@@ -87,7 +87,7 @@ __Theorem (Shor's Algorithm):__ For every $\ell$ and $a\in\Z^*_\ell$, there is a
 The idea is similar to Simon's algorithm.  We consider the map $x \mapsto a^x (\mod \ell)$ which is a periodic map over $\Z_m$ where $m=|\Z^*_\ell|$ with period being the order of $a$.  
 To find the period of this map we will now  need to perform a _Quantum Fourier Transform (QFT)_ over the group $\Z_m$ instead of $\{0,1\}^n$.
 This is a quantum algorithm that takes a register from some arbitrary
-state $f \in \C^{m}$ into a state whose vector is the Fourier transform
+state $f \in \mathbb{C}^{m}$ into a state whose vector is the Fourier transform
 $\hat{f}$ of $f$. The QFT takes only $O(\log^2 m)$ elementary steps and
 is thus very efficient. Note that we cannot say that this algorithm
 “computes” the Fourier transform, since the transform is stored in the
@@ -104,7 +104,7 @@ classical (non-quantum) computers.
 
 We now define the Fourier transform over $\Z_m$ (the group of integers
 in $\{0,\ldots,m-1\}$ with addition modulo $m$). We give a definition that is specialized to the current context.
-For every vector $f\in\C^m$, the *Fourier transform of $f$* is the
+For every vector $f\in\mathbb{C}^m$, the *Fourier transform of $f$* is the
 vector $\hat{f}$ where the $x^{th}$ coordinate of $\hat{f}$ is defined as[^8]
 
 $\hat{f}(x) = \tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m} f(x)\omega^{xy}$
@@ -125,16 +125,16 @@ means that the Fourier transform map $f \mapsto \hat{f}$ is a *unitary*
 operation.
 
 What is so special about the Fourier basis? For one thing, if we
-identify vectors in $\C^m$ with functions mapping $\Z_m$ to $\C$, then
+identify vectors in $\mathbb{C}^m$ with functions mapping $\Z_m$ to $\mathbb{C}$, then
 it’s easy to see that every function $\chi$ in the Fourier basis is a
-*homomorphism* from $\Z_m$ to $\C$ in the sense that
+*homomorphism* from $\Z_m$ to $\mathbb{C}$ in the sense that
 $\chi(y+z)= \chi(y)\chi(z)$ for every $y,z \in
 \Z_m$. Also, every function $\chi$ is *periodic* in the sense that there
 exists $r\in \Z_m$ such that $\chi(y+r)=\chi(z)$ for every $y\in \Z_m$
 (indeed if $\chi(y) =
 \omega^{xy}$ then we can take $r$ to be $\ell/x$ where $\ell$ is the least
 common multiple of $x$ and $m$). Thus, intuitively, if a function
-$f:\Z_m\rightarrow\C$ is itself periodic (or roughly periodic) then when
+$f:\Z_m\rightarrow\mathbb{C}$ is itself periodic (or roughly periodic) then when
 representing $f$ in the Fourier basis, the coefficients of basis vectors
 with periods agreeing with the period of $f$ should be large, and so we
 might be able to discover $f$’s period from this representation. This
@@ -143,7 +143,7 @@ algorithm.
 
 #### Fast Fourier Transform.
 
-Denote by $FT_m$ the operation that maps every vector $f\in\C^m$ to its
+Denote by $FT_m$ the operation that maps every vector $f\in\mathbb{C}^m$ to its
 Fourier transform $\hat{f}$. The operation $FT_m$ is represented by an
 $m\times m$ matrix whose $(x,y)$th entry is $\omega^{xy}$. The trivial
 algorithm to compute it takes $m^2$ operations. The famous *Fast Fourier
@@ -181,9 +181,9 @@ $T(m)=O(m\log m)$.
 ### Quantum Fourier Transform over $\Z_m$
 
 The *quantum Fourier transform* is an algorithm to change the state of a
-quantum register from $f \in \C^m$ to its Fourier transform $\hat{f}$.
+quantum register from $f \in \mathbb{C}^m$ to its Fourier transform $\hat{f}$.
 
-**Theorem (Quantum Fourier Transform, Bernstein Vazirani):_**
+**Theorem (Quantum Fourier Transform, Bernstein Vazirani):**
 For every $m$ and $m =2^m$ there is a quantum algorithm that uses
 $O(m^2)$ elementary quantum operations and transforms a quantum register
 in state $f = \sum_{x\in\Z_m} f(x)\ket{x}$ into the state
@@ -227,8 +227,7 @@ on input $A,N$ (represented in binary) finds the smallest $r$ such that $A^r=1 \
 Let $m=\ceil{5\log m}$ and let $m=2^m$. Our register will consist of
 $m+polylog(N)$ qubits. Note that the function $x
 \mapsto A^x \pmod{N}$ can be computed in $polylog(N)$ time and so we will assume that we can
-compute the map $\ket{x}\ket{y} \mapsto \ket{x}\ket{y\oplus \repres{A^x \pmod{N}}}$ (where $\repres{X}$ denotes the
-representation of the number $X \in \set{0,\ldots,N-1}$ as a binary
+compute the map $\ket{x}\ket{y} \mapsto \ket{x}\ket{y\oplus (A^x \pmod{N})}$ (where we identify a number $X \in \set{0,\ldots,N-1}$ with its representation as  a binary
 string of length $\log N$).[^9] Now we describe the order-finding
 algorithm. It uses a tool of elementary number theory called *continued fractions* which allows us to approximate (using a classical algorithm)
 an arbitrary real number $\alpha$ with a rational number $p/q$ where
@@ -492,7 +491,7 @@ There is another way in which quantum mechanics interacts with cryptography. The
 
 [^4]: Some quantum computing texts use $\sum_{x\in[M]}\overline{\vec{u}}_x\vec{v}_x$ instead.
 
-[^5]: This matrix is known as the *Walsh-Hadamard* error correcting code. (Though it is usually described  as a $0/1$ matrix over $GF(2)$ rather than $\pm 1$ matrix over $\C$.
+[^5]: This matrix is known as the *Walsh-Hadamard* error correcting code. (Though it is usually described  as a $0/1$ matrix over $GF(2)$ rather than $\pm 1$ matrix over $\mathbb{C}$.
 
 [^6]: The constant three is arbitrary in the sense that replacing it with every constant greater or equal to two would lead to an equivalently powerful model.
 
