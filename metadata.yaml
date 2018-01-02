@@ -1,0 +1,8 @@
+
+---
+author: Boaz Barak
+date: Spring 2018
+pagetitle: "An intensive introduction to cryptography"
+header-includes:
+   - \newcommand{\bits}{\{0,1\}}
+---
