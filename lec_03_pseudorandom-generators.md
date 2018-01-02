@@ -213,15 +213,11 @@ Boneh-Shoup book.
 
 One of the simplest ways to generate a “randomish” digit from an $n$ digit
 number is to use a *checksum* - some linear combination of the digits, as is the
-*cyclic redundancy check* or CRC. This motivates the notion of a *linear
-feedback shift register generator* (LFSR): if the current state is $s\in\{0,1\}^n$
-then the output is $f(s)$ where $f$ is a linear function (modulo 2) and the new
-state is obtained by right shifting the previous state and putting $f(s)$ at the
-leftmost location. That is, $s’_1 = f(s)$ and $s’_i = s_{i-1}$ for
-$i\in\{2,\\ldots,n\}$.
+*cyclic redundancy check* or CRC.
+This motivates the notion of a *linear feedback shift register generator* (LFSR): if the current state is $s\in\{0,1\}^n$ then the output is $f(s)$ where $f$ is a linear function (modulo 2) and the new state is obtained by right shifting the previous state and putting $f(s)$ at the leftmost location.
+That is, $s'_1 = f(s)$ and $s'_i = s_{i-1}$ for $i\in\{2,\ldots,n\}$.
 
-LFSR's
-have several good properties- if the function $f(\cdot)$ is chosen properly then they can have very long _periods_
+LFSR's have several good properties- if the function $f(\cdot)$ is chosen properly then they can have very long _periods_
 (i.e., it takes $2^n$ steps until the state repeats itself), though that also holds for the simple "counter" generator who simply treats the state
 as a number in $\{0,\ldots,2^n-1\}$ and increments it at every stage, outputting the least significant digit. They also have the property
 that every individual bit is equal to $0$ or $1$ with probability exactly half  (the counter generator also shares this property) as well as (if the function is selected properly)
@@ -254,13 +250,13 @@ any ring.
 
 In particular, if we look at the first $n$ outputs of such a generator
 $b_1,\ldots,b_n$ then we can write linear equations in the unknown initial state
-of the form $f_1(s)=b_1,\ldots,f_n(s)=b_n$ where the $f_i$ ‘s are known linear
+of the form $f_1(s)=b_1,\ldots,f_n(s)=b_n$ where the $f_i$'s are known linear
 functions. Either those functions are *linearly independent*, in which case we
 can solve the equations to get the unique solution for the original state $s$
 and from which point we can predict all outputs of the generator, or they are
 dependent, which means that we can predict some of the outputs even without
-recovering the original state. Either way the generator is \*\#!’ed (where
-\*\#\$ refers to whatever verb you prefer to use when your system is broken).
+recovering the original state. Either way the generator is $*\sharp !$’ed (where
+$* \sharp !$ refers to whatever verb you prefer to use when your system is broken).
 See also this [1977 paper](<http://alumni.cs.ucr.edu/~jsun/random-number.pdf>)
 of James Reed.
 

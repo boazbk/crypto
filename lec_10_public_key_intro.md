@@ -133,9 +133,9 @@ Unfortunately, no such result is known in the other direction. However in the ra
 
 
 
-__Computational Diffie Hellman Assumption:__ Let $\Gp$ be a group elements of which can be described in $n$ bits, with an associative and commutative multiplication operation the can be computed in $poly(n)$ time.  The _Computational Diffie Hellman (CDH)__ assumption holds for $\Gp$ if for every generator (see below) $g$ of $\Gp$ and efficient algorithm $A$, the probability that on input $g,g^a,g^b$, $A$ outputs the element $g^{ab}$ is negligible.
+__Computational Diffie Hellman Assumption:__ Let $\mathbb{G}$ be a group elements of which can be described in $n$ bits, with an associative and commutative multiplication operation the can be computed in $poly(n)$ time.  The _Computational Diffie Hellman (CDH)__ assumption holds for $\mathbb{G}$ if for every generator (see below) $g$ of $\mathbb{G}$ and efficient algorithm $A$, the probability that on input $g,g^a,g^b$, $A$ outputs the element $g^{ab}$ is negligible.
 
-__Theorem:__ The Diffie Hellman system for $\Gp$ is CPA secure in the random oracle model whenever CDH holds for $\Gp$.
+__Theorem:__ The Diffie Hellman system for $\mathbb{G}$ is CPA secure in the random oracle model whenever CDH holds for $\mathbb{G}$.
 
 __Proof:__ For CPA security we need to prove that the following two distributions are computationally indistinguishable for every $m\neq m'$
 (can you see why?)
@@ -161,24 +161,24 @@ But an adversary will only be able to distinguish between these two cases if he 
 
 If you haven't seen group theory, it might be useful for you to do a quick review. We will not use much group theory and mostly use the theory of finite commutative (also known as Abelian) cyclic groups which are such a baby version that it might not be considered true "group theory" by many group theorists. What you need to remember is the following:
 
-* $\Gp$ is a finite commutative group is a finite set together with a multiplication operation that satisfies $a\cdot b = b\cdot a$ and $(a\cdot b)\cdot c = (a\cdot b)\cdot c)$.
+* $\mathbb{G}$ is a finite commutative group is a finite set together with a multiplication operation that satisfies $a\cdot b = b\cdot a$ and $(a\cdot b)\cdot c = (a\cdot b)\cdot c)$.
 
-* $\Gp$ has a special element known as $1$, where for every $g\in \Gp$ there exists an element $g^{-1}\in \Gp$ such that $gg^{-1}=1$.
+* $\mathbb{G}$ has a special element known as $1$, where for every $g\in \mathbb{G}$ there exists an element $g^{-1}\in \mathbb{G}$ such that $gg^{-1}=1$.
 
-* For every $g\in \Gp$, the _order_ of $g$, denoted $order(g)$, is the smallest positive integer $a$ such that $g^a=1$.
+* For every $g\in \mathbb{G}$, the _order_ of $g$, denoted $order(g)$, is the smallest positive integer $a$ such that $g^a=1$.
 
 
 Some basic facts that are all not too hard to prove and would be useful exercises:
 
-* For every $g\in \Gp$, the map $a \mapsto g^a$ is a $k$ to $1$ map from $\{0,\ldots,|\Gp|-1\}$  to $\Gp$ where $k=|\Gp|/order(g)$. See footnote for hint[^hint]
+* For every $g\in \mathbb{G}$, the map $a \mapsto g^a$ is a $k$ to $1$ map from $\{0,\ldots,|\mathbb{G}|-1\}$  to $\mathbb{G}$ where $k=|\mathbb{G}|/order(g)$. See footnote for hint[^hint]
 
-* As a corollary, the order of $g$ is always a divisor of $|\Gp|$.
+* As a corollary, the order of $g$ is always a divisor of $|\mathbb{G}|$.
 
-* An element $g$ of $\Gp$ is called a _generator_ if $order(g)=|\Gp|$. A group is called _cyclic_ if it has a generator.  If $\Gp$ is cyclic then there is a (not necessarily efficiently computable) _isomorphism_ $\phi:\Gp\rightarrow\Z_{|\Gp|}$ which is a one-to-one and onto map satisfying $\phi(g\cdot h)=\phi(g)+\phi(h)$ for every $g,h\in\Gp$.
+* An element $g$ of $\mathbb{G}$ is called a _generator_ if $order(g)=|\mathbb{G}|$. A group is called _cyclic_ if it has a generator.  If $\mathbb{G}$ is cyclic then there is a (not necessarily efficiently computable) _isomorphism_ $\phi:\mathbb{G}\rightarrow\Z_{|\mathbb{G}|}$ which is a one-to-one and onto map satisfying $\phi(g\cdot h)=\phi(g)+\phi(h)$ for every $g,h\in\mathbb{G}$.
 
-[^hint]: You can show a one to one mapping between the set $\{ a : g^a = 1 \}$ and the set $\{b : g^b= f \}$ by choosing some element $b$ from the latter set and looking at the map $a \mapsto a+b \pmod {|\Gp|}$.   
+[^hint]: You can show a one to one mapping between the set $\{ a : g^a = 1 \}$ and the set $\{b : g^b= f \}$ by choosing some element $b$ from the latter set and looking at the map $a \mapsto a+b \pmod {|\mathbb{G}|}$.   
 
-  When using a group $\Gp$ for the Diffie Hellman protocol, we want the property that  $g$ is a _generator_ of the group, which also means that the map $a \mapsto g^a$ is a one to one mapping from $\{0,\ldots,|\Gp|-1\}$ to $\Gp$. This can be efficiently tested if we know the order of the group and its factorization, since it will occur if and only if $g^a \neq 1$ for every $a<|\Gp|$ (can you see why this holds?) and we know that if $g^a=1$ then $a$ must divide $\Gp$ (and this?). It is not hard to show that a random element $g\in \Gp$ will be a generator with non trivial probability (for similar reasons that a random number is prime with non trivial probability) and hence an approach to getting such a generator is to simply choose $g$ at random and test that $g^a \neq 1$ for all of the fewer than $\log |\Gp|$ numbers that are obtained by taking $|\Gp|/q$ where $q$ is a factor of $|\Gp|$.
+  When using a group $\mathbb{G}$ for the Diffie Hellman protocol, we want the property that  $g$ is a _generator_ of the group, which also means that the map $a \mapsto g^a$ is a one to one mapping from $\{0,\ldots,|\mathbb{G}|-1\}$ to $\mathbb{G}$. This can be efficiently tested if we know the order of the group and its factorization, since it will occur if and only if $g^a \neq 1$ for every $a<|\mathbb{G}|$ (can you see why this holds?) and we know that if $g^a=1$ then $a$ must divide $\mathbb{G}$ (and this?). It is not hard to show that a random element $g\in \mathbb{G}$ will be a generator with non trivial probability (for similar reasons that a random number is prime with non trivial probability) and hence an approach to getting such a generator is to simply choose $g$ at random and test that $g^a \neq 1$ for all of the fewer than $\log |\mathbb{G}|$ numbers that are obtained by taking $|\mathbb{G}|/q$ where $q$ is a factor of $|\mathbb{G}|$.
 
 
 [^ElGamal]: ElGamal's actual contribution was  to design a _signature scheme_ based on the Diffie-Hellman problem, a variant of which is the Digital Signature Algorithm (DSA) described below.
@@ -218,8 +218,8 @@ which would prove that Alice truly knew the secret key.
 
 The algorithm works as follows: (See also Section 12.5.2 in the KL book)
 
-* _Key generation:_ Pick generator $g$ for $\Gp$ and $a\in \{0,\ldots,|\Gp|-1\}$ and let $h=g^a$. Pick $H:\{0,1\}^\ell\rightarrow\Gp$ and $F:\Gp\rightarrow\Gp$ to be some  functions that can be thought of as "hash functions".[^hash] The public key is $(g,h)$  (as well as the functions $H,F$) and secret key is $a$.
-* _Signature:_ To sign a message $m$, pick $b$ at random, and let $f=g^b$, and then let $s= b^{-1}[H(m)+a\cdot F(f)]$ where all computation is done modulo $|\Gp|$. The signature is $(f,s)$.
+* _Key generation:_ Pick generator $g$ for $\mathbb{G}$ and $a\in \{0,\ldots,|\mathbb{G}|-1\}$ and let $h=g^a$. Pick $H:\{0,1\}^\ell\rightarrow\mathbb{G}$ and $F:\mathbb{G}\rightarrow\mathbb{G}$ to be some  functions that can be thought of as "hash functions".[^hash] The public key is $(g,h)$  (as well as the functions $H,F$) and secret key is $a$.
+* _Signature:_ To sign a message $m$, pick $b$ at random, and let $f=g^b$, and then let $s= b^{-1}[H(m)+a\cdot F(f)]$ where all computation is done modulo $|\mathbb{G}|$. The signature is $(f,s)$.
 * _Verification:_ To verify a signature $(f,s)$ on a message $m$, check that $s\neq 0$ and $f^s=g^{H(m)}h^{F(f)}$.
 
 [^hash]: As noted in the KL book, in the actual DSA protocol $F$ is _not_ a hash function but rather some very simple function that is still assumed to be "good enough" for security.

@@ -13,9 +13,9 @@ This is an exponential improvement over the best known classical algorithms, whi
 
 We will now sketch the ideas behind Shor's algorithm. In fact, Shor proved the following more general theorem:
 
-__Theorem:__ There is a quantum polynomial time algorithm that given a multiplicative Abelian group $\Gp$ and element $g\in\Gp$ computes the _order_ of $g$ in the group.
+__Theorem:__ There is a quantum polynomial time algorithm that given a multiplicative Abelian group $\mathbb{G}$ and element $g\in\mathbb{G}$ computes the _order_ of $g$ in the group.
 
-Recall that the order of $g$ in $\Gp$ is the smallest positive integer $a$ such that $g^a = 1$. By "given a group" we mean that we can represent the elements of the group as strings of length $O(\log |\Gp|)$ and there is a $poly(\log|\Gp|)$ algorithm to perform multiplication
+Recall that the order of $g$ in $\mathbb{G}$ is the smallest positive integer $a$ such that $g^a = 1$. By "given a group" we mean that we can represent the elements of the group as strings of length $O(\log |\mathbb{G}|)$ and there is a $poly(\log|\mathbb{G}|)$ algorithm to perform multiplication
 in the group.
 
 ## From order finding to factoring and discrete log
@@ -25,13 +25,13 @@ We merely sketch how one reduces the factoring and discrete logarithm problems t
 
 * For __factoring__, let us restrict to the case $m=pq$ for distinct $p,q$. Recall that we showed that finding the size $(p-1)(q-1)=m-p-q-1$ of the group $\Z^*_m$ is sufficient to recover $p$ and $q$. One can show that if we pick a few random $x$'s in $\Z^*_m$ and compute their order, the least common multiplier of these orders is likely to be the group size.
 
-* For **discrete log** in a group $\Gp$, if we get $X=g^x$ and need to recover $x$, we can compute the order of various elements of the form $X^ag^b$. The order of such an element is a number $c$ satisfying   $c(xa+b) = 0 \pmod{|\Gp|}$. Again, with a few random examples we will get a non trivial example (where $c \neq 0 \pmod{|\Gp|}$ ) and be able to recover the unknown $x$.
+* For **discrete log** in a group $\mathbb{G}$, if we get $X=g^x$ and need to recover $x$, we can compute the order of various elements of the form $X^ag^b$. The order of such an element is a number $c$ satisfying   $c(xa+b) = 0 \pmod{|\mathbb{G}|}$. Again, with a few random examples we will get a non trivial example (where $c \neq 0 \pmod{|\mathbb{G}|}$ ) and be able to recover the unknown $x$.
 
 ## Finding periods of a function: Simon's Algorithm
 
 Let $\Hp$ be some Abelian group with a  group operation that we'll denote by $\oplus$, and $f$ be some function mapping $\Hp$ to an arbitrary set (which we can encode as $\{0,1\}^*$).
 We say that $f$ has _period $h^*$_ for some $h^*\in\Hp$ if for every $x,y \in \Hp$, $f(x)=f(y)$ if and only if $y = x \oplus kh^*$ for some integer $k$.
-Note that if $\Gp$ is some Abelian group, then if we define $\Hp=\Z_{|\Gp|}$, for every element $g\in \Gp$, the map $f(a)=g^a$ is a periodic map over $\Hp$ with period the order of $g$.
+Note that if $\mathbb{G}$ is some Abelian group, then if we define $\Hp=\Z_{|\mathbb{G}|}$, for every element $g\in \mathbb{G}$, the map $f(a)=g^a$ is a periodic map over $\Hp$ with period the order of $g$.
 So, finding the order of an item reduces to the question of finding the period of a function.
 
 
