@@ -182,7 +182,7 @@ parts of such proofs are typically:
 -   Analyzing the probability of success and in particular showing that if $Eve$
     had non-negligible advantage then so will $Eve'$.
 
-![We show that the security of $S'$ implies the security of $S$ by transforming an adversary $Eve$ breaking $S$ into an adversary $Eve'$ breaking $S'$](../figure/reduction.jpg){ width=50% }
+![We show that the security of $S'$ implies the security of $S$ by transforming an adversary $Eve$ breaking $S$ into an adversary $Eve'$ breaking $S'$](../figure/reduction.jpg){#tmplabelfig width=50% }
 
 The asymptotic approach
 -----------------------
@@ -329,7 +329,7 @@ cryptographic tools that we can obtain from this seemingly innocent conjecture:
 (We will see what all these names and some of these reductions mean later in the
 course.)
 
-![Web of reductions between notions equivalent to ciphers with larger than key messages](../figure/privatekey-reduction-web.jpg)
+![Web of reductions between notions equivalent to ciphers with larger than key messages](../figure/privatekey-reduction-web.jpg){#tmplabelfig}
 
 We will soon see the first of the many reductions we'll learn in this course. Together this "web of reductions" forms the scientific core of cryptography, connecting many of the core concepts and enabling us to construct increasingly sophisticated tools based on relatively simple "axioms" such as the cipher conjecture.
 
@@ -550,7 +550,7 @@ $(k_1,m_1)$, then use $k_1$ to decrypt $c_2$ to learn $(k_2,m_2)$, and so on
 until we use $k_{t-1}$ to decrypt $c_t$ and learn $(k_t,m_t)$. Finally we can
 simply output $(m_1,\ldots,m_t)$.
 
-![Constructing a cipher with $t$ bit long messages from one with $n+1$ long messages](../figure/<length-extension.jpg>)
+![Constructing a cipher with $t$ bit long messages from one with $n+1$ long messages](../figure/length-extension.jpg){#tmplabelfig}
 
 The above are clearly valid encryption and decryption algorithms, and hence the
 real question becomes *is it secure??*. The intuition is that $c_1$ hides all

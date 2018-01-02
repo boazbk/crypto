@@ -40,7 +40,7 @@ England, so that she could ascend to the throne and finally escape the house arr
 As part of this complicated plot, she sent a coded letter to Sir Anthony Babington. It is what's known as a _substitution cipher_ where each letter is transformed into a different symbol, and so
 the resulting letter looks something like the following:
 
-![Snippet from encrypted communication between queen Mary and Sir Babington](../figure/encrypted_letter.jpg)
+![Snippet from encrypted communication between queen Mary and Sir Babington](../figure/encrypted_letter.jpg){#tmplabelfig}
 
 At a first look, such a letter might seem rather inscrutable- a meaningless sequence of strange symbols. However, after some thought, one might recognize that these symbols _repeat_ several
 times and moreover that different symbols repeat with different frequencies. Now it doesn't take a large leap of faith to assume that perhaps each symbol corresponds to a different letter
@@ -50,7 +50,7 @@ which was in fact done by queen Elisabeth's spies who used the decoded letters t
 Trusting in superficial security measures (such as using "inscrutable" symbols) is a trap that users of cryptography have been falling into again and again over the years.
 As in many things, this is the subject of a great XKCD cartoon:
 
-![On the added security of using uncommon symbols](../figure/code_talkers.png){ width=80% }
+![On the added security of using uncommon symbols](../figure/code_talkers.png){#tmplabelfig width=80% }
 
 
 
@@ -63,9 +63,9 @@ This "flattens" the frequencies and makes it much harder to do frequency analysi
 and published the result. The idea is that once you guess the length of the cipher, you can reduce the task to breaking a simple substitution cipher which can be done via frequency
 analysis (can you see why?).  Confederate generals used Vigenère regularly during the civil war, and their messages were routinely cryptanalzed by Union officers.
 
-![Confederate Cipher Disk for implementing the Vigenère cipher](../figure/confederate_cipher_disk.jpg)
+![Confederate Cipher Disk for implementing the Vigenère cipher](../figure/confederate_cipher_disk.jpg){#tmplabelfig}
 
-![Confederate encryption of the message  "Gen'l Pemberton: You can expect no help from this side of the river. Let Gen'l Johnston know, if possible, when you can attack the same point on the enemy's lines. Inform me also and I will endeavor to make a diversion. I have sent some caps. I subjoin a despatch from General Johnston."](../figure/confederate_message.jpg)
+![Confederate encryption of the message  "Gen'l Pemberton: You can expect no help from this side of the river. Let Gen'l Johnston know, if possible, when you can attack the same point on the enemy's lines. Inform me also and I will endeavor to make a diversion. I have sent some caps. I subjoin a despatch from General Johnston."](../figure/confederate_message.jpg){#tmplabelfig}
 
 
 The story of the _Enigma_ cipher had been told many times, and you can get some information on it from Kahn's book as well as Andrew Hodges' biography of Alan Turing.
@@ -166,7 +166,7 @@ In fact, understanding the following two statements will already get you much of
 The handout on  mathematical background contains some of the probability and discrete mathematics that we'll need, and this will also be reviewed in the sections.
 
 
-![XKCD Cartoon: Random number generator](../figure/random_number.png)
+![XKCD Cartoon: Random number generator](../figure/random_number.png){#tmplabelfig}
 
 
 ### Note: Generating randomness in actual cryptographic systems
@@ -181,30 +181,29 @@ if the probability that an attacker can guess $X$ is at most $2^{-k}$. People th
 systems were actually enabled by weak generation of randomness. Here are a few examples.
 
 One of the first attacks was on the SSL implementation of Netscape (_the_ browser at the time). Netscape use the following "unpredicatable" information--- the time of day and a process ID both of which turned out to be quite
-predictable (who knew attackers have clocks too?). Netscape tried to protect its security through "security through obscurity" by not releasing the source code for htier pseudorandom generator, but it was reverse engineered by [Ian
-Goldberg and David Wagner](https://www.cs.berkeley.edu/~daw/papers/ddj-netscape.html)  (Ph.D students at the time) who demonstrated this attack.
+predictable (who knew attackers have clocks too?). Netscape tried to protect its security through "security through obscurity" by not releasing the source code for htier pseudorandom generator, but it was reverse engineered by [Ian Goldberg and David Wagner](https://www.cs.berkeley.edu/~daw/papers/ddj-netscape.html)  (Ph.D students at the time) who demonstrated this attack.
 
 In 2006 a programmer removed a line of code from the procedure to generate entropy in OpenSSL package distributed by Debian since it caused a warning in some automatic verification code. As a result for two years (until this was
 discovered) all the randomness generated by this procedure used only the process ID as an "unpredictable" source. This means that all communication done by users in that period is fairly easily breakable (and in particular,
-if some entities recorded that communication they could break it also retroactively). This caused a huge headache and a worldwide regeneration of keys, though it is believed that many of the weak keys are still used. See [XKCD's take](http://www.xkcd.com/424/#) on that incidence.
+if some entities recorded that communication they could break it also retroactively). This caused a huge headache and a worldwide regeneration of keys, though it is believed that many of the weak keys are still used.
+See [XKCD's take](http://www.xkcd.com/424/) on that incident.
 
-In 2012 two separate teams of researchers scanned a large number of RSA keys on the web and
-found out that about 4 percent of them are easy to break. The main issue were devices such as routers, internet-connected printers and such. These devices sometimes run variants of Linux--  a desktop operating system-- but without
-a harddrive, mouse or keyboard, they don't have access to many of the entropy sources that desktop have. Coupled with some good old fashioned ignorance of cryptography and software bugs, this led to many keys that are downright trivial
+In 2012 two separate teams of researchers scanned a large number of RSA keys on the web and found out that about 4 percent of them are easy to break.
+The main issue were devices such as routers, internet-connected printers and such. These devices sometimes run variants of Linux-  a desktop operating system- but without a hard drive, mouse or keyboard, they don't have access to many of the entropy sources that desktop have. Coupled with some good old fashioned ignorance of cryptography and software bugs, this led to many keys that are downright trivial
 to break, see [this blog post](https://freedom-to-tinker.com/blog/nadiah/new-research-theres-no-need-panic-over-factorable-keys-just-mind-your-ps-and-qs/)  and [this web page](https://factorable.net/)  for more details.
 
-After the entropy is collected and then "purified" or "extracted" to a uniformly random string that is, say, a few hundred bits long, we often need to "expand" it into a longer string that is also uniform (or at least looks like that for
-all practical purposes). We will discuss how to go about that in the next lecture. This step has its weaknesses too and in particular the Snowden documents, combined with observations of Shumow and Frguson,
-strongly suggest that the NSA has deliberately inserted a _trapdoor_ in one of the pseudorandom generators published by the National Institute of Standards and Technologies (NIST). Fortunately, this generator wasn't widely adapted
-but apparently the NSA did pay $10M to RSA security so the latter would make this generator their default option in their products.
+After the entropy is collected and then "purified" or "extracted" to a uniformly random string that is, say, a few hundred bits long, we often need to "expand" it into a longer string that is also uniform (or at least looks like that for all practical purposes). We will discuss how to go about that in the next lecture. This step has its weaknesses too and in particular the Snowden documents, combined with observations of Shumow and Ferguson, strongly suggest that the NSA has deliberately inserted a _trapdoor_ in one of the pseudorandom generators published by the National Institute of Standards and Technologies (NIST).
+Fortunately, this generator wasn't widely adapted but apparently the NSA did pay 10 million dollars to RSA security so the latter would make this generator their default option in their products.
 
 
 ## Defining the secrecy requirement.
 
 Defining the secrecy requirement for an encryption is not simple. Over the course of history, many smart people got it wrong and
 convinced themselves that ciphers were impossible to break. The first person to truly ask the question in a rigorous way was Claude Shannon
-in 1945 (though a partial version of his manuscript was only declassified in 1949). Simply by asking this question, he made an enormous contribution to the science of cryptography and practical security. We now will
-try to examine how one might answer it. Let me warn you ahead of time that we are going to insist on a _mathematically precise definition_
+in 1945 (though a partial version of his manuscript was only declassified in 1949).
+Simply by asking this question, he made an enormous contribution to the science of cryptography and practical security.
+We now will try to examine how one might answer it.
+Let me warn you ahead of time that we are going to insist on a _mathematically precise definition_
 of security. That means that the definition must capture security in all cases, and the existence of a single counterexample, no matter how
 "silly", would make us rule out a candidate definition. This exercise of coming up with "silly" counterexamples
 might seem, well, silly. But in fact it is this method that has led Shannon to formulate his theory of secrecy,

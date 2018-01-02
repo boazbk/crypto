@@ -40,7 +40,7 @@ How do we find this number $h^*$?
 The key idea would be to transform $f$ from the _time_ to the _frequency_ domain.
 That is, we use the _Fourier transform_ to represent $f$ as a sum of wave functions. In this representation wavelengths that divide the period $h^*$ would get significant mass, while wavelengths that don't would likely "cancel out".
 
-![If $f$ is a periodic function then when we represent it in the Fourier transform, we expect the coefficients corresponding to wavelengths that do not evenly divide the period to be very small, as they would tend to "cancel out".](../figure/quantum_fourier.jpg)
+![If $f$ is a periodic function then when we represent it in the Fourier transform, we expect the coefficients corresponding to wavelengths that do not evenly divide the period to be very small, as they would tend to "cancel out".](../figure/quantum_fourier.jpg){#tmplabelfig}
 
 Similarly, the main idea behind Shor's algorithm is to use a tool known as the _quantum fourier transform_ that given a circuit computing the function $f:\Hp\rightarrow\R$, creates a quantum state over roughly $\log |\Hp|$ qubits (and hence dimension $|\Hp|$) that corresponds to the Fourier transform of $f$.
 Hence when we measure this state,  we get a group element $h$ with probability proportional to the square of the corresponding Fourier coefficient.

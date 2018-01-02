@@ -22,9 +22,9 @@ It's almost as if the electron checks whether two slits are open, and if they ar
 If we try to "catch the electron in the act" and place a detector right next to each slit so we can count which electron went through which slit then something even more bizzare happened.
 The mere fact that we _measured_ the electron path changes the actual path it takes, and now this "destructive interference" pattern is gone and the detector  will be hit   $\alpha+\beta$ fraction of the time.
 
-![The setup of the double slit experiment](../figure/double-slit-setup.PNG){ width=50% }
+![The setup of the double slit experiment](../figure/double-slit-setup.PNG){#tmplabelfig width=50% }
 
-![In the double slit experiment, opening two slits can actually cause some positions to receive _fewer_ electrons than before.](../figure/double_slit2.jpg){ width=50% }
+![In the double slit experiment, opening two slits can actually cause some positions to receive _fewer_ electrons than before.](../figure/double_slit2.jpg){#tmplabelfig width=50% }
 
 Quantum mechanics is a mathematical theory that allows us to calculate and predict the results of this and many other examples.
 If you think of quantum as an explanation as to what "really" goes on in the world, it can be rather confusing.

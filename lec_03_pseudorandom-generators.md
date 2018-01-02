@@ -88,7 +88,7 @@ __Proof:__ The proof of this theorem is very similar to the length extension the
 ciphers,  and in fact this theorem can be used to give an alternative proof for the former theorem.  
 The construction is illustrated in the figure below:
 
-![Length extension for pseudorandom generators](../figure/length-extension-prg.jpg)
+![Length extension for pseudorandom generators](../figure/length-extension-prg.jpg){#tmplabelfig}
 
 We are given a pseudorandom generator $G'$ mapping $n$ bits into $n+1$ bits and need to construct a pseudorandom generator $G$ mapping $n$ bits to $t=t(n)$
 bits for some polynomial $t(\cdot)$. The idea is that we maintain a state of $n$ bits, which are originally our input seed[^seed] $s_0$, and at the $i^{th}$ step we use $G'$
@@ -99,12 +99,12 @@ Namely, we choose $s_i$ at random in $\{0,1\}^n$ and continue the computation of
 Clearly $H_0=G(U_n)$ and $H_t=U_t$ and hence by the triangle inequality it suffices to prove that $H_i \approx H_{i+1}$ for all $i\in\{0,\ldots,t-1\}$.
 We illustrate these two hybrids in the following figure:
 
-![Hybrids $H_i$ and $H_{i+1}$--- dotted boxes refer to values that are chosen independently and uniformly at random](../figure/length-extension-prg-hybrid.jpg)
+![Hybrids $H_i$ and $H_{i+1}$--- dotted boxes refer to values that are chosen independently and uniformly at random](../figure/length-extension-prg-hybrid.jpg){#tmplabelfig}
 
 Suppose otherwise, that there exists some adversary $Eve$ such that $\left| \E[Eve(H_i)] - \E[Eve(H_{i+1})] \right| \geq \epsilon$ for some non-negligible $\epsilon$.
 We will build from $Eve$ an adversary $Eve'$ breaking the security of the pseudorandom generator $G'$.
 
-![Building an adversary $Eve'$ for $G'$ from an adversary $Eve$ distinguishing $H_i$ and $H_{i+1}$. The boxes marked with questions marks are those that are random or pseudorandom  depending on  whether we are in $H_i$ or $H_{i+1}$. Everything inside the dashed red lines is simulated by $Eve'$ that gets as input the $n+1$-bit string $(s_{i+1},y_{i+1})$.](../figure/length-extension-prg-adversary.jpg)
+![Building an adversary $Eve'$ for $G'$ from an adversary $Eve$ distinguishing $H_i$ and $H_{i+1}$. The boxes marked with questions marks are those that are random or pseudorandom  depending on  whether we are in $H_i$ or $H_{i+1}$. Everything inside the dashed red lines is simulated by $Eve'$ that gets as input the $n+1$-bit string $(s_{i+1},y_{i+1})$.](../figure/length-extension-prg-adversary.jpg){#tmplabelfig}
 
 On input an $n+1$ string $y$, $Eve'$ will interpret $y$ as $(s_{i+1},y_{i+1})$, choose $y_1,\ldots,y_i$ randomly and compute $y_{i+2},\ldots,y_t$ as in our pseudorandom generator's construction. $Eve'$ will then feed $(y_1,\ldots,y_t)$ to $Eve$ and output whatever $Eve$ does. Clearly, $Eve'$ is efficient if $Eve$ is. Moreover, one can see that if
 $y$ was random then $Eve'$ is feeding $Eve$ with an input distributed according to $H_{i+1}$ while if $y$ was for the form $G(s)$ for a random $s$ then $Eve'$ will feed $Eve$

@@ -120,7 +120,7 @@ __Definition (MPC with aborts):__ Let $F$ be a $k$-party functionality.  A _secu
 
 
 
-![We define security of a protocol implementing a functionality $F$ by stipulating that for every adversary $A$ that control a subset of the parties, $A$'s view in an actual execution of the protocol would be indistinguishable from its view in an ideal setting where all the parties send their inputs to an idealized and perfectly trusted party, who then computes the outputs and sends it to each party.](../figure/./real-ideal.jpg)
+![We define security of a protocol implementing a functionality $F$ by stipulating that for every adversary $A$ that control a subset of the parties, $A$'s view in an actual execution of the protocol would be indistinguishable from its view in an ideal setting where all the parties send their inputs to an idealized and perfectly trusted party, who then computes the outputs and sends it to each party.](../figure/./real-ideal.jpg){#tmplabelfig}
 
 Here are some good exercises to make sure you follow the definition:
 

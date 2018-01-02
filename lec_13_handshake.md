@@ -190,4 +190,4 @@ Security requirements: forward secrecy, deniability.
 * Vestiges of past crypto policies.
 * Importance of "perfect forward secrecy"
 
-![How the NSA feels about breaking encrypted communication](../figure/NSA_Page_29.jpg){ width=50% }
+![How the NSA feels about breaking encrypted communication](../figure/NSA_Page_29.jpg){#tmplabelfig width=50% }

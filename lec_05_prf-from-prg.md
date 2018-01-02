@@ -14,7 +14,7 @@ $$G_{i_n}(G_{i_{n-1}}(\cdots G_{i_1}(s))).$$
 
 This might be a bit hard to parse and is easier to understand via a figure:
 
-![The construction of a pseudorandom function from a pseudorandom generator can be illustrated by a depth $n$ binary tree. The root is labeled by the seed $s$ and for every internal node $v$ labeled by a strong $x\in\{0,1\}^n$, we label the two children of $v$ by $G_0(x)$ and $G_1(x)$ respectively. The output of the function $f_s$ on input $i$ is the label of the $i^{th}$ leaf.](../figure/prf-const.jpg){ width=80% }
+![The construction of a pseudorandom function from a pseudorandom generator can be illustrated by a depth $n$ binary tree. The root is labeled by the seed $s$ and for every internal node $v$ labeled by a strong $x\in\{0,1\}^n$, we label the two children of $v$ by $G_0(x)$ and $G_1(x)$ respectively. The output of the function $f_s$ on input $i$ is the label of the $i^{th}$ leaf.](../figure/prf-const.jpg){#tmplabelfig width=80% }
 
 
 
@@ -27,12 +27,12 @@ Given an  adversary $A$ that can distinguish in time $T$ a black box for $f_s(\c
 Let us consider the  "lazy evaluation" implementation  of the black box for $A$ illustrated in the following figure:
 
 
-![In the  "lazy evaluation" implementation of the black box to the adversary, we label every node in the tree only when we need it. In this figure check marks correspond to nodes that have been labeled and question marks to nodes that are still unlabeled.](../figure/prf-lazy-eval.jpg){ width=50% }
+![In the  "lazy evaluation" implementation of the black box to the adversary, we label every node in the tree only when we need it. In this figure check marks correspond to nodes that have been labeled and question marks to nodes that are still unlabeled.](../figure/prf-lazy-eval.jpg){#tmplabelfig width=50% }
 
 
 That is, at every point in time there are nodes in the full binary tree that are labeled and nodes which we haven't yet labeled. When $A$ makes a query $i$, this query corresponds to the path $i_1\ldots i_n$ in the tree. We look at the lowest (furthest away from the root) node $v$  on this path which has been labeled by some value $y$, and then we continue labelling the path from $v$ downwards until we reach $i$. That is, we label the two children of $v$ by $G_0(y)$ and $G_1(y)$, and then if the path $i$ involves the first child then we label its children by $G_0(G_0(y))$ and $G_1(G_0(y))$, and so on and so forth.
 
-![When the adversary queries $i$, the oracle takes the path from $i$ to the root and computes the generator on the minimum number of internal nodes that is needed to obtain the label of the $i^{th}$ leaf](../figure/prf-oracle-step.jpg){ width=80% }
+![When the adversary queries $i$, the oracle takes the path from $i$ to the root and computes the generator on the minimum number of internal nodes that is needed to obtain the label of the $i^{th}$ leaf](../figure/prf-oracle-step.jpg){#tmplabelfig width=80% }
 
 A moment's thought shows that this is just another (arguably cumbersome) way to describe the oracle that simply computes the map $i\mapsto f_s(i)$. And so the experiment of running $A$ with this oracle produces precisely the same result as running $A$ with access to $f_s(\cdot)$. Note that since $A$ has running time at most $T$, the number of times our oracle will need to label an internal node is at most $T' \leq 2nT$ (since we label at most $2n$ nodes for every query $i$).
 
@@ -73,7 +73,7 @@ __Definition (CPA security):__ An encryption scheme $(E,D)$ is _secure against c
 
 5. Eve _wins_ if she outpus $b$.
 
-![In the CPA game, Eve interacts with the encryption oracle and at the end chooses $m_0,m_1$, gets an encryption $c^*=E_k(m_b)$ and outputs $b'$. She _wins_ if $b'=b$](../figure/cpa-game.jpg){ width=50% }
+![In the CPA game, Eve interacts with the encryption oracle and at the end chooses $m_0,m_1$, gets an encryption $c^*=E_k(m_b)$ and outputs $b'$. She _wins_ if $b'=b$](../figure/cpa-game.jpg){#tmplabelfig width=50% }
 
 
 
@@ -85,7 +85,7 @@ __Proof:__ The proof is very simple: Eve will only use a single round of interac
 
 This proof is so simple that you might think it shows a problem with the definition, but it is actually a real problem with security. If you encrypt many messages and some of them repeat themselves, it is possible to get significant information by seeing the repetition pattern (que the XKCD cartoon again):
 
-![Insecurity of deterministic encryption](../figure/code_talkers.png){ width=50% }
+![Insecurity of deterministic encryption](../figure/code_talkers.png){#tmplabelfig width=50% }
 
 To avoid this issue we need to use _probabilistic encryption._[^high-ent] But how do we do that? Here is a simple CPA secure scheme:
 
@@ -119,7 +119,7 @@ __Theorem:__ If the PRG conjecture holds then there exists a pseudorandom permut
 
 We will not show the proof of this theorem here, but just show a figure of the construction:
 
-![We build a PRP $p$ on $2n$ bits from three PRFs $f_{s_1},f_{s_2},f_{s_3}$ on $n$ bits by letting $p_{s_1,s_2,s_3}(x_1,x_2)=(z_1,y_2)$ where $y_1 = x_1 \oplus f_{s_1}(x_2)$, $y_2 = x_2 \oplus f_{s_2}(y_1)$ and $z_1 = f_{s_3}(y_2) \oplus y_1$.](../figure/feistel.jpg){ width=50% }
+![We build a PRP $p$ on $2n$ bits from three PRFs $f_{s_1},f_{s_2},f_{s_3}$ on $n$ bits by letting $p_{s_1,s_2,s_3}(x_1,x_2)=(z_1,y_2)$ where $y_1 = x_1 \oplus f_{s_1}(x_2)$, $y_2 = x_2 \oplus f_{s_2}(y_1)$ and $z_1 = f_{s_3}(y_2) \oplus y_1$.](../figure/feistel.jpg){#tmplabelfig width=50% }
 
 
 The more common name for a pseudorandom permutation is _block cipher_ (though typically block ciphers are expected to meet additional security properties on top of being PRPs). The constructions for block ciphers used in practice typically don't follow this theorem (though they use some of the ideas) but rather build these directly.
@@ -130,7 +130,7 @@ Between 1997 and 2001, the U.S. national institute of standards (NIST) ran a com
 
 The actual construction of AES (or DES for that matter) is not extremely illuminating, but let us say a few words about the general principle behind many block ciphers. They are typically constructed by repeating one after the other a number of very simple permutations. Each such iteration is called a _round_. If there are $t$ keys, then the key $k$ is typically expanded into a $t$ tuple of keys $*k_1,\ldots,k_t)$ via some pseudorandom generator known as the _key scheduling algorithm_ and then the key $k_i$ is used in the $i^{th}$ round. Each round is typically composed of several components: there is a "key mixing component" that performs some simple permutation based on the key (often as simply as XOR'ing the key), there is a "mixing component" that mixes the bits of the block so that bits that were intially nearby don't stay close to one another, and then there is some non-linear component (often obtained by applying some simple non-linear functions known as "S boxes" to each small block of the input) that ensures that the overall cipher will not be an affine function. Each one of these operations is an easily reversible operations, and hence decrypting the cipher simply involves running the rounds backwards.
 
-![A typical round of a block cipher, $k_i$ is the $^{th}$ round key, $x_i$ is the block before the $i^{th}$ round and $x_{i+1}$ is the block at the end of this round.](../figure/block-cipher-round.jpg){ width=50% }
+![A typical round of a block cipher, $k_i$ is the $^{th}$ round key, $x_i$ is the block before the $i^{th}$ round and $x_{i+1}$ is the block at the end of this round.](../figure/block-cipher-round.jpg){#tmplabelfig width=50% }
 
 
 ## Encryption modes
@@ -142,15 +142,15 @@ The most natural approach would be that to encrypt a message $m$, we simply use 
 
 
 
-![In the Electronic Codebook  (ECB) mode every message is encrypted deterministically and independently](../figure/ecb-mode.jpg){ width=50% }
+![In the Electronic Codebook  (ECB) mode every message is encrypted deterministically and independently](../figure/ecb-mode.jpg){#tmplabelfig width=50% }
 
-![An encryption of the Linux penguin (left image) using ECB mode (middle image) vs CBC mode (right image). The ECB encryption is insecure as it reveals much structure about the original image. Image taken from Wikipedia.](../figure/ECB_prob.jpg){ width=50% }
+![An encryption of the Linux penguin (left image) using ECB mode (middle image) vs CBC mode (right image). The ECB encryption is insecure as it reveals much structure about the original image. Image taken from Wikipedia.](../figure/ECB_prob.jpg){#tmplabelfig width=50% }
 
 
 A more secure way to use a block cipher to encrypt is the _cipher block chaining mode_ where we XOR every message with the previous ciphertext. Note that if we lose a block to traffic in the CBC mode then we are unable to decrypt the next block, but can recover from that point onwards.
 
 
-![In the Cypher-Block-Chaining (CBC) the encryption of the previous message is XOR'ed into the current message prior to encrypting. The first message is XOR'ed with an _initialization vector_ (IV) that if chosen randomly, ensures CPA security.](../figure/cbc-mode.jpg){ width=50% }
+![In the Cypher-Block-Chaining (CBC) the encryption of the previous message is XOR'ed into the current message prior to encrypting. The first message is XOR'ed with an _initialization vector_ (IV) that if chosen randomly, ensures CPA security.](../figure/cbc-mode.jpg){#tmplabelfig width=50% }
 
 It turns out that using this mode with a random IV can yield CPA security, though one has to be careful in how you go about it, see the exercises.
 

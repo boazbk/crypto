@@ -40,7 +40,7 @@ Now the security of the encryption means that an adversary seeing the ciphertext
 the IP address $m_1$ that Alice was using (e.g., if she guesses it's some  popular website) then she can convert the ciphertext $c = pad \oplus (m_1,m_2,CRC(m_1,m_2))$ into the ciphertext $c' = c \oplus x$ where $x=(x_1,x_2,x_3)$ is computed so that $x_1 oplus m_1$ is equal to the adversary's own IP address! So, the adversary doesn't need to decrypt the message- by spoofind the ciphertext she can ensure that Bob (who is an access point, whose job is to decrypt and then deliver packets) simply delivers it unencrypted straight into her hands.
 One issue is that Eve modifies $m_1$ then it is unlikely that the CRC code will still check out, and hence Bob would reject the packet. However, this CRC (as most are) is _linear_ modulo $2$, which means that if the adversary sets $x_2$ to be the all zero string and $x_3 = CRC(x_1,x_2)$ then it will be the case that $CRC(m_1\oplus x_1,m_2 \oplus m_2)=CRC(m_1,m_2)\oplus CRC(x_1,x_2)$ and so $c'$ will be a valid encryption of the message $(m_1 \oplus x_1, 0, CRC(m_1\oplus x_1,0))$ which means that Bob will deliver the message $m_2$ to the IP address $m_1 \oplus x_1$ of the adversary's choice.
 
-![The attack on the WEP protocol allowing the adversary Mallory to read encrypted messages even when Alice uses a CPA secure encryption.](../figure/wep-attack.jpg){ width=90% }
+![The attack on the WEP protocol allowing the adversary Mallory to read encrypted messages even when Alice uses a CPA secure encryption.](../figure/wep-attack.jpg){#tmplabelfig width=90% }
 
 
 This is not an isolated example but in fact an instance of a general pattern of many breaks in practical protocols. The point is that often our adversaries can be _active_ and modify the communication between sender and receiver, which in effect gives them access not just to choose _plaintexts_ of their choice to encrypt but even to have some impact on the _ciphertexts_ that are decrypted. This motivates the following notion of security:
@@ -59,7 +59,7 @@ efficient Mallory wins in the following game with probability at most $1/2+ negl
 * Mallory outputs $b'$ and _wins_ if $b'=b$.
 
 
-![the CCA security game](../figure/cca-game.jpg){ width=50% }
+![the CCA security game](../figure/cca-game.jpg){#tmplabelfig width=50% }
 
 
 This might seems a rather strange definition so let's try to digest it slowly. Most people, once they understand what the definition says, don't like it that much initially. There are two natural objections to it:

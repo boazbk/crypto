@@ -45,7 +45,7 @@ and the number of iterations is tailored to be the largest one that the honest u
 In fact, typically we will set $k_{master} = H(p_{master}\| r)$ where $r$ is a long random but _public_ string known as a "salt".
 Including such a "salt" can be important to foiling an adversary's attempts to amortize the computation costs, see the exercises.
 
-![To obtain a key from a password we will typically use a "slow" hash function to map the password and a unique-to-user public "salt" value to a cryptographic key. Even with such a procedure, the resulting key cannot be consider as secure and unpredictable as a key that was chosen truly at random, especially if we are in a setting where an adversary can launch an _offline_ attack to guess all possibilities.](../figure/hash-password.jpg){ width=80% }
+![To obtain a key from a password we will typically use a "slow" hash function to map the password and a unique-to-user public "salt" value to a cryptographic key. Even with such a procedure, the resulting key cannot be consider as secure and unpredictable as a key that was chosen truly at random, especially if we are in a setting where an adversary can launch an _offline_ attack to guess all possibilities.](../figure/hash-password.jpg){#tmplabelfig width=80% }
 
 Even when we don't use one password to encrypt others, it is generally considered the best practice to _never_ store a password in the clear but always in this "slow hashed and salted" form, so if the passwords file falls to the hands of an adversary it will be expensive to recover them.
 
@@ -63,7 +63,7 @@ suppose we have a collision-resistant hash function $h:\{0,1\}^{2n}\rightarrow\{
 We then hash every pair of consecutive blocks to transform $x$ into a string $x_1$ of $t/2$ blocks, and continue in this way for $\log t$ steps
 until we get a single block $y\in\{0,1\}^n$. (Assume here $t$ is a power of two for simplicity, though it doesn't make much difference.)
 
-![In the Merkle Tree construction we map a long string $x$ into a block $y\in\{0,1\}^n$ that is a "digest" of the long string $x$. As in a collision resistant hash we can imagine that this map is "one to one" in the sense that it won't be possible to find $x'\neq x$ with the same digest. Moreover, we can efficiently certify that a certain bit of $x$ is equal to some value without sending out all of $x$ but rather the $\log t$ blocks that are on the path between $i$ to the root together with their "siblings" used in the hash function, for a total of at most $2\log t$ blocks.](../figure/merkle-tree.jpg){ width=80% }
+![In the Merkle Tree construction we map a long string $x$ into a block $y\in\{0,1\}^n$ that is a "digest" of the long string $x$. As in a collision resistant hash we can imagine that this map is "one to one" in the sense that it won't be possible to find $x'\neq x$ with the same digest. Moreover, we can efficiently certify that a certain bit of $x$ is equal to some value without sending out all of $x$ but rather the $\log t$ blocks that are on the path between $i$ to the root together with their "siblings" used in the hash function, for a total of at most $2\log t$ blocks.](../figure/merkle-tree.jpg){#tmplabelfig width=80% }
 
 
 Alice who sends $x$ to the cloud Bob will keep the short block $y$. Whenever Alice queries the value $i$ she will ask for a _certificate_ that $x_i$ is indeed the right value. This certificate will consists of the block that contains $i$, as well as all of the $2\log t$ blocks that were  used in the hash from this block to the root.
@@ -105,7 +105,7 @@ which would simply be some memory array. When we estimate that we have accumulat
 In practice people try to be very conservative (e.g., assume that there is only one bit of entropy for 64 bits of measurements or so) and hope for the best,
 which often works but sometimes also [spectacularly fails](https://factorable.net/paper.html), especially in embedded systems that do not have access to many of these sources.
 
-![To obtain pseudorandom bits for cryptographic applications we hash down measurements which contain some _entropy_ in them to a shorter string that is hopefully truly uniformly random or at least statistically close to it, and then expand this to get as many pseudorandom bits as we need using a pseudorandom generator.](../figure/extraction.jpg){ width=80% }
+![To obtain pseudorandom bits for cryptographic applications we hash down measurements which contain some _entropy_ in them to a shorter string that is hopefully truly uniformly random or at least statistically close to it, and then expand this to get as many pseudorandom bits as we need using a pseudorandom generator.](../figure/extraction.jpg){#tmplabelfig width=80% }
 
 [^pool]: The reason that people use entropy "pools" rather than simply adding the entropy to the generator's state as it comes along is that the latter alternative might be insecure. Suppose that initial state of the generator was known to the adversary and now the entropy is "trickling in" one bit at a time while we continuously use the generator to produce outputs that can be observed by the adversary. Every time a new bit of entropy is added, the adversary now has uncertainty between two potential states of the generator, but once an output is produced this eliminates this uncertainty. In contrast, if we wait until we accumulate, say, 128 bits of entropy, then now the adversary will have $2^{128}$ possible state options to consider, and it could be computationally infeasible to cull them using further observation.
 
@@ -122,7 +122,7 @@ Where different notions of entropy begin to differ is when the distributions are
 
 $H_{Shannon}(X)+H_{Shannon}(Y|X) = H_{Shannon}(X,Y)$
 
-Where the entropy of a conditional distribution $Y|X$ is simply $\E_{x\leftarrow_R X} H_{Shannon}(Y|X=x)$ where $Y|X=x$ is the distribution on $Y$ obtained by conditioning
+Where the entropy of a conditional distribution $Y|X$ is simply $\E_{x\getsr X} H_{Shannon}(Y|X=x)$ where $Y|X=x$ is the distribution on $Y$ obtained by conditioning
 on the event that $X=x$.
 
 If $(p_1,\ldots,p_m)$ is a vector of probabilities summing up to $1$ and let us assume they are rounded so that for every $i$, $p_i = k_i/2^n$ for some integer $k_i$.

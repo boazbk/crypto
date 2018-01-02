@@ -35,7 +35,7 @@ is a one to one mapping between those sets using the binary represnetation), and
 Informally, if $F$ is a pseudorandom function generator, then if we choose a random string $s$, and consider the function $f_s$ defined by $f_s(i) = F(s,i)$
 then no efficient algorithm can distinguish between black box access to $f_s(\cdot)$ and black box access to a completely random function.  Thus instead of talking about a pseudorandom function generator we will sometimes refer to a _pseudorandom function collection_ $\{ f_s \}$ where by that we mean that the map $F(s,i)=f_s(i)$ is a pseudorandom function generator.
 
-![In a pseudorandom function, an adversay cannot tell whether they are given a black box that computes the function $i \mapsto F(s,i)$ for some secret $s$ that was chosen at random and fixed, or whether the black box computes a completely random function that tosses a fresh random coin whenever it's given a new input $i$](../figure/pseudorandom_function.jpg){ width="50%" }
+![In a pseudorandom function, an adversay cannot tell whether they are given a black box that computes the function $i \mapsto F(s,i)$ for some secret $s$ that was chosen at random and fixed, or whether the black box computes a completely random function that tosses a fresh random coin whenever it's given a new input $i$](../figure/pseudorandom_function.jpg){#tmplabelfig width="50%" }
 
 We will later see the following theorem:
 
@@ -78,7 +78,7 @@ __Protocol PRF-Login:__
 
 As we will see it's not really crucial that the input $i$ (which is known in crypto parlance as a _nonce_) is random. What is crucial is that it never repeats itself, to foil a replay attack. For this reason in many applications Alice and Bob compute $i$ as a function of the current time (for example, the index of the current minute based on some agreed-upon starting point), and hence we can make it into a one message protocol. Also the parameter $\ell$ is sometimes chosen to be deliberately short so that it will be easy for people to type the values $y_1,\ldots,y_\ell$ in.
 
-![The Google Authenticator app is one popular example of a one-time password scheme using pseudorandom functions. Another example is RSA's SecurID token.](../figure/google-authenticator.jpg){width=50%}
+![The Google Authenticator app is one popular example of a one-time password scheme using pseudorandom functions. Another example is RSA's SecurID token.](../figure/google-authenticator.jpg){#tmplabelfigwidth=50%}
 
 _Why is this secure?_ The key to understanding schemes using pseudorandom functions is to imagine what would happen if instead of a _pseudo_ random function, $f_s$ would be an _actual_ random function. In a truly random function, every one of the values $f_s(1),\ldots,f_s(2^n)$ is chosen independently and uniformly at random from $\{0,1\}$. One useful way to imagine this is using the concept of "lazy evaluation". We can think of $f_S$ as determined by tossing $2^n$ different coins for the values $f(1),\ldots,f(2^n)$. Now we can think of the case where we don't actually toss the $i^{th}$ coin until we need it. Now the crucial point is that if we have queried the function in $T\ll 2^n$ places, and now Bob chooses a random $i\in[2^n]$ then it is extremely unlikely that any one of the set $\{i,i+1,\ldots,i+\ell-1\}$ will be one of those locations that we previously queried. Thus Mallory has _no information_ on the value of the function, and would be able to predict it in all these locations with probability at most $2^{-\ell}$.
 

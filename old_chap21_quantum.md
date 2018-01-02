@@ -39,9 +39,9 @@ It's almost as if the electron checks whether two slits are open, and if they ar
 If we try to "catch the electron in the act" and place a detector right next to each slit so we can count which electron went through which slit then something even more bizzare happened.
 The mere fact that we _measured_ the electron path changes the actual path it takes, and now this "destructive interference" pattern is gone and the detector  will be hit   $\alpha+\beta$ fraction of the time.
 
-![The setup of the double slit experiment](../figure/double-slit-setup.PNG){ width=50% }
+![The setup of the double slit experiment](../figure/double-slit-setup.PNG){#tmplabelfig width=50% }
 
-![In the double slit experiment, opening two slits can actually cause some positions to receive _fewer_ electrons than before.](../figure/double_slit2.jpg){ width=50% }
+![In the double slit experiment, opening two slits can actually cause some positions to receive _fewer_ electrons than before.](../figure/double_slit2.jpg){#tmplabelfig width=50% }
 
 Quantum mechanics is a mathematical theory that allows us to calculate and predict the results of this and many other examples.
 If you think of quantum as an explanation as to what "really" goes on in the world, it can be rather confusing.
@@ -348,7 +348,7 @@ How do we find this number $h^*$?
 The key idea would be to transform $f$ from the _time_ to the _frequency_ domain.
 That is, we use the _Fourier transform_ to represent $f$ as a sum of wave functions. In this representation wavelengths that divide the period $h^*$ would get significant mass, while wavelengths that don't would likely "cancel out".
 
-![If $f$ is a periodic function then when we represent it in the Fourier transform, we expect the coefficients corresponding to wavelengths that do not evenly divide the period to be very small, as they would tend to "cancel out".](../figure/quantum_fourier.jpg)
+![If $f$ is a periodic function then when we represent it in the Fourier transform, we expect the coefficients corresponding to wavelengths that do not evenly divide the period to be very small, as they would tend to "cancel out".](../figure/quantum_fourier.jpg){#tmplabelfig}
 
 Similarly, the main idea behind Shor's algorithm is to use a tool known as the _quantum fourier transform_ that given a circuit computing the function $f:\Hp\rightarrow\R$, creates a quantum state over roughly $\log |\Hp|$ qubits (and hence dimension $|\Hp|$) that corresponds to the Fourier transform of $f$.
 Hence when we measure this state,  we get a group element $h$ with probability proportional to the square of the corresponding Fourier coefficient.

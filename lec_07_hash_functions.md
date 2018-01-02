@@ -28,7 +28,7 @@ distributed computing. This seems quite scary, as there are very strong negative
 What does it mean a "majority of parties" in an anonymous network where a single person can create multiple "entities" and cause them to behave arbitrarily ("byzantine" faults in distributed- parlance)? Also, why would we assume that even one party would behave honestly- if it pays to cheat then they would, wouldn't they?
 
 
-![The bitcoin ledger consists of an ordered list of transactions. At any given point in time there might be several "forks" that continue the ledger, and different parties do not necessarily have to agree on them. However, the bitcoin architecture is designed to ensure that the parties corresponding to a majority of computing pwoers will reach consensus on a single ledger. ](../figure/bitcoin_ledger.jpg){ width=80% }
+![The bitcoin ledger consists of an ordered list of transactions. At any given point in time there might be several "forks" that continue the ledger, and different parties do not necessarily have to agree on them. However, the bitcoin architecture is designed to ensure that the parties corresponding to a majority of computing pwoers will reach consensus on a single ledger. ](../figure/bitcoin_ledger.jpg){#tmplabelfig width=80% }
 
 
 Perhaps the main idea behind bitcoin is that "majority" will correspond to a "majority of computing power", or as the original bitcoin paper says "one CPU one vote" (or perhaps more accurately, "one cycle one vote").
@@ -83,7 +83,7 @@ The only problem is that this is of course clearly impossible- $2^N$ is _much_ b
 Luckily we are in the magical world of crypto where the impossible is routine and the unimaginable is occasional.
 So, we can actually find a function $H$ that is "essentially" one to one.
 
-![A collision-resistant hash function is a map that from a large universe to a small one that is "practically one to one" in the sense that collisions for the function do exist but are hard to find.](../figure/hash_function.jpg){ width=50% }
+![A collision-resistant hash function is a map that from a large universe to a small one that is "practically one to one" in the sense that collisions for the function do exist but are hard to find.](../figure/hash_function.jpg){#tmplabelfig width=50% }
 
 The main idea is the following simple result:
 
@@ -123,7 +123,7 @@ Practical constructions of cryptographic hash functions start with a basic block
 $H(m_1,\ldots,m_t)=h(h(h(m_1,IV),m_2),\cdots,m_t)$
 when the message is composed of $t$ blocks (and we can pad it otherwise).
 
-![The Merkle-Damgard construction converts a compression function $h:\{0,1\}^{2n}\rightarrow\{0,1\}^n$ into a hash function that maps strings of arbitrary length into $\{0,1\}^n$. The transformation preserves collision resistance but does not yield a PRF even if $h$ was pseudorandom. Hence for many applications it should not be used directly but rather composed with a transformation such as HMAC.](../figure/merke-damgard.jpg){ width=80% }
+![The Merkle-Damgard construction converts a compression function $h:\{0,1\}^{2n}\rightarrow\{0,1\}^n$ into a hash function that maps strings of arbitrary length into $\{0,1\}^n$. The transformation preserves collision resistance but does not yield a PRF even if $h$ was pseudorandom. Hence for many applications it should not be used directly but rather composed with a transformation such as HMAC.](../figure/merke-damgard.jpg){#tmplabelfig width=80% }
 
 
 This construction is known as the Merkle-Damgard construction and we know that it does preserve collision resistance:
