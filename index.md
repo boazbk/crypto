@@ -27,7 +27,7 @@ index:
     draft: false
 
   - num: 4.
-    name: Pseudorandom or key derivation functions
+    name: Pseudorandom functions
     file: lec_04_pseudorandom-functions
     draft: false
 
@@ -87,7 +87,7 @@ index:
     draft: false
 
   - num: 16.
-    name: Fully homomorphic encryption (cont.)
+    name: Fully homomorphic encryption II
     file: lec_16_FHE_part2
     draft: false
 
@@ -97,7 +97,7 @@ index:
     draft: false
 
   - num: 18.
-    name: Multiparty secure computation (cont.)
+    name: Multiparty secure computation II
     file: lec_18_SFE_part2
     draft: false  
 
@@ -107,7 +107,7 @@ index:
     draft: false
 
   - num: 20.
-    name: Quantum computing and cryptography (cont)
+    name: Quantum computing and cryptography II
     file: lec_20_quantum_part2
     draft: false
 
@@ -117,7 +117,7 @@ index:
     draft: false
 
   - num: 22.
-    name: Software obfuscation (cont.)
+    name: Software obfuscation II
     file: lec_22_obfuscation_part2
     draft: false
 
@@ -127,7 +127,7 @@ index:
     draft: false
 
   - num: 24.
-    name: Cryptography, morality, and policy
+    name: Cryptography morality and policy
     file: lec_24_policy
     draft: false
 
@@ -135,7 +135,6 @@ index:
     name: Course recap
     file: lec_25_course_recap
     draft: false
-
 ---
 
 _Work in progress_
