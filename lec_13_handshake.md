@@ -41,13 +41,13 @@ Once this is done, they can use a CCA secure / authenticated  private-key encryp
 
 The canonical example of a basic key exchange protocol is the _Diffie Hellman_ protocol. It uses as public parameters a group $\mathbb{G}$ with generator $g$, and then follows the following steps:
 
-1. Alice picks random $a\getsr\{0,\ldots,|\mathbb{G}|-1\}$ and sends $A=g^a$.
-2. Bob picks random $b\getsr \{0,\ldots,|\mathbb{G}|-1\}$ and sends $B=g^b$.
+1. Alice picks random $a\leftarrow_R\{0,\ldots,|\mathbb{G}|-1\}$ and sends $A=g^a$.
+2. Bob picks random $b\leftarrow_R \{0,\ldots,|\mathbb{G}|-1\}$ and sends $B=g^b$.
 3. They both set their key as $k=H(g^{ab})$ (which Alice computes as $B^a$ and Bob computes as $A^b$), where $H$ is some hash function.
 
 Another variant is using an arbitrary encryption scheme such as RSA:
 1. Alice generates keys $(d,e)$ and sends $e$ to Bob.
-2. Bob picks random $k \getsr\{0,1\}^m$ and sends $E_e(k)$ to Alice.
+2. Bob picks random $k \leftarrow_R\{0,1\}^m$ and sends $E_e(k)$ to Alice.
 3. They both set their key to $k$ (which Alice computes by decrypting Bob's ciphertext)
 
 Under plausible assumptions, it can be shown that these protocols secure against a passive adversary Eve.
@@ -138,7 +138,7 @@ The advantage of a generic construction is that it can be instantiated not just 
 
 * **Ingredients:** A public key encryption scheme $(G',E',D')$ and a two hash functions $H,H':\{0,1\}^*\rightarrow\{0,1\}^n$ (which we model as independent random oracles[^oracles])
 * **Key generation:** We generate keys $(e,d)=G'(1^n)$ for the underlying encryption scheme.
-* **Encryption:** To encrypt a message $m\in\{0,1\}^\ell$, we select randomness $r\getsr\{0,1\}^\ell$ for the underlying encryption algorithm $E'$ and output $E'_e(r;H(m\|r))\|(r \oplus m)\|H'(m\|r)$, where by $E'_e(m';r')$ we denote the result of encrypting $m'$ using the key $e$ and the randomness $r'$ (we assume the scheme takes $n$ bits of randomness as input; otherwise modify the output length of $H$ accordingly).
+* **Encryption:** To encrypt a message $m\in\{0,1\}^\ell$, we select randomness $r\leftarrow_R\{0,1\}^\ell$ for the underlying encryption algorithm $E'$ and output $E'_e(r;H(m\|r))\|(r \oplus m)\|H'(m\|r)$, where by $E'_e(m';r')$ we denote the result of encrypting $m'$ using the key $e$ and the randomness $r'$ (we assume the scheme takes $n$ bits of randomness as input; otherwise modify the output length of $H$ accordingly).
 * **Decryption:** To decrypt a ciphertext $c\|y\|z$ first let $r=D_d(c)$, $m=r \oplus y$ and then check that $c=E_e(m;H(m\|r))$ and $z=H'(m\|r)$. If any of the checks fail we output ```error```; otherwise we output $m$.
 
 [^oracles]: Recall that it's easy to obtain two independent random oracles $H,H'$ from a single oracle $H''$, for example by letting $H(x)=H''(0\|x)$ and $H'(x)=H''(1\|x)$.

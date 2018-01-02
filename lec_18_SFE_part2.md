@@ -32,7 +32,7 @@ __Protocol 2MPC:__
 
 * __Inputs:__ Alice's input is $x\in\{0,1\}^n$ and Bob's input is $y\in\{0,1\}^n$. The goal is for Alice to learn only $F(x,y)$ and Bob learn nothing.
 
-* __Alice->Bob:__ Alice generates $(e,d)\getsr G(1^n)$ and sends $e$ and $c=E_e(x)$.
+* __Alice->Bob:__ Alice generates $(e,d)\leftarrow_R G(1^n)$ and sends $e$ and $c=E_e(x)$.
 
 * __Bob->Alice:__ Bob computes define $f$ to be the function $f(x)=F(x,y)$ and sends $c'=EVAL(f,c)$ to Alice.
 
@@ -44,7 +44,7 @@ We now claim that Bob does not learn anything about Alice's input:
 __Claim B:__ For every $x,y$, there exists a standalone algorithm $S$ such that $S(y)$ is indistinguishable from Bob's view when interacting with Alice and their corresponding inputs are $(x,y)$.
 
 __Proof:__ Bob only receives a single message in this protocol of the form $(e,c)$ where $e$ is a public key and $c=E_e(x)$.
-The simulator $S$ will generate $(e,d) \getsr G(1^n)$ and compute $(e,c)$ where $c=E_e(0^n)$. (As usual $0^n$ denotes the length $n$ string consisting of all zeroes.)
+The simulator $S$ will generate $(e,d) \leftarrow_R G(1^n)$ and compute $(e,c)$ where $c=E_e(0^n)$. (As usual $0^n$ denotes the length $n$ string consisting of all zeroes.)
 No matter what $x$ is, the output of $S$ is indistinguishable from the message Bob receives by the security of the encryption scheme. QED
 
 (In fact, this protocol is secure even against a _malicious_ strategy of Bob- can you see why?)
@@ -161,7 +161,7 @@ We will not provide the full details, but together these claims show that  $EVAL
 
 __Claim:__ Let $q=2^{\sqrt{m}}$ and suppose that $\eta< 2^{n^{0.1}}$ and $e\in\Z_q^m$ is some vector with $|e_i| \leq \eta $ for all $i$, and let $\eta' = 2^{n^{0.1}}\eta$.
 Let $Z'$ be the distribution over vectors in $\Z_q^m$ where each coordinate is chosen at random in $\{ - \eta' , \eta'+1,\ldots, \eta'-1,\eta' \}$ and let
-$Z''$ be the distribution over $\Z_q^m$ where we choose $e' \getsr Z'$ and output $e + e' (\mod \; q)$.
+$Z''$ be the distribution over $\Z_q^m$ where we choose $e' \leftarrow_R Z'$ and output $e + e' (\mod \; q)$.
 Then,
 
 $\sum_{z\in\Z_q^m} \left| \Pr[ Z' = z] - \Pr[ Z'' = z ] \right| < negl(n)$

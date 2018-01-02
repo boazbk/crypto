@@ -36,7 +36,7 @@ We say that $(G,E,D)$ is _CPA secure_ every efficient adversary $A$ wins the fol
 
 * $(e,d)=G(1^n)$
 * $A$ is given $e$ and outputs a pair of messages $m_0,m_1 \in \{0,1\}^n$.
-* $A$ is given $c=E_e(m_b)$ for $b\getsr\{0,1\}$.
+* $A$ is given $c=E_e(m_b)$ for $b\leftarrow_R\{0,1\}$.
 * $A$ outputs $b'\in\{0,1\}$ and _wins_ if $b'=b$.
 
 Note that we don't explicitly give $A$ access to the encryption oracle since it can compute it on its own using $e$.
@@ -113,11 +113,11 @@ However, currently the best known algorithm for computing the discrete logarithm
 
 John Gill suggested to Diffie and Hellman that modular exponentiation can be a good source for the kind of "easy-to-compute but hard-to-invert" functions they were looking for. Diffie and Hellman based a public key encryption scheme as follows:
 
-* The _key generation algorithm_, on input $n$, samples a prime number $p$ of $n$ bits description (i.e., between $2^{n-1}$ to $2^n$), a number $g\getsr \Z_p$ and $a \getsr \{0,\ldots,p-1\}$. We also sample a hash function $H:\{0,1\}^n\rightarrow\{0,1\}^\ell$.   The public key $e$ is $(p,g,g^a,H)$ while the secret key $d$ is $a$.[^secret_key]
+* The _key generation algorithm_, on input $n$, samples a prime number $p$ of $n$ bits description (i.e., between $2^{n-1}$ to $2^n$), a number $g\leftarrow_R \Z_p$ and $a \leftarrow_R \{0,\ldots,p-1\}$. We also sample a hash function $H:\{0,1\}^n\rightarrow\{0,1\}^\ell$.   The public key $e$ is $(p,g,g^a,H)$ while the secret key $d$ is $a$.[^secret_key]
 
 [^secret_key]: Formally the secret key should also contain all information in the public key, but we omit this for simplicity of notation.
 
-* The _encryption algorithm_, on input a message $m \in \{0,1\}^\ell$ and a public key $e=(p,g,h,H)$ will choose a random $b\getsr \{0,\ldots,p-1\}$, and output $(g^b,H(h^b)\oplus m)$.
+* The _encryption algorithm_, on input a message $m \in \{0,1\}^\ell$ and a public key $e=(p,g,h,H)$ will choose a random $b\leftarrow_R \{0,\ldots,p-1\}$, and output $(g^b,H(h^b)\oplus m)$.
 
 * The _decryption algorithm_, on input a ciphertext $(f,y)$ and the secret key, will output $H(f^a) \oplus y$.
 

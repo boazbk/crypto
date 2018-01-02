@@ -122,7 +122,7 @@ Where different notions of entropy begin to differ is when the distributions are
 
 $H_{Shannon}(X)+H_{Shannon}(Y|X) = H_{Shannon}(X,Y)$
 
-Where the entropy of a conditional distribution $Y|X$ is simply $\E_{x\getsr X} H_{Shannon}(Y|X=x)$ where $Y|X=x$ is the distribution on $Y$ obtained by conditioning
+Where the entropy of a conditional distribution $Y|X$ is simply $\E_{x\leftarrow_R X} H_{Shannon}(Y|X=x)$ where $Y|X=x$ is the distribution on $Y$ obtained by conditioning
 on the event that $X=x$.
 
 If $(p_1,\ldots,p_m)$ is a vector of probabilities summing up to $1$ and let us assume they are rounded so that for every $i$, $p_i = k_i/2^n$ for some integer $k_i$.

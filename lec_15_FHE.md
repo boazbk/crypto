@@ -112,7 +112,7 @@ On input $1^n$ key generation algorithm outputs a vector $s\in\Z_q^m$ with $s_1 
 
 Thus $s$ can be thought of a "trapdoor" for the generator that allows to distinguish between a random vector $c\in \Z_q^n$ (that with high probability would satisfy $|\iprod{c,s}|\geq q/10$)
 and an output of the generator.
-We use $G_s$ to encrypt a bit $b$ by letting $c \getsr G_s(1^n)$ and outputting $c + (b,0,\ldots,0)^\top$.
+We use $G_s$ to encrypt a bit $b$ by letting $c \leftarrow_R G_s(1^n)$ and outputting $c + (b,0,\ldots,0)^\top$.
 In the particular instantiation above we obtain $G_s$ by sampling the matrix $A$ from the LWE assumption and having $G_s$ output $w^\top A$ for a random $w\in\{0,1\}^n$, but we can ignore this particular implementation detail in the forgoing.
 
 Note that this trapdoor generator satisfies the following stronger property: we can generate an alternative generator $G'$ such that the description of $G'$ is indistinguishable from the description of $G_s$ but such that $G'$ actually does produce   (up to exponentially small statistical error)  the uniform distribution over $\Z_q^n$.

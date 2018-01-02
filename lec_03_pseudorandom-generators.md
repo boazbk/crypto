@@ -184,7 +184,7 @@ obtained by combining it with the one-time pad.
 
 
 >__Aside: Using pseudorandom generators for coin tossing over the phone.__ The following is a cute application of pseudorandom generators. Alice and Bob want to toss a fair coin over the phone. They use a pseudorandom generator $G:\{0,1\}^b\rightarrow\{0,1\}^{3n}$.
->  Alice will send $z\getsr\{0,1\}^{3n}$ to Bob, Bob picks $s\getsr\{0,1\}^n$ and with probability $1/2$ sends $G(s)$ (case I) and with probability $1/2$ sends $G(s)\oplus z$ (case II). Alice then picks a random $b\getsr\{0,1\}$ and sends it to Bob. Bob then reveals what he sent in the previous
+>  Alice will send $z\leftarrow_R\{0,1\}^{3n}$ to Bob, Bob picks $s\leftarrow_R\{0,1\}^n$ and with probability $1/2$ sends $G(s)$ (case I) and with probability $1/2$ sends $G(s)\oplus z$ (case II). Alice then picks a random $b\leftarrow_R\{0,1\}$ and sends it to Bob. Bob then reveals what he sent in the previous
 > stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$.
 
 ## How do pseudorandom generators actually look like?

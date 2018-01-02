@@ -118,7 +118,7 @@ It is not hard to show that we can relax our assumption to $q(n)$-LWE $q(n)=2^{p
 
 * **Key generation:**  As in the scheme of last lecture the secret key is $s\in\Z_s^n$ with $s_1 = \floor{\tfrac{q}{2}}$ and the public key is a generator $G_s$ such that samples from $G_s(1^n)$ are indistinguishable from independent random samples from $\Z_q^n$ but if $c$ is output by $G_s$ then $|\iprod{c,s}|<\sqrt{q}$, where the inner product (as all other computations) is done modulo $q$ and for every $x\in\Z_q=\{0,\ldots,q-1\}$ we define $|x|=\min \{ x, q-x \}$.
 
-* **Encryption:** To encrypt $b\in\{0,1\}$, let $c_1,\ldots,c_(n\log q) \getsr G(1^n)$ output $C=\widehat{bQ^\top +D}$ where $D$ is the matrix whose rows are $c_1,\ldots,c_{n\log q}$ and $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
+* **Encryption:** To encrypt $b\in\{0,1\}$, let $c_1,\ldots,c_(n\log q) \leftarrow_R G(1^n)$ output $C=\widehat{bQ^\top +D}$ where $D$ is the matrix whose rows are $c_1,\ldots,c_{n\log q}$ and $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
 
 * **Decryption:** To decrypt the ciphertext $C$, we output $0$ if $|(CQ^\top s)_1|<0.1q$ and $1$ if $0.6q>|(CQ^\top s)_1|>0.4q$. (It doesn't matter what we output on other cases.)
 

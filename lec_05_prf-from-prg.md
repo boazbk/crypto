@@ -69,7 +69,7 @@ __Definition (CPA security):__ An encryption scheme $(E,D)$ is _secure against c
 
 3. Eve interacts with $E$ for $t=poly(n)$ rounds as follows: in the $i^{th}$ round, Eve chooses a message $m_i$ and obtains $c_i= E_k(m_i)$.
 
-4. Then Eve chooses two messages $m_0,m_1$, and gets $c^* = E_k(m_b)$ for $b\getsr\{0,1\}$.
+4. Then Eve chooses two messages $m_0,m_1$, and gets $c^* = E_k(m_b)$ for $b\leftarrow_R\{0,1\}$.
 
 5. Eve _wins_ if she outpus $b$.
 

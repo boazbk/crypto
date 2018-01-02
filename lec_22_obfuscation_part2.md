@@ -85,7 +85,7 @@ __Definition:__ An IBE scheme is said to be CPA secure if every efficient advers
 * The keys are generated and Eve gets the master public key.
 * For $i=1,\ldots,T=poly(n)$, Eve chooses an identity $id_i \in \{0,1\}^*$ and gets the key $d_{id}$.
 * Eve chooses an identity $id^* \not\in \{id_1,\ldots,id_T\}$ and two messages $m_0,m_1$.
-* We choose $b\getsr\{0,1\}$ and Eve gets the encryption of $m_b$ with respect to the identity $id^*$.
+* We choose $b\leftarrow_R\{0,1\}$ and Eve gets the encryption of $m_b$ with respect to the identity $id^*$.
 * Eve outputs $b'$ and _wins_ if $b'=b$.
 
 
@@ -97,7 +97,7 @@ We assume without loss of generality that whenever $A$ makes a query to the key 
 
 We will build an algorithm $B$ that on input $\Gp_1,\Gp_2,g,g^a,g^b,g^c$ will output $\hat{g}^{abc}$ with probability $poly(\epsilon,1/T)$.
 
-The algorithm $B$ will guess $i_0, j_0 \getsr \{1,\ldots, T\}$ and simulate $A$ "in its belly" giving it the public key $g^a$, and act as follows:
+The algorithm $B$ will guess $i_0, j_0 \leftarrow_R \{1,\ldots, T\}$ and simulate $A$ "in its belly" giving it the public key $g^a$, and act as follows:
 
 * When $A$ makes a query to $H$ with $id$, then for all but the $i_0^{th}$ queries,  $B$ will chooose a random $b_{id} \in \{0,\ldots, |\Gp|\}$ (as usual we'll assume $|\Gp|$ is prime), choose $e_{id}=g^{b_{id}}$ and define $H(id)=e_{id}$.  Let $id_0$ be the $i_0^{th}$ query $A$ made to the oracle. We define $H(i_0)=g^b$ (where $g^b$ is the input to $B$- recall that $B$ does not know $b$.)
 
@@ -131,7 +131,7 @@ It should be noted that the encrypting party itself does not know any such $w$ a
 The idea is the following.
 We use the fact that the ```Exact Cover``` problem is NP complete to map $C$ into collection of subsets $S_1,\ldots,S_{m}$ of the universe $U$ (where $m,|U|=poly(|C|,n)$)
 such that there exists $w$ with $C(w)=1$ if and only if there exists $d$ sets $S_{i_1},\ldots,S_{i_d}$ that are a partition of $U$ (i.e., every element in $U$ is covered by exactly one of these sets), and moreover there is an efficient way to map $w$ to such a partition and vice versa.
-Now, to encrypt the message $x$ we take a degree $d$ instance of multilinear maps $(\Gp_1,\ldots,\Gp_{d},g_1,\ldots,g_{d})$ (with all groups of size $p$) and choose random $a_1,\ldots,a_{|U|} \getsr \{0,\ldots,p-1\}$.
+Now, to encrypt the message $x$ we take a degree $d$ instance of multilinear maps $(\Gp_1,\ldots,\Gp_{d},g_1,\ldots,g_{d})$ (with all groups of size $p$) and choose random $a_1,\ldots,a_{|U|} \leftarrow_R \{0,\ldots,p-1\}$.
 We then output the ciphertext $g_1^{\prod_{j\in S_1} a_j},\ldots,g_1^{\prod_{j\in S_m} a_j}, H(g_d^{\prod_{j\in U}^m a_j})\oplus x$.
 Now, given a partition $S_{i_1},\ldots,S_{i_d}$ of the universe $d$, we can use the multilinear operations to compute $g_d^{\prod_{j\in U}a_j}$ and recover the message.
 Intuitively, since the numbers are random, that would be the only way to come up with computing this value, but showing that requires formulating precise security definitions for both multilinear maps and witness encryption and of course a proof.

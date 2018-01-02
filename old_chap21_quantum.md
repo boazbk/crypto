@@ -7,7 +7,7 @@
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\R}{\mathbb{R}}
-\newcommand{\getsr}{\leftarrow_R\;}
+\newcommand{\leftarrow_R}{\leftarrow_R\;}
 \newcommand{\Gp}{\mathbb{G}}
 \newcommand{\Hp}{\mathbb{H}}
 

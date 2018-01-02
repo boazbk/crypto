@@ -24,7 +24,7 @@ Below is a review of some of the various reductions we saw in class that are cov
 One major point we did _not_ talk about in this course was _one way functions_. The definition of a one way function is quite simple:
 
 A function $f:\{0,1\}^*\rightarrow\{0,1\}^*$ is a _one way function_ if it is efficiently computable and for every $n$ and a $poly(n)$ time adversary $A$,
-the probability over $x\getsr\{0,1\}^n$ that $A(f(x))$ outputs $x'$ such that $f(x')=f(x)$ is negligible.
+the probability over $x\leftarrow_R\{0,1\}^n$ that $A(f(x))$ outputs $x'$ such that $f(x')=f(x)$ is negligible.
 
 The "OWF conjecture" is the conjecture that one way functions exist. It turns out to be a necessary and sufficient condition for much of cryptography.
 That is, the following theorem is known (by combining works of many people):

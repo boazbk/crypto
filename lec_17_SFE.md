@@ -297,7 +297,7 @@ The variant we defined above is known as _computationally hiding and statistical
 There are also statistically hiding and computationally binding commitments, though it can be shown that we need to restrict to efficient strategies for at least one of the parties.
 
 
-We have already seen a commitment scheme before (due to Naor): the receiver sends a random $z\getsr\{0,1\}^{3n}$ and the sender commits to a bit $b$ by choosing a random $s\in\{0,1\}^n$ and sending $y = PRG(s)+ bz (\mod 2)$ where $PRG:\{0,1\}^n\rightarrow\{0,1\}^{3n}$ is a pseudorandom generator.
+We have already seen a commitment scheme before (due to Naor): the receiver sends a random $z\leftarrow_R\{0,1\}^{3n}$ and the sender commits to a bit $b$ by choosing a random $s\in\{0,1\}^n$ and sending $y = PRG(s)+ bz (\mod 2)$ where $PRG:\{0,1\}^n\rightarrow\{0,1\}^{3n}$ is a pseudorandom generator.
 It's a good exercise to verify that it satisfies the above definitions.
 By running this protocol $\ell$ times in parallel we can commit to a string of any polynomial length.
 
@@ -336,8 +336,8 @@ Hence we need to use a _coin tossing protocol_ to choose the randomness, or more
 Such a protocol can actually be achieved very simply.
 Suppose we want to generate $m$ coins:
 
-* Alice selects $r'\getsr\{0,1\}^m$ at random and engages in a _commitment protocol_ to commit to $r'$.
-* Bob selects $r'' \getsr\{0,1\}^m$ and sends it to Alice in the clear.
+* Alice selects $r'\leftarrow_R\{0,1\}^m$ at random and engages in a _commitment protocol_ to commit to $r'$.
+* Bob selects $r'' \leftarrow_R\{0,1\}^m$ and sends it to Alice in the clear.
 * The result of the coin tossing protocol will be the string $r=r'\oplus r''$.
 
 Note that Alice knows $r$.

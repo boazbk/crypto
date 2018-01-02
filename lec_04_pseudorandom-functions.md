@@ -21,13 +21,13 @@ indistinguishable from a function that maps each index $i$ to an independent ran
 __Definition (Pseudorandom Function Generator):__ An efficiently computable function $F$ taking two inputs $s\in\{0,1\}^n$ and $i\in \{1,\ldots,2^n\}$ and outputting a single
 bit $F(s,i)$ is a _pseudorandom function (PRF) generator_ if for every polynomial time adversary $A$ outputting a single bit and polynomial $p(n)$, if $n$ is large enough then:
 
-$$ \left| \E_{s\in\{0,1\}^n}[ A^{F(s,\cdot)}(1^n)] - \E_{H \getsr [2^n]\rightarrow\{0,1\}}[A^H(1^n)] \right| < 1/p(n) \;.$$
+$$ \left| \E_{s\in\{0,1\}^n}[ A^{F(s,\cdot)}(1^n)] - \E_{H \leftarrow_R [2^n]\rightarrow\{0,1\}}[A^H(1^n)] \right| < 1/p(n) \;.$$
 
 Some notes on notation are in order. The input $1^n$ is simply a string of $n$ ones, and it is a typical cryptography convention to assume that such an input
 is always given to the adversary. This is simply because by "polynomial time" we really mean polynomial in $n$ (which is our key size or security parameter).
 The notation $A^{F(s,\cdot)}$ means that $A$ has _black box_ (also known as _oracle_) access to the function that
 maps $i$ to $F(s,i)$. That is, $A$ can choose an index $i$, query the box and get $F(s,i)$, then choose a new index $i'$, query the box to get $F(s,i')$, etc.. etc.. for
-a polynomial number of queries. The notation $H \getsr \{0,1\}^n\rightarrow \{0,1\}$ means that $H$ is simply a completely random function that maps every
+a polynomial number of queries. The notation $H \leftarrow_R \{0,1\}^n\rightarrow \{0,1\}$ means that $H$ is simply a completely random function that maps every
 index $i$ to an independent and random different bit. That means that the notation $A^H$ in the equation above means that $A$ has access to a completely random black box that
 returns a random bit for any new query made. Finally one last note: below we will identify the set $[2^n] = \{1,\ldots,2^n\}$ with the set $\{0,1\}^n$ (there
 is a one to one mapping between those sets using the binary represnetation), and so we will treat $i$ interchangebly as a number in $[2^n]$ or a string in $\{0,1\}^n$.
@@ -64,7 +64,7 @@ This would be a good time to stop reading and try to think for yourself whether 
 
 The problem is that Mallory does not have to learn the password $p$ in order to impersonate Alice. For example, she can simply record the message Alice $c_1$ sends to Bob in the first session and then _replay_ it to Bob in the next session. Since the message is a valid encryption of $p$, then Bob would accept it from Mallory!  (This is known as a _replay attack_ and is a common concern one needs to protect against in crypgoraphic protocols.) One can try to put in countermeasures to replay this particular attack, but its existence demonstrates that secrecy of the password does not guarantee security of the login protocol.
 
-_How do pseudorandom functions help in the login problem?_ The idea is that they create what's known as a _one time password_. Alice and Bob will share an index $s\in\{0,1\}^n$ for the pseudorandom function generator $\{ f_s \}$. When Alice wants to prove to Bob her identity, Bob will choose a random $i\getsr\{0,1\}^n$, and send $i$ to Alice, and then Alice will send $f_s(i),f_s(i+1),\ldots,f_s(i+\ell-1)$ to Bob where $\ell$ is some parameter (you can think of $\ell=n$ for simplicity). Bob will check that indeed $y=f_S(i)$ and if so accept the session as authentic.
+_How do pseudorandom functions help in the login problem?_ The idea is that they create what's known as a _one time password_. Alice and Bob will share an index $s\in\{0,1\}^n$ for the pseudorandom function generator $\{ f_s \}$. When Alice wants to prove to Bob her identity, Bob will choose a random $i\leftarrow_R\{0,1\}^n$, and send $i$ to Alice, and then Alice will send $f_s(i),f_s(i+1),\ldots,f_s(i+\ell-1)$ to Bob where $\ell$ is some parameter (you can think of $\ell=n$ for simplicity). Bob will check that indeed $y=f_S(i)$ and if so accept the session as authentic.
 
 The formal protocol is as follows:
 
@@ -72,7 +72,7 @@ __Protocol PRF-Login:__
 
 *  Shared input: $s\in\{0,1\}^n$. Alice and Bob treat it as a seed for a pseudorandom function generator $\{ f_s \}$.
 *  In every session Alice and Bob do the following:
-   1. Bob chooses a random $i\getsr[2^n]$ and sends $i$ to Alice.
+   1. Bob chooses a random $i\leftarrow_R[2^n]$ and sends $i$ to Alice.
    2. Alice sends $y_1,\ldots,y_\ell$ to Bob where $y_j = f_s(i+j-1)$.
    3. Bob checks that for every $j\in\{1,\ldots,\ell\}$, $y_j = f_s(i+j-1)$ and if so accepts the session; otherwise he rejects it.
 
@@ -138,7 +138,7 @@ and a tag $\tau$, and produces a bit $b\in\{0,1\}$. We say that $(S,V)$ is a _Me
 
 * For every key $k$ and message $m$, $V_k(m,S_k(m))=1$.
 
-* For every polynomial-time adversary $A$ and polynomial $p(n)$, it is with less than $1/p(n)$  probability over the choice of $k\getsr\{0,1\}^n$
+* For every polynomial-time adversary $A$ and polynomial $p(n)$, it is with less than $1/p(n)$  probability over the choice of $k\leftarrow_R\{0,1\}^n$
 that $A^{S_k(\cdot)}(1^n)=(m',\tau')$ such that $m'$ is _not_ one of the messages $A$ queries and $V_k(m',\tau')=1$.[^mesdifferent]
 
 [^mesdifferent]: Clearly if the adversary outputs a pair $(m,\tau)$ that it did query from its oracle then that pair will pass verification. This suggests the possiblity of a _replay_ attack whereby Mallory resends to Bob a message that Alice sent him in the past.  As above, once can thwart this by insisting the every message $m$ begins with a fresh nonce or a value derived from the current time.

@@ -329,7 +329,7 @@ cryptographic tools that we can obtain from this seemingly innocent conjecture:
 (We will see what all these names and some of these reductions mean later in the
 course.)
 
-![Web of reductions between notions equivalent to ciphers with larger than key messages](../figure/<privatekey-reduction-web.jpg>)
+![Web of reductions between notions equivalent to ciphers with larger than key messages](../figure/privatekey-reduction-web.jpg)
 
 We will soon see the first of the many reductions we'll learn in this course. Together this "web of reductions" forms the scientific core of cryptography, connecting many of the core concepts and enabling us to construct increasingly sophisticated tools based on relatively simple "axioms" such as the cipher conjecture.
 

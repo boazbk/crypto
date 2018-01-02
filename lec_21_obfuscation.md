@@ -70,10 +70,10 @@ __Definition (Functional encryption):__ A tuple $(G,E,D,KeyDist)$ is a _function
 
 * Every efficient adversary Eve wins the following game with probability at most $1/2 + negl(n)$:
 
-    1. We generate $(d,e) \getsr G(1^n)$.
+    1. We generate $(d,e) \leftarrow_R G(1^n)$.
     2. Eve is given $e$ and for $i=1,\ldots,T=poly(n)$ repeatedly chooses $f_i$ and receives $d_{f_i}$.
     3. Eve chooses two messages $m_0,m_1$ such that $f_i(m_0)=f_i(m_1)$ for all $i = 1,\ldots, T$.
-    4. For $b \getsr \{0,1\}$, Eve receives $c^* = E_e(m_b)$ and outputs $b'$.
+    4. For $b \leftarrow_R \{0,1\}$, Eve receives $c^* = E_e(m_b)$ and outputs $b'$.
     5. Eve _wins_ if $b'=b$.
 
 
@@ -114,7 +114,7 @@ for every  efficient adversary $A$ mapping $\{0,1\}^*$ to $\{0,1\}$, there  exis
 ## Applications of obfuscation
 
 The writings of Diffie and Hellman, James Ellis, and others that thought of public key encryption, shows that one of the first approaches they considered was to use obfuscation to transform a private-key encryption scheme into a public key one.
-That is, given a private key encryption scheme $(E,D)$ we can transform it to a public key encryption scheme $(G,E',D)$ by having the key generation algorithm select a private key $k\getsr\{0,1\}^n$ that will serve as the decryption key, and let the encryption key $e$ be the circuit $\mathcal{O}(C)$ where $\mathcal{O}$ is an obfuscator and $C$ is a circuit mapping $c$ to $D_k(d)$.
+That is, given a private key encryption scheme $(E,D)$ we can transform it to a public key encryption scheme $(G,E',D)$ by having the key generation algorithm select a private key $k\leftarrow_R\{0,1\}^n$ that will serve as the decryption key, and let the encryption key $e$ be the circuit $\mathcal{O}(C)$ where $\mathcal{O}$ is an obfuscator and $C$ is a circuit mapping $c$ to $D_k(d)$.
 The new encryption algorithm $E'$ takes $e$ and $c$ and simply outputs $e(c)$.
 
 These days we know other approaches for obtaining public key encryption, but the obfuscation-based approach has significant additional flexibility.

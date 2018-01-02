@@ -204,7 +204,7 @@ Both $V_1$ and $V_2$ are efficiently computable. We now need to come up with an 
 output a distribution indistinguishable from the output $V^*$.
 The simulator $S^*$ will work as follows:
 
-1. Pick $b'\getsr\{0,1\}$.
+1. Pick $b'\leftarrow_R\{0,1\}$.
 2. Pick $s''$ at random in $\Z^*_m$. If $b=0$ then let $x'={s''}^2 \pmod{m}$. Otherwise output $x'=x{s''}^2 \pmod{m}$.
 3. Let $b=V_1(x,m,x')$. If $b \neq b'$ then go back to step 1.
 4. Output $V_2(x,m,x',s'')$.
