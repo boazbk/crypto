@@ -317,9 +317,10 @@ $2^{101}\cdot 50.5$ and with probability $1-2^{-101}$ it will be $0$.
 
 Note that even though the average of $M$ is $50.5$, the probability that for a
 random $x$, $M(x)$ will be close to $50.5$ or even bigger than zero is very very
-small. This is similar to the fact that if Bill Gates is in a room with any
-group of $99$ people, no matter how pool, then the average worth of a random
-person in this room is more than \$100M even though with probability $0.99$ a
+small.
+This is similar to the fact that if Bill Gates is in a room with any
+group of $99$ people, no matter how poor, then the average net worth of a random
+person in this room is more than 100M dollars even though with probability $0.99$ a
 random person in the room will be worth much less than that amount. Hence the
 name "expectation" is somewhat misleading.
 
