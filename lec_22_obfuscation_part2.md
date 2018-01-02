@@ -1,4 +1,4 @@
-#  More obfuscation, exotic encryptions.
+#  More obfuscation, exotic encryptions
 
 Fully homomorphic encryption is an extremely powerful notion, but it does not allow us to obtain fine control over the access to information.
 With the public key you can do all sorts of computation on the encrypted data, but you still do not learn it, while with the private key you learn everything.

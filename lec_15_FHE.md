@@ -1,4 +1,4 @@
-# Fully homomorphic encryption : Introduction and bootstrapping
+# Fully homomorphic encryption: Introduction and bootstrapping
 
 
 

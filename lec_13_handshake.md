@@ -1,4 +1,4 @@
-# The handshake - establishing secure connections over insecure channels
+# Establishing secure connections over insecure channels
 
 
 We've now compiled all the tools that are needed for the basic goal of cryptography (which is still being subverted quite often) allowing Alice and Bob to exchange messages assuring their integrity and confidentiality over a channel that is observed or controlled by an adversary.

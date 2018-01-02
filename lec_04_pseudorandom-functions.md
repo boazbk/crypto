@@ -2,7 +2,7 @@
 
 
 
-# Length extension on Steroids - Pseudorandom functions.
+# Pseudorandom functions
 
 
 

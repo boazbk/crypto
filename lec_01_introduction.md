@@ -4,7 +4,7 @@
 
 
 
-# Lecture 1 - Introduction
+# Introduction
 
 __Optional additional reading:__ Chapters 1 and 2 of Katz-Lindell book.[^references]
 

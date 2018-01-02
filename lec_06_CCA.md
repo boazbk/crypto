@@ -1,4 +1,4 @@
-# Lecture 6: Chosen Ciphertext Security
+# Chosen Ciphertext Security
 
 
 

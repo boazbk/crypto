@@ -1,5 +1,5 @@
 # Concrete candidates for public key crypto
-% Boaz Barak
+
 
 
 In the previous lecture we talked about _public key cryptography_ and saw the Diffie Hellman system and the DSA signature scheme.
