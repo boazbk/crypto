@@ -1,10 +1,9 @@
-*CS 127: Cryptography / Boaz Barak*
-
-Lecture 0 - Mathematical Background
-===================================
+# Mathematical Background
 
 This is a brief review of some mathematical tools, and especially probability
 theory, that we will use in this course.
+See also the [mathematical background](http://www.introtcs.org/public/lec_00_1_math_background.pdf) and [probability](http://www.introtcs.org/public/lec_15_probability.pdf) lectures in my [Notes on Introduction to Theoretical Computer Science](http://www.introtcs.org/).
+
 
 At Harvard, much of this material (and more) is taught in Stat 110 "Introduction
 to Probability", CS20 "Discrete Mathemtics", and AM107 "Graph Theory and
@@ -14,7 +13,7 @@ and Meyer from MIT Course 6.042 "Mathematics For Computer Science" (Chapters 1-2
 and 14 to 19 are particularly relevant). The mathematical tool we use most often
 is discrete probability. The "Probabilistic Method" book by Alon and Spencer is
 a great resource in this area. Also, the books of Mitzenmacher and Upfal and
-Prabhakar and Raghavan cover probability from a more algorithmic perspective. 
+Prabhakar and Raghavan cover probability from a more algorithmic perspective.
 For an excellent popular discussion of some of the mathematical concepts we'll talk about, I can't recommend highly enough the book _"How Not to Be Wrong"_ by Jordan Ellenberg.
 
 Although knowledge of algorithms is not strictly necessary, it would be quite
@@ -27,8 +26,7 @@ to Theory of Computation) or the first 2 chapters of my book with Arora.
 
  
 
-Mathematical Proofs
--------------------
+## Mathematical Proofs
 
 Arguably *the* mathematical prerequisite needed for this course is a certain
 level of comfort with mathematical proofs. Many students tend to think of
@@ -241,7 +239,7 @@ versa. Then $f$ is a one-to-one and onto function from $A$ to its complement
 $\overline{A}={\{0,1\}}^{101}\setminus A$, meaning that $|A|=|\overline{A}|$ and
 since the $A$ and $\overline{A}$ are disjoint sets whose union is
 $$
- \Pr [ A \cup A' ] \leq \Pr[ A ] + \Pr[A'] 
+ \Pr [ A \cup A' ] \leq \Pr[ A ] + \Pr[A']
 $$
 
 We omit the (very simple) proof-- can you see why this is true?
@@ -276,7 +274,7 @@ number of ones in $x$. Thus, the event $A$ we considered before can be phrased
 as the event that $N \leq 50$ and the formula above can be phrased as
 
 $$
- \Pr_{x {\leftarrow_{\tiny R}}{\{0,1\}}^{101}} [ N(x) \leq 50 ] = \frac{1}{2} 
+ \Pr_{x {\leftarrow_{\tiny R}}{\{0,1\}}^{101}} [ N(x) \leq 50 ] = \frac{1}{2}
 $$
 
 For the remainder of this lecture, we will only consider **real** random
@@ -292,7 +290,7 @@ obtained is given by $p_x$) then the expectation of $N$, denoted by
 ${\mathbb{E}}[N]$ is defined as follows:
 
 $$
- {\mathbb{E}}[ N ] := \sum_{x \in S} N(x) \cdot p_x 
+ {\mathbb{E}}[ N ] := \sum_{x \in S} N(x) \cdot p_x
 $$
 
 For example, if the experiment was to choose a random U.S. citizen (and hence
@@ -347,8 +345,7 @@ For example, the random variable $N$ above is equal to $X_1+\cdots+X_{101}$ with
 $X_i$ equalling the $i^{th}$ bit of the chosen string. Since ${\mathbb{E}}[X_i]
 = (1/2)\cdot 0 + (1/2)\cdot 1 = 1/2$, ${\mathbb{E}}[N] = 101\cdot(1/2) = 50.5$.
 
-Deviation bounds
-----------------
+## Deviation bounds
 
 As we saw above, sometimes we want to know not just the expectation of a random
 variable but also the probability that the variable is close to (or at least not
@@ -372,7 +369,7 @@ following theorem:
 space $S$ such that for all $s\in S$, $X(s)\geq 0$. Let $k\geq 1$. Then,
 
 $$
- \Pr [ X \geq k {\mathbb{E}}[ X ] ] \leq \frac{1}{k} 
+ \Pr [ X \geq k {\mathbb{E}}[ X ] ] \leq \frac{1}{k}
 $$
 
 **proof:** Denote $\mu = {\mathbb{E}}[ X ]$ and let $A = \{ s \in S \;|\; X(s)
@@ -411,7 +408,7 @@ equal to the expectation of $\tilde{X}^2$. That is, for $X$ with
 ${\mathbb{E}}[X] = \mu$,
 
 $$
- Var[X] := {\mathbb{E}}[ \tilde{X}^2 ] = {\mathbb{E}}[ (X - \mu)^2 ] 
+ Var[X] := {\mathbb{E}}[ \tilde{X}^2 ] = {\mathbb{E}}[ (X - \mu)^2 ]
 $$
 
 In other words $Var[X]$ is defined to be ${\mathbb{E}}[ (X - {\mathbb{E}}[X])^2]$.
@@ -425,7 +422,7 @@ variables:
 expectation $\mu$ and standard deviation $\sigma$. Let $k\geq 1$. Then,
 
 $$
- \Pr[ | X  - \mu | \geq k \sigma ] \leq 1/k^2 
+ \Pr[ | X  - \mu | \geq k \sigma ] \leq 1/k^2
 $$
 
 **Proof:** The variable $Y = (X-\mu)^2$ is non-negative and has expectation
@@ -462,7 +459,7 @@ information on the probability that $B$ will happen. By plugging the formula for
 $\Pr[B|A]$ we see that $B$ is independent from $A$ if and only if
 
 $$
- \Pr[B \cap A] = \Pr[A]\Pr[B] 
+ \Pr[B \cap A] = \Pr[A]\Pr[B]
 $$
 
 This means that $B$ is independent from $A$ iff $A$ is independent from $B$ and
@@ -481,7 +478,7 @@ subset of $A_1,\ldots,A_n$. That is, for every subset $I$ of the numbers
 $\{1,\ldots,n\}$,
 
 $$
- \Pr[ \cap_{i\in I} A_i ] = \prod_{i \in I} \Pr[ A_i ] 
+ \Pr[ \cap_{i\in I} A_i ] = \prod_{i \in I} \Pr[ A_i ]
 $$
 
 **Independent random variables.** We say that $U$ and $V$ are **independent
@@ -516,14 +513,13 @@ variables with $0 \leq X_i \leq 1$ and ${\mathbb{E}}[ X_i = \mu ]$. Then,
 
 $$
  \Pr\left[ \left| \frac{\sum X_i}{n} - \mu \right| > \epsilon \right] <
-2^{-\epsilon^2n/4} 
+2^{-\epsilon^2n/4}
 $$
 
 We omit the proof that can be found in many of the texts mentioned above, though
 see the exercises for a proof of an important special case.
 
-Exercises
----------
+## Exercises
 
 The following exercises will be part of the first problem set in the course, so
 you can get a head start by working on them now.
@@ -594,7 +590,7 @@ you can get a head start by working on them now.
     2.  Stirling's approximation formula: for every $n\geq 1$,
 
         $$
-        \sqrt{2\pi n}\left(\tfrac{n}{e}\right)^n \leq n! \leq 2\sqrt{2\pi n}\left(\tfrac{n}{e}\right)^n 
+        \sqrt{2\pi n}\left(\tfrac{n}{e}\right)^n \leq n! \leq 2\sqrt{2\pi n}\left(\tfrac{n}{e}\right)^n
         $$
 
         where $e=2.7182\ldots$ is the base of the natural logarithm.

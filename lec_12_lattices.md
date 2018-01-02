@@ -1,18 +1,8 @@
-% Lecture 12: Lattice based crypto
-% Boaz Barak
+# Lattice based crypto
 
-<!--- ~ MathDefs   --->
 
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\getsr}{\leftarrow_R\;}
-\newcommand{\Gp}{\mathbb{G}}
-\newcommand{\floor}[1]{\lfloor #1 \rfloor}
-\newcommand{\iprod}[1]{\langle #1 \rangle}
-<!--- ~  --->
 
-# Lattice based encryption - some history and significance.
+## Lattice based encryption - some history and significance.
 
 Lattice based public key encryption (and its cousins known as knapsack and coding based encryption) have almost as long a history as discrete logarithm
 and factoring based schemes.
@@ -51,7 +41,7 @@ So, if you have some data that you expect you'd want still kept secret in 20 yea
 Currently lattice based cryptography is the only real "game in town" for potentially quantum-resistant public key encryption schemes.
 
 
-# A world without Gaussian elimination
+## A world without Gaussian elimination
 
 The general approach people used to get a public key encryption is to obtain a hard computational problem with some mathematical _structure_.
 We've seen this in the _discrete logarithm_ problem, where the task is to invert the map $a \mapsto g^a \pmod{p}$, and the integer factoring problem,
@@ -79,12 +69,12 @@ Our solution for this is simple- just add more equations! If the encryptor adds 
 Thus, at least intuitively, the following encryption scheme would be "secure" in the Gaussian-elimination free world of attackers that haven't taken freshman linear algebra:
 
 * _Key generation_:  Pick random $m\times n$ matrix $A$ over $\Z_q$, and $x\getsr\Z_q^n$, the secret key is $x$ and the public key is $(A,y)$ where $y=Ax$.
-* _Encryption_: To encrypt a message $b\in\zo$, pick $w\in\zo^m$ and output $w^\top A,\iprod{w,y}+\alpha b$ for some fixed nonzero $\alpha\in\Z_q$.
+* _Encryption_: To encrypt a message $b\in\{0,1\}$, pick $w\in\{0,1\}^m$ and output $w^\top A,\iprod{w,y}+\alpha b$ for some fixed nonzero $\alpha\in\Z_q$.
 * _Decryption:_ To decrypt a ciphertext $(a,\sigma)$, output $0$ iff $\iprod{a,x}=\sigma$.
 
 (Please make sure that you see why this description corresponds to the previous one; as usual all calculations are done modulo $q$.)
 
-# Security in the real world.
+## Security in the real world.
 
 Like it or not (and cryptographers typically don't) Gaussian elimination _is_ possible in the real world and the scheme above is completely insecure.
 However, the Gaussian elimination algorithm is extremely _brittle_.  
@@ -148,7 +138,7 @@ We can now show the secure variant of our original encryption scheme:
 
 * _Key generation:_ Pick $x\in\Z_q^n$. The private key is $x$ and the public key is $(A,y)$ with $y=Ax+e$ with $e$ a $\delta$-noise vector and $A$ a random $m\times n$ matrix.
 
-* _Encrypt:_ To encrypt $b\in\zo$ given the key $(A,y)$, pick $w\in\zo^m$ and output $w^\top A, \iprod{w,y}+b\floor{q/2}$.
+* _Encrypt:_ To encrypt $b\in\{0,1\}$ given the key $(A,y)$, pick $w\in\{0,1\}^m$ and output $w^\top A, \iprod{w,y}+b\floor{q/2}$.
 
 * _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|\iprod{a,x}-\sigma|<q/10$.
 
@@ -173,12 +163,12 @@ $(A,y),(a,\sigma)$ where $y$ is completely random in $\Z_q^m$, $a$ is random and
 (I leave to the reader to verify that this lemma implies security; the idea is that it shows that the concatenation of the public key and encryption of $0$ is indistinguishable from something that is completely random, and you can use it to show that the concatenation of the public key and encryption of $1$ is indistinguishable
   from the same thing, and then finish using the hybrid argument. )
 
-__Proof:__ By the search to decision reduction, the distribution above is indistinguishable from the distribution where $y$ is completely random. However, in this case I claim that if we choose $w$ at random in $\zo^m$ and let $(a,\sigma) = w^\top(A\|y)$ then $(a,\sigma)$ would be a (close to) completely uniform and independent
+__Proof:__ By the search to decision reduction, the distribution above is indistinguishable from the distribution where $y$ is completely random. However, in this case I claim that if we choose $w$ at random in $\{0,1\}^m$ and let $(a,\sigma) = w^\top(A\|y)$ then $(a,\sigma)$ would be a (close to) completely uniform and independent
 vector in $\Z_q^{n+1}$.
 We will not do the whole proof (which uses the mod $q$ version of the _leftover hash lemma_ we mentioned before) but the idea is simple.
 Let $A' = (A\|y)$ which in our case is a completely random matrix.
 This mans that the map $w \mapsto w^\top A'$ is essentially a _pairwise independent_ hash function mapping $\Z_q^m$ to $\Z_q^{n+1}$.
-Now when we choose $w$ at random in $\zo^m$, it is coming from a distribution with $m$ bits of entropy.
+Now when we choose $w$ at random in $\{0,1\}^m$, it is coming from a distribution with $m$ bits of entropy.
 If $m \gg (n+1)\log q$, then because the output of this function is so much smaller than $m$, we expect it to be completely uniform. QED
 
 

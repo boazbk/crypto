@@ -1,8 +1,8 @@
-~ MathDefs
-\newcommand{\zo}{\{0,1\}}
-~
+# Computational Security
 
-*CS 127: Cryptography / Boaz Barak*
+
+
+
 
 **Additional reading:** Chapter 3 up to and including Section 3.3 in Katz
 Lindell book.
@@ -71,7 +71,7 @@ the perfect secrecy definition we saw last time, a natural attempt for defining
 computational security would be the following:
 
 **Security Definition (First Attempt):** An encryption scheme $(E,D)$ has
-_$t$ bits of computational security_ 
+_$t$ bits of computational security_
 if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$
 computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key
 $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing
@@ -96,7 +96,7 @@ $E_k(m_b)$ is at most $1/2+2^{-t}$.
 [^sec_bits]: This is a slight simplification of the typical notion of "$t$ bits of security". In the more standard definition we'd say that a scheme has $t$ bits of security if for every $t_1+t_2 \leq t$, an attacker running in $2^{t_1}$ time can't get success probability advantage more than $2^{-t_2}$. However these two definitions only differ from one another by at most a factor of two. This may be important for practical applications (where the difference between $64$ and $32$ bits of security could be crucial) but won't matter for our concerns.
 
 
- 
+
 Having learned our lesson, let's try to see that this strategy does give us the
 kind of conditions we desired. In particular, let's verify that this definition
 implies the analogous condition to perfect secrecy.
@@ -182,7 +182,7 @@ parts of such proofs are typically:
 -   Analyzing the probability of success and in particular showing that if $Eve$
     had non-negligible advantage then so will $Eve'$.
 
-![We show that the security of $S'$ implies the security of $S$ by transforming an adversary $Eve$ breaking $S$ into an adversary $Eve'$ breaking $S'$](reduction.jpg){ width=50% }
+![We show that the security of $S'$ implies the security of $S$ by transforming an adversary $Eve$ breaking $S$ into an adversary $Eve'$ breaking $S'$](../figure/reduction.jpg){ width=50% }
 
 The asymptotic approach
 -----------------------
@@ -222,7 +222,7 @@ there is some $N$, such that if $n>N$ then $\mu(n) < 1/(cn)^d$. Note that for
 every non-constant polynomials $p,q$, $\mu(n)$ is negligible if and only if the
 function $\mu'(n) = p(\mu(q(n)))$ is negligible.
 
->__Note:__ The above definitions could be confusing if you haven't encountered asymptotic analysis before. Reading the beginning of Chapter 3 (pages 43-51) in the KL book can be extremely useful. As a rule of thumb, if every time you see the word "polynomial" you imagine the function $n^{10}$ and every time you see the word "negligible" you imagine the function $2^{-sqrt{n}}$ then you will get the right intuition. What you need to remember is that negligible is much smaller than any inverse polynomial, while polynomials are closed under multiplication, and so we have the "equations" $negligible\times polynomial = negligible$ and $polynomial \times polynomial = polynomial$. As mentioned, in practice people really want to get as close as possible to $n$ bits of security with an $n$ bit key, but  we would be happy as long as the security grows with the key, so when we say a scheme is "secure" you can think of it having $\sqrt{n}$ bits of security (though any function growing faster than $\log n$ would be fine as well). 
+>__Note:__ The above definitions could be confusing if you haven't encountered asymptotic analysis before. Reading the beginning of Chapter 3 (pages 43-51) in the KL book can be extremely useful. As a rule of thumb, if every time you see the word "polynomial" you imagine the function $n^{10}$ and every time you see the word "negligible" you imagine the function $2^{-sqrt{n}}$ then you will get the right intuition. What you need to remember is that negligible is much smaller than any inverse polynomial, while polynomials are closed under multiplication, and so we have the "equations" $negligible\times polynomial = negligible$ and $polynomial \times polynomial = polynomial$. As mentioned, in practice people really want to get as close as possible to $n$ bits of security with an $n$ bit key, but  we would be happy as long as the security grows with the key, so when we say a scheme is "secure" you can think of it having $\sqrt{n}$ bits of security (though any function growing faster than $\log n$ would be fine as well).
 
 
 From now on, we will require all of our encryption schemes to be *efficient*
@@ -329,12 +329,12 @@ cryptographic tools that we can obtain from this seemingly innocent conjecture:
 (We will see what all these names and some of these reductions mean later in the
 course.)
 
-![Web of reductions between notions equivalent to ciphers with larger than key messages](<privatekey-reduction-web.jpg>)
+![Web of reductions between notions equivalent to ciphers with larger than key messages](../figure/<privatekey-reduction-web.jpg>)
 
 We will soon see the first of the many reductions we'll learn in this course. Together this "web of reductions" forms the scientific core of cryptography, connecting many of the core concepts and enabling us to construct increasingly sophisticated tools based on relatively simple "axioms" such as the cipher conjecture.
 
 
-# Prelude: Computational Indistinguishability
+## Prelude: Computational Indistinguishability
 
 
 The task of Eve in breaking an encryption scheme is to *distinguish* between an
@@ -489,8 +489,7 @@ that $H_t = C^1, H_0 = C^0$, and we can argue that $H_i$ is close to $H_{i+1}$
 for all $i$. This type of argument repeats itself time and again in
 cryptography, and so it is important to get comfortable with it.
 
-The Length Extension Theorem
-----------------------------
+## The Length Extension Theorem
 
 ### Extension via repetition
 
@@ -551,7 +550,7 @@ $(k_1,m_1)$, then use $k_1$ to decrypt $c_2$ to learn $(k_2,m_2)$, and so on
 until we use $k_{t-1}$ to decrypt $c_t$ and learn $(k_t,m_t)$. Finally we can
 simply output $(m_1,\ldots,m_t)$.
 
-![Constructing a cipher with $t$ bit long messages from one with $n+1$ long messages](<length-extension.jpg>)
+![Constructing a cipher with $t$ bit long messages from one with $n+1$ long messages](../figure/<length-extension.jpg>)
 
 The above are clearly valid encryption and decryption algorithms, and hence the
 real question becomes *is it secure??*. The intuition is that $c_1$ hides all
@@ -618,9 +617,9 @@ distinguish between $E'_{U_n}(k_j,m_j)$ and $E'_{U_n}(k'_j,m_j)$ thus
 contradicting the security of $(E',D')$. QED
 
 
-# Appendix: The computational model
+### Appendix: The computational model
 
-For concreteness sake let us give a precise definition of what it means for a function or probabilistic process $f$ mapping $\zo^n$ to $\zo^m$ to be computable using $T$ operations:
+For concreteness sake let us give a precise definition of what it means for a function or probabilistic process $f$ mapping $\{0,1\}^n$ to $\{0,1\}^m$ to be computable using $T$ operations:
 
 __Defintion:__ A _probabilistic straightline program_ consists of a sequence of lines, each one of them one of the following forms:
 
@@ -630,11 +629,11 @@ __Defintion:__ A _probabilistic straightline program_ consists of a sequence of 
 * `a = INPUT` where `a` is a variable identifier.
 * `OUTPUT b` where `b` is a variable that has been assigned a value before.
 
-Given a program $\pi$, we say that its _size_ is the number of lines it contains. If the program has $n$ `INPUT` commands and $m$ `OUTPUT` commands, we identify it with the  probabilistic process that maps $\zo^n$ to $\zo^m$ in the natural way. (That is, the variables all correspond to a single bit in $\zo$, every time `INPUT` is called we take a new bit from the input, and every time `OUTPUT` is called we output a new bit.)
+Given a program $\pi$, we say that its _size_ is the number of lines it contains. If the program has $n$ `INPUT` commands and $m$ `OUTPUT` commands, we identify it with the  probabilistic process that maps $\{0,1\}^n$ to $\{0,1\}^m$ in the natural way. (That is, the variables all correspond to a single bit in $\{0,1\}$, every time `INPUT` is called we take a new bit from the input, and every time `OUTPUT` is called we output a new bit.)
 
-If $F$ is a (probabilistic or deterministic)  map of $\zo^n$ to $\zo^m$, the _complexity_ of $F$ is the size of the smallest program $\pi$ that computes it.
+If $F$ is a (probabilistic or deterministic)  map of $\{0,1\}^n$ to $\{0,1\}^m$, the _complexity_ of $F$ is the size of the smallest program $\pi$ that computes it.
 
-If you haven't taken a class such as CS121 before, you might wonder how such a simple model captures complicated programs that use loops, conditionals, and more complex data types than simply a bit in $\zo$, not to mention some special purpose crypto-breaking devices that might involve tailor-made hardware. It turns out that it does (for the same reason we can compile complicated programming languages to run on silicon chips with a very limited instruction set). In fact, as far as we know, this model can capture even computations that happen in nature, whether it's in a bee colony or the human brain (which contains about $10^{10}$ neurons, so should in principle be simulatable by a program that has up to a few order of magnitudes the same number of lines). Crucially, for cryptography, we care about such programs not because we want to actually run them, but because we want to argue about their _non existence_.[^quantum] If we have a process that cannot be computed by a straightline program of length shorter than $2^{128}>10^{38}$ then it seems safe to say that a computer the size of the human brain (or even all the human and nonhuman brains on this planet) will not be able to perform it either.
+If you haven't taken a class such as CS121 before, you might wonder how such a simple model captures complicated programs that use loops, conditionals, and more complex data types than simply a bit in $\{0,1\}$, not to mention some special purpose crypto-breaking devices that might involve tailor-made hardware. It turns out that it does (for the same reason we can compile complicated programming languages to run on silicon chips with a very limited instruction set). In fact, as far as we know, this model can capture even computations that happen in nature, whether it's in a bee colony or the human brain (which contains about $10^{10}$ neurons, so should in principle be simulatable by a program that has up to a few order of magnitudes the same number of lines). Crucially, for cryptography, we care about such programs not because we want to actually run them, but because we want to argue about their _non existence_.[^quantum] If we have a process that cannot be computed by a straightline program of length shorter than $2^{128}>10^{38}$ then it seems safe to say that a computer the size of the human brain (or even all the human and nonhuman brains on this planet) will not be able to perform it either.
 
 >__Advanced note:__  The computational model we use in this class is _non uniform_ (corresponding to Boolean circuits) as opposed to _uniform_ (corresponding to Turing machines). If this distinction doesn't mean anything to you, you can ignore it as it won't play a significant role in what we do next. It basically means that we do allow our programs to have hardwired constants of $poly(n)$ bits where $n$ is the input/key length.   
 

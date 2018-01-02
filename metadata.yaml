@@ -4,5 +4,7 @@ author: Boaz Barak
 date: Spring 2018
 pagetitle: "An intensive introduction to cryptography"
 header-includes:
-   - \newcommand{\bits}{\{0,1\}}
+   - \newcommand{\getsr}{\leftarrow_{\text{\tiny R}}}
+   - \newcommand{\bra}[1]{\langle #1 |}
+   - \newcommand{\ket}[1]{| #1 \rangle}
 ---

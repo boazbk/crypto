@@ -1,24 +1,17 @@
-% Lecture 13: The handshake - establishing secure connections over insecure channels
-% Boaz Barak
+# The handshake - establishing secure connections over insecure channels
 
-<!--- ~ MathDefs   --->
-
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\getsr}{\leftarrow_R\;}
-\newcommand{\Gp}{\mathbb{G}}
-\newcommand{\floor}[1]{\lfloor #1 \rfloor}
-\newcommand{\iprod}[1]{\langle #1 \rangle}
-<!--- ~  --->
 
 We've now compiled all the tools that are needed for the basic goal of cryptography (which is still being subverted quite often) allowing Alice and Bob to exchange messages assuring their integrity and confidentiality over a channel that is observed or controlled by an adversary.
 Our tools for achieving this goal are:
 
 * Public key (aka assymetric) encryption schemes.
+
 * Public key  (aka assymetric) digital signatures schemes.
+
 * Private key (aka symmetric) encryption schemes - block ciphers and stream ciphers.
+
 * Private key (aka symmetric) message authentication codes and psedorandom functions.
+
 * Hash functions that are used both as ways to compress messages for authentication as well as key derivation and other tasks.
 
 The notions of security we require from these building blocks can vary as well. For encryption schemes we talk about CPA (chosen plaintext attack)
@@ -33,29 +26,32 @@ Unlike algorithms, where typically there are  straightforward _quantitative_ tra
 In particular, the following issues arise when considering the task of securely transmitting information between two parties Alice and Bob:
 
 * **Infrastructure/setup assumptions:** What kind of setup can Alice and Bob rely upon? For example in the TLS protocol, typically Alice is a website and Bob is user; Using the infrastructure of certificate authorities, Bob has a trusted way to obtain Alice's _public signature key_, while Alice doesn't know anything about Bob. But there are many other variants as well. Alice and Bob could share a (low entropy) _password_. One of them might have some hardware token, or they might have a secure out of band channel (e.g., text messages) to transmit a short amount of information. There are even variants where the parties authenticate by something they _know_, with one recent example being the notion of _witness encryption_ (Garg, Gentry, Sahai, and Waters) where one can encrypt information in a "digital time capsule" to be opened by anyone who, for example, finds a proof of the Reimann hypothesis.
+
 * **Adversary access:** What kind of attacks do we need to protect against. The simplest setting is a _passive_ eavesdropping adversary (often called "Eve") but we sometimes consider an _active person-in-the-middle_ attacks (sometimes called "Mallory"). We sometimes consider notions of _graceful recovery_. For example, if the adversary manages to hack into one of the parties then it can clearly read their communications from that time onwards, but we would want their past communication to be protected (a notion known as _forward secrecy_). If we rely on trusted infrastructure such as certificate authorities, we could ask what happens if the adversary breaks into those. Sometimes we rely on the security of several entities or secrets, and we want to consider adversaries that control _some_ but not _all_ of them, a notion known as _threshold cryptography_.
+
 * **Interaction:** Do Alice and Bob get to interact and relay several messages back and forth or is it a "one shot" protocol? You may think that this is merely a question about efficiency but it turns out to be crucial for some applications. Sometimes Alice and Bob might not be two parties separated in space but the same party separated in time. That is, Alice wishes to send a message to her future self by storing an encrypted and authenticated version of it on some media. In this case, absent a time machine, back and forth interaction between the two parties is obviously impossible.
+
 * **Security goal:** The security goals of a protocol are usually stated in the negative- what does it mean for an adversary to _win_ the security game. We typically want the adversary to learn absolutely no information about the secret beyond what she obviously can. For example, if we use a shared password chosen out of $t$ possibilities, then we might need to allow the adversary $1/t$ success probability, but we wouldn't want her to get anything beyond $1/t+negl(n)$. In some settings, the adversary can obviously completely disconnect the communication channel between Alice and Bob, but we want her to be essentially limited to either dropping communication completely or letting it go by unmolested, and not have the ability to modify communication without detection. Then in some settings, such as in the case of steganography and anonymous routing, we would want the adversary not to find out even the fact that a conversation had taken place.
 
 
 ## Basic Key Exchange protocol
 
-The basic primitive for secure communication is a _key exchange_ protocol, whose goal is to have Alice and Bob share a common random secret key $k\in\zo^n$.
+The basic primitive for secure communication is a _key exchange_ protocol, whose goal is to have Alice and Bob share a common random secret key $k\in\{0,1\}^n$.
 Once this is done, they can use a CCA secure / authenticated  private-key encryption to communicate with confidentiality and integrity.
 
-The canonical example of a basic key exchange protocol is the _Diffie Hellman_ protocol. It uses as public parameters a group $\Gp$ with generator $g$, and then follows the following steps:
+The canonical example of a basic key exchange protocol is the _Diffie Hellman_ protocol. It uses as public parameters a group $\mathbb{G}$ with generator $g$, and then follows the following steps:
 
-1. Alice picks random $a\getsr\{0,\ldots,|\Gp|-1\}$ and sends $A=g^a$.
-2. Bob picks random $b\getsr \{0,\ldots,|\Gp|-1\}$ and sends $B=g^b$.
+1. Alice picks random $a\getsr\{0,\ldots,|\mathbb{G}|-1\}$ and sends $A=g^a$.
+2. Bob picks random $b\getsr \{0,\ldots,|\mathbb{G}|-1\}$ and sends $B=g^b$.
 3. They both set their key as $k=H(g^{ab})$ (which Alice computes as $B^a$ and Bob computes as $A^b$), where $H$ is some hash function.
 
 Another variant is using an arbitrary encryption scheme such as RSA:
 1. Alice generates keys $(d,e)$ and sends $e$ to Bob.
-2. Bob picks random $k \getsr\zo^m$ and sends $E_e(k)$ to Alice.
+2. Bob picks random $k \getsr\{0,1\}^m$ and sends $E_e(k)$ to Alice.
 3. They both set their key to $k$ (which Alice computes by decrypting Bob's ciphertext)
 
 Under plausible assumptions, it can be shown that these protocols secure against a passive adversary Eve.
-The notion of security here means that, similar to encryption, if after observing the transcript Eve receives with probability $1/2$ the value of $k$ and with probability $1/2$ a random string $k'\gets\zo^n$, then her probability of guessing which is the case would be at most $1/2+negl(n)$ (where $n$ can be thought of as $\log |\Gp|$ or some other parameter related to the length of bit representation of members in the group).
+The notion of security here means that, similar to encryption, if after observing the transcript Eve receives with probability $1/2$ the value of $k$ and with probability $1/2$ a random string $k'\gets\{0,1\}^n$, then her probability of guessing which is the case would be at most $1/2+negl(n)$ (where $n$ can be thought of as $\log |\mathbb{G}|$ or some other parameter related to the length of bit representation of members in the group).
 
 ## Authenticated key exchange
 
@@ -79,7 +75,9 @@ key $e$ of Alice.
 This is basically what happened in the SSL V3.0 protocol.
 However, as was shown by Bleichenbacher in 1998, it turned out this is suseptible to the following attack:
 
+
 * The adversary listens in on a conversation, and in particular observes $c=E_e(k)$ where $k$ is the private key.
+
 * The adversary then starts many connections with the server with ciphertexts related to $c$, and observes whether they succeed or fail (and in what way they fail, if they do). It turns out that based on this information, the adversary would be able to recover the key $k$.
 
 The particular details of the attack are somewhat messy, but the general notion is that part of the ciphertext is the RSA function value $y = x^e \pmod{m}$, and recovering $x$ will result in recovering the key $k$.
@@ -105,7 +103,7 @@ efficient Mallory wins in the following game with probability at most $1/2+ negl
 
 * For $poly(n)$ rounds, Mallory gets access to the function $c \mapsto D_d(c)$. (She doesn't need access to $m \mapsto E_e(m)$ since she already knows $e$.)
 
-* Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\zo$, and Mallory gets $c^* = E_e(m_b)$. (Note that she of course does _not_ get the randmoness used to generate this challenge encryption.)
+* Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\{0,1\}$, and Mallory gets $c^* = E_e(m_b)$. (Note that she of course does _not_ get the randmoness used to generate this challenge encryption.)
 
 * Mallory now gets another $poly(n)$ rounds of access to the function  $c \mapsto D_d(c)$ except that she is not allowed to query $c^*$.
 
@@ -138,9 +136,9 @@ The advantage of a generic construction is that it can be instantiated not just 
 
 
 
-* **Ingredients:** A public key encryption scheme $(G',E',D')$ and a two hash functions $H,H':\zo^*\rightarrow\zo^n$ (which we model as independent random oracles[^oracles])
+* **Ingredients:** A public key encryption scheme $(G',E',D')$ and a two hash functions $H,H':\{0,1\}^*\rightarrow\{0,1\}^n$ (which we model as independent random oracles[^oracles])
 * **Key generation:** We generate keys $(e,d)=G'(1^n)$ for the underlying encryption scheme.
-* **Encryption:** To encrypt a message $m\in\zo^\ell$, we select randomness $r\getsr\zo^\ell$ for the underlying encryption algorithm $E'$ and output $E'_e(r;H(m\|r))\|(r \oplus m)\|H'(m\|r)$, where by $E'_e(m';r')$ we denote the result of encrypting $m'$ using the key $e$ and the randomness $r'$ (we assume the scheme takes $n$ bits of randomness as input; otherwise modify the output length of $H$ accordingly).
+* **Encryption:** To encrypt a message $m\in\{0,1\}^\ell$, we select randomness $r\getsr\{0,1\}^\ell$ for the underlying encryption algorithm $E'$ and output $E'_e(r;H(m\|r))\|(r \oplus m)\|H'(m\|r)$, where by $E'_e(m';r')$ we denote the result of encrypting $m'$ using the key $e$ and the randomness $r'$ (we assume the scheme takes $n$ bits of randomness as input; otherwise modify the output length of $H$ accordingly).
 * **Decryption:** To decrypt a ciphertext $c\|y\|z$ first let $r=D_d(c)$, $m=r \oplus y$ and then check that $c=E_e(m;H(m\|r))$ and $z=H'(m\|r)$. If any of the checks fail we output ```error```; otherwise we output $m$.
 
 [^oracles]: Recall that it's easy to obtain two independent random oracles $H,H'$ from a single oracle $H''$, for example by letting $H(x)=H''(0\|x)$ and $H'(x)=H''(1\|x)$.
@@ -192,4 +190,4 @@ Security requirements: forward secrecy, deniability.
 * Vestiges of past crypto policies.
 * Importance of "perfect forward secrecy"
 
-![How the NSA feels about breaking encrypted communication](NSA_Page_29.jpg){ width=50% }
+![How the NSA feels about breaking encrypted communication](../figure/NSA_Page_29.jpg){ width=50% }

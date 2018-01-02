@@ -1,5 +1,6 @@
-% Lecture 24: Ethical, moral, and policy dimensions to cryptography
-% Boaz Barak
+# Ethical, moral, and policy dimensions to cryptography
+
+
 
 This will not be a lecture but rather a discussion on some of the questions that arise from cryptography.
 I would like you to read some of the sources below (and maybe others) and reflect on the following questions:

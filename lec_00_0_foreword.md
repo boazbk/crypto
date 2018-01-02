@@ -1,10 +1,7 @@
-*CS 127: Cryptography / Boaz Barak*
 
  
-=
 
-Foreword and Syllabus
-=====================
+# Foreword and Syllabus
 
 >   *"Human ingenuity cannot concoct a cipher which human ingenuity cannot
 >   resolve."* Edgar Allan Poe, 1841
@@ -45,8 +42,7 @@ learning a new way of thinking is its own reward.
 
  
 
-Syllabus
---------
+## Syllabus
 
 In this fast-paced course, I plan to start from the very basic notions of
 cryptogrpahy and by the end of the term reach some of the exciting advances that

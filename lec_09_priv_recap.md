@@ -1,23 +1,15 @@
-% Lecture 9: Private key crypto recap
-% Boaz Barak
+# Private key crypto recap
 
-<!--- ~ MathDefs   --->
 
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\getsr}{\leftarrow_R\;}
+We now review all that we have learned about _private key_ cryptography before we embark on the wonderful
+journey to _public key_ cryptography.
 
-<!--- ~  --->
-
-In the next lecture we will review all that we have learned about _private key_ cryptography before we embark on the wonderful
-journey to _public key_ cryptography. Please come ready with questions! (There will also be cookies :) )
 
 This material is mostly covered in Chapters 1 to 9 of the Katz Lindell book, and now would be a good time for you to read the corresponding proofs
 in the book. It is often helpful to see the same proof presented in a slightly different way.
 Below is a review of some of the various reductions we saw in class that are covered in the KL book, with pointers to the corresponding sections.
-Please make sure that you are comfortable with all these proofs, and if not, read up the proof in KL, and ask me or the TF's questions in Piazza/Section or
-in the recap class on Tuesday.
+
+
 
 * Pseudorandom generators (PRG) length extension (from $n+1$ output PRG to $poly(n)$ output PRG): Section 7.4.2
 * PRG's to pseudorandom functions (PRF's): Section 7.5
@@ -31,8 +23,8 @@ in the recap class on Tuesday.
 
 One major point we did _not_ talk about in this course was _one way functions_. The definition of a one way function is quite simple:
 
-A function $f:\zo^*\rightarrow\zo^*$ is a _one way function_ if it is efficiently computable and for every $n$ and a $poly(n)$ time adversary $A$,
-the probability over $x\getsr\zo^n$ that $A(f(x))$ outputs $x'$ such that $f(x')=f(x)$ is negligible.
+A function $f:\{0,1\}^*\rightarrow\{0,1\}^*$ is a _one way function_ if it is efficiently computable and for every $n$ and a $poly(n)$ time adversary $A$,
+the probability over $x\getsr\{0,1\}^n$ that $A(f(x))$ outputs $x'$ such that $f(x')=f(x)$ is negligible.
 
 The "OWF conjecture" is the conjecture that one way functions exist. It turns out to be a necessary and sufficient condition for much of cryptography.
 That is, the following theorem is known (by combining works of many people):
@@ -50,7 +42,7 @@ __Theorem:__ The following are equivalent:
 
 The key result in the proof of this theorem is the result of Hastad, Impagliazzo, Levin and Luby that if one way functions exist then pseudorandom generators exist.
 If you are interested in finding out more,
-Sections 7.2-7.4 in the KL book cover a special case of this theorem for the case that the one way function is a _permutation_ on $\zo^n$ for every $n$.
+Sections 7.2-7.4 in the KL book cover a special case of this theorem for the case that the one way function is a _permutation_ on $\{0,1\}^n$ for every $n$.
 This proof has been considerably simplified and quantitatively improved in works of Haitner, Holenstein, Reingold, Vadhan, Wee and Zheng. See [this talk of Salil Vadhan](http://people.seas.harvard.edu/~salil/research/CompEnt-abs.html) for more on this.  See also [these lecture notes](http://www.cs.princeton.edu/courses/archive/spring08/cos598D/scribe3.pdf) from a Princeton seminar I gave on this topic (though the proof has been simplified since then by the above works).
 
 ### Attacks on private key cryptosystems

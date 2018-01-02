@@ -1,26 +1,4 @@
-% Lecture 16: Fully homomorphic encryption : Construction
-% Boaz Barak
-
-<!--- ~ MathDefs   --->
-
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\getsr}{\leftarrow_R\;}
-\newcommand{\Gp}{\mathbb{G}}
-\newcommand{\Hp}{\mathbb{H}}
-
-\newcommand{\floor}[1]{\lfloor #1 \rfloor}
-\newcommand{\ceil}[1]{\lceil #1 \rceil}
-
-\newcommand{\iprod}[1]{\langle #1 \rangle}
-
-\newcommand{\cF}{\mathcal{F}}
-
-\newcommand{\onand}{\overline{\wedge}}
-<!--- ~  --->
-<!-- test -->
+#  Fully homomorphic encryption : Construction
 
 In the last lecture we defined fully homomorphic encryption, and showed the "bootstrapping theorem" that transforms a partially homomorphic encryption scheme into a fully homomorphic encryption, as long as the original scheme can homomorphically evaluate its own decryption circuit.
 In this lecture we will show an encryption scheme (due to Gentry, Sahai and Waters, henceforth GSW) meeting the latter property.
@@ -43,8 +21,8 @@ The challenge is that it seems that to do that we need to find a way to evaluate
 
 The GSW approach to handle this is to move from vectors to _matrices_.
 As usual, it is instructive to first consider the cryptographer's dream world where Gaussian elimination doesn't exist.
-In this case, the GSW ciphertext encrypting $b\in\zo$ would be an $n\times n$ matrix $C$ over $\Z_q$ such that $Cs = bs$ where $s\in\Z_q^n$ is the secret key.
-(Note here that $s$ is a _vector_ in $\R_q^n$ while $b$ is a _number_ in $\zo$.)
+In this case, the GSW ciphertext encrypting $b\in\{0,1\}$ would be an $n\times n$ matrix $C$ over $\Z_q$ such that $Cs = bs$ where $s\in\Z_q^n$ is the secret key.
+(Note here that $s$ is a _vector_ in $\R_q^n$ while $b$ is a _number_ in $\{0,1\}$.)
 That is, the encryption of a bit $b$  is a matrix $C$ such that the secret key is an _eigenvector_ (modulo $q$) of $C$ with corresponding eigenvalue $b$.
 (Let us defer discussion of how the encrypting party generates such a ciphertext, since this is in any case only a "dream" toy example.)
 Clearly, given $C$ and $s$ we can recover $b$.
@@ -58,7 +36,7 @@ and
 
 $CC's = bb's$.
 
-Since if $b,b' \in \zo$, then $b \; NAND \; b' = 1-bb'$ and in particular this equation holds modulo $q$, we would be able to take an encryption $C$ of $b$ and an encryption $C'$ of $b'$ and transform it to the encryption
+Since if $b,b' \in \{0,1\}$, then $b \; NAND \; b' = 1-bb'$ and in particular this equation holds modulo $q$, we would be able to take an encryption $C$ of $b$ and an encryption $C'$ of $b'$ and transform it to the encryption
 $(I-CC')$ of $b\; NAND \; b'$ (where $I$ is the identity matrix).
 
 Thus in a world without Gaussian elimination it is not hard to get a fully homomorphic encryption.[^private]
@@ -73,7 +51,7 @@ As usual, the idea is to "fool Gaussian elimination with noise" but we will see 
 [^chaos]: For this reason, Craig Gentry called his highly recommended survey on fully homomorphic encryption and other advanced constructions [computing on the edge of chaos](https://eprint.iacr.org/2014/610).
 
 
-The main idea is that we can expect the following problem to be hard for a random secret $s\in\Z_q^n$: distinguish between samples of random matrices $C$ and matrices where $Cs = bs + e$ for some $b\in\zo$ and "short" $e$ satisfying $|e_i| \leq \sqrt{q}$ for all $i$.
+The main idea is that we can expect the following problem to be hard for a random secret $s\in\Z_q^n$: distinguish between samples of random matrices $C$ and matrices where $Cs = bs + e$ for some $b\in\{0,1\}$ and "short" $e$ satisfying $|e_i| \leq \sqrt{q}$ for all $i$.
 This yields a natural candidate for an encryption scheme where we encrypt $b$ by a matrix $C$ satisfying $Cs = bs + e$ where $e$ is a "short" vector.[^short]
 
 
@@ -104,9 +82,9 @@ At this point one could say
 
 >_"If only there was some way to encode numbers between $0$ and $q-1$ using only $0$ and $1$"_
 
-If you think about it hard enough, it  turns out that there is something known as the "binary basis" that allows us to encode a number $x\in\Z_q$ as a vector $\hat{x}\in\zo^{\log q}$.[^ceil]
+If you think about it hard enough, it  turns out that there is something known as the "binary basis" that allows us to encode a number $x\in\Z_q$ as a vector $\hat{x}\in\{0,1\}^{\log q}$.[^ceil]
 What's even more surprising is that this seemingly trivial trick turns out to be immensely useful.
-Let us denote by $\hat{s}$ the encoding of $s$ as a vector in $\zo^{n\log q}$ and by $\hat{C}$ the encoding of an $m\times n$ $C$ as an $m\times n\log q$ matrix with $0,1$ entries by encoding each row  separately.
+Let us denote by $\hat{s}$ the encoding of $s$ as a vector in $\{0,1\}^{n\log q}$ and by $\hat{C}$ the encoding of an $m\times n$ $C$ as an $m\times n\log q$ matrix with $0,1$ entries by encoding each row  separately.
 (We still think of the entries of these vectors and matrices as elements of $\Z_q$ and so all calculations are still done modulo $q$.)
 We let $Q$ be the $n \times (n\log q)$ "decoding" matrix where for every $i\in [n]$ and $j\in[\log q]$, $Q_{i,ij}=2^{j-1}$ and all other entries are zero.
 It's a good exercise to verify that for every vector $v$ and matrix $C$, $Q\hat{v}=v$  and $\hat{C}Q^\top =C$.
@@ -127,9 +105,9 @@ $(C\otimes C')s = \widehat{CQ^\top}C's = \widehat{CQ^\top}(b'Q^\top s+e')=b'C Q^
 
 Combining this we can see that if we define
 
-$C \onand C'$ $= (I - C \otimes C')$
+$C \overline{\wedge} C'$ $= (I - C \otimes C')$
 
-then if $C$ encrypts $b$ and $C'$ encrypts $b'$ with noise parameters $\mu$ and $\mu'$ respectively then $C \onand C'$ encrypts $b \; NAND b'$ with noise parameter at most $\mu + n\log q \mu'$.
+then if $C$ encrypts $b$ and $C'$ encrypts $b'$ with noise parameters $\mu$ and $\mu'$ respectively then $C \overline{\wedge} C'$ encrypts $b \; NAND b'$ with noise parameter at most $\mu + n\log q \mu'$.
 
 
 ## Putting it all together
@@ -140,21 +118,21 @@ It is not hard to show that we can relax our assumption to $q(n)$-LWE $q(n)=2^{p
 
 * **Key generation:**  As in the scheme of last lecture the secret key is $s\in\Z_s^n$ with $s_1 = \floor{\tfrac{q}{2}}$ and the public key is a generator $G_s$ such that samples from $G_s(1^n)$ are indistinguishable from independent random samples from $\Z_q^n$ but if $c$ is output by $G_s$ then $|\iprod{c,s}|<\sqrt{q}$, where the inner product (as all other computations) is done modulo $q$ and for every $x\in\Z_q=\{0,\ldots,q-1\}$ we define $|x|=\min \{ x, q-x \}$.
 
-* **Encryption:** To encrypt $b\in\zo$, let $c_1,\ldots,c_(n\log q) \getsr G(1^n)$ output $C=\widehat{bQ^\top +D}$ where $D$ is the matrix whose rows are $c_1,\ldots,c_{n\log q}$ and $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
+* **Encryption:** To encrypt $b\in\{0,1\}$, let $c_1,\ldots,c_(n\log q) \getsr G(1^n)$ output $C=\widehat{bQ^\top +D}$ where $D$ is the matrix whose rows are $c_1,\ldots,c_{n\log q}$ and $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
 
 * **Decryption:** To decrypt the ciphertext $C$, we output $0$ if $|(CQ^\top s)_1|<0.1q$ and $1$ if $0.6q>|(CQ^\top s)_1|>0.4q$. (It doesn't matter what we output on other cases.)
 
-* **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \onand C'$ as $I- \widehat{CQ^\top}C'$.
+* **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \overline{\wedge} C'$ as $I- \widehat{CQ^\top}C'$.
 
 ## Analysis of our scheme
 
 To show that that this scheme is a valid partially homomorphic scheme we need to show the following properties:
 
-1. **Correctness:** The decryption of an encryption of $b\in\zo$ equals $b$.
+1. **Correctness:** The decryption of an encryption of $b\in\{0,1\}$ equals $b$.
 
 2. **CPA security:** An encryption of $0$ is computationally indistinguishable from an encryption of $1$ to someone that got the public key.
 
-3. **Homomrphism:** If $C$ encrypts $b$ and $C'$ encrypts $b'$ then $C \onand C'$ encrypts $b\; NAND\; b'$ (with a higher amount of noise). The growth of the noise will be the reason that we will not get immediately a fully homomorphic encryption.
+3. **Homomrphism:** If $C$ encrypts $b$ and $C'$ encrypts $b'$ then $C \overline{\wedge} C'$ encrypts $b\; NAND\; b'$ (with a higher amount of noise). The growth of the noise will be the reason that we will not get immediately a fully homomorphic encryption.
 
 4. **Shallow decryption circuit:** To plug this scheme into the bootstrapping theorem we will need to show that its decryption algorithm (or more accurately, the function in the statement of the bootstrapping theorem)  can be evaluated in depth $polylog(n)$ (independently of $q$), and that moreover, the noise grows slowly enough that our scheme is homomorphic with respect to such circuits.
 
@@ -191,12 +169,12 @@ It seems a reasonable assumption though unfortuantely at the moment we do not kn
 
 ### Homomorphism
 
-Let $v=Qs$, $b\in\zo$ and $C$ be a ciphertext such that $Cv = bv + e$.
+Let $v=Qs$, $b\in\{0,1\}$ and $C$ be a ciphertext such that $Cv = bv + e$.
 We define the _noise_ of $C$, denoted as $noise(C)$ to be the maximum of $|e_i|$ over all $i\in[n\log q]$.
 We make the following claim:
 
 __Lemma (noisy homomorphism):__  Let $C,C'$ be ciphertexts encrypting $b,b'$ respectively with $noise(C),noise(C')\leq q/4$.
-Then $C''=C \onand C'$ encrypts $b\; NAND\; b'$ with
+Then $C''=C \overline{\wedge} C'$ encrypts $b\; NAND\; b'$ with
 
 $noise(C'') \leq (2n\log q)\max\{ noise(C), noise(C') \}$
 
@@ -221,7 +199,7 @@ In our case the secret key is the descrption $\hat{s}$ of our vector $s$ as a bi
 Given a ciphertext $C$, the decryption algorithm takes the dot product modulo $q$ of $s$ with the first row of $CQ^\top$ and outputs $0$ (respectively $1$) if the resulting number is small (respectively large).
 By repeatedly applying the noisy homomorphism lemma, we can show that can homorphically evaluate every circuit of NAND gates whose _depth_ $\ell$  satisfies $(2n\log q)^\ell \ll q$.
 If $q = 2^{\sqrt{n}}$ then (assuming $n$ is sufficiently large) then as long as $\ell < n^{0.49}$ this will be satisfied.
-In particular to show that $f(\cdot)$ can be homomorphically evaluated it will suffice to show that for every fixed vector $c\in \Z_q^{n\log q}$ there is a $polylog(n) \ll n^{0.49}$ depth circuit $F$ that on input a string $\hat{s}\in\zo^{n \log q}$ will output $0$ if $|\iprod{c,\hat{s}}|  < q/10$ and output $1$ if $|\iprod{c,\hat{s}}|  > q/5$.
+In particular to show that $f(\cdot)$ can be homomorphically evaluated it will suffice to show that for every fixed vector $c\in \Z_q^{n\log q}$ there is a $polylog(n) \ll n^{0.49}$ depth circuit $F$ that on input a string $\hat{s}\in\{0,1\}^{n \log q}$ will output $0$ if $|\iprod{c,\hat{s}}|  < q/10$ and output $1$ if $|\iprod{c,\hat{s}}|  > q/5$.
 (We don't care what $F$ does otherwise. The above suffices since given a ciphertext $C$ we can use $f$ with the vector $c$ being the top row of $CQ^\top Q$, and hence $\iprod{c,\hat{s}}$ would correspond to the first entry of $CQ^\top s$. Note that if $F$ has depth $\ell$ then the function $f()$ above has depth at most $\ell+1$.)
 
 
@@ -233,7 +211,7 @@ Hence we can easily do this work in $poly(\log n'=poly(\log n)$ depth.
 
 Let us now show this more formally:
 
-__Lemma:__ For every $c\in\Z_q^m$ there exists some function $f:\zo^m\rightarrow\zo$ such that (1) $f(\hat{s})=0$ if $|\iprod{\hat{s},c}|<0.1q$ (2) $f(\hat{s})=1$ if $0.4q<|\iprod{\hat{s},c}|<0.6q$ and (3) there is a circuit computing $f$ of depth at most $100(\log m)^3$.
+__Lemma:__ For every $c\in\Z_q^m$ there exists some function $f:\{0,1\}^m\rightarrow\{0,1\}$ such that (1) $f(\hat{s})=0$ if $|\iprod{\hat{s},c}|<0.1q$ (2) $f(\hat{s})=1$ if $0.4q<|\iprod{\hat{s},c}|<0.6q$ and (3) there is a circuit computing $f$ of depth at most $100(\log m)^3$.
 
 __Proof:__ For every number $x\in\Z_q$, write $\tilde{x}$ to be the number that is obtained by writing $x$ in the binary basis and setting all digits except the $10\log m$ most significant ones to zero.  
 Note that $\tilde{x} \leq x \leq \tilde{x} + x+q/m^{10}$. We define $f(\hat{s})$ to equal $1$ if $|\sum \hat{s}_i \tilde{c}_i  (\mod \tilde{q})| \geq 0.3\tilde{q}$ and to equal $0$ otherwise (where as usual the absolute value of $x$ modulo $\tilde{q}$ is the minimum of $x$ and $\tilde{q}-x$.) Note that all numbers involved have zeroes in all but the $10\log m$ most significant digits and so these less significant digits can be ignored.
@@ -245,9 +223,7 @@ Indeed, note that this sum (before a modular reduction) is an integer between $0
  divide $x$ by $q$ to write $x = kq+ r$ for $r<q$, then since $x<qm$, $k<m$, and so we can write $x = k\tilde{q} + k(q-\tilde{q})+r$ so the difference between $k \mod q$ and $k \mod{\tilde{q}}$ will be (in our standard modular metric)  at most $mq/m^{10}=q/m^9$. Overall we get that if $\sum \hat{s}_i c_i \mod{q}$ is in the interval $[0.4q, 0.6q]$ then $\sum \hat{s}_i \tilde{c}_i ( \mod{\tilde{q}})$ will be in the interval $[0.4q-100q/m^9, 0.6q+100q/m^9]$ which is contained in $[0.3\tilde{q},0.7\tilde{q}]$. QED
 
 
-This completes the proof that our scheme can fit into the bootstrapping theorem, hence completing the description of the fully homomorphic encryption scheme.
-
-# QED
+This completes the proof that our scheme can fit into the bootstrapping theorem, hence completing the description of the fully homomorphic encryption scheme. __QED__
 
 ## Example application: Private information retrieval
 

@@ -1,15 +1,5 @@
-% Lecture 7: Hash functions and random oracles
-% Boaz Barak
+# Hash functions and random oracles
 
-<!--- ~ MathDefs   --->
-
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\getsr}{\leftarrow_R\;}
-
-
-<!--- ~  --->
 
 We have seen pseudorandom generators, functions and permutations, as well as Message Authentication codes, CPA and CCA secure
 encryptions. This week we will talk about cryptographic hash functions and some of their magical properties. We motivate this by the _bitcoin_
@@ -25,7 +15,7 @@ The main challenge with bitcoin is that it is _decentralized_. There is no trust
 
 Since there are no user accounts in bitcoin, the "entities" $P$ and $Q$ are not identifier of any person or account. Rather one could think of them as simply "computational puzzles". A _computational puzzle_ can be thought of as a string $\alpha$ that specifies some "problem" such that it's easy to verify whether some other string $\beta$ is a "solution" for $\alpha$, but it is hard to find such a solution on your own.
 (Students with complexity background will recognize here the class **NP**.)
-For example $\alpha$ can encode some large integer $N$, and a solution $\beta$ will encode a pair of numbers $A,B$ such that $N=A\cdot B$. Another more generic example (that you can keep in mind as a potential implementation for the puzzles we use here) is that $\alpha$  will be a string in $\zo^{2n}$ while $\beta$ will be a string in $\zo^n$ such that $\alpha = G(\beta)$ where $G:\zo^n\rightarrow\zo^{2n}$ is some pseudorandom generator.[^signatures]
+For example $\alpha$ can encode some large integer $N$, and a solution $\beta$ will encode a pair of numbers $A,B$ such that $N=A\cdot B$. Another more generic example (that you can keep in mind as a potential implementation for the puzzles we use here) is that $\alpha$  will be a string in $\{0,1\}^{2n}$ while $\beta$ will be a string in $\{0,1\}^n$ such that $\alpha = G(\beta)$ where $G:\{0,1\}^n\rightarrow\{0,1\}^{2n}$ is some pseudorandom generator.[^signatures]
 The real Bitcoin system typically  uses puzzles based on _digital signatures_, a concept we will learn about later in this course, but you can simply think of $P$ as specifying some abstract puzzle and every person that can solve $P$ perform transactions on the coins owned by $P$. In particular if you lost the solution to the puzzle then you have no access to the coin, and if someone stole the solution from you, then you have no recourse or way to get your coin back. People have managed to [lose millions of dollars](http://readwrite.com/2014/01/13/what-happens-to-lost-bitcoins) in this way.  
 
 [^signatures]: There are reasons why Bitcoin uses digital signatures and not these puzzles. The main issue is that we want to bind the puzzle not just to the coin but also to the particular transaction, so that if you know the solution to the puzzle $P$ corresponding to the coin $ID$ and want to use that to transfer it to $Q$, it won't be possible for someone to take your  solution and use that to transfer the coin to $Q'$ before your transaction is added to the public ledger. We will come back to this issue after we learn about digital signatures.
@@ -38,7 +28,7 @@ distributed computing. This seems quite scary, as there are very strong negative
 What does it mean a "majority of parties" in an anonymous network where a single person can create multiple "entities" and cause them to behave arbitrarily ("byzantine" faults in distributed- parlance)? Also, why would we assume that even one party would behave honestly- if it pays to cheat then they would, wouldn't they?
 
 
-![The bitcoin ledger consists of an ordered list of transactions. At any given point in time there might be several "forks" that continue the ledger, and different parties do not necessarily have to agree on them. However, the bitcoin architecture is designed to ensure that the parties corresponding to a majority of computing pwoers will reach consensus on a single ledger. ](bitcoin_ledger.jpg){ width=80% }
+![The bitcoin ledger consists of an ordered list of transactions. At any given point in time there might be several "forks" that continue the ledger, and different parties do not necessarily have to agree on them. However, the bitcoin architecture is designed to ensure that the parties corresponding to a majority of computing pwoers will reach consensus on a single ledger. ](../figure/bitcoin_ledger.jpg){ width=80% }
 
 
 Perhaps the main idea behind bitcoin is that "majority" will correspond to a "majority of computing power", or as the original bitcoin paper says "one CPU one vote" (or perhaps more accurately, "one cycle one vote").
@@ -61,13 +51,13 @@ __Theorem:__ Under the PRG conjecture, there exist super strong PRF.
 Unfortunately this result is _not_ known to be true, and for a very good reason. Most natural ways to define "super strong PRF" will result in properties that
 can be shown to be _impossible to achieve_. Nevertheless, the intuition behind it still seems useful and so we have the following heuristic:
 
-__The random oracle heuristic (aka "Random oracle model", Bellare-Rogaway 1993):__ If a "natural" protocol is secure when all parties have access to a random function $H:\zo^n\rightarrow\zo^\ell$, then it remains secure even when we give the parties the _description_ of a cryptographic hash function with the same input and outuput lengths.
+__The random oracle heuristic (aka "Random oracle model", Bellare-Rogaway 1993):__ If a "natural" protocol is secure when all parties have access to a random function $H:\{0,1\}^n\rightarrow\{0,1\}^\ell$, then it remains secure even when we give the parties the _description_ of a cryptographic hash function with the same input and outuput lengths.
 
 We don't have a good characterization as to what makes a protocol "natural" and we do have fairly strong counterexamples to this heuristic (though they are arguably "unnatural"). That said, it still seems useful as a way to get intuition for security, and in particular to analyze bitcoin (and many other practical protocols) we do need to assume it, at least given current knowledge.
 
 >__Important caveat:__ _The random oracle heuristic is very different from all the  conjectures we considered before. It is __not__ a formal conjecture since we don't have any good way to define "natural" and we do have examples of protocols that are secure when all parties have access to a random function but are __insecure__ whenever we  replace this random function by __any__ efficiently computable function (see the homework exercises). _
 
-We can now specify the "proof of work" protocol for bitcoin. Given some identifier $ID\in\zo^n$ an integer $T \ll 2^n$ and a hash function $H:\zo^{2n}\rightarrow\zo^n$, the proof of work corresponding to $ID$ and $T$ will be some $x\in\zo^*$ such that  the first $\lceil \log T \rceil$ bits of $H(ID\| x)$ are zero.[^number]
+We can now specify the "proof of work" protocol for bitcoin. Given some identifier $ID\in\{0,1\}^n$ an integer $T \ll 2^n$ and a hash function $H:\{0,1\}^{2n}\rightarrow\{0,1\}^n$, the proof of work corresponding to $ID$ and $T$ will be some $x\in\{0,1\}^*$ such that  the first $\lceil \log T \rceil$ bits of $H(ID\| x)$ are zero.[^number]
 
 [^number]: The actual bitcoin protocol is slightly more general, where the proof is some $x$ such that $H(ID\|x)$, when interpreted as a number in $[2^n]$, is at most $T$. There are also other issues about how exactly $x$ is placed and $ID$ is computed from past history etc.. that we ignore here.
 
@@ -88,19 +78,19 @@ The question is then how do we get to that happy state given that many parties m
 ## Collision resistance and creating short "unique" identifiers
 
 Another issue we "brushed under the carpet" is how do we come up with these unique identifiers per transaction. We want each transaction $t_i$ to be _bound_ to the ledger state $(t_1,\ldots,t_{i-1})$, and so the ID of $t_i$ should contain also the ID's all the prior transactions. But yet we want this ID to be only $n$ bits long.
-Ideally, we would like to find a  _one to one_ mapping $H$ from $\zo^N$ to $\zo^n$ for some very large $N\gg n$. Then the ID corresponding to the task of appending $t_i$ to $(t_1,\ldots,t_{i-1})$ would simply be $H(t_1\|\cdots\|t_i)$.
+Ideally, we would like to find a  _one to one_ mapping $H$ from $\{0,1\}^N$ to $\{0,1\}^n$ for some very large $N\gg n$. Then the ID corresponding to the task of appending $t_i$ to $(t_1,\ldots,t_{i-1})$ would simply be $H(t_1\|\cdots\|t_i)$.
 The only problem is that this is of course clearly impossible- $2^N$ is _much_ bigger than $2^n$ and there is no one to one map from a large set to a smaller set.
 Luckily we are in the magical world of crypto where the impossible is routine and the unimaginable is occasional.
 So, we can actually find a function $H$ that is "essentially" one to one.
 
-![A collision-resistant hash function is a map that from a large universe to a small one that is "practically one to one" in the sense that collisions for the function do exist but are hard to find.](hash_function.jpg){ width=50% }
+![A collision-resistant hash function is a map that from a large universe to a small one that is "practically one to one" in the sense that collisions for the function do exist but are hard to find.](../figure/hash_function.jpg){ width=50% }
 
 The main idea is the following simple result:
 
-__Lemma (One side of birthday bound):__ If $H$ is a random function from some domain $S$ to $\zo^n$, then the probabilisty that after $T$ queries an attacker
+__Lemma (One side of birthday bound):__ If $H$ is a random function from some domain $S$ to $\{0,1\}^n$, then the probabilisty that after $T$ queries an attacker
 finds $x\neq x'$ such that $H(x)=H(x')$ is at most $T^2/2^n$.
 
-__Proof:__ Let us think of $H$ in the "lazy evaluation" mode where for every query the adversary makes, we choose a random answer in $\zo^n$ at the time it is made.
+__Proof:__ Let us think of $H$ in the "lazy evaluation" mode where for every query the adversary makes, we choose a random answer in $\{0,1\}^n$ at the time it is made.
 (We can assume the adversary never makes the same query twice since a repeat query can be simulated by repeating the same answer.)
 For $i< j$ in $[T]$ let $E_{i,j}$ be the event that $H(x_i)=H(x_j)$. Since $H(x_j)$ is chosen at random and independently from the prior choice of $H(x_i)$,
 the probability of $E_{i,j}$ is $2^{-n}$. Thus the probability of the union of $E_{i,j}$ over all $i,j$'s is less than $T^2/2^n$, but
@@ -110,7 +100,7 @@ this probability is exactly what we needed to calculate. QED
 This means that a random function $H$ is _collision resistant_ in the sense that it is hard for an efficient adversary to find two inputs that collide.
 Thus the random oracle heuristic would suggest that a cryptographic hash function can be used to obtain the following object:
 
-__Definition:__ A collection $\{ h_k \}$ of functions where $h_k:\zo^*\rightarrow\zo^n$ for $k\in\zo^n$ is a _collision resistant hash function (CRH) collection_
+__Definition:__ A collection $\{ h_k \}$ of functions where $h_k:\{0,1\}^*\rightarrow\{0,1\}^n$ for $k\in\{0,1\}^n$ is a _collision resistant hash function (CRH) collection_
 if the map $(k,x)\mapsto h_k(x)$ is efficienty computable and for every efficient adversary $A$, the probability over $k$ that $A(k)=(x,x')$ such that $x\neq x'$ and $h_k(x)=h_k(x')$ is
 negligible.[^birthday]
 
@@ -129,16 +119,16 @@ derive such a function from the PRG assumption.
 
 While we discussed hash functions as _keyed_ collections, in practice people often think of a hash function as having being a _fixed keyless function_. However, this is because most practical constructions involve some hardwired standardized constants (often known as IV) that can be thought of as a choice of the key.
 
-Practical constructions of cryptographic hash functions start with a basic block which is known as a _compression function_ $h:\zo^{2n}\rightarrow\zo^n$. The function $H:\zo^*\rightarrow\zo^n$ is defined as
+Practical constructions of cryptographic hash functions start with a basic block which is known as a _compression function_ $h:\{0,1\}^{2n}\rightarrow\{0,1\}^n$. The function $H:\{0,1\}^*\rightarrow\{0,1\}^n$ is defined as
 $H(m_1,\ldots,m_t)=h(h(h(m_1,IV),m_2),\cdots,m_t)$
 when the message is composed of $t$ blocks (and we can pad it otherwise).
 
-![The Merkle-Damgard construction converts a compression function $h:\zo^{2n}\rightarrow\zo^n$ into a hash function that maps strings of arbitrary length into $\zo^n$. The transformation preserves collision resistance but does not yield a PRF even if $h$ was pseudorandom. Hence for many applications it should not be used directly but rather composed with a transformation such as HMAC.](merke-damgard.jpg){ width=80% }
+![The Merkle-Damgard construction converts a compression function $h:\{0,1\}^{2n}\rightarrow\{0,1\}^n$ into a hash function that maps strings of arbitrary length into $\{0,1\}^n$. The transformation preserves collision resistance but does not yield a PRF even if $h$ was pseudorandom. Hence for many applications it should not be used directly but rather composed with a transformation such as HMAC.](../figure/merke-damgard.jpg){ width=80% }
 
 
 This construction is known as the Merkle-Damgard construction and we know that it does preserve collision resistance:
 
-__Theorem:__ From two messages $m \neq m' \in \zo^{tn}$ such that $H(m)=H(m')$ we can find two messages $x \neq x' \in \zo^{2n}$ such that $h(x)=h(x')$.
+__Theorem:__ From two messages $m \neq m' \in \{0,1\}^{tn}$ such that $H(m)=H(m')$ we can find two messages $x \neq x' \in \{0,1\}^{2n}$ such that $h(x)=h(x')$.
 
 __Proof:__ The intuition behind the proof is that if $h$ was invertible then we could invert $H$ by simply going backwards. Thus in principle if a collision for $H$ exists then so does a collision for $h$.
 Now of course this is a vacuous statement since both $h$ and $H$ shrink their inputs and hence clearly have collisions. But we want to show a _constructive_ proof for this statement that allows to transform a collision in $H$ to a collision in $h$. This is very simple. We look at the computation of $H(m)$ and $H(m')$ and at the first block in which the inputs differ but the output is the same (there must be such a block). This block will yield a collision for $h$. QED

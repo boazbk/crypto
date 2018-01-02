@@ -1,7 +1,7 @@
-\newcommand{\zo}{\{0,1\}}
 
 
-_CS 127: Cryptography / Boaz Barak_
+
+
 
 
 # Lecture 1 - Introduction
@@ -40,7 +40,7 @@ England, so that she could ascend to the throne and finally escape the house arr
 As part of this complicated plot, she sent a coded letter to Sir Anthony Babington. It is what's known as a _substitution cipher_ where each letter is transformed into a different symbol, and so
 the resulting letter looks something like the following:
 
-![Snippet from encrypted communication between queen Mary and Sir Babington](encrypted_letter.jpg)
+![Snippet from encrypted communication between queen Mary and Sir Babington](../figure/encrypted_letter.jpg)
 
 At a first look, such a letter might seem rather inscrutable- a meaningless sequence of strange symbols. However, after some thought, one might recognize that these symbols _repeat_ several
 times and moreover that different symbols repeat with different frequencies. Now it doesn't take a large leap of faith to assume that perhaps each symbol corresponds to a different letter
@@ -50,7 +50,7 @@ which was in fact done by queen Elisabeth's spies who used the decoded letters t
 Trusting in superficial security measures (such as using "inscrutable" symbols) is a trap that users of cryptography have been falling into again and again over the years.
 As in many things, this is the subject of a great XKCD cartoon:
 
-![On the added security of using uncommon symbols](https://imgs.xkcd.com/comics/code_talkers.png){ width=80% }
+![On the added security of using uncommon symbols](../figure/https://imgs.xkcd.com/comics/code_talkers.png){ width=80% }
 
 
 
@@ -63,9 +63,9 @@ This "flattens" the frequencies and makes it much harder to do frequency analysi
 and published the result. The idea is that once you guess the length of the cipher, you can reduce the task to breaking a simple substitution cipher which can be done via frequency
 analysis (can you see why?).  Confederate generals used Vigenère regularly during the civil war, and their messages were routinely cryptanalzed by Union officers.
 
-![Confederate Cipher Disk for implementing the Vigenère cipher](confederate_cipher_disk.jpg)
+![Confederate Cipher Disk for implementing the Vigenère cipher](../figure/confederate_cipher_disk.jpg)
 
-![Confederate encryption of the message  "Gen'l Pemberton: You can expect no help from this side of the river. Let Gen'l Johnston know, if possible, when you can attack the same point on the enemy's lines. Inform me also and I will endeavor to make a diversion. I have sent some caps. I subjoin a despatch from General Johnston."](confederate_message.jpg)
+![Confederate encryption of the message  "Gen'l Pemberton: You can expect no help from this side of the river. Let Gen'l Johnston know, if possible, when you can attack the same point on the enemy's lines. Inform me also and I will endeavor to make a diversion. I have sent some caps. I subjoin a despatch from General Johnston."](../figure/confederate_message.jpg)
 
 
 The story of the _Enigma_ cipher had been told many times, and you can get some information on it from Kahn's book as well as Andrew Hodges' biography of Alan Turing.
@@ -90,17 +90,17 @@ on the effect of breaking the Enigma on the war. General Eisenhower said that th
 ## Defining encryptions
 
 We now turn to actually defining what is an encryption scheme. Clearly we can
-encode every message as a string of bits, i.e., an element of $\zo^\ell$ for
+encode every message as a string of bits, i.e., an element of $\{0,1\}^\ell$ for
 some $\ell$. Similarly, we can encode the _key_ as a string of bits as well,
-i.e., an element of $\zo^n$ for some $n$. Thus, we can think of an encryption
+i.e., an element of $\{0,1\}^n$ for some $n$. Thus, we can think of an encryption
 scheme as composed of two functions. The _encryption function_ $E$ maps a
-secret key $k \in \zo^n$ and a message (known also as _plaintext_) $m\in
-\zo^\ell$ into a _ciphertext_ $c \in \zo^o$ for some $o$. We write this as
+secret key $k \in \{0,1\}^n$ and a message (known also as _plaintext_) $m\in
+\{0,1\}^\ell$ into a _ciphertext_ $c \in \{0,1\}^o$ for some $o$. We write this as
 $c = E_k(m)$.  The _decryption function_ $D$ does the reverse operation,
 mapping the secret key $k$ and the cyphertext $c$ back into the plaintext
 message $m$, which we write as $m = D_k(c)$. The basic equation is that if we
 use the same key for encryption and decryption, then we should get the same
-message back. That is, for every $k \in \zo^n$ and $m\in zo^\ell$,
+message back. That is, for every $k \in \{0,1\}^n$ and $m\in zo^\ell$,
 $$ m = D_k(E_k(m)) \;.$$
 
 > _A note on notation:_ We will always use $i,j,\ell,n,o$ to denote natural
@@ -159,14 +159,14 @@ Fortunately, we don't need much of probability- only probability over finite spa
 variance, concentration and the union bound suffice for most of we need.
 In fact, understanding the following two statements will already get you much of what you need for cryptography:
 
-- For every fixed string $x\in\zo^n$, if you toss a coin $n$ times, the probability that the heads/tails pattern will be exactly $x$ is $2^{-n}$.
+- For every fixed string $x\in\{0,1\}^n$, if you toss a coin $n$ times, the probability that the heads/tails pattern will be exactly $x$ is $2^{-n}$.
 
 - A probability of $2^{-128}$ is really really small.
 
 The handout on  mathematical background contains some of the probability and discrete mathematics that we'll need, and this will also be reviewed in the sections.
 
 
-![XKCD Cartoon: Random number generator](https://imgs.xkcd.com/comics/random_number.png)
+![XKCD Cartoon: Random number generator](../figure/https://imgs.xkcd.com/comics/random_number.png)
 
 
 ### Note: Generating randomness in actual cryptographic systems
@@ -199,7 +199,7 @@ strongly suggest that the NSA has deliberately inserted a _trapdoor_ in one of t
 but apparently the NSA did pay $10M to RSA security so the latter would make this generator their default option in their products.
 
 
-# Defining the secrecy requirement.
+## Defining the secrecy requirement.
 
 Defining the secrecy requirement for an encryption is not simple. Over the course of history, many smart people got it wrong and
 convinced themselves that ciphers were impossible to break. The first person to truly ask the question in a rigorous way was Claude Shannon
@@ -237,16 +237,16 @@ can recover the true key $k$ from the ciphertext $c$ is at most $2^{-n}$.
 
 You might wonder if this definition is not too strong to make sense, after all how are we going ever to prove that Eve cannot recover the secret
 key no matter what she does? Edgar Allan Poe would say that there can always be a method that we overlooked. However, in fact this definition is too
-_weak_! Consider the following encryption: the secret key $k$ is chosen at random in $\zo^n$ but our encryption scheme simply ignores it and lets $E_k(m)=m$ and $D_k(c)=c$.
+_weak_! Consider the following encryption: the secret key $k$ is chosen at random in $\{0,1\}^n$ but our encryption scheme simply ignores it and lets $E_k(m)=m$ and $D_k(c)=c$.
 This is a valid encryption, but of course completely insecure as we are simply outputing the plaintext in the clear.
 Yet, no matter what Eve does, if she only sees $c$ and not $k$, there is no way she can guess the true value of $k$ with probability better
 than $2^{-n}$, since it was chosen completely at random and she gets no information about it.
 Formally, one can prove the following result:
 
-__Theorem:__ Let $(E,D)$ be the encryption scheme above. For every function $Eve:\zo^\ell\rightarrow \zo^n$ and for every $m\in \zo^\ell$, the probability that
+__Theorem:__ Let $(E,D)$ be the encryption scheme above. For every function $Eve:\{0,1\}^\ell\rightarrow \{0,1\}^n$ and for every $m\in \{0,1\}^\ell$, the probability that
 $Eve(E_k(m))=s$ is exactly $2^{-n}$.
 
-__Proof:__ This follows beacuse $E_k(m)=m$ and hence $Eve(E_k(m))=Eve(m)$ which is some fixed value $k'\in\zo^n$ that is independent
+__Proof:__ This follows beacuse $E_k(m)=m$ and hence $Eve(E_k(m))=Eve(m)$ which is some fixed value $k'\in\{0,1\}^n$ that is independent
 of $k$. Hence the probability that $k=s'$ is $2^{-n}$. QED
 
 The math behind the above argument is very simple, yet I urge you to read and re-read the last two paragraphs until you are sure that
@@ -265,7 +265,7 @@ probability that she can recover $m$ from the ciphertext $c=E_k(m)$ is at
 most $2^{-n}$.
 
 Now this seems like it captures our intended meaning. But remeber that we are being anal, and truly insist that the definition holds
-as stated, namely that for every plaintext message $m$ and every function $Eve:\zo^o\rightarrow\zo^\ell$, the probability over the choice of $k$
+as stated, namely that for every plaintext message $m$ and every function $Eve:\{0,1\}^o\rightarrow\{0,1\}^\ell$, the probability over the choice of $k$
 that $Eve(E_k(m))=m$ is at most $2^{-n}$. But now we see that this is clearly impossible. After all, this is supposed to work for
 _every_ message $m$ and _every_ function $Eve$, but clearly if $m$ is that all-zeroes message $0^\ell$ and $Eve$ is the function that ignores its input
 and simply outputs $0^\ell$, then it will hold that $Eve(E_k(m))=m$ with probability one.
@@ -275,7 +275,7 @@ we could guess a fixed message with probability one, so perhaps we could try to 
 
 __Security Definition (Third Attempt):__ An encyption scheme $(E,D)$  is
 _$n$-secure_ if no matter what method Eve employs, if $m$ is chosen at random
-from $\zo^\ell$, the probability that she can recover $m$ from the ciphertext
+from $\{0,1\}^\ell$, the probability that she can recover $m$ from the ciphertext
 $c=E_k(m)$ is at most $2^{-n}$.
 
 This weakened definition can in fact be achieved, but we have again weakened
@@ -301,9 +301,9 @@ possiblities for it) then she should not be able to guess it with higher
 probability after seeing the ciphertext. This is formalized as follows:
 
 __Security Definition (Perfect Secrecy):__ An encryption scheme $(E,D)$ is
-_perfectly secret_ if there for every set $M\subseteq\zo^\ell$ of plaintexts,
+_perfectly secret_ if there for every set $M\subseteq\{0,1\}^\ell$ of plaintexts,
 and for every strategy used by Eve, if we choose at random $m\in M$ and a
-random key $k\in\zo^n$, then the probability that Eve guesses $m$ after
+random key $k\in\{0,1\}^n$, then the probability that Eve guesses $m$ after
 seeing $E_k(m)$ is at most $1/|M|$.
 
 In particular, if we encrypt either "Yes" or "No" with probability $1/2$,
@@ -311,9 +311,9 @@ then Eve won't be able to guess which one it is with probability better than
 half. In fact, that turns out to be the heart of the matter:
 
 __Two to Many Theorem:__ An encryption scheme $(E,D)$ is perfectly secret if and only if
-for every two distinct plaintexts $\{m_0,m_1\} \subseteq \zo^\ell$
-and every strategy used by Eve, if we choose at random $b\in\zo$ and a
-random key $k\in\zo^n$, then the probability that Eve guesses $m_b$ after
+for every two distinct plaintexts $\{m_0,m_1\} \subseteq \{0,1\}^\ell$
+and every strategy used by Eve, if we choose at random $b\in\{0,1\}$ and a
+random key $k\in\{0,1\}^n$, then the probability that Eve guesses $m_b$ after
 seeing $E_k(m_b)$ is at most $1/2$.
 
 __Proof:__ The "only if" direction is obvious--- this condition is a special
@@ -345,7 +345,7 @@ that $Eve'(E_k(m_b))=m_b$ is larger than $1/2$ (Can you see why?)  QED.
 
 
 __Exercise__: Another equivalent condition for perfect secrecy is the following:
-$(E,D)$ is perfectly secret if for every plaintexts $m,m' \in \zo^\ell$, the two
+$(E,D)$ is perfectly secret if for every plaintexts $m,m' \in \{0,1\}^\ell$, the two
 random variables $\{ E_k(m) \}$ and $\{ E_{k'}(m') \}$ (for randomly chosen keys $k$ and $k'$)
 have precisely the same distribution.
 
@@ -378,8 +378,8 @@ In fact, this can be generalized to any number of bits:
 
 __Theorem (One time pad, Vernam 1917):__ For every $n$, there is a perfectly secret encryption $(E,D)$ with plaintexts of $n$ bits, where the key size and the ciphertext size is also $n$.
 
-__Proof:__  The encryption scheme is actually very simple - to encrypt a message $m\in\zo^n$ with key $k\in\zo^n$, we output $E_k(m)=m\oplus k$ where $\oplus$ is the exclusive or (XOR) operation. That is, $m \oplus k$ is a vector in $\zo^n$ such that $(m\oplus k)_i = k_i + m_i \pmod{2}$. Decryption works identically - $D_k(c) = c \oplus k$. It is not hard to use the associativity of addition (and in particular XOR) to verify  that
-$D_k(E_k(m)) = (m \oplus k) \oplus k = m \oplus (k \oplus k) = m$ where the last equality follows from   $k\oplus k = 0^n$  (can you see why?).  Now we claim that for every message $m \in \zo^n$, the distribution $E_k(m)$ for a random $k$ is the uniform distribution $U_n$ on $\zo^n$. By the exercise above, this implies that the scheme is perfectly secret, since for every two messages $m,m'$ the distributions $\{ E_k(m) \}$ and $\{ E_{k'}(m') \}$ will both be equal to the uniform distribution. To prove the claim we need to show that for every $y\in\zo^n$, $\Pr[ E_k(m)=y ] = 2^{-n}$ where this probability is taken over the choice of a random $k\in\zo^n$. Now note that $E_k(m)=y$ if and only if $m \oplus k = y$ or, equivalently, $k = m \oplus y$.  Since $k$ is chosen uniformly at random in $\zo^n$, the probability that it equals  $m \oplus y$ is exactly $2^{-n}$ QED.
+__Proof:__  The encryption scheme is actually very simple - to encrypt a message $m\in\{0,1\}^n$ with key $k\in\{0,1\}^n$, we output $E_k(m)=m\oplus k$ where $\oplus$ is the exclusive or (XOR) operation. That is, $m \oplus k$ is a vector in $\{0,1\}^n$ such that $(m\oplus k)_i = k_i + m_i \pmod{2}$. Decryption works identically - $D_k(c) = c \oplus k$. It is not hard to use the associativity of addition (and in particular XOR) to verify  that
+$D_k(E_k(m)) = (m \oplus k) \oplus k = m \oplus (k \oplus k) = m$ where the last equality follows from   $k\oplus k = 0^n$  (can you see why?).  Now we claim that for every message $m \in \{0,1\}^n$, the distribution $E_k(m)$ for a random $k$ is the uniform distribution $U_n$ on $\{0,1\}^n$. By the exercise above, this implies that the scheme is perfectly secret, since for every two messages $m,m'$ the distributions $\{ E_k(m) \}$ and $\{ E_{k'}(m') \}$ will both be equal to the uniform distribution. To prove the claim we need to show that for every $y\in\{0,1\}^n$, $\Pr[ E_k(m)=y ] = 2^{-n}$ where this probability is taken over the choice of a random $k\in\{0,1\}^n$. Now note that $E_k(m)=y$ if and only if $m \oplus k = y$ or, equivalently, $k = m \oplus y$.  Since $k$ is chosen uniformly at random in $\{0,1\}^n$, the probability that it equals  $m \oplus y$ is exactly $2^{-n}$ QED.
 
 >### Note: Importance of using the one time pad only once:
 
@@ -408,7 +408,7 @@ __Theorem:__ If $E$ is a perfectly secret system with key of length $n$ and mess
 
 __Proof:__ Suppose, towards the sake of contradiction that there was a perfectly secret system $(E,D)$ with a key of length
 $n$ but messages of length $\ell > n$. Then consider the following adversary strategy for Eve: given a ciphertext $c$,
-guess a random key $k\in \zo^n$ and output $m= D_k(c)$. The probability that Eve is successful is at least $2^{-n}$, since with this probability
+guess a random key $k\in \{0,1\}^n$ and output $m= D_k(c)$. The probability that Eve is successful is at least $2^{-n}$, since with this probability
 she guesses the key correctly. But by perfect secrecy, if the message is chosen at random, she should have been successful with probability at most
 $2^{-\ell} < 2^{-n}$.
 
@@ -416,14 +416,14 @@ This proof might not be fully convincing - after all, an attack that succeeds wi
 But this violation of the security definition can be significantly boosted:
 
 __Theorem:__ If $E$ is an encryption with key of length $n$ and messages of length $\geq n+10$ then there exist two messages
-$m_0,m_1$ and a strategy for Eve so that given an encryption $c = E_k(m_b)$ for random $k$ and $b\in\zo$, Eve can output
+$m_0,m_1$ and a strategy for Eve so that given an encryption $c = E_k(m_b)$ for random $k$ and $b\in\{0,1\}$, Eve can output
 $m_b$ with probability at least $0.99$.
 
 __Proof:__ Suppose that we choose two messages $m_0,m_1$ at random, encrypt $m_1$ to obtain a ciphertext $c_1$ and ask what is the probability that there exists
-some key $k$ such that $c_1 = E_k(m_0)$.  Now, let's fix the choice of $m_0$ and so consider the set $C_0 = \{ E_k(m_0) : k \in \zo^n \}$.
+some key $k$ such that $c_1 = E_k(m_0)$.  Now, let's fix the choice of $m_0$ and so consider the set $C_0 = \{ E_k(m_0) : k \in \{0,1\}^n \}$.
 The size of this set is at most $2^n$. Now for every choice of the key $k$, the map $m_1 \mapsto E_k(m_1)$ is one to one and so the image
 of this map is some set $D_k$ of size $2^{n+10}$ (i.e., there are exactly $2^{n+10}$ ciphertexts that are the encryption under $k$
-of some $m_1 \in \zo^{n+10}$). If we pick $m_1$ at random then $c_1 = E_k(m_1)$ is chosen at random from the set $D_k$ and hence the probability
+of some $m_1 \in \{0,1\}^{n+10}$). If we pick $m_1$ at random then $c_1 = E_k(m_1)$ is chosen at random from the set $D_k$ and hence the probability
 that $c_1$ falls into $C_0$ is at most $|C_0|/|D_k| \leq 2^{-10} < 0.01$. Hence in particular, there must be _some_ choice
 of $m_0,m_1$ such that Eve decides given $c$ to output $m_0$ if $c\in C_0$ and output $m_1$ otherwise, then she will be successful with probability
 at least $0.99$. QED
@@ -433,13 +433,13 @@ for future probabilistic arguments that we will be making regularly. It might he
 and $4$ possible keys, and try to prove in this case that you can always find a pair of messages $m_0,m_1$ such that you can tell with probability at least $60\%$
 whether an encryption was of $m_0$ or of $m_1$.
 
->### Advanced comment: Adding probability into the picture
+### Advanced comment: Adding probability into the picture
 
->There is a sense in which both our secrecy and our impossiblity results might not be fully convincing, and that is that we did not explicitly consider
+There is a sense in which both our secrecy and our impossiblity results might not be fully convincing, and that is that we did not explicitly consider
 algorithms that use _randomness_ . For example, maybe Eve can break a perfectly secret encryption if she is not modeled as a deterministic function
-$Eve:\zo^o\rightarrow\zo^\ell$ but rather a _probabilistic_ process. Similarly, maybe the encryption and decryption functions as well could be probabilistic
+$Eve:\{0,1\}^o\rightarrow\{0,1\}^\ell$ but rather a _probabilistic_ process. Similarly, maybe the encryption and decryption functions as well could be probabilistic
 processes as well. It turns out that none of those matter. For the former, note that a probabilistic process can be thought of as a _distribution_ over functions,
-in the sense that we have a collection of functions $f_1,...,f_N$ mapping $\zo^o$ to $\zo^\ell$, and some probabilities $p_1,\ldots,p_N$ (non-negative
+in the sense that we have a collection of functions $f_1,...,f_N$ mapping $\{0,1\}^o$ to $\{0,1\}^\ell$, and some probabilities $p_1,\ldots,p_N$ (non-negative
 numbers summing to $1$), so we now think of Eve as selecting the function $f_i$ with probability $p_i$. But if none of those functions can give advantage
 better than $1/2$, then neither can this collection. A similar (though more involved) argument shows that the impossiblity result showing that the
 key must be at least as long as the message still holds even if the encryption and decryption algorithms are allowed to be probabilistic processes as well

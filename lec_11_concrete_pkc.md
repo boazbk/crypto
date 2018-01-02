@@ -1,15 +1,6 @@
-% Lecture 11: Concrete candidates for public key crypto
+# Concrete candidates for public key crypto
 % Boaz Barak
 
-<!--- ~ MathDefs   --->
-
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\getsr}{\leftarrow_R\;}
-\newcommand{\Gp}{\mathbb{G}}
-\newcommand{\floor}[1]{\lfloor #1 \rfloor}
-<!--- ~  --->
 
 In the previous lecture we talked about _public key cryptography_ and saw the Diffie Hellman system and the DSA signature scheme.
 In this lecture, we will see the RSA trapdoor function and how to use it for both encryptions and signatures.
@@ -24,7 +15,7 @@ When two elements are in $\Z_n$ then we will always assume that all operations a
 We let $\Z^*_n = \{ a\in \Z_n : gcd(a,m)=1 \}$. Note that $n$ is prime if and only if $|\Z^*_m|=m-1$.
 For every $a \in \Z^*_m$ we can find using the extended gcd algorithm an element $b$ (typically denoted as $a^{-1}$) such that $ab=1$ (can you see why?).
 The set $\Z^*_m$ is an abelian group with the multiplication operation, and hence by the observations of the previous lecture,
-$a^{|\Z^*_m|}=1$ for every $a\in \Z^*_m$. In the case that $m$ is prime, this result is known as ``Fermat's Little Theorem'' and is typically stated as $a^{p-1}=1 \pmod{p}$ for every $a\neq 0$.
+$a^{|\Z^*_m|}=1$ for every $a\in \Z^*_m$. In the case that $m$ is prime, this result is known as "Fermat's Little Theorem" and is typically stated as $a^{p-1}=1 \pmod{p}$ for every $a\neq 0$.
 
 >__Note on $n$ bits vs a number $n$:__ One aspect that is often confusing in number-theoretic based cryptography, is that one needs to always keep track whether we are talking about "big" numbers or "small" numbers. In many cases in crypto, we use $n$ to talk about our key size or security parameter, in which case we think of $n$ as a "small" number of size $100-1000$ or so. However, when we work with $\Z^*_m$ we often think of $m$ as a  "big" number having about $100-1000$ _digits_; that is $m$ would be roughly $2^{100}---2^{1000}$ or so. I will try to reserve the notation $n$ for "small" numbers but may sometimes forget to do so, and other descriptions of RSA etc.. often use $n$ for "big" numbers. It is important that whenever you see a number $x$, you make sure you have a sense whether it is a "small" number (in which case $poly(x)$ time is considered efficient) or whether it is a "large" number (in which case only $poly(log(x))$ time would be considered efficient).
 
@@ -161,11 +152,11 @@ __Note:__ The RSA trapdoor function is known also as "plain RSA encryption". Thi
 ### Abstraction: trapdoor permutations
 
 __Def:__ We can abstract away the particular construction of the RSA and Rabin functions to talk about a general  _trapdoor permutation family (TDP)_.
-This is a family of functions $\{ p_k \}$ such that for every $k\in\zo^n$, the function $p_k$ is a permutation on $\zo^n$ and the map $k,x \mapsto p_k(x)$ is efficiently computable, but:
-* For every efficient adversary $A$, $\Pr_{y\in\zo^n}[ A(y)=p_k^{-1}(y) ] = negl(n)$.
+This is a family of functions $\{ p_k \}$ such that for every $k\in\{0,1\}^n$, the function $p_k$ is a permutation on $\{0,1\}^n$ and the map $k,x \mapsto p_k(x)$ is efficiently computable, but:
+* For every efficient adversary $A$, $\Pr_{y\in\{0,1\}^n}[ A(y)=p_k^{-1}(y) ] = negl(n)$.
 * There is a _key generation algorithm_ $G$ such that on input $1^n$ it outputs a pair $(k,\tau)$ such that the map $\tau,y \mapsto p_k^{-1}(y)$.
 
-__Note:__ The reader might note that the RSA function is not a permutation over the set of strings but rather over $\Z^*_m$ for some $m=pq$. However, if we find primes $p,q$ in the interval $[2^{n/2}(1-negl(n)),2^{n/2}]$, then $m$ will be in the interval $[2^n(1-negl(n)),2^n]$ and hence $\Z^*_m$ (which has size $pq - p - q +1 = 2^n(1-negl(n))$) can be thought of as essentially identical to $\zo^n$, since we will always pick elements from $\zo^n$ at random and hence they will be in $\Z^*_m$ with probability $1-negl(n)$. It is widely believed that for every sufficiently large $n$ there is a prime in the interval $[2^n-poly(n),2^n]$ (this follows from  the _Extended Reimann Hypothesis_) and Baker, Harman and Pintz _proved_ that there is a prime in the interval $[2^n-2^{0.6n},2^n]$.[^padding]
+__Note:__ The reader might note that the RSA function is not a permutation over the set of strings but rather over $\Z^*_m$ for some $m=pq$. However, if we find primes $p,q$ in the interval $[2^{n/2}(1-negl(n)),2^{n/2}]$, then $m$ will be in the interval $[2^n(1-negl(n)),2^n]$ and hence $\Z^*_m$ (which has size $pq - p - q +1 = 2^n(1-negl(n))$) can be thought of as essentially identical to $\{0,1\}^n$, since we will always pick elements from $\{0,1\}^n$ at random and hence they will be in $\Z^*_m$ with probability $1-negl(n)$. It is widely believed that for every sufficiently large $n$ there is a prime in the interval $[2^n-poly(n),2^n]$ (this follows from  the _Extended Reimann Hypothesis_) and Baker, Harman and Pintz _proved_ that there is a prime in the interval $[2^n-2^{0.6n},2^n]$.[^padding]
 
 [^padding]: Another, more minor issue is that the description of the key might not have the same length as $\log m$; I defined them to be the same for simplicity of notation, and this can be ensured via some padding and concatenation tricks.
 
@@ -178,7 +169,7 @@ __Note:__ The reader might note that the RSA function is not a permutation over 
 Here is how we can get a public key encryption from a trapdoor permutation scheme $\{ p_k \}$.
 
 * _Key generation:_ Run the key generation algorithm of the TDP to get $(k,\tau)$. $k$ is the _public encryption key_ and $\tau$ is the _secret decryption key_.
-* _Encryption:_ To encrypt a message $m$ with key $k\in\zo^n$, choose $x\in\zo^n$ and output $(p_k(x),H(x)\oplus m)$ where $H:\zo^n\rightarrow\zo^\ell$ is a hash function we model as a random oracle.
+* _Encryption:_ To encrypt a message $m$ with key $k\in\{0,1\}^n$, choose $x\in\{0,1\}^n$ and output $(p_k(x),H(x)\oplus m)$ where $H:\{0,1\}^n\rightarrow\{0,1\}^\ell$ is a hash function we model as a random oracle.
 * _Decryption:_ To decrypt the ciphertext $(y,z)$ with key $\tau$, output $m=H(p_k^{-1}(y))\oplus z$.
 
 __Theorem:__ If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then the above scheme is CPA secure public key encryption scheme.
@@ -192,7 +183,7 @@ __Note:__ We do _not_ need to use a random oracle to get security in this scheme
 Here is how we can get digital signatures from trapdoor permutations $\{ p_k \}$. This is known as the "full domain hash" signatures.
 
 * _Key generation:_ Run the key generation algorithm of the TDP to get $(k,\tau)$. $k$ is the _public verification key_ and $\tau$ is the _secret signing key_.
-* _Signature:_ To sign a message $m$ with key $\tau$, we output $p_{k}^{-1}(H(m))$ where $H:\zo^*\rightarrow\zo^n$ is a hash function modeled as a random oracle.
+* _Signature:_ To sign a message $m$ with key $\tau$, we output $p_{k}^{-1}(H(m))$ where $H:\{0,1\}^*\rightarrow\{0,1\}^n$ is a hash function modeled as a random oracle.
 * _Verification:_ To verify a message-signature pair $(m,x)$ we check that $p_k(x)=H(m)$.
 
 __Theorem:__ If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then the above scheme is chosen message attack secure digital signature scheme.

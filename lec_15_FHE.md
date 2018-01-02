@@ -1,27 +1,12 @@
-% Lecture 15: Fully homomorphic encryption : Introduction and bootstrapping
-% Boaz Barak
+# Fully homomorphic encryption : Introduction and bootstrapping
 
-<!--- ~ MathDefs   --->
 
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\getsr}{\leftarrow_R\;}
-\newcommand{\Gp}{\mathbb{G}}
-\newcommand{\Hp}{\mathbb{H}}
-
-\newcommand{\floor}[1]{\lfloor #1 \rfloor}
-\newcommand{\iprod}[1]{\langle #1 \rangle}
-
-\newcommand{\cF}{\mathcal{F}}
-<!--- ~  --->
 
 
 In today's era of "cloud computing", much of individual's and businesses' data is stored and computed on by third parties such as Google, Microsoft, Apple, Amazon,  Facebook, Dropbox and many others.
 Classically, cryptography provided solutions to protecting [data in motion](https://www.schneier.com/blog/archives/2010/06/data_at_rest_vs.html) from point A to point B.
 But these are not always sufficient to protect [data at rest](https://en.wikipedia.org/wiki/Data_at_rest) and particularly [data in use](https://en.wikipedia.org/wiki/Data_in_use).
-For example, suppose that  Alice has some data $x \in \zo^n$ (where in modern applications $x$ would well be terabytes in length or larger) that she wishes to store with the cloud service Bob, but is afraid that Bob will be hacked, subpoenaed or simply does not completely trust Bob.
+For example, suppose that  Alice has some data $x \in \{0,1\}^n$ (where in modern applications $x$ would well be terabytes in length or larger) that she wishes to store with the cloud service Bob, but is afraid that Bob will be hacked, subpoenaed or simply does not completely trust Bob.
 
 Encryption does not seem to immediately solve the problem.
 Alice could store at Bob an _encrypted_ version of the data and keep the secret key for herself.
@@ -65,8 +50,8 @@ However, with time people have slowly understood these better and made them more
 We start by defining _partially homomorphic_ encryption.
 We  focus on encryption for single bits.  This is without loss of generality for CPA security (CCA security is anyway ruled out for homomorphic encryption- can you see why?), though there are more efficient constructions that encrypt several bits at a time.
 
-__Definition (Partially homomorphic encryption):__ Let $\cF = \cup \cF_\ell$ be a class of functions where every $f\in\cF_\ell$ maps $\zo^\ell$ to $\zo$.  
-An _$\cF$-homomorphic public key encryption scheme_ is a CPA secure public key encryption scheme $(G,E,D)$ such that there exists a polynomial-time algorithm $EVAL$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$,  $x_1,\ldots,x_\ell \in \zo$, and $f\in \cF_\ell$ of description size $|f|$ at most $poly(\ell)$:
+__Definition (Partially homomorphic encryption):__ Let $\cF = \cup \cF_\ell$ be a class of functions where every $f\in\cF_\ell$ maps $\{0,1\}^\ell$ to $\{0,1\}$.  
+An _$\cF$-homomorphic public key encryption scheme_ is a CPA secure public key encryption scheme $(G,E,D)$ such that there exists a polynomial-time algorithm $EVAL$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$,  $x_1,\ldots,x_\ell \in \{0,1\}$, and $f\in \cF_\ell$ of description size $|f|$ at most $poly(\ell)$:
 $c=EVAL_e(1^n,f,E_e(x_1),\ldots,E_e(x_\ell))$ has length at most $n$ and $D_d(c)=f(x_1,\ldots,x_\ell)$.
 
 
@@ -100,14 +85,14 @@ __A linearly-homomorphic encryption scheme:__ We can describe the  encryption sc
 
 * Key generation: Choose $(A,s)$ from $LWE_q$ where $m$ satisfies $q^{1/4} \ll m \log q \gg n$.
 
-* To encrypt $b\in\zo$, choose $w\in\zo^m$ and output $w^\top A + (b,0,\ldots,0)$
+* To encrypt $b\in\{0,1\}$, choose $w\in\{0,1\}^m$ and output $w^\top A + (b,0,\ldots,0)$
 
 * To decrypt $c\in\Z_q^n$, output $0$ iff $|\iprod{c,s}| \leq q/10$, where for $x\in\Z_q$ we defined $|x| = \min \{ x , q-x \}$.
 
 Note that decryption succeeds since it amounts to $w^\top A s + s_1 b$ and $|w^\top A s| \leq m\sqrt{q} \ll q$.
 It turns out that this scheme is scheme above is  homomorphic with respect to the class of _linear functions_ modulo $2$. Specifically we make the following claim:
 
-__Claim:__ For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c_1,\ldots,c_\ell$ encrypting bits $b_1,\ldots,b_\ell \in \zo$, outputs a ciphertext $c$ encrypying $b_1 \oplus \cdots \oplus b_\ell$.
+__Claim:__ For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c_1,\ldots,c_\ell$ encrypting bits $b_1,\ldots,b_\ell \in \{0,1\}$, outputs a ciphertext $c$ encrypying $b_1 \oplus \cdots \oplus b_\ell$.
 
 __Proof:__ The proof is quite simple. $EVAL$ will simply add the ciphertexts as vectors in $\Z_q$.
 If $c = \sum c_i$ then $\iprod{c,s}$ will equal $\sum b_i \floor{\tfrac{q}{2}} (\mod \; q)$ up to noise which is at most $\ell m \sqrt{q} \ll q$.
@@ -128,9 +113,9 @@ On input $1^n$ key generation algorithm outputs a vector $s\in\Z_q^m$ with $s_1 
 Thus $s$ can be thought of a "trapdoor" for the generator that allows to distinguish between a random vector $c\in \Z_q^n$ (that with high probability would satisfy $|\iprod{c,s}|\geq q/10$)
 and an output of the generator.
 We use $G_s$ to encrypt a bit $b$ by letting $c \getsr G_s(1^n)$ and outputting $c + (b,0,\ldots,0)^\top$.
-In the particular instantiation above we obtain $G_s$ by sampling the matrix $A$ from the LWE assumption and having $G_s$ output $w^\top A$ for a random $w\in\zo^n$, but we can ignore this particular implementation detail in the forgoing.
+In the particular instantiation above we obtain $G_s$ by sampling the matrix $A$ from the LWE assumption and having $G_s$ output $w^\top A$ for a random $w\in\{0,1\}^n$, but we can ignore this particular implementation detail in the forgoing.
 
-Note that this trapdoor generator satisfies the following stronger property: we can generate an alternative generator $G'$ such that the description of $G'$ is indistinguishable from the description of $G_s$ but such that $G'$ actually does produce   (up to exponentially small statistical error)  the uniform distribution over $\Z_q^n$. 
+Note that this trapdoor generator satisfies the following stronger property: we can generate an alternative generator $G'$ such that the description of $G'$ is indistinguishable from the description of $G_s$ but such that $G'$ actually does produce   (up to exponentially small statistical error)  the uniform distribution over $\Z_q^n$.
 
 >__Aside: trapdoor generators in real life:__ In the above we use the notion of a "trapdoor" in the pseudorandom generator as a mathematical abstraction, but generators with actual trapdoors have arisen in practice. In 2007 the National Institute of Standards (NIST) released standards for pseudorandom generators. Pseudorandom generators are the quintessential private key primitive, typically built out of hash functions, block ciphers, and such and so it was surprising that NIST included in the list a pseudorandom generator based on public key tools - the [Dual EC DRBG](https://en.wikipedia.org/wiki/Dual_EC_DRBG) generator based on elliptic curve cryptography. This was already strange but became even more worrying when Microsoft researchers Dan Shumow and Niels Ferguson [showed](http://rump2007.cr.yp.to/15-shumow.pdf) that this generator _could_ have a trapdoor in the sense that it contained some hardwired constants that if generated in a particular way, there would be some information that (just like in $G_s$ above) allows to distinguish the generator from random (see here for a [2007 blog post](https://www.schneier.com/blog/archives/2007/11/the_strange_sto.html) on this issue). We learned more about this when leaks from the Snowden document [showed](http://www.reuters.com/article/us-usa-security-rsa-idUSBRE9BJ1C220131220) that the NSA secretly paid \$10 million to RSA to make this generator the default option in their Bsafe software. You'd think that this generator is long dead but it turns out to be the "gift that keeps on giving". In December of 2015, Juniper systems [announced](http://www.wired.com/2015/12/juniper-networks-hidden-backdoors-show-the-risk-of-government-backdoors/) that they have discovered a malicious code in their system, dating back to at least 2012 (possibly [2008](https://twitter.com/__apf__/status/685224024985567232)), that would allow an attacker to surreptitiously decrypt all VPN traffic through their firewalls. The issue is that Juniper has been using the  Dual EC DRBG and someone has managed to replace the constant they were using with another one, one that they presumably knew the trapdoor for (see [here](https://rpw.sh/blog/2015/12/21/the-backdoored-backdoor/)  and [here](http://blog.cryptographyengineering.com/2015/12/on-juniper-backdoor.html) for more). Apparently, as surprising as it is, inserting back doors into cryptographic primitives might end up making them less secure.
 
@@ -168,7 +153,7 @@ __Theorem (Bootstrapping Theorem, Gentry '09):__ Suppose that $(G,E,D)$ is a CPA
 [^circular]: You can ignore the condition of circular security in a first read - we will discuss it later.
 
 __Proof:__ The idea behind the proof is simple but ingenious.
-Recall that the NAND gate $b,b' \mapsto \neg(b \wedge b')$ is a universal gate that allows us to compute any function $f:\zo^n\rightarrow\zo$ that can be efficiently computed.
+Recall that the NAND gate $b,b' \mapsto \neg(b \wedge b')$ is a universal gate that allows us to compute any function $f:\{0,1\}^n\rightarrow\{0,1\}$ that can be efficiently computed.
 Thus, to obtain a fully homomorphic encryption it suffices to obtain a function $NAND-EVAL$ such that
 $D_d(NAND-EVAL(c,c'))=D_d(c) \;NAND\; D_d(c')$.
 (Note that this is stronger than the typical notion of homomorphic evaluation since we require that $NAND-EVAL$ outputs an encryption of $b NAND b'$ when given _any_ pair of ciphertexts that decrypt to $b$ and $b'$ respectively, regardless whether these ciphertexts were produced by the encryption algorithm or by some other method, including the $NAND-EVAL$ procedure itself.)
@@ -183,7 +168,7 @@ This latter condition is not known to be implied by standard CPA security but as
 [^leveled]: Without this assumption we can still obtained a form of FHE known as a _leveled_ FHE where the size of the public key grows with the [depth](https://en.wikipedia.org/wiki/Circuit_complexity) of the circuit to be evaluated. We can do this by having $\ell$ public keys where $\ell$ is the depth we want to evaluate, and encrypt the private key of the $i^{th}$ key with the $i+1^{st}$ public key.  However, since circular security seems quite  likely to hold, we ignore this extra complication in the rest of the discussion.
 
 
-So, now all that is left is to define the $NAND-EVAL$ operation. On input two ciphertexts $c$ and $c'$, we will construct the function $f:\zo^n\rightarrow\zo$ (where $n$ is the length of the secret key) such that $f(d)=D_d(c) \;NAND\; D_d(c')$.
+So, now all that is left is to define the $NAND-EVAL$ operation. On input two ciphertexts $c$ and $c'$, we will construct the function $f:\{0,1\}^n\rightarrow\{0,1\}$ (where $n$ is the length of the secret key) such that $f(d)=D_d(c) \;NAND\; D_d(c')$.
 It would be useful to pause at this point and make sure you understand what are the inputs to $f$, what are "hardwired constants" and what is its output.
 The ciphertexts $c$ and $c'$ are simply treated as fixed strings and are _not_ part of the input to $f$.
 Rather $f$ is a function (depending on the strings $c,c'$) that maps the secret key into a bit.

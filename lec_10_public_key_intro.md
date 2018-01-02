@@ -1,14 +1,4 @@
-% Lecture 10: Public key cryptography
-% Boaz Barak
-
-<!--- ~ MathDefs   --->
-
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\getsr}{\leftarrow_R\;}
-\newcommand{\Gp}{\mathbb{G}}
-<!--- ~  --->
+# Public key cryptography
 
 People have been dreaming about heavier than air flight since at least the days of Leonardo Da Vinci (not to mention Icarus from the greek mythology).
 Jules Vern wrote with rather insightful details about going to the moon in 1865.  
@@ -23,7 +13,7 @@ Merkle showed that one can  design a protocol where Alice and Bob can use $T$ in
 We only found out  much later that in the late 1960's, a few years before Merkle, James Ellis of the British Intelligence agency GCHQ was [having similar thoughts](http://cryptome.org/jya/ellisdoc.htm).
 His curiosity was spurred by an old World-War II manuscript from Bell labs that suggested the following way that two people could communicate securely over a phone line. Alice would inject noise to the line, Bob would relay his messages, and then Alice would subtract the noise to get the signal. The idea is that an adversary over the line sees only the sum of Alice's and Bob's signals, and doesn't know what came from what. This got James Ellis thinking whether it would be possible to achieve something like that digitally. As he later recollected, in  1970 he realized that in principle this should be possible, since he could think of an hypothetical black box $B$ that on input a "handle" $\alpha$ and plaintext  $p$ would give a "ciphertext" $c$ and that there would be a secret key $\beta$ corresponding to $\alpha$, such that feeding $\beta$ and $c$ to the box would recover $p$. However, Ellis had no idea how to actually instantiate this box. He and others kept giving this question as a puzzle to bright new recruits until one of them, Clifford Cocks, came up in 1973 with a candidate solution loosely based on the factoring problem; in 1974 another GCHQ recruit, Malcolm Williamson,  came up with a solution using modular exponentiation.
 
-But among all those thinking of public key cryptography, probably the people who saw the furthest were two researchers at Stanford, Whit Diffie and Martin Hellman. They realized that with the advent of electronic communication, cryptography would find new applications beyond the military domain of spies and submarines. And they understood that in this new world of many users and point to point communication, cryptography will need to scale up. They envisioned an object which we now call "trapdoor permutation" though they called "one way trapdoor function" or sometimes simply "public key encryption". This is a collection of permutations $\{ p_k \}$ where $p_k$ is a permutation over (say) $\zo^{|k|}$, and the map $(x,k)\mapsto p_k(x)$ is efficiently computable _but_ the reverse map $(k,y) \mapsto p_k^{-1}(y)$ computationally hard. Yet, there is also some secret key $s(k)$ (i.e., the "trapdoor") such that using $s(k)$ it is possible to efficiently compute $p^{-1}_k$. Their idea was that using such a trapdoor permutation, Alice who knows $s(k)$ would be able to publish $k$ on some public file such that every one who wants to send her a message $x$ could do so by computing $p_k(x)$. (While today we know, due to the work of Goldwasser and Micali, that such a deterministic encryption is not a good idea, at the time Diffie and Hellman had amazing intuitions but didn't really have proper definitions of security.)
+But among all those thinking of public key cryptography, probably the people who saw the furthest were two researchers at Stanford, Whit Diffie and Martin Hellman. They realized that with the advent of electronic communication, cryptography would find new applications beyond the military domain of spies and submarines. And they understood that in this new world of many users and point to point communication, cryptography will need to scale up. They envisioned an object which we now call "trapdoor permutation" though they called "one way trapdoor function" or sometimes simply "public key encryption". This is a collection of permutations $\{ p_k \}$ where $p_k$ is a permutation over (say) $\{0,1\}^{|k|}$, and the map $(x,k)\mapsto p_k(x)$ is efficiently computable _but_ the reverse map $(k,y) \mapsto p_k^{-1}(y)$ computationally hard. Yet, there is also some secret key $s(k)$ (i.e., the "trapdoor") such that using $s(k)$ it is possible to efficiently compute $p^{-1}_k$. Their idea was that using such a trapdoor permutation, Alice who knows $s(k)$ would be able to publish $k$ on some public file such that every one who wants to send her a message $x$ could do so by computing $p_k(x)$. (While today we know, due to the work of Goldwasser and Micali, that such a deterministic encryption is not a good idea, at the time Diffie and Hellman had amazing intuitions but didn't really have proper definitions of security.)
 But they didn't stop there. They realized that protecting the _integrity_ of communication is no less important than protecting its _secrecy_. Thus they imagined that Alice could "run encryption in reverse" in order to certify or _sign_ messages. That is, given some message $m$, Alice would send the value $x=p_k^{-1}(h(m))$ (for a hash function $h$) as a way to certify that she endorses $m$, and every person who knows $k$ could verify this by checking that $p_k(x)=h(m)$.
 
 However, Diffie and Hellman were in a position not unlike  physicists who predicted that a certain particle should exist but without any experimental verification. Luckily they [met Ralph Merkle](http://cr.yp.to/bib/1988/diffie.pdf), and his ideas about a probabilistic _key exchange protocol_, together with a suggestion from their Stanford colleague [John Gill](https://profiles.stanford.edu/john-gill), inspired them to come up with what today is known as the _Diffie Hellman Key Exchange_ (which unbeknownst to them was found two years earlier at GCHQ by Malcolm Williamson). They published their paper ["New Directions in Cryptography"](https://www-ee.stanford.edu/~hellman/publications/24.pdf) in 1976, and it is considered to have brought about the birth of modern cryptography. However, they still didn't find their elusive trapdoor function.
@@ -40,14 +30,14 @@ __Definition__ A triple of efficient algorithms $(G,E,D)$ is a _public key encry
 the following:
 
 * $G$ is a probabilistic algorithm known as the _key generation algorithm_ that on input $1^n$ outputs a distribution over pair of keys $(e,d)$.
-* For every $m\in\zo^n$, with probability $1-negl(n)$ over the choice of $(e,d)=G(1^n)$ and the coins of $E$,$D$, $D_d(E_e(m))=m$.  
+* For every $m\in\{0,1\}^n$, with probability $1-negl(n)$ over the choice of $(e,d)=G(1^n)$ and the coins of $E$,$D$, $D_d(E_e(m))=m$.  
 
 We say that $(G,E,D)$ is _CPA secure_ every efficient adversary $A$ wins the following game with probability at most $1/2+negl(n)$:
 
 * $(e,d)=G(1^n)$
-* $A$ is given $e$ and outputs a pair of messages $m_0,m_1 \in \zo^n$.
-* $A$ is given $c=E_e(m_b)$ for $b\getsr\zo$.
-* $A$ outputs $b'\in\zo$ and _wins_ if $b'=b$.
+* $A$ is given $e$ and outputs a pair of messages $m_0,m_1 \in \{0,1\}^n$.
+* $A$ is given $c=E_e(m_b)$ for $b\getsr\{0,1\}$.
+* $A$ outputs $b'\in\{0,1\}$ and _wins_ if $b'=b$.
 
 Note that we don't explicitly give $A$ access to the encryption oracle since it can compute it on its own using $e$.
 
@@ -74,7 +64,7 @@ We will not formally define obfuscators yet, but on intuitive level it would be 
 * $P'$ is functionally equivalent to $P$, i.e., $P'(x)=P(x)$ for every input $x$.[^side-effect]
 * $P'$ is "inscrutable" in the sense that seeing the code of $P'$ is not more informative than getting _black box access_ to $P$.
 
-[^side-effect]: For simplicity, assume that the program $P$ is _side effect free_ and hence it simply computes some function, say from $\zo^n$ to $\zo^\ell$ for some $n,\ell$.
+[^side-effect]: For simplicity, assume that the program $P$ is _side effect free_ and hence it simply computes some function, say from $\{0,1\}^n$ to $\{0,1\}^\ell$ for some $n,\ell$.
 
 Let me stress again that there is no known construction of obfuscators achieving something similar to this definition. In fact, the most natural formalization of this definition is _impossible_ to achieve (as we might see later in this course). However, when trying to stretch your imagination to consider the amazing possibilities that could be achieved in cryptography, it is not a bad heuristic to first ask yourself what could be possible if only everyone involved had access to a magic black box.
 It certainly worked well for Diffie and Hellman.
@@ -123,11 +113,11 @@ However, currently the best known algorithm for computing the discrete logarithm
 
 John Gill suggested to Diffie and Hellman that modular exponentiation can be a good source for the kind of "easy-to-compute but hard-to-invert" functions they were looking for. Diffie and Hellman based a public key encryption scheme as follows:
 
-* The _key generation algorithm_, on input $n$, samples a prime number $p$ of $n$ bits description (i.e., between $2^{n-1}$ to $2^n$), a number $g\getsr \Z_p$ and $a \getsr \{0,\ldots,p-1\}$. We also sample a hash function $H:\zo^n\rightarrow\zo^\ell$.   The public key $e$ is $(p,g,g^a,H)$ while the secret key $d$ is $a$.[^secret_key]
+* The _key generation algorithm_, on input $n$, samples a prime number $p$ of $n$ bits description (i.e., between $2^{n-1}$ to $2^n$), a number $g\getsr \Z_p$ and $a \getsr \{0,\ldots,p-1\}$. We also sample a hash function $H:\{0,1\}^n\rightarrow\{0,1\}^\ell$.   The public key $e$ is $(p,g,g^a,H)$ while the secret key $d$ is $a$.[^secret_key]
 
 [^secret_key]: Formally the secret key should also contain all information in the public key, but we omit this for simplicity of notation.
 
-* The _encryption algorithm_, on input a message $m \in \zo^\ell$ and a public key $e=(p,g,h,H)$ will choose a random $b\getsr \{0,\ldots,p-1\}$, and output $(g^b,H(h^b)\oplus m)$.
+* The _encryption algorithm_, on input a message $m \in \{0,1\}^\ell$ and a public key $e=(p,g,h,H)$ will choose a random $b\getsr \{0,\ldots,p-1\}$, and output $(g^b,H(h^b)\oplus m)$.
 
 * The _decryption algorithm_, on input a ciphertext $(f,y)$ and the secret key, will output $H(f^a) \oplus y$.
 
@@ -228,7 +218,7 @@ which would prove that Alice truly knew the secret key.
 
 The algorithm works as follows: (See also Section 12.5.2 in the KL book)
 
-* _Key generation:_ Pick generator $g$ for $\Gp$ and $a\in \{0,\ldots,|\Gp|-1\}$ and let $h=g^a$. Pick $H:\zo^\ell\rightarrow\Gp$ and $F:\Gp\rightarrow\Gp$ to be some  functions that can be thought of as "hash functions".[^hash] The public key is $(g,h)$  (as well as the functions $H,F$) and secret key is $a$.
+* _Key generation:_ Pick generator $g$ for $\Gp$ and $a\in \{0,\ldots,|\Gp|-1\}$ and let $h=g^a$. Pick $H:\{0,1\}^\ell\rightarrow\Gp$ and $F:\Gp\rightarrow\Gp$ to be some  functions that can be thought of as "hash functions".[^hash] The public key is $(g,h)$  (as well as the functions $H,F$) and secret key is $a$.
 * _Signature:_ To sign a message $m$, pick $b$ at random, and let $f=g^b$, and then let $s= b^{-1}[H(m)+a\cdot F(f)]$ where all computation is done modulo $|\Gp|$. The signature is $(f,s)$.
 * _Verification:_ To verify a signature $(f,s)$ on a message $m$, check that $s\neq 0$ and $f^s=g^{H(m)}h^{F(f)}$.
 
@@ -261,10 +251,10 @@ Once Bob knows Alice's public key they are in business- he can use that to send 
 
 This is in a very high level the SSL/TLS protocol, but there are many details inside it including the exact security notions needed from the encryption, how the two parties negotiate _which_ cryptographic algorithm to use, and more. All these issues can and have been used for attacks on this protocol. For two recent discussions see [this blog post](http://blog.cryptographyengineering.com/2013/12/how-does-nsa-break-ssl.html) and [this website](https://weakdh.org/).
 
-![When you connect to a webpage protected by SSL/TLS, the Browswer displays information on the certificate's authenticity](certificate.jpg){ width=80% }
+![When you connect to a webpage protected by SSL/TLS, the Browswer displays information on the certificate's authenticity](../figure/certificate.jpg){ width=80% }
 
-![The cipher and certificate used by '''Google.com'''. Note that Google has a 2048bit RSA signature key which it then uses to authenticate an elliptic curve based Diffie Hellman key exchange protocol to create session keys for the block cipher AES with 128 bit key in Calois Counter Mode.](googletls.jpg){ width=40% }
+![The cipher and certificate used by '''Google.com'''. Note that Google has a 2048bit RSA signature key which it then uses to authenticate an elliptic curve based Diffie Hellman key exchange protocol to create session keys for the block cipher AES with 128 bit key in Calois Counter Mode.](../figure/googletls.jpg){ width=40% }
 
-![Digital signatures and oher forms of electronic signatures are legally binding in many jurisdictions. This is some material from the website of the electronic signing company DocuSign](docusign.jpg){ width=80% }
+![Digital signatures and oher forms of electronic signatures are legally binding in many jurisdictions. This is some material from the website of the electronic signing company DocuSign](../figure/docusign.jpg){ width=80% }
 
 >__Example:__ Here is the list of certificate authorities trusted by default by the Mozilla products: Actalis, Amazon, AS Sertifitseerimiskeskuse (SK), Atos, Autoridad de Certificacion Firmaprofesional, Buypass, CA Disig a.s., Camerfirma, CerticÃ¡mara S.A., Certigna, Certinomis, certSIGN, China Financial Certification Authority (CFCA), China Internet Network Information Center (CNNIC), Chunghwa Telecom Corporation, Comodo, ComSign, Consorci AdministraciÃ³ Oberta de Catalunya (Consorci AOC,  CATCert), Cybertrust Japan / JCSI, D-TRUST, Deutscher Sparkassen Verlag GmbH (S-TRUST,  DSV-Gruppe), DigiCert, DocuSign (OpenTrust/Keynectis), e-tugra, EDICOM, Entrust, GlobalSign, GoDaddy, Government of France (ANSSI,  DCSSI), Government of Hong Kong (SAR),  Hongkong Post,  Certizen, Government of Japan,  Ministry of Internal Affairs and Communications, Government of Spain,  Autoritat de CertificaciÃ³ de la Comunitat Valenciana (ACCV), Government of Taiwan,  Government Root Certification Authority (GRCA), Government of The Netherlands,  PKIoverheid, Government of Turkey,  Kamu Sertifikasyon Merkezi (Kamu SM), HARICA, IdenTrust, Izenpe S.A., Microsec e-SzignÃ³ CA, NetLock Ltd., PROCERT, QuoVadis, RSA the Security Division of EMC, SECOM Trust Systems Co. Ltd., Start Commercial (StartCom) Ltd., Swisscom (Switzerland) Ltd, SwissSign AG, Symantec / GeoTrust, Symantec / Thawte, Symantec / VeriSign, T-Systems International GmbH (Deutsche Telekom), Taiwan-CA Inc. (TWCA), TeliaSonera, Trend Micro, Trustis, Trustwave, TurkTrust, Unizeto Certum, Visa, Web.com, Wells Fargo Bank N.A., WISeKey, WoSign CA Limited

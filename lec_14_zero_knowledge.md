@@ -1,16 +1,4 @@
-% Lecture 14: Zero knowledge proofs
-% Boaz Barak
-
-<!--- ~ MathDefs   --->
-
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\getsr}{\leftarrow_R\;}
-\newcommand{\Gp}{\mathbb{G}}
-\newcommand{\floor}[1]{\lfloor #1 \rfloor}
-\newcommand{\iprod}[1]{\langle #1 \rangle}
-<!--- ~  --->
+#  Zero knowledge proofs
 
 The notion of _proof_ is central to so many fields.
 In mathematics, we want to prove that a certain assertion is correct.
@@ -119,7 +107,7 @@ Lets start with an informal example:
 Now consider a more "mathematical" example along similar lines.
 Recall that if $x$ and $m$ are numbers then we say that $x$ is a _quadratic residue_ modulo $m$ if there is some $s$ such that $x=s^2 \pmod{m}$.
 It is very easy to prove that $x$ is a quadratic residue, but can Alice, even if she can do arbitrary computations,  prove to Bob that $x$ is _not_ a residue?
-Here is one way to do this. Given $x$ and $m$, Bob will pick some random $s\in \Z^*_m$ (e.g., by picking a random number in $\{1,\ldots,m-1\}$  and discarding it if it has nontrivial g.c.d. with $m$) and toss a coin $b\in\zo$. If $b=0$ then Bob will send $s^2 \pmod{m}$ to Alice and otherwise he will send $xs^2 \pmod{m}$ to Alice.
+Here is one way to do this. Given $x$ and $m$, Bob will pick some random $s\in \Z^*_m$ (e.g., by picking a random number in $\{1,\ldots,m-1\}$  and discarding it if it has nontrivial g.c.d. with $m$) and toss a coin $b\in\{0,1\}$. If $b=0$ then Bob will send $s^2 \pmod{m}$ to Alice and otherwise he will send $xs^2 \pmod{m}$ to Alice.
 Alice will respond with $b'=0$ if Bob sent a quadratic residue and with $b'=1$ otherwise. Now note that if $x$ is a non-residue then $xs^2$ will have to be a non-residue as well (since if it had a root $s'$ then $s's^{-1}$ would be a root of $x$). Hence it will always be the case that $b'=b$.
 Moreover, if $x$ _was_ a quadratic residue of the form $x=s'^2 \pmod{m}$ for some $s'$, then $xs^2=(s's)^2$ is simply a random quadratic residue, which means that in this case Bob's message is distributed the same regardless of whether $b=0$ or $b=1$, and no matter what she does, Alice has  probability at most $1/2$ of guessing $b$.
 Hence if Alice is always successful than after $n$ repetitions Bob would have $1-2^{-n}$ confidence that $x$ is indeed a non-residue modulo $m$.
@@ -128,8 +116,8 @@ Hence if Alice is always successful than after $n$ repetitions Bob would have $1
 There have been some recent great advances by Babai for this problem, but there is still not a truly efficient algorithm to test whether a pair of graphs has this property.
 Suppose though Alice is an "isomorphomat" - she does have the computational ability to find such isomorphisms, if they exist, and wants to convince Bob that a pair of $n$-vertex graphs $G_0$ and $G_1$ are not _isomorphic_.
 She can tell him "trust me, I know how to find isomorphisms and couldn't find one for this pair", but he may view this as less than fully convincing.
-However, he could be convinced by the following protocol: he will repeat the following experiements: pick $b$ at random in $\zo$  and pick $\sigma$ to be a random permutation of $\{1,\ldots,n \}$. He then lets $H$ be the graph obtained by permuting the vertices of $G_b$ according to $\sigma$ and sends $H$ to Alice.
-Now Alice using her isomorphism powers finds out whether $H$ is isomorphic to $G_0$ or $G_1$ and sends the index $b'\in\zo$ of the isomorphic graph to Bob.
+However, he could be convinced by the following protocol: he will repeat the following experiements: pick $b$ at random in $\{0,1\}$  and pick $\sigma$ to be a random permutation of $\{1,\ldots,n \}$. He then lets $H$ be the graph obtained by permuting the vertices of $G_b$ according to $\sigma$ and sends $H$ to Alice.
+Now Alice using her isomorphism powers finds out whether $H$ is isomorphic to $G_0$ or $G_1$ and sends the index $b'\in\{0,1\}$ of the isomorphic graph to Bob.
 If the graphs were _not_  isomorphic, then $b'$ would equal $b$ with probability $1$, since $H$ can only be isomorphic to one of the graphs.
 On ther other hand, if the graphs were isomorphic then $H$ is distributed identically no matter what $b$ was, and so no matter what she does Alice has probability at most $1/2$ of finding $b'$ that equals $b$.
 Thus if Alice always succeeds then after $n$ repetitions Bob can have $1-2^{-n}$ confidence that the graphs are _not_ isomorphic.
@@ -137,7 +125,7 @@ Thus if Alice always succeeds then after $n$ repetitions Bob can have $1-2^{-n}$
 
 Let us now make the formal definition:
 
-__Definition:__ Let $L$ be some subset of $\zo^*$. A _probabilistic proof for $L$_ is a pair of interactive algorithms $(P,V)$ such that $V$ runs in polynomial time and:
+__Definition:__ Let $L$ be some subset of $\{0,1\}^*$. A _probabilistic proof for $L$_ is a pair of interactive algorithms $(P,V)$ such that $V$ runs in polynomial time and:
 
 * __Completeness:__ If $x\in L$ then on input $x$, if $P$ and $V$ are given input $x$ and interact, then at the end of the interaction $V$ will output ```Accept``` with probability at least $0.9$.
 
@@ -166,7 +154,7 @@ __Protocol ZK-QR:__
 
 0. Public input for Alice and Bob: $x,m$; Alice's private input is $s$ such that $x=s^2 \pmod{m}$.
 1. Alice will pick a random $s'$ and send to Bob $x' = xs'^2 \pmod{m}$.
-2. Bob will pick a random bit $b\in\zo$ and send $b$ to Alice.
+2. Bob will pick a random bit $b\in\{0,1\}$ and send $b$ to Alice.
 3. If $b=0$ then Alice reveals $ss'$, hence giving out a root for $x'$; if $b=1$ then Alice reveals $s'$, hence showing a root for $x'x^{-1}$.
 4. Bob checks that the value $s''$ revealed by Alice is indeed a root of $x'x^{-b}$, if so then it "accepts" this round.
 
@@ -216,7 +204,7 @@ Both $V_1$ and $V_2$ are efficiently computable. We now need to come up with an 
 output a distribution indistinguishable from the output $V^*$.
 The simulator $S^*$ will work as follows:
 
-1. Pick $b'\getsr\zo$.
+1. Pick $b'\getsr\{0,1\}$.
 2. Pick $s''$ at random in $\Z^*_m$. If $b=0$ then let $x'={s''}^2 \pmod{m}$. Otherwise output $x'=x{s''}^2 \pmod{m}$.
 3. Let $b=V_1(x,m,x')$. If $b \neq b'$ then go back to step 1.
 4. Output $V_2(x,m,x',s'')$.
@@ -259,9 +247,9 @@ Here is how Alice can prove that such a cycle exists without revealing any infor
 __Protocol ZK-Ham:__
 
 0. **Common input:** graph $H$ (in the form of an $n\times n$ adjacency matrix); **Alice's private input:** a Hamiltonian cycle $C=(C_1,\ldots,C_n)$ which are distinct vertices such that $(C_\ell,C_{j+1})$ is an edge in $H$ for all $\ell\in\{1,\ldots,n-1\}$ and $(C_n,C_1)$ is an edge as well.
-1. Bob chooses a random string $z\in \zo^{3n}$
-2. Alice chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). For every $i,j$, Alice chooses a random string $x_{i,j} \in \zo^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}z$, where $G:\zo^n\rightarrow\zo^{3n}$ is a pseudorandom generator. She sends $\{ y_{i,j} \}_{i,j \in [n]}$ to Bob.
-3. Bob chooses a bit $b\in\zo$.
+1. Bob chooses a random string $z\in \{0,1\}^{3n}$
+2. Alice chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). For every $i,j$, Alice chooses a random string $x_{i,j} \in \{0,1\}^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}z$, where $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$ is a pseudorandom generator. She sends $\{ y_{i,j} \}_{i,j \in [n]}$ to Bob.
+3. Bob chooses a bit $b\in\{0,1\}$.
 4. If $b=0$ then Alice sends out $\pi$ and the strings $\{ x_{i,j} \}$ for all $i,j$; If $b=1$ then Alice sends out the $n$ strings $x_{\pi(C_1),\pi(C_2)}$,$\ldots$,$x_{\pi(C_n),\pi(C_1)}$ together with their indices.
 5. If $b=0$ then Bob computes $M$ to be the $\pi$-permuted adjacency matrix of $H$ and verifies that all the $y_{i,j}$'s were computed from the $x_{i,j}$'s appropriately. If $b=1$ then verify that the indices of the strings $\{ x_{i,j } \}$ sent by Alice form a cycle and that indeed $y_{i,j}=G(x_{i,j})\oplus z$ for every string $x_{i,j}$ that was sent by Alice.
 
@@ -272,7 +260,7 @@ __Proof:__ We need to prove **completeness**, **soundness**, and zero **knowledg
 **Completeness** can be easily verified, and so we leave this to the reader.
 
 
-For **soundness**, we recall that (as we've seen before) with extremely high probability the sets $S_0=\{ G(x) : x\in\zo^n \}$ and $S_1 = \{ G(x)\oplus z : x\in\zo^n \}$ will be disjoint (this probability is over the choice of $z$ that is done by the verifier).
+For **soundness**, we recall that (as we've seen before) with extremely high probability the sets $S_0=\{ G(x) : x\in\{0,1\}^n \}$ and $S_1 = \{ G(x)\oplus z : x\in\{0,1\}^n \}$ will be disjoint (this probability is over the choice of $z$ that is done by the verifier).
 Now, assuming this is the case, given the messages $\{ y_{i,j} \}$ sent by the prover in the first step, define an $n\times n$ matrix $M'$ with entries in $\{0,1,?\}$ as follows: $M'_{i,j}=0$ if $y_{i,j}\in S_0$ , $M'_{i,j}=1$ if $y_{i,j}\in S_1$ and $M'_{i,j}=?$ otherwise.
 We split into two cases.
 The first case is that there exists some permutation $\pi$ such that **(i)** $M'$ is a $\pi$-permuted version of the input graph $G$ and **(ii)** $M'$ contains a Hamiltonian cycle. Clearly in this case $G$ contains a Hamiltonian cycle as well, and hence we don't need to consider it when analyzing soundness. In the other case we claim that with probability at least $1/2$ the verifier will reject the proof.
@@ -282,9 +270,9 @@ We now turn to showing **zero knowledge**. For this we need to build a _simulato
 Recall that $S^*$ gets as input the graph $H$ (but not the _Hamiltonian_ cycle $C$) and needs to produce an output that is indistinguishable from the output of $V^*$.
 It will do so as follows:
 
-0. Pick $b'\in\zo$.
-1. Let $z\in \zo^{3n}$ be the first message computed by $V^*$ on input $H$.
-2. If $b'=0$ then $S^*$ computes the second message as Alice does: chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). In contrast, if $b'=1$ then $S^*$ lets $M$ be the all $1'$ matrix. For every $i,j$, $S^*$ chooses a random string $x_{i,j} \in \zo^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}z$, where $G:\zo^n\rightarrow\zo^{3n}$ is a pseudorandom generator.
+0. Pick $b'\in\{0,1\}$.
+1. Let $z\in \{0,1\}^{3n}$ be the first message computed by $V^*$ on input $H$.
+2. If $b'=0$ then $S^*$ computes the second message as Alice does: chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). In contrast, if $b'=1$ then $S^*$ lets $M$ be the all $1'$ matrix. For every $i,j$, $S^*$ chooses a random string $x_{i,j} \in \{0,1\}^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}z$, where $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$ is a pseudorandom generator.
 3. Let $b$ be the output of $V^*$ when given  the input $H$ and the first message $\{ y_{i,j} \}$ computed as above. If $b\neq b'$ then go back to step 0.
 4. We compute the fourth message of the protocol similarly to how Alice does it: if $b=0$ then it consists of $\pi$ and the strings $\{ x_{i,j} \}$ for all $i,j$; If $b=1$ then we pick a random length-$n$ cycle $C'$  and the message consists of the $n$ strings $x_{C'_1,C'_2}$,$\ldots$,$x_{C'_n,C'_1}$ together with their indices.
 5. Output whatever $V^*$ outputs when given the prior message.
@@ -323,7 +311,7 @@ This means that for every other NP language $L$, we can use the reduction from $
 * The language of tuples $X,e,c_1,\ldots,c_n$ such that $c_i$ is an encryption of a number $x_i$ with $\sum x_i = X$. (This is essentially what we needed in the voting example above).
 * For every efficient function $F$, the  language of pairs $x,y$ such that there exists some input $r$ satisfying $y=F(x\|r)$. (This is what we often need in the "protocol compiling" applications to show that a particular output was produced by the correct program $F$ on public input $x$ and private input $r$.)
 
-![Using a zero knowledge protocol for Hamiltonicity we can obtain a zero knowledge protocol for any language $L$ in NP. For example, if the public input is a SAT formula $\varphi$ and the Prover's secret input is a satisfying assignment $x$ for $\varphi$ then the verifier can run the reduction on $\varphi$ to obtain a graph $H$ and the prover can run the same reduction to obtain from $x$ a Hamiltonian cycle $C$ in $H$. They can then run the ZK-Ham protocol to prove that indeed $H$ is Hamiltonian (and hence the original formula was satisfiable) without revealing any information the verifier could not have obtain on his own.](zk-ham.jpg){ width=80% }
+![Using a zero knowledge protocol for Hamiltonicity we can obtain a zero knowledge protocol for any language $L$ in NP. For example, if the public input is a SAT formula $\varphi$ and the Prover's secret input is a satisfying assignment $x$ for $\varphi$ then the verifier can run the reduction on $\varphi$ to obtain a graph $H$ and the prover can run the same reduction to obtain from $x$ a Hamiltonian cycle $C$ in $H$. They can then run the ZK-Ham protocol to prove that indeed $H$ is Hamiltonian (and hence the original formula was satisfiable) without revealing any information the verifier could not have obtain on his own.](../figure/zk-ham.jpg){ width=80% }
 
 ## Parallel repetition and turning zero knowledge proofs to signatures.
 

@@ -1,11 +1,4 @@
-% Lecture 6: Chosen Ciphertext Security
-% Boaz Barak
-
-<!--- ~ MathDefs -->
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\getsr}{\leftarrow_R\;}
-<!--- ~ -->
+# Lecture 6: Chosen Ciphertext Security
 
 
 
@@ -16,8 +9,8 @@ Let's start by reviewing what we have learned so far:
 * We can mathematically define security for encryption schemes. A natural definition is _perfect secrecy_: no matter what Eve does, she can't learn anything about the plaintext that she didn't know before. Unfortunately this requires the key to be as long as the message, thus placing a severe limitation on the usability of it.
 
 * To get around this, we need to consider computational considerations.
-A basic object is a _pseudorandom generator_ and we considered _The PRG Conjecture_ which stipulates the existence of an efficiently computable function $G:\zo^n\rightarrow\zo^{n+1}$
-such that $G(U_n)\approx U_{n+1}$ (where $U_m$ denotes the uniform distribution on $\zo^m$ and $\approx$ denotes computational indistinguishability).
+A basic object is a _pseudorandom generator_ and we considered _The PRG Conjecture_ which stipulates the existence of an efficiently computable function $G:\{0,1\}^n\rightarrow\{0,1\}^{n+1}$
+such that $G(U_n)\approx U_{n+1}$ (where $U_m$ denotes the uniform distribution on $\{0,1\}^m$ and $\approx$ denotes computational indistinguishability).
 
 * We showed that the PRG conjecture implies a pseudorandom generator of any polynomial output length which in particular via the stream cipher construction implies a computationally secure encryption with plaintext  arbitrarily larger than the key. (The only restriction is that the plaintext is of polynomial size which is anyway needed if we want to actually be able to read and write it.)
 
@@ -38,7 +31,7 @@ In 2012 (after 11 years of attacks!) it was  estimated that it is still used in 
 by many other protocols, including the first versions of the secure socket layer (SSL) protocol that is used to protect all encrypted web traffic.
 
 To avoid superfluous details we will considered a highly abstract (and somewhat inaccurate) version of WEP that still demonstrates our main point. In this protocol Alice (user) sends to Bob (access point) an IP packet that she wants routed somewhere to the internet.
-So we can think of the message as a string $m\in\zo^\ell$ of the form $m=(m_1,m_2)$ where $m_1$ is the IP address this packet needs to be routed to and $m_2$ is the actual message that needs to be delivered. In the protocol Alice sends to Bob
+So we can think of the message as a string $m\in\{0,1\}^\ell$ of the form $m=(m_1,m_2)$ where $m_1$ is the IP address this packet needs to be routed to and $m_2$ is the actual message that needs to be delivered. In the protocol Alice sends to Bob
 $E_k(m\|CRC(m))$ (where $\|$ denotes concatenation and $CRC(m)$ is some cyclic redunduncy code. The actual encryption WEP used was RC4, but for us it doesn't really matter.
 What matters is that the encryption has the form  $E_k(m') = pad \oplus m'$
 where $pad$ is computed as some function of the key. In particular the attack we will describe works even if we use our stronger CPA secure PRF-based scheme where $pad=f_k(r)$ for some random (or counter) $r$ that is sent out separately.
@@ -47,7 +40,7 @@ Now the security of the encryption means that an adversary seeing the ciphertext
 the IP address $m_1$ that Alice was using (e.g., if she guesses it's some  popular website) then she can convert the ciphertext $c = pad \oplus (m_1,m_2,CRC(m_1,m_2))$ into the ciphertext $c' = c \oplus x$ where $x=(x_1,x_2,x_3)$ is computed so that $x_1 oplus m_1$ is equal to the adversary's own IP address! So, the adversary doesn't need to decrypt the message- by spoofind the ciphertext she can ensure that Bob (who is an access point, whose job is to decrypt and then deliver packets) simply delivers it unencrypted straight into her hands.
 One issue is that Eve modifies $m_1$ then it is unlikely that the CRC code will still check out, and hence Bob would reject the packet. However, this CRC (as most are) is _linear_ modulo $2$, which means that if the adversary sets $x_2$ to be the all zero string and $x_3 = CRC(x_1,x_2)$ then it will be the case that $CRC(m_1\oplus x_1,m_2 \oplus m_2)=CRC(m_1,m_2)\oplus CRC(x_1,x_2)$ and so $c'$ will be a valid encryption of the message $(m_1 \oplus x_1, 0, CRC(m_1\oplus x_1,0))$ which means that Bob will deliver the message $m_2$ to the IP address $m_1 \oplus x_1$ of the adversary's choice.
 
-![The attack on the WEP protocol allowing the adversary Mallory to read encrypted messages even when Alice uses a CPA secure encryption.](wep-attack.jpg){ width=90% }
+![The attack on the WEP protocol allowing the adversary Mallory to read encrypted messages even when Alice uses a CPA secure encryption.](../figure/wep-attack.jpg){ width=90% }
 
 
 This is not an isolated example but in fact an instance of a general pattern of many breaks in practical protocols. The point is that often our adversaries can be _active_ and modify the communication between sender and receiver, which in effect gives them access not just to choose _plaintexts_ of their choice to encrypt but even to have some impact on the _ciphertexts_ that are decrypted. This motivates the following notion of security:
@@ -59,14 +52,14 @@ efficient Mallory wins in the following game with probability at most $1/2+ negl
 
 * For $poly(n)$ rounds, Mallory gets access to the functions $m \mapsto E_k(m)$ and $c \mapsto D_k(c)$.
 
-* Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\zo$, and Mallory gets $c^* = E_k(m_b)$.
+* Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\{0,1\}$, and Mallory gets $c^* = E_k(m_b)$.
 
 * Mallory now gets another $poly(n)$ rounds of access to the functions $m \mapsto E_k(m)$ and $c \mapsto D_k(c)$ except that she is not allowed to query $c^*$ to her second oracle.
 
 * Mallory outputs $b'$ and _wins_ if $b'=b$.
 
 
-![the CCA security game](cca-game.jpg){ width=50% }
+![the CCA security game](../figure/cca-game.jpg){ width=50% }
 
 
 This might seems a rather strange definition so let's try to digest it slowly. Most people, once they understand what the definition says, don't like it that much initially. There are two natural objections to it:
@@ -88,7 +81,7 @@ __Claim:__ Suppose that $(E,D)$ is a CCA secure encryption, then there is no eff
 __Proof:__ We'll show that such if we had an adversary $M'$ that violates the conclusion of the claim, then there is an adversary $M$ that can win in the CCA game.
 The proof is simple and relies on the crucial fact that the CCA game allows M to query the decrpyption box on _any_ ciphertext of her choice, as long as it's not _exactly identical_ to the challenge cipertext $c^*$. In particular, if $M'$ is able to morph an encryption $c$ of $m$ to some encryption $c'$ of some different $m'$ that agrees with $m$ on some set of bits, then $M$ can do the following: in the security game, use $m_0$ to be some random message and $m_1$ to be this plaintext $m$. Then, when receiving $c^*$, apply $M'$ to it to obtain a ciphertext $c'$ (note that if the plaintext differs then the ciphertext must differ also; can you see why?) ask the decryption box to decrypt it and output $1$ if the resulting message agrees with $m$ in the corresponding set of bits (otherwise output a random bit). If $M'$ was successful with probability $\epsilon$, then $M$ would win in the CCA game with probability at least $1/2 + \epsilon/10$ or so. QED
 
-# Constructing CCA secure encryption
+## Constructing CCA secure encryption
 
 The definition of CCA seems extremely strong, so perhaps it is not surprising that it is useful, but can we actually construct it?
 The WEP attack shows that the CPA secure encryption we saw before (i.e., $E_k(m)=(r,f_k(r)\oplus m)$) is _not_ CCA secure.
@@ -110,13 +103,8 @@ which is the "gold standard" for online applications. (For symmetric encryption 
 
 All of this suggests that  Message Authentication Codes might help us get CCA security. This turns out to be the case. But one needs to take some care exactly _how_ to use MAC's to get CCA security. At this point, you might want to stop and think how you would do this...
 
-----
+\newpage
 
-----
-
-----
-
-----
 
 OK, so now that you had a chance to think about this on your own, we will now describe one way that works to achieve CCA security from MACs. We will explore other approaches that may or may not work in the exercises.
 
@@ -158,11 +146,11 @@ where the original decryption box would not have done so, but this happens with 
 
 The construction above works as a generic construction, but it is somewhat costly in the sense that we need to evaluate both the block cipher and the MAC. In particular, if messages have $t$ blocks, then we would need to invoke two cryptographic operations (a block cipher encryption and a MAC computation) per block. The _GCM (Galois Counter Mode)_ is a way around this. We are going to describe a simplified version of this mode. For simplicity, assume that the number of blocks $t$ is fixed and known (though many of the annoying but important details in block cipher modes of operations involves dealing with padding to multiple of blocks and dealing with variable block size).
 
-We recall that a _universal hash function_ collection is a family of functions $\{ h:\zo^\ell\rightarrow\zo^n \}$ such that for every $x \neq x' \in \zo^\ell$, the random variables $h(x)$ and $h(x')$ (taken over the choice of the same  random $h$ from this family) are pairwise independent in $\zo^{2n}$. Universal hash functions have rather efficient constructions, and in particular if we relax the definition to allow _almost universal_ hash functions then the constructions become extremely efficient and the size of the description of $h$ is only related to $n$, no matter how big $\ell$ is.[^almost-universal]
+We recall that a _universal hash function_ collection is a family of functions $\{ h:\{0,1\}^\ell\rightarrow\{0,1\}^n \}$ such that for every $x \neq x' \in \{0,1\}^\ell$, the random variables $h(x)$ and $h(x')$ (taken over the choice of the same  random $h$ from this family) are pairwise independent in $\{0,1\}^{2n}$. Universal hash functions have rather efficient constructions, and in particular if we relax the definition to allow _almost universal_ hash functions then the constructions become extremely efficient and the size of the description of $h$ is only related to $n$, no matter how big $\ell$ is.[^almost-universal]
 
-[^almost-universal]: In $\epsilon$-almost universal hash functions we require that for every $y,y'\in \zo^{n}$, and $x\neq x' \in \zo^\ell$, the probability that $h(x)=y \wedge h(x')=y'$ is at most $(1+\epsilon)2^{-2n}$.  It can be easily shown that the analysis below extends to almost universal hash functions, but we will leave verifying this to the reader.
+[^almost-universal]: In $\epsilon$-almost universal hash functions we require that for every $y,y'\in \{0,1\}^{n}$, and $x\neq x' \in \{0,1\}^\ell$, the probability that $h(x)=y \wedge h(x')=y'$ is at most $(1+\epsilon)2^{-2n}$.  It can be easily shown that the analysis below extends to almost universal hash functions, but we will leave verifying this to the reader.
 
-Our encryption scheme is defined as follow. The key is $(k,h)$ where $k$ is an index to a pseudorandom permutation $\{ p_k \}$ and $h$ is the key for a _universal hash function_.[^single_key] To encrypt a message $m = (m_1,\ldots,m_t) \in \zo^{nt}$  do the following:
+Our encryption scheme is defined as follow. The key is $(k,h)$ where $k$ is an index to a pseudorandom permutation $\{ p_k \}$ and $h$ is the key for a _universal hash function_.[^single_key] To encrypt a message $m = (m_1,\ldots,m_t) \in \{0,1\}^{nt}$  do the following:
 
 * Choose $IV$ at random in $[2^n]$.
 
@@ -189,7 +177,7 @@ In this course we typically focus on the simplest case where messages have a  _f
 
 __Chopping into blocks:__ A block cipher a-priori provides a way to encrypt a message of length $n$, but we often have much longer messages and need to "chop" them into blocks. This is where the _block cipher modes_ discussed in the previous lecture come in. However, the basic popular modes such as CBC and OFB do _not_ provide security against chosen ciphertext attack, and in fact typically make it easy to _extend_ a ciphertext with an additional block or to _remove_ the last block from a ciphertext, both being operations which should not be feasible in a CCA secure encryption.
 
-__Padding:__ Oftentimes messages are not an integer multiple of the block size and hence need to be _padded_. The _padding_ is typically a map that takes the last partial block of the message (i.e., a string $m$ of length in $\{0,\ldots,n-1\}$) and maps it into a full block (i.e., a string $m\in\zo^n$). The map needs to be invertible which in particular means that if the message is already an integer multiple of the block size we will need to add an extra block. (Since we have to map all the $1+2+\ldots+2^{n-1}$ messages of length $1,\ldots,n-1$ into the $2^n$ messages of length $n$ in a one-to-one fashion.) One approach for doing so is to pad an $n'<n$ length message with the string $10^{n-n'-1}$. Sometimes people use a different padding which involves encoding the length of the pad.   
+__Padding:__ Oftentimes messages are not an integer multiple of the block size and hence need to be _padded_. The _padding_ is typically a map that takes the last partial block of the message (i.e., a string $m$ of length in $\{0,\ldots,n-1\}$) and maps it into a full block (i.e., a string $m\in\{0,1\}^n$). The map needs to be invertible which in particular means that if the message is already an integer multiple of the block size we will need to add an extra block. (Since we have to map all the $1+2+\ldots+2^{n-1}$ messages of length $1,\ldots,n-1$ into the $2^n$ messages of length $n$ in a one-to-one fashion.) One approach for doing so is to pad an $n'<n$ length message with the string $10^{n-n'-1}$. Sometimes people use a different padding which involves encoding the length of the pad.   
 
 
 ### References: (incomplete)

@@ -1,23 +1,5 @@
-% Lecture 18: Multiparty secure computation: Construction using Fully Homomorphic Encryption
-% Boaz Barak
+# Multiparty secure computation: Construction using Fully Homomorphic Encryption
 
-
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\getsr}{\leftarrow_R\;}
-\newcommand{\Gp}{\mathbb{G}}
-\newcommand{\Hp}{\mathbb{H}}
-
-\newcommand{\floor}[1]{\lfloor #1 \rfloor}
-\newcommand{\ceil}[1]{\lceil #1 \rceil}
-
-\newcommand{\iprod}[1]{\langle #1 \rangle}
-
-\newcommand{\cF}{\mathcal{F}}
-
-\newcommand{\onand}{\overline{\wedge}}
 
 In the last lecture we saw the definition of secure multiparty computation, as well as the compiler reducing the task of achieving security in the general (malicious) setting to the passive (honest-but-curious) setting.
 In this lecture we will see how using fully homomorphic encryption we can achieve security in the honest-but-curious setting.
@@ -28,7 +10,7 @@ __Theorem:__ Under LWE, for every two party functionality $F$ there is a protoco
 Before proving the theorem it might be worthwhile to recall what is actually the definition of secure multipary computation, when specialized for the $k=2$ and honest but curious case.
 The definition significantly simplifies here since we don't have to deal with the possibility of aborts.
 
-__Definition (2-party honest but curious computation):__ Let $F$ be (possibly probabilistic) map of $\zo^n\times \zo^n$ to $\zo^n\times\zo^n$.    A _secure protocol for $F$_ is a two party protocol such for every party $t\in \{1,2\}$, there exists an efficient "ideal adversary" (i.e., efficient interactive algorithm)  $S$ such that  for every pair of inputs $(x_1,x_2)$ the following two distributions are computationally indistinguishable:
+__Definition (2-party honest but curious computation):__ Let $F$ be (possibly probabilistic) map of $\{0,1\}^n\times \{0,1\}^n$ to $\{0,1\}^n\times\{0,1\}^n$.    A _secure protocol for $F$_ is a two party protocol such for every party $t\in \{1,2\}$, there exists an efficient "ideal adversary" (i.e., efficient interactive algorithm)  $S$ such that  for every pair of inputs $(x_1,x_2)$ the following two distributions are computationally indistinguishable:
 
 * The tuple $(y_1,y_2,v)$ obtained by running the protocol on inputs $x_1,x_2$, and letting $y_1,y_2$ be the outputs of the two parties and $v$ be the _view_ (all internal randomness, inputs, and messages received) of party $t$.
 
@@ -48,7 +30,7 @@ __Protocol 2MPC:__
 
 * __Assumptions:__ $(G,E,D,EVAL)$ is a fully homomorphic encryption scheme.
 
-* __Inputs:__ Alice's input is $x\in\zo^n$ and Bob's input is $y\in\zo^n$. The goal is for Alice to learn only $F(x,y)$ and Bob learn nothing.
+* __Inputs:__ Alice's input is $x\in\{0,1\}^n$ and Bob's input is $y\in\{0,1\}^n$. The goal is for Alice to learn only $F(x,y)$ and Bob learn nothing.
 
 * __Alice->Bob:__ Alice generates $(e,d)\getsr G(1^n)$ and sends $e$ and $c=E_e(x)$.
 
@@ -105,27 +87,27 @@ Now we didn't exactly specify how we describe the function $f(x)$ defined as $x 
 
 Thus we need to get a stronger property, known as _circuit privacy_: this is a property that's useful elsewhere too for FHE. Let us now define it:
 
-__Definition:__ Let $\mathcal{E}=(G,E,D,EVAL)$ be an FHE. We say that $\mathcal{E}$ satisfies _perfect circuit privacy_[^identical] if for every $(e,d)$ output by $G(1^n)$ and every  function $f:\zo^\ell\rightarrow\zo$ of $poly(n)$ description size,
-and every ciphertexts $c_1,\ldots,c_\ell$ and $x_1,\ldots,x_\ell \in \zo$ such that $c_i$ is output by $E_e(x_i)$, the distribution of $EVAL_e(f,c_1,\ldots,c_\ell)$ is identical to the distribution of $E_e(f(x))$.
-That is, for every $z\in\zo^*$, the probability that $EVAL_e(f,c_1,\ldots,c_\ell)=z$ is the same as the probability that $E_e(f(x))=z$. We stress that these probabilities are taken only over the coins of the algorithms $EVAL$ and $E$.
+__Definition:__ Let $\mathcal{E}=(G,E,D,EVAL)$ be an FHE. We say that $\mathcal{E}$ satisfies _perfect circuit privacy_[^identical] if for every $(e,d)$ output by $G(1^n)$ and every  function $f:\{0,1\}^\ell\rightarrow\{0,1\}$ of $poly(n)$ description size,
+and every ciphertexts $c_1,\ldots,c_\ell$ and $x_1,\ldots,x_\ell \in \{0,1\}$ such that $c_i$ is output by $E_e(x_i)$, the distribution of $EVAL_e(f,c_1,\ldots,c_\ell)$ is identical to the distribution of $E_e(f(x))$.
+That is, for every $z\in\{0,1\}^*$, the probability that $EVAL_e(f,c_1,\ldots,c_\ell)=z$ is the same as the probability that $E_e(f(x))=z$. We stress that these probabilities are taken only over the coins of the algorithms $EVAL$ and $E$.
 
 [^identical]: This is the same as what we called "the identical ciphertexts property" in the homework assignment.
 
 Perfect circuit privacy is a strong property, that also automatically implies that $D_d(EVAL(f,E_e(x_1),\ldots,E_e(x_\ell)))=f(x)$ (can you see why?).
 In particular, once you understand the definition, the following claim  is an easy exercise (and so one that is good for you to do to make sure you understood it):
 
-__Claim (circuit privacy claim):__ If $(G,E,D,EVAL)$ satisfies perfect circuit privacy then if $(e,d) = G(1^n)$ then for every two functions $f,f':\zo^\ell\rightarrow\zo$ of $poly(n)$ description size and every $x\in\zo^\ell$ such that $f(x)=f'(x)$, and every algorithm $A$,
+__Claim (circuit privacy claim):__ If $(G,E,D,EVAL)$ satisfies perfect circuit privacy then if $(e,d) = G(1^n)$ then for every two functions $f,f':\{0,1\}^\ell\rightarrow\{0,1\}$ of $poly(n)$ description size and every $x\in\{0,1\}^\ell$ such that $f(x)=f'(x)$, and every algorithm $A$,
 $| \Pr[ A(d,EVAL(f,E_e(x_1),\ldots,E_e(x_\ell)))=1] -  \Pr[ A(d,EVAL(f',E_e(x_1),\ldots,E_e(x_\ell)))=1] | < negl(n)$.
 
 (Note that the algorithm $A$ above gets the _secret key_ as input, but still cannot distinguish whether the $EVAL$ algorithm used $f$ or $f'$.)
 In fact, the expression above is even equal to zero, though for our applications bounding it by a negligible function is enough.
 Indeed, we are fine with using the relaxed notion of "imperfect" circuit privacy, defined as follows:
 
-__Definition:__ Let $\mathcal{E}=(G,E,D,EVAL)$ be an FHE. We say that $\mathcal{E}$ satisfies _statistical circuit privacy_ if for every $(e,d)$ output by $G(1^n)$ and every  function $f:\zo^\ell\rightarrow\zo$ of $poly(n)$ description size,
-and every ciphertexts $c_1,\ldots,c_\ell$ and $x_1,\ldots,x_\ell \in \zo$ such that $c_i$ is output by $E_e(x_i)$, the distribution of $EVAL_e(f,c_1,\ldots,c_\ell)$ is equal up to $negl(n)$ total variation distance to the distribution of $E_e(f(x))$.
+__Definition:__ Let $\mathcal{E}=(G,E,D,EVAL)$ be an FHE. We say that $\mathcal{E}$ satisfies _statistical circuit privacy_ if for every $(e,d)$ output by $G(1^n)$ and every  function $f:\{0,1\}^\ell\rightarrow\{0,1\}$ of $poly(n)$ description size,
+and every ciphertexts $c_1,\ldots,c_\ell$ and $x_1,\ldots,x_\ell \in \{0,1\}$ such that $c_i$ is output by $E_e(x_i)$, the distribution of $EVAL_e(f,c_1,\ldots,c_\ell)$ is equal up to $negl(n)$ total variation distance to the distribution of $E_e(f(x))$.
 This means that
 
-$\sum_{z\in\zo^*} \left| \Pr[ EVAL_e(f,c_1,\ldots,c_\ell)=z] - \Pr[ E_e(f(x))=z ] \right| < negl(n)$
+$\sum_{z\in\{0,1\}^*} \left| \Pr[ EVAL_e(f,c_1,\ldots,c_\ell)=z] - \Pr[ E_e(f(x))=z ] \right| < negl(n)$
 
 where once again, these probabilities are taken only over the coins of the algorithms $EVAL$ and $E$.
 

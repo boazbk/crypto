@@ -1,12 +1,8 @@
-~ MathDefs
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\getsr}{\leftarrow_{\text{\tiny R}}}
-~
 
 
-*CS 127: Cryptography / Boaz Barak*
+
+
+
 
 
 # Pseudorandomness
@@ -63,7 +59,7 @@ that ${\mathbb{E}}[ Eve(G(U_n)) ]=1$ but ${\mathbb{E}}[ Eve(U_{n+1})] \leq 1/2$.
 
 **Proof:** On input $y\in{\{0,1\}}^{n+1}$, $Eve$ go over all possible
 $x\in{\{0,1\}}^n$ and will output $1$ if and only if $y=G(x)$ for some $x$.
-Clearly ${\mathbb{E}}[ Eve(G(U_n)) ] =1$. However, the set $S =\{ G(x) : x\in {\{0,1\}}^n \}$ 
+Clearly ${\mathbb{E}}[ Eve(G(U_n)) ] =1$. However, the set $S =\{ G(x) : x\in {\{0,1\}}^n \}$
 on which Eve outputs $1$ has size at most $2^n$, and hence a
 random $y{\leftarrow_{\tiny R}}U_n$ will fall in $S$ with probability at most
 $1/2$. QED
@@ -78,7 +74,7 @@ generator $G$ mapping $n$ bits to $n+1$ bits.
 
 As was the case for the cipher conjecture, and any other conjecture, there are two natural questions
 regarding the PRG conjecture: why should we believe it and why should we care. Fortunately, the answer to the first question is simple:
-it is known that the cipher conjecture _implies_ the PRG conjecture, and hence if we believe the former we should believe the latter. 
+it is known that the cipher conjecture _implies_ the PRG conjecture, and hence if we believe the former we should believe the latter.
 (The proof is highly non trivial and we may not get to see it in this course.)
 As for the second question, we will see that the PRG conjecture implies a great number of useful cryptographic tools, including the cipher conjecture.
 We start by showing that once we can get to an output that is one bit longer than the input, we can in fact
@@ -92,38 +88,37 @@ __Proof:__ The proof of this theorem is very similar to the length extension the
 ciphers,  and in fact this theorem can be used to give an alternative proof for the former theorem.  
 The construction is illustrated in the figure below:
 
-![Length extension for pseudorandom generators](length-extension-prg.jpg)
+![Length extension for pseudorandom generators](../figure/length-extension-prg.jpg)
 
 We are given a pseudorandom generator $G'$ mapping $n$ bits into $n+1$ bits and need to construct a pseudorandom generator $G$ mapping $n$ bits to $t=t(n)$
 bits for some polynomial $t(\cdot)$. The idea is that we maintain a state of $n$ bits, which are originally our input seed[^seed] $s_0$, and at the $i^{th}$ step we use $G'$
 to map $s_{i-1}$ to the $n+1$-long bit string $(s_i,y_i)$, output $y_i$ and keep $s_i$ as our new state. To prove the security of this construction
 we need to show that the distribution $G(U_n) = (y_1,\ldots,y_t)$  is computationally indistinguishable from the uniform distribution $U_t$. As usual, we will use the hybrid argument.
-For $i\in\{0,\ldots,t\}$ we define $H_i$ to be the distribution where the first $i$ bits chosen at uniform, whereas the last $t-i$ bits are computed as above. 
-Namely, we choose $s_i$ at random in $\zo^n$ and continue the computation of $y_{i+1},\ldots,y_t$ from the state $s_i$. 
+For $i\in\{0,\ldots,t\}$ we define $H_i$ to be the distribution where the first $i$ bits chosen at uniform, whereas the last $t-i$ bits are computed as above.
+Namely, we choose $s_i$ at random in $\{0,1\}^n$ and continue the computation of $y_{i+1},\ldots,y_t$ from the state $s_i$.
 Clearly $H_0=G(U_n)$ and $H_t=U_t$ and hence by the triangle inequality it suffices to prove that $H_i \approx H_{i+1}$ for all $i\in\{0,\ldots,t-1\}$.
 We illustrate these two hybrids in the following figure:
 
-![Hybrids $H_i$ and $H_{i+1}$--- dotted boxes refer to values that are chosen independently and uniformly at random](length-extension-prg-hybrid.jpg)
+![Hybrids $H_i$ and $H_{i+1}$--- dotted boxes refer to values that are chosen independently and uniformly at random](../figure/length-extension-prg-hybrid.jpg)
 
 Suppose otherwise, that there exists some adversary $Eve$ such that $\left| \E[Eve(H_i)] - \E[Eve(H_{i+1})] \right| \geq \epsilon$ for some non-negligible $\epsilon$.
-We will build from $Eve$ an adversary $Eve'$ breaking the security of the pseudorandom generator $G'$. 
+We will build from $Eve$ an adversary $Eve'$ breaking the security of the pseudorandom generator $G'$.
 
-![Building an adversary $Eve'$ for $G'$ from an adversary $Eve$ distinguishing $H_i$ and $H_{i+1}$. The boxes marked with questions marks are those that are random or pseudorandom  depending on  whether we are in $H_i$ or $H_{i+1}$. Everything inside the dashed red lines is simulated by $Eve'$ that gets as input the $n+1$-bit string $(s_{i+1},y_{i+1})$.](length-extension-prg-adversary.jpg)
+![Building an adversary $Eve'$ for $G'$ from an adversary $Eve$ distinguishing $H_i$ and $H_{i+1}$. The boxes marked with questions marks are those that are random or pseudorandom  depending on  whether we are in $H_i$ or $H_{i+1}$. Everything inside the dashed red lines is simulated by $Eve'$ that gets as input the $n+1$-bit string $(s_{i+1},y_{i+1})$.](../figure/length-extension-prg-adversary.jpg)
 
-On input an $n+1$ string $y$, $Eve'$ will interpret $y$ as $(s_{i+1},y_{i+1})$, choose $y_1,\ldots,y_i$ randomly and compute $y_{i+2},\ldots,y_t$ as in our pseudorandom generator's construction. $Eve'$ will then feed $(y_1,\ldots,y_t)$ to $Eve$ and output whatever $Eve$ does. Clearly, $Eve'$ is efficient if $Eve$ is. Moreover, one can see that if 
+On input an $n+1$ string $y$, $Eve'$ will interpret $y$ as $(s_{i+1},y_{i+1})$, choose $y_1,\ldots,y_i$ randomly and compute $y_{i+2},\ldots,y_t$ as in our pseudorandom generator's construction. $Eve'$ will then feed $(y_1,\ldots,y_t)$ to $Eve$ and output whatever $Eve$ does. Clearly, $Eve'$ is efficient if $Eve$ is. Moreover, one can see that if
 $y$ was random then $Eve'$ is feeding $Eve$ with an input distributed according to $H_{i+1}$ while if $y$ was for the form $G(s)$ for a random $s$ then $Eve'$ will feed $Eve$
-with an input distributed according to $H_i$. Hence we get that $| \E[ Eve'(G(U_n))] - \E[Eve'(U_{n+1})] | \geq \epsilon$ contradicting the security of $G'$ QED. 
+with an input distributed according to $H_i$. Hence we get that $| \E[ Eve'(G(U_n))] - \E[Eve'(U_{n+1})] | \geq \epsilon$ contradicting the security of $G'$ QED.
 
 
 
 [^seed]:Because we use a small input to grow a large pseudorandom string, the input to a pseudorandom generator is often known as its *seed*.
 
 >_Aside: Unpredictablity and indistinguishability- an alternative approach for proving the length extension theorem._ The notion that being random is the same as being "unpredictable" can be formalized as follows.
-> One can show that a random variable $X$ over $\zo^n$ is pseudorandom if and only every efficient algorithm $A$ succeeds in the following experiment with probability at most $1/2+negl(n)$: $A$ is given $i$ chosen at random in $\{0,\ldots,n-1\}$ and $x_1,\ldots,x_i$ where $(x_1,\ldots,x_n)$ is drawn
+> One can show that a random variable $X$ over $\{0,1\}^n$ is pseudorandom if and only every efficient algorithm $A$ succeeds in the following experiment with probability at most $1/2+negl(n)$: $A$ is given $i$ chosen at random in $\{0,\ldots,n-1\}$ and $x_1,\ldots,x_i$ where $(x_1,\ldots,x_n)$ is drawn
 > from $X$ and wins if it outputs $x_{i+1}$. It is a good optional exercise to prove this, and to use that to give an alternative proof of the length extension theorem.  
 
-Stream ciphers
---------------
+## Stream ciphers
 
 We now show a connection between our two notions:
 
@@ -188,14 +183,13 @@ pseudorandom generator itself, as well as for the encryption scheme that is
 obtained by combining it with the one-time pad.
 
 
->__Aside: Using pseudorandom generators for coin tossing over the phone.__ The following is a cute application of pseudorandom generators. Alice and Bob want to toss a fair coin over the phone. They use a pseudorandom generator $G:\zo^b\rightarrow\zo^{3n}$.
->  Alice will send $z\getsr\zo^{3n}$ to Bob, Bob picks $s\getsr\zo^n$ and with probability $1/2$ sends $G(s)$ (case I) and with probability $1/2$ sends $G(s)\oplus z$ (case II). Alice then picks a random $b\getsr\zo$ and sends it to Bob. Bob then reveals what he sent in the previous
-> stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$. 
+>__Aside: Using pseudorandom generators for coin tossing over the phone.__ The following is a cute application of pseudorandom generators. Alice and Bob want to toss a fair coin over the phone. They use a pseudorandom generator $G:\{0,1\}^b\rightarrow\{0,1\}^{3n}$.
+>  Alice will send $z\getsr\{0,1\}^{3n}$ to Bob, Bob picks $s\getsr\{0,1\}^n$ and with probability $1/2$ sends $G(s)$ (case I) and with probability $1/2$ sends $G(s)\oplus z$ (case II). Alice then picks a random $b\getsr\{0,1\}$ and sends it to Bob. Bob then reveals what he sent in the previous
+> stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$.
 
-How do pseudorandom generators actually look like?
---------------------------------------------------
+## How do pseudorandom generators actually look like?
 
- 
+
 
 So far we have made the conjectures that objects such as ciphers and
 pseudorandom generators *exist*, without giving any hint as to how they would
@@ -206,13 +200,13 @@ constructing them. We now consider candidates for functions that maps $n$ bits
 to $n+1$ bits (or more generally $n+c$ for some constant $c$ ) and look at least
 somewhat "randomish". As these constructions are typically used as a basic
 component for obtaining a longer length PRG via the length extension theorem, we
-will think of these pseudorandom generators as mapping a string $s\in\zo^n$
-representing the current state into a string $s’\in\zo^n$ representing the new
-state as well as a string $b\in\zo^c$ representing the current output. See also
+will think of these pseudorandom generators as mapping a string $s\in\{0,1\}^n$
+representing the current state into a string $s’\in\{0,1\}^n$ representing the new
+state as well as a string $b\in\{0,1\}^c$ representing the current output. See also
 Section 6.1 in Katz-Lindell and (for greater depth) Sections 3.6-3.9 in the
 Boneh-Shoup book.
 
- 
+
 
 ### Attempt 1: The linear checksum / linear feedback shift register (LFSR) the ~~mother~~ sick great-uncle of all psuedorandom generators.
 
@@ -220,20 +214,20 @@ Boneh-Shoup book.
 One of the simplest ways to generate a “randomish” digit from an $n$ digit
 number is to use a *checksum* - some linear combination of the digits, as is the
 *cyclic redundancy check* or CRC. This motivates the notion of a *linear
-feedback shift register generator* (LFSR): if the current state is $s\in\zo^n$
+feedback shift register generator* (LFSR): if the current state is $s\in\{0,1\}^n$
 then the output is $f(s)$ where $f$ is a linear function (modulo 2) and the new
 state is obtained by right shifting the previous state and putting $f(s)$ at the
 leftmost location. That is, $s’_1 = f(s)$ and $s’_i = s_{i-1}$ for
-$i\in\{2,\\ldots,n\}$. 
+$i\in\{2,\\ldots,n\}$.
 
-LFSR's 
-have several good properties- if the function $f(\cdot)$ is chosen properly then they can have very long _periods_ 
-(i.e., it takes $2^n$ steps until the state repeats itself), though that also holds for the simple "counter" generator who simply treats the state 
+LFSR's
+have several good properties- if the function $f(\cdot)$ is chosen properly then they can have very long _periods_
+(i.e., it takes $2^n$ steps until the state repeats itself), though that also holds for the simple "counter" generator who simply treats the state
 as a number in $\{0,\ldots,2^n-1\}$ and increments it at every stage, outputting the least significant digit. They also have the property
 that every individual bit is equal to $0$ or $1$ with probability exactly half  (the counter generator also shares this property) as well as (if the function is selected properly)
-that every two bits are independent from one another (the counter fails badly here - the least significant bits between two consecutive states always flip). (Showing the last facts is a great optional exercise.) 
+that every two bits are independent from one another (the counter fails badly here - the least significant bits between two consecutive states always flip). (Showing the last facts is a great optional exercise.)
 
-There is a more general notion of a *linear generator* where the new state can be any invertible 
+There is a more general notion of a *linear generator* where the new state can be any invertible
 linear transformation of the previous state. That is, we interpret the state $s$ as an element of $\Z_q^t$ for
 some integers $q,t$,[^Zq] and let $s’=F(s)$ and the output $b=G(s)$ where $F:\Z_q^t\rightarrow\Z_q^t$  and $G:\Z_q^t\rightarrow\Z_q$ are some
 invertible linear transformation (modulo $q$).  This includes as a special case the *linear
@@ -291,7 +285,7 @@ lecture, and not their actual running time.)
 
 ### From insecurity to security
 
-It is often the case that we want to "fix" a broken cryptographic primitive, such as a pseudorandom generator, to make it secure. 
+It is often the case that we want to "fix" a broken cryptographic primitive, such as a pseudorandom generator, to make it secure.
 At the moment this is still more of an art than a science, but there are some principles that cryptographers have used to try to make this more principled.
 The main intuition is that there are certain properties of computational problems that make them more amenable to algorithms (i.e., "easier") and when we want to make
 the problems useful for cryptography (i.e., "hard") we often seek variants that don't possess these properties. The following table illustrates some examples of such properties.
@@ -316,21 +310,20 @@ When constructing block ciphers we often have "mixing" transformation to ensure 
 many _rounds_ to ensure deep structure and large algebraic degree.
 
 This also works in the other direction. Many algorithmic and macnine learning advances work by embedding a discrete problem in a continuous convex one. Some attacks on cryptographic objects can be thought of as  trying to recover some of the structure (e.g., by embedding modular arithmetic in the real line or "linearizing" non linear equations).
- 
+
 
 
 
 ### Attempt 2: Linear Congruential Generators with dropped bits
 
-One  approach that is widely used in implementations of  pseudorandom generators is to take a linear generator such as the 
-linear congruential generators described above, and use for the output a "chopped" version of the linear function and drop some of the 
+One  approach that is widely used in implementations of  pseudorandom generators is to take a linear generator such as the
+linear congruential generators described above, and use for the output a "chopped" version of the linear function and drop some of the
 least significant bits. The operation of dropping these bits is non-linear and hence the attack above does not immediately apply.
 Nevertheless, it turns out this attack can be generalized to handle this case, and hence even with dropped bits Linear Congruential Generators are completely insecure
 and should be used (if at all) only in applications such as simulations where there is no adversary. Section 3.7.1 in the Boneh-Shoup book describes one attack against such generators that uses the notion of
-_lattice algorithms_ that we will encounter later in this course in very different contexts. 
+_lattice algorithms_ that we will encounter later in this course in very different contexts.
 
-
----
+##  Successful examples
 
 Let's now describe some _successful_ pseudorandom generators:
 
@@ -352,11 +345,11 @@ def subset_sum_gen(seed):
                  0xCC5FB9, 0x0BFC55, 0x847AE0, 0x8CFDF8, 0xE304B7,  
                  0x869ACE, 0xB4CDAB, 0xC8E31F, 0x00EDC7, 0xC50541,  
                  0x0D6DDD, 0x695A2F, 0xA81062, 0x0123CA, 0xC6C5C3, ]
-  
+
   return reduce(lambda x,y: (x+y) % modulo, map(lambda a,b: a*b, constants,seed))
-``` 
-That is, the seed to this generator is an array `seed` of 40 bits, there are 40 hardwired constants each of 48 bits long (these constants were generated at random, but are fixed once and for all, and are not kept secret and hence are not 
-considered part of the secret random seed), and the output is simply 
+```
+That is, the seed to this generator is an array `seed` of 40 bits, there are 40 hardwired constants each of 48 bits long (these constants were generated at random, but are fixed once and for all, and are not kept secret and hence are not
+considered part of the secret random seed), and the output is simply
 $\sum_{i=1}^{40} \texttt{seed}[i]\texttt{constants}[i] \pmod{2^{48}}$ and hence expands the $40$ bit input into a $38$ bit output.
 
 ### Case Study 2: RC4
@@ -369,17 +362,17 @@ def RC4(P,i,j):
     j = (j + P[i]) % 256
     P[i], P[j] = P[j], P[i]
     return (P,i,j,P[(P[i]+P[j]) % 256])
-``` 
+```
 
 The function `RC4` takes as input the current state `P,i,j` of the generator and returns the new state together with a single output byte.
-The state of the generator consists of an array `P` of 256 bytes, which can be thought of as a  _permutation_ of the numbers $0,\ldots,255$ in the sense that we maintain the invariant that 
+The state of the generator consists of an array `P` of 256 bytes, which can be thought of as a  _permutation_ of the numbers $0,\ldots,255$ in the sense that we maintain the invariant that
 $\texttt{P}[i]\neq\texttt{P}[j]$ for every $i\neq j$, and two indices $i,j \in \{0,\ldots,255\}$.   We can consider the initial state as the case where `P` is a completely random permutation
 and $i$ and $j$ are initialized to zero, although to save on initial seed size, typically RC4 uses some "pseudorandom" way to generate `P` from a shorter seed as well.
 
 RC4 has extremely efficient software implementations and hence has been widely implemented. However, it has several issues with its security. In particular it was shown by Mantin[^fn] and Shamir
 that the second bit of RC4 is _not_ random, even if the initialization vector was random. This and other issues led to a practical attack on the 802.11b WiFi protocol, see Section 9.9 in Boneh-Shoup.
-The initial response to those attacks was to suggest to drop the first 1024 bytes of the output, but by now they have been sufficiently extended that RC4 is simply not considered a secure cipher anymore. 
-The ciphers Salsa and ChaCha, designed by Dan Burnstein, have a similar design to RC4, and are considered secure and deployed in several standard protocols such as TLS, SSH and QUIC, see 
+The initial response to those attacks was to suggest to drop the first 1024 bytes of the output, but by now they have been sufficiently extended that RC4 is simply not considered a secure cipher anymore.
+The ciphers Salsa and ChaCha, designed by Dan Burnstein, have a similar design to RC4, and are considered secure and deployed in several standard protocols such as TLS, SSH and QUIC, see
 Section 3.6 in Boneh-Shoup.
 
 

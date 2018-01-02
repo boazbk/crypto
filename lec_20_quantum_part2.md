@@ -1,30 +1,6 @@
-% Lecture 20: Quantum computing and cryptography II
-% Boaz Barak
+# Quantum computing and cryptography II
 
-<!--- ~ MathDefs   --->
-
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\getsr}{\leftarrow_R\;}
-\newcommand{\Gp}{\mathbb{G}}
-\newcommand{\Hp}{\mathbb{H}}
-
-\newcommand{\floor}[1]{\lfloor #1 \rfloor}
-\newcommand{\ceil}[1]{\lceil #1 \rceil}
-\newcommand{\iprod}[1]{\langle #1 \rangle}
-\newcommand{\bra}[1]{\langle #1 |}
-\newcommand{\ket}[1]{| #1 \rangle}
-\newcommand{\w}{\omega}
-\renewcommand{\C}{\mathbb{C}}
-\newcommand{\set}[1]{\{ #1 \}}
-\newcommand{\repres}[1]{#1}
-<!--- ~  --->
-
-
-
-# Shor's Algorithm
+## Shor's Algorithm
 
 Bell's Inequality is powerful demonstration that there is something very strange going on with quantum mechanics.
 But could this "strangeness" be of any use to solve computational problems not directly related to quantum systems?
@@ -53,7 +29,7 @@ We merely sketch how one reduces the factoring and discrete logarithm problems t
 
 ## Finding periods of a function: Simon's Algorithm
 
-Let $\Hp$ be some Abelian group with a  group operation that we'll denote by $\oplus$, and $f$ be some function mapping $\Hp$ to an arbitrary set (which we can encode as $\zo^*$).
+Let $\Hp$ be some Abelian group with a  group operation that we'll denote by $\oplus$, and $f$ be some function mapping $\Hp$ to an arbitrary set (which we can encode as $\{0,1\}^*$).
 We say that $f$ has _period $h^*$_ for some $h^*\in\Hp$ if for every $x,y \in \Hp$, $f(x)=f(y)$ if and only if $y = x \oplus kh^*$ for some integer $k$.
 Note that if $\Gp$ is some Abelian group, then if we define $\Hp=\Z_{|\Gp|}$, for every element $g\in \Gp$, the map $f(a)=g^a$ is a periodic map over $\Hp$ with period the order of $g$.
 So, finding the order of an item reduces to the question of finding the period of a function.
@@ -64,17 +40,17 @@ How do we find this number $h^*$?
 The key idea would be to transform $f$ from the _time_ to the _frequency_ domain.
 That is, we use the _Fourier transform_ to represent $f$ as a sum of wave functions. In this representation wavelengths that divide the period $h^*$ would get significant mass, while wavelengths that don't would likely "cancel out".
 
-![If $f$ is a periodic function then when we represent it in the Fourier transform, we expect the coefficients corresponding to wavelengths that do not evenly divide the period to be very small, as they would tend to "cancel out".](quantum_fourier.jpg)
+![If $f$ is a periodic function then when we represent it in the Fourier transform, we expect the coefficients corresponding to wavelengths that do not evenly divide the period to be very small, as they would tend to "cancel out".](../figure/quantum_fourier.jpg)
 
 Similarly, the main idea behind Shor's algorithm is to use a tool known as the _quantum fourier transform_ that given a circuit computing the function $f:\Hp\rightarrow\R$, creates a quantum state over roughly $\log |\Hp|$ qubits (and hence dimension $|\Hp|$) that corresponds to the Fourier transform of $f$.
 Hence when we measure this state,  we get a group element $h$ with probability proportional to the square of the corresponding Fourier coefficient.
 One can show that if $f$ is $h^*$-periodic then we can recover $h^*$ from this distribution.
 
-Shor carried out this approach for the group $\Hp=\Z^*_q$ for some $q$, but we will start be seeing this for the group $\Hp = \zo^n$ with the XOR operation.
+Shor carried out this approach for the group $\Hp=\Z^*_q$ for some $q$, but we will start be seeing this for the group $\Hp = \{0,1\}^n$ with the XOR operation.
 This case is known as _Simon's algorithm_ (given by Dan Simon in 1994) and actually preceded (and inspired) Shor's algorithm:
 
-__Theorem (Simon's Algorithm):__ If $f:\zo^n\rightarrow\zo^*$ is polynomial time computable and satisfies the property that $f(x)=f(y)$ iff $x\oplus y = h^*$ then there exists
-a quantum polynomial-time algorithm that outputs a random $h\in \zo^n$ such that $\iprod{h,h^*}=0 \pmod{2}$.
+__Theorem (Simon's Algorithm):__ If $f:\{0,1\}^n\rightarrow\{0,1\}^*$ is polynomial time computable and satisfies the property that $f(x)=f(y)$ iff $x\oplus y = h^*$ then there exists
+a quantum polynomial-time algorithm that outputs a random $h\in \{0,1\}^n$ such that $\iprod{h,h^*}=0 \pmod{2}$.
 
 Note that given $O(n)$ such samples, we can recover $h^*$ with high probability by solving the corresponding linear equations.
 
@@ -82,18 +58,18 @@ Note that given $O(n)$ such samples, we can recover $h^*$ with high probability 
 __Proof:__ Let $HAD$ be the $2\times 2$ unitary  matrix corresponding to the  one qubit operation $\ket{0} \mapsto \tfrac{1}{\sqrt{2}}(\ket{0}+\ket{1})$ and
 $\ket{1} \mapsto \tfrac{1}{\sqrt{2}}(\ket{0}-\ket{1})$  or $\ket{a}\mapsto \tfrac{1}{\sqrt{2}}(\ket{0}+(-1)^a\ket{1})$.
 Given the state $\ket{0^{n+m}}$ we can apply this map to each one of the first $n$ qubits to get the state
-$2^{-n/2}\sum_{x\in\zo^n}\ket{x}\ket{0^m}$
+$2^{-n/2}\sum_{x\in\{0,1\}^n}\ket{x}\ket{0^m}$
 and then we can apply the gates of $f$ to map this to the state
-$2^{-n/2}\sum_{x\in\zo^n}\ket{x}\ket{f(x)}$
+$2^{-n/2}\sum_{x\in\{0,1\}^n}\ket{x}\ket{f(x)}$
 now suppose that we apply this operation again to the first $n$ qubits then we get the state
-$2^{-n}\sum_{x\in\zo^n}\prod_{i=1}^n(\ket{0}+(-1)^{x_i}\ket{1})\ket{f(x)}$
-which if we open up each one of these product and look at all $2^n$ choices $y\in\zo^n$ (with $y_i=0$ corresponding to picking $\ket{0}$ and $y_i=1$ corresponding to picking $\ket{1}$ in the $i^{th}$ product) we get
-$2^{-n}\sum_{x\in\zo^n}\sum_{y\in\zo^n}(-1)^{\iprod{x,y}}\ket{y}\ket{f(x)}$.
+$2^{-n}\sum_{x\in\{0,1\}^n}\prod_{i=1}^n(\ket{0}+(-1)^{x_i}\ket{1})\ket{f(x)}$
+which if we open up each one of these product and look at all $2^n$ choices $y\in\{0,1\}^n$ (with $y_i=0$ corresponding to picking $\ket{0}$ and $y_i=1$ corresponding to picking $\ket{1}$ in the $i^{th}$ product) we get
+$2^{-n}\sum_{x\in\{0,1\}^n}\sum_{y\in\{0,1\}^n}(-1)^{\iprod{x,y}}\ket{y}\ket{f(x)}$.
 Now under our assumptions for every particular $z$ in the image of $f$, there exist exactly two preimages $x$ and $x\oplus h^*$ such that $f(x)=f(x+h^*)=z$.
 So, if $\iprod{y,h^*}=0 \pmod{2}$, we get that $(-1)^{\iprod{x,y}}+(-1)^{\iprod{x,y+h^*}}=2$ and otherwise we get $(-1)^{\iprod{x,y}}+(-1)^{\iprod{x,y+h^*}}=0$.
 Therefore, if measure the state we will get a pair $(y,z)$ such that $\iprod{y,h^*}=0 \pmod{2}$. QED
 
-Simon's algorithm seems to really use the special bit-wise structure of the group $\zo^n$, so one could wonder if it has any relevance for the group $\Z^*_m$ for some exponentially large $m$.
+Simon's algorithm seems to really use the special bit-wise structure of the group $\{0,1\}^n$, so one could wonder if it has any relevance for the group $\Z^*_m$ for some exponentially large $m$.
 It turns out that the same insights that underlie the well known  Fast Fourier Transform (FFT) algorithm can be used to essentially follow the same strategy for this group as well.
 
 
@@ -137,13 +113,13 @@ where $\omega  = e^{2\pi i/m}$.
 
 The Fourier transform is simply a representation of $f$ in the *Fourier basis* $\set{ \chi_x }_{x \in \Z_m}$, where $\chi_x$ is the
 vector/function whose $y^{th}$ coordinate is
-$\tfrac{1}{\sqrt{m}\w^{xy}}$. Now the inner product of any two vectors
+$\tfrac{1}{\sqrt{m}\omega^{xy}}$. Now the inner product of any two vectors
 $\chi_x,\chi_z$ in this basis is equal to
-$$\iprod{\chi_x,\chi_z} = \tfrac{1}{m}\sum_{y\in\Z_m} \w^{xy} \overline{\w^{zy}} = \tfrac{1}{m}\sum_{y\in\Z_m} \w^{(x-z)y}  \;.$$
-But if $x=z$ then $\w^{(x-z)}=1$ and hence this sum is equal to $1$. On
+$$\iprod{\chi_x,\chi_z} = \tfrac{1}{m}\sum_{y\in\Z_m} \omega^{xy} \overline{\omega^{zy}} = \tfrac{1}{m}\sum_{y\in\Z_m} \omega^{(x-z)y}  \;.$$
+But if $x=z$ then $\omega^{(x-z)}=1$ and hence this sum is equal to $1$. On
 the other hand, if $x \neq z$, then this sum is equal to
-$\tfrac{1}{m} \tfrac{1 -\w^{(x-y)m}}{1-\w^{x-y}}=
-\tfrac{1}{m}\tfrac{1-1}{1-\w^{x-y}}=0$ using the formula for the sum of
+$\tfrac{1}{m} \tfrac{1 -\omega^{(x-y)m}}{1-\omega^{x-y}}=
+\tfrac{1}{m}\tfrac{1-1}{1-\omega^{x-y}}=0$ using the formula for the sum of
 a geometric series. In other words, this is an *orthonormal* basis which
 means that the Fourier transform map $f \mapsto \hat{f}$ is a *unitary*
 operation.
@@ -156,7 +132,7 @@ $\chi(y+z)= \chi(y)\chi(z)$ for every $y,z \in
 \Z_m$. Also, every function $\chi$ is *periodic* in the sense that there
 exists $r\in \Z_m$ such that $\chi(y+r)=\chi(z)$ for every $y\in \Z_m$
 (indeed if $\chi(y) =
-\w^{xy}$ then we can take $r$ to be $\ell/x$ where $\ell$ is the least
+\omega^{xy}$ then we can take $r$ to be $\ell/x$ where $\ell$ is the least
 common multiple of $x$ and $m$). Thus, intuitively, if a function
 $f:\Z_m\rightarrow\C$ is itself periodic (or roughly periodic) then when
 representing $f$ in the Fourier basis, the coefficients of basis vectors
@@ -169,7 +145,7 @@ algorithm.
 
 Denote by $FT_m$ the operation that maps every vector $f\in\C^m$ to its
 Fourier transform $\hat{f}$. The operation $FT_m$ is represented by an
-$m\times m$ matrix whose $(x,y)$th entry is $\w^{xy}$. The trivial
+$m\times m$ matrix whose $(x,y)$th entry is $\omega^{xy}$. The trivial
 algorithm to compute it takes $m^2$ operations. The famous *Fast Fourier
 Transform* (FFT) algorithm computes the Fourier transform in
 $O(m\log m)$ operations. We now sketch the idea behind the FFT algorithm as
@@ -177,13 +153,13 @@ the same idea is used in the *quantum* Fourier transform algorithm.
 
 Note that
 
-$\hat{f}(x) = \tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m} f(y)\w^{xy} =$
+$\hat{f}(x) = \tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m} f(y)\omega^{xy} =$
 
-$\tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m,y \;even} f(y)\w^{-2x(y/2)} + \w^x\tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m,y \;odd} f(y)\w^{2x(y-1)/2} \;.$
+$\tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m,y \;even} f(y)\omega^{-2x(y/2)} + \omega^x\tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m,y \;odd} f(y)\omega^{2x(y-1)/2} \;.$
 
-Now since $\w^2$ is an $m/2$th root of unity and $\w^{m/2}=-1$, letting
+Now since $\omega^2$ is an $m/2$th root of unity and $\omega^{m/2}=-1$, letting
 $W$ be the $m/2 \times m/2$ diagonal matrix with diagonal entries
-$\w^0,\ldots,\w^{m/2-1}$, we get that
+$\omega^0,\ldots,\omega^{m/2-1}$, we get that
 
 $FT_m(f)_{low} = FT_{m/2}(f_{even}) + W FT_{m/2}(f_{odd})$
 
@@ -212,7 +188,7 @@ For every $m$ and $m =2^m$ there is a quantum algorithm that uses
 $O(m^2)$ elementary quantum operations and transforms a quantum register
 in state $f = \sum_{x\in\Z_m} f(x)\ket{x}$ into the state
 $\hat{f}= \sum_{x\in\Z_m} \hat{f}(x) \ket{x}$, where
-$\hat{f}(x) = \tfrac{1}{\sqrt{m}} \sum_{y\in \Z_m} \w^{xy}f(x)$.
+$\hat{f}(x) = \tfrac{1}{\sqrt{m}} \sum_{y\in \Z_m} \omega^{xy}f(x)$.
 
 The crux of the algorithm is the FFT equations, which allow the problem of computing $FT_m$,
 the problem of size $m$, to be split into two identical subproblems of
@@ -232,12 +208,12 @@ Apply Hadmard gate $H$ to least significant qubit. | $(FT_{m/2}f_{even})(\ket{0}
 Move LSB to the most significant position          | $\ket{0}(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd}) + \ket{1}(FT_{m/2}f_{even}- W FT_{m/2}f_{odd}) = \hat{f}$
 
 
-The transformation $W$ on $m-1$ qubits can be defined by $\ket{x} \mapsto \w^x = \w^{\sum_{i=0}^{m-2} 2^ix_i}$ (where $x_i$ is
+The transformation $W$ on $m-1$ qubits can be defined by $\ket{x} \mapsto \omega^x = \omega^{\sum_{i=0}^{m-2} 2^ix_i}$ (where $x_i$ is
 the $i^{th}$ qubit of $x$). It can be easily seen to be the result of
 applying for every $i\in \set{0,\ldots,m-2}$ the following elementary
 operation on the $i^{th}$ qubit of the register:
 
-$\ket{0} \mapsto \ket{0}$ and $\ket{1} \mapsto \w^{2^i}\ket{1}$.
+$\ket{0} \mapsto \ket{0}$ and $\ket{1} \mapsto \omega^{2^i}\ket{1}$.
 
 The final state is equal to $\hat{f}$ by the FFT equations (we leave this as an exercise)
 
@@ -263,7 +239,7 @@ there is a prescribed upper bound on $q$ (see below)
 Apply Fourier transform to the first $m$ bits. | $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m}\ket{x})\ket{0^n}$
 Compute the transformation $\ket{x}\ket{y} \mapsto \ket{x}\ket{y \oplus (A^x \pmod{N})}$. | $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m} \ket{x}\ket{A^x \pmod{N}}$
 Measure the second register to get a value $y_0$. | $\tfrac{1}{\sqrt{K}}\sum_{\ell=0}^{K-1}\ket{x_0 + \ell r}\ket{y_0}$ where $x_0$ is the smallest number such that $A^{x_0} = y_0 \pmod{N}$ and $K= \floor{(m-1-x_0)/r}$.
-Apply the Fourier transform to the first register. | $\tfrac{1}{\sqrt{m}\sqrt{K}} \left(\sum_{x\in\Z_n}\sum_{\ell=0}^{K-1} \w^{(x_0+\ell r)x}\ket{x} \right) \ket{y_0}$
+Apply the Fourier transform to the first register. | $\tfrac{1}{\sqrt{m}\sqrt{K}} \left(\sum_{x\in\Z_n}\sum_{\ell=0}^{K-1} \omega^{(x_0+\ell r)x}\ket{x} \right) \ket{y_0}$
 
 
 
@@ -292,14 +268,14 @@ To prove the claim, we compute for every $x \in \Z_m$ the absolute value
 of $\ket{x}$’s coefficient before the measurement. Up to some
 normalization factor this is
 
-$\left|  \sum_{\ell=0}^{c-1} \w^{(x_0+\ell r)x} \right| = \left| \w^{x_0c'c} \right| \left| \sum_{\ell=0}^{c-1} \w^{r\ell x} \right| = 1 \cdot  \left| \sum_{\ell=0}^{c-1} \w^{r\ell x} \right| \;.$
+$\left|  \sum_{\ell=0}^{c-1} \omega^{(x_0+\ell r)x} \right| = \left| \omega^{x_0c'c} \right| \left| \sum_{\ell=0}^{c-1} \omega^{r\ell x} \right| = 1 \cdot  \left| \sum_{\ell=0}^{c-1} \omega^{r\ell x} \right| \;.$
 
 If $c$ does not divide $x$ then
-$\w^r$ is a $c^{th}$ root of unity, so
+$\omega^r$ is a $c^{th}$ root of unity, so
 $\sum_{\ell=0}^{c-1} w^{r \ell x} =0$ by the formula for sums of
 geometric progressions. Thus, such a number $x$ would be measured with
 zero probability. But if $x = cj$ then
-$\w^{r\ell x} = w^{r c j \ell}  = \w^{Mj} = 1$, and hence the amplitudes
+$\omega^{r\ell x} = w^{r c j \ell}  = \omega^{Mj} = 1$, and hence the amplitudes
 of all such $x$’s are equal for all $j \in \{0, 2, \ldots, r-1\}$.
 
 #### The general case
@@ -346,11 +322,11 @@ otherwise this factor would be shared with $rx \pmod{m}$ as well.
 **Proof of Lemma 1:** Let $x$ be such that
 $0 < xr \pmod{m} < r/10$. The absolute value of $\ket{x}$’s coefficient
 in the state before the measurement is
-$$\tfrac{1}{\sqrt{K}\sqrt{m}}\left| \sum_{\ell=0}^{K-1} \w^{\ell r x} \right| \;,$$ where
+$$\tfrac{1}{\sqrt{K}\sqrt{m}}\left| \sum_{\ell=0}^{K-1} \omega^{\ell r x} \right| \;,$$ where
 $K = \floor{(m-x_0-1)/r}$. Note that $\tfrac{m}{2r} < K < \tfrac{m}{r}$
 since $x_0 < N \ll m$.
 
-Setting $\beta=\w^{rx}$ (note that since $m \not| rx$, $\beta
+Setting $\beta=\omega^{rx}$ (note that since $m \not| rx$, $\beta
 \neq 1$) and using the formula for the sum of a geometric series, this
 is at least
 $\tfrac{\sqrt{r}}{2M}\left| \tfrac{1 - \beta^{\ceil{m/r}}}{1-\beta} \right| = \tfrac{\sqrt{r}}{2M}\tfrac{\sin(\theta\ceil{m/r}/2)}{\sin(\theta/2)} \;,$

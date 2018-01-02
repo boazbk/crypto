@@ -1,22 +1,4 @@
-% Lecture 22: More obfuscation, exotic encryptions.
-% Boaz Barak
-
-<!--- ~ MathDefs   --->
-
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\getsr}{\leftarrow_R\;}
-
-\newcommand{\floor}[1]{\lfloor #1 \rfloor}
-\newcommand{\ceil}[1]{\lceil #1 \rceil}
-\newcommand{\iprod}[1]{\langle #1 \rangle}
-
-\newcommand{\cO}{\mathcal{O}}
-
-\newcommand{\Gp}{\mathbb{Gp}}
-<!--- ~  --->
+#  More obfuscation, exotic encryptions.
 
 Fully homomorphic encryption is an extremely powerful notion, but it does not allow us to obtain fine control over the access to information.
 With the public key you can do all sorts of computation on the encrypted data, but you still do not learn it, while with the private key you learn everything.
@@ -82,11 +64,11 @@ We now show an IBE construction due to Boneh and Franklin[^history] how we can o
 [^history]: The construction we show was first published in the  CRYPTO 2001 conference. The Weil and Tate pairings were used before for cryptographic attacks, but were used  for a positive cryptographic result by Antoine Joux in his 2000 paper getting a three-party Diffie Hellman protocol and then Boneh and Franklin used this to obtain an identity based encryption scheme, answering an open question of Shamir. At approximately the same time as these papers, Sakai, Ohgishi and Kasahara presented a paper in the SCIS 2000 conference in Japan showing an identity-based key exchange protocol from pairing. Also [Clifford Cocks](https://en.wikipedia.org/wiki/Clifford_Cocks) (who as we mentioned above in the 1970's invented the RSA scheme at GCHQ before R,S, and A did), also came up in 2001 with a different identity-based encryption scheme using the quadratic residuosity assumption.
 
 
-* __Master key generation:__ We generate $\Gp_1,\Gp_2,g$ as above, choose $a$ at random in $\{0,\ldots,|\Gp|-1\}$. The  master private key is $a$ and the master public key is $\Gp_1,\Gp_2,g,h=g^a$. We let $H:\zo^*\rightarrow\Gp_1$ and $H':\Gp_2\mapsto\zo^\ell$ be two hash functions modeled as random oracles.
+* __Master key generation:__ We generate $\Gp_1,\Gp_2,g$ as above, choose $a$ at random in $\{0,\ldots,|\Gp|-1\}$. The  master private key is $a$ and the master public key is $\Gp_1,\Gp_2,g,h=g^a$. We let $H:\{0,1\}^*\rightarrow\Gp_1$ and $H':\Gp_2\mapsto\{0,1\}^\ell$ be two hash functions modeled as random oracles.
 
-* __Key distribution:__  Given an arbitrary string $id\in\zo^*$, we generate the decryption key corresponding to $id$, as $d_{id} = H(id)^a$.
+* __Key distribution:__  Given an arbitrary string $id\in\{0,1\}^*$, we generate the decryption key corresponding to $id$, as $d_{id} = H(id)^a$.
 
-* __Encryption:__ To encrypt a message $m\in\zo^\ell$ given the public paramters and some id $id$, we choose $c\in \{0,\ldots,|\Gp|-1\}$, and output $g^c,H'(id\|\varphi(h,H(id))^c) \oplus m$
+* __Encryption:__ To encrypt a message $m\in\{0,1\}^\ell$ given the public paramters and some id $id$, we choose $c\in \{0,\ldots,|\Gp|-1\}$, and output $g^c,H'(id\|\varphi(h,H(id))^c) \oplus m$
 
 * __Decryption:__ Given the secret key $d_{id}$ and a ciphertext $h',y$, we output $H'(id\|\varphi(d_{id},h'))\oplus x$
 
@@ -101,9 +83,9 @@ There are several variants, including CCA type of security definitions, but we s
 __Definition:__ An IBE scheme is said to be CPA secure if every efficient adversary Eve wins the following game with probability at most $1/2+ negl(n)$:
 
 * The keys are generated and Eve gets the master public key.
-* For $i=1,\ldots,T=poly(n)$, Eve chooses an identity $id_i \in \zo^*$ and gets the key $d_{id}$.
+* For $i=1,\ldots,T=poly(n)$, Eve chooses an identity $id_i \in \{0,1\}^*$ and gets the key $d_{id}$.
 * Eve chooses an identity $id^* \not\in \{id_1,\ldots,id_T\}$ and two messages $m_0,m_1$.
-* We choose $b\getsr\zo$ and Eve gets the encryption of $m_b$ with respect to the identity $id^*$.
+* We choose $b\getsr\{0,1\}$ and Eve gets the encryption of $m_b$ with respect to the identity $id^*$.
 * Eve outputs $b'$ and _wins_ if $b'=b$.
 
 
@@ -121,7 +103,7 @@ The algorithm $B$ will guess $i_0, j_0 \getsr \{1,\ldots, T\}$ and simulate $A$ 
 
 * When $A$ makes a query to the key distribution oracle with $id$ then if $id\neq id_0$ then $B$ will then respond with $d_{id}=(g^a)^{b_{id}}$. If $id = id_0$ then $B$ aborts and fails.
 
-* When $A$ makes a query to the $H'$ oracle with input $id'\|\hat{h}$ then for all but the $j_0^{th}$ query $B$ answers with a random string in $\zo^\ell$.  In the $j_0^{th}$ query, if $id' \neq id_0$ then $B$ stops and fails. Otherwise, it outputs $\hat{h}$.
+* When $A$ makes a query to the $H'$ oracle with input $id'\|\hat{h}$ then for all but the $j_0^{th}$ query $B$ answers with a random string in $\{0,1\}^\ell$.  In the $j_0^{th}$ query, if $id' \neq id_0$ then $B$ stops and fails. Otherwise, it outputs $\hat{h}$.
 
 * $B$ does stops the simulation and fails if we get to the challenge part.
 
@@ -144,7 +126,7 @@ This way we would be able to compute any degree $d$ polynomial in the exponent g
 We will now show how using such a multilinear map we can get a construction for a witness encryption scheme.
 We will only show the construction, without talking about the security definition, the assumption, or security reductions.
 
-Given some circuit $C:\zo^n\rightarrow\zo$ and some message $x$ we want to "encrypt" $x$ in a way that given $w$ such that $C(w)=1$ it would be possible to decrypt $x$, and otherwise it should be hard.
+Given some circuit $C:\{0,1\}^n\rightarrow\{0,1\}$ and some message $x$ we want to "encrypt" $x$ in a way that given $w$ such that $C(w)=1$ it would be possible to decrypt $x$, and otherwise it should be hard.
 It should be noted that the encrypting party itself does not know any such $w$ and indeed (as in the case of the proof of Reimann hypothesis) might not even know if such a $w$ exists.
 The idea is the following.
 We use the fact that the ```Exact Cover``` problem is NP complete to map $C$ into collection of subsets $S_1,\ldots,S_{m}$ of the universe $U$ (where $m,|U|=poly(|C|,n)$)
@@ -163,6 +145,3 @@ Moreover, the notion of security this and similar construction satisfy is rather
 Constructions of indistinguishability obfuscators are built based on this idea, but are significantly more involved than the construction of a witness encryption.
 One central tool they use is the observation that FHE reduces the task of obfuscation to essentially obfuscating a decryption circuit, which can often be rather shallow.
 But beyond that there is significant work to be done to actually carry out the obfuscation.
-
-
-At the time of this writing, Appendix A of [this paper](https://eprint.iacr.org/2016/281) is a good source for the lastest constructions and attacks.

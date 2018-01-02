@@ -1,23 +1,7 @@
-% Lecture 17: Multiparty secure computation I: Definition and Honest-But-Curious to Malicious complier
-% Boaz Barak
+# Multiparty secure computation I: Definition and Honest-But-Curious to Malicious complier
 
 
-\newcommand{\zo}{\{0,1\}}
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\getsr}{\leftarrow_R\;}
-\newcommand{\Gp}{\mathbb{G}}
-\newcommand{\Hp}{\mathbb{H}}
 
-\newcommand{\floor}[1]{\lfloor #1 \rfloor}
-\newcommand{\ceil}[1]{\lceil #1 \rceil}
-
-\newcommand{\iprod}[1]{\langle #1 \rangle}
-
-\newcommand{\cF}{\mathcal{F}}
-
-\newcommand{\onand}{\overline{\wedge}}
 
 
 
@@ -76,7 +60,7 @@ This is what makes the notion of _secure multiparty computation_ so exciting.
 We now turn to formal definitions. As we discuss below, there are many variants of secure multiparty computation, and we pick one simple version below.
 A _$k$-party protocol_ is  a set of efficiently computable $k$ prescribed interactive strategies for all $k$ parties.[^numberk]
 We assume the existence of an authenticated and private point to point channel between every pair of parties (this can be implemented using signatures and encryptions).[^broadcast]
-A _$k$ party functionality_  is a probabilistic process $F$ mapping $k$ inputs in $\zo^n$ into $k$ outputs in $\zo^n$.[^lengths]
+A _$k$ party functionality_  is a probabilistic process $F$ mapping $k$ inputs in $\{0,1\}^n$ into $k$ outputs in $\{0,1\}^n$.[^lengths]
 
 [^numberk]: Note that here $k$ is not a string which the secret key but the number of parties in the protocol.
 
@@ -136,7 +120,7 @@ __Definition (MPC with aborts):__ Let $F$ be a $k$-party functionality.  A _secu
 
 
 
-![We define security of a protocol implementing a functionality $F$ by stipulating that for every adversary $A$ that control a subset of the parties, $A$'s view in an actual execution of the protocol would be indistinguishable from its view in an ideal setting where all the parties send their inputs to an idealized and perfectly trusted party, who then computes the outputs and sends it to each party.](./real-ideal.jpg)
+![We define security of a protocol implementing a functionality $F$ by stipulating that for every adversary $A$ that control a subset of the parties, $A$'s view in an actual execution of the protocol would be indistinguishable from its view in an ideal setting where all the parties send their inputs to an idealized and perfectly trusted party, who then computes the outputs and sends it to each party.](../figure/./real-ideal.jpg)
 
 Here are some good exercises to make sure you follow the definition:
 
@@ -144,7 +128,7 @@ Here are some good exercises to make sure you follow the definition:
 
 
 
-* Let $F$ be the $k$-party functionality that on inputs $x_1,\ldots,x_k \in \zo$ outputs to all parties the majority value of the $x_i$'s.  Then, in any protocol that securely computes $F$,  for any adversary that controls less than half of the parties, if at least $n/2+1$ of the other parties' inputs equal $0$, then the adversary will not be able to cause an honest party to output $1$.
+* Let $F$ be the $k$-party functionality that on inputs $x_1,\ldots,x_k \in \{0,1\}$ outputs to all parties the majority value of the $x_i$'s.  Then, in any protocol that securely computes $F$,  for any adversary that controls less than half of the parties, if at least $n/2+1$ of the other parties' inputs equal $0$, then the adversary will not be able to cause an honest party to output $1$.
 
 [^public-inputs]: Our treatment of the input graph $H$ is  an instance of a general case. While the definition of a functionality only talks about private inputs, it's very easy to include public inputs as well. If we want to include some public input $Z$ we can simply have $Z$ concatenated to all the private inputs (and the functionality check that they are all the same, otherwise outputting ```error``` or some similar result).
 
@@ -226,12 +210,12 @@ There are several other such examples. One problem with this approach is that sp
 If you simply give half of the bits to each party, you could significantly harm security. (For example, it is possible to recover the full RSA key [from only $27\%$ of its bits](http://eprint.iacr.org/2008/510.pdf)).
 
 Here is a better approach, known as [secret sharing](https://en.wikipedia.org/wiki/Secret_sharing):
-To securely share a string $s\in\zo^n$ among $k$ parties so that any $k-1$ of them have no information about it, we choose $s_1,\ldots,s_{k-1}$ at random in $\zo^n$ and let $s_k = s \oplus s_1 \oplus \cdots s_{k-1}$ ($\oplus$ as usual denotes the XOR operation), and give party $i$ the string $s_i$, which is known as the _$i^{th}$ share_ of $s$.
+To securely share a string $s\in\{0,1\}^n$ among $k$ parties so that any $k-1$ of them have no information about it, we choose $s_1,\ldots,s_{k-1}$ at random in $\{0,1\}^n$ and let $s_k = s \oplus s_1 \oplus \cdots s_{k-1}$ ($\oplus$ as usual denotes the XOR operation), and give party $i$ the string $s_i$, which is known as the _$i^{th}$ share_ of $s$.
 Note that $s = s_1 \oplus \cdots \oplus s_t$ and so given all $k$ pieces we can reconstruct the key.
 Clearly the first $k-1$ parties did not receive any information about $s$ (since their shares were generated independent of $s$), but the following not-too-hard claim
 shows that this holds for _every_ set of $k-1$ parties:
 
-__Claim:__ For every $s\in\zo^n$, and set $T\subseteq [k]$ of size $k-1$, we get exactly the same distribution over $(s_1,\ldots,s_k)$ as above if
+__Claim:__ For every $s\in\{0,1\}^n$, and set $T\subseteq [k]$ of size $k-1$, we get exactly the same distribution over $(s_1,\ldots,s_k)$ as above if
 we choose $s_i$ for $i\in T$ at random and set $s_t = s \oplus_{i\in T} s_i$ where  $t = [k]\setminus T$.
 
 We leave the proof of the claim as an exercise.
@@ -303,9 +287,9 @@ We have seen commitments before, but let us now formally define the notion:
 
 __Definition (commitment scheme):__ A _commitment scheme_ for strings of length $\ell$ is a two party protocol between the _sender_ and _receiver_ satisfying the following:
 
-* __Hiding (sender's security):__ For every two sender inputs $x,x' \in \zo^\ell$, and no matter what efficient strategy the receiver uses, it cannot distinguish between the interaction with the sender when the latter uses $x$ as opposed to when it uses $x$'.
+* __Hiding (sender's security):__ For every two sender inputs $x,x' \in \{0,1\}^\ell$, and no matter what efficient strategy the receiver uses, it cannot distinguish between the interaction with the sender when the latter uses $x$ as opposed to when it uses $x$'.
 
-* __Binding (reciever's security):__ No matter what (efficient or non efficient) strategy the sender uses, if the reciever follows the protocol then with probability $1-negl(n)$, there will exist at most a single string $x\in\zo^\ell$ such that the transcript is consistent with the input $x$ and some sender randomness $r$.
+* __Binding (reciever's security):__ No matter what (efficient or non efficient) strategy the sender uses, if the reciever follows the protocol then with probability $1-negl(n)$, there will exist at most a single string $x\in\{0,1\}^\ell$ such that the transcript is consistent with the input $x$ and some sender randomness $r$.
 
 
 That is, a commitment is the digital analog to placing a message in a sealed envelope to be opened at a later time. To commit to a message $x$ the sender and reciever interact according to the protocol, and to _open_ the commitment the sender simply sends $x$ as well as the random coins it used during the commitment phase.
@@ -313,7 +297,7 @@ The variant we defined above is known as _computationally hiding and statistical
 There are also statistically hiding and computationally binding commitments, though it can be shown that we need to restrict to efficient strategies for at least one of the parties.
 
 
-We have already seen a commitment scheme before (due to Naor): the receiver sends a random $z\getsr\zo^{3n}$ and the sender commits to a bit $b$ by choosing a random $s\in\zo^n$ and sending $y = PRG(s)+ bz (\mod 2)$ where $PRG:\zo^n\rightarrow\zo^{3n}$ is a pseudorandom generator.
+We have already seen a commitment scheme before (due to Naor): the receiver sends a random $z\getsr\{0,1\}^{3n}$ and the sender commits to a bit $b$ by choosing a random $s\in\{0,1\}^n$ and sending $y = PRG(s)+ bz (\mod 2)$ where $PRG:\{0,1\}^n\rightarrow\{0,1\}^{3n}$ is a pseudorandom generator.
 It's a good exercise to verify that it satisfies the above definitions.
 By running this protocol $\ell$ times in parallel we can commit to a string of any polynomial length.
 
@@ -352,8 +336,8 @@ Hence we need to use a _coin tossing protocol_ to choose the randomness, or more
 Such a protocol can actually be achieved very simply.
 Suppose we want to generate $m$ coins:
 
-* Alice selects $r'\getsr\zo^m$ at random and engages in a _commitment protocol_ to commit to $r'$.
-* Bob selects $r'' \getsr\zo^m$ and sends it to Alice in the clear.
+* Alice selects $r'\getsr\{0,1\}^m$ at random and engages in a _commitment protocol_ to commit to $r'$.
+* Bob selects $r'' \getsr\{0,1\}^m$ and sends it to Alice in the clear.
 * The result of the coin tossing protocol will be the string $r=r'\oplus r''$.
 
 Note that Alice knows $r$.
