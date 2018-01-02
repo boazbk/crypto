@@ -185,7 +185,7 @@ To be completed. See [Matthew Green's blog](http://blog.cryptographyengineering.
 
 Security requirements: forward secrecy, deniability.
 
-# Heartbleed and logjam attacks
+## Heartbleed and logjam attacks
 
 * Vestiges of past crypto policies.
 * Importance of "perfect forward secrecy"

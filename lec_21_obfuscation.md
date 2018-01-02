@@ -88,7 +88,7 @@ However the fear is that hackers who didn't know about the vulnerability before 
 Could we come up for a regular expression $R$ with a program $P$ such that $P(x)=1$ if and only if $R(x)=1$ but examining the code of $P$ doesn't make it any easier to find some $x$ satisfying $R$?
 
 
-# Software obfuscation
+## Software obfuscation
 
 All these applications and more could in principle be solved by a single general tool known as _virtual black-box (VBB) secure software obfuscation_.
 In fact, such an obfuscation is a general tool that can also be directly used to yield public key encryption, fully homomorphic encryption, zero knowledge proofs, secure function evaluation, and many more applications.
