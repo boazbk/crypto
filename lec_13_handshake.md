@@ -68,7 +68,7 @@ Indeed, SSL (now known as TLS) -  the standard protocol for securing the web - h
 We'll illustrate one of those before:
 
 
-### Bleichenbacher's attack on RSA PKCS \#1 V1.5 and  SSL V3.0
+### Bleichenbacher's attack on RSA PKCS $\sharp$1 V1.5 and  SSL V3.0
 
 If you have a public key, a natural approach is to take the encryption-based protocol and simply skip the first step since Bob already knows the public
 key $e$ of Alice.

@@ -164,8 +164,9 @@ $|\E[T(U_n)] - \E[T(Y_s)]| = |\sum_{y\in\{0,1\}^n} T(y)[2^{-n}-\Pr[Y_s=y]]| \leq
 but opening up $\sum_y (2^{-n}-\Pr[Y_S=y ])^2$ we get $2^{-n} - 2\cdot 2^{-n}\sum_y \Pr[Y_s=y] + \sum_y\Pr[Y_s=y]^2$ or $Col(Y_s)-2^{-n}$ which is at most the negligible quantity $100\cdot 2^{-2n}$.
 
 __Note:__ This proof actually proves a much stronger statement. First, note that we did not at all use the fact that $T$
-is efficiently computable and hence the distribution $h_s(X)$ will not be merely pseudorandom but actually _statistically indistinguishable__ from truly
-random distribution. Second, we didn't use the fact that $h$ is completely random but rather what we needed was merely _pairwise independence_: that for every $x\neq x'$
+is efficiently computable and hence the distribution $h_s(X)$ will not be merely pseudorandom but actually _statistically indistinguishable_ from truly
+random distribution.
+Second, we didn't use the fact that $h$ is completely random but rather what we needed was merely _pairwise independence_: that for every $x\neq x'$
 and $y$, $\Pr_s[ h_s(x)=h_s(x')=y] = 2^{-2n}$. There are efficient constructions of functions $h(\cdot)$ with this property, though in practice people still often use
 cryptographic hash function for this purpose.
 

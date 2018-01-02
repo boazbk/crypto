@@ -133,7 +133,7 @@ Unfortunately, no such result is known in the other direction. However in the ra
 
 
 
-__Computational Diffie Hellman Assumption:__ Let $\mathbb{G}$ be a group elements of which can be described in $n$ bits, with an associative and commutative multiplication operation the can be computed in $poly(n)$ time.  The _Computational Diffie Hellman (CDH)__ assumption holds for $\mathbb{G}$ if for every generator (see below) $g$ of $\mathbb{G}$ and efficient algorithm $A$, the probability that on input $g,g^a,g^b$, $A$ outputs the element $g^{ab}$ is negligible.
+__Computational Diffie Hellman Assumption:__ Let $\mathbb{G}$ be a group elements of which can be described in $n$ bits, with an associative and commutative multiplication operation the can be computed in $poly(n)$ time.  The _Computational Diffie Hellman (CDH)_ assumption holds for $\mathbb{G}$ if for every generator (see below) $g$ of $\mathbb{G}$ and efficient algorithm $A$, the probability that on input $g,g^a,g^b$, $A$ outputs the element $g^{ab}$ is negligible.
 
 __Theorem:__ The Diffie Hellman system for $\mathbb{G}$ is CPA secure in the random oracle model whenever CDH holds for $\mathbb{G}$.
 

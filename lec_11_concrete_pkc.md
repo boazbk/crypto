@@ -93,7 +93,8 @@ This is a special case of the problem of factoring polynomials over finite field
 
 ### Chinese remainder theorem
 
-Suppose that $m=pq$ is a product of two primes. In this case $Z^*_m$ does not contain_all_ the numbers from $1$ to $m-1$.
+Suppose that $m=pq$ is a product of two primes.
+In this case $Z^*_m$ does not contain _all_ the numbers from $1$ to $m-1$.
 Indeed, all the numbers of the form $p,2p,3p,\ldots,(q-1)p$ and $q,2q,\ldots,(p-1)q$ will have non-trivial g.c.d. with $m$.
 There are exactly $q-1 + p-1$ such numbers (because $p$ and $q$ are prime all the numbers of the forms above are distinct).
 Hence $|Z^*_m| = m-1 - (p-1) - (q-1) = pq - p - q +1 = (p-1)(q-1)$.
