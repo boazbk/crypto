@@ -29,9 +29,9 @@ We merely sketch how one reduces the factoring and discrete logarithm problems t
 
 ## Finding periods of a function: Simon's Algorithm
 
-Let $\Hp$ be some Abelian group with a  group operation that we'll denote by $\oplus$, and $f$ be some function mapping $\Hp$ to an arbitrary set (which we can encode as $\{0,1\}^*$).
-We say that $f$ has _period $h^*$_ for some $h^*\in\Hp$ if for every $x,y \in \Hp$, $f(x)=f(y)$ if and only if $y = x \oplus kh^*$ for some integer $k$.
-Note that if $\mathbb{G}$ is some Abelian group, then if we define $\Hp=\Z_{|\mathbb{G}|}$, for every element $g\in \mathbb{G}$, the map $f(a)=g^a$ is a periodic map over $\Hp$ with period the order of $g$.
+Let $\mathbb{H}$ be some Abelian group with a  group operation that we'll denote by $\oplus$, and $f$ be some function mapping $\mathbb{H}$ to an arbitrary set (which we can encode as $\{0,1\}^*$).
+We say that $f$ has _period $h^*$_ for some $h^*\in\mathbb{H}$ if for every $x,y \in \mathbb{H}$, $f(x)=f(y)$ if and only if $y = x \oplus kh^*$ for some integer $k$.
+Note that if $\mathbb{G}$ is some Abelian group, then if we define $\mathbb{H}=\Z_{|\mathbb{G}|}$, for every element $g\in \mathbb{G}$, the map $f(a)=g^a$ is a periodic map over $\mathbb{H}$ with period the order of $g$.
 So, finding the order of an item reduces to the question of finding the period of a function.
 
 
@@ -42,11 +42,11 @@ That is, we use the _Fourier transform_ to represent $f$ as a sum of wave functi
 
 ![If $f$ is a periodic function then when we represent it in the Fourier transform, we expect the coefficients corresponding to wavelengths that do not evenly divide the period to be very small, as they would tend to "cancel out".](../figure/quantum_fourier.jpg){#tmplabelfig}
 
-Similarly, the main idea behind Shor's algorithm is to use a tool known as the _quantum fourier transform_ that given a circuit computing the function $f:\Hp\rightarrow\R$, creates a quantum state over roughly $\log |\Hp|$ qubits (and hence dimension $|\Hp|$) that corresponds to the Fourier transform of $f$.
+Similarly, the main idea behind Shor's algorithm is to use a tool known as the _quantum fourier transform_ that given a circuit computing the function $f:\mathbb{H}\rightarrow\R$, creates a quantum state over roughly $\log |\mathbb{H}|$ qubits (and hence dimension $|\mathbb{H}|$) that corresponds to the Fourier transform of $f$.
 Hence when we measure this state,  we get a group element $h$ with probability proportional to the square of the corresponding Fourier coefficient.
 One can show that if $f$ is $h^*$-periodic then we can recover $h^*$ from this distribution.
 
-Shor carried out this approach for the group $\Hp=\Z^*_q$ for some $q$, but we will start be seeing this for the group $\Hp = \{0,1\}^n$ with the XOR operation.
+Shor carried out this approach for the group $\mathbb{H}=\Z^*_q$ for some $q$, but we will start be seeing this for the group $\mathbb{H} = \{0,1\}^n$ with the XOR operation.
 This case is known as _Simon's algorithm_ (given by Dan Simon in 1994) and actually preceded (and inspired) Shor's algorithm:
 
 __Theorem (Simon's Algorithm):__ If $f:\{0,1\}^n\rightarrow\{0,1\}^*$ is polynomial time computable and satisfies the property that $f(x)=f(y)$ iff $x\oplus y = h^*$ then there exists
