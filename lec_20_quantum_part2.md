@@ -73,9 +73,9 @@ Simon's algorithm seems to really use the special bit-wise structure of the grou
 It turns out that the same insights that underlie the well known  Fast Fourier Transform (FFT) algorithm can be used to essentially follow the same strategy for this group as well.
 
 
-## From Simon to Shor[^arora-barak]
+## From Simon to Shor
 
-[^arora-barak]: The presentation here is adapted from the quantum computing chapter in my textbook with Arora.
+(Note: The presentation here is adapted from the quantum computing chapter in my textbook with Arora.)
 
 We now describe how to achieve Shor's algorithm for order finding. We will not do this for a general group but rather focus our attention on the group $\Z^*_{\ell}$ for some number $\ell$ which is the case of interest for integer factoring and the discrete logarithm modulo primes problems.
 
