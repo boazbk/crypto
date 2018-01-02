@@ -12,7 +12,7 @@ However, I think a better definition would be:
 >_Cryptography is about replacing trust with mathematics._
 
 After all, the reason we work so hard in cryptography is because a lack of trust.
-We wouldn't need encryption if Alice and Bob could be guaranteed that their communication, despite going through wireless and wired networks controlled and snooped upon by a plethora of entities, would be as reliable as if it has been hand delivered by a ~~mailman~~ letter-carrier as reliable as [Patti Whitcomb](http://old.iolaregister.com/Local%20News/Stories/Weatherwontstopcarriers.html), as opposed to the nosy Eve who might look in the messages, or the malicious Mallory, who might tamper with them.
+We wouldn't need encryption if Alice and Bob could be guaranteed that their communication, despite going through wireless and wired networks controlled and snooped upon by a plethora of entities, would be as reliable as if it has been hand delivered by a  letter-carrier as reliable as [Patti Whitcomb](http://old.iolaregister.com/Local%20News/Stories/Weatherwontstopcarriers.html),as opposed to the nosy Eve who might look in the messages, or the malicious Mallory, who might tamper with them.
 We wouldn't need zero knowledge proofs  if Vladimir could simply say "trust me Barack, this is an authentic nuke".
 We wouldn't need electronic signatures if we could trust that all software updates are designed to make our devices safer and not, to pick a random example, to turn our phones into surveillance devices.
 
@@ -82,7 +82,7 @@ __Definition (MPC without aborts):__ Let $F$ be a $k$-party functionality.  A _s
 
     a. We let $\{ x_i \}_{i \in T}$ be chosen by $S$, and compute  $(y'_1,\ldots,y'_k)=F(x_1,\ldots,x_k)$.
 
-    b. For every $i\in [k]$, if $i\not\in T$ (i.e., party $i$ is "honest") then $y_i=y'_i$ and otherwise, we let $S$ choose y_i$.
+    b. For every $i\in [k]$, if $i\not\in T$ (i.e., party $i$ is "honest") then $y_i=y'_i$ and otherwise, we let $S$ choose $y_i$.
 
 That is, the protocol is secure if whatever an adversary can gain by taking complete control over the set of parties in $T$, could have been gain by simply using this control to choose particular inputs $\{ x_i \}_{i\in T}$, run the protocol honestly, and observe the outputs of the functionality.  
 Note that in particular if $T=\emptyset$ (and hence there is no adversary) then if the parties' inputs are $(x_1,\ldots,x_k)$ then their outputs will equal $F(x_1,\ldots,x_k)$.

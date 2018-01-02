@@ -81,7 +81,7 @@ However, as was shown by Bleichenbacher in 1998, it turned out this is suseptibl
 * The adversary then starts many connections with the server with ciphertexts related to $c$, and observes whether they succeed or fail (and in what way they fail, if they do). It turns out that based on this information, the adversary would be able to recover the key $k$.
 
 The particular details of the attack are somewhat messy, but the general notion is that part of the ciphertext is the RSA function value $y = x^e \pmod{m}$, and recovering $x$ will result in recovering the key $k$.
-Now, the version of RSA (known as PKCS V1.5) used in that protocol required the value $x$ to have a particular format, with the top two bytes having a certain form.
+Now, the version of RSA (known as PKCS $\sharp$ V1.5) used in that protocol required the value $x$ to have a particular format, with the top two bytes having a certain form.
 If in the course of a protocol, a server decryped $y$ to get a value $x$ not of this form then it would send an error message and halt the connection.
 Therefore, the server basically supplied to any party an oracle that on input $y$ outputs $1$ iff $y^{d} \pmod{m}$ has this form, where $d = e^{-1} \pmod|\Z^*_m|$ is the secret decryption key.
 It turned out that one can use such an oracle to invert the RSA function.
@@ -89,7 +89,7 @@ For a result of a similar flavor, see the (1/2 page) proof of Theorem 11.31 (pag
 
 [^hardcore]: The first attack of this flavor was given in the  1982 paper of Goldwasser, Micali, and Tong. Interestingly, this notion of "hardcore bits" has been used for both practical _attacks_ against cryptosystems as well as theoretical (and sometimes practical) _constructions_ of other cryptosystems.
 
-For this reason, new versions of the SSL used a different variant of RSA known as PKCS \#1 V2.0 which satisfies (under assumptions) _chosen ciphertext security (CCA)_ and in particular such oracles cannnot be used to break the encryption. (Nonetheless,  there are still some implementation issues that allowed to perform some attacks, see the note in KL page 425 on Manfer's attack.)
+For this reason, new versions of the SSL used a different variant of RSA known as PKCS $\sharp$1 V2.0 which satisfies (under assumptions) _chosen ciphertext security (CCA)_ and in particular such oracles cannnot be used to break the encryption. (Nonetheless,  there are still some implementation issues that allowed to perform some attacks, see the note in KL page 425 on Manfer's attack.)
 
 ## Chosen ciphertext attack security for public key cryptography
 
@@ -130,7 +130,7 @@ For more on this, please see [Victor Shoup's survey](http://www.shoup.net/papers
 
 We now show how to convert any CPA-secure public key encryption scheme to a CCA-secure scheme in the random oracle model (this construction is taken from Fujisaki and  Okamoto, CRYPTO 99).
 In the homework, you will see a somewhat simpler direct construction of a CCA secure scheme from a _trapdoor permutation_, a variant of which
-is known  as OAEP (which has better ciphertext expansion) has been standardized as PKCS \#1 V2.0 and is used in several protocols.
+is known  as OAEP (which has better ciphertext expansion) has been standardized as PKCS $\sharp$1 V2.0 and is used in several protocols.
 The advantage of a generic construction is that it can be instantiated not just with the RSA and Rabin schemes, but also directly with Diffie-Hellman and Lattice based schemes
 (though there are direct and more efficient variants for these as well).
 
