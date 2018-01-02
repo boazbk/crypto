@@ -31,7 +31,6 @@ index:
     file: lec_04_pseudorandom-functions
     draft: false
 
-
   - num: 5.
     name: Pseudorandom functions from pseudorandom generators   
     file: lec_05_prf-from-prg
@@ -132,10 +131,10 @@ index:
     file: lec_24_policy
     draft: false
 
- - num: 25.
-   name: Course recap
-   file: lec_25_course_recap
-   draft: false
+  - num: 25.
+    name: Course recap
+    file: lec_25_course_recap
+    draft: false
 
 ---
 
