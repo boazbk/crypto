@@ -42,12 +42,12 @@ index:
     draft: false
 
   - num: 7.
-    name: Hash functions
+    name: Hash functions, proofs of work and cryptocurrencies
     file: lec_07_hash_functions
     draft: false
 
   - num: 8.
-    name: More hash functions: proofs of work and cryptocurrencies  
+    name: More hash functions  
     file: lec_08_hash_functions_part2
     draft: false
 
