@@ -3,6 +3,8 @@
 
 # Foreword and Syllabus
 
+$$\mathbf{CS121}\text{-complete}$$
+
 >   *"Human ingenuity cannot concoct a cipher which human ingenuity cannot
 >   resolve."* Edgar Allan Poe, 1841
 
