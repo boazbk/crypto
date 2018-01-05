@@ -147,6 +147,8 @@ Depending on time, I plan to cover the following notions:
         for particular tasks as opposed to general (and often inefficient)
         feasibility proofs.
 
+    7. **Cryptocurrencies:** Hash chains and Merkle trees, proofs of work, achieving consensus on a ledger  via "majority of cycles", smart contracts, achieving anonymity via zero knowledge proofs.
+
 ### Prerequisites
 
 The main prerequisite is the ability to read, write (and even enjoy!)
