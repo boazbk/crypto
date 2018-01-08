@@ -8,21 +8,22 @@
 
 __Optional additional reading:__ Chapters 1 and 2 of Katz-Lindell book.[^references]
 
-[^references]: Because this is an undergraduate course, I omit almost all references and credits from these lecture notes unless
-the name has become standard in the literature, or I believe that the story of some discovery can serve a pedagogical point. See the Katz-Lindell book
-for historical notes and references.
+[^references]: In the current state of these lecture notes, almost all references and credits are omitted  unless the name has become standard in the literature, or I believe that the story of some discovery can serve a pedagogical point. See the Katz-Lindell book for historical notes and references.
 
 
 
 Ever since people started to communicate, there were some messages that they
-wanted kept secret. Thus cryptography has an old though arguably _undistinguished_
-history. For a long time cryptography shared similar features with Alchemy
+wanted kept secret.
+Thus cryptography has an old though arguably _undistinguished_
+history.
+For a long time cryptography shared similar features with Alchemy
 as a domain in which many otherwise smart people would be drawn into making
 fatal mistakes.
-d
+
 The definitive text on the history of cryptography is David Kahn's "The Codebreakers",
 whose title already hints at the ultimate fate of most cryptosystems.[^crypto-notation] (See also "The Code Book" by Simon Singh.)
-We now recount just a few stories to get a feel for this field. But, before we do so, we should introduce the cast of characters.
+We now recount just a few stories to get a feel for this field.
+But, before we do so, we should introduce the cast of characters.
 The basic setting of "encryption" or "secret writing" is the following:
 one person, whom we will call __Alice__, wishes to send another person, whom we will call __Bob__, a
 __secret__ message. Since Alice and Bob are not in the same room (perhaps because Alice is imprisoned
@@ -37,10 +38,9 @@ of communication and computation.
 
 In 1587, Mary the queen of Scots, and the heir to the throne of England, wanted to arrange the assasination of her cousin, queen Elisabeth I of
 England, so that she could ascend to the throne and finally escape the house arrest under which she has been for the last 18 years.
-As part of this complicated plot, she sent a coded letter to Sir Anthony Babington. It is what's known as a _substitution cipher_ where each letter is transformed into a different symbol, and so
-the resulting letter looks something like the following:
+As part of this complicated plot, she sent a coded letter to Sir Anthony Babington. It is what's known as a _substitution cipher_ where each letter is transformed into a different symbol, and so the resulting letter looks something like the following (see [figmaryletter](){.ref}):
 
-![Snippet from encrypted communication between queen Mary and Sir Babington](../figure/encrypted_letter.jpg){#tmplabelfig}
+![Snippet from encrypted communication between queen Mary and Sir Babington](../figure/encrypted_letter.jpg){#figmaryletter}
 
 At a first look, such a letter might seem rather inscrutable- a meaningless sequence of strange symbols. However, after some thought, one might recognize that these symbols _repeat_ several
 times and moreover that different symbols repeat with different frequencies. Now it doesn't take a large leap of faith to assume that perhaps each symbol corresponds to a different letter
@@ -48,39 +48,44 @@ and the more frequent symbols correspond to letters that occur in the alphabet w
 which was in fact done by queen Elisabeth's spies who used the decoded letters to learn of all the co-conspirators and to convict queen Mary of treason, a crime for which she was executed.
 
 Trusting in superficial security measures (such as using "inscrutable" symbols) is a trap that users of cryptography have been falling into again and again over the years.
-As in many things, this is the subject of a great XKCD cartoon:
+As in many things, this is the subject of a great XKCD cartoon (see [xkcdnavajofig](){.ref}):
 
-![On the added security of using uncommon symbols](../figure/code_talkers.png){#tmplabelfig width=80% }
+![On the added security of using uncommon symbols](../figure/code_talkers.png){#xkcdnavajofig width=80% }
 
 
-
-The _Vigenère cipher_ is named after Blaise de Vigenère  who described it in a book in 1586 (though it was invented earlier by Bellaso).
+The [Vigenère cipher](https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher) is named after Blaise de Vigenère  who described it in a book in 1586 (though it was invented earlier by Bellaso).
 The idea is to use a collection of subsitution cyphers - if there are $n$ different ciphers then the first letter of the plaintext is encoded with the first cipher, the second with the second cipher,
 the $n^{th}$ with the $n^{th}$ cipher, and then the $n+1^{st}$ letter is again encoded with the first cipher.
 The key is usually a word or a phrase of $n$ letters, and the $i^{th}$ substition cipher is obtained by shifting each letter $k_i$ positions in the alphabet.
 This "flattens" the frequencies and makes it much harder to do frequency analysis, which is why this cipher was considered "unbreakable" for 300+ years and got the nickname
-"le chiffre indéchiffrable" ("the unbreakable cipher"). Charles Babbage cracked the Vigenère cipher in 1854 but did not publish it. In 1863 Friedrich Kasiski broke the cipher
-and published the result. The idea is that once you guess the length of the cipher, you can reduce the task to breaking a simple substitution cipher which can be done via frequency
-analysis (can you see why?).  Confederate generals used Vigenère regularly during the civil war, and their messages were routinely cryptanalzed by Union officers.
+"le chiffre indéchiffrable" ("the unbreakable cipher").
+Nevertheless, Charles Babbage cracked the Vigenère cipher in 1854 (though he  did not publish it).
+In 1863 Friedrich Kasiski broke the cipher and published the result.
+The idea is that once you guess the length of the cipher, you can reduce the task to breaking a simple substitution cipher which can be done via frequency
+analysis (can you see why?).
+Confederate generals used Vigenère regularly during the civil war, and their messages were routinely cryptanalzed by Union officers.
 
 ![Confederate Cipher Disk for implementing the Vigenère cipher](../figure/confederate_cipher_disk.jpg){#tmplabelfig}
 
 ![Confederate encryption of the message  "Gen'l Pemberton: You can expect no help from this side of the river. Let Gen'l Johnston know, if possible, when you can attack the same point on the enemy's lines. Inform me also and I will endeavor to make a diversion. I have sent some caps. I subjoin a despatch from General Johnston."](../figure/confederate_message.jpg){#tmplabelfig}
 
 
-The story of the _Enigma_ cipher had been told many times, and you can get some information on it from Kahn's book as well as Andrew Hodges' biography of Alan Turing.
+The story of the _Enigma_ cipher had been told many times (see for example  Kahn's book as well as Andrew Hodges' biography of Alan Turing).
 This was a mechanical cipher (looking like a typewriter) where each letter typed would get mapped into a different letter depending on the (rather complicated) key and current state
 of the machine which had several rotors that rotated at different paces. An identically wired machine at the other end could be used to decrypt.
 Just as many ciphers in history, this has also been believed by the Germans to be "impossible to break" and even quite late in the war they refused to believe it was broken despite
 mounting evidence to that effect. (In fact, some German generals refused to believe it was broken even _after_ the war.)
 Breaking Enigma was an heroic effort which was initiated by the Poles and then completed by the British at Bletchley Park; as part of this effort they built arguably the world's
 first large scale mechanical computation devices (though they looked more similar to washing machines than to iPhones). They were also helped along the way by some quirks and errors
-of the german operators. For example, the fact that their messages ended with "Heil Hitler" turned out to be quite useful. Here is one entertaining anecdote: the Enigma machine
-would never map a letter to itself. In March 1941, Mavis Batey, a cryptanalyst at Bletchley Park received a very long message that she tried to decrypt.
-She then noticed a curious property--- the message did _not_ contain the letter "L".[^enigma_exercise] She realized that it must be the case that the operator, perhaps to test the machine,
-have simply sent out a message where he repeatedly pressed the letter "L". This observation helped her decode the next message, which helped inform of a planned Italian attack and
-secure a resounding British victory in what became known as "the Battle of Cape Matapan". Mavis also helped break another Enigma machine which helped in the effort of feeding the Germans with the false
-information that the main allied invasion would take place in Pas de Calais rather than on Normandy.  See [this inteview with Sir Harry Hinsley](http://www.cix.co.uk/~klockstone/hinsley.htm) for more
+of the german operators.
+For example, the fact that their messages ended with "Heil Hitler" turned out to be quite useful.
+Here is one entertaining anecdote: the Enigma machine would never map a letter to itself.
+In March 1941, Mavis Batey, a cryptanalyst at Bletchley Park received a very long message that she tried to decrypt.
+She then noticed a curious property--- the message did _not_ contain the letter "L".[^enigma_exercise]
+She realized that for such a long message not contain "L" could not happen by chance, and hence surmised that the original message probably composed _only_ of L's.
+That is, it must have been the case that the operator, perhaps to test the machine, have simply sent out a message where he repeatedly pressed the letter "L".
+This observation helped her decode the next message, which helped inform of a planned Italian attack and secure a resounding British victory in what became known as "the Battle of Cape Matapan".
+Mavis also helped break another Enigma machine which helped in the effort of feeding the Germans with the false information that the main allied invasion would take place in Pas de Calais rather than on Normandy.  See [this inteview with Sir Harry Hinsley](http://www.cix.co.uk/~klockstone/hinsley.htm) for more
 on the effect of breaking the Enigma on the war. General Eisenhower said that the intelligence from Bletchley park was of "priceless value" and made a "very decisive contribution to the Allied war effort".
 
 
@@ -89,21 +94,34 @@ on the effect of breaking the Enigma on the war. General Eisenhower said that th
 
 ## Defining encryptions
 
+Many of the troubles that cryptosystem designers faced over history (and still face!) can be attributed to not properly defining or understanding what are the goals they want to achieve in the first place.
 We now turn to actually defining what is an encryption scheme. Clearly we can
 encode every message as a string of bits, i.e., an element of $\{0,1\}^\ell$ for
 some $\ell$. Similarly, we can encode the _key_ as a string of bits as well,
 i.e., an element of $\{0,1\}^n$ for some $n$. Thus, we can think of an encryption
 scheme as composed of two functions. The _encryption function_ $E$ maps a
 secret key $k \in \{0,1\}^n$ and a message (known also as _plaintext_) $m\in
-\{0,1\}^\ell$ into a _ciphertext_ $c \in \{0,1\}^o$ for some $o$. We write this as
+\{0,1\}^\ell$ into a _ciphertext_ $c \in \{0,1\}^L$ for some $L$. We write this as
 $c = E_k(m)$.  The _decryption function_ $D$ does the reverse operation,
 mapping the secret key $k$ and the cyphertext $c$ back into the plaintext
 message $m$, which we write as $m = D_k(c)$. The basic equation is that if we
 use the same key for encryption and decryption, then we should get the same
-message back. That is, for every $k \in \{0,1\}^n$ and $m\in zo^\ell$,
+message back. That is, for every $k \in \{0,1\}^n$ and $m\in \{0,1\}^\ell$,
 $$ m = D_k(E_k(m)) \;.$$
 
-> _A note on notation:_ We will always use $i,j,\ell,n,o$ to denote natural
+Formally, we make the following definition:
+
+> # {.definition title="Valid encryption scheme" #encryptiondef}
+A pair of functions $(E,D)$ mapping strings to strings is a _valid private key encryption scheme_ (or _encryption scheme_ for short) if there are some numbers $n,\ell,L$ such that
+$E:\{0,1\}^n \times \{0,1\}^\ell \rightarrow \{0,1\}^L$ and $D:\{0,1\}^n \times \{0,1\}^L \rightarrow \{0,1\}^\ell$ and for every
+for every $k\in \{0,1\}^n$ and $x \in \{0,1\}^{\ell}$,
+$$
+D(k,E(k,x))=x \;. \label{eqvalidenc}
+$$
+We will typically write the first input (i.e., the key) to the encryption and decryption functions as a subscribt, and so write [eqvalidenc](){.eqref} as $D_k(E_k(x))=x$.
+
+
+> _A note on notation:_ We will always use $i,j,\ell,n to denote natural
 numbers. $n$ will often denote the length of our secret key, and $\ell$ the
 length of the message, sometimes also known as "block length" since longer
 messages are simply chopped into "blocks" of length $\ell$ and also
@@ -116,17 +134,20 @@ $n$ to correspond with the standard algorithmic notation for input length (as
 in $O(n)$ time algorithms).
 
 
- Note that this definition so far says nothing about security and does not
+[encryptiondef](){.ref}  says nothing about security and does not
 rule out trivial "encryption" schemes such as the scheme $E_k(m) = m$ that
-simply outputs the plaintext as is. Defining security is tricky, and we'll
-take it one step at a time, but lets start by pondering what is secret and
-what is not. A priori we are thinking of an attacker Eve that simply sees the
-ciphertext $C$ and does not know anything on how it was generated. So, it
+simply outputs the plaintext as is.
+Defining security is tricky, and we'll take it one step at a time, but lets start by pondering what is secret and
+what is not.
+A priori we are thinking of an attacker Eve that simply sees the
+ciphertext $y=E_k(x)$ and does not know anything on how it was generated. So, it
 does not know the details of $E$ and $D$, and certainly does not know the
-secret key $k$.  However, many of the troubles past cryptosystems went
+secret key $k$.
+However, many of the troubles past cryptosystems went
 through was caused by them relying on "security through obscurity"---
 trusting that the fact their _methods_ are not known to their enemy will
-protect them from being broken. This is a faulty assumption - if you reuse a
+protect them from being broken.
+This is a faulty assumption - if you reuse a
 method again and again (even with a different key each time) then eventually
 your adversaries will figure out what you are doing. And if Alice and Bob
 meet frequently in a secure location to decide on a new method, they might as
@@ -163,19 +184,15 @@ In fact, understanding the following two statements will already get you much of
 
 - A probability of $2^{-128}$ is really really small.
 
-The handout on  mathematical background contains some of the probability and discrete mathematics that we'll need, and this will also be reviewed in the sections.
 
 
-![XKCD Cartoon: Random number generator](../figure/random_number.png){#tmplabelfig}
-
-
-### Note: Generating randomness in actual cryptographic systems
+###  Generating randomness in actual cryptographic systems
 
 
 How do we actually get random bits in actual systems?  The main idea is to use a two stage approach. First we need to get some data that is _unpredictable_ from the point of view of an attacker on our system.
 Some sources for this could be measuring latency on the network or hard drives (getting harder with solid state disk), user keyboard and mouse movement patterns (problematic when you need fresh randomness at boot time
 ), clock drift and more, there are some other sources including audio, video, and network. All of these can be problematic, especially for servers or virtual machines, and so hardware based random number generators based on phenomena
-such as thermal noise or nuclear decay are becoming more popular. Once we have some data $X$ that is unpredictable, we need to estimte the _entropy_ in it. You can roughly imagine that $X$ has $k$ bits of entropy
+such as thermal noise or nuclear decay are becoming more popular. Once we have some data $X$ that is unpredictable, we need to estimate the _entropy_ in it. You can roughly imagine that $X$ has $k$ bits of entropy
 if the probability that an attacker can guess $X$ is at most $2^{-k}$. People then use a _hash function_ (an object we'll talk about more later) to map $X$ into a string of length $k$ which is then hopefully distributed
 (close to) uniformly at random. All of this process, and especially understanding the amount of information an attacker may have on the entropy sources, is a bit of a dark art and indeed a number of attacks on cryptographic
 systems were actually enabled by weak generation of randomness. Here are a few examples.
@@ -188,6 +205,10 @@ discovered) all the randomness generated by this procedure used only the process
 if some entities recorded that communication they could break it also retroactively). This caused a huge headache and a worldwide regeneration of keys, though it is believed that many of the weak keys are still used.
 See [XKCD's take](http://www.xkcd.com/424/) on that incident.
 
+
+![XKCD Cartoon: Random number generator](../figure/random_number.png){#tmplabelfig}
+
+
 In 2012 two separate teams of researchers scanned a large number of RSA keys on the web and found out that about 4 percent of them are easy to break.
 The main issue were devices such as routers, internet-connected printers and such. These devices sometimes run variants of Linux-  a desktop operating system- but without a hard drive, mouse or keyboard, they don't have access to many of the entropy sources that desktop have. Coupled with some good old fashioned ignorance of cryptography and software bugs, this led to many keys that are downright trivial
 to break, see [this blog post](https://freedom-to-tinker.com/blog/nadiah/new-research-theres-no-need-panic-over-factorable-keys-just-mind-your-ps-and-qs/)  and [this web page](https://factorable.net/)  for more details.
@@ -198,28 +219,31 @@ Fortunately, this generator wasn't widely adapted but apparently the NSA did pay
 
 ## Defining the secrecy requirement.
 
-Defining the secrecy requirement for an encryption is not simple. Over the course of history, many smart people got it wrong and
-convinced themselves that ciphers were impossible to break. The first person to truly ask the question in a rigorous way was Claude Shannon
+Defining the secrecy requirement for an encryption is not simple.
+Over the course of history, many smart people got it wrong and convinced themselves that ciphers were impossible to break.
+The first person to truly ask the question in a rigorous way was Claude Shannon
 in 1945 (though a partial version of his manuscript was only declassified in 1949).
 Simply by asking this question, he made an enormous contribution to the science of cryptography and practical security.
 We now will try to examine how one might answer it.
+
 Let me warn you ahead of time that we are going to insist on a _mathematically precise definition_
 of security. That means that the definition must capture security in all cases, and the existence of a single counterexample, no matter how
-"silly", would make us rule out a candidate definition. This exercise of coming up with "silly" counterexamples
-might seem, well, silly. But in fact it is this method that has led Shannon to formulate his theory of secrecy,
-which (after much followup work) eventually revolutionized cryptography, and brought this science to a new age where Poe's maxim no longer holds,
-and we are able to design ciphers which human (or even nonhuman) ingeniuity cannot break.
+"silly", would make us rule out a candidate definition.
+This exercise of coming up with "silly" counterexamples might seem, well, silly. But in fact it is this method that has led Shannon to formulate his theory of secrecy,
+which (after much followup work) eventually revolutionized cryptography, and brought this science to a new age where Edgar Allan Poe's maxim no longer holds,
+and we are able to design ciphers which human (or even nonhuman) ingenuity cannot break.
 
 
-The most natural way to attack an encryption is for Eve to guess all possible keys. In many encryption schemes this number is enormous
-and this attack is completely infeasible. For example, the theoretical number of possibilities in the Enigma cipher was about $10^{113}$
+The most natural way to attack an encryption is for Eve to guess all possible keys.
+In many encryption schemes this number is enormous and this attack is completely infeasible.
+For example, the theoretical number of possibilities in the Enigma cipher was about $10^{113}$
 which roughly means that even if we built a filled the milky way galaxy with computers operating at light speed, the sun would still die out before it
 finished examining all the possibilities.[^enigmacalc] One can understand why the Germans thought it was impossible to break. (Note that despite the number
 of possibilities being so enormous, such a key can still be easily specified and shared between Alice and Bob by writing
-down $113$ digits on a piece of paper.) Ray Miller from the NSA had calculated that, in the way the Germans used the machine, the number of
-possibilities was "only" $10^{23}$ which still would mean that it would take about a year to exhaust using the fastest supercomputer of 2015, at a time
-digital computers were not yet invented. Clearly, it is sometimes possible to break an encryption without trying all possibilities, and so having
-a huge number of key combinations does not guarantee security, as an attacker might find a shortcut (as the allies did) and recover the key
+down $113$ digits on a piece of paper.)
+Ray Miller of the NSA had calculated that, in the way the Germans used the machine, the number of possibilities was "only" $10^{23}$, but this is still extremely difficult to pull off even today, and many orders of magnitudes above the computational powers during the WW-II era.
+Thus clearly, it is sometimes possible to break an encryption without trying all possibilities.
+A corollary is that  having a huge number of key combinations does not guarantee security, as an attacker might find a shortcut (as the allies did for Enigma) and recover the key
 without trying all options.
 
 [^enigmacalc]: There are about $10^{68}$ atoms in the galaxy, so even if we assumed that each one of those atoms was a computer that can process say
@@ -227,25 +251,39 @@ $10^{21}$ decryption attempts per second (as the speed of light is $10^9$ meters
 it would still take $10^{113-89} = 10^{24}$ seconds, which is about $10^{17}$ years to exhaust all possibilities, while the sun is estimated to burn out in
 about 5 billion years.
 
-But perhaps we can simply define security as requiring the key to be unrecoverable except with tiny probability, no matter what method?
+Since it is possible to recover the key with some tiny probability (e.g. by guessing it at random), perhaps one way to define security of an encryption scheme is that an attacker can never recover the key with probability significantly higher than that.
 Here is an attempt at such a definition:
 
-__Security Definition (First Attempt):__ An encyption scheme $(E,D)$ is
+
+> # {.definition title="Security of encryption: first attempt" #securefirstattemptdef}
+An encyption scheme $(E,D)$ is
 _$n$-secure_ if no matter what method Eve employs, the probability that she
 can recover the true key $k$ from the ciphertext $c$ is at most $2^{-n}$.
 
-You might wonder if this definition is not too strong to make sense, after all how are we going ever to prove that Eve cannot recover the secret
-key no matter what she does? Edgar Allan Poe would say that there can always be a method that we overlooked. However, in fact this definition is too
-_weak_! Consider the following encryption: the secret key $k$ is chosen at random in $\{0,1\}^n$ but our encryption scheme simply ignores it and lets $E_k(m)=m$ and $D_k(c)=c$.
-This is a valid encryption, but of course completely insecure as we are simply outputing the plaintext in the clear.
+> # { .pause }
+When you see a mathematical definition that attempts to model some real-life phenomenon such as security, you should pause and ask yourself:
+>
+1. Do I understand mathematically what  is the definition stating? \
+2. Is it a reasonable way to capture the real life phenomenon we are discussing?
+>
+One way to answer question 2 is to try to think of both examples of objects that satisfy the definition and examples of objects that violate it, and see if this conforms to your intuition about whether these objects display the phenomenon we are trying to capture. Try to do  this for [securefirstattemptdef](){.ref}
+
+
+
+
+You might wonder if [securefirstattemptdef](){.ref} is not _too strong_.
+After all how are we going ever to prove that Eve cannot recover the secret key no matter what she does? Edgar Allan Poe would say that there can always be a method that we overlooked. However, in fact this definition is too _weak_! Consider the following encryption: the secret key $k$ is chosen at random in $\{0,1\}^n$ but our encryption scheme simply ignores it and lets $E_k(x)=x$ and $D_k(y)=y$. This is a valid encryption, but of course completely insecure as we are simply outputting the plaintext in the clear.
 Yet, no matter what Eve does, if she only sees $c$ and not $k$, there is no way she can guess the true value of $k$ with probability better
 than $2^{-n}$, since it was chosen completely at random and she gets no information about it.
 Formally, one can prove the following result:
 
-__Theorem:__ Let $(E,D)$ be the encryption scheme above. For every function $Eve:\{0,1\}^\ell\rightarrow \{0,1\}^n$ and for every $m\in \{0,1\}^\ell$, the probability that
-$Eve(E_k(m))=s$ is exactly $2^{-n}$.
+> # {.lemma #}
+Let $(E,D)$ be the encryption scheme above. For every function $Eve:\{0,1\}^\ell\rightarrow \{0,1\}^n$ and for every $x\in \{0,1\}^\ell$, the probability that
+$Eve(E_k(x))=k$ is exactly $2^{-n}$.
 
-__Proof:__ This follows beacuse $E_k(m)=m$ and hence $Eve(E_k(m))=Eve(m)$ which is some fixed value $k'\in\{0,1\}^n$ that is independent
+
+> # {.proof data-ref=""}
+This follows beacuse $E_k(x)=x$ and hence $Eve(E_k(x))=Eve(x)$ which is some fixed value $k'\in\{0,1\}^n$ that is independent
 of $k$. Hence the probability that $k=s'$ is $2^{-n}$. QED
 
 The math behind the above argument is very simple, yet I urge you to read and re-read the last two paragraphs until you are sure that
