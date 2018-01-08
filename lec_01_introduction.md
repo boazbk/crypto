@@ -1,14 +1,9 @@
 
-
-
-
-
-
 # Introduction
 
 __Optional additional reading:__ Chapters 1 and 2 of Katz-Lindell book.[^references]
 
-[^references]: In the current state of these lecture notes, almost all references and credits are omitted  unless the name has become standard in the literature, or I believe that the story of some discovery can serve a pedagogical point. See the Katz-Lindell book for historical notes and references.
+[^references]: In the current state of these lecture notes, almost all references and credits are omitted  unless the name has become standard in the literature, or I believe that the story of some discovery can serve a pedagogical point. See the Katz-Lindell book for historical notes and references. This lecture shares a lot of text with (though is not identical to)  my lecture on cryptography in the [introduction to theoretical computer science](http://introtcs.org) lecture notes.
 
 
 
@@ -277,7 +272,7 @@ Yet, no matter what Eve does, if she only sees $c$ and not $k$, there is no way 
 than $2^{-n}$, since it was chosen completely at random and she gets no information about it.
 Formally, one can prove the following result:
 
-> # {.lemma #}
+> # {.lemma #trivialsec}
 Let $(E,D)$ be the encryption scheme above. For every function $Eve:\{0,1\}^\ell\rightarrow \{0,1\}^n$ and for every $x\in \{0,1\}^\ell$, the probability that
 $Eve(E_k(x))=k$ is exactly $2^{-n}$.
 
@@ -291,184 +286,217 @@ you completely understand why this encryption is in fact secure according to the
 This is a "toy example" of the kind of reasoning that we will be employing constantly throughout this course,
 and you want to make sure that you follow it.
 
-So, the above "Theorem" is true, but one might question its meaning. Clearly this silly example was not what we meant when stating this definition.
+So, [trivialsec](){.ref} is true, but one might question its meaning.
+Clearly this silly example was not what we meant when stating this definition.
 However, as mentioned above, we are not willing to ignore even silly examples and must amend the definition to rule them out.
 One obvious objection is that we don't care about hiding the key- it is the _message_ that we are trying to keep secret.
 This suggests the next attempt:
 
-__Security Definition (Second Attempt):__ An encyption scheme $(E,D)$  is
-_$n$-secure_ if for every message $m$ no matter what method Eve employs, the
-probability that she can recover $m$ from the ciphertext $c=E_k(m)$ is at
-most $2^{-n}$.
+> # {.definition title="Security of encryption: second attempt" #securesecondattemptdef}
+An encryption scheme $(E,D)$  is _$n$-secure_ if for every message $x$ no matter what method Eve employs, the
+probability that she can recover $x$ from the ciphertext $y=E_k(x)$ is at most $2^{-n}$.
 
-Now this seems like it captures our intended meaning. But remeber that we are being anal, and truly insist that the definition holds
-as stated, namely that for every plaintext message $m$ and every function $Eve:\{0,1\}^o\rightarrow\{0,1\}^\ell$, the probability over the choice of $k$
-that $Eve(E_k(m))=m$ is at most $2^{-n}$. But now we see that this is clearly impossible. After all, this is supposed to work for
-_every_ message $m$ and _every_ function $Eve$, but clearly if $m$ is that all-zeroes message $0^\ell$ and $Eve$ is the function that ignores its input
-and simply outputs $0^\ell$, then it will hold that $Eve(E_k(m))=m$ with probability one.
+Now this seems like it captures our intended meaning. But remember that we are being anal, and truly insist that the definition holds
+as stated, namely that for every plaintext message $x$ and every function $Eve:\{0,1\}^L\rightarrow\{0,1\}^\ell$, the probability over the choice of $k$
+that $Eve(E_k(x))=x$ is at most $2^{-n}$. But now we see that this is clearly impossible. After all, this is supposed to work for
+_every_ message $x$ and _every_ function $Eve$, but clearly if $x$ is the all-zeroes message $0^\ell$ and $Eve$ is the function that ignores its input
+and simply outputs $0^\ell$, then it will hold that $Eve(E_k(x))=x$ with probability one.
 
-So, if before the definition was too weak, the new definition is too strong and is impossible to achieve. The problem is that of course
-we could guess a fixed message with probability one, so perhaps we could try to consider a definition with a _random_ message. That is:
+So, if before the definition was too weak, the new definition is too strong and is impossible to achieve.
+The problem is that of course we could guess a fixed message with probability one, so perhaps we could try to consider a definition with a _random_ message. That is:
 
-__Security Definition (Third Attempt):__ An encyption scheme $(E,D)$  is
-_$n$-secure_ if no matter what method Eve employs, if $m$ is chosen at random
-from $\{0,1\}^\ell$, the probability that she can recover $m$ from the ciphertext
-$c=E_k(m)$ is at most $2^{-n}$.
+> # {.definition title="Security of encryption: third attempt" #securethirdattemptdef}
+An encyption scheme $(E,D)$  is _$n$-secure_ if no matter what method Eve employs, if $x$ is chosen at random
+from $\{0,1\}^\ell$, the probability that she can recover $x$ from the ciphertext
+$c=E_k(x)$ is at most $2^{-n}$.
 
-This weakened definition can in fact be achieved, but we have again weakened
-it too much. Consider an encryption that hides the last $\ell/2$ bits of the
-message, but completely reveals the first $\ell/2$ bits. The probability of
-guressing a random message is $2^{-\ell/2}$, but this is still a scheme that
-would be completely insecure in practice. The point being that in practice we
-don't encrypt random messages--- our messages might be in English, might have
-common headers, and might have even more structures based on the context. In
-fact, it may be that the message is either "Yes" or "No" (or perhaps either
+This weakened definition can in fact be achieved, but we have again weakened it too much.
+Consider an encryption that hides the last $\ell/2$ bits of the
+message, but completely reveals the first $\ell/2$ bits.
+The probability of guessing a random message is $2^{-\ell/2}$, and so such a scheme would be "$\ell/2$ secure" per [securethirdattemptdef](){.ref} but this is still a scheme that
+you would not want to use.
+The point is that in practice we don't encrypt random messages--- our messages might be in English, might have
+common headers, and might have even more structures based on the context.
+In fact, it may be that the message is either "Yes" or "No" (or perhaps either
 "Attack today" or "Attack tomorrow") but we want to make sure Eve doesn't
 learn which one it is.
+So, using an encryption scheme that reveals the first half of the message (or frankly even only the first bit) is unacceptable.
 
 ## Perfect Secrecy
 
 So far all of our attempts at definitions oscillated between being too strong
 (and hence impossible) or too weak (and hence not guaranteeing actual
-security). The key insight of Shannon was that in a secure encryption scheme
+security).
+The key insight of Shannon was that in a secure encryption scheme
 the ciphtertext should not reveal _any additional information_ about the
 plaintext.  So, if for example it was a priori possible for Eve to guess the
 plaintext with some probability $1/k$  (e.g., because there were only $k$
 possiblities for it) then she should not be able to guess it with higher
-probability after seeing the ciphertext. This is formalized as follows:
+probability after seeing the ciphertext.
+This can be formalized as follows:
 
-__Security Definition (Perfect Secrecy):__ An encryption scheme $(E,D)$ is
-_perfectly secret_ if there for every set $M\subseteq\{0,1\}^\ell$ of plaintexts,
-and for every strategy used by Eve, if we choose at random $m\in M$ and a
-random key $k\in\{0,1\}^n$, then the probability that Eve guesses $m$ after
-seeing $E_k(m)$ is at most $1/|M|$.
+> # {.definition title="Perfect secrecy" #perfectsecrecydef}
+An encryption scheme $(E,D)$ is _perfectly secret_ if there for every set $M\subseteq\{0,1\}^\ell$ of plaintexts,
+and for every strategy used by Eve, if we choose at random $x\in M$ and a
+random key $k\in\{0,1\}^n$, then the probability that Eve guesses $x$ after
+seeing $E_k(x)$ is at most $1/|M|$.
 
 In particular, if we encrypt either "Yes" or "No" with probability $1/2$,
 then Eve won't be able to guess which one it is with probability better than
 half. In fact, that turns out to be the heart of the matter:
 
-__Two to Many Theorem:__ An encryption scheme $(E,D)$ is perfectly secret if and only if
-for every two distinct plaintexts $\{m_0,m_1\} \subseteq \{0,1\}^\ell$
+
+> # {.theorem title="Two to many theorem" #twotomanythm}
+An encryption scheme $(E,D)$ is perfectly secret if and only if
+for every two distinct plaintexts $\{x_0,x_1\} \subseteq \{0,1\}^\ell$
 and every strategy used by Eve, if we choose at random $b\in\{0,1\}$ and a
-random key $k\in\{0,1\}^n$, then the probability that Eve guesses $m_b$ after
-seeing $E_k(m_b)$ is at most $1/2$.
+random key $k\in\{0,1\}^n$, then the probability that Eve guesses $x_b$ after
+seeing $E_k(x_b)$ is at most $1/2$.
 
-__Proof:__ The "only if" direction is obvious--- this condition is a special
-case of the perfect secrecy condition for a set $m$ of size $2$.
 
+> # {.proof data-ref="twotomanythm"}
+The "only if" direction is obvious--- this condition is a special
+case of the perfect secrecy condition for a set $M$ of size $2$.
+>
 The "if" direction is trickier. We need to show that if there is
 some set $M$ (of size possibly much larger than $2$) and some strategy for Eve
 to guess (based on the ciphertext) a plaintext chosen from $M$ with probability larger than $1/|M|$, then
 there is also some set $M'$ of size two and a strategy $Eve'$ for Eve to guess a plaintext
 chosen from $M'$ with probability larger than $1/2$.
-
-Let's fix the message $m_0$ for example to be the all zeroes message.
-Since $Eve(E_k(m_0))$ is a fixed string, if we pick a random $m_1$
-from $M$ then it holds that
-$$\Pr[Eve(E_k(m_0))=m_1]  \leq 1/|M|  $$
-while under our assumption, on average it holds that
-$$\Pr[Eve(E_k(m_1))=m_1]  > 1/|M| $$
+>
+Let's fix the message $x_0$ to be the all zeroes message and pick $x_1$ at random in $M$.
+Under our assumption, it holds that for random key $k$ and message $x_1\in M$,
+$$\Pr_{k \leftarrow \{0,1\}^n, x_1 \leftarrow M}[Eve(E_k(x_1))=x_1]  > 1/|M|\;.$$
+On the other hand, for every choice of $k$, $x'= Eve(E_k(x_0))$ is a fixed string independent on the choice of $x_1$, and so if we pick $x_1$ at random in $M$, then the probability that $x_1=x'$ is at most $1/|M|$, or in other words $$\Pr_{k \leftarrow \{0,1\}^n, x_1 \leftarrow M}[Eve(E_k(x_0))=x_1]  \leq  1/|M|\;.$$
+>
 Thus in particular, due to linearity of expectation, there _exists_
-some $m_1$ satisfying
-$$ \Pr[Eve(E_k(m_1))=m_1]   > \Pr[Eve(E_k(m_0))=m_1] \;.$$
-But this can be turned into an attacker $Eve'$ such that
-the probability that $Eve'(E_k(m_b))=m_b$ is larger than $1/2$.
-Indeed, we can define $Eve'(c)$ to output $m_1$ if $Eve(c)=m_1$ and otherwise
-output a random message in $\{ m_0 , m_1 \}$. The probability that $Eve'(c)$
-equals $m_1$ is higher when $c=E_k(m_1)$ than when $c=E_k(m_0)$, and since
-$Eve'$ outputs either $m_0$ or $m_1$, this means that the probability
-that $Eve'(E_k(m_b))=m_b$ is larger than $1/2$ (Can you see why?)  QED.
+some $x_1$ satisfying
+$$ \Pr[Eve(E_k(x_1))=x_1]   > \Pr[Eve(E_k(x_0))=x_1] \;.$$
+(Can you see why? This is worthwhile stopping and reading again.)
+But this can be turned into an attacker $Eve'$ such that for $b \leftarrow_R \{0,1\}$.
+the probability that $Eve'(E_k(x_b))=x_b$ is larger than $1/2$.
+Indeed, we can define $Eve'(y)$ to output $x_1$ if $Eve(y)=x_1$ and otherwise
+output a random message in $\{ x_0 , x_1 \}$.
+The probability that $Eve'(y)$ equals $x_1$ is higher when $y=E_k(x_1)$ than when $y=E_k(x_0)$, and since
+$Eve'$ outputs either $x_0$ or $x_1$, this means that the probability
+that $Eve'(E_k(x_b))=x_b$ is larger than $1/2$. (Can you see why?)
 
 
 
-__Exercise__: Another equivalent condition for perfect secrecy is the following:
-$(E,D)$ is perfectly secret if for every plaintexts $m,m' \in \{0,1\}^\ell$, the two
-random variables $\{ E_k(m) \}$ and $\{ E_{k'}(m') \}$ (for randomly chosen keys $k$ and $k'$)
+> # { .pause }
+The proof of [twotomanythm](){.ref} is not trivial, and is worth reading again and making sure you understand it.
+An excellent exercise, which I urge you to pause and do now is to prove the following:
+$(E,D)$ is perfectly secret if for every plaintexts $x,x' \in \{0,1\}^\ell$, the two
+random variables $\{ E_k(x) \}$ and $\{ E_{k'}(x') \}$ (for randomly chosen keys $k$ and $k'$)
 have precisely the same distribution.
 
 So, perfect secrecy is a natural condition, and does not seem to be too weak for applications, but can it actually
 be achieved? After all, the condition that two different plaintexts are mapped to the same distribution seems somewhat at odds
-with the condition that Bob would succeed in decrypting the ciphertexts and find out if the plaintext was in fact $m$ or $m'$.
-It turns out the answer is yes! For example, the table below details a perfectly secret
+with the condition that Bob would succeed in decrypting the ciphertexts and find out if the plaintext was in fact $x$ or $x'$.
+It turns out the answer is yes! For example, [onetimepadtwofig](){.ref} details a perfectly secret
 encryption for two bits.
 
 
 
-+---------+-------+-------+-------+-------+-------+
-| Plain:  |       | __00__| __01__| __10__| __11__|
-+---------+-------+-------+-------+-------+-------+
-| Cipher: |       |       |       |       |       |
-+---------+-------+-------+-------+-------+-------+
-|         | __00__|     00|     01|     10|     11|
-+---------+-------+-------+-------+-------+-------+
-|         | __01__|     01|     00|     11|     10|
-+---------+-------+-------+-------+-------+-------+
-|         | __10__|     10|     11|     00|     01|
-+---------+-------+-------+-------+-------+-------+
-|         | __11__|     11|     10|     01|     00|
-+---------+-------+-------+-------+-------+-------+
+![A perfectly secret encryption scheme for two-bit keys and messages. The blue vertices represent plaintexts and the red vertices represent ciphertexts, each edge mapping a plaintext $x$ to a ciphertext $y=E_k(x)$ is labeled with the corresponding key $k$. Since there are four possible keys, the degree of the graph is four and it is in fact a complete bipartite graph. The encryption scheme is valid in the sense that for every $k\in \{0,1\}^2$, the map $x \mapsto E_k(x)$ is one-to-one, which in other words means that the set of edges labeled with $k$ is a _matching_.](../figure/onetimepadtwobits.png){#onetimepadtwofig .class width=300px height=300px}
 
-  : A perfectly secret encryption scheme with $2$ bit keys, plaintexts, and ciphertexts; the rows are indexed by possible ciphertexts, the columns indexed
-  by possible plaintexts, and the $(c,m)$ location of the matrix corresponds to the key   that maps $m$ to $c$.
+
+
+
+
+![For any key length $n$, we can visualize an encryption scheme $(E,D)$ as a graph with a  vertex for every one of the $2^{L(n)}$ possible plaintexts and for every one of the ciphertexts in $\{0,1\}^*$ of the form $E_k(x)$ for $k\in \{0,1\}^n$ and $x\in \{0,1\}^{L(n)}$. For every plaintext $x$ and key $k$, we add an edge labeled $k$ between $x$ and $E_k(x)$. By the validity condition, if we pick any fixed key $k$, the map $x \mapsto E_k(x)$ must be one-to-one. The condition of perfect secrecy simply corresponds to requiring that every two    plaintexts $x$ and $x'$ have exactly the same set of neighbors (or multi-set, if there are parallel edges).](../figure/perfectsecrecy.png){#perfectsecfig .class width=300px height=300px}
+
+
 
 In fact, this can be generalized to any number of bits:
 
-__Theorem (One time pad, Vernam 1917):__ For every $n$, there is a perfectly secret encryption $(E,D)$ with plaintexts of $n$ bits, where the key size and the ciphertext size is also $n$.
 
-__Proof:__  The encryption scheme is actually very simple - to encrypt a message $m\in\{0,1\}^n$ with key $k\in\{0,1\}^n$, we output $E_k(m)=m\oplus k$ where $\oplus$ is the exclusive or (XOR) operation. That is, $m \oplus k$ is a vector in $\{0,1\}^n$ such that $(m\oplus k)_i = k_i + m_i \pmod{2}$. Decryption works identically - $D_k(c) = c \oplus k$. It is not hard to use the associativity of addition (and in particular XOR) to verify  that
-$D_k(E_k(m)) = (m \oplus k) \oplus k = m \oplus (k \oplus k) = m$ where the last equality follows from   $k\oplus k = 0^n$  (can you see why?).  Now we claim that for every message $m \in \{0,1\}^n$, the distribution $E_k(m)$ for a random $k$ is the uniform distribution $U_n$ on $\{0,1\}^n$. By the exercise above, this implies that the scheme is perfectly secret, since for every two messages $m,m'$ the distributions $\{ E_k(m) \}$ and $\{ E_{k'}(m') \}$ will both be equal to the uniform distribution. To prove the claim we need to show that for every $y\in\{0,1\}^n$, $\Pr[ E_k(m)=y ] = 2^{-n}$ where this probability is taken over the choice of a random $k\in\{0,1\}^n$. Now note that $E_k(m)=y$ if and only if $m \oplus k = y$ or, equivalently, $k = m \oplus y$.  Since $k$ is chosen uniformly at random in $\{0,1\}^n$, the probability that it equals  $m \oplus y$ is exactly $2^{-n}$ QED.
+> # {.theorem title="One Time Pad (Vernam 1917, Shannon 1949)" #onetimepad}
+There is a perfectly secret valid encryption scheme $(E,D)$ with $L(n)=n$.
 
->### Note: Importance of using the one time pad only once:
+> # {.proofidea data-ref="onetimepad"}
+Our scheme is the [one-time pad](https://en.wikipedia.org/wiki/One-time_pad) also known as the "Vernam Cipher", see [onetimepadfig](){.ref}.
+The encryption is exceedingly simple: to encrypt a message $x\in \{0,1\}^n$ with a key $k \in \{0,1\}^n$ we simply output $x \oplus k$ where $\oplus$ is the bitwise XOR operation that
+outputs the string corresponding to XORing each  coordinate of $x$ and $k$.
 
->The "one time pad" is a name analogous to the "point away from yourself gun"- the name
-suggests the fatal mistake people often end up doing. Perhaps the most dramatic example of the dangers of "key reuse"  is the _[Venona Project](http://nsarchive.gwu.edu/NSAEBB/NSAEBB278/01.PDF)_.
-The Soviets have used the one-time pad for their confidential communication since before the 1940's (WHEN?), and in fact even before
-Shannon apparently the U.S. intelligence already knew that it is in principle "unbreakable" in 1941 (see page 32 in the [Venona document](http://nsarchive.gwu.edu/NSAEBB/NSAEBB278/01.PDF)
-)). However, it turned out that the hassles of manufacturing so many keys for all the communication took its toll on the Soviets and they ended up reusing the same keys
-for more than one message, though they tried to use them for completely different receivers in the (false) hope that this wouldn't be
-detected. The Venona project of the U.S. Army was founded in February 1943 by Gene Grabeel- a former highschool teacher from Madison Heights, Virgnia and
-Lt. Leonard Zukbo. In October 1943, they had their breakthrough when it was discovered that the Russians are reusing their keys (credit to this discovery
-is shared by Lt. Richard Hallock, Carrie Berry, Frank Lewis, and Lt. Karl Elmquist, see page 27 in the document). In the 37 years of its existence, the project
-has resulted in a treasure chest of intelligence, exposing hundreds of KGB agents and Russian spies in the U.S. and other countries,
-including Julius Rosenberg, Harry Gold, Klaus Fuchs, Alger Hiss, Harry Dexter White  and many others.
+
+> # {.proof data-ref="onetimepad"}
+For two binary  strings $a$ and $b$ of the same length $n$, we define $a \oplus b$ to be the string $c \in \{0,1\}^n$ such that $c_i = a_i + b_i \mod 2$ for every $i\in [n]$.
+The encryption scheme $(E,D)$ is defined as follows: $E_k(x) = x\oplus k$ and $D_k(y)= y \oplus k$.
+By the associative law of addition (which works also modulo two), $D_k(E_k(x))=(x\oplus k) \oplus k = x \oplus (k \oplus k) = x \oplus 0^n = x$,
+using the fact that for every bit $\sigma \in \{0,1\}$, $\sigma + \sigma \mod 2 = 0$ and $\sigma + 0 = \sigma \mod 2$.
+Hence $(E,D)$ form  a valid encryption.
+>
+To analyze the perfect secrecy property, we claim that for every $x\in \{0,1\}^n$, the distribution $Y_x=E_k(x)$ where $k \sim \{0,1\}^n$ is simply the uniform distribution over $\{0,1\}^n$, and hence in particular the distributions $Y_{x}$ and $Y_{x'}$ are identical for every $x,x' \in \{0,1\}^n$.
+Indeed, for every particular $y\in \{0,1\}^n$, the value $y$ is output by $Y_x$ if and only if $y = x \oplus k$ which holds if and only if $k= x \oplus y$. Since $k$ is chosen uniformly at random in $\{0,1\}^n$, the probability that $k$ happens to equal $k \oplus y$ is exactly $2^{-n}$, which means that every string $y$ is output by $Y_x$ with probability $2^{-n}$.
+
+
+![In the _one time pad_ encryption scheme we encrypt a plaintext $x\in \{0,1\}^n$ with a key $k\in \{0,1\}^n$ by the ciphertext $x \oplus k$ where $\oplus$ denotes the bitwise XOR operation.](../figure/onetimepad.png){#onetimepadfig .class width=300px height=300px}
+
+
+> # { .pause }
+The argument above is quite simple but is worth reading again. To understand why the one-time pad is perfectly secret, it is useful to envision it as a bipartite graph as we've done in [onetimepadtwofig](){.ref}. (In fact the encryption scheme of [onetimepadtwofig](){.ref} is precisely the one-time pad for $n=2$.) For every $n$, the one-time pad encryption scheme corresponds to a bipartite graph with $2^n$  vertices on the "left side" corresponding to the plaintexts in $\{0,1\}^n$ and $2^n$  vertices on the "right side" corresponding to the ciphertexts $\{0,1\}^n$.
+For every $x\in \{0,1\}^n$ and $k\in \{0,1\}^n$, we connect $x$ to the vertex $y=E_k(x)$ with an edge that we label with $k$.
+One can see that this is the complete bipartite graph, where every vertex on the left is connected to _all_ vertices on the right.
+In particular this means that for every left vertex $x$, the distribution on the ciphertexts obtained by taking a random $k\in \{0,1\}^n$ and going to the neighbor of $x$ on the edge labeled $k$ is the uniform distribution over $\{0,1\}^n$.
+This ensures  the perfect secrecy condition.
+
+
 
 ## Necessity of long keys
 
-The one time pad requires a key the size of the message, which means that if you plan to communicate with $x$ people, you are going to have to maintain (securely!)
-$x$ huge files that are each as long as the length of the maximum total communication you expect with that person. Imagine that every time you opened
-an account with Amazon, Google, or any other service, they would need to send you in the mail a DVD full of random numbers,
-and every time you suspected a virus, you'll need to ask all these services for a fresh DVD. This doesn't sounds so appealing.
-Ideally, one could think that Alice and Bob only share a key that is long enough to be unguessable, e.g., $128$ bits, and use that
-for all their communication. Unfortunately this is impossible to achieve with perfect secrecy:
+So, does [onetimepad](){.ref} give the final word on cryptography, and means that we can all communicate with perfect secrecy and live happily ever after?
+No it doesn't.
+While the one-time pad is efficient, and gives perfect secrecy, it has one glaring disadvantage: to communicate $n$ bits you need to store a key of length $n$.
+In contrast, practically used cryptosystems such as AES-128 have a short key of $128$ bits (i.e., $16$ bytes) that can be used to protect terabytes or more of communication!
+Imagine that we all needed to use the one time pad.
+If that was the case, then if you had to communicate with $m$ people, you would have to  maintain (securely!)
+$m$ huge files that are each as long as the length of the maximum total communication you expect with that person.
+Imagine that every time you opened an account with Amazon, Google, or any other service, they would need to send you in the mail (ideally with a secure courier) a DVD full of random numbers,
+and every time you suspected a virus, you'd need to ask all these services for a fresh DVD. This doesn't sound so appealing.
 
-__Theorem:__ If $E$ is a perfectly secret system with key of length $n$ and messages of length $\ell$ then $\ell\leq n$.
+This is not just a theoretical issue.
+The Soviets have used the one-time pad for their confidential communication since before the 1940's.
+In fact,  even before Shannon's work, the U.S. intelligence  already knew in 1941 that the one-time pad is in principle "unbreakable"  (see page 32 in the [Venona document](http://nsarchive.gwu.edu/NSAEBB/NSAEBB278/01.PDF)).
+However, it  turned out that the hassle of manufacturing so many keys for all the communication took its toll on the Soviets and they ended up reusing the same keys
+for more than one message.  They did try  to use them for completely different receivers in the (false) hope that this wouldn't be detected.
+The [Venona Project](https://en.wikipedia.org/wiki/Venona_project) of the U.S. Army was founded in February 1943 by Gene Grabeel (see [genegrabeelfig](){.ref}), a former home economics teacher from Madison Heights, Virgnia and Lt. Leonard Zubko.
+In October 1943, they had their breakthrough when it was discovered that the Russians were reusing their keys.^[Credit to this discovery
+is shared by Lt. Richard Hallock, Carrie Berry, Frank Lewis, and Lt. Karl Elmquist, and there are others that have made important contribution to this project. See pages 27 and 28 in the document.]
+In the 37 years of its existence, the project has resulted in a treasure chest of intelligence, exposing hundreds of KGB agents and Russian spies in the U.S. and other countries,
+including Julius Rosenberg, Harry Gold, Klaus Fuchs, Alger Hiss, Harry Dexter White  and many others.
 
-__Proof:__ Suppose, towards the sake of contradiction that there was a perfectly secret system $(E,D)$ with a key of length
-$n$ but messages of length $\ell > n$. Then consider the following adversary strategy for Eve: given a ciphertext $c$,
-guess a random key $k\in \{0,1\}^n$ and output $m= D_k(c)$. The probability that Eve is successful is at least $2^{-n}$, since with this probability
-she guesses the key correctly. But by perfect secrecy, if the message is chosen at random, she should have been successful with probability at most
-$2^{-\ell} < 2^{-n}$.
+![Gene Grabeel, who founded the U.S. Russian SigInt program on 1 Feb 1943.  Photo taken in 1942, see Page 7 in the Venona historical study.](../figure/genevenona.png){#genegrabeelfig .class width=300px height=300px}
 
-This proof might not be fully convincing - after all, an attack that succeeds with probability $2^{-n}$ is not very worrying.
-But this violation of the security definition can be significantly boosted:
 
-__Theorem:__ If $E$ is an encryption with key of length $n$ and messages of length $\geq n+10$ then there exist two messages
-$m_0,m_1$ and a strategy for Eve so that given an encryption $c = E_k(m_b)$ for random $k$ and $b\in\{0,1\}$, Eve can output
-$m_b$ with probability at least $0.99$.
+Unfortunately it turns out that (as shown by Shannon) that such long keys are _necessary_ for perfect secrecy:
 
-__Proof:__ Suppose that we choose two messages $m_0,m_1$ at random, encrypt $m_1$ to obtain a ciphertext $c_1$ and ask what is the probability that there exists
-some key $k$ such that $c_1 = E_k(m_0)$.  Now, let's fix the choice of $m_0$ and so consider the set $C_0 = \{ E_k(m_0) : k \in \{0,1\}^n \}$.
-The size of this set is at most $2^n$. Now for every choice of the key $k$, the map $m_1 \mapsto E_k(m_1)$ is one to one and so the image
-of this map is some set $D_k$ of size $2^{n+10}$ (i.e., there are exactly $2^{n+10}$ ciphertexts that are the encryption under $k$
-of some $m_1 \in \{0,1\}^{n+10}$). If we pick $m_1$ at random then $c_1 = E_k(m_1)$ is chosen at random from the set $D_k$ and hence the probability
-that $c_1$ falls into $C_0$ is at most $|C_0|/|D_k| \leq 2^{-10} < 0.01$. Hence in particular, there must be _some_ choice
-of $m_0,m_1$ such that Eve decides given $c$ to output $m_0$ if $c\in C_0$ and output $m_1$ otherwise, then she will be successful with probability
-at least $0.99$. QED
+![An encryption scheme where the number of keys is smaller than the number of plaintexts corresponds to a bipartite graph where the degree is smaller than the number of vertices on the left side. Together with the validity condition this implies that  there will be two left vertices $x,x'$ with non-identical neighborhoods, and hence the scheme does _not_ satisfy perfect secrecy.](../figure/longkeygraph.png){#longkeygraphfig .class width=300px height=300px}
 
-__Note:__ The above proof is short  but subtle. I suggest you try to read it _very_ carefuly and make sure you understand it, since it is a prototype
-for future probabilistic arguments that we will be making regularly. It might help for you to consider a "baby case" when there are, say, $10$ possible messages
-and $4$ possible keys, and try to prove in this case that you can always find a pair of messages $m_0,m_1$ such that you can tell with probability at least $60\%$
-whether an encryption was of $m_0$ or of $m_1$.
+
+> # {.theorem title="Perfect secrecy requires long keys" #longkeysthm}
+For every perfectly secret encryption scheme $(E,D)$ the length function $L$ satisfies $L(n) \leq n$.
+
+> # {.proofidea data-ref="longkeysthm"}
+The idea behind the proof is illustrated in [longkeygraphfig](){.ref}. If the number of keys is smaller than the number of messages then the neighborhoods of all vertices in the corresponding graphs cannot be identical.
+
+> # {.proof data-ref="longkeysthm"}
+Let $E,D$ be a valid encryption scheme with messages of length $L$ and key of length $n<L$.
+We will show that $(E,D)$ is not perfectly secret by providing two plaintexts $x_0,x_1 \in \{0,1\}^L$ such that the distributions $Y_{x_0}$ and $Y_{x_1}$ are not identical, where $Y_x$ is the distribution obtained by picking $k \sim \{0,1\}^n$ and outputting $E_k(x)$.
+We choose $x_0 = 0^L$.
+Let $S_0 \subseteq \{0,1\}^*$ be the set of all ciphertexts that have nonzero probability of being output in $Y_{x_0}$. That is, $S=\{ y \;|\; \exists_{k\in \{0,1\}^n} y=E_k(x_0) \}$.
+Since there are only $2^n$ keys, we know that $|S_0| \leq 2^n$.
+>
+We will show the following claim:
+>
+__Claim I:__ There exists some $x_1 \in \{0,1\}^L$ and $k\in \{0,1\}^n$ such that $E_k(x_1) \not\in S_0$.
+>
+Claim I implies that the string $E_k(x_1)$ has positive probability of being output  by $Y_{x_1}$  and zero probability of being output by $Y_{x_0}$ and hence in particular $Y_{x_0}$ and $Y_{x_1}$ are not identical.
+To prove Claim I, just choose a fixed $k\in \{0,1\}^n$. By the validity condition, the map $x \mapsto E_k(x)$ is a one to one map of $\{0,1\}^L$ to $\{0,1\}^*$ and hence in particular
+the _image_ of this map: the set $I = \{ y \;|\; \exists_{x\in \{0,1\}^L} y=E_k(x) \}$ has size at least (in fact exactly) $2^L$.
+Since $|S_0| = 2^n < 2^L$, this means that $|I|>|S_0|$ and so in particular there exists some string $y$ in $I \setminus S_0$. But by the definition of $I$ this means that there is some $x\in \{0,1\}^L$  such that $E_k(x) \not\in S_0$ which concludes the proof of Claim I and hence of  [longkeysthm](){.ref}.
+
+
 
 ### Advanced comment: Adding probability into the picture
 
