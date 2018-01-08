@@ -116,7 +116,7 @@ $$
 We will typically write the first input (i.e., the key) to the encryption and decryption functions as a subscribt, and so write [eqvalidenc](){.eqref} as $D_k(E_k(x))=x$.
 
 
-> _A note on notation:_ We will always use $i,j,\ell,n to denote natural
+> _A note on notation:_ We will always use $i,j,\ell,n$ to denote natural
 numbers. $n$ will often denote the length of our secret key, and $\ell$ the
 length of the message, sometimes also known as "block length" since longer
 messages are simply chopped into "blocks" of length $\ell$ and also
