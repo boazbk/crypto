@@ -4,7 +4,7 @@
 
 
 
-**Additional reading:** Chapter 1 (introduction) and Chapters 2.1 (Introduction) and 2.2 (Shannon ciphers and perfect security) in the Boneh Shoup book. Chapter 3 up to and including Section 3.3 in Katz-Lindell book.
+**Additional reading:**  Chapter 3 up to and including Section 3.3 in Katz-Lindell book.
 
 Recall our cast of characters- Alice and Bob want to communicate securely over a
 channel that is monitored by the nosy Eve. In the last lecture, we have seen the
