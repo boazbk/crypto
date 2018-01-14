@@ -28,7 +28,7 @@ def Distinguish(ciphertext,plaintext1,plaintext2):
     while(sum(key)<128):
         p = Decrypt(key,ciphertext)
         if p==plaintext1: bias++
-        if p==plaintext1: bias--
+        if p==plaintext2: bias--
         increment(key)
     return bias
 
