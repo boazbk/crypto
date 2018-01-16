@@ -69,28 +69,26 @@ than $T$ operations" and just say that there is a way to formally do so. Given
 the perfect secrecy definition we saw last time, a natural attempt for defining
 computational security would be the following:
 
-**Security Definition (First Attempt):** An encryption scheme $(E,D)$ has
-_$t$ bits of computational security_
-if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$
-computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key
-$k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing
-$E_k(m_b)$ is at most $1/2$.
+
+> # {.definition title="Computational security (first attempt)" #firstcompdef}
+An encryption scheme $(E,D)$ has _$t$ bits of computational security_
+if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$ computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2$.
 
 This seems a natural definition, but is in fact impossible to achieve if the key
-is shorter than the message. The reason is that if the message is even one bit
-longer we can always have a very efficient procedure (one that runs in time $2^t$ for a very small $t$)
-that achieves success probability of about $1/2 + 2^{-n-1}$ by guessing the key. (I.e., replace the
-loop in `Distinguish` by choosing the key at random.)
+is shorter than the message.
 
-However, such tiny advantage does not seem very useful, and hence our actual
-definition will be the following:
+> # { .pause }
+Before reading further, you might want to stop and think if you can _prove_ that there is no, say, $\sqrt{n}$ secure encryption scheme satisfying [firstcompdef](){.ref} with $\ell = n+1$ and where the time to compute the encryption is polynomial.
 
-**Security Definition (Computational Security):** An encryption scheme $(E,D)$
-has _$t$ bits of computational security[^sec_bits]_  if for every two distinct plaintexts
-$\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
-$2^t$ computatoinal steps, if we choose at random $b\in{\{0,1\}}$ and a random
-key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing
-$E_k(m_b)$ is at most $1/2+2^{-t}$.
+
+The reason [firstcompdef](){.ref} can't be achieved that if the message is even one bit
+longer than the key, we can always have a very efficient procedure
+that achieves success probability of about $1/2 + 2^{-n-1}$ by guessing the key.  That is, we can replace the loop in the Python program `Distinguish` by choosing the key at random. Since we have some small chance of guessing correctly, we will get a small advantage over half.
+
+To fix this definition, we do not consider guessing with such a tiny advantage as a "true break" of the scheme, and hence this will be the actual definition we use.
+
+> # {.definition title="Computational Security (concrete)" #compsecdef}
+An encryption scheme $(E,D)$ has _$t$ bits of computational security[^sec_bits]_  if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$ computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2+2^{-t}$.
 
 [^sec_bits]: This is a slight simplification of the typical notion of "$t$ bits of security". In the more standard definition we'd say that a scheme has $t$ bits of security if for every $t_1+t_2 \leq t$, an attacker running in $2^{t_1}$ time can't get success probability advantage more than $2^{-t_2}$. However these two definitions only differ from one another by at most a factor of two. This may be important for practical applications (where the difference between $64$ and $32$ bits of security could be crucial) but won't matter for our concerns.
 
@@ -100,10 +98,13 @@ Having learned our lesson, let's try to see that this strategy does give us the
 kind of conditions we desired. In particular, let's verify that this definition
 implies the analogous condition to perfect secrecy.
 
-**Theorem:** If $(E,D)$ is has $t$ bits of computational/ security then every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
+> # {.theorem title="Guessing game for computational secrecy" #twotomanycomp}
+If $(E,D)$ is has $t$ bits of computational/ security then every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
 $2^t-(100\ell+100)$ computational steps, if we choose at random $m\in M$ and a
 random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m$ after
 seeing $E_k(m_b)$ is at most $1/|M|+2^{-t+1}$.
+
+
 
 Before proving this theorem note that it gives us a pretty strong guarantee. In
 the exercises we will strengthen it even further showing that no matter what
@@ -114,43 +115,47 @@ chances of getting to learn any additional information about it before the
 universe collapses are more or less the same as the chances that a fairy will
 materialize and whisper it in your ear.
 
-**Proof:** The proof is rather similar to the equivalence of guessing one of two
+> # {.proof data-ref="twotomanycomp"}
+The proof is rather similar to the equivalence of guessing one of two
 messages vs. one of many messages for perfect secrecy. However, in the
 computational context we need to be careful keeping track of Eve's running time.
 In that proof we showed that if there exists:
-
+>
 -   A subset $M\subseteq {\{0,1\}}^\ell$ of messages
-
+>
 and
-
+>
 -   An adversary $Eve:{\{0,1\}}^o\rightarrow{\{0,1\}}^\ell$ such that
-
+>
     $$
     \Pr_{m{\leftarrow_{\tiny R}}M, k{\leftarrow_{\tiny R}}{\{0,1\}}^n}[ Eve(E_k(m))=m ] > 1/|M|
     $$
-
+>
 Then there exist two messages $m_0,m_1$ and an adversary
 $Eve':{\{0,1\}}^0\rightarrow{\{0,1\}}^\ell$ such that $\Pr_{b{\leftarrow_{\tiny R}}{\{0,1\}},k{\leftarrow_{\tiny R}}{\{0,1\}}^n}[Eve'(E_k(m_b))=m_b ] > 1/2$.
-
+>
 To adapt this proof to the computational setting and complete the proof of the
 current theorem we need to:
-
+>
 -   Show that if the probability of $Eve$ succeeding was $\tfrac{1}{|M|} +
     \epsilon$ then the probability of $Eve'$ succeeding is at least
     $\tfrac{1}{2} + \epsilon/2$.
-
+>
 -   Show that if $Eve$ can be computed in $T$ operations, then $Eve'$ can be
     computed in $T + 100\ell + 100$ operations.
-
+>
 The first point can be shown by simply doing the same proof more carefully,
 keeping track how the advantage over $\tfrac{1}{|M|}$ for $Eve$ translates into
 an advantage over $\tfrac{1}{2}$ for $Eve'$. The second point is obtained by
 looking at the definition of $Eve'$ from that proof. On input $c$, $Eve'$
 computed $m=Eve(c)$ (which costs $T$ operations) and then checked if $m=m_0$
 (which costs, say, at most $5\ell$ operations), and then output either $1$ or a
-random bit (which is a constant, say at most $100$ operations). QED
+random bit (which is a constant, say at most $100$ operations).
 
-**Note:** The proof of this theorem is a model to how a great many of the
+
+### Proof by reduction
+
+The proof of [twotomanycomp](){.ref} is a model to how a great many of the
 results in this course will look like. Generally we will have many theorems of
 the form:
 
@@ -183,8 +188,8 @@ parts of such proofs are typically:
 
 ![We show that the security of $S'$ implies the security of $S$ by transforming an adversary $Eve$ breaking $S$ into an adversary $Eve'$ breaking $S'$](../figure/reduction.jpg){#tmplabelfig width=50% }
 
-The asymptotic approach
------------------------
+
+## The asymptotic approach
 
 For practical security, often every bit of security matters. We want our keys to
 be as short as possible and our schemes to be as fast as possible while
@@ -205,7 +210,7 @@ encounter in this course:
     constants $d,\epsilon >0$ (or $2^{n^{\Omega(1)}}$ for short) which we will
     consider as *infeasible*.[^1]
 
-Another way to say it is that in this course, if a scheme has any security at all, it will have at least $n^{1/3}$ bits of security where $n$ is the length of the key.
+Another way to say it is that in this course, if a scheme has any security at all, it will have at least $n^{\epsilon}$ bits of security where $n$ is the length of the key and $\epsilon>0$ is some absolute constant such as $\epsilon=1/3$.
 
 [^1]: Some texts reserve the term *exponential* to running times of the form  $2^{\epsilon n}$ for some $\epsilon > 0$ and call running time of , say, $2^{\sqrt{n}}$ *subexponential* . However, we will generally not make this    distinction in this course.
 
@@ -221,7 +226,10 @@ there is some $N$, such that if $n>N$ then $\mu(n) < 1/(cn)^d$. Note that for
 every non-constant polynomials $p,q$, $\mu(n)$ is negligible if and only if the
 function $\mu'(n) = p(\mu(q(n)))$ is negligible.
 
->__Note:__ The above definitions could be confusing if you haven't encountered asymptotic analysis before. Reading the beginning of Chapter 3 (pages 43-51) in the KL book can be extremely useful. As a rule of thumb, if every time you see the word "polynomial" you imagine the function $n^{10}$ and every time you see the word "negligible" you imagine the function $2^{-sqrt{n}}$ then you will get the right intuition. What you need to remember is that negligible is much smaller than any inverse polynomial, while polynomials are closed under multiplication, and so we have the "equations" $negligible\times polynomial = negligible$ and $polynomial \times polynomial = polynomial$. As mentioned, in practice people really want to get as close as possible to $n$ bits of security with an $n$ bit key, but  we would be happy as long as the security grows with the key, so when we say a scheme is "secure" you can think of it having $\sqrt{n}$ bits of security (though any function growing faster than $\log n$ would be fine as well).
+> # {.remark title="Asymptotic analysis" #asymptotic}
+The above definitions could be confusing if you haven't encountered asymptotic analysis before. Reading the beginning of Chapter 3 (pages 43-51) in the KL book, as well as the mathematical background lecture in my [intro to TCS notes](http://www.introtcs.org/public/index.html) can be extremely useful. As a rule of thumb, if every time you see the word "polynomial" you imagine the function $n^{10}$ and every time you see the word "negligible" you imagine the function $2^{-\sqrt{n}}$ then you will get the right intuition.
+>
+What you need to remember is that negligible is much smaller than any inverse polynomial, while polynomials are closed under multiplication, and so we have the "equations" $negligible\times polynomial = negligible$ and $polynomial \times polynomial = polynomial$. As mentioned, in practice people really want to get as close as possible to $n$ bits of security with an $n$ bit key, but  we would be happy as long as the security grows with the key, so when we say a scheme is "secure" you can think of it having $\sqrt{n}$ bits of security (though any function growing faster than $\log n$ would be fine as well).
 
 
 From now on, we will require all of our encryption schemes to be *efficient*
@@ -230,41 +238,35 @@ polynomial time. Security will mean that any efficient adversary can make at
 most a negligible gain in the probability of guessing the message over its a
 priori probability. That is, we make the following definition:
 
-**Security Definition (Computational Security):** An encryption scheme $(E,D)$
-is *computationally secure* if for every two distinct plaintexts $\{m_0,m_1\}
-\subseteq {\{0,1\}}^\ell$ and every efficient strategy of Eve, if we choose at
+> # {.definition title="Computational security (asymptotic)" #compsecdef}
+An encryption scheme $(E,D)$ is *computationally secure* if for every two distinct plaintexts $\{m_0,m_1\}
+\subseteq {\{0,1\}}^\ell$ and every efficient (i.e., polynomial time) strategy of Eve, if we choose at
 random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability
 that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2+\mu(n)$ for some
 negligible function $\mu(\cdot)$.
 
-Counting number of operations.
-------------------------------
+### Counting number of operations.
 
 One more detail that we've so far ignored is what does it mean exactly for a
 function to be computable using at most $T$ operations. Fortunately, when we
 don't really care about the difference between $T$ and, say, $T^2$, then
-essentially every reasonable definition gives the same answer. Formally, we can
-use the notions of Turing machines or Boolean circuits to define complexity. For
-concreteness, lets define that a function $F:{\{0,1\}}^n\rightarrow{\{0,1\}}^m$
-has complexity there exists a Boolean circuit (that uses the AND, OR and NOT
-gates) with at most $T$ gates that computes $F$. We will often also consider
+essentially every reasonable definition gives the same answer.
+Formally, we can use the notions of Turing machines, Boolean circuits, or straightline programs to define complexity. For concreteness, lets define that a function $F:{\{0,1\}}^n\rightarrow{\{0,1\}}^m$
+has complexity at most $T$ is there is a Boolean circuits that computes $F$ using at most $T$ NAND gates (or equivalently, there is a NAND program computing $F$ in at most $T$ lines). (There is nothing special about NAND, and we can use any other universal gate set.) We will often also consider
 *probabilistic* functions in which case we allow the circuit a RAND gate that
-outputs a single random bits. For more on circuit complexity you can take a look
-at Chapter 6 of my computational complexity textbook with Arora (see also [draft
-on the web](<http://theory.cs.princeton.edu/complexity/circuitschap.pdf>) ).
-
+outputs a single random bits (though this in general does not give extra power).
 The fact that we only care about asymptotics means you don't really need to
 think of gates, etc.. when arguing in cryptography. However, it is comforting to
-know that this notion has a precise mathematical formulation. See the appendix below for a more
-precise formulation of this and some discussion.
+know that this notion has a precise mathematical formulation.
 
 
-Our first conjecture
---------------------
+
+
+## Our first conjecture
 
 We are now ready to make our first conjecture:
 
-**The Cipher Conjecture:**[^2] There exists a computationally scure encryption
+>**The Cipher Conjecture:**[^2] There exists a computationally scure encryption
 scheme $(E,D)$ (where $E,D$ are efficient) with a key of size $n$ for messages
 of size $n+1$.
 
@@ -279,15 +281,15 @@ A *conjecture* is a well defined mathematical statement which (1) we believe is
 true but (2) don't know yet how to prove. Proving the cipher conjecture will be
 a great achievement and would in particular settle the P vs NP question, which
 is arguably *the* fundamental question of computer science. That is, the
-following is known to be a theorem (feel free to ignore it if you don't know the
-definition of P and NP, though if it piques your curiousity, you can find more
-about it by reading the first two chapters of my book with Arora):
+following theorem is known:
 
-**Theorem:** If $P=NP$ then there does not exist a computationally secure
+> # {.theorem title="Breaking crypto if P=NP" #PNPcipherthm}
+If $P=NP$ then there does not exist a computationally secure
 encryption with efficient $E$ and $D$ and where the message is longer than the
 key.
 
-**Proof idea:** If $P=NP$ then whenever we have a loop that searches through
+> # {.proof data-ref="PNPcipherthm"}
+We just sketch the proof, as this is not the focus of this course. If $P=NP$ then whenever we have a loop that searches through
 some domain to find some string that satisfies a particular property (like the
 loop in the `Distinguish` subroutine above that searches over all keys) then
 this loop can be sped up *exponentially* .
@@ -341,16 +343,18 @@ encryption of $m_0$ and an encryption of $m_1$. It turns out to be useful to
 consider this question of when two distributions are *computationally
 indistinguishable* more broadly:
 
-**Definition (Computational Indistinguishability):** Let $X$ and $Y$ be two
+
+> # {.definition title="Computational Indistinguishability" #compindef}
+Let $X$ and $Y$ be two
 distributions over ${\{0,1\}}^o$. We say that $X$ and $Y$ are
 $(T,\epsilon)$*-computationally indistinguishable*, denoted by $X
 \approx_{T,\epsilon} Y$, if for every function $Eve$ computable with at most $T$
 operations,
-
+>
 $$
 | \Pr[ Eve(X) = 1 ] - \Pr[ Eve(Y) = 1 ] | \leq \epsilon \;.
 $$
-
+>
 We say that $X$ and $Y$ are simply *computationally indistinguishable*, denoted
 by $X\approx Y$, if they are $(T,\epsilon)$ indistinguishable for every
 polynomial $T(o)$ and inverse polynomial $\epsilon(o)$.[^3]
