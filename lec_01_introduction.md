@@ -502,7 +502,7 @@ Since $|S_0| = 2^n < 2^L$, this means that $|I|>|S_0|$ and so in particular ther
 
 There is a sense in which both our secrecy and our impossiblity results might not be fully convincing, and that is that we did not explicitly consider
 algorithms that use _randomness_ . For example, maybe Eve can break a perfectly secret encryption if she is not modeled as a deterministic function
-$Eve:\{0,1\}^o\rightarrow\{0,1\}^\ell$ but rather a _probabilistic_ process. Similarly, maybe the encryption and decryption functions as well could be probabilistic
+$Eve:\{0,1\}^o\rightarrow\{0,1\}^\ell$ but rather a _probabilistic_ process. Similarly, maybe the encryption and decryption functions could be probabilistic
 processes as well. It turns out that none of those matter. For the former, note that a probabilistic process can be thought of as a _distribution_ over functions,
 in the sense that we have a collection of functions $f_1,...,f_N$ mapping $\{0,1\}^o$ to $\{0,1\}^\ell$, and some probabilities $p_1,\ldots,p_N$ (non-negative
 numbers summing to $1$), so we now think of Eve as selecting the function $f_i$ with probability $p_i$. But if none of those functions can give advantage
