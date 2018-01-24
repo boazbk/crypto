@@ -43,7 +43,7 @@ def increment(key):
 Now, generating, distributing, and protecting huge keys causes immense
 logistical problems, which is why almost all encryption schemes used in practice
 do in fact utilize short keys (e.g., $128$ bits long) with messages that can
-much longer (sometimes even terrabytes or more of data).
+much longer (sometimes even terabytes or more of data).
 
 So, why can't we use the above Python program to break all encryptions in the
 Internet and win infamy and fortune? We can in fact, but we'll have to wait a
@@ -171,7 +171,7 @@ random $m\in M$.
 While  in [twotomanycomp](){.ref} the encryption scheme $S$ was the same as $S'$, this  need not always be the case.
 However, all  of the  proofs of such statements  will have the same global
 structure--- we will assume towards a contradiction, that there is an efficient
-adversay strategy $Eve$ demonstrating that the scheme $S$ violates the security notion $X$, and build from
+adversary strategy $Eve$ demonstrating that the scheme $S$ violates the security notion $X$, and build from
 $Eve$ a strategy $Eve'$ demonstrating that $S'$ violates $X$. This is such an
 important point that it deserves repeating:
 
@@ -445,7 +445,7 @@ For every $i\in\{0,\ldots,\ell\}$ we define $H_i$ to be the
 distribution $(X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell)$. Clearly $H_0 = (X_1,\ldots,X_\ell)$ and $H_\ell = (Y_1,\ldots,Y_\ell)$. We will prove that for
 every $i$, $H_i \approx_{T-10\ell n,\epsilon} H_{i+1}$, and the proof will then
 follow from the triangle inequality (can you see why?). Indeed, suppose towards
-the sake of contradction that there was some $i\in \{0,\ldots,\ell\}$ and some
+the sake of contradiction that there was some $i\in \{0,\ldots,\ell\}$ and some
 $T-10\ell n$-time $Eve's:{\{0,1\}}^{n\ell}\rightarrow{\{0,1\}}$ such that
 >
 $$
@@ -463,7 +463,7 @@ $$
  {\mathbb{E}}_{X_1,\ldots,X_{i-1},X_i,Y_i,Y_{i+1},\ldots,Y_ell}\left[ Eve'(X_1,\ldots,X_{i-1},Y_i,Y_{i+1},\ldots,Y_\ell) -  Eve'(X_1,\ldots,X_{i-1},X_i,Y_{i+1},\ldots,Y_\ell) \right]
 $$
 >
-By the *averging principle*[^5] this means that there exist some values
+By the *averaging principle*[^5] this means that there exist some values
 $x_1,\ldots,x_{i-1},y_{i+1},\ldots,y_\ell$ such that
 $$
 \left|{\mathbb{E}}_{X_i,Y_i}\left[ Eve'(x_1,\ldots,x_{i-1},Y_i,y_{i+1},\ldots,y_\ell) -  Eve'(x_1,\ldots,x_{i-1},X_i,y_{i+1},\ldots,y_\ell) \right]\right|>\epsilon
