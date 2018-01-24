@@ -24,7 +24,7 @@ scheme that uses, say, a $128$ bit key, with a $129$ bit message:
 # We assume we have access to the function Decrypt(key,ciphertext)
 def Distinguish(ciphertext,plaintext1,plaintext2):
     bias = 0
-    key = [0,0,....,0] #128 0's
+    key = [0]*128 #128 0's
     while(sum(key)<128):
         p = Decrypt(key,ciphertext)
         if p==plaintext1: bias++
@@ -86,7 +86,7 @@ that achieves success probability of about $1/2 + 2^{-n-1}$ by guessing the key.
 
 To fix this definition, we do not consider guessing with such a tiny advantage as a "true break" of the scheme, and hence this will be the actual definition we use.
 
-> # {.definition title="Computational Security (concrete)" #compsecdef}
+> # {.definition title="Computational Security (concrete)" #compsecconcdef}
 An encryption scheme $(E,D)$ has _$t$ bits of computational security[^sec_bits]_  if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$ computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2+2^{-t}$.
 
 [^sec_bits]: This is a slight simplification of the typical notion of "$t$ bits of security". In the more standard definition we'd say that a scheme has $t$ bits of security if for every $t_1+t_2 \leq t$, an attacker running in $2^{t_1}$ time can't get success probability advantage more than $2^{-t_2}$. However these two definitions only differ from one another by at most a factor of two. This may be important for practical applications (where the difference between $64$ and $32$ bits of security could be crucial) but won't matter for our concerns.
@@ -98,7 +98,7 @@ kind of conditions we desired. In particular, let's verify that this definition
 implies the analogous condition to perfect secrecy.
 
 > # {.theorem title="Guessing game for computational secrecy" #twotomanycomp}
-If $(E,D)$ is has $t$ bits of computational/ security as per  [compsecdef](){.ref} then every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
+If $(E,D)$ is has $t$ bits of computational security as per  [compsecconcdef](){.ref} then every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
 $2^t-(100\ell+100)$ computational steps, if we choose at random $m\in M$ and a
 random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m$ after
 seeing $E_k(m_b)$ is at most $1/|M|+2^{-t+1}$.
@@ -411,7 +411,7 @@ lengths of the other two edges $\overline{x,y}$ and $\overline{y,z}$.
 
 > # {.theorem title="Triangle Inequality for Computational Indistinguishability" #triangleeqthm}
 Suppose $\{ X_1 \} \approx_{T,\epsilon} \{ X_2 \} \approx_{T,\epsilon} \cdots \approx_{T,\epsilon} \{ X_m \}$.
-Then $\{ X_1 \} \approx_{T, (m-1)\epsilon} \{ X_m \}$, where $o$ is the length of the $X_i$'s.
+Then $\{ X_1 \} \approx_{T, (m-1)\epsilon} \{ X_m \}$.
 
 > # {.proof data-ref="triangleeqthm"}
 Suppose that there exists a $T$ time $Eve$ such that
@@ -475,7 +475,7 @@ most the running time of $Eve$ plus $2\ell n$ and it satisfies
 $$
 \left| {\mathbb{E}}_{X_i} [ Eve(X_i) ] - {\mathbb{E}}_{Y_i} [ Eve(Y_i) ] \right| > \epsilon
 $$
-contradicting the assumption that $X_i \approx_{T,\epsilon} Y_i$. QED
+contradicting the assumption that $X_i \approx_{T,\epsilon} Y_i$.
 
 
 
@@ -552,7 +552,7 @@ To decrypt $(c_1,\ldots,c_t)$ using the key $k_0$, first decrypt $c_1$ to learn
 $(k_1,m_1)$, then use $k_1$ to decrypt $c_2$ to learn $(k_2,m_2)$, and so on
 until we use $k_{t-1}$ to decrypt $c_t$ and learn $(k_t,m_t)$. Finally we can
 simply output $(m_1,\ldots,m_t)$.
-<
+>
 The above are clearly valid encryption and decryption algorithms, and hence the
 real question becomes *is it secure??*. The intuition is that $c_1$ hides all
 information about $(k_1,m_1)$ and so in particular the first bit of the message
