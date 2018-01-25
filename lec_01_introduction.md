@@ -278,8 +278,8 @@ $Eve(E_k(x))=k$ is exactly $2^{-n}$.
 
 
 > # {.proof data-ref=""}
-This follows beacuse $E_k(x)=x$ and hence $Eve(E_k(x))=Eve(x)$ which is some fixed value $k'\in\{0,1\}^n$ that is independent
-of $k$. Hence the probability that $k=s'$ is $2^{-n}$. QED
+This follows because $E_k(x)=x$ and hence $Eve(E_k(x))=Eve(x)$ which is some fixed value $k'\in\{0,1\}^n$ that is independent
+of $k$. Hence the probability that $k=k'$ is $2^{-n}$. QED
 
 The math behind the above argument is very simple, yet I urge you to read and re-read the last two paragraphs until you are sure that
 you completely understand why this encryption is in fact secure according to the above definition.
