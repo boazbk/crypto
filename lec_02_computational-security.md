@@ -42,7 +42,7 @@ def increment(key):
 
 Now, generating, distributing, and protecting huge keys causes immense
 logistical problems, which is why almost all encryption schemes used in practice
-do in fact utilize short keys (e.g., $128$ bits long) with messages that can
+do in fact utilize short keys (e.g., $128$ bits long) with messages that can be
 much longer (sometimes even terabytes or more of data).
 
 So, why can't we use the above Python program to break all encryptions in the
@@ -151,8 +151,8 @@ The first item  can be shown by simply doing the same proof more carefully,
 keeping track how the advantage over $\tfrac{1}{|M|}$ for $Eve$ translates into
 an advantage over $\tfrac{1}{2}$ for $Eve'$. As the world's most annoying saying goes, doing this is an excellent exercise for the reader. The item point is obtained by
 looking at the definition of $Eve'$ from that proof. On input $c$, $Eve'$
-computed $m=Eve(c)$ (which costs $T$ operations) and then checked if $m=m_0$
-(which costs, say, at most $5\ell$ operations), and then output either $1$ or a
+computed $m=Eve(c)$ (which costs $T$ operations), checked if $m=m_0$
+(which costs, say, at most $5\ell$ operations), and then outputted either $1$ or a
 random bit (which is a constant, say at most $100$ operations).
 
 
@@ -254,10 +254,10 @@ function to be computable using at most $T$ operations.
 Fortunately, when we don't really care about the difference between $T$ and, say, $T^2$, then
 essentially every reasonable definition gives the same answer.
 Formally, we can use the notions of Turing machines, Boolean circuits, or straightline programs to define complexity. For concreteness, lets define that a function $F:{\{0,1\}}^n\rightarrow{\{0,1\}}^m$
-has complexity at most $T$ is there is a Boolean circuits that computes $F$ using at most $T$ NAND gates (or equivalently, there is a NAND program computing $F$ in at most $T$ lines).
+has complexity at most $T$ if there is a Boolean circuit that computes $F$ using at most $T$ NAND gates (or equivalently, there is a NAND program computing $F$ in at most $T$ lines).
 (There is nothing special about NAND, and we can use any other universal gate set.) We will often also consider
 *probabilistic* functions in which case we allow the circuit a RAND gate that
-outputs a single random bits (though this in general does not give extra power).
+outputs a single random bit (though this in general does not give extra power).
 The fact that we only care about asymptotics means you don't really need to
 think of gates, etc.. when arguing in cryptography. However, it is comforting to
 know that this notion has a precise mathematical formulation.
@@ -387,7 +387,7 @@ $k{\leftarrow_{\tiny R}}{\{0,1\}}^n$.
 
 Working out the proof is an excellent way to make sure you understand both the definition of computational security and computational indistinguishability, and hence we leave it as an exercise.
 
-One intuition for computational indistinguishability that it is related to some
+One intuition for computational indistinguishability is that it is related to some
 notion of *distance*.
 If two distributions are computationally
 indistinguishable, then we can think of them as "very close" to one another, at
@@ -454,13 +454,13 @@ $$
 >
 In other words
 $$
- \left| {\mathbb{E}}_{X_1,\ldots,X_{i-1},Y_i,\ldots,Y_ell}[ Eve'(X_1,\ldots,X_{i-1},Y_i,\ldots,Y_\ell) ] - {\mathbb{E}}_{X_1,\ldots,X_i,Y_{i+1},\ldots,Y_ell}[ Eve'(X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell) ]   \right|  > \epsilon\;.
+ \left| {\mathbb{E}}_{X_1,\ldots,X_{i-1},Y_i,\ldots,Y_\ell}[ Eve'(X_1,\ldots,X_{i-1},Y_i,\ldots,Y_\ell) ] - {\mathbb{E}}_{X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell}[ Eve'(X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell) ]   \right|  > \epsilon\;.
 $$
 >
 By linearity of expectation we can write the difference of these two
 expectations as
 $$
- {\mathbb{E}}_{X_1,\ldots,X_{i-1},X_i,Y_i,Y_{i+1},\ldots,Y_ell}\left[ Eve'(X_1,\ldots,X_{i-1},Y_i,Y_{i+1},\ldots,Y_\ell) -  Eve'(X_1,\ldots,X_{i-1},X_i,Y_{i+1},\ldots,Y_\ell) \right]
+ {\mathbb{E}}_{X_1,\ldots,X_{i-1},X_i,Y_i,Y_{i+1},\ldots,Y_\ell}\left[ Eve'(X_1,\ldots,X_{i-1},Y_i,Y_{i+1},\ldots,Y_\ell) -  Eve'(X_1,\ldots,X_{i-1},X_i,Y_{i+1},\ldots,Y_\ell) \right]
 $$
 >
 By the *averaging principle*[^5] this means that there exist some values
@@ -609,7 +609,7 @@ $t-j$ blocks of $H_j$ and $H_{j+1}$ would be identical and we can denote them by
 $\alpha$ and $\beta$ respectively and hence write $(*)$ as
 >
 $$
-\left| {\mathbb{E}}_{k_{j-1}}[ Eve'(\alpha,E_{k_{j-1}}(k_{j},m_j),\beta) - Eve'(\alpha,E_{k_{j-1}}(k'_j,m_j),\beta) \right| \geq \epsilon \;\;(**)
+\left| {\mathbb{E}}_{k_{j-1}}[ Eve'(\alpha,E_{k_{j-1}}(k_{j},m_j),\beta) - Eve'(\alpha,E_{k_{j-1}}(k'_j,m_j),\beta) ] \right| \geq \epsilon \;\;(**)
 $$
 >
 But now consider the adversary $Eve$ that is defined as $Eve(c) =
@@ -645,7 +645,7 @@ Given a program $\pi$, we say that its _size_ is the number of lines it contains
 The program computes the  probabilistic process that maps $\{0,1\}^n$ to $\{0,1\}^m$ in the natural way.
 If $F$ is a (probabilistic or deterministic)  map of $\{0,1\}^n$ to $\{0,1\}^m$, the _complexity_ of $F$ is the size of the smallest program $P$ that computes it.
 
-If you haven't taken a class such as CS121 before, you might wonder how such a simple model captures complicated programs that use loops, conditionals, and more complex data types than simply a bit in $\{0,1\}$, not to mention some special purpose crypto-breaking devices that might involve tailor-made hardware. It turns out that it does (for the same reason we can compile complicated programming languages to run on silicon chips with a very limited instruction set). In fact, as far as we know, this model can capture even computations that happen in nature, whether it's in a bee colony or the human brain (which contains about $10^{10}$ neurons, so should in principle be simulatable by a program that has up to a few order of magnitudes the same number of lines). Crucially, for cryptography, we care about such programs not because we want to actually run them, but because we want to argue about their _non existence_.[^quantum] If we have a process that cannot be computed by a straightline program of length shorter than $2^{128}>10^{38}$ then it seems safe to say that a computer the size of the human brain (or even all the human and nonhuman brains on this planet) will not be able to perform it either.
+If you haven't taken a class such as CS121 before, you might wonder how such a simple model captures complicated programs that use loops, conditionals, and more complex data types than simply a bit in $\{0,1\}$, not to mention some special purpose crypto-breaking devices that might involve tailor-made hardware. It turns out that it does (for the same reason we can compile complicated programming languages to run on silicon chips with a very limited instruction set). In fact, as far as we know, this model can capture even computations that happen in nature, whether it's in a bee colony or the human brain (which contains about $10^{10}$ neurons, so should in principle be simulatable by a program that has up to a few order of magnitudes of the same number of lines). Crucially, for cryptography, we care about such programs not because we want to actually run them, but because we want to argue about their _non existence_.[^quantum] If we have a process that cannot be computed by a straightline program of length shorter than $2^{128}>10^{38}$ then it seems safe to say that a computer the size of the human brain (or even all the human and nonhuman brains on this planet) will not be able to perform it either.
 
 >__Advanced note:__  The computational model we use in this class is _non uniform_ (corresponding to Boolean circuits) as opposed to _uniform_ (corresponding to Turing machines). If this distinction doesn't mean anything to you, you can ignore it as it won't play a significant role in what we do next. It basically means that we do allow our programs to have hardwired constants of $poly(n)$ bits where $n$ is the input/key length. In fact, to be precise, we will hold ourselves to a higher standard than our adversary, in the sense that we require our algorithms to be efficient in the stronger sense of being computable in uniform probabilistic polynomial time (for  some fixed polynomial, often $O(n)$ or $O(n^2$)), while the adversary is allowed to use non uniformity.
 

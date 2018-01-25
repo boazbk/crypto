@@ -277,7 +277,7 @@ Let $(E,D)$ be the encryption scheme above. For every function $Eve:\{0,1\}^\ell
 $Eve(E_k(x))=k$ is exactly $2^{-n}$.
 
 
-> # {.proof data-ref=""}
+> # {.proof data-ref="#trivialsec"}
 This follows because $E_k(x)=x$ and hence $Eve(E_k(x))=Eve(x)$ which is some fixed value $k'\in\{0,1\}^n$ that is independent
 of $k$. Hence the probability that $k=k'$ is $2^{-n}$. QED
 
@@ -505,7 +505,7 @@ algorithms that use _randomness_ . For example, maybe Eve can break a perfectly 
 $Eve:\{0,1\}^o\rightarrow\{0,1\}^\ell$ but rather a _probabilistic_ process. Similarly, maybe the encryption and decryption functions could be probabilistic
 processes as well. It turns out that none of those matter. For the former, note that a probabilistic process can be thought of as a _distribution_ over functions,
 in the sense that we have a collection of functions $f_1,...,f_N$ mapping $\{0,1\}^o$ to $\{0,1\}^\ell$, and some probabilities $p_1,\ldots,p_N$ (non-negative
-numbers summing to $1$), so we now think of Eve as selecting the function $f_i$ with probability $p_i$. But if none of those functions can give advantage
+numbers summing to $1$), so we now think of Eve as selecting the function $f_i$ with probability $p_i$. But if none of those functions can give an advantage
 better than $1/2$, then neither can this collection. A similar (though more involved) argument shows that the impossiblity result showing that the
 key must be at least as long as the message still holds even if the encryption and decryption algorithms are allowed to be probabilistic processes as well
 (working this out is a great exercise).
