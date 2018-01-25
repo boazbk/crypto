@@ -2,4 +2,5 @@
 
 If you make a pull request, please also add your name here in the alphabetical order
 
+William Fu
 Daniel Inge

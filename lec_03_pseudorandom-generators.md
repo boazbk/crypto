@@ -257,8 +257,7 @@ A more interesting property is that  (if the function is selected properly) for 
 That is, there is some super-polynomial function $t(n)$ (in fact $t(n)$ can be exponential in $n$) such that if $\ell \neq \ell' \in \{0,\ldots, t(n) \}$, then if we look at the two random variables corresponding to the $\ell$-th and $\ell'$-th output of the generator (where randomness is the initial state) then they are distributed like two independent random coins. (This is non trivial to show, and depends on the choice of $f$ - it is a challenging but useful exercise to work this out.)
 The counter generator fails badly at this condition:  the least significant bits between two consecutive states always flip.
 
-There is a more general notion of a *linear generator* where the new state can be any invertible linear transformation of the previous state. That is, we interpret the state $s$ as an element of $\Z_q^t$ for some integers $q,t$,[^Zq] and let $s’=F(s)$ and the output $b=G(s)$ where $F:\Z_q^t\rightarrow\Z_q^t$  and $G:\Z_q^t\rightarrow\Z_q$ are some
-invertible linear transformation (modulo $q$).
+There is a more general notion of a *linear generator* where the new state can be any invertible linear transformation of the previous state. That is, we interpret the state $s$ as an element of $\Z_q^t$ for some integers $q,t$,[^Zq] and let $s’=F(s)$ and the output $b=G(s)$ where $F:\Z_q^t\rightarrow\Z_q^t$  and $G:\Z_q^t\rightarrow\Z_q$ are invertible linear transformations (modulo $q$).
 This includes as a special case the *linear congruential generator* where $t=1$ and the map  $F(s)$ corresponds to taking $as \pmod{q}$ where $a$ is number co-prime to $q$.
 
 [^Zq]: A ring is a set of elements where addition and multiplication are defined and obey the natural rules of associativity and commutativity (though without necessarily having a multiplicative inverse for every element). For every integer $q$ we define $\Z_q$ (known as the _ring of integers modulo $q$_) to be the  set $\{0,\ldots,q-1\}$ where addition and multiplication is done modulo $q$.
@@ -336,7 +335,7 @@ When constructing **block ciphers** we often have "mixing" transformation to ens
 many _rounds_ to ensure deep structure and large algebraic degree.
 
 This also works in the other direction.
-Many algorithmic and macnine learning advances work by embedding a discrete problem in a continuous convex one.
+Many algorithmic and machine learning advances work by embedding a discrete problem in a continuous convex one.
 Some attacks on cryptographic objects can be thought of as  trying to recover some of the structure (e.g., by embedding modular arithmetic in the real line or "linearizing" non linear equations).
 
 
@@ -378,7 +377,7 @@ def subset_sum_gen(seed):
   return reduce(lambda x,y: (x+y) % modulo, map(lambda a,b: a*b, constants,seed))
 ```
 
-That is, the seed to this generator is an array `seed` of 40 bits, there are 40 hardwired constants each of 48 bits long (these constants were generated at random, but are fixed once and for all, and are not kept secret and hence are not
+That is, the seed to this generator is an array `seed` of 40 bits, with 40 hardwired constants each 48 bits long (these constants were generated at random, but are fixed once and for all, and are not kept secret and hence are not
 considered part of the secret random seed), and the output is simply
 $\sum_{i=1}^{40} \texttt{seed}[i]\texttt{constants}[i] \pmod{2^{48}}$ and hence expands the $40$ bit input into a $48$ bit output.
 
