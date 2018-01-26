@@ -277,7 +277,7 @@ Let $(E,D)$ be the encryption scheme above. For every function $Eve:\{0,1\}^\ell
 $Eve(E_k(x))=k$ is exactly $2^{-n}$.
 
 
-> # {.proof data-ref="#trivialsec"}
+> # {.proof data-ref="trivialsec"}
 This follows because $E_k(x)=x$ and hence $Eve(E_k(x))=Eve(x)$ which is some fixed value $k'\in\{0,1\}^n$ that is independent
 of $k$. Hence the probability that $k=k'$ is $2^{-n}$. QED
 
