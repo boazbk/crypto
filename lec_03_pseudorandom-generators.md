@@ -12,17 +12,17 @@ answers to the question of what does it mean for data to be random, and what is
 the nature of probability. The movements of the planets initially looked random
 and arbitrary, but then the early astronomers managed to find *order* and make
 some *predictions* on them. Similarly we have made great advances in predicting
-the weather, and probably will continue to do so in the future. So, while these
-days it seems as if the event of whether or not it will rain a week from today
-is *random*, we could imagine that in some future we will be able to perfectly
-predict it. Even the canonical notion of a random experiment- tossing a coin -
+the weather, and probably will continue to do so.
+So, while these days it seems as if the event of whether or not it will rain a week from today
+is *random*, we could imagine that in with time we will be able to predict the weather further into the future.
+Even the canonical notion of a random experiment -tossing a coin -
 turns out that it [might not be as random as you'd think](http://statweb.stanford.edu/~susan/papers/headswithJ.pdf), with about a
 51% chance that the second toss will have the same result as the first one.
 (Though [see also this experiment](https://www.stat.berkeley.edu/~aldous/Real-World/coin_tosses.html).)
 It is conceivable that at some point someone would discover some function $F$
 that given the first 100 coin tosses by any given person can predict the value of the
 101$^{th}$.[^def]
-Note that in all these examples, the physics underlying the event, whether it's the
+In all these examples, the physics underlying the event, whether it's the
 planets' movement, the weather, or coin tosses, did not change but only
 our powers to predict them.
 So to a large extent, *randomness is a function of
@@ -53,9 +53,10 @@ $$\left| \Pr[D(G(U_n))=1] - \Pr[ D(U_\ell)=1] \right| < \tfrac{1}{p(n)}$$
 
 Note that the requirement that $\ell>n$ is crucial to make this notion
 non-trivial, as for $\ell=n$ the function $G(x)=x$ clearly satisfies that
-$G(U_n)$ is identical to (and hence indistinguishable from) the distribution
-$U_n$. (Make sure that you understand this last statement!) However, for
-$\ell>n$ this is no longer trivial at all, and in particular if we didn't
+$G(U_n)$ is identical to (and hence in particular indistinguishable from) the distribution
+$U_n$.
+(Make sure that you understand this last statement!)
+However, for $\ell>n$ this is no longer trivial at all, and in particular if we didn't
 restrict the running time of $Eve$ then no such pseudo-random generator would
 exist:
 
@@ -65,15 +66,16 @@ exists an (inefficient) algorithm $Eve:{\{0,1\}}^{n+1}\rightarrow{\{0,1\}}$ such
 that ${\mathbb{E}}[ Eve(G(U_n)) ]=1$ but ${\mathbb{E}}[ Eve(U_{n+1})] \leq 1/2$.
 
 > # {.proof data-ref="breakprglem"}
-On input $y\in{\{0,1\}}^{n+1}$, $Eve$ go over all possible
+On input $y\in{\{0,1\}}^{n+1}$, consider the algorithm $Eve$ that goes over all possible
 $x\in{\{0,1\}}^n$ and will output $1$ if and only if $y=G(x)$ for some $x$.
-Clearly ${\mathbb{E}}[ Eve(G(U_n)) ] =1$. However, the set $S =\{ G(x) : x\in {\{0,1\}}^n \}$
-on which Eve outputs $1$ has size at most $2^n$, and hence a
-random $y{\leftarrow_{\tiny R}}U_n$ will fall in $S$ with probability at most
-$1/2$. QED
+Clearly ${\mathbb{E}}[ Eve(G(U_n)) ] =1$.
+However, the set $S =\{ G(x) : x\in {\{0,1\}}^n \}$ on which Eve outputs $1$ has size at most $2^n$, and hence a
+random $y{\leftarrow_{\tiny R}} U_{n+1}$ will fall in $S$ with probability at most
+$1/2$.
 
 It is not hard to show that if $P=NP$ then the above algorithm Eve can be made
-efficient, and hence in particular at the moment we do not know how to *prove*
+efficient.
+In particular, at the moment we do not know how to *prove*
 the existence of pseudorandom generators. Nevertheless they are widely believed
 to exist and hence we make the following conjecture:
 
@@ -84,9 +86,8 @@ As was the case for the cipher conjecture, and any other conjecture, there are t
 regarding the PRG conjecture: why should we believe it and why should we care. Fortunately, the answer to the first question is simple:
 it is known that the cipher conjecture _implies_ the PRG conjecture, and hence if we believe the former we should believe the latter.
 (The proof is highly non trivial and we may not get to see it in this course.)
-As for the second question, we will see that the PRG conjecture implies a great number of useful cryptographic tools, including the cipher conjecture.
-We start by showing that once we can get to an output that is one bit longer than the input, we can in fact
-obtain any number of bits.
+As for the second question, we will see that the PRG conjecture implies a great number of useful cryptographic tools, including the cipher conjecture (i.e., the two conjectures are in fact equivalent).
+We start by showing that once we can get to an output that is one bit longer than the input, we can in fact obtain any number of bits.
 
 > # {.theorem title="Length Extension for PRG's" #lengthextendprgthm}
 Suppose that the PRG conjecture is
@@ -102,7 +103,8 @@ ciphers,  and in fact this theorem can be used to give an alternative proof for 
 The construction is illustrated in [lengthextendprgfig](){.ref}. >
 We are given a pseudorandom generator $G'$ mapping $n$ bits into $n+1$ bits and need to construct a pseudorandom generator $G$ mapping $n$ bits to $t=t(n)$
 bits for some polynomial $t(\cdot)$. The idea is that we maintain a state of $n$ bits, which are originally our input seed[^seed] $s_0$, and at the $i^{th}$ step we use $G'$
-to map $s_{i-1}$ to the $n+1$-long bit string $(s_i,y_i)$, output $y_i$ and keep $s_i$ as our new state. To prove the security of this construction
+to map $s_{i-1}$ to the $n+1$-long bit string $(s_i,y_i)$, output $y_i$ and keep $s_i$ as our new state.
+To prove the security of this construction
 we need to show that the distribution $G(U_n) = (y_1,\ldots,y_t)$  is computationally indistinguishable from the uniform distribution $U_t$. As usual, we will use the hybrid argument.
 For $i\in\{0,\ldots,t\}$ we define $H_i$ to be the distribution where the first $i$ bits chosen at uniform, whereas the last $t-i$ bits are computed as above.
 Namely, we choose $s_i$ at random in $\{0,1\}^n$ and continue the computation of $y_{i+1},\ldots,y_t$ from the state $s_i$.
@@ -123,6 +125,8 @@ with an input distributed according to $H_i$. Hence we get that $| \E[ Eve'(G(U_
 
 
 [^seed]:Because we use a small input to grow a large pseudorandom string, the input to a pseudorandom generator is often known as its *seed*.
+
+The proof of [lengthextendprgthm](){.ref} is indicative of many practical constructions of pseudorandom generators. Many operating systems keep track of an initial _seed_ of randomness, and  supply a system call `rand` such that every call to `rand` applies a pseudorandom generator $G'$ to the current seed, uses part of the output to update the seed, and returns the remainder to the caller.
 
 
 > # {.remark title="Unpredictablity and indistinguishability- an alternative approach for proving the length extension theorem" #alternativelengthextendrem}
@@ -163,8 +167,8 @@ $$
 >
 Just like in the one time pad, $D_k(E_k(m)) = G(k) \oplus G(k) \oplus m = m$.
 Moreover, the encryption and decruption algorithms are clearly efficient and so
-the only thing that's left is to prove security or that for every $m,m'
-E_{U_n}(m) \approx E_{U_n}(m')$. We show this by proving the following claim:
+the only thing that's left is to prove security or that for every pair $m,m'$ of plaintexts,
+$E_{U_n}(m) \approx E_{U_n}(m')$. We show this by proving the following claim:
 >
 **Claim:** For every $m\in{\{0,1\}}^{n+1}$, $E_{U_n}(m) \approx U_{n+1} \oplus  m$.
 >
@@ -192,7 +196,7 @@ if we use the length extension for PRG's, we don't need to decide on the length
 of messages in advance. Every time we need to encrypt another bit (or another
 block) $m_i$ of the message, we run the basic PRG to update our state and obtain
 some new randomness $y_i$ that we can XOR with the message and ouput. Such
-constructions are known as *stream ciphers* in the literature. In fact, in most
+constructions are known as *stream ciphers* in the literature. In much
 of the practical literature the mame *stream cipher* is used both for the
 pseudorandom generator itself, as well as for the encryption scheme that is
 obtained by combining it with the one-time pad.
@@ -243,9 +247,8 @@ You should really pause here and make sure you see why the "counter   pseudorand
 ### Attempt 1: The linear checksum / linear feedback shift register (LFSR)
 
 LFSR can be thought of as the "mother" (or maybe more like the sick great-uncle) of all psuedorandom generators.
-One of the simplest ways to generate a “randomish” digit from an $n$ digit
-number is to use a *checksum* - some linear combination of the digits, as is the
-*cyclic redundancy check* or CRC.^[CRC are often used to generate a "control digit" to detect mistypes of credit card or social security card number. This has very different goals than its use for pseudorandom generators, though there are some common intuitions behind the two usages.]
+One of the simplest ways to generate a "randomish" extra digit given an $n$ digit
+number is to use a *checksum* - some linear combination of the digits, with a canonical example being the [cyclic redundancy check](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) or CRC.^[CRC are often used to generate a "control digit" to detect mistypes of credit card or social security card number. This has very different goals than its use for pseudorandom generators, though there are some common intuitions behind the two usages.]
 This motivates the notion of a *linear feedback shift register generator* (LFSR): if the current state is $s\in\{0,1\}^n$ then the output is $f(s)$ where $f$ is a linear function (modulo 2) and the new state is obtained by right shifting the previous state and putting $f(s)$ at the leftmost location.
 That is, $s'_1 = f(s)$ and $s'_i = s_{i-1}$ for $i\in\{2,\ldots,n\}$.
 
@@ -264,7 +267,7 @@ This includes as a special case the *linear congruential generator* where $t=1$ 
 
 
 All these generators are unfortunately insecure due to the great bane of
-cryptography- the *Gaussian Elimination algorithm* which students typically encounter in any linear algebra class.^[Despite the name, the algorithm goes back at least to the authors of the Chinese *Jiuzhang Suanshu* manuscript, circa 150 B.C..]
+cryptography- the *Gaussian Elimination algorithm* which students typically encounter in any linear algebra class.^[Despite the name, the algorithm goes at least as far back as the Chinese *Jiuzhang Suanshu* manuscript, circa 150 B.C.]
 
 > # {.theorem title="The unfortunate theorem for cryptography" #gaussianelimthm}
 There is a polynomial time algorithm to solve
@@ -272,19 +275,17 @@ $m$ linear equations in $n$ variables (or to certify no solution exists) over
 any ring.
 
 
-Despite its seeming simplicity and uniquity, Gaussian elimination  (and some generalizations and related algorithms such as Euclid’s extended g.c.d algorithm and the LLL lattice reduction algorithm) has been used time and again to break candidate cryptographic constructions.
-
-
-
-
+Despite its seeming simplicity and ubiquity, Gaussian elimination  (and some generalizations and related algorithms such as Euclid’s extended g.c.d algorithm and the LLL lattice reduction algorithm) has been used time and again to break candidate cryptographic constructions.
 In particular, if we look at the first $n$ outputs of a linear  generator
 $b_1,\ldots,b_n$ then we can write linear equations in the unknown initial state
 of the form $f_1(s)=b_1,\ldots,f_n(s)=b_n$ where the $f_i$'s are known linear
-functions. Either those functions are *linearly independent*, in which case we
+functions.
+Either those functions are *linearly independent*, in which case we
 can solve the equations to get the unique solution for the original state $s$
 and from which point we can predict all outputs of the generator, or they are
 dependent, which means that we can predict some of the outputs even without
-recovering the original state. Either way the generator is $*\sharp !$’ed (where
+recovering the original state.
+Either way the generator is $*\sharp !$’ed (where
 $* \sharp !$ refers to whatever verb you prefer to use when your system is broken).
 See also this [1977 paper](http://alumni.cs.ucr.edu/~jsun/random-number.pdf)
 of James Reed.
@@ -297,7 +298,8 @@ pseudorandom generator in a cryptographic application, and in fact in any
 adversarial setting (e.g., one shouldn't hope that an attacker would not be able
 to figure out the algorithm that computes the control digit of a credit card
 number[^10]). However, that does not mean that there are no legitimate cases
-where linear generators can be used. In a setting where the application is not adversarial and you have an ability to *test* if the generator is actually successful, it
+where linear generators can be use
+. In a setting where the application is not adversarial and you have an ability to *test* if the generator is actually successful, it
 might be reasonable to use such insecure non-cryptographic generators.
 They tend to be more efficient (though often not by much) and hence are often the default
 option in many programming environments such as the `C rand()` command. (In
@@ -360,7 +362,7 @@ Let's now describe some _successful_ (at least per current knowledge) pseudorand
 
 Here is an extremely simple generator that is yet still secure[^ss_sec] as far as we know.
 
-[^ss_sec]: Actually modern computers will be able to break this generator via brute force, but if the length and number of the constants were doubled (or even quadrupled) this should be sufficiently secure, though longer to write down.
+[^ss_sec]: Actually modern computers will be able to break this generator via brute force, but if the length and number of the constants were doubled (or perhaps  quadrupled) this should be sufficiently secure, though longer to write down.
 
 ```python
 def subset_sum_gen(seed):
