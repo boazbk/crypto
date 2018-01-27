@@ -75,7 +75,7 @@ The idea is that they create what's known as a _one time password_. Alice and Bo
 
 The formal protocol is as follows:
 
-__Protocol PRF-Login:__
+__Protocol__ `PRF-Login`__:__
 
 *  Shared input: $s\in\{0,1\}^n$. Alice and Bob treat it as a seed for a pseudorandom function generator $\{ f_s \}$.
 *  In every session Alice and Bob do the following:
@@ -103,20 +103,20 @@ Please make sure you understand the informal reasoning above, since we will now 
 
 
 > # {.theorem title="Login protocol via PRF" #loginprfthm}
-that $\{ f_s \}$ is a secure pseudorandom function generator and Alice and Bob interact using Protocol __PRF-Login__ for some polynomial number $T$ of sessions (over a channel controlled by Mallory), and then Mallory interacts with Bob, where Bob follows the protocol's instructions but  Mallory may use an arbitrary efficient computation.
+that $\{ f_s \}$ is a secure pseudorandom function generator and Alice and Bob interact using Protocol `PRF-Login` for some polynomial number $T$ of sessions (over a channel controlled by Mallory), and then Mallory interacts with Bob, where Bob follows the protocol's instructions but  Mallory may use an arbitrary efficient computation.
 Then, the probability that Bob accepts the interaction after this interaction is at most $2^{-\ell}+\mu(n)$ where $\mu(\cdot)$ is some negligible function.
 
 
 > # {.proof data-ref="loginprfthm"}
 This proof, as so many others in this course, uses an argument via contradiction.
-We assume, towards the sake of contradiction, that there exists an adversary $M$ (for Mallory) that can break the identification scheme __PRF-Login__ with probability $2^{-\ell}+\epsilon$ after $T$ interactions and construct an attacker $A$ that can distinguish access to $\{ f_s \}$ from access to a random function using $poly(T)$ time and with bias at least   $\epsilon/2$.
+We assume, towards the sake of contradiction, that there exists an adversary $M$ (for Mallory) that can break the identification scheme `PRF-Login` with probability $2^{-\ell}+\epsilon$ after $T$ interactions and construct an attacker $A$ that can distinguish access to $\{ f_s \}$ from access to a random function using $poly(T)$ time and with bias at least   $\epsilon/2$.
 >
-How do we construct this adversary $A$? The idea is as follows. First, we prove that if we ran the protocol __PRF-Login__ using an _actual random_ function, then $M$ would not be able to succeed in impersonating with probability better than $2^{-\ell}+negligible$. Therefore, if $M$ does do better, then we can use that to distinguish $f_s$ from a random function.
+How do we construct this adversary $A$? The idea is as follows. First, we prove that if we ran the protocol `PRF-Login` using an _actual random_ function, then $M$ would not be able to succeed in impersonating with probability better than $2^{-\ell}+negligible$. Therefore, if $M$ does do better, then we can use that to distinguish $f_s$ from a random function.
 The adversary $A$ gets some black box $F(\cdot)$ and will use it while simulating internally all the parties--- Alice, Bob and Mallorty (using $M$) in the $T+1$ interactions of the `PRF-Login` protocol. Whenever any of the parties needs to evalueate $f_s(i)$, $A$ will forward $i$ to its black box $F(\cdot)$ and return the value $F(i)$. It will then output $1$ if an only if $M$ succeeds in impersonation in this internal simulation. The argument above showed that if $F(\cdot)$ is a truly random function then the probability $A$ outputs $1$ is at most $2^{-\ell}+negligible$ (and so in particular less than $2^{-\ell}+\epsilon/2$ while under our assumptions, if $F(\cdot)$ is the function $i \mapsto f_s(i)$ for some fixed and random $s$, then this probability is at least $2^{-\ell}+\epsilon$. Thus $A$ will distinguish between the two cases with bias at least $\epsilon/2$.  We now turn to the formal proof:
 >
-__Claim 1:__ Let __PRF-Login*__ be the hypothetical variant of the protocol `PRF-Login` where Alice and Bob share a completely random function $H:[2^n]\rightarrow\{0,1\}$. Then, no matter what Mallory does, the probability she can impersonate Alice after observing $T$ interactions is at most $2^{-\ell}+(8\ell T)/2^n$.
+__Claim 1:__ Let `PRF-Login*` be the hypothetical variant of the protocol `PRF-Login` where Alice and Bob share a completely random function $H:[2^n]\rightarrow\{0,1\}$. Then, no matter what Mallory does, the probability she can impersonate Alice after observing $T$ interactions is at most $2^{-\ell}+(8\ell T)/2^n$.
 >
-(If  __PRF-Login*__ is easier to prove secure than  __PRF-Login__, you might wonder why we bother with __PRF-Login__ in the first place and not simply use __PRF-Login*__. The reason is that specifying a random function $H$ requires specifying $2^n$ bits, and so that would be a _huge_ shared key. So __PRF-Login*__ is not a protocol we can actually run but rather a hypothetical "mental experiment" that helps us in arguing about the security of __PRF-Login__.)
+(If  `PRF-Login*` is easier to prove secure than  `PRF-Login`, you might wonder why we bother with `PRF-Login` in the first place and not simply use `PRF-Login*`. The reason is that specifying a random function $H$ requires specifying $2^n$ bits, and so that would be a _huge_ shared key. So `PRF-Login*` is not a protocol we can actually run but rather a hypothetical "mental experiment" that helps us in arguing about the security of `PRF-Login`.)
 >
 __Proof of Claim 1:__ Let $i_1,\ldots,i_{2T}$ be the nonces chosen by Bob and recieved by Alice in the first $T$ iterations.
 That is, $i_1$ is the nonce chosen by Bob in the first iteration while $i_2$ is the nonce that Alice received in the first iteration (if Mallory doesn't modify it then $i_1=i_2$), similarly $i_3$ is the nonce chosen by Bob in the second iteration while $i_4$ is the nonce recieved by Alice and so on and so forth. Let $i$ be the nonce chosen in the $T+1^{st}$ iteration in which Mallory tries to impersonate Alice.
@@ -128,7 +128,7 @@ Since $H(\cdot)$ is a completely random function, the values $H(i),\ldots,H(i+\e
 >
 The proof of Claim 1 is not hard, but it is somewhat subtle, and it's good to go over it again and make sure you are sure you understand it.
 >
-Now that we have Claim 1, the proof of the theorem follows as outlined above. We build an adversary $A$ to the pseudorandom function generator from $M$ by having $A$ simulate "inside its belly" all the parties Alice, Bob and Mallory and output $1$ if Mallory succeeds in impersonating. Since we assumed $\epsilon$ is non-negligible and $T$ is polynomial, we can assume that $(8\ell T)/2^n < \epsilon/2$ and hence by Claim 1, if the black box is a random function then we are in the __PRF-Login*__ setting and Mallory's success will be at most $2^{-\ell}+\epsilon/2$ while if the black box is $f_s(\cdot)$ then we get exactly the same setting as __PRF-Login__ and hence under our assumption the success will be at least $2^{-\ell}+\epsilon$. We conclude that the difference in probability of $A$ outputting one between the random and pseudorandom case is at least $\epsilon/2$ thus contradicting the security of the pseudorandom function generator.
+Now that we have Claim 1, the proof of the theorem follows as outlined above. We build an adversary $A$ to the pseudorandom function generator from $M$ by having $A$ simulate "inside its belly" all the parties Alice, Bob and Mallory and output $1$ if Mallory succeeds in impersonating. Since we assumed $\epsilon$ is non-negligible and $T$ is polynomial, we can assume that $(8\ell T)/2^n < \epsilon/2$ and hence by Claim 1, if the black box is a random function then we are in the `PRF-Login*` setting and Mallory's success will be at most $2^{-\ell}+\epsilon/2$ while if the black box is $f_s(\cdot)$ then we get exactly the same setting as `PRF-Login` and hence under our assumption the success will be at least $2^{-\ell}+\epsilon$. We conclude that the difference in probability of $A$ outputting one between the random and pseudorandom case is at least $\epsilon/2$ thus contradicting the security of the pseudorandom function generator.
 
 > # {.remark title="Increasing output length of PRFs" #outputincprfrem}
 In the course of constructing this one-time-password scheme from a PRF, we have actually proven a general statement that

@@ -39,7 +39,7 @@ harnessing it to build secure systems. The basic object we want is the
 following:
 
 > # {.definition title="Pseudorandom generator" #prgdef}
-An efficiently computable function $G:{\{0,1\}}^n\rightarrow{\{0,1\}}^\ell$  is a $(T,\epsilon)$ *pseudorandom generator* if  $G(U_n) \approx_{T,\epsilon} U_\ell$ where $U_t$ denotes the uniform
+A function $G:{\{0,1\}}^n\rightarrow{\{0,1\}}^\ell$  is a $(T,\epsilon)$ *pseudorandom generator* if  $G(U_n) \approx_{T,\epsilon} U_\ell$ where $U_t$ denotes the uniform
 distribution on ${\{0,1\}}^t$.
 >
 We say that $G:\{0,1\}^* \rightarrow \{0,1\}^*$ is a _pseudorandom generator_ with length function $\ell:\N \rightarrow \N$ (where $\ell(n)>n$) if $G$ is computable in polynomial time, and there are functions $T(n)>n^{\omega(1)}$ and $\epsilon(n)<n^{-\omega(1)}$ such that
@@ -47,8 +47,8 @@ $$G(U_n) \approx_{T(n),\epsilon(n)} U_{\ell(n)} \label{prgdefeq}$$
 for every $n\in \N$
 
 > # { .pause }
-This definition (as is often the case in cryptography) is a bit long, so you want to take your time parsing it. In particular you should verify that you understand why the condition [prgdefeq](){.eqref} is the same as saying that for every polynomial $p:\N \rightarrow \N$, if $n$ is sufficiently large, then for every circuit $D$ of at most $T$ gates
-$$\left| \Pr[D(G(U_n))=1] - \Pr[ D(U_\ell)=1] \right| < \tfrac{1}{p(n)}$$
+This definition (as is often the case in cryptography) is a bit long, so you want to take your time parsing it. In particular you should verify that you understand why the condition [prgdefeq](){.eqref} is the same as saying that for every polynomial $p:\N \rightarrow \N$, if $n$ is sufficiently large, then for every circuit $D$ of at most $T$ gates (or equivalently, for every straightline program $D$ of at most $T$ lines):
+$$\left| \Pr[D(G(U_n))=1] - \Pr[ D(U_\ell)=1] \right| < \tfrac{1}{p(n)} \label{prgdefeq}$$
 
 
 Note that the requirement that $\ell>n$ is crucial to make this notion
@@ -80,7 +80,7 @@ the existence of pseudorandom generators. Nevertheless they are widely believed
 to exist and hence we make the following conjecture:
 
 >**Conjecture (The PRG conjecture):** For every $n$, there exists a pseudorandom
-generator $G$ mapping $n$ bits to $n+1$ bits.^[The name "The PRG conjecture" is non-standard. In the literature this is known as the conjecture of existence of pseudorandom generators. This is a weaker form of "The Optimal PRG Conjecture" presented in my intro to theoretical CS lecture notes since the PRF conjecture only posits the existence of pseudorandom generators with arbitrary polynomial blowup, as opposed to an exponential blowup posited in the optimal PRF conjecture.]
+generator $G$ mapping $n$ bits to $n+1$ bits.^[The name "The PRG conjecture" is non-standard. In the literature this is known as the conjecture of existence of pseudorandom generators. This is a weaker form of "The Optimal PRG Conjecture" presented in my [intro to theoretical CS lecture notes](https://goo.gl/G7bU4M) since the PRG conjecture only posits the existence of pseudorandom generators with arbitrary polynomial blowup, as opposed to an exponential blowup posited in the optimal PRF conjecture.]
 
 As was the case for the cipher conjecture, and any other conjecture, there are two natural questions
 regarding the PRG conjecture: why should we believe it and why should we care. Fortunately, the answer to the first question is simple:
@@ -100,7 +100,8 @@ mapping $n$ bits to $t(n)$ bits.
 > # {.proof data-ref="lengthextendprgthm"}
 The proof of this theorem is very similar to the length extension theorem for
 ciphers,  and in fact this theorem can be used to give an alternative proof for the former theorem.  
-The construction is illustrated in [lengthextendprgfig](){.ref}. >
+>
+The construction is illustrated in [lengthextendprgfig](){.ref}.
 We are given a pseudorandom generator $G'$ mapping $n$ bits into $n+1$ bits and need to construct a pseudorandom generator $G$ mapping $n$ bits to $t=t(n)$
 bits for some polynomial $t(\cdot)$. The idea is that we maintain a state of $n$ bits, which are originally our input seed[^seed] $s_0$, and at the $i^{th}$ step we use $G'$
 to map $s_{i-1}$ to the $n+1$-long bit string $(s_i,y_i)$, output $y_i$ and keep $s_i$ as our new state.
@@ -296,8 +297,8 @@ of James Reed.
 The above means that it is a bad idea to use a linear checksum as a
 pseudorandom generator in a cryptographic application, and in fact in any
 adversarial setting (e.g., one shouldn't hope that an attacker would not be able
-to figure out the algorithm that computes the control digit of a credit card
-number[^10]). However, that does not mean that there are no legitimate cases
+to reverse engineer the algorithm[^luhn] that computes the control digit of a credit card
+number). However, that does not mean that there are no legitimate cases
 where linear generators can be use
 . In a setting where the application is not adversarial and you have an ability to *test* if the generator is actually successful, it
 might be reasonable to use such insecure non-cryptographic generators.
@@ -307,7 +308,7 @@ fact, the real bottleneck in using cryptographic pseudorandom generators is
 often the generation of *entropy* for their seed, as discussed in the previous
 lecture, and not their actual running time.)
 
-[^10]: That number is obtained by applying Luhn’s algorithm which applies a simple map to each digit of the card and then sums them up modulo 10.
+[^luhn]: That number is obtained by applying [Luhn’s algorithm](https://goo.gl/KcH9xQ) which applies a simple map to each digit of the card and then sums them up modulo 10.
 
 
 ### From insecurity to security
@@ -333,8 +334,7 @@ Many cryptographic constructions can be thought of as trying to transform an eas
 
 The **discrete logarithm problem** is the discrete version of the continuous real logarithm problem.
 The **learning with errors problem** can be thought of as the noisy version of the linear equations problem (or the discrete version of least squares minimization).
-When constructing **block ciphers** we often have "mixing" transformation to ensure that the dependency structure between different bits is _global_, S-boxes to ensure non-linearity, and
-many _rounds_ to ensure deep structure and large algebraic degree.
+When constructing **block ciphers** we often have _mixing_ transformation to ensure that the dependency structure between different bits is _global_, _S-boxes_ to ensure _non-linearity_, and many _rounds_ to ensure _deep_ structure and _large algebraic degree_.
 
 This also works in the other direction.
 Many algorithmic and machine learning advances work by embedding a discrete problem in a continuous convex one.
@@ -365,23 +365,31 @@ Here is an extremely simple generator that is yet still secure[^ss_sec] as far a
 [^ss_sec]: Actually modern computers will be able to break this generator via brute force, but if the length and number of the constants were doubled (or perhaps  quadrupled) this should be sufficiently secure, though longer to write down.
 
 ```python
+# seed is a list of 40 zero/one  values
+# output is a 48 bit integer
 def subset_sum_gen(seed):
   modulo = 0x1000000
-  constants =   [0x3D6EA1, 0x1E2795, 0xC802C6, 0xBF742A, 0x45FF31,  
-                 0x53A9D4, 0x927F9F, 0x70E09D, 0x56F00A, 0x78B494,  
-                 0x9122E7, 0xAFB10C, 0x18C2C8, 0x8FF050, 0x0239A3,  
-                 0x02E4E0, 0x779B76, 0x1C4FC2, 0x7C5150, 0x81E05E,  
-                 0x154647, 0xB80E68, 0xA042E5, 0xE20269, 0xD3B7F3,  
-                 0xCC5FB9, 0x0BFC55, 0x847AE0, 0x8CFDF8, 0xE304B7,  
-                 0x869ACE, 0xB4CDAB, 0xC8E31F, 0x00EDC7, 0xC50541,  
-                 0x0D6DDD, 0x695A2F, 0xA81062, 0x0123CA, 0xC6C5C3, ]
+  constants = [  
+     0x3D6EA1, 0x1E2795, 0xC802C6, 0xBF742A, 0x45FF31,  
+     0x53A9D4, 0x927F9F, 0x70E09D, 0x56F00A, 0x78B494,  
+     0x9122E7, 0xAFB10C, 0x18C2C8, 0x8FF050, 0x0239A3,  
+     0x02E4E0, 0x779B76, 0x1C4FC2, 0x7C5150, 0x81E05E,  
+     0x154647, 0xB80E68, 0xA042E5, 0xE20269, 0xD3B7F3,  
+     0xCC5FB9, 0x0BFC55, 0x847AE0, 0x8CFDF8, 0xE304B7,
+     0x869ACE, 0xB4CDAB, 0xC8E31F, 0x00EDC7, 0xC50541,  
+     0x0D6DDD, 0x695A2F, 0xA81062, 0x0123CA, 0xC6C5C3 ]
 
-  return reduce(lambda x,y: (x+y) % modulo, map(lambda a,b: a*b, constants,seed))
+  # return the modular sum of the constants
+  # corresponding to ones in the seed
+  return reduce(lambda x,y: (x+y) % modulo,
+                map(lambda a,b: a*b, constants,seed))
 ```
 
-That is, the seed to this generator is an array `seed` of 40 bits, with 40 hardwired constants each 48 bits long (these constants were generated at random, but are fixed once and for all, and are not kept secret and hence are not
-considered part of the secret random seed), and the output is simply
-$\sum_{i=1}^{40} \texttt{seed}[i]\texttt{constants}[i] \pmod{2^{48}}$ and hence expands the $40$ bit input into a $48$ bit output.
+The seed to this generator is an array `seed` of 40 bits, with 40 hardwired constants each 48 bits long (these constants were generated at random, but are fixed once and for all, and are not kept secret and hence are not
+considered part of the secret random seed).
+The output is simply
+$$\sum_{i=1}^{40} \texttt{seed}[i]\texttt{constants}[i] \pmod{2^{48}}$$
+and hence expands the $40$ bit input into a $48$ bit output.
 
 
 This generator is loosely motivated by the "subset sum" computational problem, which is NP hard. However, since NP hardness is a _worst case_ notion of complexity, it does not imply security for pseudorandom generators, which requires hardness of an _average case_ variant.
@@ -390,10 +398,14 @@ To get some intuition for its security, we can work out why (given that it seems
 > # { .pause }
 This is an excellent point for you to stop and try to answer this question on your own.
 
-We can certainly use Gaussian elimination to compute, given the known constants $c_1,\ldots,c_{20} \in \Z_{2^{48}}$ and the output $y \in \Z_{2^{48}}$ the linear subspace $V$ of all vectors $(s_1,\ldots,s_{40}) \in (\Z_{2^{48}})^40$ such that $\sum s_i c_i = y \pmod 2^{48}$.
-However, regardless of whether $y$ was generated at random from $\Z_{2^{48}}$, or $y$ was generated as an output of the generator, the subspace $V$ will always have the same dimension (specifically, since it is formed by a single linear equation over $40$ variables, the dimension will be $39$.)
+Given the known constants and known output,  figuring out the set of potential seeds can be thought of as solving a _single_ equation in 40 variables.
+However, this equation is clearly overdetermined, and will have a solution regardless of whether the observed value is indeed an output of the generator, or it is chosen uniformly at random.
+
+More concretely,  we can use linear-eqaution solving to  compute (given the known constants $c_1,\ldots,c_{40} \in \Z_{2^{48}}$ and the output $y \in \Z_{2^{48}}$) the linear subspace $V$ of all vectors $(s_1,\ldots,s_{40}) \in (\Z_{2^{48}})^{40}$ such that $\sum s_i c_i = y \pmod{2^{48}}$.
+But, regardless of whether $y$ was generated at random from $\Z_{2^{48}}$, or $y$ was generated as an output of the generator, the subspace $V$ will always have the same dimension (specifically, since it is formed by a single linear equation over $40$ variables, the dimension will be $39$.)
 To break the generator we seem to need to be able to decide whether this linear subspace $V \subseteq (\Z_{2^{48}})^{40}$ contains a _Boolean vector_ (i.e., a vector $s\in \{0,1\}^n$).
 Since the condition that a vector is Boolean is not defined by linear equations, this is not a task we know to do using Gaussian elimination.
+Generally, the task of finding a vector with _small_ coefficients inside a discrete linear subspace is closely related to a classical problem known as finding the [shortest vector in a lattice](https://goo.gl/WRNT9S). (See also the [short integer solution (SIS) problem](https://goo.gl/KwZWhV).)
 
 
 
@@ -445,36 +457,36 @@ The above discussion might be rather abstract at this point, but would become cl
 
 
 > # {.proof data-ref="prgexist"}
-Let $\epsilon,T,\ell,m$ be as in the lemma's statement. We need to show that there exists a function $G:\{0,1\}^\ell \rightarrow \{0,1\}^m$ that "fools" every $T$ line program $P$ in the sense of [eq:prg](){.eqref}.
+Let $\epsilon,T,\ell,m$ be as in the lemma's statement. We need to show that there exists a function $G:\{0,1\}^\ell \rightarrow \{0,1\}^m$ that "fools" every $T$ line program $P$ in the sense of [prgdefeq](){.eqref}.
 We will show that this follows from the following claim:
 >
-__Claim I:__ For every fixed NAND program / Boolean circuit $P$, if we pick $G:\{0,1\}^\ell \rightarrow \{0,1\}^m$ _at random_ then the probability that [eq:prg](){.eqref} is violated is at most $2^{-T^2}$.
+__Claim I:__ For every fixed NAND program / Boolean circuit $P$, if we pick $G:\{0,1\}^\ell \rightarrow \{0,1\}^m$ _at random_ then the probability that [prgdefeq](){.eqref} is violated is at most $2^{-T^2}$.
 >
 Before proving Claim I, let us see why it implies [prgexist](){.ref}.
 We can identify a function $G:\{0,1\}^\ell \rightarrow \{0,1\}^m$ with its "truth table" or simply the list of evaluations on all its possible $2^\ell$ inputs. Since each output is an $m$ bit string,
 we can also think of $G$ as a string in $\{0,1\}^{m\cdot 2^\ell}$. We define $\mathcal{G}^m_\ell$ to be the set of all functions from $\{0,1\}^\ell$ to $\{0,1\}^\ell$. As discussed above we can identify $\mathcal{F}_\ell^m$ with $\{0,1\}^{m\cdot 2^\ell}$ and choosing a random function $G \sim \mathcal{F}_\ell^m$ corresponds to choosing a random $m\cdot 2^\ell$-long bit string.
 >
-For every NAND program / Boolean circuit  $P$ let $B_P$ be the event that, if we choose $G$ at random from $\mathcal{F}_\ell^m$ then  [eq:prg](){.eqref} is violated with respect to the program $P$.
-It is important to understand what is the sample space that the event $B_P$ is defined over, namely this event depends on the choice of $G$ and so $B_P$ is a subset of $\mathcal{F}_\ell^m$. An equivalent way to define the  event $B_P$ is that it is the subset of  all functions  mapping $\{0,1\}^\ell$ to $\{0,1\}^m$  that violate [eq:prg](){.eqref}, or in other words:
+For every NAND program / Boolean circuit  $P$ let $B_P$ be the event that, if we choose $G$ at random from $\mathcal{F}_\ell^m$ then  [prgdefeq](){.eqref} is violated with respect to the program $P$.
+It is important to understand what is the sample space that the event $B_P$ is defined over, namely this event depends on the choice of $G$ and so $B_P$ is a subset of $\mathcal{F}_\ell^m$. An equivalent way to define the  event $B_P$ is that it is the subset of  all functions  mapping $\{0,1\}^\ell$ to $\{0,1\}^m$  that violate [prgdefeq](){.eqref}, or in other words:
 $$
 B_P = \left\{ G \in \mathcal{F}_\ell^m  \; \big| \; \left| \tfrac{1}{2^\ell}\sum_{s\in \{0,1\}^\ell} P(G(s)) - \tfrac{1}{2^m}\sum_{r \in \{0,1\}^m}P(r)  \right| > \epsilon  \right\} \;\;. \label{eq:eventdefine}
 $$
-(We've replaced here the probability statements in [eq:prg](){.eqref} with the equivalent sums so as to reduce confusion as to what is the sample space that $B_P$ is defined over.)
+(We've replaced here the probability statements in [prgdefeq](){.eqref} with the equivalent sums so as to reduce confusion as to what is the sample space that $B_P$ is defined over.)
 >
 To understand this proof it is crucial that you pause here and see how  the definition of $B_P$ above corresponds to [eq:eventdefine](){.eqref}. This may well take re-reading the above text once or twice, but it is a good exercise at parsing probabilistic statements and learning how to identify the _sample space_ that these statements correspond to.
 >
 Now, the number of programs of size $T$ (or circuits of size $T$) is at most $2^{O(T\log T)}$.
 Since $T\log T = o(T^2$)  this means that if  Claim I  is true, then by the union bound it holds that the probability of the union of $B_P$ over _all_ NAND programs of at most $T$ lines is at most $2^{O(T\log T)}2^{-T^2} < 0.1$ for sufficiently large $T$.
 What is important for us about the number $0.1$ is that it is smaller than $1$.
-In particular this means that there _exists_ a single $G^* \in \mathcal{F}_\ell^m$ such that $G^*$ _does not_ violate [eq:prg](){.eqref} with respect to any NAND program of at most $T$ lines, but that precisely means that $G^*$ is a $(T,\epsilon)$ pseudorandom generator.
+In particular this means that there _exists_ a single $G^* \in \mathcal{F}_\ell^m$ such that $G^*$ _does not_ violate [prgdefeq](){.eqref} with respect to any NAND program of at most $T$ lines, but that precisely means that $G^*$ is a $(T,\epsilon)$ pseudorandom generator.
 >
 Hence  conclude the proof of [prgexist](){.ref}, it suffices to prove Claim I.
 Choosing a random $G: \{0,1\}^\ell \rightarrow \{0,1\}^m$ amounts to choosing $L=2^\ell$ random strings $y_0,\ldots,y_{L-1} \in \{0,1\}^m$ and letting $G(x)=y_x$ (identifying $\{0,1\}^\ell$ and $[L]$ via the binary representation).
 Hence the claim amounts to showing that for every fixed function $P:\{0,1\}^m \rightarrow \{0,1\}$,
 if $L >  2^{C (\log T + \log \epsilon)}$ (which by setting $C>4$, we can ensure is larger than $10 T^2/\epsilon^2$) then the probability that
 $$
-\left| \tfrac{1}{L}\sum_{i=0}^{L-1} P(y_s)  -  \Pr_{s \sim \{0,1\}^m}[P(s)=1] \right| > \epsilon \label{eq:prgchernoff}
+\left| \tfrac{1}{L}\sum_{i=0}^{L-1} P(y_s)  -  \Pr_{s \sim \{0,1\}^m}[P(s)=1] \right| > \epsilon \label{prgdefeqchernoff}
 $$
 is at most $2^{-T^2}$.
-[{eq:prgchernoff}](){.eqref} follows directly from the Chernoff bound.
+[{prgdefeqchernoff}](){.eqref} follows directly from the Chernoff bound.
 If we let for every $i\in  [L]$  the random variable $X_i$ denote $P(y_i)$, then since $y_0,\ldots,y_{L-1}$ is chosen independently at random, these are independently and identically distributed random variables with mean $\E_{y \sim \{0,1\}^m}[P(y)]= \Pr_{y\sim \{0,1\}^m}[ P(y)=1]$ and hence the probability that they deviate from their expectation by $\epsilon$ is at most $2\cdot 2^{-\epsilon^2 L/2}$.
