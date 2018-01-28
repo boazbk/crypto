@@ -85,7 +85,7 @@ generator $G$ mapping $n$ bits to $n+1$ bits.^[The name "The PRG conjecture" is 
 As was the case for the cipher conjecture, and any other conjecture, there are two natural questions
 regarding the PRG conjecture: why should we believe it and why should we care. Fortunately, the answer to the first question is simple:
 it is known that the cipher conjecture _implies_ the PRG conjecture, and hence if we believe the former we should believe the latter.
-(The proof is highly non trivial and we may not get to see it in this course.)
+(The proof is highly non-trivial and we may not get to see it in this course.)
 As for the second question, we will see that the PRG conjecture implies a great number of useful cryptographic tools, including the cipher conjecture (i.e., the two conjectures are in fact equivalent).
 We start by showing that once we can get to an output that is one bit longer than the input, we can in fact obtain any number of bits.
 
@@ -211,9 +211,9 @@ The following is a cute application of pseudorandom generators. Alice and Bob wa
 * Alice then picks a random $b\leftarrow_R\{0,1\}$ and sends it to Bob. \
 * Bob  reveals what he sent in the previous stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$.
 >
-It can be shown that (assuming the protocol is completed) the output is a random coin, neither Alice or Bob can control or predict with more than negligible advantage over hald. (Trying to formalize this and prove it is an excellent exercise.)
+It can be shown that (assuming the protocol is completed) the output is a random coin, neither Alice or Bob can control or predict with more than negligible advantage over half. (Trying to formalize this and prove it is an excellent exercise.)
 
-## How do pseudorandom generators actually look like?
+## What do pseudorandom generators actually look like?
 
 
 
@@ -258,7 +258,7 @@ LFSR's have several good properties- if the function $f(\cdot)$ is chosen proper
 They also have the property that every individual bit is equal to $0$ or $1$ with probability exactly half  (the counter generator also shares this property).
 
 A more interesting property is that  (if the function is selected properly) for every two coordinates are independent from one another.
-That is, there is some super-polynomial function $t(n)$ (in fact $t(n)$ can be exponential in $n$) such that if $\ell \neq \ell' \in \{0,\ldots, t(n) \}$, then if we look at the two random variables corresponding to the $\ell$-th and $\ell'$-th output of the generator (where randomness is the initial state) then they are distributed like two independent random coins. (This is non trivial to show, and depends on the choice of $f$ - it is a challenging but useful exercise to work this out.)
+That is, there is some super-polynomial function $t(n)$ (in fact $t(n)$ can be exponential in $n$) such that if $\ell \neq \ell' \in \{0,\ldots, t(n) \}$, then if we look at the two random variables corresponding to the $\ell$-th and $\ell'$-th output of the generator (where randomness is the initial state) then they are distributed like two independent random coins. (This is non-trivial to show, and depends on the choice of $f$ - it is a challenging but useful exercise to work this out.)
 The counter generator fails badly at this condition:  the least significant bits between two consecutive states always flip.
 
 There is a more general notion of a *linear generator* where the new state can be any invertible linear transformation of the previous state. That is, we interpret the state $s$ as an element of $\Z_q^t$ for some integers $q,t$,[^Zq] and let $s’=F(s)$ and the output $b=G(s)$ where $F:\Z_q^t\rightarrow\Z_q^t$  and $G:\Z_q^t\rightarrow\Z_q$ are invertible linear transformations (modulo $q$).
@@ -268,7 +268,7 @@ This includes as a special case the *linear congruential generator* where $t=1$ 
 
 
 All these generators are unfortunately insecure due to the great bane of
-cryptography- the *Gaussian Elimination algorithm* which students typically encounter in any linear algebra class.^[Despite the name, the algorithm goes at least as far back as the Chinese *Jiuzhang Suanshu* manuscript, circa 150 B.C.]
+cryptography- the *Gaussian elimination algorithm* which students typically encounter in any linear algebra class.^[Despite the name, the algorithm goes at least as far back as the Chinese *Jiuzhang Suanshu* manuscript, circa 150 B.C.]
 
 > # {.theorem title="The unfortunate theorem for cryptography" #gaussianelimthm}
 There is a polynomial time algorithm to solve
@@ -299,7 +299,7 @@ pseudorandom generator in a cryptographic application, and in fact in any
 adversarial setting (e.g., one shouldn't hope that an attacker would not be able
 to reverse engineer the algorithm[^luhn] that computes the control digit of a credit card
 number). However, that does not mean that there are no legitimate cases
-where linear generators can be use
+where linear generators can be used
 . In a setting where the application is not adversarial and you have an ability to *test* if the generator is actually successful, it
 might be reasonable to use such insecure non-cryptographic generators.
 They tend to be more efficient (though often not by much) and hence are often the default
