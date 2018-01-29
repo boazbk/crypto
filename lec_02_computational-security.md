@@ -552,7 +552,8 @@ long messages with an $n$-bit long key and we need to encrypt a $t$-bit long
 message $m=(m_1,\ldots,m_t) \in {\{0,1\}}^t$. Our idea is simple (at least in
 hindsight). Let $k_0 {\leftarrow_{\tiny R}}{\{0,1\}}^n$ be our key (which is
 chosen at random). To encrypt $m$ using $k_0$, the encryption function will
-choose $t$ random strings $k_1,\ldots, k_t {\leftarrow_{\tiny R}}{\{0,1\}}^n$.[^6] We will then encrypt the $n+1$-bit long message $(k_1,m_1)$
+choose $t$ random strings $k_1,\ldots, k_t {\leftarrow_{\tiny R}}{\{0,1\}}^n$.
+We will then encrypt the $n+1$-bit long message $(k_1,m_1)$
 with the key $k_0$ to obtain the ciphertext $c_1$, then encrypt the $n+1$-bit
 long message $(k_2,m_2)$ with the key $k_1$ to obtain the ciphertext $c_2$, and
 so on and so forth until we encrypt the message $(k_t,m_t)$ with the key
