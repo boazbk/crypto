@@ -71,7 +71,7 @@ Depending on time, I plan to cover the following notions:
         *secure* .
 
     2.  **Perfect security and its limitations:** Showing the possibility (and
-        the limitations) of encryptions that are perfectly secure regardless the
+        the limitations) of encryptions that are perfectly secure regardless of the
         attacker's computational resources.
 
     3.  **Computational security:** Bypassing the above limitations by
