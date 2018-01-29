@@ -127,7 +127,7 @@ remember it, you might want to stop reading at this point and try to come up
 with it on your own before continuing.) The first (and often most important)
 step is to understand what the statement means. Saying that the number of primes
 is infinite means that it is not finite. More precisely, this means that for
-every natural number $k$, there are not than $k$ primes.
+every natural number $k$, there are more than $k$ primes.
 
 Now that we understand what we need to prove, let us try to convince ourselves
 of this fact. At first, it might seem obvious--- since there are infinitely many
@@ -149,8 +149,8 @@ this observation already suggests a guess for what would be a number that is
 divisible by neither $p$ nor $q$, namely $pq+1$. Indeed, the remainder of
 $n=pq+1$ when dividing by either $p$ or $q$ would be $1$ (which in particular is
 not zero). This observation generalizes and we can set $n=pqr+1$ to be a number
-that is divisable neither $p,q$ nor $r$, and more generally $n=p_1\cdots, p_k
-+1$ is not divisable by $p_1,\ldots,p_k$.
+that is divisible neither by $p,q$ nor $r$, and more generally $n=p_1\cdots, p_k
++1$ is not divisible by $p_1,\ldots,p_k$.
 
 Now we have convinced ourselves of the statement and it is time to think of how
 to write this down in the clearest way. One issue that arises is that we want to
