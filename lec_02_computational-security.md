@@ -523,13 +523,23 @@ $$
 for random $k_1,\ldots,k_t$ chosen independently from $U_n$ which is exactly the
 condition that $(E,D)$ is computationally secure.
 
-We can now prove  the full length extension theorem:
+We can now prove  the full length extension theorem. Before doing so, we will need to generalize the notion of an encryption scheme to allow a _randomized encryption scheme_.
+That is, we will consider encryption schemes where the encryption algorithm can "toss coins" in its computation.
+There is a crucial difference between key material and such "as hoc" randomness.
+Keys need to be not only chosen at random, but also shared in advance between the sender and receiver, and stored securely throughout their lifetime.
+The "coin tosses" used by a randomized encryption scheme are generated "on the fly" and are not known to the receiver, nor do they need to be stored long term by the sender.
+So, allowing such randomized encryption does not make a difference for most applications of encryption schemes.
+In fact, as we will see later in this course, randomized encryption is _necessary_ for security against more sophisticated attackes such as chosen plaintext and chosen ciphertext attacks, as well as for obtaining secure _public key_ encryptions.
+We will use the notation $E_k(m;r)$ to denote the output of the encryption algorithm on key $k$, message $m$ and using internal randomness $r$.
+We often supress the notation for the randomness, and hence use $E_k(m)$ to denote the random variable obtained by sampling a random $r$ and outputting $E_k(m;r)$.
+
+We can now show that given an encryption scheme with messages one bit longer than the key, we can obtain a (randomized) encryption scheme with arbitrarily long messages:
 
 
 > # {.theorem title="Length extension of ciphers" #lengthextendthm}
 Suppose that there exists a
 computationally secure encryption scheme $(E',D')$ with key length $n$ and
-message length $n+1$. Then for every polynomial $t(n)$ there exists a
+message length $n+1$. Then for every polynomial $t(n)$ there exists a (randomized)
 computationally secure encryption scheme $(E,D)$ with key length $n$ and message
 length $t(n)$.
 
@@ -546,7 +556,8 @@ choose $t$ random strings $k_1,\ldots, k_t {\leftarrow_{\tiny R}}{\{0,1\}}^n$.[^
 with the key $k_0$ to obtain the ciphertext $c_1$, then encrypt the $n+1$-bit
 long message $(k_2,m_2)$ with the key $k_1$ to obtain the ciphertext $c_2$, and
 so on and so forth until we encrypt the message $(k_t,m_t)$ with the key
-$k_{t-1}$. We output $(c_1,\ldots,c_t)$ as the final ciphertext.[^7]
+$k_{t-1}$.^[The keys $k_1,\ldots,k_t$ are sometimes known as _ephemeral keys_ in the crypto literature, since they are created only for the purposes of this particular interaction.]
+We output $(c_1,\ldots,c_t)$ as the final ciphertext.[^7]
 >
 To decrypt $(c_1,\ldots,c_t)$ using the key $k_0$, first decrypt $c_1$ to learn
 $(k_1,m_1)$, then use $k_1$ to decrypt $c_2$ to learn $(k_2,m_2)$, and so on
@@ -573,12 +584,20 @@ that is chosen *independently* of everything else including the key $k_i$. Then,
 for every message $m\in{\{0,1\}}^t$
 >
 $$
-E_{U_n}(m) \approx \hat{E}_{U_n}(m) \;.
+E_{U_n}(m) \approx \hat{E}_{U_n}(m)  \label{lengthextendclaimeq} \;.
 $$
 >
 Note that $\hat{E}$ is not a valid encryption scheme since it's not at all clear
 there is a decryption algorithm for it. It is just an hypothetical tool we use
-for the proof. Once we prove the claim then we are done since we know that for
+for the proof.
+Since both $E$ and $\hat{E}$ are randomized encryption schemes (with $E$ using $(t-1)n$ bits of randomness for the emphemeral keys $k_1,\ldots,k_{t-1}$ and $\hat{E}$ using $(2t-1)n$ bits of randomness for the ephemeral keys $k_1,\ldots,k_t,k'_2,\ldots,k'_t$), we can also write
+[lengthextendclaimeq](){.eqref} as
+$$
+E_{U_n}(m; U'_{tn}) \approx \hat{E}_{U_n}(m; U'_{(2t-1)n})  
+$$
+where we use $U'_\ell$ to denote a random variable that is chosen uniformly at random from $\{0,1\}^\ell$ and independently from the choice of $U_n$ (which is chosen uniformly at random from $\{0,1\}^n$).
+>
+Once we prove the claim then we are done since we know that for
 every pair of message $m,m'$, $E_{U_n}(m) \approx \hat{E}_{U_n}(m)$ and
 $E_{U_n}(m') \approx \hat{E}_{U_n}(m')$ but $\hat{E}_{U_n}(m) \approx
 \hat{E}_{U_n}(m')$ since $\hat{E}$ is essentially the same as the $t$-times
@@ -619,10 +638,6 @@ contradicting the security of $(E',D')$. This concludes the proof of the claim a
 
 
 
-[^6]: Note that this makes the encryption function *probabilistic* but it does
-not increase the size of the key; while we didn't explicitly say that the
-encryption can be probabilistic before, allowing this is absolutely fine and in
-fact will be *necessary* for some future security requirements.
 
 [^7]: The astute reader might note that the key $k_t$ is actually not used
 anywhere in the encryption nor decryption and hence we could encrypt $n$ more
