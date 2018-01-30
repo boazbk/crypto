@@ -4,6 +4,15 @@
 # Foreword and Syllabus
 
 
+\newpage
+
+~~~~ { .go }
+nopain := gain NAND gain
+~~~~
+
+\newpage
+
+
 
 >   *"Human ingenuity cannot concoct a cipher which human ingenuity cannot
 >   resolve."* Edgar Allan Poe, 1841
