@@ -119,7 +119,7 @@ We will build from $Eve$ an adversary $Eve'$ breaking the security of the pseudo
 >
 ![Building an adversary $Eve'$ for $G'$ from an adversary $Eve$ distinguishing $H_i$ and $H_{i+1}$. The boxes marked with questions marks are those that are random or pseudorandom  depending on  whether we are in $H_i$ or $H_{i+1}$. Everything inside the dashed red lines is simulated by $Eve'$ that gets as input the $n+1$-bit string $(s_{i+1},y_{i+1})$.](../figure/length-extension-prg-adversary.jpg){#reductionlengthextendfig}
 >
-On input an $n+1$ string $y$, $Eve'$ will interpret $y$ as $(s_{i+1},y_{i+1})$, choose $y_1,\ldots,y_i$ randomly and compute $y_{i+2},\ldots,y_t$ as in our pseudorandom generator's construction. $Eve'$ will then feed $(y_1,\ldots,y_t)$ to $Eve$ and output whatever $Eve$ does. Clearly, $Eve'$ is efficient if $Eve$ is. Moreover, one can see that if
+On input of string $y$ of length $n+1$, $Eve'$ will interpret $y$ as $(s_{i+1},y_{i+1})$, choose $y_1,\ldots,y_i$ randomly and compute $y_{i+2},\ldots,y_t$ as in our pseudorandom generator's construction. $Eve'$ will then feed $(y_1,\ldots,y_t)$ to $Eve$ and output whatever $Eve$ does. Clearly, $Eve'$ is efficient if $Eve$ is. Moreover, one can see that if
 $y$ was random then $Eve'$ is feeding $Eve$ with an input distributed according to $H_{i+1}$ while if $y$ was of the form $G(s)$ for a random $s$ then $Eve'$ will feed $Eve$
 with an input distributed according to $H_i$. Hence we get that $| \E[ Eve'(G'(U_n))] - \E[Eve'(U_{n+1})] | \geq \epsilon$ contradicting the security of $G'$.
 
@@ -211,7 +211,7 @@ The following is a cute application of pseudorandom generators. Alice and Bob wa
 * Alice then picks a random $b\leftarrow_R\{0,1\}$ and sends it to Bob. \
 * Bob  reveals what he sent in the previous stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$.
 >
-It can be shown that (assuming the protocol is completed) the output is a random coin, neither Alice or Bob can control or predict with more than negligible advantage over half. (Trying to formalize this and prove it is an excellent exercise.)
+It can be shown that (assuming the protocol is completed) the output is a random coin, which neither Alice or Bob can control or predict with more than negligible advantage over half. (Trying to formalize this and prove it is an excellent exercise.)
 
 ## What do pseudorandom generators actually look like?
 
@@ -257,7 +257,7 @@ LFSR's have several good properties- if the function $f(\cdot)$ is chosen proper
 (i.e., it can take an exponential number of steps until the state repeats itself), though that also holds for the simple "counter" generator we saw above.
 They also have the property that every individual bit is equal to $0$ or $1$ with probability exactly half  (the counter generator also shares this property).
 
-A more interesting property is that  (if the function is selected properly) for every two coordinates are independent from one another.
+A more interesting property is that  (if the function is selected properly) every two coordinates are independent from one another.
 That is, there is some super-polynomial function $t(n)$ (in fact $t(n)$ can be exponential in $n$) such that if $\ell \neq \ell' \in \{0,\ldots, t(n) \}$, then if we look at the two random variables corresponding to the $\ell$-th and $\ell'$-th output of the generator (where randomness is the initial state) then they are distributed like two independent random coins. (This is non-trivial to show, and depends on the choice of $f$ - it is a challenging but useful exercise to work this out.)
 The counter generator fails badly at this condition:  the least significant bits between two consecutive states always flip.
 
@@ -404,7 +404,7 @@ However, this equation is clearly overdetermined, and will have a solution regar
 More concretely,  we can use linear-eqaution solving to  compute (given the known constants $c_1,\ldots,c_{40} \in \Z_{2^{48}}$ and the output $y \in \Z_{2^{48}}$) the linear subspace $V$ of all vectors $(s_1,\ldots,s_{40}) \in (\Z_{2^{48}})^{40}$ such that $\sum s_i c_i = y \pmod{2^{48}}$.
 But, regardless of whether $y$ was generated at random from $\Z_{2^{48}}$, or $y$ was generated as an output of the generator, the subspace $V$ will always have the same dimension (specifically, since it is formed by a single linear equation over $40$ variables, the dimension will be $39$.)
 To break the generator we seem to need to be able to decide whether this linear subspace $V \subseteq (\Z_{2^{48}})^{40}$ contains a _Boolean vector_ (i.e., a vector $s\in \{0,1\}^n$).
-Since the condition that a vector is Boolean is not defined by linear equations, this is not a task we know to do using Gaussian elimination.
+Since the condition that a vector is Boolean is not defined by linear equations, we cannot use Gaussian elimination to break the generator.
 Generally, the task of finding a vector with _small_ coefficients inside a discrete linear subspace is closely related to a classical problem known as finding the [shortest vector in a lattice](https://goo.gl/WRNT9S). (See also the [short integer solution (SIS) problem](https://goo.gl/KwZWhV).)
 
 
