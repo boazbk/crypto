@@ -119,7 +119,7 @@ We will build from $Eve$ an adversary $Eve'$ breaking the security of the pseudo
 >
 ![Building an adversary $Eve'$ for $G'$ from an adversary $Eve$ distinguishing $H_i$ and $H_{i+1}$. The boxes marked with questions marks are those that are random or pseudorandom  depending on  whether we are in $H_i$ or $H_{i+1}$. Everything inside the dashed red lines is simulated by $Eve'$ that gets as input the $n+1$-bit string $(s_{i+1},y_{i+1})$.](../figure/length-extension-prg-adversary.jpg){#reductionlengthextendfig}
 >
-On input an $n+1$ string $y$, $Eve'$ will interpret $y$ as $(s_{i+1},y_{i+1})$, choose $y_1,\ldots,y_i$ randomly and compute $y_{i+2},\ldots,y_t$ as in our pseudorandom generator's construction. $Eve'$ will then feed $(y_1,\ldots,y_t)$ to $Eve$ and output whatever $Eve$ does. Clearly, $Eve'$ is efficient if $Eve$ is. Moreover, one can see that if
+On input of string $y$ of length $n+1$, $Eve'$ will interpret $y$ as $(s_{i+1},y_{i+1})$, choose $y_1,\ldots,y_i$ randomly and compute $y_{i+2},\ldots,y_t$ as in our pseudorandom generator's construction. $Eve'$ will then feed $(y_1,\ldots,y_t)$ to $Eve$ and output whatever $Eve$ does. Clearly, $Eve'$ is efficient if $Eve$ is. Moreover, one can see that if
 $y$ was random then $Eve'$ is feeding $Eve$ with an input distributed according to $H_{i+1}$ while if $y$ was of the form $G(s)$ for a random $s$ then $Eve'$ will feed $Eve$
 with an input distributed according to $H_i$. Hence we get that $| \E[ Eve'(G'(U_n))] - \E[Eve'(U_{n+1})] | \geq \epsilon$ contradicting the security of $G'$.
 
@@ -211,7 +211,7 @@ The following is a cute application of pseudorandom generators. Alice and Bob wa
 * Alice then picks a random $b\leftarrow_R\{0,1\}$ and sends it to Bob. \
 * Bob  reveals what he sent in the previous stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$.
 >
-It can be shown that (assuming the protocol is completed) the output is a random coin, neither Alice or Bob can control or predict with more than negligible advantage over half. (Trying to formalize this and prove it is an excellent exercise.)
+It can be shown that (assuming the protocol is completed) the output is a random coin, which neither Alice or Bob can control or predict with more than negligible advantage over half. (Trying to formalize this and prove it is an excellent exercise.)
 
 ## What do pseudorandom generators actually look like?
 
@@ -257,7 +257,7 @@ LFSR's have several good properties- if the function $f(\cdot)$ is chosen proper
 (i.e., it can take an exponential number of steps until the state repeats itself), though that also holds for the simple "counter" generator we saw above.
 They also have the property that every individual bit is equal to $0$ or $1$ with probability exactly half  (the counter generator also shares this property).
 
-A more interesting property is that  (if the function is selected properly) for every two coordinates are independent from one another.
+A more interesting property is that  (if the function is selected properly) every two coordinates are independent from one another.
 That is, there is some super-polynomial function $t(n)$ (in fact $t(n)$ can be exponential in $n$) such that if $\ell \neq \ell' \in \{0,\ldots, t(n) \}$, then if we look at the two random variables corresponding to the $\ell$-th and $\ell'$-th output of the generator (where randomness is the initial state) then they are distributed like two independent random coins. (This is non-trivial to show, and depends on the choice of $f$ - it is a challenging but useful exercise to work this out.)
 The counter generator fails badly at this condition:  the least significant bits between two consecutive states always flip.
 
