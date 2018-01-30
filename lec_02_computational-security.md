@@ -629,7 +629,7 @@ $t-j$ blocks of $H_j$ and $H_{j+1}$ would be identical and we can denote them by
 $\alpha$ and $\beta$ respectively and hence write $(*)$ as
 >
 $$
-\left| {\mathbb{E}}_{k_{j-1}}[ Eve'(\alpha,E_{k_{j-1}}(k_{j},m_j),\beta) - Eve'(\alpha,E_{k_{j-1}}(k'_j,m_j),\beta) ] \right| \geq \epsilon \;\;(**)
+\left| {\mathbb{E}}_{k_{j-1}}[ Eve'(\alpha,E'_{k_{j-1}}(k_{j},m_j),\beta) - Eve'(\alpha,E'_{k_{j-1}}(k'_j,m_j),\beta) ] \right| \geq \epsilon \;\;(**)
 $$
 >
 But now consider the adversary $Eve$ that is defined as $Eve(c) =
