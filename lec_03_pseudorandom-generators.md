@@ -404,7 +404,7 @@ However, this equation is clearly overdetermined, and will have a solution regar
 More concretely,  we can use linear-eqaution solving to  compute (given the known constants $c_1,\ldots,c_{40} \in \Z_{2^{48}}$ and the output $y \in \Z_{2^{48}}$) the linear subspace $V$ of all vectors $(s_1,\ldots,s_{40}) \in (\Z_{2^{48}})^{40}$ such that $\sum s_i c_i = y \pmod{2^{48}}$.
 But, regardless of whether $y$ was generated at random from $\Z_{2^{48}}$, or $y$ was generated as an output of the generator, the subspace $V$ will always have the same dimension (specifically, since it is formed by a single linear equation over $40$ variables, the dimension will be $39$.)
 To break the generator we seem to need to be able to decide whether this linear subspace $V \subseteq (\Z_{2^{48}})^{40}$ contains a _Boolean vector_ (i.e., a vector $s\in \{0,1\}^n$).
-Since the condition that a vector is Boolean is not defined by linear equations, this is not a task we know to do using Gaussian elimination.
+Since the condition that a vector is Boolean is not defined by linear equations, we cannot use Gaussian elimination to break the generator.
 Generally, the task of finding a vector with _small_ coefficients inside a discrete linear subspace is closely related to a classical problem known as finding the [shortest vector in a lattice](https://goo.gl/WRNT9S). (See also the [short integer solution (SIS) problem](https://goo.gl/KwZWhV).)
 
 
