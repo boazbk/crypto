@@ -220,9 +220,9 @@ careful on the exact way one chops the message into blocks and pads it to an int
 schemes that performed this incorrectly.
 
 
-## Aside: natural proofs^[This discussion has more to do with computational complexity than cryptography, and so can be safely skipped without harming understanding of future material in this course.]
+## Aside: natural proofs
 
-Pseudorandom functions play an important role in computational complexity, where they have been used as a way to give "barrier results" for proving results such as $\mathbf{P}\neq \mathbf{NP}$.
+Pseudorandom functions play an important role in computational complexity, where they have been used as a way to give "barrier results" for proving results such as $\mathbf{P}\neq \mathbf{NP}$.^[This discussion has more to do with computational complexity than cryptography, and so can be safely skipped without harming understanding of future material in this course.]
 Specifically, the [Natural Proofs](https://goo.gl/fiH3Pe) barrier for proving circuit lower bounds says that if strong enough pseudorandom functions exist, then certain types of arguments are bound to fail.
 These are arguments which come up with a property $EASY$ of a Boolean function $f:\{0,1\}^n \rightarrow \{0,1\}$ such that:
 
