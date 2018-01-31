@@ -6,7 +6,7 @@
 
 
 In the last lecture we saw the notion of _pseudorandom generators_, and introduced the __PRG conjecture__ that there exists a pseudorandom
-generator mapping $n$ bits to $n+1$ bits. We have seen the _length extension_ theorem that we given such a pseudorandom generator, we can
+generator mapping $n$ bits to $n+1$ bits. We have seen the _length extension_ theorem that when given such a pseudorandom generator, we can
 create a generator mapping $n$ bits to $m$ bits for an arbitrarily large polynomial $m(n)$. But can we extend it even further? Say, to $2^n$ bits?
 Does this question even make sense? And why would we want to do that? This is the topic of this lecture.
 
@@ -32,13 +32,13 @@ a polynomial number of queries.
 The notation $H \leftarrow_R \{0,1\}^n\rightarrow \{0,1\}$ means that $H$ is  a completely random function that maps every index $i$ to an independent and random different bit.
 That means that the notation $A^H$ in the equation above means that $A$ has access to a completely random black box that returns a random bit for any new query made.
 Finally one last note: below we will identify the set $[2^n] = \{0,\ldots,2^n-1\}$ with the set $\{0,1\}^n$ (there
-is a one to one mapping between those sets using the binary represnetation), and so we will treat $i$ interchangeably as a number in $[2^n]$ or a string in $\{0,1\}^n$.
+is a one to one mapping between those sets using the binary representation), and so we will treat $i$ interchangeably as a number in $[2^n]$ or a string in $\{0,1\}^n$.
 
 Informally, if $F$ is a pseudorandom function generator, then if we choose a random string $s$, and consider the function $f_s$ defined by $f_s(i) = F(s,i)$
 then no efficient algorithm can distinguish between black box access to $f_s(\cdot)$ and black box access to a completely random function (see [prfmodelfig](){.ref}).
 Thus often instead of talking about a pseudorandom function generator we will refer to a _pseudorandom function collection_ $\{ f_s \}$ where by that we mean that the map $F(s,i)=f_s(i)$ is a pseudorandom function generator.
 
-![In a pseudorandom function, an adversay cannot tell whether they are given a black box that computes the function $i \mapsto F(s,i)$ for some secret $s$ that was chosen at random and fixed, or whether the black box computes a completely random function that tosses a fresh random coin whenever it's given a new input $i$](../figure/pseudorandom_function.jpg){#prfmodelfig width="50%" }
+![In a pseudorandom function, an adversary cannot tell whether they are given a black box that computes the function $i \mapsto F(s,i)$ for some secret $s$ that was chosen at random and fixed, or whether the black box computes a completely random function that tosses a fresh random coin whenever it's given a new input $i$](../figure/pseudorandom_function.jpg){#prfmodelfig width="50%" }
 
 In the next lecture we will see the proof of following theorem (due to Goldreich, Goldwasser, and Micali)
 
@@ -54,7 +54,7 @@ Until now we have talked about the task of _encryption_, or protecting the  _sec
 _integrity_ of messages is no less important. For example, consider the case that you receive a software update for your PC, phone, car, pacemaker, etc..
 over an open connection such as an unencrypted Wi-Fi. Then the contents of that update are not secret, but it is of crucial importance that no malicious
 attacker had modified the code and that it was unchanged from the message sent out by the company. Similarly, when you log into your bank, you might be much more
-concerned about the possiblity of someone impersonating you and cleaning out your account than you are about the secrecy of your information.
+concerned about the possibility of someone impersonating you and cleaning out your account than you are about the secrecy of your information.
 
 Let's start with a very simple scenario which I'll call **the login problem**. **Alice** and **Bob** share a key as before, but now Alice wants to simply prove her identity to Bob. What makes it challenging is
 that this time they need to tackle not the passive eavesdropping Eve but the active adversary **Mallory** who completely controls the communication channel between them and can modify (or _mall_) any message that they send out.
@@ -67,7 +67,7 @@ A moment's thought shows that this would be a very bad idea. Since Mallory is co
 > # { .pause }
 This would be a good time to stop reading and try to think for yourself whether using a secure encryption to encrypt $p$ would guarantee security for the login problem. (No really, stop and think about it.)
 
-The problem is that Mallory does not have to learn the password $p$ in order to impersonate Alice. For example, she can simply record the message Alice $c_1$ sends to Bob in the first session and then _replay_ it to Bob in the next session. Since the message is a valid encryption of $p$, then Bob would accept it from Mallory!  (This is known as a _replay attack_ and is a common concern one needs to protect against in crypgoraphic protocols.) One can try to put in countermeasures to replay this particular attack, but its existence demonstrates that secrecy of the password does not guarantee security of the login protocol.
+The problem is that Mallory does not have to learn the password $p$ in order to impersonate Alice. For example, she can simply record the message Alice $c_1$ sends to Bob in the first session and then _replay_ it to Bob in the next session. Since the message is a valid encryption of $p$, then Bob would accept it from Mallory!  (This is known as a _replay attack_ and is a common concern one needs to protect against in cryptographic protocols.) One can try to put in countermeasures to defend against this particular attack, but its existence demonstrates that secrecy of the password does not guarantee security of the login protocol.
 
 ### How do pseudorandom functions help in the login problem?
 
@@ -95,7 +95,7 @@ In a truly random function, every one of the values $f_s(0),\ldots,f_s(2^n-1)$ i
 One useful way to imagine this is using the concept of "lazy evaluation".
 We can think of $f_S$ as determined by tossing $2^n$ different coins for the values $f(0),\ldots,f(2^n-1)$. Now consider the case where we don't actually toss the $i^{th}$ coin until we need it.
 The  crucial point is that if we have queried the function in $T\ll 2^n$ places, when Bob chooses a random $i\in[2^n]$ then it is _extremely unlikely_ that any one of the set $\{i,i+1,\ldots,i+\ell-1\}$ will be one of those locations that we previously queried.
-Thus, if the function was trule random,  Mallory has  _no information_ on the value of the function in these coordinates, and would be able to predict it in all these locations with probability at most $2^{-\ell}$.
+Thus, if the function was truly random,  Mallory has  _no information_ on the value of the function in these coordinates, and would be able to predict it in all these locations with probability at most $2^{-\ell}$.
 
 
 > # { .pause }
@@ -103,7 +103,7 @@ Please make sure you understand the informal reasoning above, since we will now 
 
 
 > # {.theorem title="Login protocol via PRF" #loginprfthm}
-that $\{ f_s \}$ is a secure pseudorandom function generator and Alice and Bob interact using Protocol `PRF-Login` for some polynomial number $T$ of sessions (over a channel controlled by Mallory), and then Mallory interacts with Bob, where Bob follows the protocol's instructions but  Mallory may use an arbitrary efficient computation.
+Suppose that $\{ f_s \}$ is a secure pseudorandom function generator and Alice and Bob interact using Protocol `PRF-Login` for some polynomial number $T$ of sessions (over a channel controlled by Mallory), and then Mallory interacts with Bob, where Bob follows the protocol's instructions but  Mallory may use an arbitrary efficient computation.
 Then, the probability that Bob accepts the interaction after this interaction is at most $2^{-\ell}+\mu(n)$ where $\mu(\cdot)$ is some negligible function.
 
 
@@ -112,7 +112,7 @@ This proof, as so many others in this course, uses an argument via contradiction
 We assume, towards the sake of contradiction, that there exists an adversary $M$ (for Mallory) that can break the identification scheme `PRF-Login` with probability $2^{-\ell}+\epsilon$ after $T$ interactions and construct an attacker $A$ that can distinguish access to $\{ f_s \}$ from access to a random function using $poly(T)$ time and with bias at least   $\epsilon/2$.
 >
 How do we construct this adversary $A$? The idea is as follows. First, we prove that if we ran the protocol `PRF-Login` using an _actual random_ function, then $M$ would not be able to succeed in impersonating with probability better than $2^{-\ell}+negligible$. Therefore, if $M$ does do better, then we can use that to distinguish $f_s$ from a random function.
-The adversary $A$ gets some black box $F(\cdot)$ and will use it while simulating internally all the parties--- Alice, Bob and Mallorty (using $M$) in the $T+1$ interactions of the `PRF-Login` protocol. Whenever any of the parties needs to evalueate $f_s(i)$, $A$ will forward $i$ to its black box $F(\cdot)$ and return the value $F(i)$. It will then output $1$ if an only if $M$ succeeds in impersonation in this internal simulation. The argument above showed that if $F(\cdot)$ is a truly random function then the probability $A$ outputs $1$ is at most $2^{-\ell}+negligible$ (and so in particular less than $2^{-\ell}+\epsilon/2$ while under our assumptions, if $F(\cdot)$ is the function $i \mapsto f_s(i)$ for some fixed and random $s$, then this probability is at least $2^{-\ell}+\epsilon$. Thus $A$ will distinguish between the two cases with bias at least $\epsilon/2$.  We now turn to the formal proof:
+The adversary $A$ gets some black box $F(\cdot)$ and will use it while internally simulating all the parties--- Alice, Bob and Mallory (using $M$) in the $T+1$ interactions of the `PRF-Login` protocol. Whenever any of the parties needs to evaluate $f_s(i)$, $A$ will forward $i$ to its black box $F(\cdot)$ and return the value $F(i)$. It will then output $1$ if an only if $M$ succeeds in impersonation in this internal simulation. The argument above showed that if $F(\cdot)$ is a truly random function then the probability $A$ outputs $1$ is at most $2^{-\ell}+negligible$ (and so in particular less than $2^{-\ell}+\epsilon/2$ while under our assumptions, if $F(\cdot)$ is the function $i \mapsto f_s(i)$ for some fixed and random $s$, then this probability is at least $2^{-\ell}+\epsilon$. Thus $A$ will distinguish between the two cases with bias at least $\epsilon/2$.  We now turn to the formal proof:
 >
 __Claim 1:__ Let `PRF-Login*` be the hypothetical variant of the protocol `PRF-Login` where Alice and Bob share a completely random function $H:[2^n]\rightarrow\{0,1\}$. Then, no matter what Mallory does, the probability she can impersonate Alice after observing $T$ interactions is at most $2^{-\ell}+(8\ell T)/2^n$.
 >
@@ -237,5 +237,5 @@ The idea is that such approaches find a "non generic" property of easily computa
 These are correlations that are unlikely to occur in random functions.
 The lower bound typically follows by exhibiting a  function $f_0$ that does not have this property, and then using that to derive that $f_0$ cannot be efficiently computed by this particular restricted family of circuits.
 
-The existence of strong enough pseudorandom functions can be shown to contradict the existence of such a property $EASY$, since a pseudorandom fuction can be computed by a polynomial sized circuit, but it cannot be distinguished from a random functiom.
+The existence of strong enough pseudorandom functions can be shown to contradict the existence of such a property $EASY$, since a pseudorandom function can be computed by a polynomial sized circuit, but it cannot be distinguished from a random function.
 While a priori a pseudorandom function is only secure for polynomial time distinguishers, under certain assumptions it might be possible to create a pseudorandom function with a seed of size, say, $n^5$, that would be secure with respect to adversaries running in time $2^{O(n^2)}$.
