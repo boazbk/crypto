@@ -308,7 +308,7 @@ fact, the real bottleneck in using cryptographic pseudorandom generators is
 often the generation of *entropy* for their seed, as discussed in the previous
 lecture, and not their actual running time.)
 
-[^luhn]: That number is obtained by applying [Luhn’s algorithm](https://goo.gl/KcH9xQ) which applies a simple map to each digit of the card and then sums them up modulo 10.
+[^luhn]: That number is obtained by applying an algorithm of  [Hans Peter Luhn](https://goo.gl/SL8ahM) which applies a simple map to each digit of the card and then sums them up modulo 10.
 
 
 ### From insecurity to security
