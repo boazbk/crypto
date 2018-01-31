@@ -218,3 +218,24 @@ We note that this issue of length extension is actually quite a thorny and impor
 achieve this, and there are several more practical variants in the literature (see Boneh-Shoup Sections 6.4-6.8). Also, one needs to be very
 careful on the exact way one chops the message into blocks and pads it to an integer multiple of the block size. Several attacks have been mounted on
 schemes that performed this incorrectly.
+
+
+## Aside: natural proofs^[This discussion has more to do with computational complexity than cryptography, and so can be safely skipped without harming understanding of future material in this course.]
+
+Pseudorandom functions play an important role in computational complexity, where they have been used as a way to give "barrier results" for proving results such as $\mathbf{P}\neq \mathbf{NP}$.
+Specifically, the [Natural Proofs](https://goo.gl/fiH3Pe) barrier for proving circuit lower bounds says that if strong enough pseudorandom functions exist, then certain types of arguments are bound to fail.
+These are arguments which come up with a property $EASY$ of a Boolean function $f:\{0,1\}^n \rightarrow \{0,1\}$ such that:
+
+* If $f$ can be computed by a polynomial sized circuit, then it has the property $EASY$.
+
+* The property $EASY$ fails to hold for a random function with high probability.
+
+* Checking whether $EASY$ holds can be done in time polynomial _in the truth table size of $f$_. That is, in $2^{O(n)}$ time.
+
+A priori these technical conditions  might not seem very "natural" but it turns out that many approaches for proving circuit lower bounds (for restricted families of circuits) have this form.
+The idea is that such approaches find a "non generic" property of easily computable function, such as finding some interesting correlations between the some input bits and the output.
+These are correlations that are unlikely to occur in random functions.
+The lower bound typically follows by exhibiting a  function $f_0$ that does not have this property, and then using that to derive that $f_0$ cannot be efficiently computed by this particular restricted family of circuits.
+
+The existence of strong enough pseudorandom functions can be shown to contradict the existence of such a property $EASY$, since a pseudorandom fuction can be computed by a polynomial sized circuit, but it cannot be distinguished from a random functiom.
+While a priori a pseudorandom function is only secure for polynomial time distinguishers, under certain assumptions it might be possible to create a pseudorandom function with a seed of size, say, $n^5$, that would be secure with respect to adversaries running in time $2^{O(n^2)}$.
