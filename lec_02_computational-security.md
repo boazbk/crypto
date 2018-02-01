@@ -1,4 +1,4 @@
-# Computational Security
+# Computational secrecy
 
 
 
@@ -67,11 +67,11 @@ precisely *defining* what it means for a scheme to be secure.
 Let us defer the discussion how one defines a function being computable in "less
 than $T$ operations" and just say that there is a way to formally do so. Given
 the perfect secrecy definition we saw last time, a natural attempt for defining
-computational security would be the following:
+Computational secrecy would be the following:
 
 
-> # {.definition title="Computational security (first attempt)" #firstcompdef}
-An encryption scheme $(E,D)$ has _$t$ bits of computational security_
+> # {.definition title="Computational secrecy (first attempt)" #firstcompdef}
+An encryption scheme $(E,D)$ has _$t$ bits of computational secrecy_
 if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$ computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2$.^[It is important to keep track of  what  is known and unknown to the adversary Eve. The adversary knows the set $\{ m_0,m_1 \}$ of potential messages, and the ciphertext $y=E_k(m_b)$. The only things she doesn't know are whether $b=0$ or $b=1$, and the value of the secret key $k$. In particular, because $m_0$ and $m_1$ are known to Eve, it does not matter whether we define Eve's goal in this "security game" as outputting $m_b$ or as outputting $b$.]
 
 [firstcompdef](){.ref} seems very natural, but is in fact _impossible_ to achieve if the key is shorter than the message.
@@ -86,8 +86,8 @@ that achieves success probability of about $1/2 + 2^{-n-1}$ by guessing the key.
 
 To fix this definition, we do not consider guessing with such a tiny advantage as a "true break" of the scheme, and hence this will be the actual definition we use.
 
-> # {.definition title="Computational Security (concrete)" #compsecconcdef}
-An encryption scheme $(E,D)$ has _$t$ bits of computational security[^sec_bits]_  if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$ computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2+2^{-t}$.
+> # {.definition title="Computational secrecy (concrete)" #compsecconcdef}
+An encryption scheme $(E,D)$ has _$t$ bits of computational secrecy[^sec_bits]_  if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$ computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2+2^{-t}$.
 
 [^sec_bits]: This is a slight simplification of the typical notion of "$t$ bits of security". In the more standard definition we'd say that a scheme has $t$ bits of security if for every $t_1+t_2 \leq t$, an attacker running in $2^{t_1}$ time can't get success probability advantage more than $2^{-t_2}$. However these two definitions only differ from one another by at most a factor of two. This may be important for practical applications (where the difference between $64$ and $32$ bits of security could be crucial) but won't matter for our concerns.
 
@@ -98,7 +98,7 @@ kind of conditions we desired. In particular, let's verify that this definition
 implies the analogous condition to perfect secrecy.
 
 > # {.theorem title="Guessing game for computational secrecy" #twotomanycomp}
-If $(E,D)$ is has $t$ bits of computational security as per  [compsecconcdef](){.ref} then every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
+If $(E,D)$ is has $t$ bits of Computational secrecy as per  [compsecconcdef](){.ref} then every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
 $2^t-(100\ell+100)$ computational steps, if we choose at random $m\in M$ and a
 random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m$ after
 seeing $E_k(m_b)$ is at most $1/|M|+2^{-t+1}$.
@@ -179,7 +179,7 @@ important point that it deserves repeating:
 >   a transformation from an adversary that breaks $S$ into an adversary that
 >   breaks $S'$_
 
-For computational security, we will always want that $Eve'$ will be efficient if
+For computational secrecy, we will always want that $Eve'$ will be efficient if
 $Eve$ is, and that will usually be the case because $Eve'$ will simply use $Eve$
 as a black box, which it will not invoke too many times, and addition will use
 some polynomial time preprocessing and postprocessing. The more challenging
@@ -241,8 +241,8 @@ most a negligible gain in the probability of guessing the message over its a
 priori probability.^[Note that there is a subtle issue here with the order of quantifiers. For a scheme to be efficient, the algorithms such as encryption and decryption need to run in some _fixed_ polynomial time such as $n^2$ or $n^3$. In contrast we allow the adversary to run in _any_ polynomial time. That is, for every $c$, if $n$ is large enough, then the scheme should be secure against an adversary that runs in time $n^c$. This is a general principle in cryptography that we always allow the adversary potentially much more resources than those used by the honest users. In practical security we often assume that the gap between the honest use and the adversary resources can be _exponential_. For example, a low power embedded device can encrypt messages that, as far as we know, are undecipherable even by a nation-state using super-computers and massive data centers.]
 That is, we make the following definition:
 
-> # {.definition title="Computational security (asymptotic)" #compsecdef}
-An encryption scheme $(E,D)$ is *computationally secure* if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every efficient (i.e., polynomial time) strategy of Eve, if we choose at
+> # {.definition title="Computational secrecy (asymptotic)" #compsecdef}
+An encryption scheme $(E,D)$ is *computationally secret* if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every efficient (i.e., polynomial time) strategy of Eve, if we choose at
 random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability
 that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2+\mu(n)$ for some
 negligible function $\mu(\cdot)$.
@@ -269,7 +269,7 @@ know that this notion has a precise mathematical formulation.
 
 We are now ready to make our first conjecture:
 
->**The Cipher Conjecture:**[^2] There exists a computationally scure encryption
+>**The Cipher Conjecture:**[^2] There exists a computationally secret encryption
 scheme $(E,D)$ (where $E,D$ are efficient) with a key of size $n$ for messages
 of size $n+1$.
 
@@ -287,7 +287,7 @@ is arguably *the* fundamental question of computer science. That is, the
 following theorem is known:
 
 > # {.theorem title="Breaking crypto if P=NP" #PNPcipherthm}
-If $P=NP$ then there does not exist a computationally secure
+If $P=NP$ then there does not exist a computationally secret
 encryption with efficient $E$ and $D$ and where the message is longer than the
 key.
 
@@ -316,7 +316,7 @@ There are several reasons to believe the cipher conjecture. We now  briefly ment
 >   250 BC
 
 Every perfectly secure encryption scheme is clearly also
-computationally secure, and so if we required a message of size $n$ instead
+computationally secret, and so if we required a message of size $n$ instead
 $n+1$, then the  conjecture would have been trivially satisfied by the one-time pad.
 However, having a message longer than
 the key by just a single bit does not seem that impressive.
@@ -324,7 +324,7 @@ Sure, if we used such a scheme with $128$-bit long keys, our communication will 
 factor of $128/129$ (or a saving of about $0.8\%$) over the one-time pad, but
 this doesn't seem worth the risk of using an unproven conjecture.
 However, it turns out that if we assume this rather weak condition, we can actually get a
-computationally secure encryption scheme with a message of size $p(n)$ for
+computationally secret encryption scheme with a message of size $p(n)$ for
 *every* polynomial $p(\cdot)$. In essence, we can fix a single $n$-bit long key
 and communicate securely as many bits as we want!
 
@@ -375,17 +375,17 @@ ${\mathbb{E}}[Eve(X)]$ (since we can assume that whenever $Eve(x)$ does not
 output $1$ it outputs zero). This notation will be useful for us sometimes.
 
 We can use computational indistinguishability to phrase the definition of
-computational security more succinctly:
+Computational secrecy more succinctly:
 
 > # {.theorem title="Computational Indistinguishability phrasing of security" #compindsecthm}
 Let $(E,D)$ be a valid
-encryption scheme. Then $(E,D)$ is computationally secure if and only if for
+encryption scheme. Then $(E,D)$ is computationally secret if and only if for
 every two messages $m_0,m_1 \in \{0,1\}^\ell$,
 $$ \{ E_k(m_0) \}  \approx \{ E_k(m_1) \}  $$
 where each of these two distributions is obtained by sampling a random
 $k{\leftarrow_{\tiny R}}{\{0,1\}}^n$.
 
-Working out the proof is an excellent way to make sure you understand both the definition of computational security and computational indistinguishability, and hence we leave it as an exercise.
+Working out the proof is an excellent way to make sure you understand both the definition of Computational secrecy and computational indistinguishability, and hence we leave it as an exercise.
 
 One intuition for computational indistinguishability is that it is related to some
 notion of *distance*.
@@ -501,9 +501,9 @@ For a warm-up, let's show that the easier fact that we can transform an encrypti
 
 > # {.theorem title="Security of repetition" #secrepthm}
 Suppose that $(E',D')$ is a
-computationally secure encryption scheme with $n$ bit keys and $n+1$ bit
+computationally secret encryption scheme with $n$ bit keys and $n+1$ bit
 messages. Then the scheme $(E,D)$ where $E_{k_1,\ldots,k_t}(m_1,\ldots,m_t)= (E'_{k_1}(m_1),\ldots, E'_{k_T}(m_t))$
-and $D_{k_1,\ldots,k_t}(c_1,\ldots,c_t)= (D'_{k_1}(c_1),\ldots, D'_{k_t}(c_t))$ is a computationally secure scheme with
+and $D_{k_1,\ldots,k_t}(c_1,\ldots,c_t)= (D'_{k_1}(c_1),\ldots, D'_{k_t}(c_t))$ is a computationally secret scheme with
 $tn$ bit keys and $t(n+1)$ bit messages.
 
 > # {.proof data-ref="secrepthm"}
@@ -521,7 +521,7 @@ $$
 $$
 >
 for random $k_1,\ldots,k_t$ chosen independently from $U_n$ which is exactly the
-condition that $(E,D)$ is computationally secure.
+condition that $(E,D)$ is computationally secret.
 
 We can now prove  the full length extension theorem. Before doing so, we will need to generalize the notion of an encryption scheme to allow a _randomized encryption scheme_.
 That is, we will consider encryption schemes where the encryption algorithm can "toss coins" in its computation.
@@ -538,9 +538,9 @@ We can now show that given an encryption scheme with messages one bit longer tha
 
 > # {.theorem title="Length extension of ciphers" #lengthextendthm}
 Suppose that there exists a
-computationally secure encryption scheme $(E',D')$ with key length $n$ and
+computationally secret encryption scheme $(E',D')$ with key length $n$ and
 message length $n+1$. Then for every polynomial $t(n)$ there exists a (randomized)
-computationally secure encryption scheme $(E,D)$ with key length $n$ and message
+computationally secret encryption scheme $(E,D)$ with key length $n$ and message
 length $t(n)$.
 
 ![Constructing a cipher with $t$ bit long messages from one with $n+1$ long messages](../figure/length-extension.jpg){#tmplabelfig}
