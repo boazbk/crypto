@@ -140,7 +140,7 @@ Thus from now on whenever we are given a PRF, we will allow ourselves to assume 
 
 ## Message Authentication Codes
 
-One time passwords are a tool allowing you to prove your _identity_ to, say, your email server. But even after you did so, how can the server trust that future communication comes from you and not from some attacker that can interfere with the communication channel between you and the server (so called "man in the middle" attack). Similarly, one time passwords may allow a software company to prove that their identity before they send you a software update, but how do you know that an attacker does not change some bits of this software update on route between their servers and your device?
+One time passwords are a tool allowing you to prove your _identity_ to, say, your email server. But even after you did so, how can the server trust that future communication comes from you and not from some attacker that can interfere with the communication channel between you and the server (so called "man in the middle" attack). Similarly, one time passwords may allow a software company to prove their identity before they send you a software update, but how do you know that an attacker does not change some bits of this software update on route between their servers and your device?
 
 This is where _Message Authentication Codes (MACs)_ come into play- their role is to authenticate not merely the _identity_ of the parties but also their _communication_.
 Once again we have  __Alice__ and __Bob__, and the adversary __Mallory__ who can actively modify messages (in contrast to the passive eavesdropper Eve).
