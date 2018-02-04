@@ -39,7 +39,7 @@ Note that the $0^{th}$ hybrid corresponds to the case where the oracle implement
 >
 We can now describe our distinguisher $D$ for the pseudorandom generator. On input a string $y\in\{0,1\}^{2n}$ $D$ will run $A$ and the $j^{th}$ oracle inside its belly with one difference- when the time comes to label the $j^{th}$ node, instead of doing this by applying the pseudorandom generator to the label of its parent $v$  (which is what should happen in the $j^{th}$ oracle) it uses its input $y$ to label the two children of $v$.
 >
-Now, if $y$ was completely random then we get exactly the distribution of the $j+1^{st}$ oracle, and hence in this case $D$ simulates internally the $j+1^{st}$ hybrid. However, if $y=G(s)$ for a random $s\in\{0,1\}^n$ it might not be obvious if we get the distribution of the $j^{th}$ oracle, since in that oracle the label for the children of $v$ was supposed to be the result of applying the pseudorandom generator to the label of $v$ and not to some other random string. However, because $v$ was labeled _before_ the $j^{th}$ step then we know that it was actually labeled by a random string. Moreover, since we use lazy evaluation we know that step $j$ is the _first_ time where we actually use the value of the label of $v$. Hence, if at this point we _resampled_ this label and used a completely independent random string then the distribution would be _identical_ . Hence if $y=G(U_n)$ then $D$ actually does simulate the distribution of the $j^{th}$ hybrid in its belly, and thus if $A$ had advantage $\epsilon$ in breaking the PRF $\{ f_s \}$ then $D$ will have advantage $\epsilon/T'$ in breaking the PRG $G$ thus obtaining a contradiction. 
+Now, if $y$ was completely random then we get exactly the distribution of the $j+1^{st}$ oracle, and hence in this case $D$ simulates internally the $j+1^{st}$ hybrid. However, if $y=G(s)$ for a random $s\in\{0,1\}^n$ it might not be obvious if we get the distribution of the $j^{th}$ oracle, since in that oracle the label for the children of $v$ was supposed to be the result of applying the pseudorandom generator to the label of $v$ and not to some other random string. However, because $v$ was labeled _before_ the $j^{th}$ step then we know that it was actually labeled by a random string. Moreover, since we use lazy evaluation we know that step $j$ is the _first_ time where we actually use the value of the label of $v$. Hence, if at this point we _resampled_ this label and used a completely independent random string then the distribution would be _identical_ . Hence if $y=G(U_n)$ then $D$ actually does simulate the distribution of the $j^{th}$ hybrid in its belly, and thus if $A$ had advantage $\epsilon$ in breaking the PRF $\{ f_s \}$ then $D$ will have advantage $\epsilon/T'$ in breaking the PRG $G$ thus obtaining a contradiction.
 >
 This proof is ultimately not very hard but is rather confusing. I urge you to also look at the proof of this theorem as is written in Section 7.5 (pages 265-269) of the KL book.
 
@@ -109,18 +109,18 @@ The proof is very simple: Eve will only use a single round of interacting with $
 
 This proof is so simple that you might think it shows a problem with the definition, but it is actually a real problem with security.
 If you encrypt many messages and some of them repeat themselves, it is possible to get significant information by seeing the repetition pattern (que the XKCD cartoon again, see [xkcdnavajotwofig](){.ref}).
-To avoid this issue we need to use _probabilistic encryption._[^high-ent]
+To avoid this issue we need to use a  _randomized_  (or _probabilistic_) encryption, such that if we encrypt the same message twice we _won't_ see two copies of the same ciphertext.[^high-ent]
 But how do we do that?
 Here pseudorandom functions come to the rescue:
 
-[^high-ent]: If the messages are guaranteed to have _high entropy_ which roughly means that the probability that a message repeats itself is negligible, then it is possible to have a secure deterministic encryption, and this is sometimes used in practice, though often some sort of randomization or padding is added to ensure this property, hence in effect creating a probabilistic encryption. Deterministic encryption can sometimes be useful for applications such as efficient queries on encrypted databases. See [this lecture](https://goo.gl/GWJLFd) in Dan Boneh's coursera course.
+[^high-ent]: If the messages are guaranteed to have _high entropy_ which roughly means that the probability that a message repeats itself is negligible, then it is possible to have a secure deterministic private-key encryption, and this is sometimes used in practice. (Though often some sort of randomization or padding is added to ensure this property, hence in effect creating a randomized encryption.) Deterministic encryptions can sometimes be useful for applications such as efficient queries on encrypted databases. See [this lecture](https://goo.gl/GWJLFd) in Dan Boneh's coursera course.
 
 > # {.theorem title="CPA security from PRFs" #cpafromprfthm}
 Suppose that $\{ f_s \}$ is a PRF collection where $f_s:\{0,1\}^n\rightarrow\{0,1\}^\ell$, then the following is a CPA secure encryption scheme: $E_s(m)=(r,f_s(r)\oplus m)$ and $D_s(r,z)=f_s(r)\oplus z$.
 
 
 > # {.proof data-ref="cpafromprfthm"}
-I leave to you to verify that $D_s(E_s(m))=m$. I need to show the CPA security property. As is usual in PRF-based constructions, we first show that this scheme will be secure if $f_s$ was an actually random function, and then use that to derive security.
+I leave to you to verify that $D_s(E_s(m))=m$. We need to show the CPA security property. As is usual in PRF-based constructions, we first show that this scheme will be secure if $f_s$ was an actually random function, and then use that to derive security.
 >
 Consider the game above when played with a completely random function and let $r_i$ be the random string chosen by $E$ in the $i^{th}$ round and $r^*$ the  string chosen in the last round. We start with the following simple but crucial claim:
 >
