@@ -9,14 +9,31 @@ is purely coincidental.
 ## The "bitcoin" problem
 
 Using cryptography to create a _centralized_ digital-currency is fairly straightforward, and indeed this is what is done by Visa, Mastercard etc..
-The main challenge with bitcoin is that it is _decentralized_. There is no trusted server, and there are also no "user accounts" but rather this is a collection of anonymous and autonomous parties that somehow need to agree on what is a valid payment. The basic unit in the system is a _coin_. Each coin has a unique identifier, and a current _owner_ .[^satoshi] Transactions in the system have either the form of "mint coin with identifier $ID$ and owner $P$" or "transfer the coin $ID$ from $P$ to $Q$".
+The main challenge with bitcoin is that it is _decentralized_.
+There is no trusted server,  there are  no "user accounts", no central authority to adjudicate claims.
+Rather we have  a collection of anonymous and autonomous parties that somehow need to agree on what is a valid payment. The basic unit in the system is a _coin_.
+Each coin has a unique identifier, and a current _owner_ .[^satoshi]
+Transactions in the system have either the form of "mint coin with identifier $ID$ and owner $P$" or "transfer the coin $ID$ from $P$ to $Q$".
+All of these transactions are recorded in a public _ledger_.
 
-[^satoshi]: This is  one of the places where we simplify and deviate from the actual Bitcoin system. In the actual Bitcoin system, the atomic unit is known as a _satoshi_ and one bitcoin (abberviated BTC) is $10^8$ satoshis. For reasons of efficiency, not every satoshi  has an individual identifier and transactions can involve transfer and creation of multiple satoshis.
+[^satoshi]: This is  one of the places where we simplify and deviate from the actual Bitcoin system. In the actual Bitcoin system, the atomic unit is known as a _satoshi_ and one bitcoin (abberviated BTC) is $10^8$ satoshis. For reasons of efficiency, there is no individual identifier per satoshi and transactions can involve transfer and creation of multiple satoshis. However, conceptually we can think of atomic coins each of which has a unique identifier.
 
-Since there are no user accounts in bitcoin, the "entities" $P$ and $Q$ are not identifier of any person or account. Rather one could think of them as simply "computational puzzles". A _computational puzzle_ can be thought of as a string $\alpha$ that specifies some "problem" such that it's easy to verify whether some other string $\beta$ is a "solution" for $\alpha$, but it is hard to find such a solution on your own.
+Since there are no user accounts in bitcoin, the "entities" $P$ and $Q$ are not identifier of any person or account.
+Rather  $P$ and $Q$ as  "computational puzzles".
+A _computational puzzle_ can be thought of as a string $\alpha$ that specifies some "problem" such that it's easy to verify whether some other string $\beta$ is a "solution" for $\alpha$, but it is hard to find such a solution on your own.
 (Students with complexity background will recognize here the class **NP**.)
-For example $\alpha$ can encode some large integer $N$, and a solution $\beta$ will encode a pair of numbers $A,B$ such that $N=A\cdot B$. Another more generic example (that you can keep in mind as a potential implementation for the puzzles we use here) is that $\alpha$  will be a string in $\{0,1\}^{2n}$ while $\beta$ will be a string in $\{0,1\}^n$ such that $\alpha = G(\beta)$ where $G:\{0,1\}^n\rightarrow\{0,1\}^{2n}$ is some pseudorandom generator.[^signatures]
-The real Bitcoin system typically  uses puzzles based on _digital signatures_, a concept we will learn about later in this course, but you can simply think of $P$ as specifying some abstract puzzle and every person that can solve $P$ perform transactions on the coins owned by $P$. In particular if you lost the solution to the puzzle then you have no access to the coin, and if someone stole the solution from you, then you have no recourse or way to get your coin back. People have managed to [lose millions of dollars](http://readwrite.com/2014/01/13/what-happens-to-lost-bitcoins) in this way.  
+So when we say "transfer the coin $ID$ from $P$ to $Q$" we mean that whomever holds a solution for the puzzle $Q$ is now the owner of the coin $ID$ (and to verify the authenticity of this transfer, you provide a solution to the puzzle $P$.)
+More accurately, a transaction involving the coin $ID$ is self-validating if it contains a solution to the puzzle that is associated with $ID$ according to the latest transaction in the ledger.
+
+> # { .pause }
+Please re-read the previous paragraph, to make sure you follow the logic.
+
+
+
+One example of a puzzle is that  $\alpha$ can encode some large integer $N$, and a solution $\beta$ will encode a pair of numbers $A,B$ such that $N=A\cdot B$.
+Another more generic example (that you can keep in mind as a potential implementation for the puzzles we use here) is that $\alpha$  will be a string in $\{0,1\}^{2n}$ while $\beta$ will be a string in $\{0,1\}^n$ such that $\alpha = G(\beta)$ where $G:\{0,1\}^n\rightarrow\{0,1\}^{2n}$ is some pseudorandom generator.
+The real Bitcoin system typically  uses puzzles based on _digital signatures_, a concept we will learn about later in this course, but you can simply think of $P$ as specifying some abstract puzzle and every person that can solve $P$ perform transactions on the coins owned by $P$.[^signatures]
+In particular if you lost the solution to the puzzle then you have no access to the coin, and if someone stole the solution from you, then you have no recourse or way to get your coin back. People have managed to [lose millions of dollars](http://readwrite.com/2014/01/13/what-happens-to-lost-bitcoins) in this way.  
 
 [^signatures]: There are reasons why Bitcoin uses digital signatures and not these puzzles. The main issue is that we want to bind the puzzle not just to the coin but also to the particular transaction, so that if you know the solution to the puzzle $P$ corresponding to the coin $ID$ and want to use that to transfer it to $Q$, it won't be possible for someone to take your  solution and use that to transfer the coin to $Q'$ before your transaction is added to the public ledger. We will come back to this issue after we learn about digital signatures.
 
