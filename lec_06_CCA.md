@@ -41,10 +41,11 @@ In 2012 (after 11 years of attacks!) it was  estimated that it is still used in 
 Here we will talk about a different flaw of WEP that is in fact shared
 by many other protocols, including the first versions of the secure socket layer (SSL) protocol that is used to protect all encrypted web traffic.
 
-To avoid superfluous details we will considered a highly abstract (and somewhat inaccurate) version of WEP that still demonstrates our main point.
-In this protocol Alice (user) sends to Bob (access point) an IP packet that she wants routed somewhere to the internet.
-So we can think of the message as a string $m\in\{0,1\}^\ell$ of the form $m=(m_1,m_2)$ where $m_1$ is the IP address this packet needs to be routed to and $m_2$ is the actual message that needs to be delivered.
-In the protocol Alice sends to Bob
+To avoid superfluous details we will consider a highly abstract (and somewhat inaccurate) version of WEP that still demonstrates our main point.
+In this protocol Alice (the user) sends to Bob (the access point) an IP packet that she wants routed somewhere on the internet.
+
+Thus we can think of the message Alice sends to Bob as a string $m\in\{0,1\}^\ell$ of the form $m=(m_1,m_2)$ where $m_1$ is the IP address this packet needs to be routed to and $m_2$ is the actual message that needs to be delivered.
+In the WEP protocol, the message that Alice sends to Bob has the form  
 $E_k(m\|CRC(m))$ (where $\|$ denotes concatenation and $CRC(m)$ is some cyclic redundancy code).
 The actual encryption WEP used was RC4, but for us it doesn't really matter.
 What does matter is that the encryption has the form  $E_k(m') = pad \oplus m'$
@@ -69,7 +70,7 @@ The point is that often our adversaries can be _active_ and modify the communica
 
 > # {.definition title="CCA security" #CCAdef}
 An encryption scheme $(E,D)$ is _chosen ciphertext attack (CCA) secure_ if every
-efficient adversary  _Mallory_ wins in the following game with probability at most $1/2+ negl(n)$:
+efficient adversary  _Mallory_ wins in the following game with probability at most $1/2+ negl(n)$: \
 * Mallory gets $1^n$ where $n$ is the length of the key \
 * For $poly(n)$ rounds, Mallory gets access to the functions $m \mapsto E_k(m)$ and $c \mapsto D_k(c)$. \
 * Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\{0,1\}$, and Mallory gets $c^* = E_k(m_b)$. \
@@ -96,7 +97,7 @@ The WEP example shows that the definition does capture a practical issue in secu
 __What does CCA has to do with WEP?__ The CCA security game is somewhat strange, and it might not be immediately clear whether it has anything to do with the attack we described on the WEP protocol. However, it turns out that using a CCA secure encryption _would_ have prevented that attack. The key is the following claim:
 
 > # {.lemma #ccaweplem}
-Suppose that $(E,D)$ is a CCA secure encryption, then there is no efficient algorithm that given an encryption $c$ of $(m_1,m_2)$ outputs an encryption $c'$ of $(m'_1,m_2)$ where $m'_1\neq m_1$.
+Suppose that $(E,D)$ is a CCA secure encryption, then there is no efficient algorithm that given an encryption $c$ of the plaintext $(m_1,m_2)$ outputs a ciphertext $c'$ that decrypts to $(m'_1,m_2)$ where $m'_1\neq m_1$.
 
 
 In particular [ccaweplem](){.ref} rules out the attack of transforming $c$ that encrypts a message starting with a some address $IP$ to a ciphertext that starts with a different address $IP'$. Let us now see its proof.
@@ -105,7 +106,7 @@ In particular [ccaweplem](){.ref} rules out the attack of transforming $c$ that 
 
 > # {.proof data-ref="ccaweplem"}
 We'll show that such if we had an adversary $M'$ that violates the conclusion of the claim, then there is an adversary $M$ that can win in the CCA game.
-The proof is simple and relies on the crucial fact that the CCA game allows M to query the decrpyption box on _any_ ciphertext of her choice, as long as it's not _exactly identical_ to the challenge cipertext $c^*$. In particular, if $M'$ is able to morph an encryption $c$ of $m$ to some encryption $c'$ of some different $m'$ that agrees with $m$ on some set of bits, then $M$ can do the following: in the security game, use $m_0$ to be some random message and $m_1$ to be this plaintext $m$. Then, when receiving $c^*$, apply $M'$ to it to obtain a ciphertext $c'$ (note that if the plaintext differs then the ciphertext must differ also; can you see why?) ask the decryption box to decrypt it and output $1$ if the resulting message agrees with $m$ in the corresponding set of bits (otherwise output a random bit). If $M'$ was successful with probability $\epsilon$, then $M$ would win in the CCA game with probability at least $1/2 + \epsilon/10$ or so.
+The proof is simple and relies on the crucial fact that the CCA game allows $M$ to query the decryption box on _any_ ciphertext of her choice, as long as it's not _exactly identical_ to the challenge cipertext $c^*$. In particular, if $M'$ is able to morph an encryption $c$ of $m$ to some encryption $c'$ of some different $m'$ that agrees with $m$ on some set of bits, then $M$ can do the following: in the security game, use $m_0$ to be some random message and $m_1$ to be this plaintext $m$. Then, when receiving $c^*$, apply $M'$ to it to obtain a ciphertext $c'$ (note that if the plaintext differs then the ciphertext must differ also; can you see why?) ask the decryption box to decrypt it and output $1$ if the resulting message agrees with $m$ in the corresponding set of bits (otherwise output a random bit). If $M'$ was successful with probability $\epsilon$, then $M$ would win in the CCA game with probability at least $1/2 + \epsilon/10$ or so.
 
 
 
@@ -160,7 +161,7 @@ Suppose, for the sake of contradiction, that there exists an adversary $M'$ that
 at least $1/2+\epsilon$. We consider the following two cases:
 >
 __Case I:__ With probability at least $\epsilon/10$, at some point during the CCA game, $M'$ sends to its decryption box a ciphertext $(c,\sigma)$ that is
-not identical to one of the ciphertexts it previous obtained from its decryption box, and obtains from it a non-error response.
+not identical to one of the ciphertexts it previously obtained from its decryption box, and obtains from it a non-error response.
 >
 __Case II:__ The event above happens with probability smaller than $\epsilon/10$.
 >
