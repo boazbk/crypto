@@ -207,7 +207,7 @@ For simplicity, assume that the number of blocks $t$ is fixed and known (though 
 
 A [universal hash function collection](https://goo.gl/jLpNtU) is a family of functions $\{ h:\{0,1\}^\ell\rightarrow\{0,1\}^n \}$ such that for every $x \neq x' \in \{0,1\}^\ell$, the random variables $h(x)$ and $h(x')$ (taken over the choice of a  random $h$ from this family) are pairwise independent in $\{0,1\}^{2n}$. That is, for every two potential outputs $y,y'\in \{0,1\}^n$,
 $$
-\Pr_h[ h(x)=y \;\wedge\; h(x)=y']=2^{-2n} \label{equnivhash}
+\Pr_h[ h(x)=y \;\wedge\; h(x')=y']=2^{-2n} \label{equnivhash}
 $$
 
 Universal hash functions have rather efficient constructions, and in particular if we relax the definition to allow _almost universal_ hash functions (where we replace the $2^{-2n}$ factor in the righthand side of [equnivhash](){.eqref} by a slightly bigger, though still negligible quantity) then the constructions become extremely efficient and the size of the description of $h$ is only related to $n$, no matter how big $\ell$ is.[^almost-universal]
