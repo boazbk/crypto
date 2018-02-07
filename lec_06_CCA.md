@@ -24,7 +24,7 @@ such that $G(U_n)\approx U_{n+1}$ (where $U_m$ denotes the uniform distribution 
 It may seem that we have finally nailed down the security definition for encryption. After all, what could be stronger than allowing Eve unfettered access to the encryption function. Clearly an encryption satisfying this property will hide the contents of the message in all practical circumstances, or will it?
 
 
-### EXample: The Wired Equivalence Protocol (WEP)
+### Example: The Wired Equivalence Protocol (WEP)
 
 The WEP is perhaps one of the most inaccurately named protocols in history.
 It was invented in 1999 for the purpose  of securing Wi-Fi networks so that they would have virtually the same level of security as wired networks, but already early on several
@@ -35,7 +35,7 @@ In 2012 (after 11 years of attacks!) it was  estimated that it is still used in 
 Here we will talk about a different flaw of WEP that is in fact shared
 by many other protocols, including the first versions of the secure socket layer (SSL) protocol that is used to protect all encrypted web traffic.
 
-To avoid superfluous details we will considered a highly abstract (and somewhat inaccurate) version of WEP that still demonstrates our main point. In this protocol Alice (user) sends to Bob (access point) an IP packet that she wants routed somewhere to the internet.
+To avoid superfluous details we will consider a highly abstract (and somewhat inaccurate) version of WEP that still demonstrates our main point. In this protocol Alice (user) sends to Bob (access point) an IP packet that she wants routed somewhere to the internet.
 So we can think of the message as a string $m\in\{0,1\}^\ell$ of the form $m=(m_1,m_2)$ where $m_1$ is the IP address this packet needs to be routed to and $m_2$ is the actual message that needs to be delivered.
 In the protocol Alice sends to Bob
 $E_k(m\|CRC(m))$ (where $\|$ denotes concatenation and $CRC(m)$ is some cyclic redunduncy code. The actual encryption WEP used was RC4, but for us it doesn't really matter.
@@ -57,7 +57,7 @@ The point is that often our adversaries can be _active_ and modify the communica
 
 > # {.definition title="CCA security" #CCAdef}
 An encryption scheme $(E,D)$ is _chosen ciphertext attack (CCA) secure_ if every
-efficient adversary  _Mallory_ wins in the following game with probability at most $1/2+ negl(n)$:
+efficient adversary  _Mallory_ wins in the following game with probability at most $1/2+ negl(n)$: \
 * Mallory gets $1^n$ where $n$ is the length of the key \
 * For $poly(n)$ rounds, Mallory gets access to the functions $m \mapsto E_k(m)$ and $c \mapsto D_k(c)$. \
 * Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\{0,1\}$, and Mallory gets $c^* = E_k(m_b)$. \
@@ -93,7 +93,7 @@ In particular [ccaweplem](){.ref} rules out the attack of transforming $c$ that 
 
 > # {.proof data-ref="ccaweplem"}
 We'll show that such if we had an adversary $M'$ that violates the conclusion of the claim, then there is an adversary $M$ that can win in the CCA game.
-The proof is simple and relies on the crucial fact that the CCA game allows M to query the decrpyption box on _any_ ciphertext of her choice, as long as it's not _exactly identical_ to the challenge cipertext $c^*$. In particular, if $M'$ is able to morph an encryption $c$ of $m$ to some encryption $c'$ of some different $m'$ that agrees with $m$ on some set of bits, then $M$ can do the following: in the security game, use $m_0$ to be some random message and $m_1$ to be this plaintext $m$. Then, when receiving $c^*$, apply $M'$ to it to obtain a ciphertext $c'$ (note that if the plaintext differs then the ciphertext must differ also; can you see why?) ask the decryption box to decrypt it and output $1$ if the resulting message agrees with $m$ in the corresponding set of bits (otherwise output a random bit). If $M'$ was successful with probability $\epsilon$, then $M$ would win in the CCA game with probability at least $1/2 + \epsilon/10$ or so.
+The proof is simple and relies on the crucial fact that the CCA game allows M to query the decryption box on _any_ ciphertext of her choice, as long as it's not _exactly identical_ to the challenge cipertext $c^*$. In particular, if $M'$ is able to morph an encryption $c$ of $m$ to some encryption $c'$ of some different $m'$ that agrees with $m$ on some set of bits, then $M$ can do the following: in the security game, use $m_0$ to be some random message and $m_1$ to be this plaintext $m$. Then, when receiving $c^*$, apply $M'$ to it to obtain a ciphertext $c'$ (note that if the plaintext differs then the ciphertext must differ also; can you see why?) ask the decryption box to decrypt it and output $1$ if the resulting message agrees with $m$ in the corresponding set of bits (otherwise output a random bit). If $M'$ was successful with probability $\epsilon$, then $M$ would win in the CCA game with probability at least $1/2 + \epsilon/10$ or so.
 
 
 
@@ -148,7 +148,7 @@ Suppose, for the sake of contradiction, that there exists an adversary $M'$ that
 at least $1/2+\epsilon$. We consider the following two cases:
 >
 __Case I:__ With probability at least $\epsilon/10$, at some point during the CCA game, $M'$ sends to its decryption box a ciphertext $(c,\sigma)$ that is
-not identical to one of the ciphertexts it previous obtained from its decryption box, and obtains from it a non-error response.
+not identical to one of the ciphertexts it previously obtained from its decryption box, and obtains from it a non-error response.
 >
 __Case II:__ The event above happens with probability smaller than $\epsilon/10$.
 >
