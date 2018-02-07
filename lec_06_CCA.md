@@ -24,7 +24,7 @@ such that $G(U_n)\approx U_{n+1}$ (where $U_m$ denotes the uniform distribution 
 It may seem that we have finally nailed down the security definition for encryption. After all, what could be stronger than allowing Eve unfettered access to the encryption function. Clearly an encryption satisfying this property will hide the contents of the message in all practical circumstances, or will it?
 
 > # { .pause }
-Please stop and play an omnious sound track at this point.
+Please stop and play an ominous sound track at this point.
 
 
 
@@ -106,7 +106,7 @@ In particular [ccaweplem](){.ref} rules out the attack of transforming $c$ that 
 
 > # {.proof data-ref="ccaweplem"}
 We'll show that such if we had an adversary $M'$ that violates the conclusion of the claim, then there is an adversary $M$ that can win in the CCA game.
-The proof is simple and relies on the crucial fact that the CCA game allows $M$ to query the decryption box on _any_ ciphertext of her choice, as long as it's not _exactly identical_ to the challenge cipertext $c^*$. In particular, if $M'$ is able to morph an encryption $c$ of $m$ to some encryption $c'$ of some different $m'$ that agrees with $m$ on some set of bits, then $M$ can do the following: in the security game, use $m_0$ to be some random message and $m_1$ to be this plaintext $m$. Then, when receiving $c^*$, apply $M'$ to it to obtain a ciphertext $c'$ (note that if the plaintext differs then the ciphertext must differ also; can you see why?) ask the decryption box to decrypt it and output $1$ if the resulting message agrees with $m$ in the corresponding set of bits (otherwise output a random bit). If $M'$ was successful with probability $\epsilon$, then $M$ would win in the CCA game with probability at least $1/2 + \epsilon/10$ or so.
+The proof is simple and relies on the crucial fact that the CCA game allows $M$ to query the decryption box on _any_ ciphertext of her choice, as long as it's not _exactly identical_ to the challenge ciphertext $c^*$. In particular, if $M'$ is able to morph an encryption $c$ of $m$ to some encryption $c'$ of some different $m'$ that agrees with $m$ on some set of bits, then $M$ can do the following: in the security game, use $m_0$ to be some random message and $m_1$ to be this plaintext $m$. Then, when receiving $c^*$, apply $M'$ to it to obtain a ciphertext $c'$ (note that if the plaintext differs then the ciphertext must differ also; can you see why?) ask the decryption box to decrypt it and output $1$ if the resulting message agrees with $m$ in the corresponding set of bits (otherwise output a random bit). If $M'$ was successful with probability $\epsilon$, then $M$ would win in the CCA game with probability at least $1/2 + \epsilon/10$ or so.
 
 
 
@@ -131,7 +131,7 @@ _encryption_ (and one that is only CPA secure) and there is no need for _authent
 exactly because these basic modes only ensure security for _passive_ eavesdropping adversaries and do not ensure chosen ciphertext security
 which is the "gold standard" for online applications. (For symmetric encryption people often use the name "authenticated encryption" in practice rather than CCA security; those are not identical but are extremely related notions.)
 
-[^OFB]: I also like the part where Green says about a block cipher mode that "if OCB was your kid, he'd play three sports and be on his way to Harvard." We will have an exercise about a simplified version of the GCM mode (which perhaps only plays a single sport and is on its way to ...). You can read about OCB in Exercise 9.14 in the Boneh-Shoup book; it uses the notion of a "tweakable block cipher" which simply means that given a single key $k$, you actually get a set $\{ p_{k,1},\ldots,p_{k,t} \}$ of permutations that are indistinguishable from $t$ independent random permuation (the set $\{1,\ldots, t\}$ is called the set of "tweaks" and we sometimes index it using strings instead of numbers).
+[^OFB]: I also like the part where Green says about a block cipher mode that "if OCB was your kid, he'd play three sports and be on his way to Harvard." We will have an exercise about a simplified version of the GCM mode (which perhaps only plays a single sport and is on its way to ...). You can read about OCB in Exercise 9.14 in the Boneh-Shoup book; it uses the notion of a "tweakable block cipher" which simply means that given a single key $k$, you actually get a set $\{ p_{k,1},\ldots,p_{k,t} \}$ of permutations that are indistinguishable from $t$ independent random permutation (the set $\{1,\ldots, t\}$ is called the set of "tweaks" and we sometimes index it using strings instead of numbers).
 
 All of this suggests that  Message Authentication Codes might help us get CCA security. This turns out to be the case. But one needs to take some care exactly _how_ to use MAC's to get CCA security. At this point, you might want to stop and think how you would do this...
 
@@ -176,7 +176,7 @@ $Eve$ can forward the plaintext $m$ to its encryption oracle to get  $c=E_{k_1}(
 >
 However, what does $Eve$ do when $M'$ makes _decryption_ queries? That is, suppose that $M'$ sends a query of the form $(c,\sigma)$ to its decryption box. To simulate the algorithm $D'$, $Eve$ will need access to a _decryption box_ for $D$, but she doesn't get such a box in the CPA game! (This is a subtle point- please pause here and reflect on it until you are sure you understand it!)
 >
-$Eve$'s  will follow the common approach of "winging it and hoping for the best". When $M'$ sends a query of the form $(c,\sigma)$, $Eve$ will first check if it happens to be the case that $(c,\sigma)$ was returned before as an answer to an encryption querty $m$ then $Eve$ will breathe a sigh of relief and simply return $m$ as the
+$Eve$'s  will follow the common approach of "winging it and hoping for the best". When $M'$ sends a query of the form $(c,\sigma)$, $Eve$ will first check if it happens to be the case that $(c,\sigma)$ was returned before as an answer to an encryption query $m$ then $Eve$ will breathe a sigh of relief and simply return $m$ as the
 answer. (This is obviously correct: if $(c,\sigma)$ is the encryption of $m$ then $m$ is the decryption of $(c,\sigma)$.) However, if the query $(c,\sigma)$ has not been
 returned before as an answer, then $Eve$ is in a bit of a pickle. The way out of it is for her to simply return "error" and hope that everything will work out.
 But the crucial observation is that because we are in case II things _will_ work out. After all, the only way $Eve$ makes a mistake is if she returns an error message
@@ -239,9 +239,9 @@ _Formal verification_ of computer programs is an area that is growing in importa
 Cryptographic protocols can fail in  subtle  ways, and even published proofs of security can turn out to have bugs in them.
 Hence there is a line of research dedicated to finding ways to _automatically_ prove security of cryptographic protocols.
 Much of these line of research is based on simple models to describe protocols that are known as _Dolev Yao models_, based on the first paper that proposed such models.
-These models define an _algebraic_ form of security, where rather than thinking of   messages, keys, and ciphertexsts as binary string, we think of them as abstract entities.
+These models define an _algebraic_ form of security, where rather than thinking of   messages, keys, and ciphertexts as binary string, we think of them as abstract entities.
 There are certain rules for manipulating these symbols.
-For example, given a key $k$ and a message $m$ you can create the ciphertex $\{ m \}_k$, which you can decrypt back to $m$ using the same key.
+For example, given a key $k$ and a message $m$ you can create the ciphertext $\{ m \}_k$, which you can decrypt back to $m$ using the same key.
 However the assumption is that any information that cannot be obtained by such manipulation is unknown.
 
 Translating a proof of security in this algebra to proof for real world adversaries is highly non trivial. However, to have even a fighting a chance, the encryption scheme needs to be as strong as possible, and in particular it turns out that security notions such as CCA play a crucial role.
