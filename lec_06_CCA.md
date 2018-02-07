@@ -23,36 +23,48 @@ such that $G(U_n)\approx U_{n+1}$ (where $U_m$ denotes the uniform distribution 
 
 It may seem that we have finally nailed down the security definition for encryption. After all, what could be stronger than allowing Eve unfettered access to the encryption function. Clearly an encryption satisfying this property will hide the contents of the message in all practical circumstances, or will it?
 
+> # { .pause }
+Please stop and play an omnious sound track at this point.
+
+
+
 
 ### EXample: The Wired Equivalence Protocol (WEP)
 
-The WEP is perhaps one of the most inaccurately named protocols in history.
+The WEP is perhaps one of the most inaccurately named protocols of all times.
 It was invented in 1999 for the purpose  of securing Wi-Fi networks so that they would have virtually the same level of security as wired networks, but already early on several
-security flaws were pointed out, and in particular 2001, Fluhrer,  Mantin, and Shamir showed how the RC4 flaws we mentioned in prior lecture can be used to completely break WEP in less than one minute.
+security flaws were pointed out.
+In particular in 2001, Fluhrer,  Mantin, and Shamir showed how the RC4 flaws we mentioned in prior lecture can be used to completely break WEP in less than one minute.
 Yet, the protocol lingered on and for many years after was still the most widely used WiFi encryption protocol as many routers had it as the default option.
 In 2007 the WEP was blamed for a hack stealing 45 million credit card numbers from T.J. Maxx.
 In 2012 (after 11 years of attacks!) it was  estimated that it is still used in about a quarter of encrypted wireless networks, and in 2014 it was still the default option on many Verizon home routers. (I don't know of more recent surveys.)
 Here we will talk about a different flaw of WEP that is in fact shared
 by many other protocols, including the first versions of the secure socket layer (SSL) protocol that is used to protect all encrypted web traffic.
 
-To avoid superfluous details we will considered a highly abstract (and somewhat inaccurate) version of WEP that still demonstrates our main point. In this protocol Alice (user) sends to Bob (access point) an IP packet that she wants routed somewhere to the internet.
+To avoid superfluous details we will considered a highly abstract (and somewhat inaccurate) version of WEP that still demonstrates our main point.
+In this protocol Alice (user) sends to Bob (access point) an IP packet that she wants routed somewhere to the internet.
 So we can think of the message as a string $m\in\{0,1\}^\ell$ of the form $m=(m_1,m_2)$ where $m_1$ is the IP address this packet needs to be routed to and $m_2$ is the actual message that needs to be delivered.
 In the protocol Alice sends to Bob
-$E_k(m\|CRC(m))$ (where $\|$ denotes concatenation and $CRC(m)$ is some cyclic redunduncy code. The actual encryption WEP used was RC4, but for us it doesn't really matter.
-What matters is that the encryption has the form  $E_k(m') = pad \oplus m'$
-where $pad$ is computed as some function of the key. In particular the attack we will describe works even if we use our stronger CPA secure PRF-based scheme where $pad=f_k(r)$ for some random (or counter) $r$ that is sent out separately.
+$E_k(m\|CRC(m))$ (where $\|$ denotes concatenation and $CRC(m)$ is some cyclic redundancy code).
+The actual encryption WEP used was RC4, but for us it doesn't really matter.
+What does matter is that the encryption has the form  $E_k(m') = pad \oplus m'$
+where $pad$ is computed as some function of the key.
+In particular the attack we will describe works even if we use our stronger CPA secure PRF-based scheme where $pad=f_k(r)$ for some random (or counter) $r$ that is sent out separately.
 
-Now the security of the encryption means that an adversary seeing the ciphertext $c=E_k(m\|crc(m))$ will not be able to know $m$, but since this is traveling over the air, the adversary could "spoof" the signal and send a different ciphertext $c'$ to Bob. In particular, if the adversary knows
-the IP address $m_1$ that Alice was using (e.g., for example, the adversary can guess that Alice is probably one of the billions of people that go to boazbarak.org) then she can XOR the ciphertext with a string of her choosing and hence convert the ciphertext $c = pad \oplus (m_1,m_2,CRC(m_1,m_2))$ into the ciphertext $c' = c \oplus x$ where $x=(x_1,x_2,x_3)$ is computed so that $x_1 oplus m_1$ is equal to the adversary's own IP address!
-So, the adversary doesn't need to decrypt the message- by spoofing the ciphertext she can ensure that Bob (who is an access point, whose job is to decrypt and then deliver packets) simply delivers it unencrypted straight into her hands.
+Now the security of the encryption means that an adversary seeing the ciphertext $c=E_k(m\|crc(m))$ will not be able to know $m$, but since this is traveling over the air, the adversary could "spoof" the signal and send a different ciphertext $c'$ to Bob.
+In particular, if the adversary knows the IP address $m_1$ that Alice was using (e.g., for example, the adversary can guess that Alice is probably one of the billions of people that visit to boazbarak.org on a regular basis) then she can XOR the ciphertext with a string of her choosing and hence convert the ciphertext $c = pad \oplus (m_1,m_2,CRC(m_1,m_2))$ into the ciphertext $c' = c \oplus x$ where $x=(x_1,x_2,x_3)$ is computed so that $x_1 oplus m_1$ is equal to the adversary's own IP address!
+So, the adversary doesn't need to decrypt the message- by spoofing the ciphertext she can ensure that Bob (who is  an access point, and whose job is to decrypt and then deliver packets) simply delivers it unencrypted straight into her hands.
 One issue is that Eve modifies $m_1$ then it is unlikely that the CRC code will still check out, and hence Bob would reject the packet.
-However, this CRC (as most are) is _linear_ modulo $2$, which means that if the adversary sets $x_2$ to be the all zero string and $x_3 = CRC(x_1,x_2)$ then it will be the case that $CRC(m_1\oplus x_1,m_2 \oplus m_2)=CRC(m_1,m_2)\oplus CRC(x_1,x_2)$ and so $c'$ will be a valid encryption of the message $(m_1 \oplus x_1, 0, CRC(m_1\oplus x_1,0))$ which means that Bob will deliver the message $m_2$ to the IP address $m_1 \oplus x_1$ of the adversary's choice (see [WEPattackfig](){.ref}).
+However,  [CRC 32](https://goo.gl/5aqEHB) - the CRC algorithm  used by WEP - is  (as many are)  _linear_ modulo $2$, which means that if the adversary sets $x_2$ to be the all zero string and $x_3 = CRC(x_1,x_2)$ then it will be the case that $CRC(m_1\oplus x_1,m_2 \oplus m_2)=CRC(m_1,m_2)\oplus CRC(x_1,x_2)$ and so $c'$ will be a valid encryption of the message $(m_1 \oplus x_1, 0, CRC(m_1\oplus x_1,0))$ which means that Bob will deliver the message $m_2$ to the IP address $m_1 \oplus x_1$ of the adversary's choice (see [WEPattackfig](){.ref}).
 
 ![The attack on the WEP protocol allowing the adversary Mallory to read encrypted messages even when Alice uses a CPA secure encryption.](../figure/wep-attack.jpg){#WEPattackfig width=90% }
 
 ### Chosen ciphertext security
 
 This is not an isolated example but in fact an instance of a general pattern of many breaks in practical protocols.
+Some examples of protocols broken through similar means include [XML encryption](http://www.nds.rub.de/media/nds/veroeffentlichungen/2011/10/22/HowToBreakXMLenc.pdf) ,  [IPSec](https://www.cs.columbia.edu/~smb/papers/badesp.pdf) as well as  JavaServer Faces, Ruby on Rails, ASP.NET, and the Steam gaming client (see the Wikipedia page on [Padding Oracle Attacks](https://goo.gl/b5aKYg)).
+
+
 The point is that often our adversaries can be _active_ and modify the communication between sender and receiver, which in effect gives them access not just to choose _plaintexts_ of their choice to encrypt but even to have some impact on the _ciphertexts_ that are decrypted. This motivates the following notion of security (see also [CCAgamefig](){.ref}):
 
 > # {.definition title="CCA security" #CCAdef}
@@ -84,7 +96,7 @@ The WEP example shows that the definition does capture a practical issue in secu
 __What does CCA has to do with WEP?__ The CCA security game is somewhat strange, and it might not be immediately clear whether it has anything to do with the attack we described on the WEP protocol. However, it turns out that using a CCA secure encryption _would_ have prevented that attack. The key is the following claim:
 
 > # {.lemma #ccaweplem}
-Suppose that $(E,D)$ is a CCA secure encryption, then there is no efficient algorithm that given an encryption $c$ of $(m_1,m_2,m_3)$ outputs an encryption $c'$ of $(m'_1,m_2,m'_3)$ where $m'_1\neq m_1$.
+Suppose that $(E,D)$ is a CCA secure encryption, then there is no efficient algorithm that given an encryption $c$ of $(m_1,m_2)$ outputs an encryption $c'$ of $(m'_1,m_2)$ where $m'_1\neq m_1$.
 
 
 In particular [ccaweplem](){.ref} rules out the attack of transforming $c$ that encrypts a message starting with a some address $IP$ to a ciphertext that starts with a different address $IP'$. Let us now see its proof.
@@ -116,14 +128,14 @@ _encryption_ (and one that is only CPA secure) and there is no need for _authent
 >_Nearly all of the symmetric encryption modes you learned about in school, textbooks, and Wikipedia are (potentially) insecure.[^OFB]_
 
 exactly because these basic modes only ensure security for _passive_ eavesdropping adversaries and do not ensure chosen ciphertext security
-which is the "gold standard" for online applications. (For symmetric encryption people often use the name "authenticated encryption" in practice rather than CCA security; those are not identical but extremely related notions.)
+which is the "gold standard" for online applications. (For symmetric encryption people often use the name "authenticated encryption" in practice rather than CCA security; those are not identical but are extremely related notions.)
 
 [^OFB]: I also like the part where Green says about a block cipher mode that "if OCB was your kid, he'd play three sports and be on his way to Harvard." We will have an exercise about a simplified version of the GCM mode (which perhaps only plays a single sport and is on its way to ...). You can read about OCB in Exercise 9.14 in the Boneh-Shoup book; it uses the notion of a "tweakable block cipher" which simply means that given a single key $k$, you actually get a set $\{ p_{k,1},\ldots,p_{k,t} \}$ of permutations that are indistinguishable from $t$ independent random permuation (the set $\{1,\ldots, t\}$ is called the set of "tweaks" and we sometimes index it using strings instead of numbers).
 
 All of this suggests that  Message Authentication Codes might help us get CCA security. This turns out to be the case. But one needs to take some care exactly _how_ to use MAC's to get CCA security. At this point, you might want to stop and think how you would do this...
 
 > # { .pause }
-You should really stop here and try to think how you would implement a CCA secure encryption by combining MAC's with a CPA secure encryption.
+You should  stop here and try to think how you would implement a CCA secure encryption by combining MAC's with a CPA secure encryption.
 
 \newpage
 
@@ -173,7 +185,7 @@ where the original decryption box would not have done so, but this happens with 
 ## (Simplified) GCM encryption
 
 The construction above works as a generic construction, but it is somewhat costly in the sense that we need to evaluate both the block cipher and the MAC. In particular, if messages have $t$ blocks, then we would need to invoke two cryptographic operations (a block cipher encryption and a MAC computation) per block. The [GCM (Galois Counter Mode)](https://goo.gl/uz6WgS) is a way around this. We are going to describe a simplified version of this mode.
-For simplicity, assume that the number of blocks $t$ is fixed and known (though many of the annoying but important details in block cipher modes of operations involves dealing with padding to multiple of blocks and dealing with variable block size).
+For simplicity, assume that the number of blocks $t$ is fixed and known (though many of the annoying but important details in block cipher modes of operations involve dealing with padding to multiple of blocks and dealing with variable block size).
 
 A [universal hash function collection](https://goo.gl/jLpNtU) is a family of functions $\{ h:\{0,1\}^\ell\rightarrow\{0,1\}^n \}$ such that for every $x \neq x' \in \{0,1\}^\ell$, the random variables $h(x)$ and $h(x')$ (taken over the choice of a  random $h$ from this family) are pairwise independent in $\{0,1\}^{2n}$. That is, for every two potential outputs $y,y'\in \{0,1\}^n$,
 $$
@@ -215,7 +227,20 @@ __Chopping into blocks:__ A block cipher a-priori provides a way to encrypt a me
 __Padding:__ Oftentimes messages are not an integer multiple of the block size and hence need to be _padded_. The _padding_ is typically a map that takes the last partial block of the message (i.e., a string $m$ of length in $\{0,\ldots,n-1\}$) and maps it into a full block (i.e., a string $m\in\{0,1\}^n$). The map needs to be invertible which in particular means that if the message is already an integer multiple of the block size we will need to add an extra block. (Since we have to map all the $1+2+\ldots+2^{n-1}$ messages of length $1,\ldots,n-1$ into the $2^n$ messages of length $n$ in a one-to-one fashion.) One approach for doing so is to pad an $n'<n$ length message with the string $10^{n-n'-1}$. Sometimes people use a different padding which involves encoding the length of the pad.   
 
 
-### References: (incomplete)
+## Chosen ciphertext attack as implementing metaphors
 
-The notion of CCA and non malleability was first suggested by Dolev, Dwork and Naor in 1991.
-The order of encryption and authentication was studied by Hugo Krawczyk in 2001.
+The classical "metaphor" for an encryption is a sealed envelope, but as we have seen in the WEP, this metaphor can lead you astray.
+If you placed a message $m$ in a sealed envelope, you should not be able to modify it to the message $m \oplus m'$ without opening the envelope, and yet this is exactly what happens in the canonical CPA secure encryption $E_k(m)=(r,f_k(r) \oplus m)$.
+CCA security comes much closer to realizing the metaphor, and hence is considered as the "gold standard" of secure encryption.
+This is important even if you do not intend to write poetry about encryption.
+
+_Formal verification_ of computer programs is an area that is growing in importance given that computer programs become both more complex and more mission critical.
+Cryptographic protocols can fail in  subtle  ways, and even published proofs of security can turn out to have bugs in them.
+Hence there is a line of research dedicated to finding ways to _automatically_ prove security of cryptographic protocols.
+Much of these line of research is based on simple models to describe protocols that are known as _Dolev Yao models_, based on the first paper that proposed such models.
+These models define an _algebraic_ form of security, where rather than thinking of   messages, keys, and ciphertexsts as binary string, we think of them as abstract entities.
+There are certain rules for manipulating these symbols.
+For example, given a key $k$ and a message $m$ you can create the ciphertex $\{ m \}_k$, which you can decrypt back to $m$ using the same key.
+However the assumption is that any information that cannot be obtained by such manipulation is unknown.
+
+Translating a proof of security in this algebra to proof for real world adversaries is highly non trivial. However, to have even a fighting a chance, the encryption scheme needs to be as strong as possible, and in particular it turns out that security notions such as CCA play a crucial role.
