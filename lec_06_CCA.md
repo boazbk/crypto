@@ -29,7 +29,7 @@ Please stop and play an omnious sound track at this point.
 
 
 
-### EXample: The Wired Equivalence Protocol (WEP)
+### Example: The Wired Equivalence Protocol (WEP)
 
 The WEP is perhaps one of the most inaccurately named protocols of all times.
 It was invented in 1999 for the purpose  of securing Wi-Fi networks so that they would have virtually the same level of security as wired networks, but already early on several
