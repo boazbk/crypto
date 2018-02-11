@@ -69,7 +69,7 @@ Therefore by XOR'ing $c$ with $(x_1,0,CRC(x_1,0))$, the adversary Mallory can en
 ### Chosen ciphertext security
 
 This is not an isolated example but in fact an instance of a general pattern of many breaks in practical protocols.
-Some examples of protocols broken through similar means include [XML encryption](http://www.nds.rub.de/media/nds/veroeffentlichungen/2011/10/22/HowToBreakXMLenc.pdf) ,  [IPSec](https://www.cs.columbia.edu/~smb/papers/badesp.pdf) as well as  JavaServer Faces, Ruby on Rails, ASP.NET, and the Steam gaming client (see the Wikipedia page on [Padding Oracle Attacks](https://goo.gl/b5aKYg)).
+Some examples of protocols broken through similar means include [XML encryption](http://www.nds.rub.de/media/nds/veroeffentlichungen/2011/10/22/HowToBreakXMLenc.pdf) ,  [IPSec](https://www.cs.columbia.edu/~smb/papers/badesp.pdf) (see also [here](https://eprint.iacr.org/2005/416)) as well as  JavaServer Faces, Ruby on Rails, ASP.NET, and the Steam gaming client (see the Wikipedia page on [Padding Oracle Attacks](https://goo.gl/b5aKYg)).
 
 
 The point is that often our adversaries can be _active_ and modify the communication between sender and receiver, which in effect gives them access not just to choose _plaintexts_ of their choice to encrypt but even to have some impact on the _ciphertexts_ that are decrypted. This motivates the following notion of security (see also [CCAgamefig](){.ref}):
@@ -212,7 +212,7 @@ $$
 
 Universal hash functions have rather efficient constructions, and in particular if we relax the definition to allow _almost universal_ hash functions (where we replace the $2^{-2n}$ factor in the righthand side of [equnivhash](){.eqref} by a slightly bigger, though still negligible quantity) then the constructions become extremely efficient and the size of the description of $h$ is only related to $n$, no matter how big $\ell$ is.[^almost-universal]
 
-[^almost-universal]: In $\epsilon$-almost universal hash functions we require that for every $y,y'\in \{0,1\}^{n}$, and $x\neq x' \in \{0,1\}^\ell$, the probability that $h(x)=y \wedge h(x')=y'$ is at most $(1+\epsilon)2^{-2n}$.  It can be easily shown that the analysis below extends to almost universal hash functions, but we will leave verifying this to the reader.
+[^almost-universal]: In $\epsilon$-almost universal hash functions we require that for every $y,y'\in \{0,1\}^{n}$, and $x\neq x' \in \{0,1\}^\ell$, the probability that $h(x)= h(x')$ is at most $\epsilon$.  It can be easily shown that the analysis below extends to $\epsilon$ almost universal hash functions as long as $\epsilon$ is negligible, but we will leave verifying this to the reader.
 
 Our encryption scheme is defined as follow. The key is $(k,h)$ where $k$ is an index to a pseudorandom permutation $\{ p_k \}$ and $h$ is the key for a _universal hash function_.[^single_key] To encrypt a message $m = (m_1,\ldots,m_t) \in \{0,1\}^{nt}$  do the following:
 
@@ -227,7 +227,8 @@ Our encryption scheme is defined as follow. The key is $(k,h)$ where $k$ is an i
 * Output $(IV,c_1,\ldots,c_{t+1})$.
 
 The communication overhead includes one additional output block plus the  IV (whose transmission can often be avoided or reduced, depending on the settings; see the notion of "nonce based encryption").
-This is fairly minimal. The additional computational cost on top of $t$ block-cipher evaluation is the application of $h(\cdot)$. For the particular choice of $h$ used in Galois Counter Mode, this function $h$ can be evaluated very efficiently- at a cost of a single multiplication in the Galois field of size $2^{128}$ (one can think of it as some very particular operation that maps two $128$ bit strings to a single one, and can be carried out quite efficiently).
+This is fairly minimal. The additional computational cost on top of $t$ block-cipher evaluation is the application of $h(\cdot)$.
+For the particular choice of $h$ used in Galois Counter Mode, this function $h$ can be evaluated very efficiently- at a cost of a single multiplication in the Galois field of size $2^{128}$ per block (one can think of it as some very particular operation that maps two $128$ bit strings to a single one, and can be carried out quite efficiently).
 We leave it as an (excellent!) exercise to prove that the resulting scheme is CCA secure.
 
 
