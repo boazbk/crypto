@@ -112,6 +112,7 @@ In particular [ccaweplem](){.ref} rules out the attack of transforming $c$ that 
 
 > # {.proof data-ref="ccaweplem"}
 We'll show that such if we had an adversary $M'$ that violates the conclusion of the claim, then there is an adversary $M$ that can win in the CCA game.
+
 The proof is simple and relies on the crucial fact that the CCA game allows $M$ to query the decryption box on _any_ ciphertext of her choice, as long as it's not _exactly identical_ to the challenge cipertext $c^*$. In particular, if $M'$ is able to morph an encryption $c$ of $m$ to some encryption $c'$ of some different $m'$ that agrees with $m$ on some set of bits, then $M$ can do the following: in the security game, use $m_0$ to be some random message and $m_1$ to be this plaintext $m$. Then, when receiving $c^*$, apply $M'$ to it to obtain a ciphertext $c'$ (note that if the plaintext differs then the ciphertext must differ also; can you see why?) ask the decryption box to decrypt it and output $1$ if the resulting message agrees with $m$ in the corresponding set of bits (otherwise output a random bit). If $M'$ was successful with probability $\epsilon$, then $M$ would win in the CCA game with probability at least $1/2 + \epsilon/10$ or so.
 
 > # { .pause }
