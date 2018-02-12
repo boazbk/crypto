@@ -1,5 +1,6 @@
 #  Key derivation, protecting passwords, slow hashes, Merkle trees
 
+
 Last lecture we saw the notion of cryptographic hash functions which are functions that behave like a random function, even in settings (unlike that of standard PRFs) where the adversary has access to the key that allows them to evaluate the hash function.
 Hash functions have found a variety of uses in cryptography, and in this lecture we survey some of their other applications.
 In some of these cases, we only need the relatively mild and well-defined property of _collision resistance_ while in others we only know how to analyze security under the stronger (and not precisely well defined) _random oracle heuristic_.
