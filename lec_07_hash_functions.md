@@ -45,8 +45,8 @@ All of these transactions are recorded in a public _ledger_.
 
 [^satoshi]: This is  one of the places where we simplify and deviate from the actual Bitcoin system. In the actual Bitcoin system, the atomic unit is known as a _satoshi_ and one bitcoin (abberviated BTC) is $10^8$ satoshis. For reasons of efficiency, there is no individual identifier per satoshi and transactions can involve transfer and creation of multiple satoshis. However, conceptually we can think of atomic coins each of which has a unique identifier.
 
-Since there are no user accounts in bitcoin, the "entities" $P$ and $Q$ are not identifier of any person or account.
-Rather  $P$ and $Q$ as  "computational puzzles".
+Since there are no user accounts in bitcoin, the "entities" $P$ and $Q$ are not identifiers of any person or account.
+Rather  $P$ and $Q$ are  "computational puzzles".
 A _computational puzzle_ can be thought of as a string $\alpha$ that specifies some "problem" such that it's easy to verify whether some other string $\beta$ is a "solution" for $\alpha$, but it is hard to find such a solution on your own.
 (Students with complexity background will recognize here the class **NP**.)
 So when we say "transfer the coin $ID$ from $P$ to $Q$" we mean that whomever holds a solution for the puzzle $Q$ is now the owner of the coin $ID$ (and to verify the authenticity of this transfer, you provide a solution to the puzzle $P$.)
@@ -116,7 +116,7 @@ The random oracle heuristic is very different from all the  conjectures we consi
 
 
 
-We can now specify the "proof of work" protocol for bitcoin. Given some identifier $ID\in\{0,1\}^n$ an integer $T \ll 2^n$ and a hash function $H:\{0,1\}^{2n}\rightarrow\{0,1\}^n$, the proof of work corresponding to $ID$ and $T$ will be some $x\in\{0,1\}^*$ such that  the first $\lceil \log T \rceil$ bits of $H(ID\| x)$ are zero.[^number]
+We can now specify the "proof of work" protocol for bitcoin. Given some identifier $ID\in\{0,1\}^n$, an integer $T \ll 2^n$, and a hash function $H:\{0,1\}^{2n}\rightarrow\{0,1\}^n$, the proof of work corresponding to $ID$ and $T$ will be some $x\in\{0,1\}^*$ such that  the first $\lceil \log T \rceil$ bits of $H(ID\| x)$ are zero.[^number]
 
 [^number]: The actual bitcoin protocol is slightly more general, where the proof is some $x$ such that $H(ID\|x)$, when interpreted as a number in $[2^n]$, is at most $T$. There are also other issues about how exactly $x$ is placed and $ID$ is computed from past history  that we ignore here.
 
@@ -127,7 +127,7 @@ The _length_ of a ledger $(t_1,\ldots,t_n)$ is the sum of the corresponding $T_i
 
 An honest party in the bitcoin network will accept the longest valid ledger it is aware of. (A ledger is _valid_ if every transaction in it of the form "transfer the coin $ID$ from $P$ to $Q$" is self-certified by a solution of $P$, and the last transaction in the ledger involving $ID$ either transferred or minted the coin $ID$ to $P$). If a ledger $L$ corresponds to the majority of the cycles that were available in this network then every honest party would accept it, as any alternative ledger would be necessarily shorter. (See [ledgerfig](){.ref}.)
 
-The question is then how do we get to that happy state given that many parties might be non malicious but still _selfish_ and might not want to volunteer their computing power for the goal of creating a consensus ledger.
+The question is then how do we get to that happy state given that many parties might be non-malicious but still _selfish_ and might not want to volunteer their computing power for the goal of creating a consensus ledger.
 Bitcoin achieves this by giving some incentive, in the form of the ability to mint new coins, to any party that adds to the ledger.
 This means that if we are already in the situation where there is a consensus ledger $L$, then every party has an interest in continuing this ledger $L$, and not any alternative, as they want their minting transaction to be part of the new consensus ledger.
 In contrast if they "fork" the consensus ledger then their work may well be for vain.
@@ -137,7 +137,7 @@ Thus one can hope that the consensus ledger will continue to grow. (This is a ra
 
 
 
->__The real bitcoin:__ There are several aspects in which the protocol described above differs from the real bitcoin protocol. Some of them were already discussed above:  Bitcoin typically uses digital signatures for puzzles (though it has a more general scripting language to specify them), and transactions involve a number of satoshis (and the user interface typically displayes currency is in units of BTC which are $10^8$ satoshis). The  Bitcoin protocol also has a formula designed to factor in the decrease in dollar cost per cycle so that bitcoins become more expensive to mine with time. There is also a fee mechanism apart from the mining to incentivize parties to add to the ledger. (The issue of incentives in bitcoin is quite subtle and not fully resolved, and it is possible that parties behavior will change with time.) The ledger does not grow by a single transaction at a time but rather by a _block_ of transactions, and there is also some timing synchronization mechanism (which is needed, as per the consensus impossiblity results). There are other differences as well; see the [Bonneau et al paper](https://eprint.iacr.org/2015/261) as well as the [Tschorsch and Scheuermann survey](https://eprint.iacr.org/2015/464) for more.    
+>__The real bitcoin:__ There are several aspects in which the protocol described above differs from the real bitcoin protocol. Some of them were already discussed above:  Bitcoin typically uses digital signatures for puzzles (though it has a more general scripting language to specify them), and transactions involve a number of satoshis (and the user interface typically displayes currency is in units of BTC which are $10^8$ satoshis). The  Bitcoin protocol also has a formula designed to factor in the decrease in dollar cost per cycle so that bitcoins become more expensive to mine with time. There is also a fee mechanism apart from the mining to incentivize parties to add to the ledger. (The issue of incentives in bitcoin is quite subtle and not fully resolved, and it is possible that parties' behavior will change with time.) The ledger does not grow by a single transaction at a time but rather by a _block_ of transactions, and there is also some timing synchronization mechanism (which is needed, as per the consensus impossiblity results). There are other differences as well; see the [Bonneau et al paper](https://eprint.iacr.org/2015/261) as well as the [Tschorsch and Scheuermann survey](https://eprint.iacr.org/2015/464) for more.
 
 ## Collision resistance hash functions and creating short "unique" identifiers
 
@@ -244,7 +244,7 @@ Almost all practically used hash functions are based on the Merkle-Damgard parad
 Hash functions are designed to be extremely efficient[^efficient] which also means that they are often at the "edge of insecurity" and indeed
 have fallen over the edge.
 
-[^efficient]: For example, the Boneh-Shoup book quotes processing times of up to 255MB/sec on a 1.83 Ghz Intel Core 2 processor, which is more than enough to handle not just Harvard's network but even [Lamar college's](http://www.huffingtonpost.com/2014/06/27/colleges-fastest-internet-speed-infographic_n_5536834.html).
+[^efficient]: For example, the Boneh-Shoup book quotes processing times of up to 255MB/sec on a 1.83 Ghz Intel Core 2 processor, which is more than enough to handle not just Harvard's network but even [Lamar College's](http://www.huffingtonpost.com/2014/06/27/colleges-fastest-internet-speed-infographic_n_5536834.html).
 
 In 1990 Ron Rivest proposed MD4, which was already shown weaknesses in 1991, and a full collision has been found in 1995.
 Even faster attacks have been since found and MD4 is considered completely insecure.
@@ -283,6 +283,6 @@ For this reason it is suspected that it was designed by a western intelligence a
 Another insight into NSA's thoughts can be found in  pages 12-19 of NSA's internal [Cryptolog magazine](https://www.nsa.gov/public_info/_files/cryptologs/cryptolog_126.pdf) which has been recently declassified; one can find there a rather  entertaining and opinionated (or obnoxious, depending on your point of view) review of the CRYPTO 1992 conference. In page 14 the author remarks that certain weaknesses of MD5 demonstrated in the conference are unlikely to be extended to the full version, which suggests that the NSA (or at least the author) was not aware of the MD5 collisions at the time.
 
 
-### Cryptographic vs non cryptographic hash functions:
+### Cryptographic vs non-cryptographic hash functions:
 
-Hash functions are of course also widely used for _non cryptographic_ applications such as building hash tables and load balancing. For these applications people often use _linear_ hash functions known as _cyclic redundancy codes (CRC)_.  Note however that even in those seemingly non cryptographic applications, an adversary might cause significant slowdown to the system if he can generate many collisions. This can and [has](http://arstechnica.com/business/2011/12/huge-portions-of-web-vulnerable-to-hashing-denial-of-service-attack/) been used to  obtain denial of service attacks. As a rule of thumb, if the inputs to your system might be generated by someone who does not have your best interests at heart, you're better off using a cryptographic hash function.
+Hash functions are of course also widely used for _non-cryptographic_ applications such as building hash tables and load balancing. For these applications people often use _linear_ hash functions known as _cyclic redundancy codes (CRC)_.  Note however that even in those seemingly non-cryptographic applications, an adversary might cause significant slowdown to the system if he can generate many collisions. This can and [has](http://arstechnica.com/business/2011/12/huge-portions-of-web-vulnerable-to-hashing-denial-of-service-attack/) been used to  obtain denial of service attacks. As a rule of thumb, if the inputs to your system might be generated by someone who does not have your best interests at heart, you're better off using a cryptographic hash function.
