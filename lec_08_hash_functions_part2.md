@@ -16,17 +16,18 @@ Due to several large scale hacks, very large databases of passwords have been ma
 and one [estimate](https://blogs.dropbox.com/tech/2012/04/zxcvbn-realistic-password-strength-estimation/) is that 90 percent of the passwords chosen by users are contained in a list of about  $10,000 \approx 2^{14}$ strings.
 
 
-If we choose a password at random from some set $D$ then the _entropy_ of the password is simply $\log_2 |D|$.  
-Estimating the entropy of real life passwords is rather difficult.
+If we choose a password at random from some set $D$ then the _entropy_ of the password is simply $\log_2 |D|$.
+However, estimating the entropy of real life passwords is rather difficult.
 For example, suppose that I use the winning Massachussets Mega-Lottery numbers as my password.
 A priory, my password consists of $5$ numbers between $1$ till $75$ and so its entropy is $\log_2 (75^5) \approx 31$.
 However, if an attacker _knew_ that I did this, the entropy might be something like $\log(520) \approx 9$ (since there were only 520 such numbers selected in the last 10 years).
 Moreover, if they knew exactly what draw I based my password on, then they would it exactly and hence the entropy (from their point of view) would be zero.
 This is worthwhile to emphasize:
 
->_The entropy of a secret is always measured with respect to the attacker's point of view_
+>_The entropy of a secret is always measured with respect to the attacker's point of view._
 
-The exact security of passwords is of course a matter of intense practical interest, but we will simply model the password as being chosen at random from some set $D\subseteq\{0,1\}^n$ (which is sometimes called the "dictionary"). The set $D$ is known to the attacker, but she has no information on the particular choice of the password.
+The exact security of passwords is of course a matter of intense practical interest, but we will simply model the password as being chosen at random from some set $D\subseteq\{0,1\}^n$ (which is sometimes called the "dictionary").
+The set $D$ is known to the attacker, but she has no information on the particular choice of the password.
 
 Much of the challenge for using passwords securely relies on the distinction between _offline_ and _online_ attacks.
 If each guess for a password requires interacting _online_ with a server, as is the case when typing a PIN number in the ATM, then even a weak password (such as a 4 digit PIN that at best provides $13$ bits of entropy) can
