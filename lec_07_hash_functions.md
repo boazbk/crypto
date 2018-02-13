@@ -59,7 +59,7 @@ Please re-read the previous paragraph, to make sure you follow the logic.
 
 One example of a puzzle is that  $\alpha$ can encode some large integer $N$, and a solution $\beta$ will encode a pair of numbers $A,B$ such that $N=A\cdot B$.
 Another more generic example (that you can keep in mind as a potential implementation for the puzzles we use here) is that $\alpha$  will be a string in $\{0,1\}^{2n}$ while $\beta$ will be a string in $\{0,1\}^n$ such that $\alpha = G(\beta)$ where $G:\{0,1\}^n\rightarrow\{0,1\}^{2n}$ is some pseudorandom generator.
-The real Bitcoin system typically  uses puzzles based on _digital signatures_, a concept we will learn about later in this course, but you can simply think of $P$ as specifying some abstract puzzle and every person that can solve $P$ perform transactions on the coins owned by $P$.[^signatures]
+The real Bitcoin system typically  uses puzzles based on _digital signatures_, a concept we will learn about later in this course, but you can simply think of $P$ as specifying some abstract puzzle and every person that can solve $P$ can perform transactions on the coins owned by $P$.[^signatures]
 In particular if you lost the solution to the puzzle then you have no access to the coin, and if someone stole the solution from you, then you have no recourse or way to get your coin back. People have managed to [lose millions of dollars](http://readwrite.com/2014/01/13/what-happens-to-lost-bitcoins) in this way.  
 
 [^signatures]: There are reasons why Bitcoin uses digital signatures and not these puzzles. The main issue is that we want to bind the puzzle not just to the coin but also to the particular transaction, so that if you know the solution to the puzzle $P$ corresponding to the coin $ID$ and want to use that to transfer it to $Q$, it won't be possible for someone to take your  solution and use that to transfer the coin to $Q'$ before your transaction is added to the public ledger. We will come back to this issue after we learn about digital signatures.
@@ -195,7 +195,7 @@ This is a much stronger attack model, and so a PRF does not have to be collision
 
 ## Practical constructions of cryptographic hash functions
 
-While we discussed hash functions as _keyed_ collections, in practice people often think of a hash function as having being a _fixed keyless function_. However, this is because most practical constructions involve some hardwired standardized constants (often known as IV) that can be thought of as a choice of the key.
+While we discussed hash functions as _keyed_ collections, in practice people often think of a hash function as being a _fixed keyless function_. However, this is because most practical constructions involve some hardwired standardized constants (often known as IV) that can be thought of as a choice of the key.
 
 Practical constructions of cryptographic hash functions start with a basic block which is known as a _compression function_ $h:\{0,1\}^{2n}\rightarrow\{0,1\}^n$. The function $H:\{0,1\}^*\rightarrow\{0,1\}^n$ is defined as
 $H(m_1,\ldots,m_t)=h(h(h(m_1,IV),m_2),\cdots,m_t)$
