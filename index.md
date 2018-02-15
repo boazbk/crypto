@@ -66,12 +66,10 @@ index:
     file: lec_12_lattices
     draft: false
 
-
-   - num: 12.
+  - num: 12.
     name: Chosen Ciphertext Security for Public Key Encryption
     file: lec_12a_CCA_public_key
-   draft: false
-
+    draft: false
 
   - num: 13.
     name: Establishing secure communication channels
