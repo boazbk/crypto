@@ -52,24 +52,26 @@ index:
     draft: false
 
   - num: 9.
-    name: Private key cryptography recap    
-    file: lec_09_priv_recap
-    draft: false
-
-  - num: 10.
     name: Public key cryptography
     file: lec_10_public_key_intro
     draft: false
 
-  - num: 11.
+  - num: 10.
     name: Concrete public key schemes
     file: lec_11_concrete_pkc
     draft: false
 
-  - num: 12.
+  - num: 11.
     name: Lattice based cryptography    
     file: lec_12_lattices
     draft: false
+
+
+   - num: 12.
+    name: Chosen Ciphertext Security for Public Key Encryption
+    file: lec_12a_CCA_public_key
+   draft: false
+
 
   - num: 13.
     name: Establishing secure communication channels

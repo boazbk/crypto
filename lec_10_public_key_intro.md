@@ -20,6 +20,60 @@ However, Diffie and Hellman were in a position not unlike  physicists who predic
 This was done the next year by Rivest, Shamir and Adleman who came up with the RSA trapdoor function, which through the framework of Diffie and Hellman yielded not just encryption but also signatures (this was essentially the same function  discovered earlier by Clifford Cocks at GCHQ, though as far as I can tell Cocks, Ellis and Williamson did not realize the application to digital signatures).
 From this point on began a flurry of advances in cryptography which hasn't really died down till this day.
 
+
+## Private key crypto recap
+
+
+Before we embark on the wonderful journey to _public key_ cryptography, let's briefly look back and see what we learned about _private key cryptography_.
+This material is mostly covered in Chapters 1 to 9 of the Katz Lindell (KL) book and Part I (Chapters 1-9) of the Boneh Shoup (BS) book.
+Now would be a good time for you to read the corresponding proofs in one or both of  these books. It is often helpful to see the same proof presented in a slightly different way.
+Below is a review of some of the various reductions we saw in class, with pointers to the corresponding sections in these books.
+
+
+
+* Pseudorandom generators (PRG) length extension (from $n+1$ output PRG to $poly(n)$ output PRG): KL 7.4.2, BS 3.4.2
+* PRG's to pseudorandom functions (PRF's): KL 7.5, BS 4.6
+* PRF's to Chosen Plaintext Attack (CPA) secure encryption: KL 3.5.2, BS 5.5
+* PRF's to secure Message Authentication Codes (MAC's): KL 4.3,  BS 6.3
+* MAC's + CPA secure encryption to chosen ciphertext attack (CCA) secure encryption: BS 4.5.4, BS 9.4
+* Pseudorandom permutation (PRP's) to CPA secure encryption / block cipher modes: KL 3.5.2, KL 3.6.2, BS 4.1, 4.4, 5.4
+* Hash function applications: fingerprinting, Merkle trees, passwords: KL 5.6, BS Chapter 8
+* Coin tossing over the phone: we saw a construction in class that used a _commitment scheme_ built out of a pseudorandom generator. This is shown in BS 3.12, KL 5.6.5 shows an alternative construction using random oracles.
+* PRP's from PRF's: we only sketched the construction which can be found in KL 7.6 or BS 4.5
+
+One major point we did _not_ talk about in this course was _one way functions_. The definition of a one way function is quite simple:
+
+> # {.definition title="One Way Functions" #owfdef}
+A function $f:\{0,1\}^*\rightarrow\{0,1\}^*$ is a _one way function_ if it is efficiently computable and for every $n$ and a $poly(n)$ time adversary $A$,
+the probability over $x\leftarrow_R\{0,1\}^n$ that $A(f(x))$ outputs $x'$ such that $f(x')=f(x)$ is negligible.
+
+The "OWF conjecture" is the conjecture that one way functions exist. It turns out to be a necessary and sufficient condition for much of cryptography.
+That is, the following theorem is known (by combining works of many people):
+
+> # {.theorem title="One way functions and private key cryptography" #privkeydef}
+The following are equivalent: \
+* One way functions exist \
+* Pseudorandom generators (with non trivial stretch) exist \
+* Pseudorandom functions exist \
+* CPA secure private key encryptions exist \
+* CCA secure private key encryptions exist \
+* Message Authentication Codes exist \
+* Commitment schemes exist
+
+(and others as well)
+The key result in the proof of this theorem is the result of Hastad, Impagliazzo, Levin and Luby that if one way functions exist then pseudorandom generators exist.
+If you are interested in finding out more,
+Sections 7.2-7.4 in the KL book cover a special case of this theorem for the case that the one way function is a _permutation_ on $\{0,1\}^n$ for every $n$.
+This proof has been considerably simplified and quantitatively improved in works of Haitner, Holenstein, Reingold, Vadhan, Wee and Zheng. See [this talk of Salil Vadhan](http://people.seas.harvard.edu/~salil/research/CompEnt-abs.html) for more on this.  See also [these lecture notes](http://www.cs.princeton.edu/courses/archive/spring08/cos598D/scribe3.pdf) from a Princeton seminar I gave on this topic (though the proof has been simplified since then by the above works).
+
+
+> # {.remark title="Attacks on private key cryptosystems" #privkeyattacks}
+Another topic we did not discuss in depth   is attacks on private key cryptosystems.
+These attacks often work by "opening the black box" and looking at the internal operation of block ciphers or hash functions.
+One then often assigns variables to various internal registers, and then we look to finding collections of inputs that would satisfy some non-trivial relation between those variables. This is a rather vague description, but you can read KL Section 6.2.6 on _linear_ and _differential_ cryptanalysis and BS Sections 3.7-3.9 and 4.3 for more information. See also [this course of Adi Shamir](http://www.cs.tau.ac.il/~tromer/SKC2006/). There is also the fascinating area of _side channel_ attacks on both public and private key crypto.
+
+
+
 ### Public Key Cryptography: Definition
 
 We now discuss how we define security for public key cryptography. As mentioned above,
