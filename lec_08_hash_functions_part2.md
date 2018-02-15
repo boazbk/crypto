@@ -162,13 +162,15 @@ $H_{Shannon}(X) = n - \E[Y|X] =  n - \sum_{i=1}^m p_i k_i = \sum_{i=1}^m p_i \lo
 since $p_i = k_i/2^n$ and hence $\log(p_i)=\log(k_i)-n$.
 
 The Shannon entropy has many attractive properties, but it turns out that for cryptographic applications, the notion of _min entropy_ is more appropriate.
-For a distribution $X$ the _min-entropy_ is simply defined as $H_{\infty}(X)= \max_x \log(1/\Pr[X=x])$.[^infty] Note that if $X$ is flat then $H_{infty}(X)=H_{Shannon}(X)$ and that $H_{infty}(X) \leq H_{Shannon}(X)$ for all $X$. We can now formally define the notion of an extractor:
+For a distribution $X$ the _min-entropy_ is simply defined as $H_{\infty}(X)= \min_x \log(1/\Pr[X=x])$.[^infty]
+Note that if $X$ is flat then $H_{\infty}(X)=H_{Shannon}(X)$ and that $H_{\infty}(X) \leq H_{Shannon}(X)$ for all $X$.
+We can now formally define the notion of an extractor:
 
 > # {.definition title="Randomness extractor" #extractordef}
 A function $h:\{0,1\}^{\ell+n}\rightarrow\{0,1\}^n$ is a _randomness extractor_ ("extractor" for short) if for every distribution $X$ over $\{0,1\}^\ell$ with min entropy at least $2n$, if we pick
 $s$ to be a random "salt", the distribution $h(X)$ is computationally indistinguishable from the uniform distribution.[^params]
 
-[^infty]:  The notation $H_{\infty}(\cdot)$ for  min entropy comes from the fact that one can define a [_family_](https://goo.gl/HvVgu1) of entropy like functions, containing a function for every non-negative number $p$ based on the $p$-norm of the probability distribution. That is, the Rényi  entropy of order $p$ is defined as $H_p(X)=(1-p)^{-1}\log(\sum_x \Pr[X=x]^p)$. The min entropy can be thought of as the limit of $H_p$ when $p$ tends to infinity while the Shannon entropy is the limit as $p$ tends to $1$. The entropy $H_2(\cdot)$ is related to the _collision probability_ of $X$ and is often used as well.
+[^infty]:  The notation $H_{\infty}(\cdot)$ for  min entropy comes from the fact that one can define a [_family_](https://goo.gl/HvVgu1) of entropy like functions, containing a function for every non-negative number $p$ based on the $p$-norm of the probability distribution. That is, the Rényi  entropy of order $p$ is defined as $H_p(X)=(1-p)^{-1}\log(\sum_x \Pr[X=x]^p)$. The min entropy can be thought of as the limit of $H_p$ when $p$ tends to infinity while the Shannon entropy is the limit as $p$ tends to $1$. The entropy $H_2(\cdot)$ is related to the _collision probability_ of $X$ and is often used as well. The min entropy is the smallest among all the entropies and hence it is the most _conservative_ (and so appropriate for usage in cryptography). For _flat sources_, which are uniform over a certain subset, all entropies coincide.
 
 [^params]: The pseudorandomness literature studies the notion of extractors much more generally and consider all possible variations for parameters such as the entropy requirement, the salt (more commonly known as seed) size, the distance from uniformity, and more. The type of notion we consider here is known in that literature as a "strong seeded extractor". See [Vadhan's monograph](https://goo.gl/XHQjTB) for an in-depth treatment of this topic.
 
@@ -206,11 +208,12 @@ There are efficient constructions of functions $h(\cdot)$ with this property, th
 cryptographic hash function for this purpose.
 
 
-### Forward secrecy
+### Forward and backward secrecy
 
 A cryptographic tool such as encryption is clearly insecure if the adversary learns the private key,  and similarly the output of a pseudorandom generator is insecure if the adversary learns the seed.
 So, it might seem as if it's "game over" once this happens. However, there is still some hope.
 For example, if the adversary  learns it at time $t$ but didn't know it before then, then one could hope that she does not learn the information that was exchanged up to time $t-1$.
 This property is known as "forward secrecy". It had recently gained interest as means to protect against powerful "attackers" such as the NSA that may record the communication transcripts in the hope of deciphering them in some future after it had learned the secret key.
-In the context of pseudorandom generators, one could hope for both forward and backwards secrecy. Forward secrecy means that the state of the generator is updated at every point in time in a way that learning the state at time $t$ does not help in recovering past state, and "backwards secrecy" means that we can recover from the adversary knowing our internal state by updating the generator with fresh entropy.
+In the context of pseudorandom generators, one could hope for both forward and backward secrecy.
+Forward secrecy means that the state of the generator is updated at every point in time in a way that learning the state at time $t$ does not help in recovering past state, and "backward secrecy" means that we can recover from the adversary knowing our internal state by updating the generator with fresh entropy.
 See [this paper of me and Halevi](https://eprint.iacr.org/2005/029) for some discussions of this issue, as well as [this later work by Dodis et al](https://eprint.iacr.org/2013/338).
