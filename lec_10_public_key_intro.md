@@ -47,7 +47,7 @@ One major point we did _not_ talk about in this course was _one way functions_. 
 A function $f:\{0,1\}^*\rightarrow\{0,1\}^*$ is a _one way function_ if it is efficiently computable and for every $n$ and a $poly(n)$ time adversary $A$,
 the probability over $x\leftarrow_R\{0,1\}^n$ that $A(f(x))$ outputs $x'$ such that $f(x')=f(x)$ is negligible.
 
-The "OWF conjecture" is the conjecture that one way functions exist. It turns out to be a necessary and sufficient condition for much of cryptography.
+The "OWF conjecture" is the conjecture that one way functions exist. It turns out to be a necessary and sufficient condition for much of private key cryptography.
 That is, the following theorem is known (by combining works of many people):
 
 > # {.theorem title="One way functions and private key cryptography" #privkeydef}
@@ -60,7 +60,7 @@ The following are equivalent: \
 * Message Authentication Codes exist \
 * Commitment schemes exist
 
-(and others as well)
+
 The key result in the proof of this theorem is the result of Hastad, Impagliazzo, Levin and Luby that if one way functions exist then pseudorandom generators exist.
 If you are interested in finding out more,
 Sections 7.2-7.4 in the KL book cover a special case of this theorem for the case that the one way function is a _permutation_ on $\{0,1\}^n$ for every $n$.
@@ -72,25 +72,33 @@ Another topic we did not discuss in depth   is attacks on private key cryptosyst
 These attacks often work by "opening the black box" and looking at the internal operation of block ciphers or hash functions.
 One then often assigns variables to various internal registers, and then we look to finding collections of inputs that would satisfy some non-trivial relation between those variables. This is a rather vague description, but you can read KL Section 6.2.6 on _linear_ and _differential_ cryptanalysis and BS Sections 3.7-3.9 and 4.3 for more information. See also [this course of Adi Shamir](http://www.cs.tau.ac.il/~tromer/SKC2006/). There is also the fascinating area of _side channel_ attacks on both public and private key crypto.
 
+> # {.remark title="Digital Signatures" #signaturesrem}
+We will discuss in this lecture _Digital signatures_, which are the public key analog of message authentication codes.
+Surprisingly, despite being a "public key" object, it is possible to base digital signatures on one-way functions (this is obtained using ideas of Lamport, Merkle, Goldwasser-Goldreich-Micali, Naor-Yung, and Rompel).
+However these constructions are not very efficient (and this may be inherent) and so in practice people use  digital signatures that are built using similar techniques to those used for public key encryption.
 
 
-### Public Key Cryptography: Definition
 
-We now discuss how we define security for public key cryptography. As mentioned above,
+
+## Public Key Encryptions: Definition
+
+We now discuss how we define security for public key encryption. As mentioned above,
 it took quite a while for cryptographers to arrive at the "right" definition,
 but in the interest of time we will skip ahead to what by now is the standard basic notion:
 
-__Definition__ A triple of efficient algorithms $(G,E,D)$ is a _public key encryption scheme_ if it satisfies
-the following:
 
+> # {.definition title="Public key encryption" #pubkeydef}
+A triple of efficient algorithms $(G,E,D)$ is a _public key encryption scheme_ if it satisfies
+the following: \
+>
 * $G$ is a probabilistic algorithm known as the _key generation algorithm_ that on input $1^n$ outputs a distribution over pair of keys $(e,d)$.
-* For every $m\in\{0,1\}^n$, with probability $1-negl(n)$ over the choice of $(e,d)=G(1^n)$ and the coins of $E$,$D$, $D_d(E_e(m))=m$.  
-
+* For every $m\in\{0,1\}^n$, with probability $1-negl(n)$ over the choice of $(e,d)=G(1^n)$ and the coins of $E$,$D$, $D_d(E_e(m))=m$.  \
+>
 We say that $(G,E,D)$ is _CPA secure_ every efficient adversary $A$ wins the following game with probability at most $1/2+negl(n)$:
-
-* $(e,d)=G(1^n)$
-* $A$ is given $e$ and outputs a pair of messages $m_0,m_1 \in \{0,1\}^n$.
-* $A$ is given $c=E_e(m_b)$ for $b\leftarrow_R\{0,1\}$.
+>
+* $(e,d) \leftarrow_R G(1^n)$ \
+* $A$ is given $e$ and outputs a pair of messages $m_0,m_1 \in \{0,1\}^n$. \
+* $A$ is given $c=E_e(m_b)$ for $b\leftarrow_R\{0,1\}$. \
 * $A$ outputs $b'\in\{0,1\}$ and _wins_ if $b'=b$.
 
 Note that we don't explicitly give $A$ access to the encryption oracle since it can compute it on its own using $e$.
@@ -102,7 +110,9 @@ Another way to think about it is that $e$ is a "hobbled key" that can be used fo
 
 ### The obfuscation paradigm
 
-Why would someone imagine that such a magical object could exist? The writing of both James Ellis as well as Diffie and Hellman suggests that their thought process was roughly as follows. You imagine a "magic black box" $B$ such that if all parties have access to $B$ then we could get a public key encryption scheme.
+Why would someone imagine that such a magical object could exist?
+The writing of both James Ellis as well as Diffie and Hellman suggests that their thought process was roughly as follows.
+You imagine a "magic black box" $B$ such that if all parties have access to $B$ then we could get a public key encryption scheme.
 Now if public key encryption was impossible  it would mean that for every possible program $P$ that computes the functionality of $B$, if we distribute the code of $P$ to all parties then we don't get a secure encryption scheme. That means that _no matter what program $P$ the adversary gets_, she will always be able to get some information out of that code that helps break the encryption, even though she wouldn't have been able to break it if $P$ was a black box.
 Now intuitively understanding arbitrary code is a very hard problem, so Diffie and Hellman imagined that it might be possible to take this ideal  $B$ and compile it to some sufficiently low level assembly language so that it would behave as a "virtual black box".
 In particular, if you took, say, the encoding procedure $m \mapsto p_k(m)$ of a block cipher with a particular key $k$, and ran it through an optimizing compiler you might hope that while it would be possible to perform this map using the resulting executable, it will be hard to extract $k$ from it, and hence could treat this code as a "public key".
@@ -128,21 +138,24 @@ It certainly worked well for Diffie and Hellman.
 
 We would have loved to prove a theorem of the form:
 
-__"Theorem":__ If the PRG assumption is true then there exists a CPA-secure public key encryption.
+>__"Theorem":__ If the PRG conjecture  is true then there exists a CPA-secure public key encryption.
 
-This would have meant that we do not need to assume anything more than the already minimal notion of pseudorandom generators (or equivalently, one way functions) to obtain public key cryptography. Unfortunately, no such result is known.  The kind of results we know have the following form:
+This would have meant that we do not need to assume anything more than the already minimal notion of pseudorandom generators (or equivalently, one way functions) to obtain public key cryptography.
+Unfortunately, no such result is known (and this may be [inherent](https://www.cs.virginia.edu/~mohammad/files/papers/MerkleFull.pdf)).
+The kind of results we know have the following form:
 
-__Theorem:__ If problem $X$ is hard then there exists a CPA-secure public key encryption.
+>__Theorem:__ If problem $X$ is hard then there exists a CPA-secure public key encryption.
 
-Where $X$ is some problem that people have tried to solve and couldn't. Thus we have various _candidates_ for public key encryption and we fervently hope
+Where $X$ is some problem that people have tried to solve and couldn't.
+Thus we have various _candidates_ for public key encryption and we fervently hope
 that at least one of them is actually secure.
-The dirty little secret of cryptography is that we actually don't have that many candidates.
+The [dirty little secret](https://eprint.iacr.org/2017/365.pdf) of cryptography is that we actually don't have that many candidates.
 We really have only two well studied families.[^other]
 One is the "group theoretic" family that relies on the difficulty of the discrete logarithm (over modular arithmetic or elliptic curves) or the integer factoring problem.
 The other is the "coding/lattice theoretic" family that relies on the difficulty of solving noisy linear equations or related problems such as finding
 short vectors in a _lattice_ and solving instances of the "knapsack" problem.
 Moreover, problems from the first family are known to be _efficiently solvable_ in a computational model known as "quantum computing".
-If large scale physical devices that simulate this model, known as _quantum computers_, then they could break all cryptosystems relying on these problems.
+If large scale physical devices that simulate this model, known as _quantum computers_, then they could break all cryptosystems relying on these problems and we'll be down to only having a _single_ family of candidate public key encryption schemes.
 
 [^other]: There have been some other more exotic suggestions for public key encryption (including some by [yours truly](http://www.eng.tau.ac.il/~bennyap/pubs/ncpkcFull1.pdf) as well as suggestions such as the [isogeny star problem]( http://eprint.iacr.org/2006/291) , though see also [this](http://arxiv.org/pdf/1012.4019.pdf)), but they have not yet received wide scrutiny.
 
@@ -177,9 +190,12 @@ John Gill suggested to Diffie and Hellman that modular exponentiation can be a g
 
 The correctness of the decryption algorithm follows from the fact that $(g^a)^b = (g^b)^a = g^{ab}$ and hence $H(h^b)$ computed by the encryption algorithm is the same as the value $H(f^a)$ computed by the decryption algorithm. A simple relation between the discrete logarithm and the Diffie-Hellman system is the following:
 
-__Lemma:__ If there is a polynomial time algorithm for the discrete logarithm problem then the Diffie-Hellman system is _insecure_.
 
-__Proof:__ Using a discrete logarithm algorithm, we can compute the private key $a$ from the parameters $p,g,g^a$ present in the public key, and clearly once we know the private key we can decrypt any message of our choice. QED
+> # {.lemma #dhinseclem}
+If there is a polynomial time algorithm for the discrete logarithm problem then the Diffie-Hellman system is _insecure_.
+
+> # {.proof data-ref="dhinseclem"}
+Using a discrete logarithm algorithm, we can compute the private key $a$ from the parameters $p,g,g^a$ present in the public key, and clearly once we know the private key we can decrypt any message of our choice.
 
 Unfortunately, no such result is known in the other direction. However in the random oracle model, we can prove that this protocol is secure assuming the task of computing $g^{ab}$ from $g^a$ and $g^b$ (which is now known as the _Diffie Hellman problem_) is hard.[^DDH]
 
@@ -187,27 +203,34 @@ Unfortunately, no such result is known in the other direction. However in the ra
 
 
 
-__Computational Diffie Hellman Assumption:__ Let $\mathbb{G}$ be a group elements of which can be described in $n$ bits, with an associative and commutative multiplication operation the can be computed in $poly(n)$ time.  The _Computational Diffie Hellman (CDH)_ assumption holds for $\mathbb{G}$ if for every generator (see below) $g$ of $\mathbb{G}$ and efficient algorithm $A$, the probability that on input $g,g^a,g^b$, $A$ outputs the element $g^{ab}$ is negligible.
+>__Computational Diffie Hellman Assumption:__ Let $\mathbb{G}$ be a group elements of which can be described in $n$ bits, with an associative and commutative multiplication operation the can be computed in $poly(n)$ time.  The _Computational Diffie Hellman (CDH)_ assumption holds for $\mathbb{G}$ if for every generator (see below) $g$ of $\mathbb{G}$ and efficient algorithm $A$, the probability that on input $g,g^a,g^b$, $A$ outputs the element $g^{ab}$ is negligible.
 
-__Theorem:__ The Diffie Hellman system for $\mathbb{G}$ is CPA secure in the random oracle model whenever CDH holds for $\mathbb{G}$.
 
-__Proof:__ For CPA security we need to prove that the following two distributions are computationally indistinguishable for every $m\neq m'$
-(can you see why?)
 
-* $(g^a,g^b,H(g^{ab})\oplus m)$
+> # {.theorem title="Diffie-Hellman security in Random Oracle Model" #DHROMthm}
+The Diffie Hellman system for $\mathbb{G}$ is CPA secure in the random oracle model whenever CDH holds for $\mathbb{G}$.
+
+> # {.proof data-ref="DHROMthm"}
+For CPA security we need to prove that the following two distributions are computationally indistinguishable for every $m\neq m'$
+(can you see why? you should pause here and verify this!)
+>
+* $(g^a,g^b,H(g^{ab})\oplus m)$ \
 * $(g^a,g^b,H(g^{ab})\oplus m')$
-
+>
 By the hybrid argument, this follows from showing that the following two distributions are computationally indistinguishable:
-
-* $(H,g,g^a,g^b,H(g^{ab}))$
+>
+* $(H,g,g^a,g^b,H(g^{ab}))$ \
 * $(H,g,g^a,g^b,U_\ell)$
+>
+But an adversary will only be able to distinguish between these two cases if he makes the query $g^{ab}$ to the random oracle $H(\cdot)$ (as otherwise the value of this query is completely uniform), and so if a $T$ query adversary $A$ distinguishes between these two distributions with probability $\epsilon$ then it can be converted into a CDH algorithm that succeeds with probability roughly $\epsilon/T$.
 
-But an adversary will only be able to distinguish between these two cases if he makes the query $g^{ab}$ to the random oracle $H(\cdot)$ (as otherwise the value of this query is completely uniform), and so if a $T$ query adversary $A$ distinguishes between these two distributions with probability $\epsilon$ then it can be converted into a CDH algorithm that succeeds with probability roughly $\epsilon/T$. QED
+
+> # {.remark title="Elliptic curve cryptography" #curverem}
+As mentioned, the Diffie Hellman systems  can be run with many variants of Abelian groups. Of course, for some of those groups the discrete logarithm problem might be easy, and so they would be inappropriate to use for this system. One variant that has been proposed is [elliptic curve cryptography](https://en.wikipedia.org/wiki/Elliptic_curve_cryptography). This is a group consisting of points of the form $(x,y,z)\in \Z_p^3$ that satisfy a certain  equation, and multiplication can be defined according in a certain way. The main advantage of elliptic curve cryptography is that the best known algorithms run in time $2^{\approx n}$ as opposed to $2^{\approx n^{1/3}}$ which allows for much shorter keys. Unfortunately, elliptic curve cryptography is just as susceptible to quantum algorithms as the discrete logarithm problem over $\Z_p$.
 
 
->__Elliptic curve cryptography:__ As mentioned, the Diffie Hellman systems  can be run with many variants of Abelian groups. Of course, for some of those groups the discrete logarithm problem might be easy, and so they would be inappropriate to use for this system. One variant that has been proposed is [elliptic curve cryptography](https://en.wikipedia.org/wiki/Elliptic_curve_cryptography). This is a group consisting of points of the form $(x,y,z)\in \Z_p^3$ that satisfy a certain  equation, and multiplication can be defined according in a certain way. The main advantage of elliptic curve cryptography is that the best known algorithms run in time $2^{\approx n}$ as opposed to $2^{\approx n^{1/3}}$ which allows for much shorter keys. Unfortunately, elliptic curve cryptography is just as susceptible to quantum algorithms as the discrete logarithm problem over $\Z_p$.
-
->__Encryption vs Key Echange and El Gamal:__ In most of the cryptography literature the protocol above is called the _Diffie Hellman Key Exchange_ protocol, and when considered as a public key system it is sometimes known as _ElGamal encryption_.[^ElGamal]  The reason for this mostly stems from the early confusion on what are the right security definitions. Diffie and Hellman thought of encryption as a _deterministic_ process and so they called their scheme a "key exchange protocol". They also envisioned that public key encryption could be just as efficient as private key encryption. The work of Goldwasser and Micali showed that encryption must be probabilistic for security, and efficiency considerations also imply that public key encryption is always used today just as a mechanism to exchange a key to be used as a private key. Together this means that there is not much point to distinguish between a two message key exchange algorithm and a public key encryption.
+> # {.remark title="Encryption vs Key Exchange and El Gamal" #DHKErem}
+In most of the cryptography literature the protocol above is called the _Diffie Hellman Key Exchange_ protocol, and when considered as a public key system it is sometimes known as _ElGamal encryption_.[^ElGamal]  The reason for this mostly stems from the early confusion on what are the right security definitions. Diffie and Hellman thought of encryption as a _deterministic_ process and so they called their scheme a "key exchange protocol". They also envisioned that public key encryption could be just as efficient as private key encryption. The work of Goldwasser and Micali showed that encryption must be probabilistic for security, and efficiency considerations also imply that public key encryption is always used today just as a mechanism to exchange a key to be used as a private key. Together this means that there is not much point to distinguish between a two message key exchange algorithm and a public key encryption.
 
 
 
@@ -242,17 +265,18 @@ Some basic facts that are all not too hard to prove and would be useful exercise
 Public key encryption solves the _confidentiality_ problem but we still need to solve the _authenticity_ or _integrity_ problem, which might be even more important in practice. That is, suppose Alice wants to endorse a message $m$ that _everyone_ can verify but only she can sign.
 This of course is extremely widely used in many settings, including software updates, web pages, financial transactions, and more.
 
-__Definition:__ A triple of algorithm $(G,S,V)$ is a chosen-message-attack secure _digital signature scheme_ if it satisfies the following:
 
-* On input $1^n$, the probabilistic _key generation_ algorithm $G$ outputs a pair $(s,v)$ of keys, where $s$ is the private _signing key_ and $v$ is the public _verification_ key.
+> # {.definition title="Digital Signatures" #sigsdef}
+A triple of algorithm $(G,S,V)$ is a chosen-message-attack secure _digital signature scheme_ if it satisfies the following:
+>
+* On input $1^n$, the probabilistic _key generation_ algorithm $G$ outputs a pair $(s,v)$ of keys, where $s$ is the private _signing key_ and $v$ is the public _verification_ key. \
+* On input a message $m$ and the signing key $s$, the signing algorithm $S$ outputs a string $\sigma = S_{s}(m)$ such that with probability $1-negl(n)$, $V_v(m,S_s(m))=1$. \
+* Every efficient aversary $A$ wins with at most negligible probability the following game: \
+>
+   1. The keys $(s,v)$ are chosen by the key generation algorithm. \
+   2. The adversary gets the inputs $1^n$, $v$, and black box access to the signing algorithm $S_s(\cdot)$. \
+   3. The adversary _wins_ if they output a pair $(m^*,\sigma^*)$ such that $m^*$ was _not_ queried before to the signing algorithm and $V_v(m^*,\sigma^*)=1$.
 
-* On input a message $m$ and the signing key $s$, the signing algorithm $S$ outputs a string $\sigma = S_{s}(m)$ such that with probability $1-negl(n)$, $V_v(m,S_s(m))=1$.
-
-* Every efficient aversary $A$ wins with at most negligible probability the following game:
-
-    1. The keys $(s,v)$ are chosen by the key generation algorithm.
-    2. The adversary gets the inputs $1^n$, $v$, and black box access to the signing algorithm $S_s(\cdot)$.
-    3. The adversary _wins_ if they output a pair $(m^*,\sigma^*)$ such that $m^*$ was _not_ queried before to the signing algorithm and $V_v(m^*,\sigma^*)=1$.
 
 
 ### The Digital Signature Algorithm (DSA)
