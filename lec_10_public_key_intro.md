@@ -84,15 +84,18 @@ However these constructions are not very efficient (and this may be inherent) an
 
 We now discuss how we define security for public key encryption. As mentioned above,
 it took quite a while for cryptographers to arrive at the "right" definition,
-but in the interest of time we will skip ahead to what by now is the standard basic notion:
+but in the interest of time we will skip ahead to what by now is the standard basic notion (see also [PKCfig](){.ref}):
 
+![In a public key encryption, the receiver Bob generates a _pair_ of keys $(e,d)$, The _encryption key_ $e$ is used for encryption, and the _decryption key_ is used for decryption. We call it a public key system since the security of the scheme does not rely on the adversary Eve not knowing the encryption key. Hence Bob can publicize the key $e$  to a great many potential receivers, and still ensure confidentiality of the messages he receives.](../figure/pkenccartoon.png){#PKCfig .class width=300px height=300px}
 
 > # {.definition title="Public key encryption" #pubkeydef}
 A triple of efficient algorithms $(G,E,D)$ is a _public key encryption scheme_ if it satisfies
 the following: \
 >
-* $G$ is a probabilistic algorithm known as the _key generation algorithm_ that on input $1^n$ outputs a distribution over pair of keys $(e,d)$.
-* For every $m\in\{0,1\}^n$, with probability $1-negl(n)$ over the choice of $(e,d)=G(1^n)$ and the coins of $E$,$D$, $D_d(E_e(m))=m$.  \
+* $G$ is a probabilistic algorithm known as the _key generation algorithm_ that on input $1^n$ outputs a distribution over pair of keys $(e,d)$. \
+* $E$ is the _encryption algorithm_ that takes a pair of inputs $e,m$ with $m\in \{0,1\}^n$ and outputs $c=E_e(m)$ \
+* $D$ is the _decryption algorithm_ that takes a pair of inputs $d,c$ and outputs $m'=D_d(c)$. \
+* For every $m\in\{0,1\}^n$, with probability $1-negl(n)$ over the choice of $(e,d)$ output from $G(1^n)$ and the coins of $E$,$D$, $D_d(E_e(m))=m$.  \
 >
 We say that $(G,E,D)$ is _CPA secure_ every efficient adversary $A$ wins the following game with probability at most $1/2+negl(n)$:
 >
@@ -101,8 +104,9 @@ We say that $(G,E,D)$ is _CPA secure_ every efficient adversary $A$ wins the fol
 * $A$ is given $c=E_e(m_b)$ for $b\leftarrow_R\{0,1\}$. \
 * $A$ outputs $b'\in\{0,1\}$ and _wins_ if $b'=b$.
 
-Note that we don't explicitly give $A$ access to the encryption oracle since it can compute it on its own using $e$.
-
+> # { .pause }
+Despite it being a "chosen plaintext attack", we don't explicitly give $A$ access to the encryption oracle in the public key setting.
+Make sure you understand why giving it such access would not give it more power.
 
 One metaphor for a public key encryption is a "self-locking lock" where you don't need the key to _lock it_ (but rather you simply push the shackle until it clicks and lock) but you do need the key to _unlock_ it.
 So, if Alice generates $(e,d)=G(1^n)$ then $e$ serves as the "lock" that can be used to _encrypt_ messages for Alice while only $d$ can be used to _decrypt_ the messages.
@@ -116,6 +120,19 @@ You imagine a "magic black box" $B$ such that if all parties have access to $B$ 
 Now if public key encryption was impossible  it would mean that for every possible program $P$ that computes the functionality of $B$, if we distribute the code of $P$ to all parties then we don't get a secure encryption scheme. That means that _no matter what program $P$ the adversary gets_, she will always be able to get some information out of that code that helps break the encryption, even though she wouldn't have been able to break it if $P$ was a black box.
 Now intuitively understanding arbitrary code is a very hard problem, so Diffie and Hellman imagined that it might be possible to take this ideal  $B$ and compile it to some sufficiently low level assembly language so that it would behave as a "virtual black box".
 In particular, if you took, say, the encoding procedure $m \mapsto p_k(m)$ of a block cipher with a particular key $k$, and ran it through an optimizing compiler you might hope that while it would be possible to perform this map using the resulting executable, it will be hard to extract $k$ from it, and hence could treat this code as a "public key".
+This suggests the following approach for getting an encryption scheme:
+
+>__"Obfuscation based public key encyption":__
+>
+>__Ingredients:__ _(i)_ A pseudorandom permutation collection $\{ p_k \}_{k\in \{0,1\}^*}$ where for every $k\in \{0,1\}^n$, $p_k:\{0,1\}^n \rightarrow \{0,1\}^n$, _(ii)_ An "obfuscating compiler" polynomial-time computable $O:\{0,1\}^* \rightarrow \{0,1\}^*$ such that for every circuit $C$, $O(C)$ is a circuit that computes the same function as $C$
+>
+* _Key Generation:_ The private key is $k \leftarrow_R \{0,1\}^n$, the public key is $E=O(C_k)$ where $C_k$ is the circuit that maps $x\in \{0,1\}^n$ to $p_k(x)$.
+>
+* _Encryption:_ To encrypt $m\in \{0,1\}^n$ with public key $E$, choose $IV \leftarrow_R \{0,1\}^n$ and output $(IV, E(x \oplus IV))$.
+>
+* _Decryption:_ To decrypt $(IV,y)$ with key $k$, output $IV \oplus p_k^{-1}(y)$.
+
+
 Diffie and Hellman couldn't really find a way to make this work, but it convinced them this notion of public key is not _inherently impossible_.
 This concept of compiling a program into a functionally equivalent but "inscrutable" form is known as _software obfuscation_ .
 It had turned out to be quite a tricky object to both define formally and achieve, but it serves as a very good intuition as to what can be achieved, even if,
@@ -130,7 +147,11 @@ We will not formally define obfuscators yet, but on intuitive level it would be 
 
 [^side-effect]: For simplicity, assume that the program $P$ is _side effect free_ and hence it simply computes some function, say from $\{0,1\}^n$ to $\{0,1\}^\ell$ for some $n,\ell$.
 
-Let me stress again that there is no known construction of obfuscators achieving something similar to this definition. In fact, the most natural formalization of this definition is _impossible_ to achieve (as we might see later in this course). However, when trying to stretch your imagination to consider the amazing possibilities that could be achieved in cryptography, it is not a bad heuristic to first ask yourself what could be possible if only everyone involved had access to a magic black box.
+Let me stress again that there is no known construction of obfuscators achieving something similar to this definition.
+In fact, the most natural formalization of this definition is _impossible_ to achieve (as we might see later in this course).
+Only very recently (exciting!) progress was finally made towards  obfuscators-like  notions strong enough to achieve these and other applications, and there are some significant caveats (see [my survey on this topic](https://eprint.iacr.org/2016/210)).
+
+However, when trying to stretch your imagination to consider the amazing possibilities that could be achieved in cryptography, it is not a bad heuristic to first ask yourself what could be possible if only everyone involved had access to a magic black box.
 It certainly worked well for Diffie and Hellman.
 
 
@@ -171,18 +192,20 @@ We can clearly multiply and add such numbers modulo $p$ in $poly(n)$ time.
 If $g\in \Z_p$ and $a$ is any natural number, we can define $g^a$ to be simply $g\cdot g \cdots g$ ($a$ times).
 A priori one might think that it would take $a\cdot poly(n)$ time to compute $g^a$, which might be exponential if $a$ itself is roughly $2^n$.
 However, we can compute this in $poly(\log a) \cdot n)$ time using the _repeated squaring trick_. The idea is that if $a=2^{\ell}$ then we can compute $g^a$ in $\ell$  by squaring $g$ $\ell$ times, and  a general $a$  can  be decomposed into powers of two using the binary representation.
+
+
 The _discrete logarithm_ problem is the problem of computing, given $g,h \in \Z_p$, a number $a$ such that $g^a=h$.
 If such a solution $a$ exists then there is always also a solution of size at most $p$ (can you see why?) and so the solution can be represented using $n$ bits.
-However, currently the best known algorithm for computing the discrete logarithm run in time roughly $2^{n^{1/3}}$ which currently becomes prohibitively expensive when $p$ is about  $2048$ bits.[^constants]
+However, currently the best known algorithm for computing the discrete logarithm run in time roughly $2^{n^{1/3}}$ which currently becomes prohibitively expensive when $p$ is a prime of length about  $2048$ bits.[^constantsdlog]
 
-[^constants]: If the time was truly $2^{n^{1/3}}$ then you might think we'd need numbers of the order of $128^3 \approx 2\cdot 10^6$ bits to get $128$ bits of security, while [NIST estimates](http://csrc.nist.gov/publications/nistpubs/800-57/sp800-57_part1_rev3_general.pdf) that we only need a $3072$ bit key to get this level of security. This is because of the constants (and some slow growing non constant functions) in the exponent of the running time of the current best algorithm. However, you can see that the algorithm runs better than $2^{constant\;\cdot\; n}$ in the fast that to double the estimated security to $256$ bits, NIST recommends that we multiply the RSA keysize $5$-fold to $15,360$. (The same document says that SHA-256 gives $256$ bits of security as a pseudorandom generator but only $128$ bits when used to hash documents for digital signatures; do you know why?)
+[^constantsdlog]: The running time of the best known algorithms for computing the discrete logarithm modulo $n$ bit primes is $2^{f(n)2^{n^{1/3}}}$ where $f(n)$ is a function that depends polylogarithmically on $n$. If $f(n)$ would equal $1$ then we'd   need numbers  of $128^3 \approx 2\cdot 10^6$ bits to get $128$ bits of security, but because $f(n)$ is larger than one, the current   [estimates](https://goo.gl/ntszsg) are that we  need to let $n=3072$ bit key to get $128$ bits of of security. Still  the existence of such a non trivial algorithm means that we need much larger keys than those used for private key systems to get the same level of security. In particular, to double the estimated security to $256$ bits, NIST recommends that we multiply the RSA keysize give-fold to $15,360$. (The same document also says that SHA-256 gives $256$ bits of security as a pseudorandom generator but only $128$ bits when used to hash documents for digital signatures; can you see why?)
 
 
 John Gill suggested to Diffie and Hellman that modular exponentiation can be a good source for the kind of "easy-to-compute but hard-to-invert" functions they were looking for. Diffie and Hellman based a public key encryption scheme as follows:
 
 * The _key generation algorithm_, on input $n$, samples a prime number $p$ of $n$ bits description (i.e., between $2^{n-1}$ to $2^n$), a number $g\leftarrow_R \Z_p$ and $a \leftarrow_R \{0,\ldots,p-1\}$. We also sample a hash function $H:\{0,1\}^n\rightarrow\{0,1\}^\ell$.   The public key $e$ is $(p,g,g^a,H)$ while the secret key $d$ is $a$.[^secret_key]
 
-[^secret_key]: Formally the secret key should also contain all information in the public key, but we omit this for simplicity of notation.
+[^secret_key]: Formally the secret key should contain all the  information in the public key plus the extra secret information, but we omit the public information for simplicity of notation.
 
 * The _encryption algorithm_, on input a message $m \in \{0,1\}^\ell$ and a public key $e=(p,g,h,H)$ will choose a random $b\leftarrow_R \{0,\ldots,p-1\}$, and output $(g^b,H(h^b)\oplus m)$.
 
@@ -203,12 +226,20 @@ Unfortunately, no such result is known in the other direction. However in the ra
 
 
 
->__Computational Diffie Hellman Assumption:__ Let $\mathbb{G}$ be a group elements of which can be described in $n$ bits, with an associative and commutative multiplication operation the can be computed in $poly(n)$ time.  The _Computational Diffie Hellman (CDH)_ assumption holds for $\mathbb{G}$ if for every generator (see below) $g$ of $\mathbb{G}$ and efficient algorithm $A$, the probability that on input $g,g^a,g^b$, $A$ outputs the element $g^{ab}$ is negligible.
+>__Computational Diffie Hellman Assumption:__ Let $\mathbb{G}$ be a group elements of which can be described in $n$ bits, with an associative and commutative multiplication operation that can be computed in $poly(n)$ time.  The _Computational Diffie Hellman (CDH)_ assumption holds with respect to the group $\mathbb{G}$ if for every generator (see below) $g$ of $\mathbb{G}$ and efficient algorithm $A$, the probability that on input $g,g^a,g^b$, $A$ outputs the element $g^{ab}$ is negligible as a function of $n$.^[Formally, since it is an asymptotic statement, the CDH assumption needs to be defined with a _sequence of groups_. However, to make notation simpler we will ignore this issue, and use it only for groups (such as the numbers modulo some $n$ bit primes) where we can easily increase the "security parameter" $n$.]
+
+In particular we can make the following conjecture:
 
 
+>__Computational Diffie Hellman Conjecture for mod prime groups:__ For a random $n$-bit  prime and random $g \in \mathbb{Z}_p$, the CDH  holds  with respect to the group $\mathbb{G} = \{ g^a \mod p \;|; a\in \mathbb{Z} \}$.
+>
+That is, for every polynomial $q:\N \rightarrow \N$, if $n$ is large enough, then with probability at least $1-1/q(n)$ over the choice of a uniform prime $p\in [2^n]$ and $g\in \Z_p$, for every circuit $A$ of size at most  $q(n)$, the probability that $A(g,p,g^a,g^b)$ outputs $h$ such that $g^{ab} = h \mod p$ is at most $1/q(n)$ where the probability is taken over $a,b$ chosen at random in $\Z_p$.^[In practice people often take $g$ to be a generator of a group significantly smaller in size than $p$, which enables $a,b$ to be smaller numbers and hence multiplication to be more efficient. We ignore this optimization in our discussions.]
+
+> # { .pause }
+Please take your time to re-read the following conjecture until you are sure you understand what it means. Victor Shoup's excellent and online available book [A Computational Introduction to Number Theory and Algebra](http://www.shoup.net/ntb/) has an in depth treatment of groups, generators, and the discrete log and Diffie Hellman problem. See also Chapters 10.4 and 10.5 in the Boneh Shoup book, and Chapters 8.3 and 11.4 in the Katz-Lindell book.
 
 > # {.theorem title="Diffie-Hellman security in Random Oracle Model" #DHROMthm}
-The Diffie Hellman system for $\mathbb{G}$ is CPA secure in the random oracle model whenever CDH holds for $\mathbb{G}$.
+Suppose that the Computational Diffie Hellman Conjecture for mod prime groups is true. Then, the Diffie Hellman public key encryption  is CPA secure in the random oracle model.
 
 > # {.proof data-ref="DHROMthm"}
 For CPA security we need to prove that the following two distributions are computationally indistinguishable for every $m\neq m'$
@@ -230,35 +261,78 @@ As mentioned, the Diffie Hellman systems  can be run with many variants of Abeli
 
 
 > # {.remark title="Encryption vs Key Exchange and El Gamal" #DHKErem}
-In most of the cryptography literature the protocol above is called the _Diffie Hellman Key Exchange_ protocol, and when considered as a public key system it is sometimes known as _ElGamal encryption_.[^ElGamal]  The reason for this mostly stems from the early confusion on what are the right security definitions. Diffie and Hellman thought of encryption as a _deterministic_ process and so they called their scheme a "key exchange protocol". They also envisioned that public key encryption could be just as efficient as private key encryption. The work of Goldwasser and Micali showed that encryption must be probabilistic for security, and efficiency considerations also imply that public key encryption is always used today just as a mechanism to exchange a key to be used as a private key. Together this means that there is not much point to distinguish between a two message key exchange algorithm and a public key encryption.
+In most of the cryptography literature the protocol above is called the _Diffie Hellman Key Exchange_ protocol, and when considered as a public key system it is sometimes known as _ElGamal encryption_.[^ElGamal]
+The reason for this mostly stems from the early confusion on what are the right security definitions.
+Diffie and Hellman thought of encryption as a _deterministic_ process and so they called their scheme a "key exchange protocol".
+The work of Goldwasser and Micali showed that encryption must be probabilistic for security.
+Also, because of efficiency considerations, these days  public key encryption is mostly used as a mechanism to exchange a key for a private key encryption, that is then used for the bulk of the communication.
+Together this means that there is not much point in distinguishing between a two message key exchange algorithm and a public key encryption.
+
+### Sampling random primes
+
+To sample a random $n$ bit prime one can sample a random number $0 \leq p < 2^n$ and then test if $p$ is prime.
+If it is not prime, then we can sample a new random number again.
+To make this work we need to show two properties:
+
+_Efficient testing:_ That there is a $poly(n)$ time algorithm to test whether an $n$ bit number is a prime. It turns out that there are such [known algorithms](https://en.wikipedia.org/wiki/Primality_test). _Randomized_ algorithm have been known since the 1970's. Moreover in a 2002 breakthrough, [Manindra Agrawal, Neeraj Kayal, and Nitin Saxena](https://goo.gl/nycWFA) (a professor and two undergraduate students from the  Indian Institute of Technology Kanpur) came up with the first deterministic polynomial time algorithm for testing primality.
+
+_Prime density:_  That the probability that a random $n$ bit number is prime, is at least $1/poly(n)$. This probability is in fact $1/\ln(2^n)=\Omega(1/n)$ by the [Prime Number Theorem](https://goo.gl/ChrXJY). However, for the sake of completeness, we sketch below a simple argument showing the probability is at least $\Omega(1/n^2)$.
+
+
+> # {.lemma #primedensitylem}
+The number of primes between $1$ and $N$ is  $\Omega(N/\log^2 N)$.
+
+> # {.proof data-ref="primedensitylem"}
+We will show that the _least common multiple_ (LCM) of the numbers from $1$ to  $N$ is at least $2^{N-2}$.
+This implies the result by taking logs since this least common multiple is clearly upper bounded by the product of all primes in this range raised to the $$\log N$$ power (can you see why?).
+There fore, if $k$ is the number of such primes, then we get that  (each of them is at most $N$) that $2^{N-2} \leq (N^{\log N})^k = 2^{k \log^2 N}$ and hence $k \geq   \Omega(N/\log^2 N)$.
+>
+To show the lower bound on the least common multiple we look at the integral $\int_0^1 x^{N/2-1}(1-x)^{N/2-1} dx$.
+This is clearly some positive number $I>0$.
+>
+On one hand, for every $x$ between zero and one, $x(1-x) \leq 1/4$ and hence $I$ is at most $4^{-(N/2-1)}=2^{-N+2}$.
+On the other hand, the polynomial $x^{N/2-1}(1-x)^{N/2-1}$ is some polynomial of degree at most $N-2$ with integer coefficients, and so $I=\sum_{k=1}^{N-2} C_k \int_0^1 x^k dx$ for some integer coefficients $C_k$.
+Thus we get that $$I = \sum C_k/(k+1)$$ or in other words that it is a sum of fractions with integer numerators and with denominators that are at most $$N$$.
+Such a sum, if positive, must be at least one over the least common multiple of $$1$$ to $$1$$, and hence we get that $$2^{-N+2} \geq I \geq 1/LCM(1,\ldots,N)$$.
+
+
+> # { .pause }
+While this is not crucial for us, with  a bit more work, one can get a bound of $\Omega(N/\log N)$ on the number of primes in $[N]$ with the same approach, and working this out can be a nice exercise.
+
 
 
 
 ### A little bit of group theory.
 
-If you haven't seen group theory, it might be useful for you to do a quick review. We will not use much group theory and mostly use the theory of finite commutative (also known as Abelian) cyclic groups which are such a baby version that it might not be considered true "group theory" by many group theorists. What you need to remember is the following:
+If you haven't seen group theory, it might be useful for you to do a quick review. We will not use much group theory and mostly use the theory of finite commutative (also known as Abelian)  groups (in fact often _cyclic_) which are such a baby version that it might not be considered true "group theory" by many group theorists.
+Shoup's [excellent book](http://www.shoup.net/ntb/) contains everything we need to know (and much more than that).
+What you need to remember is the following:
 
-* $\mathbb{G}$ is a finite commutative group is a finite set together with a multiplication operation that satisfies $a\cdot b = b\cdot a$ and $(a\cdot b)\cdot c = (a\cdot b)\cdot c)$.
+* A  _finite commutative group_ $\mathbb{G}$   is a finite set together with a multiplication operation that satisfies $a\cdot b = b\cdot a$ and $(a\cdot b)\cdot c = (a\cdot b)\cdot c)$.
 
-* $\mathbb{G}$ has a special element known as $1$, where for every $g\in \mathbb{G}$ there exists an element $g^{-1}\in \mathbb{G}$ such that $gg^{-1}=1$.
+* $\mathbb{G}$ has a special element known as $1$, where $g1=1g=g$ for every $g\in\mathbb{G}$ and for every $g\in \mathbb{G}$ there exists an element $g^{-1}\in \mathbb{G}$ such that $gg^{-1}=1$.
 
 * For every $g\in \mathbb{G}$, the _order_ of $g$, denoted $order(g)$, is the smallest positive integer $a$ such that $g^a=1$.
 
 
-Some basic facts that are all not too hard to prove and would be useful exercises:
+The following  basic facts  are all not too hard to prove and would be useful exercises:
 
-* For every $g\in \mathbb{G}$, the map $a \mapsto g^a$ is a $k$ to $1$ map from $\{0,\ldots,|\mathbb{G}|-1\}$  to $\mathbb{G}$ where $k=|\mathbb{G}|/order(g)$. See footnote for hint[^hint]
+* For every $g\in \mathbb{G}$, the map $a \mapsto g^a$ is a $k$ to $1$ map from $\{0,\ldots,|\mathbb{G}|-1\}$  to $\mathbb{G}$ where $k=|\mathbb{G}|/order(g)$. See footnote for hint^[For every $f\in \mathbb{G}$, you can show a one to one and onto mapping between the set $\{ a : g^a = 1 \}$ and the set $\{b : g^b= f \}$ by choosing some element $b$ from the latter set and looking at the map $a \mapsto a+b \mod |\mathbb{G}|$.]
 
-* As a corollary, the order of $g$ is always a divisor of $|\mathbb{G}|$.
+* As a corollary, the order of $g$ is always a divisor of $|\mathbb{G}|$. This is a special case of a more general phenomenon: the set $\{ g^a \;|\; a\in\mathbb{Z} \}$ is a subset of the group $\mathbb{G}$ that is closed under multiplication, and such subsets are known as _subgroups_ of $\mathbb{G}$. It is not hard to show (using the same approach as above) that for every group $\mathbb{G}$ and subgroup $\mathbb{H}$, the size of $\mathbb{H}$ divides the size of $\mathbb{G}$. This is known as [Lagrange's Theorem](https://goo.gl/Q9VSqn) in group theory.
 
 * An element $g$ of $\mathbb{G}$ is called a _generator_ if $order(g)=|\mathbb{G}|$. A group is called _cyclic_ if it has a generator.  If $\mathbb{G}$ is cyclic then there is a (not necessarily efficiently computable) _isomorphism_ $\phi:\mathbb{G}\rightarrow\Z_{|\mathbb{G}|}$ which is a one-to-one and onto map satisfying $\phi(g\cdot h)=\phi(g)+\phi(h)$ for every $g,h\in\mathbb{G}$.
 
-[^hint]: You can show a one to one mapping between the set $\{ a : g^a = 1 \}$ and the set $\{b : g^b= f \}$ by choosing some element $b$ from the latter set and looking at the map $a \mapsto a+b \pmod {|\mathbb{G}|}$.   
 
-  When using a group $\mathbb{G}$ for the Diffie Hellman protocol, we want the property that  $g$ is a _generator_ of the group, which also means that the map $a \mapsto g^a$ is a one to one mapping from $\{0,\ldots,|\mathbb{G}|-1\}$ to $\mathbb{G}$. This can be efficiently tested if we know the order of the group and its factorization, since it will occur if and only if $g^a \neq 1$ for every $a<|\mathbb{G}|$ (can you see why this holds?) and we know that if $g^a=1$ then $a$ must divide $\mathbb{G}$ (and this?). It is not hard to show that a random element $g\in \mathbb{G}$ will be a generator with non trivial probability (for similar reasons that a random number is prime with non trivial probability) and hence an approach to getting such a generator is to simply choose $g$ at random and test that $g^a \neq 1$ for all of the fewer than $\log |\mathbb{G}|$ numbers that are obtained by taking $|\mathbb{G}|/q$ where $q$ is a factor of $|\mathbb{G}|$.
 
+When using a group $\mathbb{G}$ for the Diffie Hellman protocol, we want the property that  $g$ is a _generator_ of the group, which also means that the map $a \mapsto g^a$ is a one to one mapping from $\{0,\ldots,|\mathbb{G}|-1\}$ to $\mathbb{G}$.
+This can be efficiently tested if we know the order of the group and its factorization, since it will occur if and only if $g^a \neq 1$ for every $a<|\mathbb{G}|$ (can you see why this holds?) and we know that if $g^a=1$ then $a$ must divide $\mathbb{G}$ (and this?).   
+It is not hard to show that a random element $g\in \mathbb{G}$ will be a generator with non trivial probability (for similar reasons that a random number is prime with non trivial probability) and hence an approach to getting such a generator is to simply choose $g$ at random and test that $g^a \neq 1$ for all of the fewer than $\log |\mathbb{G}|$ numbers that are obtained by taking $|\mathbb{G}|/q$ where $q$ is a factor of $|\mathbb{G}|$.
 
 [^ElGamal]: ElGamal's actual contribution was  to design a _signature scheme_ based on the Diffie-Hellman problem, a variant of which is the Digital Signature Algorithm (DSA) described below.
+
+> # { .pause }
+Try to stop here and verify all the facts on groups mentioned above.
 
 ### Digital Signatures
 
@@ -281,30 +355,118 @@ A triple of algorithm $(G,S,V)$ is a chosen-message-attack secure _digital signa
 
 ### The Digital Signature Algorithm (DSA)
 
-The Diffie-Hellman protocol can be turned into a signature scheme. This was first done by ElGamal, and a variant of his scheme was  developed by the NSA and standardized by NIST as the Digital Signature Algorithm (DSA) standard. When based on an elliptic curve this is known as ECDSA.
+The Diffie-Hellman protocol can be turned into a signature scheme.
+This was first done by ElGamal, and a variant of his scheme was  developed by the NSA and standardized by NIST as the Digital Signature Algorithm (DSA) standard. When based on an elliptic curve this is known as ECDSA.
 The starting point is the following generic idea of how to turn an encryption scheme into an _identification protocol_.
-If Alice published a public encryption key $e$, then she can prove her identity to Bob by decrypting a random ciphertext $c$.
+
+
+If Alice published a public encryption key $e$, then one natural approach for Alice to prove her identity to Bob is as follows.
+Bob will send an encryption $c=E_e(x)$ of some random message $x \leftarrow_R \{0,1\}^n$ to Alice, and Alice will send $x'=D_d(c)$ back.
+If $x=x'$ then she has proven that she can decrypt ciphertexts encrypted with $e$, and so Bob can be assured that she is the rightful owner of the public key $e$.
+
 However, this falls  short of a signature scheme in two aspects:
 
-* This is only an identification protocol and does not allow Alice to endorse a particular message $m$.
+* This is only an identification protocol and does not allow Alice to endorse a particular message $m$. \
 * This is an _interactive_ protocol, and so Alice cannot generate a static signature based on $m$ that can be verified by any party without further interaction.
 
-The first issue is not so significant, since we can always have the ciphertext be an encryption of $H(m)$ where $H$ is some hash function presumed to behave
-as a random oracle. The second issue is more serious. We could imagine Alice trying to run this protocol on her own by generating the ciphertext and then decrypting it, but this does not really prove that she knows the corresponding private key. After all, even without knowing $d$, any party can generate a ciphertext $c$ and its corresponding decryption.
+The first issue is not so significant, since we can always have the ciphertext be an encryption of $x=H(m)$ where $H$ is some hash function presumed to behave
+as a random oracle. (We do _not_ want to simply run this protocol with $x=m$. Can you see why?)
+
+The second issue is more serious.
+We could imagine Alice trying to run this protocol on her own by generating the ciphertext and then decrypting it, and then sending over the transcript to Bob.
+But this does not really prove that she knows the corresponding private key.
+After all, even without knowing $d$, any party can generate a ciphertext $c$ and its corresponding decryption.
 The idea behind the DSA protocol is that we require Alice to generate a ciphertext $c$ and its decryption satisfying some additional extra conditions,
 which would prove that Alice truly knew the secret key.
 
-The algorithm works as follows: (See also Section 12.5.2 in the KL book)
+__DSA Signatures:__ The DSA signature algorithm works as follows: (See also Section 12.5.2 in the KL book)
 
-* _Key generation:_ Pick generator $g$ for $\mathbb{G}$ and $a\in \{0,\ldots,|\mathbb{G}|-1\}$ and let $h=g^a$. Pick $H:\{0,1\}^\ell\rightarrow\mathbb{G}$ and $F:\mathbb{G}\rightarrow\mathbb{G}$ to be some  functions that can be thought of as "hash functions".[^hash] The public key is $(g,h)$  (as well as the functions $H,F$) and secret key is $a$.
-* _Signature:_ To sign a message $m$, pick $b$ at random, and let $f=g^b$, and then let $s= b^{-1}[H(m)+a\cdot F(f)]$ where all computation is done modulo $|\mathbb{G}|$. The signature is $(f,s)$.
-* _Verification:_ To verify a signature $(f,s)$ on a message $m$, check that $s\neq 0$ and $f^s=g^{H(m)}h^{F(f)}$.
+* _Key generation:_ Pick generator $g$ for $\mathbb{G}$ and $a\in \{0,\ldots,|\mathbb{G}|-1\}$ and let $h=g^a$. Pick $H:\{0,1\}^\ell\rightarrow\mathbb{G}$ and $F:\mathbb{G}\rightarrow\mathbb{G}$ to be some  functions that can be thought of as "hash functions".[^hashDSA] The public key is $(g,h)$  (as well as the functions $H,F$) and secret key is $a$. \
+* _Signature:_ To sign a message $m$ with the key $a$, pick $b$ at random, and let $f=g^b$, and then let $\sigma = b^{-1}[H(m)+a\cdot F(f)]$ where all computation is done modulo $|\mathbb{G}|$. The signature is $(f,\sigma)$. \
+* _Verification:_ To verify a signature $(f,\sigma)$ on a message $m$, check that $s\neq 0$ and $f^\sigma=g^{H(m)}h^{F(f)}$.
 
-[^hash]: As noted in the KL book, in the actual DSA protocol $F$ is _not_ a hash function but rather some very simple function that is still assumed to be "good enough" for security.
+[^hashDSA]: It is a bit cumbersome, but not so hard, to transform functions that map strings to strings to functions whose domain or range are group elements. As noted in the KL book, in the actual DSA protocol $F$ is _not_ a cryptographic hash function but rather some very simple function that is still assumed to be "good enough" for security.
+
+> # { .pause }
+You should pause here and verify that this is indeed a valid signature scheme, in the sense that for every $m$, $V_s(m,S_s(m))=1$.
+
 
 Very roughly speaking, the idea behind security is that on one hand $s$ does not reveal information about $b$ and $a$ because this is "masked" by the "random" value $H(m)$. On the other hand, if an adversary is able to come up with valid signatures then at least if we treated $H$ and $F$ as oracles, then if the signature passes verification then (by taking $\log$ to the base of $g$) the answers $x,y$ of these oracles will satisfy $bs = x + ay$ which means that sufficiently many such equations should be enough to recover the discrete log $a$.
 
-### Putting everything together - security in practice.
+
+> # { .pause }
+Before seeing the actual proof, it is a very good exercise to try to see how to convert the intuition above into a formal proof.
+
+> # {.theorem title="DSAsec" #DSAsec}
+Suppose that the discrete logarithm assumption holds for the group $\mathbb{G}$. Then the DSA signature with $\mathbb{G}$ is secure when $H,F$ are modeled as random oracles.
+
+
+> # {.proof data-ref="DSAsec"}
+Suppose, towards the sake of contradiction, that there was a $T$-time adversary $A$ that succeeds with probability $\epsilon$ in a chosen message attack against the DSA scheme.
+We will show that there is an adversary that can compute the discrete logarithm with running time and probability polynomially related to $T$ and $\epsilon$ respectively.
+>
+Recall that in a chosen message attack in the random oracle model, the adversary interacts with a signature oracle, and oracles that compute the functions $F$ and $H$.
+For starters, we consider the following experiment $CMA'$ where in the chosen message attack we replace the signature box with the following "fake signature oracle" and "fake function $F$ oracle".
+On input a message $m$, the fake box will choose $\sigma,r$ at random in $\{0,\ldots,p-1\}$ (where $p=|\mathbb{G}|$), and compute $f=(g^{H(m)}h^{r})^{\sigma^{-1} \mod p}$ and output $h$.
+We will then record the value $F(f)=r$ and answer $r$ on future queries to $F$.
+If we've already answered before $F(f)$ to be a different value then we halt the experiment and output an error.
+We claim that the adversary's chance of succeeding in $CMA'$ is computationally indistinguishable from its chance of succeeding in the original $CMA$ experiment.
+Indeed, since we choose the value $r=F(f)$ at random,  as long as we don't repeat a value $f$ that was queried before, the function $F$ is completely random.
+But since the adversary  makes at most $T$ queries, and each $f$ is chosen at random in the group $\mathbb{G}$ (which has size roughly $2^n$), the probability that $f$ is repeated is at most $T/|\mathbb{G}|$ which is negligible.
+Now we computed $\sigma$ in the fake box as a random value, but we can also compute $\sigma$ as equalling $b^{-1}(H(m)+a r) \mod p$, where  $b=\log_g f \mod \mathbb{G}$ is uniform as well,  and so the distribution of the signature $(f,\sigma)$ is identical to the distribution by a real box.
+>
+Note that we can simulate the result of the experiment $CMA'$ without access to the value $a$ such that $h=g^a$.
+We now transform an algorithm $A'$ that manages to forge a signature in the $CMA'$ experiment into an algorithm that given $\mathbb{G},g,g^a$ manages to recover $a$.
+>
+We let $(m^*,f^*,\sigma^*)$ be the message and signature that the adversary $A'$ outputs at the end of a successful attack.
+We can assume without loss of generality that $f^*$ is queried to the $F$ oracle at some point during the attack. (For example, by modifying $A'$ to make this query just before she outputs the final signature.)
+So, we split into two cases:
+>
+__Case I:__ The value $F(f^*)$ is first queried by the signature box.
+>
+__Case II:__ The value $F(f^*)$ is first queried by the adversary.
+>
+If Case I happens with non negligible probability, then we know that the value $f^*$ is queried when producing the signature $(f^*,\sigma)$ for some message $m \neq m^*$, and so we know the following two equations hold:
+$$ g^{H(m)}h^{F(f^*)} = (f^*)^{\sigma}$$
+and
+$$ g^{H(m^*)}h^{F(g^*)}=  (f^*)^{\sigma^*}$$
+Taking logs we get the following equations on $a = \log_g h$ and $b=\log_g f^*$:
+$$H(m)+aF(f^*) = b\sigma$$
+and
+$$H(m^*)+aF(f^*)=b\sigma^*$$
+or
+$$b= (H(m^*)-H(m))(\sigma-\sigma^*)^{-1} \mod p$$
+since all of the valus $H(m^*),H(m),\sigma,\sigma^*$ are known, this means we can compute $b$, and hence also recover the unknown value $a$.
+>
+If Case II happens, then we split it into two cases as well.
+__Case IIa__ is that this happens and $F(f^*)$ is queried _before_ $H(m^*)$ is queried, and __Case IIb__ is that this happens and $F(f^*)$ is queried after $H(m^*)$ is queried.
+>
+We start by considering the setting that __Case IIa__ happens with non-negligible probability $\epsilon$.
+By the averaging argument there are some $t'< t  \in \{1,\ldots,T\}$ such that with probability at least $\epsilon/T^2$,  $f^*$ is queried by the adversary at the $t'$-th query and $m^*$ is queried by the adversary at its $t$-th query.
+We run the $CMA'$ experiment _twice_, using the same randomness up until the $t-1$-th query and independent randomness from then onwards.
+With probability at least $(\epsilon/T^2)^2$, both experiments will result in a successful forge, and since $f^*$ was queried before at stage $t'<t$, we get the following equations
+$$H_1(m^*)+aF(f^*) = b\sigma$$
+and
+$$H_2(m^*)+aF(f^*)=b\sigma^*$$
+where $H_1(m^*)$ and $H_2(m^*)$ are the answers of $H$ to the query $m^*$ in the first and second time we run the experiment. (The answers of $F$ to $f^*$ are the same since this happens before the $t$-th step).
+As before, we can use this to recover $a=\log_g h$.
+>
+If __Case IIb__ happens with non-negligible probability $\epsilon>0$.
+Then again by the averaging argument there are some $t< t'  \in \{1,\ldots,T\}$ such that with probability at least $\epsilon/T^2$,  $m^*$ is queried by the adversary at the $t$-th query and $f^*$ is queried by the adversary at its $t'$-th query.
+We run the $CMA'$ experiment _twice_, using the same randomness up until the $t'-1$-th query and independent randomness from then onwards.
+This time we will get the two equations
+$$H(m^*)+aF_1(f^*) = b\sigma$$
+and
+$$H(m^*)+aF_2(f^*)=b\sigma^*$$
+where $F_1(f^*)$ and $F_2(f^*)$ are our two answers in the first and second experiment, and now we can use this to learn $a= b(\sigma-\sigma^*)(F_1(f^*)-F_2(f^*))^{-1}$.
+>
+The bottom line is that we obtain a probabilistic polynomial time algorithm that on input $\mathbb{G},g,g^a$ recovers $a$ with non-negligible probability, hence violating the assumption that the discrete log problem is hard for the group $\mathbb{G}$.
+
+> # {.remark title="Non random oracle model security" #nonromsec}
+In this lecture both our encryption scheme and digital signature schemes were not proven secure under a well stated computational assumption, but rather used the random oracle model heuristic.
+However, it is known how to obtain schemes that do not rely on this heuristic, and we will see such schemes later on in this course.
+
+## Putting everything together - security in practice.
 
 Let us discuss briefly how public key cryptography is used to secure web trafic through the SSL/TLS protocol that we all use when we use ```https://``` URLs.
 The security this achieve is quite amazing. No matter what wired or wireless network you are using, no matter what country you are in, as long as your device (e.g., phone/laptop/etc..) and the server you are talking to (e.g., Google, Amazon, Microsoft etc..) is functioning properly, you can communicate securely without any party in the middle able to either learn  or modify the contents of your interaction.[^steg]
