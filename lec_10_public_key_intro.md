@@ -292,8 +292,8 @@ This is clearly some positive number $I>0$.
 >
 On one hand, for every $x$ between zero and one, $x(1-x) \leq 1/4$ and hence $I$ is at most $4^{-(N/2-1)}=2^{-N+2}$.
 On the other hand, the polynomial $x^{N/2-1}(1-x)^{N/2-1}$ is some polynomial of degree at most $N-2$ with integer coefficients, and so $I=\sum_{k=1}^{N-2} C_k \int_0^1 x^k dx$ for some integer coefficients $C_k$.
-Thus we get that $$I = \sum C_k/(k+1)$$ or in other words that it is a sum of fractions with integer numerators and with denominators that are at most $$N$$.
-Such a sum, if positive, must be at least one over the least common multiple of $$1$$ to $$1$$, and hence we get that $$2^{-N+2} \geq I \geq 1/LCM(1,\ldots,N)$$.
+Thus we get that $I = \sum C_k/(k+1)$ or in other words that it is a sum of fractions with integer numerators and with denominators that are at most $N$.
+Such a sum, if positive, must be at least one over the least common multiple of the numbers from $1$ to $N$, and hence we get that $$2^{-N+2} \geq I \geq 1/LCM(1,\ldots,N).$$
 
 
 > # { .pause }
