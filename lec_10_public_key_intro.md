@@ -284,7 +284,7 @@ The number of primes between $1$ and $N$ is  $\Omega(N/\log^2 N)$.
 
 > # {.proof data-ref="primedensitylem"}
 We will show that the _least common multiple_ (LCM) of the numbers from $1$ to  $N$ is at least $2^{N-2}$.
-This implies the result by taking logs since this least common multiple is clearly upper bounded by the product of all primes in this range raised to the $$\log N$$ power (can you see why?).
+This implies the result by taking logs since this least common multiple is clearly upper bounded by the product of all primes in this range raised to the $\log N$ power (can you see why?).
 There fore, if $k$ is the number of such primes, then we get that  (each of them is at most $N$) that $2^{N-2} \leq (N^{\log N})^k = 2^{k \log^2 N}$ and hence $k \geq   \Omega(N/\log^2 N)$.
 >
 To show the lower bound on the least common multiple we look at the integral $\int_0^1 x^{N/2-1}(1-x)^{N/2-1} dx$.
