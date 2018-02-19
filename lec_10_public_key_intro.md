@@ -53,7 +53,7 @@ That is, the following theorem is known (by combining works of many people):
 > # {.theorem title="One way functions and private key cryptography" #privkeydef}
 The following are equivalent: \
 * One way functions exist \
-* Pseudorandom generators (with non trivial stretch) exist \
+* Pseudorandom generators (with non-trivial stretch) exist \
 * Pseudorandom functions exist \
 * CPA secure private key encryptions exist \
 * CCA secure private key encryptions exist \
@@ -276,7 +276,7 @@ To make this work we need to show two properties:
 
 _Efficient testing:_ That there is a $poly(n)$ time algorithm to test whether an $n$ bit number is a prime. It turns out that there are such [known algorithms](https://en.wikipedia.org/wiki/Primality_test). _Randomized_ algorithm have been known since the 1970's. Moreover in a 2002 breakthrough, [Manindra Agrawal, Neeraj Kayal, and Nitin Saxena](https://goo.gl/nycWFA) (a professor and two undergraduate students from the  Indian Institute of Technology Kanpur) came up with the first deterministic polynomial time algorithm for testing primality.
 
-_Prime density:_  That the probability that a random $n$ bit number is prime, is at least $1/poly(n)$. This probability is in fact $1/\ln(2^n)=\Omega(1/n)$ by the [Prime Number Theorem](https://goo.gl/ChrXJY). However, for the sake of completeness, we sketch below a simple argument showing the probability is at least $\Omega(1/n^2)$.
+_Prime density:_  That the probability that a random $n$ bit number is prime is at least $1/poly(n)$. This probability is in fact $1/\ln(2^n)=\Omega(1/n)$ by the [Prime Number Theorem](https://goo.gl/ChrXJY). However, for the sake of completeness, we sketch below a simple argument showing the probability is at least $\Omega(1/n^2)$.
 
 
 > # {.lemma #primedensitylem}
@@ -285,7 +285,7 @@ The number of primes between $1$ and $N$ is  $\Omega(N/\log^2 N)$.
 > # {.proof data-ref="primedensitylem"}
 We will show that the _least common multiple_ (LCM) of the numbers from $1$ to  $N$ is at least $2^{N-2}$.
 This implies the result by taking logs since this least common multiple is clearly upper bounded by the product of all primes in this range raised to the $\log N$ power (can you see why?).
-There fore, if $k$ is the number of such primes, then we get that  (each of them is at most $N$) that $2^{N-2} \leq (N^{\log N})^k = 2^{k \log^2 N}$ and hence $k \geq   \Omega(N/\log^2 N)$.
+Therefore, if $k$ is the number of such primes, then we get that  (each of them is at most $N$) that $2^{N-2} \leq (N^{\log N})^k = 2^{k \log^2 N}$ and hence $k \geq   \Omega(N/\log^2 N)$.
 >
 To show the lower bound on the least common multiple we look at the integral $\int_0^1 x^{N/2-1}(1-x)^{N/2-1} dx$.
 This is clearly some positive number $I>0$.
@@ -327,7 +327,7 @@ The following  basic facts  are all not too hard to prove and would be useful ex
 
 When using a group $\mathbb{G}$ for the Diffie-Hellman protocol, we want the property that  $g$ is a _generator_ of the group, which also means that the map $a \mapsto g^a$ is a one to one mapping from $\{0,\ldots,|\mathbb{G}|-1\}$ to $\mathbb{G}$.
 This can be efficiently tested if we know the order of the group and its factorization, since it will occur if and only if $g^a \neq 1$ for every $a<|\mathbb{G}|$ (can you see why this holds?) and we know that if $g^a=1$ then $a$ must divide $\mathbb{G}$ (and this?).   
-It is not hard to show that a random element $g\in \mathbb{G}$ will be a generator with non trivial probability (for similar reasons that a random number is prime with non trivial probability) and hence an approach to getting such a generator is to simply choose $g$ at random and test that $g^a \neq 1$ for all of the fewer than $\log |\mathbb{G}|$ numbers that are obtained by taking $|\mathbb{G}|/q$ where $q$ is a factor of $|\mathbb{G}|$.
+It is not hard to show that a random element $g\in \mathbb{G}$ will be a generator with non-trivial probability (for similar reasons that a random number is prime with non-trivial probability) and hence an approach to getting such a generator is to simply choose $g$ at random and test that $g^a \neq 1$ for all of the fewer than $\log |\mathbb{G}|$ numbers that are obtained by taking $|\mathbb{G}|/q$ where $q$ is a factor of $|\mathbb{G}|$.
 
 [^ElGamal]: ElGamal's actual contribution was  to design a _signature scheme_ based on the Diffie-Hellman problem, a variant of which is the Digital Signature Algorithm (DSA) described below.
 
@@ -341,11 +341,11 @@ This of course is extremely widely used in many settings, including software upd
 
 
 > # {.definition title="Digital Signatures" #sigsdef}
-A triple of algorithm $(G,S,V)$ is a chosen-message-attack secure _digital signature scheme_ if it satisfies the following:
+A triple of algorithms $(G,S,V)$ is a chosen-message-attack secure _digital signature scheme_ if it satisfies the following:
 >
 * On input $1^n$, the probabilistic _key generation_ algorithm $G$ outputs a pair $(s,v)$ of keys, where $s$ is the private _signing key_ and $v$ is the public _verification_ key. \
 * On input a message $m$ and the signing key $s$, the signing algorithm $S$ outputs a string $\sigma = S_{s}(m)$ such that with probability $1-negl(n)$, $V_v(m,S_s(m))=1$. \
-* Every efficient aversary $A$ wins with at most negligible probability the following game: \
+* Every efficient adversary $A$ wins the following game with at most negligible probability: \
 >
    1. The keys $(s,v)$ are chosen by the key generation algorithm. \
    2. The adversary gets the inputs $1^n$, $v$, and black box access to the signing algorithm $S_s(\cdot)$. \
@@ -462,18 +462,18 @@ where $F_1(f^*)$ and $F_2(f^*)$ are our two answers in the first and second expe
 >
 The bottom line is that we obtain a probabilistic polynomial time algorithm that on input $\mathbb{G},g,g^a$ recovers $a$ with non-negligible probability, hence violating the assumption that the discrete log problem is hard for the group $\mathbb{G}$.
 
-> # {.remark title="Non random oracle model security" #nonromsec}
+> # {.remark title="Non-random oracle model security" #nonromsec}
 In this lecture both our encryption scheme and digital signature schemes were not proven secure under a well stated computational assumption, but rather used the random oracle model heuristic.
 However, it is known how to obtain schemes that do not rely on this heuristic, and we will see such schemes later on in this course.
 
 ## Putting everything together - security in practice.
 
 Let us discuss briefly how public key cryptography is used to secure web trafic through the SSL/TLS protocol that we all use when we use ```https://``` URLs.
-The security this achieve is quite amazing. No matter what wired or wireless network you are using, no matter what country you are in, as long as your device (e.g., phone/laptop/etc..) and the server you are talking to (e.g., Google, Amazon, Microsoft etc..) is functioning properly, you can communicate securely without any party in the middle able to either learn  or modify the contents of your interaction.[^steg]
+The security this achieve is quite amazing. No matter what wired or wireless network you are using, no matter what country you are in, as long as your device (e.g., phone/laptop/etc..) and the server you are talking to (e.g., Google, Amazon, Microsoft etc.) is functioning properly, you can communicate securely without any party in the middle able to either learn  or modify the contents of your interaction.[^steg]
 
 [^steg]: They are able to know that such an interaction took place and the amount of bits exchanged. Preventing these kind of attacks is more subtle and approaches for solutions are  known as _steganography_ and _anonymous routing_.
 
-In the web setting, therre are _servers_ who have public keys, and _users_ who generally don't have such keys. Ideally, as a user, you should already know the public keys of all the entities you communicate with e.g., ```amazon.com```, ```google.com```, etc.. etc.. . However, how are you going to learn those public keys?
+In the web setting, therre are _servers_ who have public keys, and _users_ who generally don't have such keys. Ideally, as a user, you should already know the public keys of all the entities you communicate with e.g., ```amazon.com```, ```google.com```, etc. However, how are you going to learn those public keys?
 The traditional answer was that because they are _public_ these keys are much easier to communicate and the servers could even post them as ads on the _New York Times_. Of course these days everyone reads the _Times_ through ```nytimes.com``` and so this seems like a chicken-and-egg type of problem.
 
 The solution goes back again to the quote of Archimedes of "Give me a fulcrum, and I shall move the world". The  idea is that trust can be _transitive_. Suppose you have a Mac. Then you have already trusted Apple with quite a bit of your personal information, and so you might be fine if this Mac came pre-installed with the Apple public key which you trust to be authentic. Now, suppose that you want to communicate with ```Amazon.com```. Now, _you_ might not know the correct public key for Amazon, but _Apple_ surely does. So Apple can supply Amazon with a signed message to the effect of
@@ -495,6 +495,6 @@ This is in a very high level the SSL/TLS protocol, but there are many details in
 
 ![The cipher and certificate used by '''Google.com'''. Note that Google has a 2048bit RSA signature key which it then uses to authenticate an elliptic curve based Diffie-Hellman key exchange protocol to create session keys for the block cipher AES with 128 bit key in Calois Counter Mode.](../figure/googletls.jpg){#tmplabelfig width=40% }
 
-![Digital signatures and oher forms of electronic signatures are legally binding in many jurisdictions. This is some material from the website of the electronic signing company DocuSign](../figure/docusign.jpg){#tmplabelfig width=80% }
+![Digital signatures and other forms of electronic signatures are legally binding in many jurisdictions. This is some material from the website of the electronic signing company DocuSign](../figure/docusign.jpg){#tmplabelfig width=80% }
 
->__Example:__ Here is the list of certificate authorities that were trusted by default (as of spring 2016) by the Mozilla products: Actalis, Amazon, AS Sertifitseerimiskeskuse (SK), Atos, Autoridad de Certificacion Firmaprofesional, Buypass, CA Disig a.s., Camerfirma, CerticÃ¡mara S.A., Certigna, Certinomis, certSIGN, China Financial Certification Authority (CFCA), China Internet Network Information Center (CNNIC), Chunghwa Telecom Corporation, Comodo, ComSign, Consorci AdministraciÃ³ Oberta de Catalunya (Consorci AOC,  CATCert), Cybertrust Japan / JCSI, D-TRUST, Deutscher Sparkassen Verlag GmbH (S-TRUST,  DSV-Gruppe), DigiCert, DocuSign (OpenTrust/Keynectis), e-tugra, EDICOM, Entrust, GlobalSign, GoDaddy, Government of France (ANSSI,  DCSSI), Government of Hong Kong (SAR),  Hongkong Post,  Certizen, Government of Japan,  Ministry of Internal Affairs and Communications, Government of Spain,  Autoritat de CertificaciÃ³ de la Comunitat Valenciana (ACCV), Government of Taiwan,  Government Root Certification Authority (GRCA), Government of The Netherlands,  PKIoverheid, Government of Turkey,  Kamu Sertifikasyon Merkezi (Kamu SM), HARICA, IdenTrust, Izenpe S.A., Microsec e-SzignÃ³ CA, NetLock Ltd., PROCERT, QuoVadis, RSA the Security Division of EMC, SECOM Trust Systems Co. Ltd., Start Commercial (StartCom) Ltd., Swisscom (Switzerland) Ltd, SwissSign AG, Symantec / GeoTrust, Symantec / Thawte, Symantec / VeriSign, T-Systems International GmbH (Deutsche Telekom), Taiwan-CA Inc. (TWCA), TeliaSonera, Trend Micro, Trustis, Trustwave, TurkTrust, Unizeto Certum, Visa, Web.com, Wells Fargo Bank N.A., WISeKey, WoSign CA Limited
+>__Example:__ Here is the list of certificate authorities that were trusted by default (as of spring 2016) by Mozilla products: Actalis, Amazon, AS Sertifitseerimiskeskuse (SK), Atos, Autoridad de Certificacion Firmaprofesional, Buypass, CA Disig a.s., Camerfirma, CerticÃ¡mara S.A., Certigna, Certinomis, certSIGN, China Financial Certification Authority (CFCA), China Internet Network Information Center (CNNIC), Chunghwa Telecom Corporation, Comodo, ComSign, Consorci AdministraciÃ³ Oberta de Catalunya (Consorci AOC,  CATCert), Cybertrust Japan / JCSI, D-TRUST, Deutscher Sparkassen Verlag GmbH (S-TRUST,  DSV-Gruppe), DigiCert, DocuSign (OpenTrust/Keynectis), e-tugra, EDICOM, Entrust, GlobalSign, GoDaddy, Government of France (ANSSI,  DCSSI), Government of Hong Kong (SAR),  Hongkong Post,  Certizen, Government of Japan,  Ministry of Internal Affairs and Communications, Government of Spain,  Autoritat de CertificaciÃ³ de la Comunitat Valenciana (ACCV), Government of Taiwan,  Government Root Certification Authority (GRCA), Government of The Netherlands,  PKIoverheid, Government of Turkey,  Kamu Sertifikasyon Merkezi (Kamu SM), HARICA, IdenTrust, Izenpe S.A., Microsec e-SzignÃ³ CA, NetLock Ltd., PROCERT, QuoVadis, RSA the Security Division of EMC, SECOM Trust Systems Co. Ltd., Start Commercial (StartCom) Ltd., Swisscom (Switzerland) Ltd, SwissSign AG, Symantec / GeoTrust, Symantec / Thawte, Symantec / VeriSign, T-Systems International GmbH (Deutsche Telekom), Taiwan-CA Inc. (TWCA), TeliaSonera, Trend Micro, Trustis, Trustwave, TurkTrust, Unizeto Certum, Visa, Web.com, Wells Fargo Bank N.A., WISeKey, WoSign CA Limited
