@@ -242,22 +242,33 @@ Please take your time to re-read the following conjecture until you are sure you
 Suppose that the Computational Diffie-Hellman Conjecture for mod prime groups is true. Then, the Diffie-Hellman public key encryption  is CPA secure in the random oracle model.
 
 > # {.proof data-ref="DHROMthm"}
-For CPA security we need to prove that (for fixed $\mathbb{G}$ and random oracle $H$) the following two distributions are computationally indistinguishable for every $m\neq m'$
-(can you see why? you should pause here and verify this!)
+For CPA security we need to prove that (for fixed $\mathbb{G}$ of size $p$ and random oracle $H$) the following two distributions are computationally indistinguishable for every two strings $m,m' \in \{0,1\}^\ell$:
 >
-* $(g^a,g^b,H(g^{ab})\oplus m)$ \
-* $(g^a,g^b,H(g^{ab})\oplus m')$
+* $(g^a,g^b,H(g^{ab})\oplus m)$ for $a,b$ chosen uniformly and independently in $\Z_{p}$ \
+* $(g^a,g^b,H(g^{ab})\oplus m')$ chosen uniformly and independently in $\Z_{p}$.
+>
+(can you see why this implies CPA security? you should pause here and verify this!)
 >
 We make the following claim:
-
-
-
-By the hybrid argument, this follows from showing that the following two distributions are computationally indistinguishable:
 >
-* $(H,g,g^a,g^b,H(g^{ab}))$ \
-* $(H,g,g^a,g^b,U_\ell)$
+__CLAIM:__ For a fixed $\mathbb{G}$ of size $p$, generator $g$  for $\mathbb{G}$, and given random oracle $H$, if there is a size $T$  distinguisher  $A$ with $\epsilon$ advantage  between the distribution $(g^a,g^b,H(g^{ab}))$ and the distribution $(g^a,g^b,U_\ell)$ (where $a,b$ are chosen uniformly and independently in $\Z_{p}$) then there is a size $poly(T)$ algorithm $A'$ to solve the Diffie-Hellman problem with respect to $\mathbb{G},g$ with success at least $\epsilon$. That is, for random $a,b \in \Z_p$, $A'(g,g^a,g^b)=g^{ab}$ with probability at least $\epsilon/T$.
 >
-But an adversary will only be able to distinguish between these two cases if he makes the query $g^{ab}$ to the random oracle $H(\cdot)$ (as otherwise the value of this query is completely uniform), and so if a $T$ query adversary $A$ distinguishes between these two distributions with probability $\epsilon$ then it can be converted into a CDH algorithm that succeeds with probability roughly $\epsilon/T$.
+__Proof of claim:__ The proof is simple. We claim that under the assumptions above, $a$ makes the query $g^{ab}$ to its oracle $H$ with probability at most $\epsilon$ since otherwise, by the "lazy evaluation" paradigm, we can assume that $H(g^{ab})$ is chosen independently at random after $A$'s attack is completed and hence it is indistinguishable from a uniform output. Therefore, on input $g,g^a,g^b$, $A'$ can simulate $A$ and simply output one of the at most $T$ queries that $A$ makes to $H$ at random, and will be successful with probability at least $\epsilon/T$.
+>
+Now given the claim, we can complete the proof of security via the following hybrids. Define the following "hubrid" distributions (where in all cases $a,b$ are chosen uniformly and independently in $\Z_{p}$):
+>
+* $H_0$: $(g^a,g^b,H(g^{ab}) \oplus m)$ \
+* $H_1$: $(g^a,g^b,U_\ell \oplus m)$ \
+* $H_2$: $(g^a,g^b,U_\ell \oplus m')$ \
+* $H_3$: $(g^a,g^b,H(g^{ab}) \oplus m)$
+>
+The claim implies that $H_0 \approx H_1$. Indeed otherwise we could transform a distinguisher $T$ between $H_0$ and $H_1$ to a distinguisher $T'$ violating the claim by letting $T'(h,h',z) = T(h,h',z \oplus m)$.
+>
+The distributions $H_1$ and $H_2$ are _identical_ by the same argument as the security of the one time pad (since $U_\ell \oplus m$ is identical to $U_\ell$).
+>
+The distributions $H_2$ and $H_3$ are computationally indistinguishable by the same argument that $H_0 \approx H_1$.
+>
+Together these imply that $H_0 \approx H_3$ which yields the CPA security of the scheme.
 
 
 > # {.remark title="Elliptic curve cryptography" #curverem}
