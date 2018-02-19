@@ -444,7 +444,7 @@ __Case II:__ The value $F(f^*)$ is first queried by the adversary.
 If Case I happens with non negligible probability, then we know that the value $f^*$ is queried when producing the signature $(f^*,\sigma)$ for some message $m \neq m^*$, and so we know the following two equations hold:
 $$ g^{H(m)}h^{F(f^*)} = (f^*)^{\sigma}$$
 and
-$$ g^{H(m^*)}h^{F(g^*)}=  (f^*)^{\sigma^*}$$
+$$ g^{H(m^*)}h^{F(f^*)}=  (f^*)^{\sigma^*}$$
 Taking logs we get the following equations on $a = \log_g h$ and $b=\log_g f^*$:
 $$H(m)+aF(f^*) = b\sigma$$
 and
