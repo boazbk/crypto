@@ -242,12 +242,16 @@ Please take your time to re-read the following conjecture until you are sure you
 Suppose that the Computational Diffie-Hellman Conjecture for mod prime groups is true. Then, the Diffie-Hellman public key encryption  is CPA secure in the random oracle model.
 
 > # {.proof data-ref="DHROMthm"}
-For CPA security we need to prove that the following two distributions are computationally indistinguishable for every $m\neq m'$
+For CPA security we need to prove that (for fixed $\mathbb{G}$ and random oracle $H$) the following two distributions are computationally indistinguishable for every $m\neq m'$
 (can you see why? you should pause here and verify this!)
 >
 * $(g^a,g^b,H(g^{ab})\oplus m)$ \
 * $(g^a,g^b,H(g^{ab})\oplus m')$
 >
+We make the following claim:
+
+
+
 By the hybrid argument, this follows from showing that the following two distributions are computationally indistinguishable:
 >
 * $(H,g,g^a,g^b,H(g^{ab}))$ \
