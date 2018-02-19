@@ -99,7 +99,7 @@ Indeed, all the numbers of the form $p,2p,3p,\ldots,(q-1)p$ and $q,2q,\ldots,(p-
 There are exactly $q-1 + p-1$ such numbers (because $p$ and $q$ are prime all the numbers of the forms above are distinct).
 Hence $|Z^*_m| = m-1 - (p-1) - (q-1) = pq - p - q +1 = (p-1)(q-1)$.
 
-Note that $|Z^*_m|=|\Z^*_p|\cdot |\Z^*_q$. It turns out this is no accident:
+Note that $|Z^*_m|=|\Z^*_p|\cdot |\Z^*_q|$. It turns out this is no accident:
 
 __Theorem (Chinese Remainder Theorem -- CRT):__ If $m=pq$ then there is an isomorphism $\varphi:\Z^*_m \rightarrow \Z^*_p \times \Z^*_q$.
 That is, $\varphi$ is one to one and onto and maps $x\in\Z^*_m$ into a pair $(\varphi_1(x),\varphi_2(x)) \in \Z^*_p \times \Z^*_q$ such that for every $x,y \in \Z^*_m$:
@@ -118,7 +118,7 @@ However, if you don't know the factorization then this is hard. In particular, e
 __Theorem (Square root extraction implies factoring):__ Suppose that $m=pq$ there is an efficient algorithm $A$ such that for every $a\in \Z^*_m$, $A(a^2 \pmod {m})=b$ such that $a^2 = b^2 \pmod{m}$.
 Then, there is an efficient algorithm to recover $p,q$ from $m$.
 
-__Proof:__ Suppose that there is such an algorithm $A$. Using the CRT we can define $f:\Z^*_p\times\Z^*_q \rightarrow \Z^*_p\times Z^*_q$ as
+__Proof:__ Suppose that there is such an algorithm $A$. Using the CRT we can define $f:\Z^*_p\times\Z^*_q \rightarrow \Z^*_p\times \Z^*_q$ as
 $f(x,y)=\varphi(A(\varphi^{-1}(x^2,y^2)))$
 for all $x\in \Z^*_p$ and $y\in\Z^*_q$.
 Now, for any $x,y$ let $(x',y')=f(x,y)$.  Since $x^2 = x'^2 \pmod{p}$ and $y^2 = y'^2 \pmod{q}$ we know that $x' \in \{\pm x \}$ and $y' \in \{ \pm y \}$.
@@ -136,7 +136,7 @@ We are now ready to describe the RSA and Rabin trapdoor functions:
 __Def:__ Given a number $m=pq$ and $e$ such that $gcd((p-1)(q-1),e)=1$, the _RSA function_ w.r.t $m$ and $e$ is the map
 $f_{m,e}:\Z^*_m\rightarrow\Z^*_m$ such that $RSA_{m,e}(x) = x^e \pmod{m}$.
 
-__Def:__ Given a number $m=pq$, the _Rabin function_ w.r.t. $m$, is the map $Rabin_m:\Z^*_m\rightarrow Z^*_m$ such that $Rabin_m(x)=x^2 \pmod{m}$.
+__Def:__ Given a number $m=pq$, the _Rabin function_ w.r.t. $m$, is the map $Rabin_m:\Z^*_m\rightarrow \Z^*_m$ such that $Rabin_m(x)=x^2 \pmod{m}$.
 
 Note that both maps can be computed in polynomial time. Using the theorem above, we know that both functions can be _inverted_ efficiently if we know the factorization (at least for not too large $e$; indeed $e$ is often ).  However, it turns out that this is a much too big of a Hammer to solve this, and there are direct and simple inversion algorithms (see homework exercises). By the discussion above, inverting the Rabin function amounts to factoring $m$. No such result is known for the RSA function, but there is no better algorithm known to attack it than proceeding via factorization of $m$. The RSA function has the advantage that it is a _permutation_ over $\Z^*_m$:
 
@@ -173,7 +173,7 @@ Here is how we can get a public key encryption from a trapdoor permutation schem
 * _Encryption:_ To encrypt a message $m$ with key $k\in\{0,1\}^n$, choose $x\in\{0,1\}^n$ and output $(p_k(x),H(x)\oplus m)$ where $H:\{0,1\}^n\rightarrow\{0,1\}^\ell$ is a hash function we model as a random oracle.
 * _Decryption:_ To decrypt the ciphertext $(y,z)$ with key $\tau$, output $m=H(p_k^{-1}(y))\oplus z$.
 
-__Theorem:__ If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then the above scheme is CPA secure public key encryption scheme.
+__Theorem:__ If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then the above scheme is a CPA secure public key encryption scheme.
 
 __Proof:__ (To be completed)
 

@@ -82,7 +82,7 @@ Errors tend to be amplified when you combine equations.
 To see why, let us recall how Gaussian elimination works.
 Think of $m=n$ for simplicity.
 Given equations $Ax=y$ in the unknown variables $x$, the goal of Gaussian elimination is to transform them into the equations $Ix = y'$ where $I$ is the identity matrix (and hence the solution is simply $x=y'$).
-Recall how we do it: by rearranging and scaling, we can assume that the top left corner of $A$ is equal to $1$, and then we add the first equation to the other equations (scaled apropriately) to zero out the first entry in all the other rows of $A$ (i.e., make the first column of $A$ equal to $(1,0,\ldots,0)$) and continue onwards to the second column and so on and so forth.
+Recall how we do it: by rearranging and scaling, we can assume that the top left corner of $A$ is equal to $1$, and then we add the first equation to the other equations (scaled appropriately) to zero out the first entry in all the other rows of $A$ (i.e., make the first column of $A$ equal to $(1,0,\ldots,0)$) and continue onwards to the second column and so on and so forth.
 Now, suppose that the equations were _noisy_, in the sense that we added to $y$ a vector $e\in\Z_q^m$ such that $|e_i|<\delta q$ for every $i$.
 (Because over $\Z_q$, we can think of $q-1$ also as the number $-1$, and so on, if $a\in\Z_q$, we define $|a|$ to be the minimum of $a$ and $q-a$. This ensures the absolute value satisfies the natural property of  $|a|=|-a|$.)
 Even ignoring the effect that our scaling has on this, simply adding the first equation to the rest would typically tend to increase their relative error from $\approx \delta$ to $\approx 2\delta$.
@@ -127,7 +127,7 @@ However, if $x_1 \neq a$ then this amounts to adding a non-zero multiple of the 
 with random $A',y'$.  
 Hence if we send this input to our the decision algorithm $D$, then we would get $1$ with probability $p+\epsilon$  if $x_1=a$ and an output of $1$ with probability $p$ otherwise.
 Now the crucial observation is that if our decision algorithm $D$ requires $m$ equations to succeed with bias $\epsilon$, we can use $100mn/\epsilon^2$ equations (which is still polynomial) to invoke it $100n/\epsilon^2$ times.
-This allows us to distinguish with probability $1-2^{-n}$ between the case that $D$ outputs $1$ with probability $p+\epsilon$ and the case that it outputs $1$ with probability $p$ (this follows from the Chernoff bound we discussed in the mathematical backgroudn handout; can you see why?).
+This allows us to distinguish with probability $1-2^{-n}$ between the case that $D$ outputs $1$ with probability $p+\epsilon$ and the case that it outputs $1$ with probability $p$ (this follows from the Chernoff bound we discussed in the mathematical background handout; can you see why?).
 Hence by using polynomially more samples than the decision algorithm $D$, we get a search algorithm $S$ that can actually recover $x$. QED
 
 ## An LWE based encryption scheme
@@ -207,7 +207,7 @@ One common variant is the following: we fix some polynomial $p$ over $\Z_q$ with
 (By this I mean that for every polynomial $t$ of degree at least $n$ we write $t$ as $ps+r$ where $p$ is the polynomial above, $s$ is some polynomial and $r$ is the "remainder" polynomial of degree $<n$;
 then $t \pmod{p} = r$.)
 Now for every fixed polynomial $t$, the operation $A_t$ which is defined as  $s \mapsto ts \pmod{p}$ is a linear operation mapping polynomials of degree at most $n-1$ to polynomials of degree at most $n-1$, or put another way, it is a linear map over $\Z_q^n$.
-However, the map $A_d$ can be described using the $n$ cofficients of $t$ as opposed to the $n^2$ description of a matrix.
+However, the map $A_d$ can be described using the $n$ coefficients of $t$ as opposed to the $n^2$ description of a matrix.
 It also turns out that by using the Fast Fourier Transform we can evaluate this operation in roughly $n$ steps as opposed to $n^2$.
 The ideal lattice based cryptosystem use matrices of this form to save on key size and computation time.
 It is still unclear if this structure can be used for attacks; recent papers attacking principal ideal lattices have shown that one needs to be careful about this.
