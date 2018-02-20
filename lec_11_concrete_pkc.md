@@ -49,10 +49,15 @@ But it is easy to see that $S$ is a _group_ and hence $|S|$ must divide $|Z^*_n|
 that $|S| < |\Z^*_n|/2$ and so with probability at least $1/2$ the algorithm will output ```NO```.
 
 [pseudoprimelem](){.ref} its own might not seem very meaningful since it's not clear how many pseudoprimes are there.
-However, it turns out these pseudoprimes, also known as "Carmichael numbers", are much less prevalent than the primes (there are about $N/2^{-\Theta(\log N/\log\log N)} \ll N/\log N$ of those between $q$ and $N$). Moreover, as mentioned above, there are better algorithms that succeed for _all_ numbers.
+However, it turns out these pseudoprimes, also known as "Carmichael numbers", are much less prevalent than the primes, specifically, there are about
+$N/2^{-\Theta(\log N/\log\log N)}$ pseudoprimes between $1$ and $N$.
+If we choose a random number $m \in [2^n]$ and output it if and only if the algorithm of [pseudoprimelem](){.ref} algorithm outputs  ```YES``` (otherwise resampling), then the probability we make a mistake and output a pseudoprime is equal to the ratio of the set of pseudoprimes in $[2^n]$ to the set of primes in $[2^n]$. Since there are $\Omega(2^n/n)$ primes in $[2^n]$, this ratio is
+$\tfrac{n}{2^{-\Omega(n/\log n)}}$ which is a negligible quantity.
+Moreover, as mentioned above, there are better algorithms that succeed for _all_ numbers.
 
 
-In contrast to _testing_ if a number is prime or composite, there is no known efficient algorithm to actually _find_ the factorization of a composite number. As we mentioned, the best known algorithms run in time roughly $2^{\tilde{O}(n^{1/3})}$.
+In contrast to _testing_ if a number is prime or composite, there is no known efficient algorithm to actually _find_ the factorization of a composite number.
+The  best known algorithms run in time roughly $2^{\tilde{O}(n^{1/3})}$ where $n$ is the number of bits.
 
 
 ### Fields
@@ -60,16 +65,19 @@ In contrast to _testing_ if a number is prime or composite, there is no known ef
 If $p$ is a prime then $\Z_p$ is a _field_ which means it is closed under addition and multiplication and has $0$ and $1$ elements.
 One property of a field is the following:
 
-__Theorem:__  If $f$ is a nonzero polynomial of degree $d$ over $\Z_p$ then there are at most $d$ distinct inputs $x$ such that $f(x)=0$.
+> # {.theorem title="Fundamental Theorem of Algebra, mod $p$ version" #bezout}
+If $f$ is a nonzero polynomial of degree $d$ over $\Z_p$ then there are at most $d$ distinct inputs $x$ such that $f(x)=0$.
 
 (If you're curious why, you can see that the task of, given $x_1,\ldots,x_{d+1}$ finding the coefficients for a polynomial vanishing on the $x_i$'s amounts to solving a linear system in $d+1$ variables  with $d+1$ equations that are independent due to the non-singularity of the Vandermonde matrix.)
 
-In particular every $x \in \Z_p$ has at most two _square roots_.
+In particular every $x \in \Z_p$ has at most two _square roots_ (numbers $s$ such that $s^2 = x \mod p$).
 In fact, just like over the reals, every $x\in\Z_p$ either has no square roots or  exactly two square roots of the form $\pm s$.
 
 We can efficiently find square roots modulo a prime. In fact, the following result is known:
 
-__Theorem:__ There is a probabilistic $poly(\log p,d)$ time algorithm to find the roots of a degree $d$ polynomial over $\Z_p$.
+
+> # {.theorem title="Finding roots" #rootfindingthm}
+There is a probabilistic $poly(\log p,d)$ time algorithm to find the roots of a degree $d$ polynomial over $\Z_p$.
 
 This is a special case of the problem of factoring polynomials over finite fields, shown in 1967 by  Berlekamp and on which much other work has been done; see Chapter 20 in [Shoup](http://www.shoup.net/ntb/)).
 
@@ -84,68 +92,89 @@ Hence $|Z^*_m| = m-1 - (p-1) - (q-1) = pq - p - q +1 = (p-1)(q-1)$.
 
 Note that $|Z^*_m|=|\Z^*_p|\cdot |\Z^*_q|$. It turns out this is no accident:
 
-__Theorem (Chinese Remainder Theorem -- CRT):__ If $m=pq$ then there is an isomorphism $\varphi:\Z^*_m \rightarrow \Z^*_p \times \Z^*_q$.
-That is, $\varphi$ is one to one and onto and maps $x\in\Z^*_m$ into a pair $(\varphi_1(x),\varphi_2(x)) \in \Z^*_p \times \Z^*_q$ such that for every $x,y \in \Z^*_m$:
-* $\varphi_1(x+y) = \varphi_1(x)+\varphi_1(y) \pmod{p}$
-* $\varphi_2(x+y) = \varphi_2(x)+\varphi_2(y) \pmod{q}$
-* $\varphi_1(x\cdot y) = \varphi_1(x)\cdot \varphi_1(y) \pmod{p}$
+> # {.theorem title="Chinese Remainder Theorem (CRT)" #CRTthm}
+If $m=pq$ then there is an isomorphism $\varphi:\Z^*_m \rightarrow \Z^*_p \times \Z^*_q$.
+That is, $\varphi$ is one to one and onto and maps $x\in\Z^*_m$ into a pair $(\varphi_1(x),\varphi_2(x)) \in \Z^*_p \times \Z^*_q$ such that for every $x,y \in \Z^*_m$: \
+* $\varphi_1(x+y) = \varphi_1(x)+\varphi_1(y) \pmod{p}$ \
+* $\varphi_2(x+y) = \varphi_2(x)+\varphi_2(y) \pmod{q}$ \
+* $\varphi_1(x\cdot y) = \varphi_1(x)\cdot \varphi_1(y) \pmod{p}$ \
 * $\varphi_2(x\cdot y) = \varphi_2(x)\cdot \varphi_2(y) \pmod{q}$
 
-__Proof:__ $\varphi$ simply maps $x\in \Z^*_m$ to the pair $(x \mod p, x \mod q)$. Verifying that it satisfies all desired properties is a good exercise. QED
+> # {.proof data-ref="CRTthm"}
+$\varphi$ simply maps $x\in \Z^*_m$ to the pair $(x \mod p, x \mod q)$. Verifying that it satisfies all desired properties is a good exercise. QED
 
 In particular, for every polynomial $f()$ and $x\in \Z^*_m$, $f(x)=0 \pmod{m}$ iff $f(x)=0 \pmod{p}$ and $f(x)=0 \pmod{q}$.
 Therefore finding the roots of a polynomial $f()$ modulo a composite $m$ is easy _if you know $m$'s factorization_.
-However, if you don't know the factorization then this is hard. In particular, extracting square roots is as hard as finding out the factors:
+However, if you don't know the factorization then this is hard.
+In particular, extracting square roots is as hard as finding out the factors:
 
 
-__Theorem (Square root extraction implies factoring):__ Suppose that $m=pq$ there is an efficient algorithm $A$ such that for every $a\in \Z^*_m$, $A(a^2 \pmod {m})=b$ such that $a^2 = b^2 \pmod{m}$.
+> # {.theorem title="Square root extraction implies factoring" #squarerootfactthm}
+Suppose  and there is an efficient algorithm $A$ such that for every $m\in \N$ and $a\in \Z^*_m$, $A(m,a^2 \pmod {m})=b$ such that $a^2 = b^2 \pmod{m}$.
 Then, there is an efficient algorithm to recover $p,q$ from $m$.
 
-__Proof:__ Suppose that there is such an algorithm $A$. Using the CRT we can define $f:\Z^*_p\times\Z^*_q \rightarrow \Z^*_p\times \Z^*_q$ as
+
+> # {.proof data-ref="squarerootfactthm"}
+Suppose that there is such an algorithm $A$. Using the CRT we can define $f:\Z^*_p\times\Z^*_q \rightarrow \Z^*_p\times \Z^*_q$ as
 $f(x,y)=\varphi(A(\varphi^{-1}(x^2,y^2)))$
 for all $x\in \Z^*_p$ and $y\in\Z^*_q$.
 Now, for any $x,y$ let $(x',y')=f(x,y)$.  Since $x^2 = x'^2 \pmod{p}$ and $y^2 = y'^2 \pmod{q}$ we know that $x' \in \{\pm x \}$ and $y' \in \{ \pm y \}$.
 Since flipping signs doesn't change the value of $(x',y')=f(x,y)$, by flipping one or both of the signs of $x$ or $y$ we can ensure that $x'=x$ and $y'=-y$.
 Hence $(x,x')-(y,y')=(0,2y)$. In other words, if $c = \varphi^{-1}(x-x',y-y')$ then $c= 0 \pmod{p}$ but $c \neq 0 \pmod{q}$ which in particular means that the greatest common divisor of $c$ and $m$ is $q$. So, by taking $gcd(A(\varphi^{-1}(x,y)),m)$ we will find $q$, from which we can find $p=m/q$.  
+>
+This almost works, but there is a question of how can we find $\varphi^{-1}(x,y)$, given that we don't know $p$ and $q$? The crucial observation is that we don't need to. We can simply pick a value $a$ at random in $\{1,\ldots,m\}$. With very high probability (namely $(p-1+q-1)/pq$) $a$ will be in $\Z^*_m$, and so we can imagine this process as equivalent to the process of taking a random $x\in\Z^*_p$, a random $y\in \Z^*_q$ and then flipping the signs of $x$ and $y$ randomly and taking $a=\varphi(x,y)$. By the arguments above with probability at least $1/4$, it will hold that $gcd(a-A(a^2),m)$ will equal $q$.
 
-This almost works, but there is a question of how can we find $\varphi^{-1}(x,y)$, given that we don't know $p$ and $q$? The crucial observation is that we don't need to. We can simply pick a value $a$ at random in $\{1,\ldots,m\}$. With very high probability (namely $(p-1+q-1)/pq$) $a$ will be in $\Z^*_m$, and so we can imagine this process as equivalent to the process of taking a random $x\in\Z^*_p$, a random $y\in \Z^*_q$ and then flipping the signs of $x$ and $y$ randomly and taking $a=\varphi(x,y)$. By the arguments above with probability at least $1/4$, it will hold that $gcd(a-A(a^2),m)$ will equal $q$. QED
-
-Note that this argument generalizes to work even if the algorithm $A$ is an _average case_ algorithm that only succeeds in finding a square root for a significant fraction of the inputs. This observation is crucial for cryptographic applications.
+Note that this argument generalizes to work even if the algorithm $A$ is an _average case_ algorithm that only succeeds in finding a square root for a significant fraction of the inputs.
+This observation is crucial for cryptographic applications.
 
 ### The RSA and Rabin functions
 
 We are now ready to describe the RSA and Rabin trapdoor functions:
 
-__Def:__ Given a number $m=pq$ and $e$ such that $gcd((p-1)(q-1),e)=1$, the _RSA function_ w.r.t $m$ and $e$ is the map
+> # {.definition title="RSA function" #RSAfuncdef}
+Given a number $m=pq$ and $e$ such that $gcd((p-1)(q-1),e)=1$, the _RSA function_ w.r.t $m$ and $e$ is the map
 $f_{m,e}:\Z^*_m\rightarrow\Z^*_m$ such that $RSA_{m,e}(x) = x^e \pmod{m}$.
 
-__Def:__ Given a number $m=pq$, the _Rabin function_ w.r.t. $m$, is the map $Rabin_m:\Z^*_m\rightarrow \Z^*_m$ such that $Rabin_m(x)=x^2 \pmod{m}$.
+> # {.definition title="Rabin function" #Rabinfuncdef}
+Given a number $m=pq$, the _Rabin function_ w.r.t. $m$, is the map $Rabin_m:\Z^*_m\rightarrow \Z^*_m$ such that $Rabin_m(x)=x^2 \pmod{m}$.
 
-Note that both maps can be computed in polynomial time. Using the theorem above, we know that both functions can be _inverted_ efficiently if we know the factorization (at least for not too large $e$; indeed $e$ is often ).  However, it turns out that this is a much too big of a Hammer to solve this, and there are direct and simple inversion algorithms (see homework exercises). By the discussion above, inverting the Rabin function amounts to factoring $m$. No such result is known for the RSA function, but there is no better algorithm known to attack it than proceeding via factorization of $m$. The RSA function has the advantage that it is a _permutation_ over $\Z^*_m$:
+Note that both maps can be computed in polynomial time.
+Using the Chinese Remainder Theorem and [rootfindingthm](){.ref}, we know that both functions can be _inverted_ efficiently if we know the factorization.^[Using  [rootfindingthm](){.ref}  to invert the function requires  $e$ to be not too large. However, as we will see below it turns out that using the factorization we can invert the RSA function for every $e$. Also, in practice people often use a small value for $e$ (sometimes as small as $e=3$) for reasons of efficiency.]  
+However [rootfindingthm](){.ref} is a much too big of a Hammer to invert the RSA and Rabin functions, and there are direct and simple inversion algorithms (see homework exercises).
+By [squarerootfactthm](){.ref}, inverting the Rabin function amounts to factoring $m$.
+No such result is known for the RSA function, but there is no better algorithm known to attack it than proceeding via factorization of $m$.
+The RSA function has the advantage that it is a _permutation_ over $\Z^*_m$:
 
-__Lemma:__ $RSA_{m,e}$ is one to one over $\Z^*_m$.
+> # {.lemma #RSAonetoonelem}
+$RSA_{m,e}$ is one to one over $\Z^*_m$.
 
-__Proof:__ Suppose that $RSA_{m,e}(a)=RSA_{m,e}(a')$. By the CRT, it means that there is $(x,y) \neq (x',y') \in \Z^*_p \times \Z^*_q$ such that
+> # {.proof data-ref="RSAonetoonelem"}
+Suppose that $RSA_{m,e}(a)=RSA_{m,e}(a')$.
+By the CRT, it means that there is $(x,y) \neq (x',y') \in \Z^*_p \times \Z^*_q$ such that
 $x^e = x'^e \pmod{p}$ and $y^e = y'^e \pmod{q}$. But if that's the case we get that $(xx'^{-1})^e = 1 \pmod{p}$ and $(yy'^{-1})^e = 1 \pmod{q}$.
 But this means that $e$ has to be a multiple of the _order_ of $xx'^{-1}$ and $yy'^{-1}$ (at least one of which is _not_ $1$ and hence has order $>1$).
-But since the order always divides the group size, this implies that $e$ has to have non-trivial gcd with either $|Z^*_p|$ or $|\Z^*_q|$ and hence with $(p-1)(q-1)$. QED
+But since the order always divides the group size, this implies that $e$ has to have non-trivial gcd with either $|Z^*_p|$ or $|\Z^*_q|$ and hence with $(p-1)(q-1)$.
 
-__Note:__ The RSA trapdoor function is known also as "plain RSA encryption". This is because initially Diffie and Hellman (and following them, RSA) thought of an encryption scheme as a deterministic procedure. Today however we know that it is insecure to use a trapdoor function directly as an encryption scheme without adding some randomization.
+> # {.remark title="Plain/Textbook RSA" #plainrsarem}
+The RSA trapdoor function is known also as "plain" or "textbook" RSA encryption. This is because initially Diffie and Hellman (and following them, RSA) thought of an encryption scheme as a deterministic procedure and so considered simply encrypting a message $x$ by applying  $ESA_{m,e}(x)$.
+Today however we know that it is insecure to use a trapdoor function directly as an encryption scheme without adding some randomization.
 
 
 ### Abstraction: trapdoor permutations
 
-__Def:__ We can abstract away the particular construction of the RSA and Rabin functions to talk about a general  _trapdoor permutation family (TDP)_.
-This is a family of functions $\{ p_k \}$ such that for every $k\in\{0,1\}^n$, the function $p_k$ is a permutation on $\{0,1\}^n$ and the map $k,x \mapsto p_k(x)$ is efficiently computable, but:
-* For every efficient adversary $A$, $\Pr_{y\in\{0,1\}^n}[ A(y)=p_k^{-1}(y) ] = negl(n)$.
-* There is a _key generation algorithm_ $G$ such that on input $1^n$ it outputs a pair $(k,\tau)$ such that the map $\tau,y \mapsto p_k^{-1}(y)$.
+We can abstract away the particular construction of the RSA and Rabin functions to talk about a general  _trapdoor permutation family_.
+We make the following definition
 
-__Note:__ The reader might note that the RSA function is not a permutation over the set of strings but rather over $\Z^*_m$ for some $m=pq$. However, if we find primes $p,q$ in the interval $[2^{n/2}(1-negl(n)),2^{n/2}]$, then $m$ will be in the interval $[2^n(1-negl(n)),2^n]$ and hence $\Z^*_m$ (which has size $pq - p - q +1 = 2^n(1-negl(n))$) can be thought of as essentially identical to $\{0,1\}^n$, since we will always pick elements from $\{0,1\}^n$ at random and hence they will be in $\Z^*_m$ with probability $1-negl(n)$. It is widely believed that for every sufficiently large $n$ there is a prime in the interval $[2^n-poly(n),2^n]$ (this follows from  the _Extended Reimann Hypothesis_) and Baker, Harman and Pintz _proved_ that there is a prime in the interval $[2^n-2^{0.6n},2^n]$.[^padding]
+> # {.definition title="Trapdoor permutation" #TDPdef}
+A _trapdoor permutation family (TDP)_  is a family of functions $\{ p_k \}$ such that for every $k\in\{0,1\}^n$, the function $p_k$ is a permutation on $\{0,1\}^n$ and the map $k,x \mapsto p_k(x)$ is efficiently computable, but: \
+* For every efficient adversary $A$, $\Pr_{y\in\{0,1\}^n}[ A(y)=p_k^{-1}(y) ] = negl(n)$. \
+* There is a _key generation algorithm_ $G$ such that on input $1^n$ it outputs a pair $(k,\tau)$ such that the map $\tau,y \mapsto p_k^{-1}(y)$. \
+
+> # {.remark title="Domain of permutations" #permutationsovergroups}
+The RSA function is not a permutation over the set of strings but rather over $\Z^*_m$ for some $m=pq$. However, if we find primes $p,q$ in the interval $[2^{n/2}(1-negl(n)),2^{n/2}]$, then $m$ will be in the interval $[2^n(1-negl(n)),2^n]$ and hence $\Z^*_m$ (which has size $pq - p - q +1 = 2^n(1-negl(n))$) can be thought of as essentially identical to $\{0,1\}^n$, since we will always pick elements from $\{0,1\}^n$ at random and hence they will be in $\Z^*_m$ with probability $1-negl(n)$. It is widely believed that for every sufficiently large $n$ there is a prime in the interval $[2^n-poly(n),2^n]$ (this follows from  the _Extended Reimann Hypothesis_) and Baker, Harman and Pintz _proved_ that there is a prime in the interval $[2^n-2^{0.6n},2^n]$.[^padding]
 
 [^padding]: Another, more minor issue is that the description of the key might not have the same length as $\log m$; I defined them to be the same for simplicity of notation, and this can be ensured via some padding and concatenation tricks.
 
-
- <!--- Baker, Harman and Pintz proved that there is a prime in the interval [x, x+O(x^{21/40})] for all large x.  -->
 
 
 ### Public key encryption from trapdoor permutations
@@ -153,26 +182,36 @@ __Note:__ The reader might note that the RSA function is not a permutation over 
 Here is how we can get a public key encryption from a trapdoor permutation scheme $\{ p_k \}$.
 
 * _Key generation:_ Run the key generation algorithm of the TDP to get $(k,\tau)$. $k$ is the _public encryption key_ and $\tau$ is the _secret decryption key_.
+
 * _Encryption:_ To encrypt a message $m$ with key $k\in\{0,1\}^n$, choose $x\in\{0,1\}^n$ and output $(p_k(x),H(x)\oplus m)$ where $H:\{0,1\}^n\rightarrow\{0,1\}^\ell$ is a hash function we model as a random oracle.
+
 * _Decryption:_ To decrypt the ciphertext $(y,z)$ with key $\tau$, output $m=H(p_k^{-1}(y))\oplus z$.
 
-__Theorem:__ If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then the above scheme is a CPA secure public key encryption scheme.
 
-__Proof:__ (To be completed)
+> # {.theorem title="Public key encryption from trapdoor permutations" #TDPpkcthm}
+If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then the above scheme is a CPA secure public key encryption scheme.
 
-__Note:__ We do _not_ need to use a random oracle to get security in this scheme, especially if $\ell$ is sufficiently short. We can replace $H()$ with a hash function of specific properties known as a _hard core_ construction; this was first shown by Goldreich and Levin.
+> # {.proof data-ref="TDPpkcthm"}
+(To be completed)
+
+> # {.remark title="Security without random oracles" #noromtdpthm}
+We do _not_ need to use a random oracle to get security in this scheme, especially if $\ell$ is sufficiently short. We can replace $H()$ with a hash function of specific properties known as a _hard core_ construction; this was first shown by Goldreich and Levin.
 
 ### Digital signatures from trapdoor permutations
 
 Here is how we can get digital signatures from trapdoor permutations $\{ p_k \}$. This is known as the "full domain hash" signatures.
 
 * _Key generation:_ Run the key generation algorithm of the TDP to get $(k,\tau)$. $k$ is the _public verification key_ and $\tau$ is the _secret signing key_.
+
 * _Signature:_ To sign a message $m$ with key $\tau$, we output $p_{k}^{-1}(H(m))$ where $H:\{0,1\}^*\rightarrow\{0,1\}^n$ is a hash function modeled as a random oracle.
+
 * _Verification:_ To verify a message-signature pair $(m,x)$ we check that $p_k(x)=H(m)$.
 
-__Theorem:__ If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then the above scheme is chosen message attack secure digital signature scheme.
+> # {.theorem title="Full domain hash security" #FDHthm}
+If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then the above scheme is chosen message attack secure digital signature scheme.
 
-__Proof:__ (To be completed).
+> # {.proof data-ref="FDHthm"}
+(To be completed).
 
 ### Key exchange, authenticated and password-authenticated key exchange
 
