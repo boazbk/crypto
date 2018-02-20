@@ -376,6 +376,13 @@ A triple of algorithms $(G,S,V)$ is a chosen-message-attack secure _digital sign
    3. The adversary _wins_ if they output a pair $(m^*,\sigma^*)$ such that $m^*$ was _not_ queried before to the signing algorithm and $V_v(m^*,\sigma^*)=1$.
 
 
+> # {.remark title="Strong unforgability" #strongunforgabilitysigrem}
+Just like for MACs (see [MACdef](){.ref}), our definition of security for digital signatures with respect to a chosen message attack does not preclude the ability of the adversary of producing a new signature for the same message that it has seen a signature of.
+Just like in MACs, people sometimes consider the notion of _strong unforgability_ which requires that it would not be possible for the adversary to produce a new message-signature pair (even if the message itself was queried before).
+Some signature schemes (such as the full domain hash and the DSA scheme) satisfy this stronger notion while others do not.
+However, just like MACs, it is possible to transform any signature with standard security into a signature that satisfies this stronger unforgability condition.
+
+
 
 ### The Digital Signature Algorithm (DSA)
 

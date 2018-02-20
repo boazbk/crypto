@@ -181,18 +181,75 @@ The RSA function is not a permutation over the set of strings but rather over $\
 
 Here is how we can get a public key encryption from a trapdoor permutation scheme $\{ p_k \}$.
 
+>__TDP-based public key encryption (TDPENC):__
+>
 * _Key generation:_ Run the key generation algorithm of the TDP to get $(k,\tau)$. $k$ is the _public encryption key_ and $\tau$ is the _secret decryption key_.
-
+>
 * _Encryption:_ To encrypt a message $m$ with key $k\in\{0,1\}^n$, choose $x\in\{0,1\}^n$ and output $(p_k(x),H(x)\oplus m)$ where $H:\{0,1\}^n\rightarrow\{0,1\}^\ell$ is a hash function we model as a random oracle.
-
+>
 * _Decryption:_ To decrypt the ciphertext $(y,z)$ with key $\tau$, output $m=H(p_k^{-1}(y))\oplus z$.
 
 
+> # { .pause }
+Please verify that you undestand why TDPENC is a _valid_ encryption scheme, in the sense that decryption of an encryption of $m$ yields $m$.
+
+
 > # {.theorem title="Public key encryption from trapdoor permutations" #TDPpkcthm}
-If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then the above scheme is a CPA secure public key encryption scheme.
+If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then TDPENC is a CPA secure public key encryption scheme.
 
 > # {.proof data-ref="TDPpkcthm"}
-(To be completed)
+Suppose, towards the sake of contradiction, that there is a polynomial-size adversary $A$ that succeeds in the  CPA game of TDPENC (with access to a random oracle $H$) with non-negligible advantage $\epsilon$ over half.
+We will use $A$ to design an algorithm $I$ that inverts the trapdoor permutation.
+>
+Recall that the CPA game works as follows:
+>
+* The adversary $A$ gets as input a key $k \in \{0,1\}^n$.
+>
+* The algorithm $A$ makes some polynomial amount of computation and $T_1=poly(n)$ queries to the random oracle $H$ and produces a pair of messages $m_0,m_1 \in \{0,1\}^\ell$.
+>
+* The "challenger" chooses $b^* \leftarrow_R \{0,1\}$, chooses $x^* \leftarrow_R \{0,1\}^n$ and computes the ciphertext $(y^*=p_k(x^*),z^* = H(x^*) \oplus m_{b^*})$ which is an encryption of $m_{b^*}$.
+>
+* The adversary $A$ gets $(y^*,z^*)$ as input, makes some additional polynomial amount of computation and $T_2=poly(n)$ queries to $H$, and then outputs $b$.
+>
+* The adversary _wins_ if $b=b^*$.
+>
+We make the following claim:
+>
+__CLAIM:__ With probability at least $\epsilon$, the adversary $A$ will make the query $x^*$ to the random oracle.
+>
+__PROOF:__ Suppose otherwise. We will prove the claim using the "forgetful gnome" technique as used in the Boneh Shoup book.
+By the "lazy evaluation" paradigm, we can imagine that queries to $H$ are answered by a "faithful gnome" that whenever presented with a new query $x$, chooses a uniform and independent value $w \leftarrow_R \{0,1\}^\ell$ as a response, and then records that $H(x)=w$ to use that as answers for future queries.
+>
+Now consider the experiment where in the challenge part we use a "forgetful gnome" that answers $H(x^*)$ by a uniform and independent string $w^* \leftarrow_R \{0,1\}^\ell$ and _does not_ record the answer for future queries.
+In the "forgetful experiment", the second component of the ciphertext $z^* = w^* \oplus m_{b^*}$ is distributed uniformly in $\{0,1\}^\ell$ and independently  from all other random choices, regardless of whether $b^*=0$ or $b^*=1$.
+Hence in this "forgetful experiment" the adversary gets no information about $b^*$ and its probability of winning is at most $1/2$.
+But the forgetful experiment is identical to the actual experiment if the value $x^*$ is only queried to $H$ once.
+Apart from the query of $x^*$ by the challenger, all other queries to $H$ are made by the adversary.
+Under our assumption, the adverdsary makes the query $x^*$ with probability at most $\epsilon$, and conditioned on this not happening the two experiments are identical.
+Since the probability of winning in the forgetful experiment is at most $1/2$, the probability of winning in the overall experiment is less than $1/2+\epsilon$, thus yielding a contradiction and establishing the claim. (These kind of  analayses on sample spaces can be confusing; See [TDPENCgnomefig](){.ref} for a graphical illustration of this argument.)
+>
+Given the claim, we can now construct our inverter algorithm $I$ as follows:
+>
+* The input to $I$ is the key $k$ to the trapdoor permutation and $y^* = p_k(x^*)$. The goal of $I$ is to output $x^*$.
+>
+* The inverter simulates the adversary in a CPA attack, answering all its queries to the oracle $H$ by random values if they are new or the previously supplied answers if they were asked before. Whenever the adversary makes a query $x$ to $H$, $I$ checks if $p_h(x)=y^*$ and if so halts and outputs $x$.
+>
+* When the time comes to produce the challenge, the inverter $I$ chooses $z^*$ at random and  provides the adversary with $(y^*,z^*)$ where $z^* = w^* \oplus m_{b^*}$.^[It would have been equivalent to answer the adversary with a uniformly chosen $z^*$ in $\{0,1\}^\ell$, can you see why?]
+>
+* The inverter continues the simulation again halting an outputting $x$ if the adversary makes the query $x$ such that $p_k(x)=y^*$ to $H$.
+>
+We claim that up to the point we halt, the experiment is identical to the actual attack.
+Indeed, since $p_k$ is a permutation, we know that if the time came to produce the challenge and we have not halted, then the query $x^*$ has not been made yet to $H$. Therefore we are free to choose an independent random value $w^*$  as the value $H(x^*)$. (Our inverter does not know what the value $x^*$ is, but this does not matter for this argument: can you see why?)
+Therefore, since by the claim the adversary will make the query $x^*$ to $H$ with probability at least $\epsilon$, our inverter will succeed with the same probability.
+
+
+
+![In the proof of security of TDPENC, we show that if the assumption of the claim is violated, the "forgetful experiment" is identical to the real experiment with probability larger $1-\epsilon$. In such a case, even if all that probability mass was on the points in the sample space where the adversary in the forgetful experiment will lose and the adversary of the real experiment will win, the probability of winning in the latter experiment would still be less than $1/2+\epsilon$.](../figure/gnomeTDPENC.png){#TDPENCgnomefig .class width=300px height=300px}
+
+> # { .pause }
+This proof of [TDPpkcthm](){.ref} is not very long but it is somewhat subtle. Please re-read it and make sure you understand it.
+I also recommend you look at the version of the same proof in Boneh Shoup: Theorem 11.2 in Section 11.4 ("Encryption based on a trapdoor function scheme").
+
 
 > # {.remark title="Security without random oracles" #noromtdpthm}
 We do _not_ need to use a random oracle to get security in this scheme, especially if $\ell$ is sufficiently short. We can replace $H()$ with a hash function of specific properties known as a _hard core_ construction; this was first shown by Goldreich and Levin.
@@ -201,18 +258,50 @@ We do _not_ need to use a random oracle to get security in this scheme, especial
 
 Here is how we can get digital signatures from trapdoor permutations $\{ p_k \}$. This is known as the "full domain hash" signatures.
 
+>__Full domain hash signatures (FDHSIG):__
+>
 * _Key generation:_ Run the key generation algorithm of the TDP to get $(k,\tau)$. $k$ is the _public verification key_ and $\tau$ is the _secret signing key_.
-
-* _Signature:_ To sign a message $m$ with key $\tau$, we output $p_{k}^{-1}(H(m))$ where $H:\{0,1\}^*\rightarrow\{0,1\}^n$ is a hash function modeled as a random oracle.
-
+>
+* _Signing:_ To sign a message $m$ with key $\tau$, we output $p_{k}^{-1}(H(m))$ where $H:\{0,1\}^*\rightarrow\{0,1\}^n$ is a hash function modeled as a random oracle.
+>
 * _Verification:_ To verify a message-signature pair $(m,x)$ we check that $p_k(x)=H(m)$.
 
 > # {.theorem title="Full domain hash security" #FDHthm}
-If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then the above scheme is chosen message attack secure digital signature scheme.
+If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then FDHSIG is chosen message attack secure digital signature scheme.
 
 > # {.proof data-ref="FDHthm"}
-(To be completed).
+Suppose towards the sake of contradiction that there is a polynomial-sized adversary $A$ that succeeds in a chosen message attack with non-negligible probability $\epsilon>0$.
+We will construct an inverter $I$ for the trapdoor permutation collection that succeeds with non-negligible probability as well.
+>
+Recall that in a chosen message attack the adversary makes $T$ queries $m_1,\ldots,m_T$ to its signing box which are interspersed with $T'$ queries $m'_1,\ldots,m'_{T'}$ to the random oracle $H$.
+We can assume without loss of generality (by modifying the adversary and at most doubling the number of queries) that the adversary always queries the message $m_i$ to the random oracle _before_ it queries it to the signing box, though it can also make additional queries to the random oracle (and hence in particular  $T' \geq T$).
+At the end of the attack the adversary outputs with probability $\epsilon$ a pair $(x^*,m^*)$ such that $m^*$ was not queried to the signing box and $p_k(x^*)=H(m^*)$.
+>
+Our inverter $I$ works as follows:
+>
+* __Input:__ $k$ and $y^*=p_k(y^*)$. Goal is to output $x^*$.
+>
+* $I$ will guess at random $t^*$ which is the step in which the adversary will query to $H$ the message $m^*$ that it is eventually going to forge in. With probability $1/T'$ the guess will be correct.
+>
+* $I$ simulates the execution of $A$. Except for step $t^*$, whenever $A$ makes a new query $m$ to the random oracle, $I$ will choose a random $x\getsr \{0,1\}^n$, compute $y=p_k(x)$ and designate $H(m)=y$.  In step $t^*$, when the adversary makes the query $m^*$, the inverter $I$ will return $H(m^*)=y^*$. $I$ will record the values $(x,y)$ and so in particular will always know $p_k^{-1}(H(m))$ for every $H(m) \neq y^*$ that it returned as answer from its oracle on query $m$.
+>
+* When $A$ makes the query $m$ to the signature box, then since $m$ was queried before to $H$, if $m \neq m^*$ then $I$ returns $x=p_k^{-1}(H(m))$ using its records. If $m=m^*$ then $I$ halts and outputs "failure".
+>
+* At the end of the game, the adversary outputs $(m^*,x^*)$. If $p_k(x^*)=y^*$ then $I$ outputs $x^*$.
+>
+We claim that, conditioned on the probability $\geq \epsilon/T'$ event that the adversary is successful and the final message $m^*$ is the one queried in step $t^*$, we provide a perfect simulation of the actual game.
+Indeed, while in an actual game, the value $y=H(m)$ will be chosen independently at random in $\bits^n$, this is equivalent to choosing  $x \leftarrow_R \{0,1\}^n$ and letting $y=p_k(x)$.
+After all, a permutation applied to the uniform distribution is uniform.
+>
+Therefore with probability at least $\epsilon/T'$ the inverter $I$ will output $x^*$ such that $p_k(x^*)=y^*$ hence succeeding in the inverter.
 
-### Key exchange, authenticated and password-authenticated key exchange
+> # { .pause }
+Once again, this proof is somewhat subtle. I recommend you also read the version of this proof in Section 13.4 of Boneh-Shoup.
 
-(To be completed)
+> # {.remark title="Hash and sign" #hashandsignrem}
+There is another reason to use hash functions with signatures.
+By combining a collision-resistant hash function $h:\{0,1\}^* \rightarrow \{0,1\}^\ell$ with a signature scheme $(S,V)$ for $\ell$-length messages, we can obtain a signature for arbitrary length messages by defining $S'_s(m)=S_s(h(m))$ and $V'_v(m,\sigma)=V_v(h(m),\sigma)$.
+
+## Hardcore bits and security without random oracles
+
+To be completed.

@@ -182,6 +182,12 @@ Second, in many realistic settings an adversary could have some effect on the me
 This has occurred time and again in cases ranging from web servers to German submarines in World War II, and we'll return to this point when we talk about _chosen plaintext_ and _chosen ciphertext_ attacks on encryption schemes.
 
 
+> # {.remark title="Strong unforgability" #strongunforgability}
+Some texts (such as Boneh Shoup) define a stronger notion of unforgability where the adversary cannot even produce new signatures for messages it _has_ queried in the attack. That is, the adversary cannot produce a valid message-signature pair that it has not seen before.
+This stronger definition can be useful for some applications.
+It is fairly easy to transform MACs satisfying [MACdef](){.ref} into MACs satisfying strong unforgability.
+In particular, if the signing function is deterministic, and we use a _canonical verifier algorithm_ where $V_k(m,\sigma)=1$ iff $S_k(m)=\sigma$ then weak unforgability automatically implies strong unforgability since every message has a  a single signature that would pass verification (can you see why?).
+
 
 
 ## MACs from PRFs
