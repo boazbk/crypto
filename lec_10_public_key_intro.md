@@ -422,12 +422,13 @@ We will show that there is an adversary that can compute the discrete logarithm 
 >
 Recall that in a chosen message attack in the random oracle model, the adversary interacts with a signature oracle, and oracles that compute the functions $F$ and $H$.
 For starters, we consider the following experiment $CMA'$ where in the chosen message attack we replace the signature box with the following "fake signature oracle" and "fake function $F$ oracle".
-On input a message $m$, the fake box will choose $\sigma,r$ at random in $\{0,\ldots,p-1\}$ (where $p=|\mathbb{G}|$), and compute $f=(g^{H(m)}h^{r})^{\sigma^{-1} \mod p}$ and output $h$.
+On input a message $m$, the fake box will choose $\sigma,r$ at random in $\{0,\ldots,p-1\}$ (where $p=|\mathbb{G}|$), and compute $$f=(g^{H(m)}h^{r})^{\sigma^{-1} \mod p} \label{randomfdsaeq}$$
+and output $h$.
 We will then record the value $F(f)=r$ and answer $r$ on future queries to $F$.
 If we've already answered before $F(f)$ to be a different value then we halt the experiment and output an error.
 We claim that the adversary's chance of succeeding in $CMA'$ is computationally indistinguishable from its chance of succeeding in the original $CMA$ experiment.
 Indeed, since we choose the value $r=F(f)$ at random,  as long as we don't repeat a value $f$ that was queried before, the function $F$ is completely random.
-But since the adversary  makes at most $T$ queries, and each $f$ is chosen at random in the group $\mathbb{G}$ (which has size roughly $2^n$), the probability that $f$ is repeated is at most $T/|\mathbb{G}|$ which is negligible.
+But since the adversary  makes at most $T$ queries, and each $f$ is chosen according to [randomfdsaeq](){.eqref}, which yields a  random element the group $\mathbb{G}$ (which has size roughly $2^n$), the probability that $f$ is repeated is at most $T/|\mathbb{G}|$ which is negligible.
 Now we computed $\sigma$ in the fake box as a random value, but we can also compute $\sigma$ as equalling $b^{-1}(H(m)+a r) \mod p$, where  $b=\log_g f \mod \mathbb{G}$ is uniform as well,  and so the distribution of the signature $(f,\sigma)$ is identical to the distribution by a real box.
 >
 Note that we can simulate the result of the experiment $CMA'$ without access to the value $a$ such that $h=g^a$.
