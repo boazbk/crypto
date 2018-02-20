@@ -295,24 +295,33 @@ _Prime density:_  That the probability that a random $n$ bit number is prime is 
 
 
 > # {.lemma #primedensitylem}
-The number of primes between $1$ and $N$ is  $\Omega(N/\log^2 N)$.
+The number of primes between $1$ and $N$ is  $\Omega(N/\log N)$.
 
 > # {.proof data-ref="primedensitylem"}
-We will show that the _least common multiple_ (LCM) of the numbers from $1$ to  $N$ is at least $2^{N-2}$.
-This implies the result by taking logs since this least common multiple is clearly upper bounded by the product of all primes in this range raised to the $\log N$ power (can you see why?).
-Therefore, if $k$ is the number of such primes, then we get that  (each of them is at most $N$) that $2^{N-2} \leq (N^{\log N})^k = 2^{k \log^2 N}$ and hence $k \geq   \Omega(N/\log^2 N)$.
+Recall that the _least common multiple (LCM)_ of two or more  $a_1,\ldots,a_t$ is the smallest number that is a multiple of all of the $a_i$'s.
+One way to compute the LCM of $a_1,\ldots,a_t$ is to take the prime factorizations of all the $a_i$'s, and then the LCM is the product that all the primes that appear in these factorizations, with the highest power that they appear in.
+Let $k$ be the number of primes between $1$ and $N$.
+The lemma will follow from the following two claims:
 >
-To show the lower bound on the least common multiple we look at the integral $\int_0^1 x^{N/2-1}(1-x)^{N/2-1} dx$.
-This is clearly some positive number $I>0$.
+__CLAIM 1:__ $LCM(1,\ldots,N) \leq N^k$.
 >
-On one hand, for every $x$ between zero and one, $x(1-x) \leq 1/4$ and hence $I$ is at most $4^{-(N/2-1)}=2^{-N+2}$.
-On the other hand, the polynomial $x^{N/2-1}(1-x)^{N/2-1}$ is some polynomial of degree at most $N-2$ with integer coefficients, and so $I=\sum_{k=1}^{N-2} C_k \int_0^1 x^k dx$ for some integer coefficients $C_k$.
-Thus we get that $I = \sum_{k=1}^{N-2} C_k/(k+1)$ for $C_k \in \mathbb{Z}$ or in other words that $I$ is a sum of fractions with integer numerators and with denominators that are at most $N$.
-Such a sum, if positive, must be at least one over the least common multiple of the numbers from $1$ to $N$, and hence we get that $2^{-N+2} \geq I \geq 1/LCM(1,\ldots,N)$ or $LCM(1,\ldots,N) \leq 2^{N-2}$.
+__CLAIM 2:__ If $N$ is odd then $LCM(1,\ldots,N) \geq 2^{N-1}$.
+>
+The two claim immediately imply the result since they imply that $2^N \leq N^k$, and taking logs we get that $N-2 \leq k \log N$ or $k \geq (N-2)/\log N$.
+(We can assume that $N$ is odd without of loss of generality, since changing from $N$ to $N+1$ can change the number of primes by at most one.)
+Thus all that is left is to prove the two claims.
+>
+__Proof of CLAIM 1:__ Let $p_1,\ldots,p_k$ be all the prime numbers between $1$ and $N$, and let $e_i$ be the largest integer such that $p_i^{e_i} \leq N$ and $L = p_1^{e_1} \cdots p_k^{e_k}$. Since $L$ is the product of $k$ terms, each of size at most $N$, $L \leq N^k$. But we claim that every number $1 \leq a \leq N$ divides $L$. Indeed, every prime $p$ in the prime factorization of $a$ is one of the $p_i$'s, and since $a \leq N$, the power in which $p$ appears in $a$ is at most $e_i$. By the definition of the least common multiple, this means that $LCM(1,\ldots,N) \leq L$. QED (CLAIM 1)
+>
+__Proof of CLAIM 2:__  Consider the integral $I=\int_0^1 x^{(N-1)/2}(1-x)^{(N-1)/2} dx$.
+This is clearly some positive number and so $I>0$.
+On one hand, for every $x$ between zero and one, $x(1-x) \leq 1/4$ and hence $I$ is at most $4^{-(N-1)/2}=2^{-N+1}$.
+On the other hand, the polynomial $x^{N/2}(1-x)^{N/2}$ is some polynomial of degree at most $N-1$ with integer coefficients, and so $I=\sum_{k=1}^{N-1} C_k \int_0^1 x^k dx$ for some integer coefficients $C_1,\ldots,C_{N-1}$.
+Since $\int_0^1 x^k = \tfrac{1}{k+1}$, we see that $I$ is a sum of fractions with integer numerators and with denominators that are at most $N$.
+Since all the denominators are at most $N$ and $I>0$, it follows that $I \geq \tfrac{1}{LCM(1,\ldots,N)}$, and so
+$$2^{-N+1} \geq I \geq \tfrac{1}{LCM(1,\ldots,N)}$$
+which implies $LCM(1,\ldots,N) \leq 2^{N-1}$. QED (CLAIM 2 and hence lemma)
 
-
-> # { .pause }
-While this is not crucial for us, with  a bit more work, one can get a bound of $\Omega(N/\log N)$ on the number of primes in $[N]$ with the same approach, and working this out can be a nice exercise.
 
 
 
@@ -518,7 +527,7 @@ This is in a very high level the SSL/TLS protocol, but there are many details in
 
 ## Appendix: An alternative proof of the density of primes
 
-I record here an alternative way to show that the fraction of primes in $[2^n]$ is $\Omega(1/n)$.
+I record here an alternative way to show that the fraction of primes in $[2^n]$ is $\Omega(1/n)$.^[It might be that the two ways are more or less the same, as if we open up the polynomial $(1-x)^kx^k$ we get the binomial coefficients.]
 
 
 > # {.lemma #densityprimesaltlem}
