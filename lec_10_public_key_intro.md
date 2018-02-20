@@ -514,3 +514,31 @@ This is in a very high level the SSL/TLS protocol, but there are many details in
 ![Digital signatures and other forms of electronic signatures are legally binding in many jurisdictions. This is some material from the website of the electronic signing company DocuSign](../figure/docusign.jpg){#tmplabelfig width=80% }
 
 >__Example:__ Here is the list of certificate authorities that were trusted by default (as of spring 2016) by Mozilla products: Actalis, Amazon, AS Sertifitseerimiskeskuse (SK), Atos, Autoridad de Certificacion Firmaprofesional, Buypass, CA Disig a.s., Camerfirma, CerticÃ¡mara S.A., Certigna, Certinomis, certSIGN, China Financial Certification Authority (CFCA), China Internet Network Information Center (CNNIC), Chunghwa Telecom Corporation, Comodo, ComSign, Consorci AdministraciÃ³ Oberta de Catalunya (Consorci AOC,  CATCert), Cybertrust Japan / JCSI, D-TRUST, Deutscher Sparkassen Verlag GmbH (S-TRUST,  DSV-Gruppe), DigiCert, DocuSign (OpenTrust/Keynectis), e-tugra, EDICOM, Entrust, GlobalSign, GoDaddy, Government of France (ANSSI,  DCSSI), Government of Hong Kong (SAR),  Hongkong Post,  Certizen, Government of Japan,  Ministry of Internal Affairs and Communications, Government of Spain,  Autoritat de CertificaciÃ³ de la Comunitat Valenciana (ACCV), Government of Taiwan,  Government Root Certification Authority (GRCA), Government of The Netherlands,  PKIoverheid, Government of Turkey,  Kamu Sertifikasyon Merkezi (Kamu SM), HARICA, IdenTrust, Izenpe S.A., Microsec e-SzignÃ³ CA, NetLock Ltd., PROCERT, QuoVadis, RSA the Security Division of EMC, SECOM Trust Systems Co. Ltd., Start Commercial (StartCom) Ltd., Swisscom (Switzerland) Ltd, SwissSign AG, Symantec / GeoTrust, Symantec / Thawte, Symantec / VeriSign, T-Systems International GmbH (Deutsche Telekom), Taiwan-CA Inc. (TWCA), TeliaSonera, Trend Micro, Trustis, Trustwave, TurkTrust, Unizeto Certum, Visa, Web.com, Wells Fargo Bank N.A., WISeKey, WoSign CA Limited
+
+
+## Appendix: An alternative proof of the density of primes
+
+I record here an alternative way to show that the fraction of primes in $[2^n]$ is $\Omega(1/n)$.
+
+
+> # {.lemma #densityprimesaltlem}
+The probability that a random $n$ bit number is prime is at least $\Omega(1/n)$.
+
+> # {.proof data-ref="densityprimesaltlem"}  
+Let $N=2^n$. We need to show that the number of primes between $1$ and $N$ is at least $\Omega(N/\log N)$.
+Consider the number $\binom{2N}{N}=\tfrac{2N!}{N!N!}$. By
+Stirling's formula we know that $\log \binom{2N}{N} = (1 - o(1))2N$ and in particular $N \leq \log\binom{2N}{N}
+\leq 2N$. Also, by the formula using factorials, all the prime factors of $\binom{2N}{N}$ are between $0$ and $2N$,
+and each factor $P$ cannot appear more than $k=\floor{\tfrac{\log 2N}{\log P}}$ times. Indeed, for every $N$, the number of times $P$ appears
+in the factorization of $N!$ is $\sum_i \floor{\tfrac{N}{P^i}}$, since we get $\floor{\tfrac{N}{P}}$ times a factor
+$P$ in the factorizations of $\{1,\ldots,N\}$, $\floor{\tfrac{N}{P^2}}$ times a factor of the form $P^2$, etc...
+Thus the number of times $P$ appears in the factorization of $\binom{2N}{N}=\tfrac{(2N)!}{N!N!}$ is equal to
+$\sum_i \floor{\tfrac{2N}{P^i}}-2\floor{\tfrac{N}{P^i}}$: a sum of at most $k$ elements (since $P^{k+1}>2N$) each
+of which is either $0$ or $1$.
+>
+Thus, $\binom{2N}{N} \leq \prod_{\substack{1 \leq P \leq 2N \\
+P \text{ prime }}} P^{\floor{\tfrac{\log 2N}{\log P}}}$. Taking logs we get that
+$$N \leq \log \binom{2N}{N}$$
+$$\leq \sum_{P \text{prime} \in [2n]} \floor{\tfrac{\log 2N}{\log P}}\log P$$
+$$\leq \sum_{P \text{prime} \in [2n]} \log 2N$$
+establishing that the number of primes in $[1,N]$ is $\Omega(\tfrac{N}{\log N})$.

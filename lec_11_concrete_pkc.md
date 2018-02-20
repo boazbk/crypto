@@ -9,7 +9,6 @@ In this lecture, we will see the RSA trapdoor function and how to use it for bot
 
 (See [Shoup's excellent and freely available book](http://www.shoup.net/ntb/)  for extensive coverage of these and many other topics.)
 
-
 For every number $m$, we define $\Z_m$ to be the set $\{0,\ldots,m-1\}$ with the addition and multiplication operations modulo $m$.
 When two elements are in $\Z_n$ then we will always assume that all operations are done modulo $m$ unless stated otherwise.
 We let $\Z^*_n = \{ a\in \Z_n : gcd(a,m)=1 \}$. Note that $n$ is prime if and only if $|\Z^*_m|=m-1$.
@@ -17,55 +16,39 @@ For every $a \in \Z^*_m$ we can find using the extended gcd algorithm an element
 The set $\Z^*_m$ is an abelian group with the multiplication operation, and hence by the observations of the previous lecture,
 $a^{|\Z^*_m|}=1$ for every $a\in \Z^*_m$. In the case that $m$ is prime, this result is known as "Fermat's Little Theorem" and is typically stated as $a^{p-1}=1 \pmod{p}$ for every $a\neq 0$.
 
->__Note on $n$ bits vs a number $n$:__ One aspect that is often confusing in number-theoretic based cryptography, is that one needs to always keep track whether we are talking about "big" numbers or "small" numbers. In many cases in crypto, we use $n$ to talk about our key size or security parameter, in which case we think of $n$ as a "small" number of size $100-1000$ or so. However, when we work with $\Z^*_m$ we often think of $m$ as a  "big" number having about $100-1000$ _digits_; that is $m$ would be roughly $2^{100}---2^{1000}$ or so. I will try to reserve the notation $n$ for "small" numbers but may sometimes forget to do so, and other descriptions of RSA etc.. often use $n$ for "big" numbers. It is important that whenever you see a number $x$, you make sure you have a sense whether it is a "small" number (in which case $poly(x)$ time is considered efficient) or whether it is a "large" number (in which case only $poly(log(x))$ time would be considered efficient).
+> # {.remark title="Note on $n$ bits vs a number $n$" #smallvsbigrem}
+One aspect that is often confusing in number-theoretic based cryptography, is that one needs to always keep track whether we are talking about "big" numbers or "small" numbers. In many cases in crypto, we use $n$ to talk about our key size or security parameter, in which case we think of $n$ as a "small" number of size $100-1000$ or so. However, when we work with $\Z^*_m$ we often think of $m$ as a  "big" number having about $100-1000$ _digits_; that is $m$ would be roughly $2^{100}$ to $2^{1000}$ or so. I will try to reserve the notation $n$ for "small" numbers but may sometimes forget to do so, and other descriptions of RSA etc.. often use $n$ for "big" numbers.
+It is important that whenever you see a number $x$, you make sure you have a sense whether it is a "small" number (in which case $poly(x)$ time is considered efficient) or whether it is a "large" number (in which case only $poly(log(x))$ time would be considered efficient).
 
 
-One procedure we often need is to find a prime of $n$ bits. The typical way people do it is by choosing a random $n$-bit number $m$, and testing whether it is prime.
-This relies on the following two facts:
+### Primaliy testing
 
-__Theorem 1:__  The probability that a random $n$ bit number is prime is at least $\Omega(1/n)$. In fact, it is $(1\pm o(1))\frac{1}{n \ln 2}$ by the famous _Prime Number Theorem_ obtained in the 1890's by Hadamard and   de la Vall\'{e}e Poussin).
+One procedure we often need is to find a prime of $n$ bits. The typical way people do it is by choosing a random $n$-bit number $p$, and testing whether it is prime.
+We showed in the previous lecture that a random $n$ bit number is prime with probability at least $\Omega(1/n^2)$ (in fact the probability is $\tfrac{1\pm o(1)}{\ln n}$ by the [Prime Number Theorem](https://goo.gl/ChrXJY)).
+We now discuss how we can test for primality.
 
-__Theorem 2:__  There is an $poly(n)$-time algorithm to test whether a given $n$-bit number is prime or composite.
-This was first shown in 1970's by Solovay, Strassen, Miller and Rabin via a _probabilistic_ algorithm (that can make a mistake with probability exponentially small in the number of coins it uses), and in a 2002 breakthrough  Agrawal, Kayal, and Saxena gave a _deterministic_ polynomial time algorithm for the same problem.
+> # {.theorem title="Primality Testing" #primalitytesting}
+There is an $poly(n)$-time algorithm to test whether a given $n$-bit number is prime or composite.
 
-We now show "poor man's versions" of both theorems:
+[primalitytesting](){.ref} was first shown in 1970's by Solovay, Strassen, Miller and Rabin via a _probabilistic_ algorithm (that can make a mistake with probability exponentially small in the number of coins it uses), and in a 2002 breakthrough  Agrawal, Kayal, and Saxena gave a _deterministic_ polynomial time algorithm for the same problem.
 
-__Lemma 1:__  The probability that a random $n$ bit number is prime is at least $\Omega(1/n)$.
-
-__Proof:__ Let $N=2^n$. We need to show that the number of primes between $1$ and $N$ is at least $\Omega(N/\log N)$.
-Consider the number $\binom{2N}{N}=\tfrac{2N!}{N!N!}$. By
-Stirling's formula we know that $\log \binom{2N}{N} = (1 - o(1))2N$ and in particular $N \leq \log\binom{2N}{N}
-\leq 2N$. Also, by the formula using factorials, all the prime factors of $\binom{2N}{N}$ are between $0$ and $2N$,
-and each factor $P$ cannot appear more than $k=\floor{\tfrac{\log 2N}{\log P}}$ times. Indeed, for every $N$, the number of times $P$ appears
-in the factorization of $N!$ is $\sum_i \floor{\tfrac{N}{P^i}}$, since we get $\floor{\tfrac{N}{P}}$ times a factor
-$P$ in the factorizations of $\{1,\ldots,N\}$, $\floor{\tfrac{N}{P^2}}$ times a factor of the form $P^2$, etc...
-Thus the number of times $P$ appears in the factorization of $\binom{2N}{N}=\tfrac{(2N)!}{N!N!}$ is equal to
-$\sum_i \floor{\tfrac{2N}{P^i}}-2\floor{\tfrac{N}{P^i}}$: a sum of at most $k$ elements (since $P^{k+1}>2N$) each
-of which is either $0$ or $1$.
-
-
-Thus, $\binom{2N}{N} \leq \prod_{\substack{1 \leq P \leq 2N \\
-P \text{ prime }}} P^{\floor{\tfrac{\log 2N}{\log P}}}$. Taking logs we get that
-$N \leq \log \binom{2N}{N} \leq \sum_{P \text{prime} \in [2n]} \floor{\tfrac{\log 2N}{\log P}}\log P \leq$
-
-$\sum_{P \text{prime} \in [2n]} \log 2N$
-
-establishing that the number of primes in $[1,N]$ is $\Omega(\tfrac{N}{\log N})$. QED
-
-__Lemma 2:__ There is a probabilistic polynomial time algorithm $A$ that on input a number $m$,
+> # {.lemma #pseudoprimelem}
+There is a probabilistic polynomial time algorithm $A$ that on input a number $m$,
 if $m$ is prime $A$ outputs ```YES``` with probability $1$ and if $A$ is not even a "pseudoprime" it  outputs ```NO``` with probability at least $1/2$.
 (The definition of "pseudo-prime" will be clarified in the proof below.)
 
-__Proof:__ The algorithm is very simple and is based on Fermat's Little Theorem: on input $m$, pick a random $a\in \{2,\ldots,m-1\}$,
-and if $gcd(a,m)\neq 1$ or $a^{m-1} \neq 1 \pmod{m}$ return ```NO``` and otherwise return ```YES```.
 
+> # {.proof data-ref="pseudoprimelem"}
+The algorithm is very simple and is based on Fermat's Little Theorem: on input $m$, pick a random $a\in \{2,\ldots,m-1\}$,
+and if $gcd(a,m)\neq 1$ or $a^{m-1} \neq 1 \pmod{m}$ return ```NO``` and otherwise return ```YES```.
+>
 By Fermat's little theorem, the algorithm will always return ```YES``` on a prime $m$.
 We define a "pseudoprime" to be a non-prime number $m$ such that $a^{m-1}=1 \pmod{m}$ for all $a$ such that $gcd(a,m)=1$.  
 If $n$ is _not_ a pseudoprime then the set $S = \{ a\in\Z^*_m : a^{m-1}=1 \}$ is a strict subset of $\Z^*_m$.
 But it is easy to see that $S$ is a _group_ and hence $|S|$ must divide $|Z^*_n|$ and hence in particular it must be the case
-that $|S| < |\Z^*_n|/2$ and so with probability at least $1/2$ the algorithm will output ```NO```. QED
+that $|S| < |\Z^*_n|/2$ and so with probability at least $1/2$ the algorithm will output ```NO```.
 
-Lemma 2 on its own might not seem very meaningful since it's not clear how many pseudoprimes are there.
+[pseudoprimelem](){.ref} its own might not seem very meaningful since it's not clear how many pseudoprimes are there.
 However, it turns out these pseudoprimes, also known as "Carmichael numbers", are much less prevalent than the primes (there are about $N/2^{-\Theta(\log N/\log\log N)} \ll N/\log N$ of those between $q$ and $N$). Moreover, as mentioned above, there are better algorithms that succeed for _all_ numbers.
 
 
