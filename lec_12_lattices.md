@@ -36,7 +36,8 @@ as well as indistinguishability obfuscation (though the latter's security's foun
 On the applied side, the steady advances in the technology of quantum computers have finally gotten practitioners worried about RSA, Diffie Hellman and Elliptic Curves.
 While current constructions for quantum computers are nowhere near being able to, say, factor larger numbers that can be done classically (or even than can be done by hand), given that it takes many years to develop new standards and get them deployed, many believe the effort to transition away from these factoring/dlog based schemes should start today (or perhaps should have started several years ago).
 The NSA has [suggested](https://www.nsa.gov/ia/programs/suiteb_cryptography/index.shtml) that it plans to initiate the process to "transition to quantum resistant algorithms in the not too distant future"; see also this [very interesting FAQ](https://cryptome.org/2016/01/CNSA-Suite-and-Quantum-Computing-FAQ.pdf) on this topic.
-Note that cryptography has the peculiar/unfortunate feature that if a machine is built that can factor large integers in 20 years, it can still be used to break the communication we transmit _today_, provided this communication was recorded.
+
+Cryptography has the peculiar/unfortunate feature that if a machine is built that can factor large integers in 20 years, it can still be used to break the communication we transmit _today_, provided this communication was recorded.
 So, if you have some data that you expect you'd want still kept secret in 20 years (as many government and commercial entities do), you might have reasons to worry.
 Currently lattice based cryptography is the only real "game in town" for potentially quantum-resistant public key encryption schemes.
 
@@ -61,6 +62,12 @@ Under our assumption, it is hard to recover the secret key from the public key, 
 
 The crucial observation is that even if we don't know how to solve linear equations, we can still combine several equations to get new ones.
 To keep things simple, let's consider the case of encrypting a single bit.
+
+> # { .pause }
+If you have a CPA secure public key encryption scheme for single bit messages then you can extend it to a CPA secure encryption scheme for messages of any length.
+Can you see why?
+
+
 We think of the public key as the set  of equations $\iprod{a_1,x}=y_1,\ldots, \iprod{a_m,x}=y_m$ in the unknown variables $x$.
 The idea is that to encrypt the value $0$ we will generate a new _correct_ equation on $x$, while to encrypt the value $1$ we will generate an _incorrect_ equation.
 To decrypt a ciphertext $(a,\sigma)\in \Z_q^{n+1}$, we think of it as an equation of the form $\iprod{a,x}=\sigma$ and output $1$ if and only if the equation is correct.
@@ -72,40 +79,45 @@ However, even if it's hard to solve for $x$ given the equations, an attacker (wh
 
 Our solution for this is simple- just add more equations! If the encryptor adds a random subset of equations then there are $2^m$ possibilities for that, and an attacker can't guess them all.
 Thus, at least intuitively, the following encryption scheme would be "secure" in the Gaussian-elimination free world of attackers that haven't taken freshman linear algebra:
-
+>__Scheme LwoE-ENC:__  Public key encryption under the hardness of "learning linear equations without errors".
+>
 * _Key generation_:  Pick random $m\times n$ matrix $A$ over $\Z_q$, and $x\leftarrow_R\Z_q^n$, the secret key is $x$ and the public key is $(A,y)$ where $y=Ax$.
-
+>
 * _Encryption_: To encrypt a message $b\in\{0,1\}$, pick $w\in\{0,1\}^m$ and output $w^\top A,\iprod{w,y}+\alpha b$ for some fixed nonzero $\alpha\in\Z_q$.
-
+>
 * _Decryption:_ To decrypt a ciphertext $(a,\sigma)$, output $0$ iff $\iprod{a,x}=\sigma$.
 
-(Please make sure that you see why this description corresponds to the previous one; as usual all calculations are done modulo $q$.)
+
+> # { .pause }
+Please stop here and make sure that you see why this description corresponds to the previous one; as usual all calculations are done modulo $q$.
 
 ## Security in the real world.
 
 Like it or not (and cryptographers typically don't) Gaussian elimination _is_ possible in the real world and the scheme above is completely insecure.
 However, the Gaussian elimination algorithm is extremely _brittle_.  
 Errors tend to be amplified when you combine equations.
-To see why, let us recall how Gaussian elimination works.
+This is usually thought of as a bad thing, and numerical analysis is much about dealing with issue.
+However, from the cryptographic point of view, these errors can be our saving grace and enable us to salvage the security of the ridiculous scheme above.
 
+
+To see why Gaussian elimination is brittle, let us recall how it works.
 Think of $m=n$ for simplicity.
 Given equations $Ax=y$ in the unknown variables $x$, the goal of Gaussian elimination is to transform them into the equations $Ix = y'$ where $I$ is the identity matrix (and hence the solution is simply $x=y'$).
 Recall how we do it: by rearranging and scaling, we can assume that the top left corner of $A$ is equal to $1$, and then we add the first equation to the other equations (scaled appropriately) to zero out the first entry in all the other rows of $A$ (i.e., make the first column of $A$ equal to $(1,0,\ldots,0)$) and continue onwards to the second column and so on and so forth.
 
-Now, suppose that the equations were _noisy_, in the sense that we added to $y$ a vector $e\in\Z_q^m$ such that $|e_i|<\delta q$ for every $i$.
-(Because over $\Z_q$, we can think of $q-1$ also as the number $-1$, and so on, if $a\in\Z_q$, we define $|a|$ to be the minimum of $a$ and $q-a$. This ensures the absolute value satisfies the natural property of  $|a|=|-a|$.)
-Even ignoring the effect that our scaling has on this, simply adding the first equation to the rest would typically tend to increase their relative error from $\approx \delta$ to $\approx 2\delta$.
-Now, when we repeat the process, we increase the error from $\approx 2\delta$ to $\approx 4\delta$, and we see that by the time we're done dealing with all $n$ variables, we have equations either error level roughly $2^n\delta$.
+Now, suppose that the equations were _noisy_, in the sense that we added to $y$ a vector $e\in\Z_q^m$ such that $|e_i|<\delta q$ for every $i$.^[Over $\Z_q$, we can think of $q-1$ also as the number $-1$, and so on. Thus if $a\in\Z_q$, we define $|a|$ to be the minimum of $a$ and $q-a$. This ensures the absolute value satisfies the natural property of  $|a|=|-a|$.]
+Even ignoring the effect of the scaling step (which does not _reduce_ error), simply adding the first equation to the rest of the equations would typically tend to increase the  relative error of equations $2,\ldots,m$  from $\approx \delta$ to $\approx 2\delta$.
+Now, when we repeat the process, we increase the error of equations $3,\ldots,m$ from $\approx 2\delta$ to $\approx 4\delta$, and we see that by the time we're done dealing with about $n/2$ variables, the remaining equations have error level roughly $2^{n/2}\delta$.
 So, unless $\delta$ was truly tiny (and $q$ truly big, in which case the difference between working in $\Z_q$ and simply working with integers or rationals disappears), the resulting equations have the form $Ix = y' + e'$ where $e'$ is so big that we get no information on $x$.
 
 The _Learning With Errors (LWE)_ conjecture is that this is _inherent_:
 
 >__Conjecture (Learning with Errors, Regev 2005):__ Let $q=q(n)$ and $\delta=\delta(n)$ be some functions.
-The Learning with Error (LWE) conjecture with respect to $q,\delta$, is that for every polynomial-time adversary $E$
+The _Learning with Error (LWE) conjecture with respect to $q,\delta$_, is that for every polynomial-time adversary $E$
 and $m=poly(n)$, the probability that $E(A,Ax+e)=x$ is negligible, where $A$ is a random $m\times n$ matrix in $\Z_q$,
 $x$ is random in $\Z_q^n,$ and $e \in \Z_q^m$ is a random noise vector with magnitude $\delta q$.[^noise]
 >
-The _LWE conjecture_ is that for ever polynomial $p(n)$ there is some polynomial $q(n)$ such that LWE holds with respect to $q(n)$ and $\delta(n)=1/p(n)$.[^superpoly]
+The _LWE conjecture_ is that for every polynomial $p(n)$ there is some polynomial $q(n)$ such that LWE holds with respect to $q(n)$ and $\delta(n)=1/p(n)$.[^superpoly]
 
 
 [^noise]: One can think of $e$ as chosen by simply letting every coordinate be chosen at random in $\{ -\delta q, -\delta q + 1 , \ldots, +\delta q \}$. For technical reasons, we sometimes consider other distributions and in particular the _discrete Gaussian_ distribution which is obtained by letting every coordinate of $e$ be an independent Gaussian random variable with standard deviation $\delta q$, conditioned on it being an integer. (A closely related distribution is obtained by picking such a Gaussian random variable and then rounding it to the nearest integer.)
