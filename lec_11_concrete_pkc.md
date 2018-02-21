@@ -266,6 +266,8 @@ Here is how we can get digital signatures from trapdoor permutations $\{ p_k \}$
 >
 * _Verification:_ To verify a message-signature pair $(m,x)$ we check that $p_k(x)=H(m)$.
 
+We now prove the security of full domain hash:
+
 > # {.theorem title="Full domain hash security" #FDHthm}
 If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then FDHSIG is chosen message attack secure digital signature scheme.
 

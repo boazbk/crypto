@@ -14,28 +14,28 @@ His proposal evolved into the Merkle-Hellman system proposed in 1978.
 
 McEliece proposed in 1978 a system based on the difficulty of the decoding problem for general linear codes. This is the task of solving _noisy linear equations_ where one is given $A$ and $y$ such that $y=Ax+e$ for a "small" error vector $e$, and needs to recover $x$.
 Crucially, here we work in a finite field, such as working modulo $q$ for some prime $q$ (that can even be $2$) rather than over the reals or rationals.
-There are special matrices $A^*$ for which we know how to solve this problem efficiently: these are known as efficiently decodable error correcting codes.
-McEliece suggested a scheme where the key generator lets $A$ be a "scrambled" version of a special $A^*$ (based on the Goppa algebraic geometric code).
+There are special matrices $A^*$ for which we know how to solve this problem efficiently: these are known as efficiently decodable [error correcting codes](https://goo.gl/vM7Pvv).
+McEliece suggested a scheme where the key generator lets $A$ be a "scrambled" version of a special $A^*$ (based on the [Goppa algebraic geometric code](https://goo.gl/Vd4yye)).
 So, someone that knows the scrambling could solve the problem, but (hopefully) someone that doesn't know it wouldn't.
 McEliece's system has so far not been broken.
 
 
 In a 1996 breakthrough, Ajtai showed a _private key_ scheme based on integer lattices that had a very curious property- its security could be based on the assumption that certain problems were only hard in the _worst case_, and moreover variants of these problems were known to be NP hard.
-This ignited hope that we could perhaps realize the old dream of basing crypto on the mere assumption that $P\neq NP$.
-Alas, we know understand that there are fundamental barriers to this approach.
-Nevertheless, Ajtai's work attracted signifincant interest, and within a year both Ajtai and Dwork, as well as Goldreich, Goldwasser and Halevi came up with lattice based constructions for _public key_ encryption (the former based also on _worst case_ assumptions).
-At about the same time,  Hoffstein, Pipher, and Silverman came up with their NTRU public key system which is based on stronger assumptions but offers better performance,
-and they started a company around it together with Daniel Lieman.
+This re-ignited the  hope that we could perhaps realize the old dream of basing crypto on the mere assumption that $P\neq NP$.
+Alas, we now understand that there are fundamental barriers to this approach.
 
-You may note that I haven't yet said what _lattices_ are; we will do so later, but for now if you simply think of questions involving linear equations modulo some prime $q$, you will get enough of the intuition that you need.  (The lattice viewpoint is more geometric, and we'll discuss it more below; it was first used to _attack_ cryptosystems and in particular break the Merkle-Hellman knapsack scheme and many of its variants.)
+Nevertheless, Ajtai's work attracted significant interest, and within a year both Ajtai and Dwork, as well as Goldreich, Goldwasser and Halevi came up with lattice based constructions for _public key_ encryption (the former based also on _worst case_ assumptions).
+At about the same time,  Hoffstein, Pipher, and Silverman came up with their NTRU public key system which is based on stronger assumptions but offers better performance, and they started a company around it together with Daniel Lieman.
+
+You may note that I haven't yet said what _lattices_ are; we will do so later, but for now if you simply think of questions involving linear equations modulo some prime $q$, you will get enough of the intuition that you need.
+(The lattice viewpoint is more geometric, and we'll discuss it more below; it was first used to _attack_ cryptosystems and in particular break the Merkle-Hellman knapsack scheme and many of its variants.)
 
 Lattice based cryptography has captured a lot of attention recently from both theory and practice.
 In the theory side, many cool new constructions are now based on lattice based cryptography, and chief among them fully homomorphic encryption,
-as well as indistinguishability obfuscation (though the latter's security's foundations is still far less solid).
-On the applied side, the steady advances in the technology of quantum computers have finally gotten practitioners worried about RSA, Diffie Hellman and
-Elliptic Curves.
-While current constructions for quantum computers are nowhere near being able to, say, factor larger numbers that can be done classically (or even than can be done by hand), given that it takes many years to develop new standards and get them deployed, many believe the effort to transition away from these factoring/dlog based schemes should start today.
-The NSA has [recently suggested](https://www.nsa.gov/ia/programs/suiteb_cryptography/index.shtml) that it plans to initiate the process to "transition to quantum resistant algorithms in the not too distant future"; see also this [very interesting FAQ](https://cryptome.org/2016/01/CNSA-Suite-and-Quantum-Computing-FAQ.pdf) on this topic.
+as well as indistinguishability obfuscation (though the latter's security's foundations are still far less solid).
+On the applied side, the steady advances in the technology of quantum computers have finally gotten practitioners worried about RSA, Diffie Hellman and Elliptic Curves.
+While current constructions for quantum computers are nowhere near being able to, say, factor larger numbers that can be done classically (or even than can be done by hand), given that it takes many years to develop new standards and get them deployed, many believe the effort to transition away from these factoring/dlog based schemes should start today (or perhaps should have started several years ago).
+The NSA has [suggested](https://www.nsa.gov/ia/programs/suiteb_cryptography/index.shtml) that it plans to initiate the process to "transition to quantum resistant algorithms in the not too distant future"; see also this [very interesting FAQ](https://cryptome.org/2016/01/CNSA-Suite-and-Quantum-Computing-FAQ.pdf) on this topic.
 Note that cryptography has the peculiar/unfortunate feature that if a machine is built that can factor large integers in 20 years, it can still be used to break the communication we transmit _today_, provided this communication was recorded.
 So, if you have some data that you expect you'd want still kept secret in 20 years (as many government and commercial entities do), you might have reasons to worry.
 Currently lattice based cryptography is the only real "game in town" for potentially quantum-resistant public key encryption schemes.
@@ -47,14 +47,18 @@ The general approach people used to get a public key encryption is to obtain a h
 We've seen this in the _discrete logarithm_ problem, where the task is to invert the map $a \mapsto g^a \pmod{p}$, and the integer factoring problem,
 where the task is to invert the map $a,b \mapsto a\cdot b$.
 Perhaps the simplest structure to consider is the task of solving linear equations.
-Pretend that we didn't know of Gaussian elimination, and that if we picked a "generic" matrix $A$ then the map $x \mapsto Ax$ would be hard to invert.
+
+
+Pretend that we didn't know of Gaussian elimination,^[Despite the name, [Gaussian elimination](https://goo.gl/3HNb5U)  has been known to Chinese mathematicians since 150BC or so, and was popularized in the west through the 1670 notes of Issac Newton.] and that if we picked a "generic" matrix $A$ then the map $x \mapsto Ax$ would be hard to invert.
 (Here and elsewhere, our default interpretation of a vector $x$ is as a _column_ vector, and hence if $x$ is $n$ dimensional and $A$ is $m\times n$ then $Ax$ is $m$ dimensional. We use $x^\top$ to denote the row vector obtained by _transposing_ $x$.)
 Could we use that to get a public key encryption scheme?
 
-Here is a concrete approach. Let us fix some prime $q$ (think of it as polynomial size, e.g., $q$ is smaller than $1024$ or so, though people can and sometimes do consider $q$ of exponential size),
+Here is a concrete approach.
+Let us fix some prime $q$ (think of it as polynomial size, e.g., $q$ is smaller than $1024$ or so, though people can and sometimes do consider $q$ of exponential size),
 and all computation below will be done modulo $q$.
 The secret key is a vector $x\in\Z_q^n$, and the public key is $(A,y)$ where $A$ is a random $m\times n$ matrix with entries in $\Z_q$ and $y=Ax$.
 Under our assumption, it is hard to recover the secret key from the public key, but how do we use the public key to encrypt?
+
 The crucial observation is that even if we don't know how to solve linear equations, we can still combine several equations to get new ones.
 To keep things simple, let's consider the case of encrypting a single bit.
 We think of the public key as the set  of equations $\iprod{a_1,x}=y_1,\ldots, \iprod{a_m,x}=y_m$ in the unknown variables $x$.
@@ -65,11 +69,14 @@ How does the encrypting algorithm, that does not know $x$, get a correct or inco
 One way would be to simply take two equations $\iprod{a_i,x}=y_i$ and $\iprod{a_j,x}=y_j$ and add them together to get the equation $\iprod{a_i+a_j,x}=y_i+y_j$.
 This equation is correct and so one can use it to encrypt $0$, while to encrypt $1$ we simply add some fixed nonzero number $\alpha\in\Z_q$ to the right hand side to get the incorrect equation $\iprod{a_i+a_j,x}= y_i+y_j + \alpha$.
 However, even if it's hard to solve for $x$ given the equations, an attacker (who also knows the public key $(A,y)$) can try itself all pairs of equations and do the same thing.
+
 Our solution for this is simple- just add more equations! If the encryptor adds a random subset of equations then there are $2^m$ possibilities for that, and an attacker can't guess them all.
 Thus, at least intuitively, the following encryption scheme would be "secure" in the Gaussian-elimination free world of attackers that haven't taken freshman linear algebra:
 
 * _Key generation_:  Pick random $m\times n$ matrix $A$ over $\Z_q$, and $x\leftarrow_R\Z_q^n$, the secret key is $x$ and the public key is $(A,y)$ where $y=Ax$.
+
 * _Encryption_: To encrypt a message $b\in\{0,1\}$, pick $w\in\{0,1\}^m$ and output $w^\top A,\iprod{w,y}+\alpha b$ for some fixed nonzero $\alpha\in\Z_q$.
+
 * _Decryption:_ To decrypt a ciphertext $(a,\sigma)$, output $0$ iff $\iprod{a,x}=\sigma$.
 
 (Please make sure that you see why this description corresponds to the previous one; as usual all calculations are done modulo $q$.)
@@ -80,9 +87,11 @@ Like it or not (and cryptographers typically don't) Gaussian elimination _is_ po
 However, the Gaussian elimination algorithm is extremely _brittle_.  
 Errors tend to be amplified when you combine equations.
 To see why, let us recall how Gaussian elimination works.
+
 Think of $m=n$ for simplicity.
 Given equations $Ax=y$ in the unknown variables $x$, the goal of Gaussian elimination is to transform them into the equations $Ix = y'$ where $I$ is the identity matrix (and hence the solution is simply $x=y'$).
 Recall how we do it: by rearranging and scaling, we can assume that the top left corner of $A$ is equal to $1$, and then we add the first equation to the other equations (scaled appropriately) to zero out the first entry in all the other rows of $A$ (i.e., make the first column of $A$ equal to $(1,0,\ldots,0)$) and continue onwards to the second column and so on and so forth.
+
 Now, suppose that the equations were _noisy_, in the sense that we added to $y$ a vector $e\in\Z_q^m$ such that $|e_i|<\delta q$ for every $i$.
 (Because over $\Z_q$, we can think of $q-1$ also as the number $-1$, and so on, if $a\in\Z_q$, we define $|a|$ to be the minimum of $a$ and $q-a$. This ensures the absolute value satisfies the natural property of  $|a|=|-a|$.)
 Even ignoring the effect that our scaling has on this, simply adding the first equation to the rest would typically tend to increase their relative error from $\approx \delta$ to $\approx 2\delta$.
@@ -91,10 +100,11 @@ So, unless $\delta$ was truly tiny (and $q$ truly big, in which case the differe
 
 The _Learning With Errors (LWE)_ conjecture is that this is _inherent_:
 
-__Conjecture (Learning with Errors, Regev 2005):__ Let $q=q(n)$ and $\delta=\delta(n)$ be some functions.
+>__Conjecture (Learning with Errors, Regev 2005):__ Let $q=q(n)$ and $\delta=\delta(n)$ be some functions.
 The Learning with Error (LWE) conjecture with respect to $q,\delta$, is that for every polynomial-time adversary $E$
 and $m=poly(n)$, the probability that $E(A,Ax+e)=x$ is negligible, where $A$ is a random $m\times n$ matrix in $\Z_q$,
 $x$ is random in $\Z_q^n,$ and $e \in \Z_q^m$ is a random noise vector with magnitude $\delta q$.[^noise]
+>
 The _LWE conjecture_ is that for ever polynomial $p(n)$ there is some polynomial $q(n)$ such that LWE holds with respect to $q(n)$ and $\delta(n)=1/p(n)$.[^superpoly]
 
 
@@ -107,76 +117,98 @@ The _LWE conjecture_ is that for ever polynomial $p(n)$ there is some polynomial
 
 It turns out that if the LWE is hard, then it is even hard to distinguish between random equations and nearly correct ones:
 
-__Theorem (Search to decision reduction):__ If the LWE conjecture is true then for every $q=poly(n)$ and $\delta=1/poly(n)$ and $m=poly(n)$, the following two distributions are computationally
-indistinguishable:
 
+> # {.theorem title="Search to decision reduction for LWE" #LWEsearchtodecthm}
+If the LWE conjecture is true then for every $q=poly(n)$ and $\delta=1/poly(n)$ and $m=poly(n)$, the following two distributions are computationally
+indistinguishable: \
+>
 * $\{ (A,Ax+e) \}$ where $A$ is random $m\times n$ matrix in $\Z_q$, $x$ is random in $\Z_q^n$ and $e\in \Z_q^m$ is random noise vector of magnitude $\delta$.
-
+>
 * $\{ (A,y) \}$ where $A$ is random $m\times n$ matrix in $\Z_q$ and $y$ is random in $\Z_q^m$
 
-__Proof:__ Suppose that we had a decisional adversary $D$ that succeeds in distinguishing the two distributions above with bias $\epsilon$.
+> # {.proof data-ref="LWEsearchtodecthm"}
+Suppose that we had a decisional adversary $D$ that succeeds in distinguishing the two distributions above with bias $\epsilon$.
 For example, suppose that $D$ outputs $1$ with probability $p+\epsilon$ on inputs from the first distribution, and outputs  $1$ with probability $p$
 on inputs from the second distribution.
+>
 We will show how we can use this to obtain a polynomial-time algorithm $S$ that on input $m$ noisy equations on $x$ and a value $a\in\ Z_q$, will learn with high probability whether or not the first coordinate of $x$ equals $a$.
 Clearly, we can repeat this for all the possible $q$ values of $a$ to learn the first coordinate exactly, and then continue in this way to learn all coordinates.
-
+>
 Our algorithm $S$ gets as input the pair $(A,y)$ where $y=Ax+e$ and we need to decide whether $x_1 = a$.
 Now consider the instance $A+(r\|0^m\|\cdots \|0^m),y+ar$, where $r$ is a random vector in $\Z_q^m$ and the matrix $(r\|0^m\|\cdots \|0^m)$ is simply the matrix with first column equal to $r$ and all other columns equal to $0$. Note that if $A$ is random then $A+r\|0^m\|\cdots \|0^m)$ is random as well.
 Now note that $Ax + (r|0^m\cdots \|0^m)x = Ax + x_1 r$ and hence if $x_1 = a$ then we still have an input of the same form.
 However, if $x_1 \neq a$ then this amounts to adding a non-zero multiple of the random vector $r$ to the noise vector, and hence we get an instance of the form $(A',y')$
 with random $A',y'$.  
 Hence if we send this input to our the decision algorithm $D$, then we would get $1$ with probability $p+\epsilon$  if $x_1=a$ and an output of $1$ with probability $p$ otherwise.
+>
 Now the crucial observation is that if our decision algorithm $D$ requires $m$ equations to succeed with bias $\epsilon$, we can use $100mn/\epsilon^2$ equations (which is still polynomial) to invoke it $100n/\epsilon^2$ times.
 This allows us to distinguish with probability $1-2^{-n}$ between the case that $D$ outputs $1$ with probability $p+\epsilon$ and the case that it outputs $1$ with probability $p$ (this follows from the Chernoff bound we discussed in the mathematical background handout; can you see why?).
-Hence by using polynomially more samples than the decision algorithm $D$, we get a search algorithm $S$ that can actually recover $x$. QED
+Hence by using polynomially more samples than the decision algorithm $D$, we get a search algorithm $S$ that can actually recover $x$.
 
 ## An LWE based encryption scheme
 
 We can now show the secure variant of our original encryption scheme:
 
+
+>__LWE-based encryption LWEENC:__
+>
 * _Parameters:_ Let $\delta(n)=1/n^4$ and let $q=poly(n)$ be a prime such that LWE holds w.r.t. $q,\delta$. We let $m = n^2\log q$.
-
+>
 * _Key generation:_ Pick $x\in\Z_q^n$. The private key is $x$ and the public key is $(A,y)$ with $y=Ax+e$ with $e$ a $\delta$-noise vector and $A$ a random $m\times n$ matrix.
-
+>
 * _Encrypt:_ To encrypt $b\in\{0,1\}$ given the key $(A,y)$, pick $w\in\{0,1\}^m$ and output $w^\top A, \iprod{w,y}+b\floor{q/2}$.
-
+>
 * _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|\iprod{a,x}-\sigma|<q/10$.
 
 
-Unlike our typical schemes, here it is not immediately clear that even get the right answer, but we do:
+Unlike our typical schemes, here it is not immediately clear that this encryption is valid, in the sense that the decrypting an encryption of $b$ returns the value $b$. But this is the case:
 
-__Claim:__ With high probability, the decryption of the encryption of $b$ equals $b$.
+> # {.lemma #LWEcorrectlem}
+With high probability, the decryption of the encryption of $b$ equals $b$.
 
-__Proof:__  $\iprod{w^\top A,x} = \iprod{w,Ax}$. Hence, if $y=Ax+e$ then $\iprod{w,y} = \iprod{w^\top A,x} + \iprod{w,e}$.
+> # {.proof data-ref="LWEcorrectlem"}
+$\iprod{w^\top A,x} = \iprod{w,Ax}$. Hence, if $y=Ax+e$ then $\iprod{w,y} = \iprod{w^\top A,x} + \iprod{w,e}$.
 But since every coordinate of $w$ is either $0$ or $1$, $|\iprod{w,e}|<\delta m q \ll q < q/10$.[^cancellations]  
 So, we get that if $a= w^\top A$ and $\sigma = \iprod{w,y}+b\floor{q/2}$ then $\sigma - \iprod{a,x} = \iprod{w,e} + b\floor{q/2}$ which will be smaller than
-$q/10$ iff $b=0$. QED
+$q/10$ iff $b=0$.
 
 [^cancellations]: In fact, due to the fact that the _signs_ of the error vector's entries are different, we expect the errors to have significant cancellations and hence we would expect $|\iprod{w,e}|$ to only be roughly of magnitude $\sqrt{m}\delta q$, but this is not crucial for our discussions.
 
-We now claim that this scheme is CPA secure. For a public key encryption scheme with messages that are just bits, this just means that an encryption of $0$ is indistinguishable from an encryption of $1$, even given the public key.
-This will follow from the following lemma:
+We now prove security of the LWE based encryption:
 
-__Lemma:__ Assuming the LWE, the distribution $(A,y=Ax+e),(w^\top A,\iprod{w^\top,y})$ (where all values are chosen as above) is indistinguishable from the distribution
+> # {.theorem title="CPA security of LWEENC" #LWEENCthm}
+If the LWE conjecture is true then LWEENC is CPA secure
+
+
+For a public key encryption scheme with messages that are just bits, CPA security  means that an encryption of $0$ is indistinguishable from an encryption of $1$, even given the public key.
+Thus [LWEENCthm](){.ref}  will follow from the following lemma:
+
+
+> # {.lemma #LWEENClem}
+Assuming the LWE, the distribution $(A,y=Ax+e),(w^\top A,\iprod{w^\top,y})$ (where all values are chosen as above) is indistinguishable from the distribution
 $(A,y),(a,\sigma)$ where $y$ is completely random in $\Z_q^m$, $a$ is random and independent in $\Z_q^n$ and $\sigma$ is random and independent in $\Z_q$.
 
-(I leave to the reader to verify that this lemma implies security; the idea is that it shows that the concatenation of the public key and encryption of $0$ is indistinguishable from something that is completely random, and you can use it to show that the concatenation of the public key and encryption of $1$ is indistinguishable
-  from the same thing, and then finish using the hybrid argument. )
 
-__Proof:__ By the search to decision reduction, the distribution above is indistinguishable from the distribution where $y$ is completely random. However, in this case I claim that if we choose $w$ at random in $\{0,1\}^m$ and let $(a,\sigma) = w^\top(A\|y)$ then $(a,\sigma)$ would be a (close to) completely uniform and independent
+> # { .pause }
+You should stop here and verify that [LWEENClem](){.ref} implies [LWEENCthm](){.ref}.
+The idea is that it shows that the concatenation of the public key and encryption of $0$ is indistinguishable from something that is completely random, and you can use it to show that the concatenation of the public key and encryption of $1$ is indistinguishable from the same thing, and then finish using the hybrid argument.
+
+We now prove [LWEENClem](){.ref}, which will complete the proof of [LWEENCthm](){.ref}.
+
+> # {.proof data-ref="LWEENClem"}
+By the search to decision reduction, the distribution above is indistinguishable from the distribution where $y$ is completely random. However, in this case I claim that if we choose $w$ at random in $\{0,1\}^m$ and let $(a,\sigma) = w^\top(A\|y)$ then $(a,\sigma)$ would be a (close to) completely uniform and independent
 vector in $\Z_q^{n+1}$.
-We will not do the whole proof (which uses the mod $q$ version of the _leftover hash lemma_ we mentioned before) but the idea is simple.
+We will not do the whole proof (which uses the mod $q$ version of the [leftover hash lemma](https://goo.gl/KXpccP) which  we mentioned before and is also "Wikipedia-able") but the idea is simple.
 Let $A' = (A\|y)$ which in our case is a completely random matrix.
 This mans that the map $w \mapsto w^\top A'$ is essentially a _pairwise independent_ hash function mapping $\Z_q^m$ to $\Z_q^{n+1}$.
 Now when we choose $w$ at random in $\{0,1\}^m$, it is coming from a distribution with $m$ bits of entropy.
-If $m \gg (n+1)\log q$, then because the output of this function is so much smaller than $m$, we expect it to be completely uniform. QED
+If $m \gg (n+1)\log q$, then because the output of this function is so much smaller than $m$, we expect it to be completely uniform.
 
 
 
 
-
-
-This proof is quite subtle and requires some thought.
+> # { .pause }
+The proof of [LWEENCthm](){.ref} is quite subtle and requires some re-reading and  thought.
 To read more about this, you can look at the survey of Oded Regev, ["On the Learning with Error Problem"](http://www.cims.nyu.edu/~regev/papers/lwesurvey.pdf) Sections 3 and 4.
 
 ## But what are lattices?
@@ -186,12 +218,16 @@ A lattice $L$ is simply a subset of $\mathbb{R}^n$ such that if $u,v\in L$ and $
 A lattice is given by a basis  which simply a matrix $B$ such that every vector $u\in L$ is obtained as $u=Bx$ for some vector of integers $x$.
 It can be shown that we can  assume without loss of generality that $B$ is full dimensional and hence it's an $n$ by $n$ invertible matrix.
 Note that given a basis $B$ we can generate vectors in $L$, as well as test whether a vector $v$ is in $L$ by testing if $B^{-1}v$ is an integer vector.
-There can be many different bases for the same lattice, and some of them are easier to work with than others.
+There can be many different bases for the same lattice, and some of them are easier to work with than others (see [latticebasesfig](){.ref}).
+
+![A _lattice_ is a discrete subspace $L \subseteq \R^n$ that is closed under _integer_ combinations. A _basis_ for the lattice is a minimal set $b_1,\ldots,b_m$ (typically $m=n$) such that every $u \in L$ is an integer combination of $b_1,\ldots,b_m$. The same lattice can have different bases. In this figure the lattice is a set of points in $\R^2$, and the black vectors $v_1,v_2$ and the ref vectors $u_1,u_2$ are two alternative bases for it. Generally we consider the basis $u_1,u_2$ "better" since the vectors are shorter and it is less "skewed".](../figure/Lattice-reduction.png){#latticebasesfig .class width=300px height=300px}
 
 Some classical computational questions on lattices are:
 
 * _Shortest vector problem:_ Given a basis $B$ for $L$, find the nonzero vector $v$ with smallest norm in $L$.
+
 * _Closest vector problem:_ Given a basis $B$ for $L$ and a vector $u$ that is _not_ in $L$, find the closest vector to $u$ in $L$.
+
 * _Bounded distance decoding:_ Given a basis $B$ for $L$ and a vector $u$ of the form $u=v+e$ where $v$ is in $L$, and $e$ is a particularly short "error" vector (so in particular no other vector in the lattice is within distance $\|e\|$ to $u$), recover $v$. Note that this is a special case of the closest vector problem.
 
 In particular, if $V$ is a linear subspace of $\Z_q^n$, we can think of it also as a lattice $\hat{V}$ of $\mathbb{R}^n$ where we simply say that
