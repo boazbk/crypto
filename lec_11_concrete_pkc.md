@@ -11,7 +11,7 @@ In this lecture, we will see the RSA trapdoor function and how to use it for bot
 
 For every number $m$, we define $\Z_m$ to be the set $\{0,\ldots,m-1\}$ with the addition and multiplication operations modulo $m$.
 When two elements are in $\Z_n$ then we will always assume that all operations are done modulo $m$ unless stated otherwise.
-We let $\Z^*_n = \{ a\in \Z_n : gcd(a,m)=1 \}$. Note that $n$ is prime if and only if $|\Z^*_m|=m-1$.
+We let $\Z^*_m = \{ a\in \Z_m : gcd(a,m)=1 \}$. Note that $m$ is prime if and only if $|\Z^*_m|=m-1$.
 For every $a \in \Z^*_m$ we can find using the extended gcd algorithm an element $b$ (typically denoted as $a^{-1}$) such that $ab=1$ (can you see why?).
 The set $\Z^*_m$ is an abelian group with the multiplication operation, and hence by the observations of the previous lecture,
 $a^{|\Z^*_m|}=1$ for every $a\in \Z^*_m$. In the case that $m$ is prime, this result is known as "Fermat's Little Theorem" and is typically stated as $a^{p-1}=1 \pmod{p}$ for every $a\neq 0$.
@@ -19,6 +19,13 @@ $a^{|\Z^*_m|}=1$ for every $a\in \Z^*_m$. In the case that $m$ is prime, this re
 > # {.remark title="Note on $n$ bits vs a number $n$" #smallvsbigrem}
 One aspect that is often confusing in number-theoretic based cryptography, is that one needs to always keep track whether we are talking about "big" numbers or "small" numbers. In many cases in crypto, we use $n$ to talk about our key size or security parameter, in which case we think of $n$ as a "small" number of size $100-1000$ or so. However, when we work with $\Z^*_m$ we often think of $m$ as a  "big" number having about $100-1000$ _digits_; that is $m$ would be roughly $2^{100}$ to $2^{1000}$ or so. I will try to reserve the notation $n$ for "small" numbers but may sometimes forget to do so, and other descriptions of RSA etc.. often use $n$ for "big" numbers.
 It is important that whenever you see a number $x$, you make sure you have a sense whether it is a "small" number (in which case $poly(x)$ time is considered efficient) or whether it is a "large" number (in which case only $poly(log(x))$ time would be considered efficient).
+
+
+> # {.remark title="The number $m$ vs the message $m$" #numbermvsmessage}
+In much of this course we use $m$ to denote a string which is our plaintext message to be encrypted or authenticated.
+In the context of integer factoring, it is convenient to use $m=pq$ as the composite number that is to be factored.
+To keep things interesting (or more honestly, because I keep running out of letters) in this lecture we will have both usages of $m$ (though hopefully not in the same theorem or definition!). When we talk about factoring, RSA, and Rabin, then we will use $m$ as the composite number, while in the context of the abstract trapdoor-permutation based encryption and signatures we will use $m$ for the message.
+When you see an instance of $m$, make sure you understand what  is its usage.
 
 
 ### Primaliy testing
@@ -120,9 +127,12 @@ $f(x,y)=\varphi(A(\varphi^{-1}(x^2,y^2)))$
 for all $x\in \Z^*_p$ and $y\in\Z^*_q$.
 Now, for any $x,y$ let $(x',y')=f(x,y)$.  Since $x^2 = x'^2 \pmod{p}$ and $y^2 = y'^2 \pmod{q}$ we know that $x' \in \{\pm x \}$ and $y' \in \{ \pm y \}$.
 Since flipping signs doesn't change the value of $(x',y')=f(x,y)$, by flipping one or both of the signs of $x$ or $y$ we can ensure that $x'=x$ and $y'=-y$.
-Hence $(x,x')-(y,y')=(0,2y)$. In other words, if $c = \varphi^{-1}(x-x',y-y')$ then $c= 0 \pmod{p}$ but $c \neq 0 \pmod{q}$ which in particular means that the greatest common divisor of $c$ and $m$ is $q$. So, by taking $gcd(A(\varphi^{-1}(x,y)),m)$ we will find $q$, from which we can find $p=m/q$.  
+Hence $(x,y)-(x',y')=(0,2y)$. In other words, if $c = \varphi^{-1}(x-x',y-y')$ then $c= 0 \pmod{p}$ but $c \neq 0 \pmod{q}$ which in particular means that the greatest common divisor of $c$ and $m$ is $q$. So, by taking $gcd(A(\varphi^{-1}(x,y)),m)$ we will find $q$, from which we can find $p=m/q$.  
 >
-This almost works, but there is a question of how can we find $\varphi^{-1}(x,y)$, given that we don't know $p$ and $q$? The crucial observation is that we don't need to. We can simply pick a value $a$ at random in $\{1,\ldots,m\}$. With very high probability (namely $(p-1+q-1)/pq$) $a$ will be in $\Z^*_m$, and so we can imagine this process as equivalent to the process of taking a random $x\in\Z^*_p$, a random $y\in \Z^*_q$ and then flipping the signs of $x$ and $y$ randomly and taking $a=\varphi(x,y)$. By the arguments above with probability at least $1/4$, it will hold that $gcd(a-A(a^2),m)$ will equal $q$.
+This almost works, but there is a question of how can we find $\varphi^{-1}(x,y)$, given that we don't know $p$ and $q$? The crucial observation is that we don't need to.
+We can simply pick a value $a$ at random in $\{1,\ldots,m\}$.
+With very high probability (namely $(p-1+q-1)/pq$) $a$ will be in $\Z^*_m$, and so we can imagine this process as equivalent to the process of taking a random $x\in\Z^*_p$, a random $y\in \Z^*_q$ and then flipping the signs of $x$ and $y$ randomly and taking $a=\varphi(x,y)$.
+By the arguments above with probability at least $1/4$, it will hold that $gcd(a-A(a^2),m)$ will equal $q$.
 
 Note that this argument generalizes to work even if the algorithm $A$ is an _average case_ algorithm that only succeeds in finding a square root for a significant fraction of the inputs.
 This observation is crucial for cryptographic applications.
