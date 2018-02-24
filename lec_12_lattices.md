@@ -50,7 +50,7 @@ where the task is to invert the map $a,b \mapsto a\cdot b$.
 Perhaps the simplest structure to consider is the task of solving linear equations.
 
 
-Pretend that we didn't know of Gaussian elimination,^[Despite the name, [Gaussian elimination](https://goo.gl/3HNb5U)  has been known to Chinese mathematicians since 150BC or so, and was popularized in the west through the 1670 notes of Issac Newton.] and that if we picked a "generic" matrix $A$ then the map $x \mapsto Ax$ would be hard to invert.
+Pretend that we didn't know of Gaussian elimination,^[Despite the name, [Gaussian elimination](https://goo.gl/3HNb5U)  has been known to Chinese mathematicians since 150BC or so, and was popularized in the west through the 1670 notes of Isaac Newton.] and that if we picked a "generic" matrix $A$ then the map $x \mapsto Ax$ would be hard to invert.
 (Here and elsewhere, our default interpretation of a vector $x$ is as a _column_ vector, and hence if $x$ is $n$ dimensional and $A$ is $m\times n$ then $Ax$ is $m$ dimensional. We use $x^\top$ to denote the row vector obtained by _transposing_ $x$.)
 Could we use that to get a public key encryption scheme?
 
@@ -79,6 +79,7 @@ However, even if it's hard to solve for $x$ given the equations, an attacker (wh
 
 Our solution for this is simple- just add more equations! If the encryptor adds a random subset of equations then there are $2^m$ possibilities for that, and an attacker can't guess them all.
 Thus, at least intuitively, the following encryption scheme would be "secure" in the Gaussian-elimination free world of attackers that haven't taken freshman linear algebra:
+
 >__Scheme LwoE-ENC:__  Public key encryption under the hardness of "learning linear equations without errors".
 >
 * _Key generation_:  Pick random $m\times n$ matrix $A$ over $\Z_q$, and $x\leftarrow_R\Z_q^n$, the secret key is $x$ and the public key is $(A,y)$ where $y=Ax$.
@@ -189,7 +190,7 @@ $q/10$ iff $b=0$.
 We now prove security of the LWE based encryption:
 
 > # {.theorem title="CPA security of LWEENC" #LWEENCthm}
-If the LWE conjecture is true then LWEENC is CPA secure
+If the LWE conjecture is true then LWEENC is CPA secure.
 
 
 For a public key encryption scheme with messages that are just bits, CPA security  means that an encryption of $0$ is indistinguishable from an encryption of $1$, even given the public key.
