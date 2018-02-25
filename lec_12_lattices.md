@@ -169,7 +169,7 @@ We can now show the secure variant of our original encryption scheme:
 >
 * _Key generation:_ Pick $x\in\Z_q^n$. The private key is $x$ and the public key is $(A,y)$ with $y=Ax+e$ with $e$ a $\delta$-noise vector and $A$ a random $m\times n$ matrix.
 >
-* _Encrypt:_ To encrypt $b\in\{0,1\}$ given the key $(A,y)$, pick $w\in\{0,1\}^m$ and output $w^\top A, \iprod{w,y}+b\floor{q/2}$.
+* _Encrypt:_ To encrypt $b\in\{0,1\}$ given the key $(A,y)$, pick $w\in\{0,1\}^m$ and output $w^\top A, \iprod{w,y}+b\floor{q/2}$ (all computations are done in $\Z_q$).
 >
 * _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|\iprod{a,x}-\sigma|<q/10$.
 
@@ -181,7 +181,7 @@ With high probability, the decryption of the encryption of $b$ equals $b$.
 
 > # {.proof data-ref="LWEcorrectlem"}
 $\iprod{w^\top A,x} = \iprod{w,Ax}$. Hence, if $y=Ax+e$ then $\iprod{w,y} = \iprod{w^\top A,x} + \iprod{w,e}$.
-But since every coordinate of $w$ is either $0$ or $1$, $|\iprod{w,e}|<\delta m q \ll q < q/10$.[^cancellations]  
+But since every coordinate of $w$ is either $0$ or $1$, $|\iprod{w,e}|<\delta m q < q/10$ for our choice of parameters.[^cancellations]  
 So, we get that if $a= w^\top A$ and $\sigma = \iprod{w,y}+b\floor{q/2}$ then $\sigma - \iprod{a,x} = \iprod{w,e} + b\floor{q/2}$ which will be smaller than
 $q/10$ iff $b=0$.
 
