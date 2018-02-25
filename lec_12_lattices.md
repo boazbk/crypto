@@ -265,3 +265,5 @@ However, the map $A_d$ can be described using the $n$ coefficients of $t$ as opp
 It also turns out that by using the Fast Fourier Transform we can evaluate this operation in roughly $n$ steps as opposed to $n^2$.
 The ideal lattice based cryptosystem use matrices of this form to save on key size and computation time.
 It is still unclear if this structure can be used for attacks; recent papers attacking principal ideal lattices have shown that one needs to be careful about this.
+
+One of the more promising 
