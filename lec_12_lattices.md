@@ -2,8 +2,6 @@
 
 
 
-## Lattice based encryption - some history and significance.
-
 Lattice based public key encryption (and its cousins known as knapsack and coding based encryption) have almost as long a history as discrete logarithm
 and factoring based schemes.
 Already in 1976, right after the Diffie-Hellman key exchange was discovered (and before RSA), Ralph Merkle was working on building public key encryption from the
@@ -40,6 +38,10 @@ The NSA has [suggested](https://www.nsa.gov/ia/programs/suiteb_cryptography/inde
 Cryptography has the peculiar/unfortunate feature that if a machine is built that can factor large integers in 20 years, it can still be used to break the communication we transmit _today_, provided this communication was recorded.
 So, if you have some data that you expect you'd want still kept secret in 20 years (as many government and commercial entities do), you might have reasons to worry.
 Currently lattice based cryptography is the only real "game in town" for potentially quantum-resistant public key encryption schemes.
+
+
+Lattice based cryptography is a huge area, and in this lecture and this course we only touch on few aspects of it.
+I highly recommend [Chris Peikert's Survey](https://web.eecs.umich.edu/~cpeikert/pubs/lattice-survey.pdf) for a much more in depth treatment of this area.
 
 
 ## A world without Gaussian elimination
@@ -227,7 +229,7 @@ To read more about this, you can look at the survey of Oded Regev, ["On the Lear
 ## But what are lattices?
 
 You can think of a lattice as a discrete version of a subspace.
-A lattice $L$ is simply a subset of $\mathbb{R}^n$ such that if $u,v\in L$ and $a,b$ are integers then $au+bv\in L$.
+A lattice $L$ is simply a discrete subset of $\mathbb{R}^n$ such that if $u,v\in L$ and $a,b$ are integers then $au+bv\in L$.^[By discrete we mean that points in $L$ are isolated. One formal way to define it is that there is some $\epsilon>0$ such that every distinct $u,v \in L$ are of distance at least $\epsilon$ from one another.]
 A lattice is given by a basis  which simply a matrix $B$ such that every vector $u\in L$ is obtained as $u=Bx$ for some vector of integers $x$.
 It can be shown that we can  assume without loss of generality that $B$ is full dimensional and hence it's an $n$ by $n$ invertible matrix.
 Note that given a basis $B$ we can generate vectors in $L$, as well as test whether a vector $v$ is in $L$ by testing if $B^{-1}v$ is an integer vector.
@@ -246,6 +248,9 @@ Some classical computational questions on lattices are:
 In particular, if $V$ is a linear subspace of $\Z_q^n$, we can think of it also as a lattice $\hat{V}$ of $\mathbb{R}^n$ where we simply say that
 that a vector $\hat{u}$ is in $\hat{V}$ if all of $\hat{u}$'s coordinates are integers and if we let $u_i = \hat{u}_i \pmod{q}$ then $u\in V$.
 The learning with error task of recovering $x$ from $Ax+e$ can then be thought of as an instance of the  bounded distance decoding problem for $\hat{V}$.
+
+A natural algorithm to try to solve the _closest vector_ and _bounded distance decoding_ problems is that to take the vector $u$, express it in the basis $B$ by computing $w = B^{-1}u$, and then round all the coordinates of $w$ to obtain an integer vector $\tilde{w}$ and let $v=B\tilde{w}$ be a vector in the lattice.
+If we have an extremely good basis $L$ for the lattice then we can
 
 ## Ring based lattices
 
