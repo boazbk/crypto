@@ -7,7 +7,7 @@ and factoring based schemes.
 Already in 1976, right after the Diffie-Hellman key exchange was discovered (and before RSA), Ralph Merkle was working on building public key encryption from the
 NP hard _knapsack_ problem (see [Diffie's recollection](http://cr.yp.to/bib/1988/diffie.pdf)). This can be thought of as the task of solving a linear equation of the
 form $Ax = y$ (where $A$ is a given matrix, $y$ is a given vector, and the unknown are $x$) over the real numbers but with the additional constraint that $x$ must be either $0$ or $1$.
-His proposal evolved into the Merkle-Hellman system proposed in 1978.
+His proposal evolved into the Merkle-Hellman system proposed in 1978 (which was broken in 1984).
 
 
 McEliece proposed in 1978 a system based on the difficulty of the decoding problem for general linear codes. This is the task of solving _noisy linear equations_ where one is given $A$ and $y$ such that $y=Ax+e$ for a "small" error vector $e$, and needs to recover $x$.
@@ -91,8 +91,12 @@ Thus, at least intuitively, the following encryption scheme would be "secure" in
 * _Decryption:_ To decrypt a ciphertext $(a,\sigma)$, output $0$ iff $\iprod{a,x}=\sigma$.
 
 
+
+
 > # { .pause }
-Please stop here and make sure that you see why this description corresponds to the previous one; as usual all calculations are done modulo $q$.
+Please stop here and make sure that you see why this is a valid encryption, and this description corresponds to the previous one; as usual all calculations are done modulo $q$.
+
+
 
 ## Security in the real world.
 
@@ -109,7 +113,7 @@ Given equations $Ax=y$ in the unknown variables $x$, the goal of Gaussian elimin
 Recall how we do it: by rearranging and scaling, we can assume that the top left corner of $A$ is equal to $1$, and then we add the first equation to the other equations (scaled appropriately) to zero out the first entry in all the other rows of $A$ (i.e., make the first column of $A$ equal to $(1,0,\ldots,0)$) and continue onwards to the second column and so on and so forth.
 
 Now, suppose that the equations were _noisy_, in the sense that we added to $y$ a vector $e\in\Z_q^m$ such that $|e_i|<\delta q$ for every $i$.^[Over $\Z_q$, we can think of $q-1$ also as the number $-1$, and so on. Thus if $a\in\Z_q$, we define $|a|$ to be the minimum of $a$ and $q-a$. This ensures the absolute value satisfies the natural property of  $|a|=|-a|$.]
-Even ignoring the effect of the scaling step (which does not _reduce_ error), simply adding the first equation to the rest of the equations would typically tend to increase the  relative error of equations $2,\ldots,m$  from $\approx \delta$ to $\approx 2\delta$.
+Even ignoring the effect of the scaling step, simply adding the first equation to the rest of the equations would typically tend to increase the  relative error of equations $2,\ldots,m$  from $\approx \delta$ to $\approx 2\delta$.
 Now, when we repeat the process, we increase the error of equations $3,\ldots,m$ from $\approx 2\delta$ to $\approx 4\delta$, and we see that by the time we're done dealing with about $n/2$ variables, the remaining equations have error level roughly $2^{n/2}\delta$.
 So, unless $\delta$ was truly tiny (and $q$ truly big, in which case the difference between working in $\Z_q$ and simply working with integers or rationals disappears), the resulting equations have the form $Ix = y' + e'$ where $e'$ is so big that we get no information on $x$.
 
@@ -135,7 +139,7 @@ It turns out that if the LWE is hard, then it is even hard to distinguish betwee
 
 > # {.theorem title="Search to decision reduction for LWE" #LWEsearchtodecthm}
 If the LWE conjecture is true then for every $q=poly(n)$ and $\delta=1/poly(n)$ and $m=poly(n)$, the following two distributions are computationally
-indistinguishable: \
+indistinguishable:
 >
 * $\{ (A,Ax+e) \}$ where $A$ is random $m\times n$ matrix in $\Z_q$, $x$ is random in $\Z_q^n$ and $e\in \Z_q^m$ is random noise vector of magnitude $\delta$.
 >
@@ -167,6 +171,7 @@ We can now show the secure variant of our original encryption scheme:
 
 >__LWE-based encryption LWEENC:__
 >
+>
 * _Parameters:_ Let $\delta(n)=1/n^4$ and let $q=poly(n)$ be a prime such that LWE holds w.r.t. $q,\delta$. We let $m = n^2\log q$.
 >
 * _Key generation:_ Pick $x\in\Z_q^n$. The private key is $x$ and the public key is $(A,y)$ with $y=Ax+e$ with $e$ a $\delta$-noise vector and $A$ a random $m\times n$ matrix.
@@ -175,15 +180,20 @@ We can now show the secure variant of our original encryption scheme:
 >
 * _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|\iprod{a,x}-\sigma|<q/10$.
 
+ \
 
-Unlike our typical schemes, here it is not immediately clear that this encryption is valid, in the sense that the decrypting an encryption of $b$ returns the value $b$. But this is the case:
+
+
+Unlike our typical schemes,
+here it is not immediately clear that this encryption is valid,
+in the sense that the decrypting an encryption of $b$ returns the value $b$. But this is the case:
 
 > # {.lemma #LWEcorrectlem}
 With high probability, the decryption of the encryption of $b$ equals $b$.
 
 > # {.proof data-ref="LWEcorrectlem"}
 $\iprod{w^\top A,x} = \iprod{w,Ax}$. Hence, if $y=Ax+e$ then $\iprod{w,y} = \iprod{w^\top A,x} + \iprod{w,e}$.
-But since every coordinate of $w$ is either $0$ or $1$, $|\iprod{w,e}|<\delta m q < q/10$ for our choice of parameters.[^cancellations]  
+But since every coordinate of $w$ is either $0$ or $1$, $|\iprod{w,e}|<\delta m q < q/10$ for our choice of parameters.[^cancellations]
 So, we get that if $a= w^\top A$ and $\sigma = \iprod{w,y}+b\floor{q/2}$ then $\sigma - \iprod{a,x} = \iprod{w,e} + b\floor{q/2}$ which will be smaller than
 $q/10$ iff $b=0$.
 
@@ -250,7 +260,8 @@ that a vector $\hat{u}$ is in $\hat{V}$ if all of $\hat{u}$'s coordinates are in
 The learning with error task of recovering $x$ from $Ax+e$ can then be thought of as an instance of the  bounded distance decoding problem for $\hat{V}$.
 
 A natural algorithm to try to solve the _closest vector_ and _bounded distance decoding_ problems is that to take the vector $u$, express it in the basis $B$ by computing $w = B^{-1}u$, and then round all the coordinates of $w$ to obtain an integer vector $\tilde{w}$ and let $v=B\tilde{w}$ be a vector in the lattice.
-If we have an extremely good basis $L$ for the lattice then we can
+If we have an extremely good basis $L$ for the lattice then $v$ may indeed be the closest vector in the lattice,  but in other more "skewed" bases it can be extremely far from it.
+
 
 ## Ring based lattices
 
