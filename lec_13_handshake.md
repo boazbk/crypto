@@ -119,18 +119,23 @@ In the private key setting, we achieved CCA security by combining a CPA-secure p
 we first used the CPA-secure scheme on $m$ to obtain a ciphertext $c$, and then added an authentication tag $\tau$ by signing $c$ with the MAC.
 The decryption algorithm first verified the MAC before decrypting the ciphertext.
 In the public key setting, one might hope that we could repeat the same construction using a CPA-secure _public key_ encryption and replacing the MAC with _digital signatures_.
-Alas, there is a fly in this ointment.
+
+> # { .pause }
+Try to think what would be such a construction, and whether there is a fundamental obstacle to combining digital signatures and public key encryption in the same way we combined MACs and private key encryption.
+
+Alas, as you may have realized, there is a fly in this ointment.
 In a signature scheme (necessarily) it is the _signing key_ that is _secret_, and the _verification key_ that is _public_.
 But in a public key encryption, the _encryption_ key is _public_, and hence it makes no sense for it to use a secret signing key.
 (It's not hard to see that if you reveal the secret signing key then there is no point in using a signature scheme in the first place.)
 
-**Why CCA security matters.** For the reasons above, constructing CCA secure public key encryption is very challenging. But is it worth the trouble? Do we really need this "ultra conservative" notion of security?
-The answer is _yes_. Just as we argued for _private key_ encryption, chosen ciphertext security is the notion that gets us as close as possible to designing encryptions that fit the metaphor of _secure sealed envelopes_.
-Digital analogies will never be a perfect imitation of physical ones, but such metaphors are what people have in mind when designing cryptographic protocols, which is a hard enough task even when we don't have to worry about the ability
-of an adversary to reach inside a sealed envelope and XOR the contents of the note written there with some arbitrary string.
+**Why CCA security matters.** For the reasons above, constructing CCA secure public key encryption is very challenging.
+But is it worth the trouble? Do we really need this "ultra conservative" notion of security?
+The answer is _yes_.
+Just as we argued for _private key_ encryption, chosen ciphertext security is the notion that gets us as close as possible to designing encryptions that fit the metaphor of _secure sealed envelopes_.
+Digital analogies will never be a perfect imitation of physical ones, but such metaphors are what people have in mind when designing cryptographic protocols, which is a hard enough task even when we don't have to worry about the ability of an adversary to reach inside a sealed envelope and XOR the contents of the note written there with some arbitrary string.
 Indeed, several practical attacks, including Bleichenbacher's attack above, exploited exactly this gap between the physical metaphor and the digital realization.
 For more on this, please see [Victor Shoup's survey](http://www.shoup.net/papers/expo.pdf) where he also describes the Cramer-Shoup encryption scheme which was the first practical public key system to be shown CCA secure without resorting to the random oracle heuristic.
-(The first defginition of CCA security, as well as the first polynomial-time construction, was given in a seminal 1991 work of Dolev, Dwork and Naor.)
+(The first definition of CCA security, as well as the first polynomial-time construction, was given in a seminal 1991 work of Dolev, Dwork and Naor.)
 
 ## CCA secure public key encryption in the Random Oracle Model
 
@@ -142,37 +147,51 @@ The advantage of a generic construction is that it can be instantiated not just 
 
 
 
+>__CCA-ROM-ENC Scheme:__ \
+>
 * **Ingredients:** A public key encryption scheme $(G',E',D')$ and a two hash functions $H,H':\{0,1\}^*\rightarrow\{0,1\}^n$ (which we model as independent random oracles[^oracles])
+>
 * **Key generation:** We generate keys $(e,d)=G'(1^n)$ for the underlying encryption scheme.
+>
 * **Encryption:** To encrypt a message $m\in\{0,1\}^\ell$, we select randomness $r\leftarrow_R\{0,1\}^\ell$ for the underlying encryption algorithm $E'$ and output $E'_e(r;H(m\|r))\|(r \oplus m)\|H'(m\|r)$, where by $E'_e(m';r')$ we denote the result of encrypting $m'$ using the key $e$ and the randomness $r'$ (we assume the scheme takes $n$ bits of randomness as input; otherwise modify the output length of $H$ accordingly).
+>
 * **Decryption:** To decrypt a ciphertext $c\|y\|z$ first let $r=D_d(c)$, $m=r \oplus y$ and then check that $c=E_e(m;H(m\|r))$ and $z=H'(m\|r)$. If any of the checks fail we output ```error```; otherwise we output $m$.
+
 
 [^oracles]: Recall that it's easy to obtain two independent random oracles $H,H'$ from a single oracle $H''$, for example by letting $H(x)=H''(0\|x)$ and $H'(x)=H''(1\|x)$.
 
-__Theorem:__ The above scheme $(G,E,D)$ is CCA secure.
+> # {.theorem title="CCA security from random oracles" #CCAPKCthm}
+The above CCA-ROM-ENC scheme  is CCA secure.
 
-__Proof:__ Suppose towards a contradiction that there exists an adversary $M$ that wins the CCA game with probability at least $1/2+\epsilon$ where $\epsilon$ is non-negligible.
+> # {.proof data-ref="CCAPKCthm"}
+Suppose towards a contradiction that there exists an adversary $M$ that wins the CCA game with probability at least $1/2+\epsilon$ where $\epsilon$ is non-negligible.
 Our aim is to show that the decryption box would be "useless" to $M$ and hence reduce CCA security to CPA security (which we'll then derive from the CPA security of the underlying scheme).  
-Consider the following box $\hat{D}$ that will answer decryption queries $c\|y\|z$ of the adversary as follows:
-     * If $z$ was returned before to the adversary as an answer to $H'(m\|r)$ for some $m,r$, and $c=E_e(m\;H(m\|r))$ and $y=m\oplus r$ then return $m$.
-     * Otherwise return ```error```
-
- __Claim:__ The probability that $\hat{D}$ answers a query differently then $D$ is negligible.
- __Proof:__ If  $D$ gives a non ```error``` response to a query $c\|y\|z$ then it must be that $z=H'(m\|r)$ for some $m,r$ such that  $y = r\oplus m$ and $c=E_e(r;H(m\|r))$, in which case $D$ will return $m$. The only way that $\hat{D}$ will answer this question differently is if $z=H'(m\|r)$ but the query $m\|r$ hasn't been asked before by the adversary. Here there are two options. If this query has never been asked before at all, then  by the lazy evaluation principle in this case we can think of $H'(m\|r)$ as being independently chosen at this point, and the probability it happens to equal $z$ will be $2^{-n}$.  If this query was asked by someone apart from the adversary then it could only have been asked by the encryption oracle while producing the challenge ciphertext $c^*\|y^*\|z^*$, but since the adversary is not allowed to ask this precise ciphertext, then it must be a ciphertext of the form $c\|y\|z^*$ where $(c,y) \neq (c^*,y^*)$ and such a ciphertext would get an ```error`` response from both oracles. QED
-
+>
+Consider the following "box" $\hat{D}$ that will answer decryption queries $c\|y\|z$ of the adversary as follows: \
+* If $z$ was returned before to the adversary as an answer to $H'(m\|r)$ for some $m,r$, and $c=E_e(m\;H(m\|r))$ and $y=m\oplus r$ then return $m$. \
+* Otherwise return ```error```
+>
+__Claim:__ The probability that $\hat{D}$ answers a query differently then $D$ is negligible.
+>
+__Proof of claim:__ If  $D$ gives a non ```error``` response to a query $c\|y\|z$ then it must be that $z=H'(m\|r)$ for some $m,r$ such that  $y = r\oplus m$ and $c=E_e(r;H(m\|r))$, in which case $D$ will return $m$. The only way that $\hat{D}$ will answer this question differently is if $z=H'(m\|r)$ but the query $m\|r$ hasn't been asked before by the adversary.
+Here there are two options. If this query has never been asked before at all, then  by the lazy evaluation principle in this case we can think of $H'(m\|r)$ as being independently chosen at this point, and the probability it happens to equal $z$ will be $2^{-n}$.
+If this query was asked by someone apart from the adversary then it could only have been asked by the encryption oracle while producing the challenge ciphertext $c^*\|y^*\|z^*$, but since the adversary is not allowed to ask this precise ciphertext, then it must be a ciphertext of the form $c\|y\|z^*$ where $(c,y) \neq (c^*,y^*)$ and such a ciphertext would get an ```error``` response from both oracles. __QED (claim)__
+>
 Note that we can assume without loss of generality that if $m^*$ is the challenge message and $r^*$ is the randomness chosen in this challenge, the adversary never asks the query $m^*\|r^*$ to the its $H$ or $H'$ oracles, since we can modify it so that before making a query $m\|r$, it will first check if $E_e(m\;r)=c^*$ where $c^*\|y^*\|z^*$ is the challenge ciphertext, and if so use this to win the game.
-
+>
 In other words, if we modified the experiment so the values $R^*=H(r^*\|m)$ and $z^*=H'(m^*\|r^*)$ chosen while producing the challenge are simply random strings chosen completely independently of everything else. Now note that our oracle $\hat{D}$ did _not_ need to use the decryption key $d$.
-So, if the adversary wins the CCA game, then it wins the _CPA game_ for the encryption scheme $E_e(m) = E'_e(r;R)\| r \oplus m \| R'$ where $R$ and $R'$ are simply independent random strings; we leave proving that this scheme is CPA secure as an exercise to the reader. QED
+So, if the adversary wins the CCA game, then it wins the _CPA game_ for the encryption scheme $E_e(m) = E'_e(r;R)\| r \oplus m \| R'$ where $R$ and $R'$ are simply independent random strings; we leave proving that this scheme is CPA secure as an exercise to the reader.
 
 ## Secure authenticated key exchange protocols:
 
-There is a generic "compiler" approach to obtainined authenticated key exchange protocols:
+There is a generic "compiler" approach to obtaining authenticated key exchange protocols:
 
-* Start with a protocol such as the basic Diffie-Hellman protocol that is only secure with respect to a _passive eavesropping_ adversary.
+* Start with a protocol such as the basic Diffie-Hellman protocol that is only secure with respect to a _passive eavesdropping_ adversary.
+
 * Then _compile_ it into a protocol that is secure with respect to an active adversary using authentication tools such as digital signatures, message authentication codes, etc.., depending on what kind of setup you can assume and what properties you want to achieve.
 
-This approach has the advantage of being modular in both the construction and the analysis. However, direct constructions might be more efficient.
+This approach has the advantage of being modular in both the construction and the analysis.
+However, direct constructions might be more efficient.
 There are a great many potentially desirable properties of key exchange protocols, and different protocols achieve different subsets of these properties at different costs. The most common variant of authenticated key exchange protocols is to use some version of the Diffie-Hellman key exchange.
 If both parties have public signature keys, then they can simply sign their messages and then that effectively rules out an active attack,
 reducing active security to passive security (though one needs to include identities in the signatures to ensure non repeating of messages, see [here](http://link.springer.com/article/10.1007%2FBF00124891)).
@@ -194,6 +213,7 @@ Security requirements: forward secrecy, deniability.
 ## Heartbleed and logjam attacks
 
 * Vestiges of past crypto policies.
+
 * Importance of "perfect forward secrecy"
 
 ![How the NSA feels about breaking encrypted communication](../figure/NSA_Page_29.jpg){#tmplabelfig width=50% }
