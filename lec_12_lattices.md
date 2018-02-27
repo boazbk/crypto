@@ -91,6 +91,8 @@ Thus, at least intuitively, the following encryption scheme would be "secure" in
 * _Decryption:_ To decrypt a ciphertext $(a,\sigma)$, output $0$ iff $\iprod{a,x}=\sigma$.
 
 
+ \
+
 
 
 > # { .pause }
@@ -210,24 +212,42 @@ Thus [LWEENCthm](){.ref}  will follow from the following lemma:
 
 
 > # {.lemma #LWEENClem}
-Assuming the LWE, the distribution $(A,y=Ax+e),(w^\top A,\iprod{w^\top,y})$ (where all values are chosen as above) is indistinguishable from the distribution
-$(A,y),(a,\sigma)$ where $y$ is completely random in $\Z_q^m$, $a$ is random and independent in $\Z_q^n$ and $\sigma$ is random and independent in $\Z_q$.
+Let $q,m,\delta$ be set as in LWEENC,
+Then assuming the LWE conjecture, the following distributions are computationally indistinguishable:
+>
+*  $D$: The distribution over four-tuples of the form  $(A,y,w^\top A,\iprod{w,y})$  where $A$ is uniform in $\Z_q^{m\times n}$, $x$ is uniform in $\Z_q^n$, $e \in Z_q$ is chosen with $e_i \in \{-\delta q,\ldots,+\delta q\}$, $y=Ax+e$, and $w$ is uniform in $\{0,1\}^m$.
+>
+* $\overline{D}$: The distribution over four-tuples $(A,y',a,\sigma)$ where  all entries are uniform: $A$ is uniform in $\Z_q^{m\times n}$, $y'$ is uniform in $\Z_q^m$, $a$ is uniform in $\Z_q^n$ and $\sigma$ is uniform in $\Z_q$.
 
 
 > # { .pause }
-You should stop here and verify that [LWEENClem](){.ref} implies [LWEENCthm](){.ref}.
-The idea is that it shows that the concatenation of the public key and encryption of $0$ is indistinguishable from something that is completely random, and you can use it to show that the concatenation of the public key and encryption of $1$ is indistinguishable from the same thing, and then finish using the hybrid argument.
+You should stop here and verify that __(i)__ You understand the statement of [LWEENClem](){.ref} and __(ii)__ you understand why this lemma  implies [LWEENCthm](){.ref}.
+The idea is that [LWEENClem](){.ref} shows that the concatenation of the public key and encryption of $0$ is indistinguishable from something that is completely random.
+You can then use it to show that the concatenation of the public key and encryption of $1$ is indistinguishable from the same thing, and then finish using the hybrid argument.
 
 We now prove [LWEENClem](){.ref}, which will complete the proof of [LWEENCthm](){.ref}.
 
 > # {.proof data-ref="LWEENClem"}
-By the search to decision reduction, the distribution above is indistinguishable from the distribution where $y$ is completely random. However, in this case I claim that if we choose $w$ at random in $\{0,1\}^m$ and let $(a,\sigma) = w^\top(A\|y)$ then $(a,\sigma)$ would be a (close to) completely uniform and independent
-vector in $\Z_q^{n+1}$.
-We will not do the whole proof (which uses the mod $q$ version of the [leftover hash lemma](https://goo.gl/KXpccP) which  we mentioned before and is also "Wikipedia-able") but the idea is simple.
-Let $A' = (A\|y)$ which in our case is a completely random matrix.
-This mans that the map $w \mapsto w^\top A'$ is essentially a _pairwise independent_ hash function mapping $\Z_q^m$ to $\Z_q^{n+1}$.
+Define $D$ to be the distribution $(A,y,w^\top A,\iprod{w,y})$ as in the lemma's statement (i.e., $y=Ax+e$ for some $x$, $e$ chosen as above).
+Define $D'$ to be the distribution $(A,y',w^\top A, \iprod{w,y'})$ where $y'$ is chosen uniformly in $\Z_q^m$.
+We claim that $D'$ is computationally indistinguishable from $D$ under the LWE conjecture.
+Indeed by [LWEsearchtodecthm](){.ref} (search to  decision reduction) this conjecture implies that the distribution $X$ over pairs   $(A,y)$ with $y=Ax+e$  is indistinguishable from the distribution $X'$ over pairs $(A,y')$ where $y'$ is uniform.
+But if there was some polynomial-time algorithm $T$ distinguishing $D$ from $D'$ then we can design a randomized  polynomial-time algorithm $T'$ distinguishing $X$ from $X'$ with the same advantage by setting $T'(A,y)=T(A,y,w^\top A,\iprod{w,y})$ for random $w \leftarrow_R \{0,1\}^m$.
+>
+We will finish the proof by showing that  the distribution $D'$ is _statistically indistinguishable_ (i.e., has negligible total variation distance) from $\overline{D}$.
+This follows from the following claim:
+>
+__CLAIM:__ Suppose that $m > 100 n \log q$. If $A'$ is a random $m\times n+1$ matrix in $\Z_q^m$, then with probability at least $1-2^{-n}$, the distribution $Z_{A'}$ over $\Z_q^m$ which is obtained by choosing $w$ at random in $\{0,1\}^m$ and outputting $w^\top A'$ has at most $2^{-n}$ statistical distance from the uniform distribution over  $\Z_q^{n+1}$.
+>
+The claim completes the proof of the theorem, since letting $A'$ be the matrix $(A|y)$ and $z=(a,\sigma)$, we see that the distribution $D'$, as the form $(A',z)$ where $A'$ is a uniformly random  $m\times (n+1)$ matrix and $z$ is sampled from $Z_{A'}$ (i.e., $z=w^\top A'$ where $w$ is uniformly chosen in $\{0,1\}^m$).
+Hence this means that  the statistical distance of $D'$ from $\overline{D}$ (where all elements are uniform) is $O(2^{-n})$.
+(Please make sure you understand this reasoning!)
+>
+We will not do the whole proof of the claim (which uses the mod $q$ version of the [leftover hash lemma](https://goo.gl/KXpccP) which  we mentioned before and is also "Wikipedia-able") but the idea is simple.
+For every $m\times (n+1)$ matrix $A'$ over $\Z_q$, define $h_{A'}:\Z_q^m \rightarrow \Z_q^n$ to be the map $h_{A'}(w)=w^\top A'$.
+This collection can be shown to be a "good" hash function collection in some specific technical sense.
 Now when we choose $w$ at random in $\{0,1\}^m$, it is coming from a distribution with $m$ bits of entropy.
-If $m \gg (n+1)\log q$, then because the output of this function is so much smaller than $m$, we expect it to be completely uniform.
+If $m \gg (n+1)\log q$, then because the output of this function is so much smaller than $m$, we expect it to be completely uniform, and this is what's shown by the leftover hash lemma.
 
 
 
