@@ -39,18 +39,24 @@ In particular, the following issues arise when considering the task of securely 
 The basic primitive for secure communication is a _key exchange_ protocol, whose goal is to have Alice and Bob share a common random secret key $k\in\{0,1\}^n$.
 Once this is done, they can use a CCA secure / authenticated  private-key encryption to communicate with confidentiality and integrity.
 
-The canonical example of a basic key exchange protocol is the _Diffie Hellman_ protocol. It uses as public parameters a group $\mathbb{G}$ with generator $g$, and then follows the following steps:
+The canonical example of a basic key exchange protocol is the _Diffie Hellman_ protocol.
+It uses as public parameters a group $\mathbb{G}$ with generator $g$, and then follows the following steps:
 
 1. Alice picks random $a\leftarrow_R\{0,\ldots,|\mathbb{G}|-1\}$ and sends $A=g^a$.
+
 2. Bob picks random $b\leftarrow_R \{0,\ldots,|\mathbb{G}|-1\}$ and sends $B=g^b$.
+
 3. They both set their key as $k=H(g^{ab})$ (which Alice computes as $B^a$ and Bob computes as $A^b$), where $H$ is some hash function.
 
-Another variant is using an arbitrary encryption scheme such as RSA:
+Another variant is using an arbitrary public key encryption scheme such as RSA:
+
 1. Alice generates keys $(d,e)$ and sends $e$ to Bob.
+
 2. Bob picks random $k \leftarrow_R\{0,1\}^m$ and sends $E_e(k)$ to Alice.
+
 3. They both set their key to $k$ (which Alice computes by decrypting Bob's ciphertext)
 
-Under plausible assumptions, it can be shown that these protocols secure against a passive adversary Eve.
+Under plausible assumptions, it can be shown that these protocols secure against a _passive_ eavesdropping adversary Eve.
 The notion of security here means that, similar to encryption, if after observing the transcript Eve receives with probability $1/2$ the value of $k$ and with probability $1/2$ a random string $k'\gets\{0,1\}^n$, then her probability of guessing which is the case would be at most $1/2+negl(n)$ (where $n$ can be thought of as $\log |\mathbb{G}|$ or some other parameter related to the length of bit representation of members in the group).
 
 ## Authenticated key exchange
@@ -64,8 +70,8 @@ The notion of authentication used depends on what we can assume on the setup ass
 A standard assumption is that Alice has some public keys but Bob doesn't.
 (This is the case when Alice is a website and Bob is a user.)
 However, one needs to take care in how to use this assumption.
-Indeed, SSL (now known as TLS) -  the standard protocol for securing the web - has gone through six revisions largely because of security concerns.
-We'll illustrate one of those before:
+Indeed, the standard protocol for securing the web: the [transport Layer Security (TLS) protocol](https://goo.gl/md9Bsa) (and its predecessor SSL) has gone through six revisions (including a name change from SSL to TLS) largely  because of security concerns.
+We now illustrate one of those attacks.
 
 
 ### Bleichenbacher's attack on RSA PKCS $\sharp$1 V1.5 and  SSL V3.0
@@ -73,40 +79,40 @@ We'll illustrate one of those before:
 If you have a public key, a natural approach is to take the encryption-based protocol and simply skip the first step since Bob already knows the public
 key $e$ of Alice.
 This is basically what happened in the SSL V3.0 protocol.
-However, as was shown by Bleichenbacher in 1998, it turned out this is suseptible to the following attack:
+However, as was [shown by Bleichenbacher in 1998](http://archiv.infsec.ethz.ch/education/fs08/secsem/bleichenbacher98.pdf), it turns out this is susceptible to the following attack:
 
 
 * The adversary listens in on a conversation, and in particular observes $c=E_e(k)$ where $k$ is the private key.
 
 * The adversary then starts many connections with the server with ciphertexts related to $c$, and observes whether they succeed or fail (and in what way they fail, if they do). It turns out that based on this information, the adversary would be able to recover the key $k$.
 
-The particular details of the attack are somewhat messy, but the general notion is that part of the ciphertext is the RSA function value $y = x^e \pmod{m}$, and recovering $x$ will result in recovering the key $k$.
-Now, the version of RSA (known as PKCS $\sharp$ V1.5) used in that protocol required the value $x$ to have a particular format, with the top two bytes having a certain form.
-If in the course of a protocol, a server decryped $y$ to get a value $x$ not of this form then it would send an error message and halt the connection.
-Therefore, the server basically supplied to any party an oracle that on input $y$ outputs $1$ iff $y^{d} \pmod{m}$ has this form, where $d = e^{-1} \pmod|\Z^*_m|$ is the secret decryption key.
+Specifically, the version of RSA (known as PKCS $\sharp$ V1.5) used in the SSL V3.0 protocol requires the value $x$ to have a particular format, with the top two bytes having a certain form.
+If in the course of the protocol, a server decrypts $y$ and gets a value $x$ not of this form then it would send an error message and halt the connection.
+While the designers of SSL V3.0 might not have thought of it that way, this amounts to saying that an SSL V3.0 server supplies to any party an oracle that on input $y$ outputs $1$ iff $y^{d} \pmod{m}$ has this form, where $d = e^{-1} \pmod|\Z^*_m|$ is the secret decryption key.
 It turned out that one can use such an oracle to invert the RSA function.
 For a result of a similar flavor, see the (1/2 page) proof of Theorem 11.31 (page 418) in KL, where they show that an oracle that given $y$ outputs the least significant bit of $y^d \pmod{m}$ allows to invert the RSA function.[^hardcore]
 
 [^hardcore]: The first attack of this flavor was given in the  1982 paper of Goldwasser, Micali, and Tong. Interestingly, this notion of "hardcore bits" has been used for both practical _attacks_ against cryptosystems as well as theoretical (and sometimes practical) _constructions_ of other cryptosystems.
 
-For this reason, new versions of the SSL used a different variant of RSA known as PKCS $\sharp$1 V2.0 which satisfies (under assumptions) _chosen ciphertext security (CCA)_ and in particular such oracles cannnot be used to break the encryption. (Nonetheless,  there are still some implementation issues that allowed to perform some attacks, see the note in KL page 425 on Manfer's attack.)
+For this reason, new versions of the SSL used a different variant of RSA known as PKCS $\sharp$1 V2.0 which satisfies (under assumptions) _chosen ciphertext security (CCA)_ and in particular such oracles cannot be used to break the encryption. (Nonetheless,  there are still some implementation issues that allowed to perform some attacks, see the note in KL page 425 on Manfer's attack.)
 
 ## Chosen ciphertext attack security for public key cryptography
 
 The concept of chosen ciphertext attack security makes perfect sense for _public key_ encryption as well.
 It is defined in the same way as it was in the private key setting:
 
-__Definition:__ A public key encryption scheme $(G,E,D)$ is _chosen ciphertext attack (CCA) secure_ if every
+> # {.definition title="CCA secure public key encryption" #CCSpubdef}
+A public key encryption scheme $(G,E,D)$ is _chosen ciphertext attack (CCA) secure_ if every
 efficient Mallory wins in the following game with probability at most $1/2+ negl(n)$:
-
+>
 * The keys $(e,d)$ are generated via $G(1^n)$, and Mallory  gets the public encryption key $e$ and $1^n$.
-
+>
 * For $poly(n)$ rounds, Mallory gets access to the function $c \mapsto D_d(c)$. (She doesn't need access to $m \mapsto E_e(m)$ since she already knows $e$.)
-
+>
 * Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\{0,1\}$, and Mallory gets $c^* = E_e(m_b)$. (Note that she of course does _not_ get the randmoness used to generate this challenge encryption.)
-
+>
 * Mallory now gets another $poly(n)$ rounds of access to the function  $c \mapsto D_d(c)$ except that she is not allowed to query $c^*$.
-
+>
 * Mallory outputs $b'$ and _wins_ if $b'=b$.
 
 In the private key setting, we achieved CCA security by combining a CPA-secure private key encryption scheme with a message authenticating code (MAC), where to CCA-encrypt a message $m$,
