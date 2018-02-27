@@ -147,7 +147,7 @@ The advantage of a generic construction is that it can be instantiated not just 
 
 
 
->__CCA-ROM-ENC Scheme:__ \
+>__CCA-ROM-ENC Scheme:__
 >
 * **Ingredients:** A public key encryption scheme $(G',E',D')$ and a two hash functions $H,H':\{0,1\}^*\rightarrow\{0,1\}^n$ (which we model as independent random oracles[^oracles])
 >
@@ -182,7 +182,18 @@ Note that we can assume without loss of generality that if $m^*$ is the challeng
 In other words, if we modified the experiment so the values $R^*=H(r^*\|m)$ and $z^*=H'(m^*\|r^*)$ chosen while producing the challenge are simply random strings chosen completely independently of everything else. Now note that our oracle $\hat{D}$ did _not_ need to use the decryption key $d$.
 So, if the adversary wins the CCA game, then it wins the _CPA game_ for the encryption scheme $E_e(m) = E'_e(r;R)\| r \oplus m \| R'$ where $R$ and $R'$ are simply independent random strings; we leave proving that this scheme is CPA secure as an exercise to the reader.
 
-## Secure authenticated key exchange protocols:
+## Secure authenticated key exchange protocols
+
+The basic goal of secure communication is to set up a _secure channel_ between two parties Alice and Bob.
+We want to do so over an open network, where  messages between Alice and Bob might be read, modified, deleted, or added  by the adversary.
+Moreover, we want Alice and Bob to be sure that they are talking to one another rather than other parties.
+This raises the question of what is identity and how is it verified.
+Ultimately, if we want to use identities, then we need to trust some authority that decides which party has which identity.
+This is typically done via a _certificate authority (CA)_.
+This is some trusted authority, whose verification key $v_{CA}$ is public and known to all parties.
+Alice proves in some way to the CA that she is indeed Alice, and then generates a pair $(s_{Alice},v_{Alice})$, and gets from the CA the message $\sigma_{Alice}$="The key $v_{Alice}$ belongs to Alice" signed with $s_{CA}$.^[The registration process could be more subtle than that, and for example Alice might need to _prove_ to the CA that she does indeed know the corresponding secret key.]
+Now Alice can send $(v_{Alice},\sigma_{Alice})$ to Bob to certify that the owner of this public key is indeed Alice.
+
 
 There is a generic "compiler" approach to obtaining authenticated key exchange protocols:
 
