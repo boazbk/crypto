@@ -229,6 +229,10 @@ Of these protocols a particularly efficient variant is the MQV protocol of Law, 
 
 To be completed (the most natural candidate: use MACS with a password-derived key to authenticate communication - completely fails)
 
+> # { .pause }
+Please skim Boneh Shoup Chapter 21.11
+
+
 ## Client to client key exchange for secure text messaging - ZRTP, OTR, TextSecure
 
 To be completed. See [Matthew Green's blog](http://blog.cryptographyengineering.com/2013/03/here-come-encryption-apps.html) , [text secure](https://whispersystems.org/blog/advanced-ratcheting/), [OTR](https://otr.cypherpunks.ca/Protocol-v3-4.0.0.html).
