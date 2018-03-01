@@ -149,16 +149,16 @@ The advantage of a generic construction is that it can be instantiated not just 
 
 >__CCA-ROM-ENC Scheme:__
 >
-* **Ingredients:** A public key encryption scheme $(G',E',D')$ and a two hash functions $H,H':\{0,1\}^*\rightarrow\{0,1\}^n$ (which we model as independent random oracles[^oracles])
+* **Ingredients:** A public key encryption scheme $(G',E',D')$ and  three hash functions $H,H',H'':\{0,1\}^*\rightarrow\{0,1\}^n$ (which we model as independent random oracles[^oracles])
 >
 * **Key generation:** We generate keys $(e,d)=G'(1^n)$ for the underlying encryption scheme.
 >
-* **Encryption:** To encrypt a message $m\in\{0,1\}^\ell$, we select randomness $r\leftarrow_R\{0,1\}^\ell$ for the underlying encryption algorithm $E'$ and output $E'_e(r;H(m\|r))\|(r \oplus m)\|H'(m\|r)$, where by $E'_e(m';r')$ we denote the result of encrypting $m'$ using the key $e$ and the randomness $r'$ (we assume the scheme takes $n$ bits of randomness as input; otherwise modify the output length of $H$ accordingly).
+* **Encryption:** To encrypt a message $m\in\{0,1\}^\ell$, we select randomness $r\leftarrow_R\{0,1\}^\ell$ for the underlying encryption algorithm $E'$ and output $E'_e(r;H(m\|r))\|(H''(r) \oplus m)\|H'(m\|r)$, where by $E'_e(m';r')$ we denote the result of encrypting $m'$ using the key $e$ and the randomness $r'$ (we assume the scheme takes $n$ bits of randomness as input; otherwise modify the output length of $H$ accordingly).
 >
-* **Decryption:** To decrypt a ciphertext $c\|y\|z$ first let $r=D_d(c)$, $m=r \oplus y$ and then check that $c=E_e(m;H(m\|r))$ and $z=H'(m\|r)$. If any of the checks fail we output ```error```; otherwise we output $m$.
+* **Decryption:** To decrypt a ciphertext $c\|y\|z$ first let $r=D_d(c)$, $m=H''(r) \oplus y$ and then check that $c=E_e(m;H(m\|r))$ and $z=H'(m\|r)$. If any of the checks fail we output ```error```; otherwise we output $m$.
 
 
-[^oracles]: Recall that it's easy to obtain two independent random oracles $H,H'$ from a single oracle $H''$, for example by letting $H(x)=H''(0\|x)$ and $H'(x)=H''(1\|x)$.
+[^oracles]: Recall that it's easy to obtain three independent random oracles $H,H',H''$ from a single oracle $H'''$, for example by letting $H(x)=H'''(00\|x)$,$H'(x)=H'''(01\|x)$,$H''(x)=H'''(10\|x)$.
 
 > # {.theorem title="CCA security from random oracles" #CCAPKCthm}
 The above CCA-ROM-ENC scheme  is CCA secure.
@@ -168,7 +168,7 @@ Suppose towards a contradiction that there exists an adversary $M$ that wins the
 Our aim is to show that the decryption box would be "useless" to $M$ and hence reduce CCA security to CPA security (which we'll then derive from the CPA security of the underlying scheme).  
 >
 Consider the following "box" $\hat{D}$ that will answer decryption queries $c\|y\|z$ of the adversary as follows: \
-* If $z$ was returned before to the adversary as an answer to $H'(m\|r)$ for some $m,r$, and $c=E_e(m\;H(m\|r))$ and $y=m\oplus r$ then return $m$. \
+* If $z$ was returned before to the adversary as an answer to $H'(m\|r)$ for some $m,r$, and $c=E_e(m\;H(m\|r))$ and $y=m\oplus H''(r)$ then return $m$. \
 * Otherwise return ```error```
 >
 __Claim:__ The probability that $\hat{D}$ answers a query differently then $D$ is negligible.
