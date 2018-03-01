@@ -171,16 +171,33 @@ Consider the following "box" $\hat{D}$ that will answer decryption queries $c\|y
 * If $z$ was returned before to the adversary as an answer to $H'(m\|r)$ for some $m,r$, and $c=E_e(m\;H(m\|r))$ and $y=m\oplus H''(r)$ then return $m$. \
 * Otherwise return ```error```
 >
+Note that the box $\hat{D}$ can answer all queries based only on information that is known to the adeversary (namely past queries) and does not need to use the secret key $d$ at all.
+>
 __Claim:__ The probability that $\hat{D}$ answers a query differently then $D$ is negligible.
 >
-__Proof of claim:__ If  $D$ gives a non ```error``` response to a query $c\|y\|z$ then it must be that $z=H'(m\|r)$ for some $m,r$ such that  $y = r\oplus m$ and $c=E_e(r;H(m\|r))$, in which case $D$ will return $m$. The only way that $\hat{D}$ will answer this question differently is if $z=H'(m\|r)$ but the query $m\|r$ hasn't been asked before by the adversary.
-Here there are two options. If this query has never been asked before at all, then  by the lazy evaluation principle in this case we can think of $H'(m\|r)$ as being independently chosen at this point, and the probability it happens to equal $z$ will be $2^{-n}$.
-If this query was asked by someone apart from the adversary then it could only have been asked by the encryption oracle while producing the challenge ciphertext $c^*\|y^*\|z^*$, but since the adversary is not allowed to ask this precise ciphertext, then it must be a ciphertext of the form $c\|y\|z^*$ where $(c,y) \neq (c^*,y^*)$ and such a ciphertext would get an ```error``` response from both oracles. __QED (claim)__
+__Proof of claim:__ If  $D$ gives a non ```error``` response to a query $c\|y\|z$ then it must be that $z=H'(m\|r)$ for some $m,r$ such that  $y = H''(r)\oplus m$ and $c=E_e(r;H(m\|r))$, in which case $D$ will return $m$. The only way that $\hat{D}$ will answer this question differently is if $z=H'(m\|r)$ (for $r=D_d(c)$) but the query $m\|r$ hasn't been asked before by the adversary.
+Here there are two options.
+If the query $m\|r$ has never been asked before of $H'$ at all, then  by the lazy evaluation principle in this case we can think of $H'(m\|r)$ as being independently chosen at this point, and the probability it happens to equal $z$ will be $2^{-n}$.
+If the query was asked by someone apart from the adversary then it could only have been asked by the encryption oracle while producing the challenge ciphertext $c^*\|y^*\|z^*$.  
+This means that $m=m^*$ and $r=r^*$ where these are the message and randomness in producing the challenge ciphertext $c^*\|y^*\|z^*$ where $c^*=E_e(m^*|H(m^*\|r^*))$, $y^*= H''(r^*) \oplus m^*$, and $z^*= h'(m^*\|r^*)$.
+Since we assume that $m=m^*$ and $r=r^*$, and since all the elements $c,y,z$ of the ciphertext are deterministic functions of $m$ and $r$, this means that $c=c^*$, $Y=y^*$, and  $z=z^*$ which contradicts the fact that the adversary is not allowed to ask the precise challenge ciphertext from the decryption box.
 >
-Note that we can assume without loss of generality that if $m^*$ is the challenge message and $r^*$ is the randomness chosen in this challenge, the adversary never asks the query $m^*\|r^*$ to the its $H$ or $H'$ oracles, since we can modify it so that before making a query $m\|r$, it will first check if $E_e(m\;r)=c^*$ where $c^*\|y^*\|z^*$ is the challenge ciphertext, and if so use this to win the game.
+Since the box $\hat{D}$ can be simulated by the adversary on its own, given the claim the theorem will follow if we show that the scheme is CPA secure.
+Suppose now for the sake of contradiction that there is an attacker $A$ that succeeds in a CPA attack with non-negligible advantage of $\epsilon$.
+We split into two cases.
+Case 1 is that the probability that the attacker $A$ makes the query $r^*$ to $H''(\cdot)$ is less than $\epsilon/2$.
+This yields a contradiction since in this case the  challenge ciphertext as containing no information on $m^*$ with probability $1-\epsilon/2$, as we can think of the value $H''(r^*) \oplus m^*$ as chosen uniformly at random.
+Case 2 is that the attacker makes the query $r^*$ to $H''$ with probability at least $\epsilon/2$.
+In this case we obtain a contradiction to the CPA security of the underlying encryption scheme.
+Indeed, in this case consider the adversary $A'$ for the original encryption scheme that will succeed in recovering $r^*$ from $c^*=E_e(r^*)$ with non-negligible probability for $r^*$ chosen at random from $\{0,1\}^\ell$. (Can you see why this breaks CPA security?)
 >
-In other words, if we modified the experiment so the values $R^*=H(r^*\|m)$ and $z^*=H'(m^*\|r^*)$ chosen while producing the challenge are simply random strings chosen completely independently of everything else. Now note that our oracle $\hat{D}$ did _not_ need to use the decryption key $d$.
-So, if the adversary wins the CCA game, then it wins the _CPA game_ for the encryption scheme $E_e(m) = E'_e(r;R)\| r \oplus m \| R'$ where $R$ and $R'$ are simply independent random strings; we leave proving that this scheme is CPA secure as an exercise to the reader.
+Fix $m^*$ to be a choice such that under which $A$ makes the query $r^*$ to $H''$ with probability at least $\epsilon/2$. (This has to be the case for either $m^*=m_0$ or $m^*=m_1$.)
+Given $c^*=E_e(r^*)$, the adversary $A'$ will simulate the execution of $A$, answering queries to $H,H',H''$ as random oracles using the lazy evaluation paradigm.
+The only difference will be that whenever $A'$ makes the query $r$ to $H''$, or the query $m^*\|r^*$ to $H$ or $H'$, we wll check if $c^*=E_e(r^*;H(m^*\|r^*))$ and if so stop the experiment return $r^*$.
+Note that $A'$ will never see the answer to the query $H(r^*)$ (since if it makes this query we will halt the experiment), and so we can think of this value as an independent random string.
+Therefore we can assume that the randomness used for producing $c^*$ is $H(r^*)$.
+In this case we see that we do a perfect simulation of $A$, and hence $A'$ will make the query $r^*$ (and hence succeed in this attack) with probability at least $\epsilon/2$.
+
 
 ### Defining secure authenticated key exchange
 
