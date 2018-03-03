@@ -48,7 +48,7 @@ To take the distance between theory and practice in perspective, it might be use
 In the early 1990's researchers (motivated initially by zero knowledge proofs) came up with the notion of [probabilistically checkable proofs (PCP's)](http://madhu.seas.harvard.edu/papers/2009/pcpcacm.pdf) which could yield in principle extremely succinct ways to check correctness of computation.
 >
 Probabilistically checkable proofs can be thought of as "souped up" versions of NP completeness reductions and like these reductions, have been mostly used for _negative_ results, especially since the initial proofs were extremely complicated and also included enormous hidden constants.
-However, with time people have slowly understood these better and made them more efficient (e.g., see [this survey](http://m.cacm.acm.org/magazines/2015/2/182636-verifying-computations-without-reexecuting-them/fulltext)) and it has now reached the point where these results, are  [nearly practical](http://cacm.acm.org/magazines/2016/2/197429-pinocchio/abstract) (see also [this](https://eprint.iacr.org/2016/646) )and in fact these are ideas underly at least one [startup](http://z.cash).
+However, with time people have slowly understood these better and made them more efficient (e.g., see [this survey](http://m.cacm.acm.org/magazines/2015/2/182636-verifying-computations-without-reexecuting-them/fulltext)) and it has now reached the point where these results, are  [nearly practical](http://cacm.acm.org/magazines/2016/2/197429-pinocchio/abstract) (see also [this](https://eprint.iacr.org/2016/646) )and in fact these  ideas underly at least one [startup](http://z.cash).
 Overall,  constructions for verifying computation have improved by at least 20 orders of magnitude over the last two decades. (We will talk about some of these constructions later in this course.)
 If progress on fully homomorphic encryption follows a similar trajectory, then we can expect the road to practical utility to be very long, but there is hope that it's not a "bridge to nowhere".
 
@@ -144,24 +144,37 @@ Note that if $y$ is a random vector in $\Z_q^m$ then so is $-\beta y$ and so the
 >
 * To decrypt $c\in\Z_q^n$, output $0$ iff $|\iprod{c,s}| \leq q/10$, where for $x\in\Z_q$ we defined $|x| = \min \{ x , q-x \}$.
 
-Note that decryption succeeds since it amounts to $w^\top A s + s_1 b$ and $|w^\top A s| \leq m\sqrt{q} \ll q$.
+
+ \
+
+The decryption algorithm recivers the original plaintext since   $\iprod{c,s}= w^\top A s + s_1 b$ and $|w^\top A s| \leq m\sqrt{q} \ll q$.
 It turns out that this scheme is scheme above is  homomorphic with respect to the class of _linear functions_ modulo $2$. Specifically we make the following claim:
 
 
 > # {.lemma #parityhomlem}
-For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c_1,\ldots,c_\ell$ encrypting via LWEENC bits $b_1,\ldots,b_\ell \in \{0,1\}$, outputs a ciphertext $c$ encrypying $b_1 \oplus \cdots \oplus b_\ell$.
+For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c_1,\ldots,c_\ell$ encrypting via LWEENC bits $b_1,\ldots,b_\ell \in \{0,1\}$, outputs a ciphertext $c$ encrypting $b_1 \oplus \cdots \oplus b_\ell$.
+
+> # { .pause }
+This claim is not hard to prove, but working it out for yourself can be a good way to get more familiarity with LWEENC and the kind of manipulations we'll be making time and again in the constructions of many lattice based cryptographic primitives.
+Try to show that $c = c_1 + \cdots +c_\ell$ (where addition is done as vectors in $\Z_q$) will be the encryption $b_1 \oplus \cdots \oplus b_\ell$.
+
 
 > # {.proof data-ref="parityhomlem"}
 The proof is quite simple. $EVAL$ will simply add the ciphertexts as vectors in $\Z_q$.
-If $c = \sum c_i$ then $\iprod{c,s}$ will equal $\sum b_i \floor{\tfrac{q}{2}} (\mod \; q)$ up to noise which is at most $\ell m \sqrt{q} \ll q$.
-Since $|\floor{\tfrac{q}{2}}-  \tfrac{q}{2}|<1$ this equals (up to small noise) to
-$\floor{(\sum b_i)\tfrac{q}{2}}$ which would be $0$ if $\sum b_i$ is even and $\floor{\tfrac{q}{2}}$ if $\sum b_i$ is odd.
+If $c = \sum c_i$ then
+$$\iprod{c,s} = \sum b_i \floor{\tfrac{q}{2}}  +  \xi \mod  q$$
+where  $\xi \in \Z_q$ is a "noise term" such that   $|\xi| \leq \ell m \sqrt{q} \ll q$.
+Since $|\floor{\tfrac{q}{2}}-  \tfrac{q}{2}|<1$, adding at most $\ell$ terms of this difference adds at most $\ell$, and so we can also write
+$$\iprod{c,s} = \floor{ \sum b_i \tfrac{q}{2} }  +  \xi' \mod  q$$
+for $|\xi'| \leq \ell m \sqrt{q} + \ell \ll q$.
+If $\sum b_i$ is even then $\sum b_i \tfrac{q}{2}$ is an integer multiple of $q$ and hence in this case $|\iprod{c,s}| \ll q$.
+If $\sum b_i$ is odd  $\floor{\sum_{b_i} \tfrac{q}{2}} = \floor{q/2} \mod q$ and so in this case $|\iprod{c,s}| = q/2 \pm o(q) > q/10$.
 
 Several other encryption schemes are also homomorphic with respect to linear functions, and even before Gentry's construction people have managed to achieve homomorphism with respect to slightly larger classes (e.g., quadratic functions by Boneh, Goh and Nissim) but not significantly so.
 
 ### Abstraction: A trapdoor pseudorandom generator.
 
-It is instructive to consider the following abstraction (which we'll use in the next lecture) of the above encryption scheme.
+It is instructive to consider the following abstraction (which we'll use in the next lecture) of the above encryption scheme as a _trapdoor generator_ (see [TDPgenfig](){.ref}).
 On input $1^n$ key generation algorithm outputs a vector $s\in\Z_q^m$ with $s_1 = \floor{\tfrac{q}{2}}$ and a probabilistic algorithm $G_s$ such that the following holds:
 
 * Any polynomial number of samples from the distribution $G_s(1^n)$ is computationally indistinguishable from independent samples from the uniform distribution over $\Z_q^n$
@@ -173,7 +186,23 @@ and an output of the generator.
 We use $G_s$ to encrypt a bit $b$ by letting $c \leftarrow_R G_s(1^n)$ and outputting $c + (b,0,\ldots,0)^\top$.
 In the particular instantiation above we obtain $G_s$ by sampling the matrix $A$ from the LWE assumption and having $G_s$ output $w^\top A$ for a random $w\in\{0,1\}^n$, but we can ignore this particular implementation detail in the forgoing.
 
+![In a _trapdoor generator_, we have two ways to generate randomized algorithms. That is, we have some algorithms $GEN$ and $GEN'$ such that $GEN$ outputs a pair $(G_s,s)$ and $GEN'$ outputs $G'$ with $G_s,G'$ being themselves algorithms (e.g., randomized circuits). The conditions we require are that __(1)__ the descriptions of the circuits $G_s$ and $G'$ (considering them as distributions over strings) are computationally indistinguishable and __(2)__ the distribution $G'(1^n)$ is _statistically indistinguishable_ from the uniform distribution.](../figure/trapdoorprg.png){#TDPgenfig .class width=300px height=300px}
+
+
 Note that this trapdoor generator satisfies the following stronger property: we can generate an alternative generator $G'$ such that the description of $G'$ is indistinguishable from the description of $G_s$ but such that $G'$ actually does produce   (up to exponentially small statistical error)  the uniform distribution over $\Z_q^n$.
+We can define trapdoor generators formally as follows
+
+> # {.definition title="Trapdoor generators" #tdpgendef}
+A _trapdoor generator_ is a pair of randomized algorithms $GEN,GEN'$ that satisfy the following: \
+* On input $1^n$, $GEN$ outputs a pair $(G_s,s)$ where $G_s$ is a string describing a randomized circuit that itself takes $1^n$ as input. \
+* On input $1^n$, $GEN$ outputs $G'$ where $G'$ is a string describing a randomized circuit that itself takes $1^n$ as input. \
+* The distributions $GEN(1^n)_1$ (i.e., the first output of $GEN(1^n)$ and $GEN'(1^n)$ are computationally indistinguishable \
+* There is some polynomial $t=t(n)$ such that with probability $1-negl(n)$ over the choice of $G'$ output by $GEN'$, the distribution $G(1^n)$ is _statistically indistinguishable_ (i.e., within $negl(n)$ total variation distance) from $U_t$.
+
+> # { .pause }
+This is not an easy definition to parse, but looking at [TDPgenfig](){.ref} can help.
+Make sure you understand why $LWEENC$ gives rise to a trapdoor generator satisfying all the conditions of [tdpgendef](){.ref}.
+
 
 >__Aside: trapdoor generators in real life:__ In the above we use the notion of a "trapdoor" in the pseudorandom generator as a mathematical abstraction, but generators with actual trapdoors have arisen in practice. In 2007 the National Institute of Standards (NIST) released standards for pseudorandom generators. Pseudorandom generators are the quintessential private key primitive, typically built out of hash functions, block ciphers, and such and so it was surprising that NIST included in the list a pseudorandom generator based on public key tools - the [Dual EC DRBG](https://en.wikipedia.org/wiki/Dual_EC_DRBG) generator based on elliptic curve cryptography. This was already strange but became even more worrying when Microsoft researchers Dan Shumow and Niels Ferguson [showed](http://rump2007.cr.yp.to/15-shumow.pdf) that this generator _could_ have a trapdoor in the sense that it contained some hardwired constants that if generated in a particular way, there would be some information that (just like in $G_s$ above) allows to distinguish the generator from random (see here for a [2007 blog post](https://www.schneier.com/blog/archives/2007/11/the_strange_sto.html) on this issue). We learned more about this when leaks from the Snowden document [showed](http://www.reuters.com/article/us-usa-security-rsa-idUSBRE9BJ1C220131220) that the NSA secretly paid 10 million dollars to RSA to make this generator the default option in their Bsafe software.
 >
