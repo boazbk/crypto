@@ -199,7 +199,7 @@ A _trapdoor generator_ is a pair of randomized algorithms $GEN,GEN'$ that satisf
 * On input $1^n$, $GEN$ outputs $G'$ where $G'$ is a string describing a randomized circuit that itself takes $1^n$ as input. \
 * The distributions $GEN(1^n)_1$ (i.e., the first output of $GEN(1^n)$ and $GEN'(1^n)$ are computationally indistinguishable \
 * With probability $1-negl(n)$ over the choice of $G'$ output by $GEN'$, the distribution $G(1^n)$ is _statistically indistinguishable_ (i.e., within $negl(n)$ total variation distance) from $U_t$. \
-* There is an efficient algorithm $T$ such that for every pair $(G_s,s)$ output by $GEN$, $\Pr[ T(s,G_s)=1] \geq 1- negl(n)$ but $\Pr[ T(s,U_t)] \leq 1/3$.^[The choice of $1/3$ is arbitrary, and can be amplified as needed.]
+* There is an efficient algorithm $T$ such that for every pair $(G_s,s)$ output by $GEN$, $\Pr[ T(s,G_s)=1] \geq 1- negl(n)$ but $\Pr[ T(s,U_t)=1] \leq 1/3$.^[The choice of $1/3$ is arbitrary, and can be amplified as needed.]
 
 
 
