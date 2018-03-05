@@ -193,11 +193,16 @@ Note that this trapdoor generator satisfies the following stronger property: we 
 We can define trapdoor generators formally as follows
 
 > # {.definition title="Trapdoor generators" #tdpgendef}
-A _trapdoor generator_ is a pair of randomized algorithms $GEN,GEN'$ that satisfy the following: \
-* On input $1^n$, $GEN$ outputs a pair $(G_s,s)$ where $G_s$ is a string describing a randomized circuit that itself takes $1^n$ as input. \
+A _trapdoor generator_ is a pair of randomized algorithms $GEN,GEN'$ that satisfy the following:
+>
+* On input $1^n$, $GEN$ outputs a pair $(G_s,s)$ where $G_s$ is a string describing a randomized circuit that itself takes $1^n$ as input and outputs a string of length $t$ where $t=t(n)$ is some polynomial. \
 * On input $1^n$, $GEN$ outputs $G'$ where $G'$ is a string describing a randomized circuit that itself takes $1^n$ as input. \
 * The distributions $GEN(1^n)_1$ (i.e., the first output of $GEN(1^n)$ and $GEN'(1^n)$ are computationally indistinguishable \
-* There is some polynomial $t=t(n)$ such that with probability $1-negl(n)$ over the choice of $G'$ output by $GEN'$, the distribution $G(1^n)$ is _statistically indistinguishable_ (i.e., within $negl(n)$ total variation distance) from $U_t$.
+* With probability $1-negl(n)$ over the choice of $G'$ output by $GEN'$, the distribution $G(1^n)$ is _statistically indistinguishable_ (i.e., within $negl(n)$ total variation distance) from $U_t$. \
+* There is an efficient algorithm $T$ such that for every pair $(G_s,s)$ output by $GEN$, $\Pr[ T(s,G_s)=1] \geq 1- negl(n)$ but $\Pr[ T(s,U_t)] \leq 1/3$.^[The choice of $1/3$ is arbitrary, and can be amplified as needed.]
+
+
+
 
 > # { .pause }
 This is not an easy definition to parse, but looking at [TDPgenfig](){.ref} can help.
