@@ -132,21 +132,16 @@ Similarly, if $C$ is an $m\times n$ matrix, then we denote by $\hat{C}$ the $m\t
 
 While encoding in the binary basis is not a linear operation, the _decoding_ operation is linear as one can see in [eqbinaryencoding](){.eqref}.
 We let $Q$ be the $n \times (n\log q)$ "decoding" matrix that maps an encoding vector $\hat{v}$ back to the original vector $v$.
-Specifically, every row of $Q$ is 
-
-
-where for every $i\in [n]$ and $j\in[\log q]$, $Q_{i,(i,j)}=2^{j-1}$ and all other entries are zero.
+Specifically, every row of $Q$ is composed of $n$ blocks each of $\log q$ size, where the $i$-th row has only the $i$-th block nonzero, and equal to the values $(1,2,4,\ldots,2^{\log q-1})$.
 It's a good exercise to verify that for every vector $v$ and matrix $C$, $Q\hat{v}=v$  and $\hat{C}Q^\top =C$.
 
 [^ceil]: If we were being pedantic the length of the vector (and other constant below) should be the integer $\ceil{\log q}$ but I omit the ceiling symbols for simplicity of notation.
 
 In our final scheme the ciphertext encrypting $b$ will be a $(n\log q)\times (n\times\log q)$ matrix $C$ such that $Cv =bv + e$ for a "short" $e \in \Z_q^{n\log q}$ and $v=Q^\top s$ for $s\in\Z_q^n$.
-
-
 Now given ciphertexts $C,C'$ that encrypt $b,b'$ respectively, we will define $C \oplus C' = C + C' \pmod{q}$ and $C \otimes C' = \widehat{CQ^\top}C'$.
-Since we have $Cs = bv + e$ and $C' = b'v + e'$ we get that
+Since we have $Cv = bv + e$ and $C'v = b'v + e'$ we get that
 
-$$(C\oplus C')s = (C+C')s = (b+b')v + (e+e') \label{eqfheaddfinal}$$
+$$(C\oplus C')v = (C+C')v = (b+b')v + (e+e') \label{eqfheaddfinal}$$
 
 and
 
