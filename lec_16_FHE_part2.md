@@ -60,7 +60,7 @@ Strictly speaking, we only showed in this world how to get a _private key_ fully
 
 ## Real world partially homomorphic encryption
 
-We now discuss how we can obtain an encryption in  the real world where, as much as we'd like to ignore it, there are people who walk among us (not to mention some computer programs) that can actually do eigenvalue computations.
+We now discuss how we can obtain an encryption in  the real world where, as much as we'd like to ignore it, there are people who walk among us (not to mention some computer programs) that can actually invert matrices.
 As usual, the idea is to "fool Gaussian elimination with noise" but we will see that we have to be much more careful about "noise management", otherwise even for the party holding the secret key the noise will overwhelm the signal.[^chaos]
 
 [^chaos]: For this reason, Craig Gentry called his highly recommended survey on fully homomorphic encryption and other advanced constructions [computing on the edge of chaos](https://eprint.iacr.org/2014/610).
