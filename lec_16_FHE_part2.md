@@ -10,7 +10,7 @@ That is, this lecture is devoted to proving[^caveat] the following theorem:
 
 > # {.theorem title="FHE from LWE" #LWEFHEthm}
 Assuming the LWE conjecture, there exists a partially homomorphic public key encryption $(G,E,D,EVAL)$ that fits the conditions of the bootstrapping theorem ([bootstrapthm](){.ref}).
-That is, for every two ciphertexts $c$ and $c'$, the function $d \mapsto D_d(c)\; NAND\; D_d(c')$ is can be homomorphically evaluated by $EVAL$.
+That is, for every two ciphertexts $c$ and $c'$, the function $d \mapsto D_d(c)\; NAND\; D_d(c')$  can be homomorphically evaluated by $EVAL$.
 
 
 
@@ -20,11 +20,14 @@ That is, for every two ciphertexts $c$ and $c'$, the function $d \mapsto D_d(c)\
 
 
 
-In the linear homomorphic scheme we saw in the last lecture, the ciphertexts were vectors $c\in\Z_q^n$ such that $\iprod{c,s}$ was equal (up to scaling by $\floor{\tfrac{q}{2}}$) to the plaintext bit.
+In the linear homomorphic scheme we saw in the last lecture, every  ciphertext was a vector $c\in\Z_q^n$ such that $\iprod{c,s}$  equals (up to scaling by $\floor{\tfrac{q}{2}}$)  the plaintext bit.
 We saw that adding two ciphertexts modulo $q$ corresponded to XOR'ing (i.e., adding modulo $2$) the corresponding two plaintexts.
-That is, if we defined $c \oplus c'$ as $c+c' \pmod{q}$ then performing the $\oplus$ operation on the ciphertexts corresponded to adding modulo $2$ the plaintexts.
+That is, if we define $c \oplus c'$ as $c+c' \pmod{q}$ then performing the $\oplus$ operation on the ciphertexts corresponds to adding modulo $2$ the plaintexts.
+
+
 However, to get to a fully, or even partially, homomorphic scheme, we need to find a way to perform the NAND operation on the two plaintexts.
-The challenge is that it seems that to do that we need to find a way to evaluate  _multiplications_: find a way to define some operation $\otimes$ on ciphertexts that corresponds to multiplying the plaintexts. Alas,  a priori, there doesn't seem to be a natural way to _multiply_ two vectors.
+The challenge is that it seems that to do that we need to find a way to evaluate  _multiplications_: find a way to define some operation $\otimes$ on ciphertexts that corresponds to multiplying the plaintexts.
+Alas,  a priori, there doesn't seem to be a natural way to _multiply_ two vectors.
 
 The GSW approach to handle this is to move from vectors to _matrices_.
 As usual, it is instructive to first consider the cryptographer's dream world where Gaussian elimination doesn't exist.
@@ -34,7 +37,7 @@ That is, the encryption of a bit $b$  is a matrix $C$ such that the secret key i
 
 > # { .pause }
 You should make sure you understand the _types_ of all the identifiers we refer to.
-In particular, above  $s$ is a _vector_ in $\Z_q^n$ while $b$ is a _number_ in $\{0,1\}$.
+In particular, above   $C$ is an $n\times n$ _matrix_ with entries in $\Z_q$, $s$ is a _vector_ in $\Z_q^n$, and $b$ is a _scalar_ (i.e., just a number) in $\{0,1\}$.
 
 
 Given $C$ and $s$ we can recover $b$ by just checking if $Cs=s$ or $Cs=0^n$.
@@ -48,19 +51,25 @@ $$(C+C')s = (b+b')s$$
 
 and
 
-$$CC's = bb's$$.
+$$CC's = C(bs) = bb's$$
 
-Now if  $b,b' \in \{0,1\}$, then $b \; NAND \; b' = 1-bb'$ and in particular this equation holds modulo $q$.
-Hence we can take  a ciphertext $C$ encrypting $b$ and a ciphretext $C'$ encrypting $b'$ and transform these two ciphertexts to the ciphertext
+where all these equalities are in $\Z_q$.
+
+Addition modulo $q$ is not the same as XOR, but given these multiplication and addition operations, we can implement the NAND operation as well.
+Specifically, for every  $b,b' \in \{0,1\}$,  $b \; NAND \; b' = 1-bb'$.
+Hence we can take  a ciphertext $C$ encrypting $b$ and a ciphertext $C'$ encrypting $b'$ and transform these two ciphertexts to the ciphertext
 $C''=(I-CC')$ that encrypts $b\; NAND \; b'$ (where $I$ is the identity matrix).
 Thus in a world without Gaussian elimination it is not hard to get a fully homomorphic encryption.
 
 > # {.remark title="Private key FHE" #privkeyfhe}
-Strictly speaking, we only showed in this world how to get a _private key_ fully homomorphic encryption. Our "real world" scheme will be a full fledged _public key_ FHE.  However, we note that private key homomorphic encryption is already very interesting and in fact sufficient for many of the "cloud computing" applications. Moreover,  [Rothblum](http://eccc.hpi-web.de/report/2010/146/)  gave a generic transformation from a  _private key_ homomorphic encryption to a _public key_ homomorphic encryption.
+We have not shown how to _generate_ a ciphertext without knowledge of $s$, and hence strictly speaking we only showed in this world how to get a _private key_ fully homomorphic encryption.
+Our "real world" scheme will be a full fledged _public key_ FHE.
+However we note that private key homomorphic encryption is already very interesting and in fact sufficient for many of the "cloud computing" applications.
+Moreover,  [Rothblum](http://eccc.hpi-web.de/report/2010/146/)  gave a generic transformation from a  _private key_ homomorphic encryption to a _public key_ homomorphic encryption.
 
 ## Real world partially homomorphic encryption
 
-We now discuss how we can obtain an encryption in  the real world where, as much as we'd like to ignore it, there are people who walk among us (not to mention some computer programs) that can actually invert matrices.
+We now discuss how we can obtain an encryption in  the real world where, as much as we'd like to ignore it, there are people who walk among us (not to mention some computer programs) that  actually know how to invert matrices.
 As usual, the idea is to "fool Gaussian elimination with noise" but we will see that we have to be much more careful about "noise management", otherwise even for the party holding the secret key the noise will overwhelm the signal.[^chaos]
 
 [^chaos]: For this reason, Craig Gentry called his highly recommended survey on fully homomorphic encryption and other advanced constructions [computing on the edge of chaos](https://eprint.iacr.org/2014/610).
@@ -72,7 +81,7 @@ This yields a natural candidate for an encryption scheme where we encrypt $b$ by
 
 [^short]: We deliberately leave some flexibility  in the definition of "short". While initially "short" might mean that $|e_i|<\sqrt{q}$ for every $i$, decryption will succeed as long as long as $|e_i|$ is, say, at most $q/100$.
 
-We can now see what adding and multiplying two matrices does to the noise.
+We can now try to check what adding and multiplying two matrices does to the noise.
 If $Cs = bs+e$ and $C's=b's+e'$ then
 
 $$(C+C')s = (b+b')s+(e+e') \label{eqhomadd}$$
@@ -80,6 +89,10 @@ $$(C+C')s = (b+b')s+(e+e') \label{eqhomadd}$$
 and
 
 $$CC's = C(b's+e')+e =bb's+ (b'e+Ce')\;. \label{eqhommult} $$
+
+
+> # { .pause }
+I recommend you pause here and check for yourself whether it will be the case that if $C+C'$ encrypts $b+b'$ and $CC'$ encrypts $bb'$ up to small noise or not.
 
 
 We would have loved to say that we can define as above $C\oplus C' = C+C' (\mod\; q)$ and $C\otimes C' = CC' (\mod \; q)$.
@@ -108,9 +121,21 @@ At this point one could say
 
 If you think about it hard enough, it  turns out that there is something known as the "binary basis" that allows us to encode a number $x\in\Z_q$ as a vector $\hat{x}\in\{0,1\}^{\log q}$.[^ceil]
 What's even more surprising is that this seemingly trivial trick turns out to be immensely useful.
-Let us denote by $\hat{s}$ the encoding of $s$ as a vector in $\{0,1\}^{n\log q}$ and by $\hat{C}$ the encoding of an $m\times n$ $C$ as an $m\times n\log q$ matrix with $0,1$ entries by encoding each row  separately.
+We will define the _binary encoding_ of a vector or matrix $x$ over $\Z_q$ by $\hat{x}$.
+That is, $\hat{x}$ is obtained by replacing every coordinate  $x_i$ with $\log q$ coordinates $x_{i,0},\ldots,x_{i,\log q-1}$ such that
+
+$$x_i = \sum_{j=0}^{\log q-1}2^j x_{i,j} \;. \label{eqbinaryencoding}$$
+
+Specifically, if $s\in \Z_q^n$, then we denote by $\hat{s}$ the $n\log q$-dimensional vector  with entries in $\{0,1\}$, such that each $\log q$-sized block of $\hat{s}$ encodes a coordinate of $s$.
+Similarly, if $C$ is an $m\times n$ matrix, then we denote by $\hat{C}$ the $m\times n\log q$ matrix with entries in $\{0,1\}$ that corresponds to encoding every $n$-dimensional row of $C$ by an  $n\log q$-dimensional row  where each $\log q$-sized block corresponds to a single entry.
 (We still think of the entries of these vectors and matrices as elements of $\Z_q$ and so all calculations are still done modulo $q$.)
-We let $Q$ be the $n \times (n\log q)$ "decoding" matrix where for every $i\in [n]$ and $j\in[\log q]$, $Q_{i,(i,j)}=2^{j-1}$ and all other entries are zero.
+
+While encoding in the binary basis is not a linear operation, the _decoding_ operation is linear as one can see in [eqbinaryencoding](){.eqref}.
+We let $Q$ be the $n \times (n\log q)$ "decoding" matrix that maps an encoding vector $\hat{v}$ back to the original vector $v$.
+Specifically, every row of $Q$ is 
+
+
+where for every $i\in [n]$ and $j\in[\log q]$, $Q_{i,(i,j)}=2^{j-1}$ and all other entries are zero.
 It's a good exercise to verify that for every vector $v$ and matrix $C$, $Q\hat{v}=v$  and $\hat{C}Q^\top =C$.
 
 [^ceil]: If we were being pedantic the length of the vector (and other constant below) should be the integer $\ceil{\log q}$ but I omit the ceiling symbols for simplicity of notation.
