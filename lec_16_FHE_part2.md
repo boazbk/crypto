@@ -54,7 +54,7 @@ $$(C+C')s = (b+b')s$$
 
 and
 
-$$CC's = C(bs) = bb's$$
+$$CC's = C(b's) = bb's$$
 
 where all these equalities are in $\Z_q$.
 
