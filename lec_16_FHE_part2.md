@@ -189,18 +189,11 @@ This time, rather than letting $s_1 = \floor{q/2}$, we will ensure that $(Q^\top
 * **Decryption:** To decrypt the ciphertext $C$, we output $0$ if $|(CQ^\top s)_1|<0.1q$ and output $1$ if $0.6q>|(CQ^\top s)_1|>0.4q$, see [fhedecfig](){.ref}. (It doesn't matter what we output on other cases.)
 >
 * **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \overline{\wedge} C'$ as $I- \widehat{(CQ^\top)}C'$, $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
-> \
+
+ \
 
 
-
-  \
-
-
-
-![In our fully homomorphic encryption, the public key is a trapdoor generator $G_s$. To encrypt a bit $b$, we output $C=\widehat{(bQ^\top +D)}$ where $D$ is a $(n\log q) \times n$ matrix whose rows are generated using $G_s$.](../figure/fheenc.png){#fheencfig .class width=300px height=300px}
-
-![We decrypt a ciphertext $C=\widehat{(bQ^\top +D)}$ by looking at the first coordinate of $CQ^\top s$ (or equivalently, $CQ^\top Q\hat{s}$). If $b=0$ then this equals to the first coordinate of $Ds$, which is at most $\sqrt{q}$ in magintude. If $b=1$ then we get an extra factor of $Q^\top s$ which we set to be in the interval $(0.499q,0.51q)$. We can think of either $s$ or $\hat{s}$ as our secret key.](../figure/fhedec.png){#fhedecfig .class width=300px height=300px}
-
+ \
 
 
 
@@ -209,6 +202,16 @@ This time, rather than letting $s_1 = \floor{q/2}$, we will ensure that $(Q^\top
 > # { .pause }
 Please take your time to read the definition of the scheme, and go over
 [fheencfig](){.ref} and [fhedecfig](){.ref} to make sure you understand it.
+
+
+
+
+
+![In our fully homomorphic encryption, the public key is a trapdoor generator $G_s$. To encrypt a bit $b$, we output $C=\widehat{(bQ^\top +D)}$ where $D$ is a $(n\log q) \times n$ matrix whose rows are generated using $G_s$.](../figure/fheenc.png){#fheencfig .class width=300px height=300px}
+
+![We decrypt a ciphertext $C=\widehat{(bQ^\top +D)}$ by looking at the first coordinate of $CQ^\top s$ (or equivalently, $CQ^\top Q\hat{s}$). If $b=0$ then this equals to the first coordinate of $Ds$, which is at most $\sqrt{q}$ in magintude. If $b=1$ then we get an extra factor of $Q^\top s$ which we set to be in the interval $(0.499q,0.51q)$. We can think of either $s$ or $\hat{s}$ as our secret key.](../figure/fhedec.png){#fhedecfig .class width=300px height=300px}
+
+
 
 
 
