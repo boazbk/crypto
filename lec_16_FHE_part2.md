@@ -222,7 +222,8 @@ To show that that this scheme is a valid partially homomorphic scheme we need to
 
 4. **Shallow decryption circuit:** To plug this scheme into the bootstrapping theorem we will need to show that its decryption algorithm (or more accurately, the function in the statement of the bootstrapping theorem)  can be evaluated in depth $polylog(n)$ (independently of $q$), and that moreover, the noise grows slowly enough that our scheme is homomorphic with respect to such circuits.
 
-Once we obtain 1-4 above, we have proven the existence of a fully homomorphic encryption scheme. We now address those points one by one.
+Once we obtain 1-4 above, we can plug FHEENC into the Bootstrapping Theorem ([bootstrapthm](){.ref}) and thus complete the proof of existence of a fully homomorphic encryption scheme.
+We now address those points one by one.
 
 ### Correctness
 
@@ -231,15 +232,15 @@ Correctness of the scheme will follow from the following stronger condition:
 > # {.lemma #fhecorrectlem}
 For every $b \in \{0,1\}$,  if $C$ is the encryption of $b$ then it is an $(n\log q)\times (n \log q)$ matrix satisfying
 $$CQ^\top s = bQ^\top s + e$$
-where $\max |e_i| \ll q$.
+where $\max |e_i| \ll \sqrt{q}$.
 
 > # {.proof data-ref="fhecorrectlem"}   
-For starters, let us see that the dimensions make sense: the encryption of $b$ is computed by $C=\widehat{bQ^\top +D}$ where $D$ is an $(n\log q)\times n$ matrix satisfying $|Ds|_i \leq \sqrt{q}$ for every $i$ and $I$ is the $(n\log q)\times (n\log q)$.
+For starters, let us see that the dimensions make sense: the encryption of $b$ is computed by $C=\widehat{(bQ^\top +D)}$ where $D$ is an $(n\log q)\times n$ matrix satisfying $|Ds|_i \leq \sqrt{q}$ for every $i$ and $I$ is the $(n\log q)\times (n\log q)$.
 >
-Since $Q^\top$ is also an $(n \log q) \times n$ matrix, adding $bQ^\top+D$ makes sense and applying the $\hat{\cdot}$ operation will transform every row to length $n\log q$ and hence $C$ is indeed a square $(n\log q)\times (n \log q)$ matrix.
+Since $Q^\top$ is also an $(n \log q) \times n$ matrix, adding $bQ^\top$ (i.e. either $Q^\top$ or the all-zeroes matrix, depending on whether or not $b=1$) to $D$ makes sense and applying the $\hat{\cdot}$ operation will transform every row to length $n\log q$ and hence $C$ is indeed a square $(n\log q)\times (n \log q)$ matrix.
 >
-Let us now see what this matrix does to the vector $v=Q^\top s$.
-Using the fact that $\hat{M}Q^\top = M$ for every matrix $m$, we get that
+Let us now see what this matrix $C$ does to the vector $v=Q^\top s$.
+Using the fact that $\hat{M}Q^\top = M$ for every matrix $M$, we get that
 >
 $$Cv = (bQ^\top + D) s = bv+  Ds$$
 >

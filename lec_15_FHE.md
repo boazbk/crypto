@@ -78,11 +78,15 @@ An _$\cF$-homomorphic public key encryption scheme_ is a CPA secure public key e
 
  \
 
+![In a valid encryption scheme $E$, the set of ciphertexts $c$ such that $D_d(c)=b$ is a superset of the set of ciphertexts $c$ such that $c=E_e(b;r)$ for some  $r \in \{0,1\}^{t}$ where $t$ is the number of random bits used by the encryption algorithm. Our definition of partially homomorphic encryption scheme requires that for every $f:\{0,1\}^\ell \rightarrow \{0,1\}$ in our family and $x\in \{0,1\}^\ell$, if $c_i \in  E_e(x_i;\{0,1\}^t)$ for $i=1..\ell$ then $EVAL(f,c_1,\ldots,c_\ell)$ is in the superset $\{ c \;|\; D_d(c)=f(x) \}$ of $E_e(f(x);\{0,1\}^t)$. For example if we apply $EVAL$ to the $OR$ function and ciphertexts $c,c'$ that were obtained as encryptions of $1$ and $0$ respectively, then the output is a ciphertext $c''$ that would be decrypted to $OR(1,0)=1$, even if $c''$ is not in the smaller set of possible outputs of the encryption algorithm on $1$. This distinction between the smaller and larger set is the reason why we cannot automatically apply the $EVAL$ function to ciphertexts that are obtained from the outputs of previous $EVAL$ operations.](../figure/evalciphertexts.png){#evalciphertextfig .class width=300px height=300px}
+
 
 > # { .pause }
 Please stop and verify you understand the definition.
 In particular you should understand why some bound on the length of the output of $EVAL$ is needed to rule out trivial constructions that are the analogous of the cloud provider sending over to Alice the entire encrypted database every time she wants to evaluate a function of it.
 By artificially increasing the randomness for the key generation algorithm, this is equivalent to  requiring that  $|c| \leq p(n)$  for some fixed polynomial $p(\cdot)$ that does not grow with $\ell$ or $|f|$.
+You should also understand the distinction between ciphertexts that are the output of the encryption algorithm on the plaintext $b$, and ciphertexts that decrypt to $b$, see [evalciphertextfig](){.ref}.
+
 
 A _fully homomomorphic encryption_ is simply a partially homomorphic encryption scheme for the family $\cF$ of _all_ functions, where the description of a function is as a circuit (say composed of [NAND](https://en.wikipedia.org/wiki/NAND_gate) gates, which are known to be a universal basis).
 
