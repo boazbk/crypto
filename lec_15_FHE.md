@@ -60,9 +60,8 @@ The idea is that a cloud provider client would treat this enclave as a trusted p
 The client can store their data on the cloud encrypted with some key $k$, and then set up a secure channel with the enclave using  an authenticated key exchange protocol, and send $k$ over.
 Then, when the client sends over a function $f$ to the cloud provider, the latter party can simulate FHE by asking the enclave to compute the encryption of $f(x)$ given the encryption of $x$.
 In this solution ultimately the private key does reside on the cloud provider's computers, and the client has to trust the security of the enclave.
-In practice, this could provide reasonable security against remote hackers, but (unlike FHE) probably not against sophisticated attackers (e.g., governments) that have physical access to the server
+In practice, this could provide reasonable security against remote hackers, but (unlike FHE) probably not against sophisticated attackers (e.g., governments) that have physical access to the server.
 
-.
 
 ## Defining fully homomorphic encryption
 
