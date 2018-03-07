@@ -178,11 +178,8 @@ We are going to use a quantitatively stronger version of LWE.
 Namely,  the $q(n)$-dLWE assumption for $q(n)=2^{\sqrt{n}}$.
 It is not hard to show that we can relax our assumption to $q(n)$-LWE $q(n)=2^{polylog(n)}$  and Brakerski and Vaikuntanathan showed how to relax the assumption to standard (i.e. $q(n)=poly(n)$) LWE though we will not present this here.
 
-![In our fully homomorphic encryption, the public key is a trapdoor generator $G_s$. To encrypt a bit $b$, we output $C=\widehat{(bQ^\top +D)}$ where $D$ is a $(n\log q) \times n$ matrix whose rows are generated using $G_s$.](../figure/fheenc.png){#fheencfig .class width=300px height=300px}
 
-![We decrypt a ciphertext $C=\widehat{(bQ^\top +D)}$ by looking at the first coordinate of $CQ^\top s$ (or equivalently, $CQ^\top Q\hat{s}$). If $b=0$ then this equals to the first coordinate of $Ds$, which is at most $\sqrt{q}$ in magintude. If $b=1$ then we get an extra factor of $Q^\top s$ which we set to be in the interval $(0.499q,0.51q)$. We can think of either $s$ or $\hat{s}$ as our secret key.](../figure/fhedec.png){#fhedecfig .class width=300px height=300px}
-
->__FHEENC:__ \
+>__FHEENC:__
 >
 * **Key generation:**  As in the scheme of last lecture the secret key is $s\in\Z_s^n$ and the public key is a generator $G_s$ such that samples from $G_s(1^n)$ are indistinguishable from independent random samples from $\Z_q^n$ but if $c$ is output by $G_s$ then $|\iprod{c,s}|<\sqrt{q}$, where the inner product (as all other computations) is done modulo $q$ and for every $x\in\Z_q=\{0,\ldots,q-1\}$ we define $|x|=\min \{ x, q-x \}$.
 This time, rather than letting $s_1 = \floor{q/2}$, we will ensure that $(Q^\top s)_1$ is roughly $q/2$. We can either ensure this exactly equals $\floor{q/2}$ in the same way as before, or we can repeatedly sample $s$ until this value (which is uniform in $\{0,\ldots,q-1\}$) lands in the interval $(0.499q,0.501q)$).
@@ -191,8 +188,14 @@ This time, rather than letting $s_1 = \floor{q/2}$, we will ensure that $(Q^\top
 >
 * **Decryption:** To decrypt the ciphertext $C$, we output $0$ if $|(CQ^\top s)_1|<0.1q$ and $1$ if $0.6q>|(CQ^\top s)_1|>0.4q$, see [fhedecfig](){.ref}. (It doesn't matter what we output on other cases.)
 >
-* **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \overline{\wedge} C'$ as $I- \widehat{(CQ^\top)}C'$, $I$ is the $(n\log q)\times (n\log q)$ identity matrix. 
+* **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \overline{\wedge} C'$ as $I- \widehat{(CQ^\top)}C'$, $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
 
+
+
+
+![In our fully homomorphic encryption, the public key is a trapdoor generator $G_s$. To encrypt a bit $b$, we output $C=\widehat{(bQ^\top +D)}$ where $D$ is a $(n\log q) \times n$ matrix whose rows are generated using $G_s$.](../figure/fheenc.png){#fheencfig .class width=300px height=300px}
+
+![We decrypt a ciphertext $C=\widehat{(bQ^\top +D)}$ by looking at the first coordinate of $CQ^\top s$ (or equivalently, $CQ^\top Q\hat{s}$). If $b=0$ then this equals to the first coordinate of $Ds$, which is at most $\sqrt{q}$ in magintude. If $b=1$ then we get an extra factor of $Q^\top s$ which we set to be in the interval $(0.499q,0.51q)$. We can think of either $s$ or $\hat{s}$ as our secret key.](../figure/fhedec.png){#fhedecfig .class width=300px height=300px}
 
 
 
