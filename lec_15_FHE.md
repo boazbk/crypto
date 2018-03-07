@@ -96,13 +96,14 @@ Curiously the protocol involves "doubly encrypting" the input, and homomorphical
 
 * __Assumptions:__ We assume that all functions $f$ that the client will be interested in can be described by a string of length $n$.
 
-* __Preprocessing:__ The client generates a pair of keys $(e,d)$. In the initial stage the client computes the encrypted database $\overline{c}=E_e(x)$ and sends $\overline{c},e,e'$ to the server. It also computes $c^* = EVAL_{e'}(f^*,\overline{c})$ for some function $f^*$ and keeps $c^*$ for herself.
+* __Preprocessing:__ The client generates a pair of keys $(e,d)$. In the initial stage the client computes the encrypted database $\overline{c}=E_e(x)$ and sends $\overline{c},e,e'$ to the server. It also computes $c^* = E_e(f^*)$ for some function $f^*$ as well as  $C^{**}=EVAL_{e}(eval,E_e(f^*)\|\overline{c})$  for some function $f^*$ and keeps $c^*,c^{**}$ for herself, where $eval(f,x)=f(x)$ is the circuit evaluation function.
 
-* __Client query:__ To ask for an evaluation of $f$, the client chooses $b \leftarrow_R \{0,1\}$ and lets $c_b = E_{e'}(f)$ and $c_{1-b}=E_{e'}(f^*)$. It sends the pair $c_0,c_1$ to the server.
 
-* __Server response:__ Given the queries $c_0,c_1$, the server defines the function $g:\{0,1\}^* \rightarrow \{0,1\}^*$ where $g(f)=EVAL_e(f,\overline{c})$ (for the fixed $\overline{c}$ received) and computes $c'_0 = EVAL_{e'}(g,c_0)$ and $c'_1 = EVAL_{e'}(g,c_1)$. (Please pause here and make sure you understand what this step is doing! Note that we use here crucially the fact that $EVAL$ itself is a polynomial time computation.)
+* __Client query:__ To ask for an evaluation of $f$, the client generates a new random FHE keypair $(e',d')$, chooses $b \leftarrow_R \{0,1\}$ and lets $c_b = E_{e'}(E_e(f))$ and $c_{1-b}=E_{e'}(c^*)$. It sends the triple $e',c_0,c_1$ to the server.
 
-* __Client check:__ Client checks whether $D_{d'}(c'_{1-b})=c^*$ and if so accepts $D_d(D_{d'}(c'_b))$ as the answer.
+* __Server response:__ Given the queries $c_0,c_1$, the server defines the function $g:\{0,1\}^* \rightarrow \{0,1\}^*$ where $g(c)=EVAL_e(eval,c\|\overline{c})$ (for the fixed $\overline{c}$ received) and computes $c'_0,c'_1$ where $c'_b = EVAL_{e'}(g_b,c_b)$. (Please pause here and make sure you understand what this step is doing! Note that we use here crucially the fact that $EVAL$ itself is a polynomial time computation.)
+
+* __Client check:__ Client checks whether $D_{d'}(c'_{1-b})=c^{**}$ and if so accepts $D_d(D_{d'}(c'_b))$ as the answer.
 
 We claim that if the server cheats then the client will detect this with probability $1/2 - negl(n)$.
 Working this out is a great exercise.
