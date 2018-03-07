@@ -38,7 +38,10 @@ That is, the encryption of a bit $b$  is a matrix $C$ such that the secret key i
 > # { .pause }
 You should make sure you understand the _types_ of all the identifiers we refer to.
 In particular, above   $C$ is an $n\times n$ _matrix_ with entries in $\Z_q$, $s$ is a _vector_ in $\Z_q^n$, and $b$ is a _scalar_ (i.e., just a number) in $\{0,1\}$.
+See [naivegswfig](){.ref} for a visual representation of the ciphertexts in this "naive" encryption scheme.
+Keeping track of the dimensions of all objects will become only more important in the rest of this lecture.
 
+![In the "naive" version of the GSW encryption, to encrypt a bit $b$ we output an $n\times n$ matrix $C$ such that $Cs=bs$ where $s \in \Z_q^n$ is the secret key. In this scheme we can transform encryptions $C,C'$ of $b,b'$ respectively to an encryption $C''$ of $NAND(b,b')$ by letting $C'' = I-CC'$.](../figure/naivegsw.png){#naivegswfig .class width=300px height=300px}
 
 Given $C$ and $s$ we can recover $b$ by just checking if $Cs=s$ or $Cs=0^n$.
 The scheme  allows homomorphic evaluation of both addition (modulo $q$) and multiplication, since if $Cs = bs$ and $C's=b's$ then we can define
@@ -133,25 +136,39 @@ Similarly, if $C$ is an $m\times n$ matrix, then we denote by $\hat{C}$ the $m\t
 While encoding in the binary basis is not a linear operation, the _decoding_ operation is linear as one can see in [eqbinaryencoding](){.eqref}.
 We let $Q$ be the $n \times (n\log q)$ "decoding" matrix that maps an encoding vector $\hat{v}$ back to the original vector $v$.
 Specifically, every row of $Q$ is composed of $n$ blocks each of $\log q$ size, where the $i$-th row has only the $i$-th block nonzero, and equal to the values $(1,2,4,\ldots,2^{\log q-1})$.
-It's a good exercise to verify that for every vector $v$ and matrix $C$, $Q\hat{v}=v$  and $\hat{C}Q^\top =C$.
+It's a good exercise to verify that for every vector $v$ and matrix $C$, $Q\hat{v}=v$  and $\hat{C}Q^\top =C$. (See [encodevecfig](){.ref} amd [encodematrixfig](){.ref}.)
 
 [^ceil]: If we were being pedantic the length of the vector (and other constant below) should be the integer $\ceil{\log q}$ but I omit the ceiling symbols for simplicity of notation.
 
-In our final scheme the ciphertext encrypting $b$ will be a $(n\log q)\times (n\times\log q)$ matrix $C$ such that $Cv =bv + e$ for a "short" $e \in \Z_q^{n\log q}$ and $v=Q^\top s$ for $s\in\Z_q^n$.
-Now given ciphertexts $C,C'$ that encrypt $b,b'$ respectively, we will define $C \oplus C' = C + C' \pmod{q}$ and $C \otimes C' = \widehat{CQ^\top}C'$.
+![We can encode a vector $s\in \Z_q^n$ as a vector $\hat{s} \in \Z_q^{n\log q}$ that has only entries in $\{0,1\}$ by using the binary encoding, replacing every coordinate of $s$ with a $\log q$-sized block in $\hat{s}$. The decoding operation is _linear_ and so we can write $s=Q\hat{s}$ for a specific (simple) $n \times (n\log q)$ matrix $Q$.](../figure/encodevec.png){#encodevecfig .class width=300px height=300px}
+
+![We can encode an $n\times n$ matrix $C$ over $\Z_q$ by an $n\times (n \log q)$ matrix $\hat{C}$ using the binary basis. We have the equation $C=\hat{C}Q^\top$ where $Q$ is the same matrix we use to decode a vector.](../figure/encodematrix.png){#encodematrixfig .class width=300px height=300px}
+
+
+In our final scheme the ciphertext encrypting $b$ will be an $(n\log q)\times (n\log q)$ matrix $C$ with small coefficients such that $Cv =bv + e$ for a "short" $e \in \Z_q^{n\log q}$ and $v=Q^\top s$ for $s\in\Z_q^n$.
+Now given ciphertexts $C,C'$ that encrypt $b,b'$ respectively, we will define $C \oplus C' = C + C' \pmod{q}$ and $C \otimes C' = \widehat{(CQ^\top)}C'$.
+
+
 Since we have $Cv = bv + e$ and $C'v = b'v + e'$ we get that
 
 $$(C\oplus C')v = (C+C')v = (b+b')v + (e+e') \label{eqfheaddfinal}$$
 
 and
 
-$$(C\otimes C')s = \widehat{CQ^\top}C's = \widehat{CQ^\top}(b'Q^\top s+e')=b'C Q^\top s+\widehat{CQ^\top}e' = b'bv + (b'e + \hat{C}e') \label{eqfhemultfinal} \;.$$
+$$(C\otimes C')v = \widehat{(CQ^\top)}C'v = \widehat{(CQ^\top)}(bv+e') \;. \label{fhemultfinaleqfirst}$$
 
-Combining this we can see that if we define
+But since $v=Q^\top s$ and $\hat{A}Q^\top = A$ for every matrix $A$, the righthand side of [fhemultfinaleqfirst](){.eqref} equals
+
+$$\widehat{(CQ^\top)}(b'Q^\top s+e')=b'C Q^\top s+\widehat{(CQ^\top)}e' = b'Cv + \widehat{(CQ^\top)}e' \label{fhemultfinaleqsec}$$
+
+but since $\widehat{B}$ is a matrix with small coefficients for every $B$ and $e'$ is short, the righthand side of [fhemultfinaleqsec](){.eqref} equals $b'Cv$ up to a short vector, and since $Cv=bv+e$ and $b'e$ is short, we get that $(C\otimes C')v$ equals $b'bv$ plus a short vector as desired.
+
+
+If we keep track of the parameters in the above analysis, we can see that
 
 $$C \overline{\wedge} C' = (I - C \otimes C')$$
 
-then if $C$ encrypts $b$ and $C'$ encrypts $b'$ with noise parameters $\mu$ and $\mu'$ respectively then $C \overline{\wedge} C'$ encrypts $b \; NAND b'$ with noise parameter at most $\mu + n\log q \mu'$.
+then if $C$ encrypts $b$ and $C'$ encrypts $b'$ with noise vectors $e,e'$ satisfying $\max |e_i| \leq \mu$ and $\max |e'_i| \leq \mu'$ then  $C \overline{\wedge} C'$ encrypts $b \; NAND b'$ up to a vector of maximum magnitude at most $O(\mu + n\log q \mu')$.
 
 
 ## Putting it all together
@@ -161,14 +178,32 @@ We are going to use a quantitatively stronger version of LWE.
 Namely,  the $q(n)$-dLWE assumption for $q(n)=2^{\sqrt{n}}$.
 It is not hard to show that we can relax our assumption to $q(n)$-LWE $q(n)=2^{polylog(n)}$  and Brakerski and Vaikuntanathan showed how to relax the assumption to standard (i.e. $q(n)=poly(n)$) LWE though we will not present this here.
 
+![In our fully homomorphic encryption, the public key is a trapdoor generator $G_s$. To encrypt a bit $b$, we output $C=\widehat{(bQ^\top +D)}$ where $D$ is a $(n\log q) \times n$ matrix whose rows are generated using $G_s$.](../figure/fheenc.png){#fheencfig .class width=300px height=300px}
 
-* **Key generation:**  As in the scheme of last lecture the secret key is $s\in\Z_s^n$ with $s_1 = \floor{\tfrac{q}{2}}$ and the public key is a generator $G_s$ such that samples from $G_s(1^n)$ are indistinguishable from independent random samples from $\Z_q^n$ but if $c$ is output by $G_s$ then $|\iprod{c,s}|<\sqrt{q}$, where the inner product (as all other computations) is done modulo $q$ and for every $x\in\Z_q=\{0,\ldots,q-1\}$ we define $|x|=\min \{ x, q-x \}$.
+![We decrypt a ciphertext $C=\widehat{(bQ^\top +D)}$ by looking at the first coordinate of $CQ^\top s$ (or equivalently, $CQ^\top Q\hat{s}$). If $b=0$ then this equals to the first coordinate of $Ds$, which is at most $\sqrt{q}$ in magintude. If $b=1$ then we get an extra factor of $Q^\top s$ which we set to be in the interval $(0.499q,0.51q)$. We can think of either $s$ or $\hat{s}$ as our secret key.](../figure/fhedec.png){#fhedecfig .class width=300px height=300px}
 
-* **Encryption:** To encrypt $b\in\{0,1\}$, let $c_1,\ldots,c_(n\log q) \leftarrow_R G(1^n)$ output $C=\widehat{bQ^\top +D}$ where $D$ is the matrix whose rows are $c_1,\ldots,c_{n\log q}$.
+>__FHEENC:__ \
+>
+* **Key generation:**  As in the scheme of last lecture the secret key is $s\in\Z_s^n$ and the public key is a generator $G_s$ such that samples from $G_s(1^n)$ are indistinguishable from independent random samples from $\Z_q^n$ but if $c$ is output by $G_s$ then $|\iprod{c,s}|<\sqrt{q}$, where the inner product (as all other computations) is done modulo $q$ and for every $x\in\Z_q=\{0,\ldots,q-1\}$ we define $|x|=\min \{ x, q-x \}$.
+This time, rather than letting $s_1 = \floor{q/2}$, we will ensure that $(Q^\top s)_1$ is roughly $q/2$. We can either ensure this exactly equals $\floor{q/2}$ in the same way as before, or we can repeatedly sample $s$ until this value (which is uniform in $\{0,\ldots,q-1\}$) lands in the interval $(0.499q,0.501q)$).
+>
+* **Encryption:** To encrypt $b\in\{0,1\}$, let $d_1,\ldots,d_(n\log q) \leftarrow_R G_s(1^n)$ output $C=\widehat{(bQ^\top +D)}$ where $D$ is the matrix whose rows are $d_1,\ldots,d_{n\log q}$ generated from $G_s$. (See [fheencfig](){.ref})
+>
+* **Decryption:** To decrypt the ciphertext $C$, we output $0$ if $|(CQ^\top s)_1|<0.1q$ and $1$ if $0.6q>|(CQ^\top s)_1|>0.4q$, see [fhedecfig](){.ref}. (It doesn't matter what we output on other cases.)
+>
+* **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \overline{\wedge} C'$ as $I- \widehat{(CQ^\top)}C'$, $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
+>
 
-* **Decryption:** To decrypt the ciphertext $C$, we output $0$ if $|(CQ^\top s)_1|<0.1q$ and $1$ if $0.6q>|(CQ^\top s)_1|>0.4q$. (It doesn't matter what we output on other cases.)
 
-* **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \overline{\wedge} C'$ as $I- \widehat{CQ^\top}C'$, $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
+ \
+
+> # { .pause }
+Please take your time to read the definition of the scheme, and go over
+[fheencfig](){.ref} and [fhedecfig](){.ref} to make sure you understand it.
+
+
+
+
 
 ## Analysis of our scheme
 
@@ -186,29 +221,36 @@ Once we obtain 1-4 above, we have proven the existence of a fully homomorphic en
 
 ### Correctness
 
-To ensure correctness, it suffices to show that for every bit $b$,  if $C$ is the encryption of $b$ then it is an $(n\log q)\times (n \log q)$ matrix satisfying
+Correctness of the scheme will follow from the following stronger condition:
 
+> # {.lemma #fhecorrectlem}
+For every $b \in \{0,1\}$,  if $C$ is the encryption of $b$ then it is an $(n\log q)\times (n \log q)$ matrix satisfying
 $$CQ^\top s = bQ^\top s + e$$
-
 where $\max |e_i| \ll q$.
 
+> # {.proof data-ref="fhecorrectlem"}   
 For starters, let us see that the dimensions make sense: the encryption of $b$ is computed by $C=\widehat{bQ^\top +D}$ where $D$ is an $(n\log q)\times n$ matrix satisfying $|Ds|_i \leq \sqrt{q}$ for every $i$ and $I$ is the $(n\log q)\times (n\log q)$.
+>
 Since $Q^\top$ is also an $(n \log q) \times n$ matrix, adding $bQ^\top+D$ makes sense and applying the $\hat{\cdot}$ operation will transform every row to length $n\log q$ and hence $C$ is indeed a square $(n\log q)\times (n \log q)$ matrix.
-
+>
 Let us now see what this matrix does to the vector $v=Q^\top s$.
 Using the fact that $\hat{M}Q^\top = M$ for every matrix $m$, we get that
-
+>
 $$Cv = (bQ^\top + D) s = bv+  Ds$$
+>
+but by construction $|(Ds)_i| \leq \sqrt{q}$ for every $i$.
 
-but by construction $|(Ds)_i| \leq \sqrt{q}$ for every $i$, hence completing the proof of correctness.
+[fhecorrectlem](){.ref} implies correctness of decryption since by construction we ensured that $(Q^\top s)_1 \in (0.499q,0.5001q)$ and hence we get that if $b=0$ then  $|(Cv)_1|=o(q)$ and if $b=1$ then $0.499q-o(q) \leq |(C_v)_1|  \leq 0.501q + o(q)$.
 
 
 ### CPA Security
 
 To show CPA security we need to show that an encryption of $0$ is indistinguishable from an encryption of $1$.
-However, by the security of the pseudorandom generator, an encryption of $b$ computed according to our algorithm will be indistinguishable from an encryption of $b$ obtained when the matrix $D$ is a random $(q\log n)\times n$ matrix.
-Now in this case the encryption is obtained by applying the $\hat{\cdot}$ operation to $bQ^\top +D$ but if $D$ is uniformly random then for every choice of $b$, $bQ^\top + D$ is uniformly random (since a fixed number plus a random number modulo $q$ yields a random number) and hence the matrix $bQ^\top + D$ (and so also the matrix $\widehat{bQ^\top+D}$) contains no information about $b$.
+However, by the security of the trapdoor generator, an encryption of $b$ computed according to our algorithm will be indistinguishable from an encryption of $b$ obtained when the matrix $D$ is a random $(q\log n)\times n$ matrix.
+Now in this case the encryption is obtained by applying the $\hat{\cdot}$ operation to $bQ^\top +D$ but if $D$ is uniformly random then for every choice of $b$, $bQ^\top + D$ is uniformly random (since a fixed matrix plus a random matrix  yields a random matrix) and hence the matrix $bQ^\top + D$ (and so also the matrix $\widehat{bQ^\top+D}$) contains no information about $b$.
 This completes the proof of CPA security (can you see why?).
+
+
 If we want to plug in this scheme in the bootstrapping theorem, then we will also assume that it  is _circular secure_.
 It seems a reasonable assumption though unfortuantely at the moment we do not know how to derive it from LWE.
 (If we don't want to make this assumption we can still obtained a _leveled_ fully homomorphic encryption as discussed in the previous lecture.)
@@ -216,19 +258,21 @@ It seems a reasonable assumption though unfortuantely at the moment we do not kn
 ### Homomorphism
 
 Let $v=Qs$, $b\in\{0,1\}$ and $C$ be a ciphertext such that $Cv = bv + e$.
-We define the _noise_ of $C$, denoted as $noise(C)$ to be the maximum of $|e_i|$ over all $i\in[n\log q]$.
+We define the _noise_ of $C$, denoted as $\mu(C)$ to be the maximum of $|e_i|$ over all $i\in[n\log q]$.
 We make the following lemma, which we'll call the "noisy homomorphism lemma":
 
 > # {.lemma #noisehomolem}
-Let $C,C'$ be ciphertexts encrypting $b,b'$ respectively with $noise(C),noise(C')\leq q/4$.
-Then $C''=C \overline{\wedge} C'$ encrypts $b\; NAND\; b'$ with
-$noise(C'') \leq (2n\log q)\max\{ noise(C), noise(C') \}$
+Let $C,C'$ be ciphertexts encrypting $b,b'$ respectively with $\mu(C),\mu(C')\leq q/4$.
+Then $C''=C \overline{\wedge} C'$ encrypts $b\; NAND\; b'$ and satisfies
+$$\mu(C'') \leq (2n\log q)\max\{ \mu(C), \mu(C') \} \label{eqnoisebound}$$
 
 > # {.proof data-ref="noisehomolem"}
 This follows from the calculations we have done before.
 As we've seen,
 $$\widehat{CQ^\top}C'v = \widehat{CQ^\top}(b'v+e') = b'\widehat{CQ^\top}Q^\top s + \widehat{CQ^\top}e' = b'(Cv)+ \widehat{CQ^\top}e' = bb'v + b'e+ \widehat{CQ^\top}e'$$
 But since $\widehat{CQ^\top}$ is a $0/1$ matrix with every row of length $n\log q$, for every $i$  $(\widehat{CQ^\top}e')_i \leq (n\log q)\max_j |e_j|$.
+We see that the noise vector in the product has magnitude at most $\mu(C)+n\log q \mu(C')$.
+Adding the identity for the NAND operation adds at most $\mu(C)+\mu(C')$ to the noise, and so the total noise magnitude is  bounded by the righthand side of [eqnoisebound](){.eqref}.
 
 
 ### Shallow decryption circuit
@@ -239,37 +283,50 @@ $$f(d) = D_d(C) \;NAND\; D_d(C')$$
 
 can be homomorphically evaluated where $d$ is the secret key and $D_d(C)$ denotes the decryption algorithm applied to $C$.
 
-In our case the secret key is the descrption $\hat{s}$ of our vector $s$ as a bit string of length $n\log q$.
-Given a ciphertext $C$, the decryption algorithm takes the dot product modulo $q$ of $s$ with the first row of $CQ^\top$ and outputs $0$ (respectively $1$) if the resulting number is small (respectively large).
+In our case we can think of the secret key as the binary string $\hat{s}$ which describes our vector $s$ as a bit string of length $n\log q$.
+Given a ciphertext $C$, the decryption algorithm takes the dot product modulo $q$ of $s$ with the first row of $CQ^\top$ (or, equivalently, the dot product of $\hat{q}$ with $CQ^\top Q$) and outputs $0$ (respectively $1$) if the resulting number is small (respectively large).
 
 
 By repeatedly applying the noisy homomorphism lemma ([noisehomolem](){.ref}), we can show that can homorphically evaluate every circuit of NAND gates whose _depth_ $\ell$  satisfies $(2n\log q)^\ell \ll q$.
 If $q = 2^{\sqrt{n}}$ then (assuming $n$ is sufficiently large) then as long as $\ell < n^{0.49}$ this will be satisfied.
+
 In particular to show that $f(\cdot)$ can be homomorphically evaluated it will suffice to show that for every fixed vector $c\in \Z_q^{n\log q}$ there is a $polylog(n) \ll n^{0.49}$ depth circuit $F$ that on input a string $\hat{s}\in\{0,1\}^{n \log q}$ will output $0$ if $|\iprod{c,\hat{s}}|  < q/10$ and output $1$ if $|\iprod{c,\hat{s}}|  > q/5$.
-(We don't care what $F$ does otherwise. The above suffices since given a ciphertext $C$ we can use $f$ with the vector $c$ being the top row of $CQ^\top Q$, and hence $\iprod{c,\hat{s}}$ would correspond to the first entry of $CQ^\top s$. Note that if $F$ has depth $\ell$ then the function $f()$ above has depth at most $\ell+1$.)
+(We don't care what $F$ does otherwise. The above suffices since given a ciphertext $C$ we can use $F$ with the vector $c$ being the top row of $CQ^\top Q$, and hence $\iprod{c,\hat{s}}$ would correspond to the first entry of $CQ^\top s$. Note that if $F$ has depth $\ell$ then the function $f()$ above has depth at most $\ell+1$.)
+
+> # { .pause }
+Please make sure you understand the above argument.
+
+If $c=(c_1,\ldots,c_{n\log q})$ is a vector then to compute its inner product with a $0/1$ vector $\hat{s}$ we simply need to sum up the numbers $c_i$  where $\hat{s}_i=1$.
+Summing up $m$ numbers can be done via the obvious recursion in depth that is $\log m$ times the depth for a single addition of two numbers.
+However, the naive way to add two numbers in $\Z_q$ (each represented by $\log q$ bits) will have depth $O(\log q)$ which is too much for us.
+
+> # { .pause }
+Please stop here and see if you understand why the natural circuit to compute the addition of two numbers modulo $q$ (represented as $\log q$-length binary strings) will require depth $O(\log q)$.
+As a hint, one needs to keep track of the "carry".
 
 
-If $c=(c_1,\ldots,c_{n\log q})$ is a vector then to compute its inner product with a $0/1$ vector $s$ we simply need to sum up the numbers $c_i$  where $s_i=1$.
-Summing up $n'$ numbers can be done via the obvious recursion in depth that is $\log n'$ times the depth for a single addition of two numbers.
-However, the naive way to add two numbers in $\Z_q$ will have depth $poly(\log q)$ which is too much for us.
-Fortunately, because we only care about accuracy up to $q/10$, we can drop all but the first $100\log (n')$ most significant digits of our numbers, since including them can change the sum of the $n$ numbers by at most $n'(q/(n')^{100}) \ll q$.
-Hence we can easily do this work in $poly(\log n'=poly(\log n)$ depth.
+
+Fortunately, because we only care about accuracy up to $q/10$, if we add $m$ numbers, we can drop all but the first $100\log m$ most significant digits of our numbers, since including them can change the sum of the $n$ numbers by at most $m(q/m^{100}) \ll q$.
+Hence we can easily do this work in $poly(\log m)$  depth, which is $poly(\log n)$ since $m=poly(n)$.
 
 Let us now show this more formally:
 
 
 > # {.lemma #decdepthlem}
 For every $c\in\Z_q^m$ there exists some function $f:\{0,1\}^m\rightarrow\{0,1\}$ such that: \
-1. $f(\hat{s})=0$ if $|\iprod{\hat{s},c}|<0.1q$ \
-2. $f(\hat{s})=1$ if $0.4q<|\iprod{\hat{s},c}|<0.6q$ and \
+1. For every $\hat{s}\in \{0,1\}^n$ such that  $|\iprod{\hat{s},c}|<0.1q$, $f(\hat{s})=0$ \
+2. For every $\hat{s}\in \{0,1\}^n$ such that $0.4q<|\iprod{\hat{s},c}|<0.6q$, $f(\hat{s})=1$ \
 3. There is a circuit computing $f$ of depth at most $100(\log m)^3$.
 
 > # {.proof data-ref="decdepthlem"}
 For every number $x\in\Z_q$, write $\tilde{x}$ to be the number that is obtained by writing $x$ in the binary basis and setting all digits except the $10\log m$ most significant ones to zero.  
-Note that $\tilde{x} \leq x \leq \tilde{x} + x+q/m^{10}$. We define $f(\hat{s})$ to equal $1$ if $|\sum \hat{s}_i \tilde{c}_i  (\mod \tilde{q})| \geq 0.3\tilde{q}$ and to equal $0$ otherwise (where as usual the absolute value of $x$ modulo $\tilde{q}$ is the minimum of $x$ and $\tilde{q}-x$.) Note that all numbers involved have zeroes in all but the $10\log m$ most significant digits and so these less significant digits can be ignored.
+Note that $\tilde{x} \leq x \leq \tilde{x} + q/m^{10}$.
+We define $f(\hat{s})$ to equal $1$ if $|\sum \hat{s}_i \tilde{c}_i  (\mod \tilde{q})| \geq 0.3\tilde{q}$ and to equal $0$ otherwise (where as usual the absolute value of $x$ modulo $\tilde{q}$ is the minimum of $x$ and $\tilde{q}-x$.)
+Note that all numbers involved have zeroes in all but the $10\log m$ most significant digits and so these less significant digits can be ignored.
 Hence we can add any pair of such numbers modulo $\tilde{q}$ in depth $O(\log m)^2$ using the standard elementary school algorithm to add two $\ell$-digit numbers in $O(\ell^2)$ steps.
 Now we can add the $m$ numbers by adding pairs, and then adding up the results, and this way in a binary tree of depth $\log m$ to get a total depth of $O(\log m)^3$.
 So, all that is left to prove is that this function $f$ satisfies the conditions (1) and (2).
+>
 Note that $|\sum \hat{s}_i \tilde{c}_i - \sum \hat{s}_i c_i | < mq/m^10 = q/m^9$ so now we want to show that the effect of taking modulo $\tilde{q}$ is not much different from taking modulo $q$.
 Indeed, note that this sum (before a modular reduction) is an integer between $0$ and $qm$. If $x$ is such an integer and we
 divide $x$ by $q$ to write $x = kq+ r$ for $r<q$, then since $x<qm$, $k<m$, and so we can write $x = k\tilde{q} + k(q-\tilde{q})+r$ so the difference between $k \mod q$ and $k \mod{\tilde{q}}$ will be (in our standard modular metric)  at most $mq/m^{10}=q/m^9$. Overall we get that if $\sum \hat{s}_i c_i \mod{q}$ is in the interval $[0.4q, 0.6q]$ then $\sum \hat{s}_i \tilde{c}_i ( \mod{\tilde{q}})$ will be in the interval $[0.4q-100q/m^9, 0.6q+100q/m^9]$ which is contained in $[0.3\tilde{q},0.7\tilde{q}]$.

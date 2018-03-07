@@ -138,6 +138,8 @@ The _LWE conjecture_ is that for every polynomial $p(n)$ there is some polynomia
 
 It turns out that if the LWE is hard, then it is even hard to distinguish between random equations and nearly correct ones:
 
+![The search to decision reduction ([LWEsearchtodecthm](){.ref}) implies that under the LWE conjecture,  for every $m=poly(n)$, if we choose and fix a random $m\times n$ matrix $A$ over $\Z_q$, the distribution $Ax+e$ is indistinguishable from a random vector in $\Z_q^m$, where    $x$ is  a random vector in $\Z_q^n$ and $e$ is a random "short" vector in $\Z_q^m$. The two distributions are indistinguishable even to an adversary that knows $A$.](../figure/lwevecindist.png){#figid .class width=300px height=300px}
+
 
 > # {.theorem title="Search to decision reduction for LWE" #LWEsearchtodecthm}
 If the LWE conjecture is true then for every $q=poly(n)$ and $\delta=1/poly(n)$ and $m=poly(n)$, the following two distributions are computationally
@@ -183,6 +185,13 @@ We can now show the secure variant of our original encryption scheme:
 * _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|\iprod{a,x}-\sigma|<q/10$.
 
  \
+
+
+> # { .pause }
+The scheme LWEENC is also described in [lweencdescfig](){.ref} with slightly different notation. I highly recommend you stop and verify you understand why the two descriptions are equivalent.
+
+
+![In the encryption scheme LWEENC, the public key is a matrix $A'=(A|y)$, where $y=As+e$ and $s$ is the secret key. To encrypt a bit $b$ we choose a random $w \leftarrow_R \{0,1\}^m$, and output $w^\top A' + (0,\ldots,0,b\floor{\tfrac{q}{2}})$. We decrypt $c \in \Z_q^{n+1}$ to zero with key $s$ iff $|\iprod{c,(s,-1)}| \leq q/10$ where the inner product is done modulo $q$. ](../figure/lweencdesc.png){#lweencdescfig .class width=300px height=300px}
 
 
 
