@@ -186,7 +186,7 @@ This time, rather than letting $s_1 = \floor{q/2}$, we will ensure that $(Q^\top
 >
 * **Encryption:** To encrypt $b\in\{0,1\}$, let $d_1,\ldots,d_(n\log q) \leftarrow_R G_s(1^n)$ output $C=\widehat{(bQ^\top +D)}$ where $D$ is the matrix whose rows are $d_1,\ldots,d_{n\log q}$ generated from $G_s$. (See [fheencfig](){.ref})
 >
-* **Decryption:** To decrypt the ciphertext $C$, we output $0$ if $|(CQ^\top s)_1|<0.1q$ and $1$ if $0.6q>|(CQ^\top s)_1|>0.4q$, see [fhedecfig](){.ref}. (It doesn't matter what we output on other cases.)
+* **Decryption:** To decrypt the ciphertext $C$, we output $0$ if $|(CQ^\top s)_1|<0.1q$ and output $1$ if $0.6q>|(CQ^\top s)_1|>0.4q$, see [fhedecfig](){.ref}. (It doesn't matter what we output on other cases.)
 >
 * **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \overline{\wedge} C'$ as $I- \widehat{(CQ^\top)}C'$, $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
 
