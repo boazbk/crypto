@@ -188,7 +188,7 @@ This time, rather than letting $s_1 = \floor{q/2}$, we will ensure that $(Q^\top
 >
 * **Decryption:** To decrypt the ciphertext $C$, we output $0$ if $|(CQ^\top s)_1|<0.1q$ and output $1$ if $0.6q>|(CQ^\top s)_1|>0.4q$, see [fhedecfig](){.ref}. (It doesn't matter what we output on other cases.)
 >
-* **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \overline{\wedge} C'$ as $I- \widehat{(CQ^\top)}C'$, $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
+* **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \overline{\wedge} C'$ (sometimes also denoted as $NANDEVAL(C,C')$) to equal  $I- \widehat{(CQ^\top)}C'$, where $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
 
  \
 
