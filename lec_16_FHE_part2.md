@@ -182,7 +182,7 @@ It is not hard to show that we can relax our assumption to $q(n)$-LWE $q(n)=2^{p
 >__FHEENC:__
 >
 * **Key generation:**  As in the scheme of last lecture the secret key is $s\in\Z_s^n$ and the public key is a generator $G_s$ such that samples from $G_s(1^n)$ are indistinguishable from independent random samples from $\Z_q^n$ but if $c$ is output by $G_s$ then $|\iprod{c,s}|<\sqrt{q}$, where the inner product (as all other computations) is done modulo $q$ and for every $x\in\Z_q=\{0,\ldots,q-1\}$ we define $|x|=\min \{ x, q-x \}$.
-This time, rather than letting $s_1 = \floor{q/2}$, we will ensure that $(Q^\top s)_1$ is roughly $q/2$. We can either ensure this exactly equals $\floor{q/2}$ in the same way as before, or we can repeatedly sample $s$ until this value (which is uniform in $\{0,\ldots,q-1\}$) lands in the interval $(0.499q,0.501q)$).
+As before, we can assume that $s_1 = \floor{q/2}$ which implies that  $(Q^\top s)_1$ is also $\floor{q/2}$ since (as can be verified by direct inspection) the first row of $Q^\top$ is $(1,0,\ldots,0)$. 
 >
 * **Encryption:** To encrypt $b\in\{0,1\}$, let $d_1,\ldots,d_(n\log q) \leftarrow_R G_s(1^n)$ output $C=\widehat{(bQ^\top +D)}$ where $D$ is the matrix whose rows are $d_1,\ldots,d_{n\log q}$ generated from $G_s$. (See [fheencfig](){.ref})
 >
