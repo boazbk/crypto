@@ -168,7 +168,7 @@ If we keep track of the parameters in the above analysis, we can see that
 
 $$C \overline{\wedge} C' = (I - C \otimes C')$$
 
-then if $C$ encrypts $b$ and $C'$ encrypts $b'$ with noise vectors $e,e'$ satisfying $\max |e_i| \leq \mu$ and $\max |e'_i| \leq \mu'$ then  $C \overline{\wedge} C'$ encrypts $b \; NAND b'$ up to a vector of maximum magnitude at most $O(\mu + n\log q \mu')$.
+then if $C$ encrypts $b$ and $C'$ encrypts $b'$ with noise vectors $e,e'$ satisfying $\max |e_i| \leq \mu$ and $\max |e'_i| \leq \mu'$ then  $C \overline{\wedge} C'$ encrypts $b \; NAND\; b'$ up to a vector of maximum magnitude at most $O(\mu + n\log q \mu')$.
 
 
 ## Putting it all together
@@ -225,7 +225,7 @@ To show that that this scheme is a valid partially homomorphic scheme we need to
 
 2. **CPA security:** An encryption of $0$ is computationally indistinguishable from an encryption of $1$ to someone that got the public key.
 
-3. **Homomrphism:** If $C$ encrypts $b$ and $C'$ encrypts $b'$ then $C \overline{\wedge} C'$ encrypts $b\; NAND\; b'$ (with a higher amount of noise). The growth of the noise will be the reason that we will not get immediately a fully homomorphic encryption.
+3. **Homomorphism:** If $C$ encrypts $b$ and $C'$ encrypts $b'$ then $C \overline{\wedge} C'$ encrypts $b\; NAND\; b'$ (with a higher amount of noise). The growth of the noise will be the reason that we will not get immediately a fully homomorphic encryption.
 
 4. **Shallow decryption circuit:** To plug this scheme into the bootstrapping theorem we will need to show that its decryption algorithm (or more accurately, the function in the statement of the bootstrapping theorem)  can be evaluated in depth $polylog(n)$ (independently of $q$), and that moreover, the noise grows slowly enough that our scheme is homomorphic with respect to such circuits.
 
