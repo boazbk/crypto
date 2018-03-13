@@ -10,12 +10,11 @@ Typically a proof that some assertion X is true, also reveals some information a
 When Hercule Poirot proves that Norman Gale killed Madame Giselle he does so by showing _how_ Gale committed the murder by dressing up as a flight attendant and stabbing Madame Gisselle with a poisoned dart.
 Could Hercule convince us beyond a reasonable doubt that Gale did the crime without giving any information on _how_ the crime was committed?
 Can the Russians prove to the U.S. that a sealed box contains an authentic nuclear warhead without revealing anything about its design?
-Can I prove to you that the number $m=385,608,108,395,369,363,400,501,273,594,475,104,405,448,848,047,062,278,473,983$ has a prime factor whose last digit is $7$ without giving you any information about  $m$'s prime factors?
+Can I prove to you that the number $m=385,608,108,395,369,363,400,501,273,594,475,104,405,448,848,047,062,278,473,983$ has a prime factor whose last digit is $7$ without giving you any information about  $m$'s prime factors?^[In case you are curious, the factors of $m$ are $1,172,192,558,529,627,184,841,954,822,099$ and $328,963,108,995,562,790,517,498,071,717$.]
 We won't answer the first question, but will show some insights on the latter two.
 
-<!-- [^factors]: In case you are curious, the factors of $m$ are $1,172,192,558,529,627,184,841,954,822,099$ and $328,963,108,995,562,790,517,498,071,717$. --->
-
-_Zero knowledge proofs_ are proofs that fully convince that a statement is true without yielding _any additional knowledge_. So, after seeing a zero knowledge proof that $m$ has a factor ending with $7$, you'll be no
+_Zero knowledge proofs_ are proofs that fully convince that a statement is true without yielding _any additional knowledge_.
+So, after seeing a zero knowledge proof that $m$ has a factor ending with $7$, you'll be no
 closer to knowing $m$'s factorization than you were before.
 Zero knowledge proofs were invented by Goldasser, Micali and Rackoff in 1982 and have since been used in great many settings.
 How would you achieve such a thing, or even define it? And why on earth would it be useful?
@@ -28,15 +27,17 @@ Before we  talk about how to achieve zero knowledge, let us discuss some of its 
 
 ### Nuclear disarmanent
 
-I think it's fair to say that Barack Obama and Vladimir Putin don't see eye to eye on too many topics.
-However, one point they do agree on is the need for both the U.S. and Russia to reduce their nuclear arsenal.
-Obama has called in 2009 to set as a long term goal a "world without nuclear weapons" and in 2012 talked about concretely talking to Russia about reducing  "not only our strategic nuclear warheads, but also tactical weapons and warheads in reserve".
-Putin has said already in 2000 that he sees "no obstacles that could hamper future deep cuts of strategic offensive armaments" (though lately has been talking about developing new missiles).
-This is not surprising.
-The two countries have reached a dangerous and expensive equilibrium by which each has about [7000 nuclear warheads](https://www.armscontrol.org/factsheets/Nuclearweaponswhohaswhat), much more than is needed to wipe out human civilization
-many times over.[^population]
-This not only increases the chance of "leakage" of weapons, but also threatens the delicate balance of the [Non-Proliferation Treaty](https://en.wikipedia.org/wiki/Treaty_on_the_Non-Proliferation_of_Nuclear_Weapons) which at its core is a bargain where non-weapons states agree not to pursue nuclear weapons and the five nuclear weapon states agree to make progress on nuclear disarmament.
+The United States and Russia have reached a dangerous and expensive equilibrium by which each has about [7000 nuclear warheads](https://www.armscontrol.org/factsheets/Nuclearweaponswhohaswhat), much more than is needed to decimate each others' population (and the population of much of the rest of the world).[^population]
+Havine so many weapons increases the chance of "leakage" of weapons, or of a launch (which can result in a an all our war) through fault in communications or rogue commanders.
+This also threatens the delicate balance of the [Non-Proliferation Treaty](https://en.wikipedia.org/wiki/Treaty_on_the_Non-Proliferation_of_Nuclear_Weapons) which at its core is a bargain where non-weapons states agree not to pursue nuclear weapons and the five nuclear weapon states agree to make progress on nuclear disarmament.
 These weapons are also very expensive to maintain.
+
+
+
+These huge quantities of nuclear weapons are not only dangerous, as they increase the chance of a leak or of an individual failure or rogue commander causing a world catastrophe, but also extremely expensive to maintain.
+Indeed, U.S. President Obama called in 2009 to set as a long term goal a "world without nuclear weapons" and in 2012 talked about concretely talking to Russia about reducing  "not only our strategic nuclear warheads, but also tactical weapons and warheads in reserve".
+On the other side, Russian President Putin has said already in 2000 that he sees "no obstacles that could hamper future deep cuts of strategic offensive armaments" (though lately has been talking about developing new missiles).
+
 There are many reasons why progress on nuclear disarmanent has been so slow, and most of them have nothing to do with zero knowledge or any other piece of technology.
 But there are some technical hurdles as well.
 One of those hurdles is that for the U.S. and Russia to go beyond restricting the number of _deployed_ weapons to significantly reducing the _stockpiles_, they need to find a way for one country to verifiably prove that it has dismantled warheads.
@@ -65,7 +66,8 @@ An alternative approach to such identification protocols is through using _digit
 
 [^pok]: As we'll see, technically what Alice needs to do in such a scenario is use a _zero knowledge proof of knowledge_ of a solution for $P$.
 
-Another very generic application is for "compiling protocols". As we've seen time and again, it is often much easier to handle passive adversaries than active ones.
+Another very generic application is for "compiling protocols". As we've seen time and again, it is often much easier to handle _passive_ adversaries than _active_ ones.
+(For example, it's much easier to get CPA security against the eavesdropping Eve than CCA security against the person-in-the-middle Mallory.)
 Thus it would be wonderful if we could "compile" a protocol that is secure with respect to passive attacks into one that is secure with respect to active ones.
 As was first shown by Goldreich, Micali, and Wigderson, zero knowledge proofs yield a very general such compiler.
 The idea is that all parties prove in zero knowledge that they follow the protocol's specifications.
@@ -86,7 +88,6 @@ For example:
 * In [_Zermalo-Frankel + Axiom of Choice (ZFC)_](https://en.wikipedia.org/wiki/Zermelo%E2%80%93Fraenkel_set_theory) a _statement_ is some purported fact about sets (e.g., the Reimann Hypothesis[^encoding]), and a _proof_ is a step by step derivation of it from the axioms.
 
 * We can many define other "theories". For example, a theory where the statements are pairs $(x,m)$ such that $x$ is a quadratic residue modulo $m$  and a proof for $x$ is the number $s$ such that $x=s^2 \pmod{m}$, or a theory where the theorems are _Hamlitonian_ graphs $G$ (graphs on $n$ vertices that contain an $n$-long cycle) and the proofs are the description of the cycle.
-
 
 
 [^encoding]: Integers can be coded as sets in various ways. For example, one can encode $0$ as $\emptyset$ and if $N$ is the set encoding $n$, we can encode $n+1$ using the set $|N|+1$ cardinality set  $\{ N \} \cup N$.   
@@ -125,11 +126,19 @@ Thus if Alice always succeeds then after $n$ repetitions Bob can have $1-2^{-n}$
 
 Let us now make the formal definition:
 
-__Definition:__ Let $L$ be some subset of $\{0,1\}^*$. A _probabilistic proof for $L$_ is a pair of interactive algorithms $(P,V)$ such that $V$ runs in polynomial time and:
 
-* __Completeness:__ If $x\in L$ then on input $x$, if $P$ and $V$ are given input $x$ and interact, then at the end of the interaction $V$ will output ```Accept``` with probability at least $0.9$.
+> # {.definition title="Proof systems" #proofsystemdef}
+Let $f:\{0,1\}^* \rightarrow \{0,1\}$ be some function.
+A _probabilistic proof for $f$_ (i.e., a proof for statements of the form "$f(x)=1$") is a pair of interactive algorithms $(P,V)$ such that $V$ runs in polynomial time and they satisfy:
+>
+* __Completeness:__ If $f(x)=1$ then on input $x$, if $P$ and $V$ are given input $x$ and interact, then at the end of the interaction $V$ will output ```Accept``` with probability at least $0.9$.
+>
+* __Soundness:__ If If $f(x)=0$ then for any arbitrary (efficient or non efficient) algorithm $P^*$, if $P^*$ and $V$ are  given input $x$  and interact then at the end $V$ will output ```Accept``` with probability at most $0.1$
 
-* __Soundness:__ If If $x\not\in L$ then for any arbitrary (efficient or non efficient) algorithm $P^*$, if $P^*$ and $V$ are  given input $x$  and interact then at the end $V$ will output ```Accept``` with probability at most $0.1$
+> # {.remark title="Functions vs languages" #funclangrem}
+In many texts proof systems are defined with respect to _languages_ as opposed to _functions_. That is, instead of talking about a function $f:\{0,1\}^* \rightarrow \{0,1\}$ we talk about a _lanugage_ $L \subseteq \{0,1\}^*$.
+These two viewpoints are completely equivalent via the mapping $f \longleftrightarrow L$ where $L = \{ x \;| f(x) = 1 \}$.
+
 
 Note that we don't necessarily require the prover to be efficient (and indeed, in examples such as the graph non-isomorphism question, it might not be).
 On the other hand, our soundness condition holds even if the prover uses a non efficient strategy.[^arguments]
@@ -138,7 +147,9 @@ We say that a proof system has an _efficient prover_ if there is an NP-type  pro
 
 [^arguments]: People have considered the notions of zero knowledge systems where soundness holds only with respect to efficient provers; these are known as _argument systems_.
 
->__Notation for strategies:__ Up until now, we always considered cryptographic protocols where Alice and Bob trusted one another, but were worries about some adversary controlling the channel between them. Now we are in a somewhat more "suspicious" setting where the parties do not fully trust one another. In such protocols there is always a "prescribed" or **honest** strategy that a particular party _should_ follow, but we generally don't want the other parties' security to rely on some else's good intention, and hence analyze also the case where a party uses an arbitrary **malicious** strategy. We sometimes also consider the **honest but curious** case where the adversary is passive and only collects information, but does not deviate from the prescribed strategy. Note that protocols typically only guarantee security for party A when it behaves honestly - a party can always chose to violate its own security and there is not much we can (or should?) do about it.
+> # {.remark title="Notation for strategies" #strategies}
+Up until now, we always considered cryptographic protocols where Alice and Bob trusted one another, but were worries about some adversary controlling the channel between them. Now we are in a somewhat more "suspicious" setting where the parties do not fully trust one another. In such protocols there is always a "prescribed" or **honest** strategy that a particular party _should_ follow, but we generally don't want the other parties' security to rely on some else's good intention, and hence analyze also the case where a party uses an arbitrary **malicious** strategy. We sometimes also consider the **honest but curious** case where the adversary is passive and only collects information, but does not deviate from the prescribed strategy. Note that protocols typically only guarantee security for party A when it behaves honestly - a party can always chose to violate its own security and there is not much we can (or should?) do about it.
+
 
 ## Defining zero knowledge
 
@@ -153,9 +164,13 @@ Can  she convince Bob that such an $s$ exist without revealing any information a
 __Protocol ZK-QR:__
 
 0. Public input for Alice and Bob: $x,m$; Alice's private input is $s$ such that $x=s^2 \pmod{m}$.
+
 1. Alice will pick a random $s'$ and send to Bob $x' = xs'^2 \pmod{m}$.
+
 2. Bob will pick a random bit $b\in\{0,1\}$ and send $b$ to Alice.
+
 3. If $b=0$ then Alice reveals $ss'$, hence giving out a root for $x'$; if $b=1$ then Alice reveals $s'$, hence showing a root for $x'x^{-1}$.
+
 4. Bob checks that the value $s''$ revealed by Alice is indeed a root of $x'x^{-b}$, if so then it "accepts" this round.
 
 If $x$ was _not_ a  quadratic residue then no matter how $x'$ was chosen, either $x'$ or $x'x^{-1}$ is _not_ a residue and hence Bob will reject each round eith probability at least $1/2$.
@@ -169,66 +184,79 @@ To define zero knowledge mathematically we follow the following intuition:
 Here is how we formally define this:
 
 
-__Definition:__ A proof system $(P,V)$ for $L$ is _zero knowledge_ if for every efficient verifier strategy $V^*$
-there exists an efficient probabilistic algorithm  $S^*$ (known as the _simulator_) such that for every $x\in L$,
+> # {.definition title="Zero knowledge proofs" #zkpdef}
+A proof system $(P,V)$ for $f$ is _zero knowledge_ if for every efficient verifier strategy $V^*$
+there exists an efficient probabilistic algorithm  $S^*$ (known as the _simulator_) such that for every $x$ s.t. $f(x)=1$,
 the following random variables are computationally indistinguishable:
-
+>
 * The output of $V^*$ after interacting with $P$ on input $x$.
-
-
+>
 * The output of $S^*$ on input $x$.
 
 That is, we can show the verifier does not gain anything from the interaction, because no matter what algorithm $V^*$ he uses, whatever he learned as a result of interacting with the prover, he could have just as equally learned by simply running the standalone algorithm $S^*$ on the same input.
 
 
-
->**The simulation paradigm:** The natural way to define security is to say that a system is secure if some "laundry list" of bad outcomes X,Y,Z can't happen. The definition of zero knowledge is different. Rather than giving a list of the events that are _not allowed_ to occur, it gives a maximalist _simulation_ condition. That is, at its heart the definition of zero knowledge says the following: clearly, we cannot prevent the verifier from running an efficient algorithm $S^*$ on the public input, but we want to ensure that this is the most he can learn from the interaction. This _simulation paradigm_ has become the standard way to define security of a great many cryptographic applications. That is, we bound what an adversary Eve can learn by postulating some hypothetical adversary Lilith that is under much harsher conditions (e.g., does not get to interact with the prover) and ensuring that Eve cannot learn anything that Lilith couldn't have learned either. This has an advantage of being the most conservative definition possible, and also phrasing security in _positive_ terms- there exists a simulation - as opposed to the typical _negative_ terms - events X,Y,Z can't happen. Since it's often easier for us to think of positive terms, paradoxically sometimes this stronger security condition is easier to prove. Zero knowledge is in some sense the simplest setting of the simulation paradigm and we'll see it time and again in dealing with more advanced notions.
+> # {.remark title="The simulation paradigm" #simulationrem}
+The natural way to define security is to say that a system is secure if some "laundry list" of bad outcomes X,Y,Z can't happen.
+The definition of zero knowledge is different. Rather than giving a list of the events that are _not allowed_ to occur, it gives a maximalist _simulation_ condition.
+That is, at its heart the definition of zero knowledge says the following: clearly, we cannot prevent the verifier from running an efficient algorithm $S^*$ on the public input, but we want to ensure that this is the most he can learn from the interaction.
+This _simulation paradigm_ has become the standard way to define security of a great many cryptographic applications.
+That is, we bound what an adversary Eve can learn by postulating some hypothetical adversary Lilith that is under much harsher conditions (e.g., does not get to interact with the prover) and ensuring that Eve cannot learn anything that Lilith couldn't have learned either.
+This has an advantage of being the most conservative definition possible, and also phrasing security in _positive_ terms- there exists a simulation - as opposed to the typical _negative_ terms - events X,Y,Z can't happen. Since it's often easier for us to think of positive terms, paradoxically sometimes this stronger security condition is easier to prove. Zero knowledge is in some sense the simplest setting of the simulation paradigm and we'll see it time and again in dealing with more advanced notions.
 
 
 The definition of zero knowledge is confusing since intuitively one thing that if the verifier gained confidence that the statement is true than surely he must have learned _something_.
 This is another one of those cases where cryptography is counterintuitive.
 To understand it better, it is worthwhile to see the formal proof that the protocol above for quadratic residousity is zero knowledge:
 
-__Theorem:__ Protocol ZK-QR above is a zero knowledge protocol.
 
-__Proof:__ Let $V^*$ be an arbitrary efficient strategy for Bob.
+> # {.theorem title="Zero knowledge for quadratic residuosity" #zkqrthm}
+Protocol ZK-QR above is a zero knowledge protocol.
+
+> # {.proof data-ref="zkqrthm"}
+Let $V^*$ be an arbitrary efficient strategy for Bob.
 Since Bob only sends a single bit, we can think of this strategy as composed of two functions:
-
+>
 * $V_1(x,m,x')$ outputs the bit $b$ that Bob chooses on input $x,m$ and after Alice's first message is $x'$.
-
+>
 * $V_2(x,m,x',s'')$ is whatevery Bob outputs after seeing Alice's response $s''$ to the bit $b$.
-
+>
 Both $V_1$ and $V_2$ are efficiently computable. We now need to come up with an efficient simulator $S^*$ that is a standalone algorithm that on input $x,m$ will  
 output a distribution indistinguishable from the output $V^*$.
 The simulator $S^*$ will work as follows:
-
+>
 1. Pick $b'\leftarrow_R\{0,1\}$.
+>
 2. Pick $s''$ at random in $\Z^*_m$. If $b=0$ then let $x'={s''}^2 \pmod{m}$. Otherwise output $x'=x{s''}^2 \pmod{m}$.
+>
 3. Let $b=V_1(x,m,x')$. If $b \neq b'$ then go back to step 1.
+>
 4. Output $V_2(x,m,x',s'')$.
-
+>
 The correctness of the simulator follows from the following claims (all of which assume that $x$ is actually a quadratic residue, since otherwise
 we don't need to make any guarantees and in any case Alice's behaviour is not well defined):
-
+>
 __Claim 1:__ The distribution of $x'$ computed by $S^*$ is identical to the distribution of $x'$ chosen by Alice.
-
+>
 __Claim 2:__ With probability at least $1/2$, $b'=b$.
-
+>
 __Claim 3:__ Conditioned on $b=b'$ and the value $x'$ computed in step 2, the value $s''$ computed by $S^*$ is identical to the value that Alice sends when her first message is $X'$ and Bob's response is $b$.
-
-Together these two claims imply that in expectation $S^*$ only invokes $V_1$ and $V_2$ a constant number of times (since every time it goes back to step 1 with probability at most $1/2$).
+>
+Together these three  claims imply that in expectation $S^*$ only invokes $V_1$ and $V_2$ a constant number of times (since every time it goes back to step 1 with probability at most $1/2$).
 They also imply that the output of $S^*$ is in fact identical to the output of $V^*$ in a true interaction with Alice.
 Thus, we only need to prove the claims, which is actually quite easy:
-
+>
 __Proof of Claim 1:__ In both cases, $x'$ is a random quadratic residue. QED
-
+>
 __Proof of Claim 2:__ This is a corollary of Claim 1; since the distribution of $x'$ is identical to the distribution chosen by Alice, in particular $x'$ gives out no information about the choice of $b'$. QED
-
+>
 __Proof of Claim 3:__ This follows from a direct calculation. The value $s''$ sent by Alice is a square root of $x'$ if $b=0$ and of $x'x^{-1}$ if $x=1$. But this is identical to what happens for $S^*$ if $b=b'$. QED
-
+>
 Together these complete the proof of the theorem.
 
-This is not enough since the protocol that we really need to show is zero knowledge is the one where we repeat this procedure $n$ times.
+
+[zkqrthm](){.ref} is interesting but not yet good enough to guarantee security in practice.
+After all, the protocol that we really need to show is zero knowledge is the one where we repeat this procedure $n$ times.
 This is a general theorem that if a protocol is zero knowledge then repeating it polynomially many times one after the other
 (so called "sequential repetition") preserves zero knowledge.
 You can think of this as cryptography's version of the equality "$0+0=0$", but as usual, intuitive things are not always correct and so this theorem does require (a not super trivial) proof.
