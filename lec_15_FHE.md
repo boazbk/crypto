@@ -154,8 +154,8 @@ Note that if $y$ is a random vector in $\Z_q^m$ then so is $-\beta y$ and so the
 
  \
 
-The decryption algorithm recivers the original plaintext since   $\iprod{c,s}= w^\top A s + s_1 b$ and $|w^\top A s| \leq m\sqrt{q} \ll q$.
-It turns out that this scheme is scheme above is  homomorphic with respect to the class of _linear functions_ modulo $2$. Specifically we make the following claim:
+The decryption algorithm recovers the original plaintext since   $\iprod{c,s}= w^\top A s + s_1 b$ and $|w^\top A s| \leq m\sqrt{q} \ll q$.
+It turns out that this scheme is homomorphic with respect to the class of _linear functions_ modulo $2$. Specifically we make the following claim:
 
 
 > # {.lemma #parityhomlem}
@@ -175,7 +175,7 @@ Since $|\floor{\tfrac{q}{2}}-  \tfrac{q}{2}|<1$, adding at most $\ell$ terms of 
 $$\iprod{c,s} = \floor{ \sum b_i \tfrac{q}{2} }  +  \xi' \mod  q$$
 for $|\xi'| \leq \ell m \sqrt{q} + \ell \ll q$.
 If $\sum b_i$ is even then $\sum b_i \tfrac{q}{2}$ is an integer multiple of $q$ and hence in this case $|\iprod{c,s}| \ll q$.
-If $\sum b_i$ is odd  $\floor{\sum_{b_i} \tfrac{q}{2}} = \floor{q/2} \mod q$ and so in this case $|\iprod{c,s}| = q/2 \pm o(q) > q/10$.
+If $\sum b_i$ is odd  $\floor{\sum b_i \tfrac{q}{2}} = \floor{q/2} \mod q$ and so in this case $|\iprod{c,s}| = q/2 \pm o(q) > q/10$.
 
 Several other encryption schemes are also homomorphic with respect to linear functions, and even before Gentry's construction people have managed to achieve homomorphism with respect to slightly larger classes (e.g., quadratic functions by Boneh, Goh and Nissim) but not significantly so.
 
@@ -293,11 +293,11 @@ The idea behind the proof is simple but ingenious.
 Recall that the NAND gate $b,b' \mapsto \neg(b \wedge b')$ is a universal gate that allows us to compute any function $f:\{0,1\}^n\rightarrow\{0,1\}$ that can be efficiently computed.
 Thus, to obtain a fully homomorphic encryption it suffices to obtain a function $NANDEVAL$ such that
 $D_d(NANDEVAL(c,c'))=D_d(c) \;NAND\; D_d(c')$.
-(Note that this is stronger than the typical notion of homomorphic evaluation since we require that $NANDEVAL$ outputs an encryption of $b NAND b'$ when given _any_ pair of ciphertexts that decrypt to $b$ and $b'$ respectively, regardless whether these ciphertexts were produced by the encryption algorithm or by some other method, including the $NANDEVAL$ procedure itself.)
+(Note that this is stronger than the typical notion of homomorphic evaluation since we require that $NANDEVAL$ outputs an encryption of $b \;NAND\; b'$ when given _any_ pair of ciphertexts that decrypt to $b$ and $b'$ respectively, regardless whether these ciphertexts were produced by the encryption algorithm or by some other method, including the $NANDEVAL$ procedure itself.)
 >
 Thus to prove the theorem, we need to modify $(G,E,D)$ into an encryption scheme supporting the $NANDEVAL$ operation.
 Our new scheme will use the same encryption algorithms $E$ and $D$ but the following modification $G'$ of the key generation algorithm: after running $(d,e)=G(1^n)$, we will append to the public key an encryption $c^* = E_e(d)$ of the secret key.
-We habe now defined the key generation, encryption and decryption.
+We have now defined the key generation, encryption and decryption.
 CPA security follows from the security of the original scheme, where by circular security we refer exactly to the condition that the scheme is secure even if the adversary gets a single encryption of the public key.[^leveled]
 This latter condition is not known to be implied by standard CPA security but as far as we know is satisfied by all natural public key encryptions, including the LWE-based ones we will plug into this theorem later on.
 >
