@@ -273,56 +273,66 @@ Here is how Alice can prove that such a cycle exists without revealing any infor
 __Protocol ZK-Ham:__
 
 0. **Common input:** graph $H$ (in the form of an $n\times n$ adjacency matrix); **Alice's private input:** a Hamiltonian cycle $C=(C_1,\ldots,C_n)$ which are distinct vertices such that $(C_\ell,C_{j+1})$ is an edge in $H$ for all $\ell\in\{1,\ldots,n-1\}$ and $(C_n,C_1)$ is an edge as well.
+
 1. Bob chooses a random string $z\in \{0,1\}^{3n}$
+
 2. Alice chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). For every $i,j$, Alice chooses a random string $x_{i,j} \in \{0,1\}^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}z$, where $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$ is a pseudorandom generator. She sends $\{ y_{i,j} \}_{i,j \in [n]}$ to Bob.
+
 3. Bob chooses a bit $b\in\{0,1\}$.
+
 4. If $b=0$ then Alice sends out $\pi$ and the strings $\{ x_{i,j} \}$ for all $i,j$; If $b=1$ then Alice sends out the $n$ strings $x_{\pi(C_1),\pi(C_2)}$,$\ldots$,$x_{\pi(C_n),\pi(C_1)}$ together with their indices.
+
 5. If $b=0$ then Bob computes $M$ to be the $\pi$-permuted adjacency matrix of $H$ and verifies that all the $y_{i,j}$'s were computed from the $x_{i,j}$'s appropriately. If $b=1$ then verify that the indices of the strings $\{ x_{i,j } \}$ sent by Alice form a cycle and that indeed $y_{i,j}=G(x_{i,j})\oplus z$ for every string $x_{i,j}$ that was sent by Alice.
 
-__Theorem[^zkcredit]:__ Protocol ZK-Ham is a zero knowledge proof system for the language of Hamiltonian graphs.
+> # {.theorem title="Zero Knowledge proof for Hamiltonian Cycle" #zkhamthm}
+Protocol ZK-Ham is a zero knowledge proof system for the language of Hamiltonian graphs.[^zkcredit]
 
-__Proof:__ We need to prove **completeness**, **soundness**, and zero **knowledge**.
-
+> # {.proof data-ref="zkhamthm"}
+We need to prove **completeness**, **soundness**, and zero **knowledge**.
+>
 **Completeness** can be easily verified, and so we leave this to the reader.
-
-
+>
 For **soundness**, we recall that (as we've seen before) with extremely high probability the sets $S_0=\{ G(x) : x\in\{0,1\}^n \}$ and $S_1 = \{ G(x)\oplus z : x\in\{0,1\}^n \}$ will be disjoint (this probability is over the choice of $z$ that is done by the verifier).
 Now, assuming this is the case, given the messages $\{ y_{i,j} \}$ sent by the prover in the first step, define an $n\times n$ matrix $M'$ with entries in $\{0,1,?\}$ as follows: $M'_{i,j}=0$ if $y_{i,j}\in S_0$ , $M'_{i,j}=1$ if $y_{i,j}\in S_1$ and $M'_{i,j}=?$ otherwise.
+>
 We split into two cases.
 The first case is that there exists some permutation $\pi$ such that **(i)** $M'$ is a $\pi$-permuted version of the input graph $G$ and **(ii)** $M'$ contains a Hamiltonian cycle. Clearly in this case $G$ contains a Hamiltonian cycle as well, and hence we don't need to consider it when analyzing soundness. In the other case we claim that with probability at least $1/2$ the verifier will reject the proof.
 Indeed, if **(i)** is violated then the proof will be rejected if Bob chooses $b=0$ and if **(ii)** is violated then the proof will be rejected if Bob chooses $b=1$.
-
+>
 We now turn to showing **zero knowledge**. For this we need to build a _simulator_ $S^*$ for an arbitrary efficient strategy $V^*$ of Bob.
 Recall that $S^*$ gets as input the graph $H$ (but not the _Hamiltonian_ cycle $C$) and needs to produce an output that is indistinguishable from the output of $V^*$.
 It will do so as follows:
-
+>
 0. Pick $b'\in\{0,1\}$.
+>
 1. Let $z\in \{0,1\}^{3n}$ be the first message computed by $V^*$ on input $H$.
+>
 2. If $b'=0$ then $S^*$ computes the second message as Alice does: chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). In contrast, if $b'=1$ then $S^*$ lets $M$ be the all $1'$ matrix. For every $i,j$, $S^*$ chooses a random string $x_{i,j} \in \{0,1\}^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}z$, where $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$ is a pseudorandom generator.
+>
 3. Let $b$ be the output of $V^*$ when given  the input $H$ and the first message $\{ y_{i,j} \}$ computed as above. If $b\neq b'$ then go back to step 0.
+>
 4. We compute the fourth message of the protocol similarly to how Alice does it: if $b=0$ then it consists of $\pi$ and the strings $\{ x_{i,j} \}$ for all $i,j$; If $b=1$ then we pick a random length-$n$ cycle $C'$  and the message consists of the $n$ strings $x_{C'_1,C'_2}$,$\ldots$,$x_{C'_n,C'_1}$ together with their indices.
+>
 5. Output whatever $V^*$ outputs when given the prior message.
-
+>
 We prove the output of the simulator is indistinguishable from the output of $V^*$ in an actual interaction by the following claims:
-
+>
 **Claim 1:** The  message $\{ y_{i,j} \}$ computed by $S^*$ is computationally indistinguishable from the first message computed by Alice.
-
+>
 **Claim 2:** The probability that $b=b'$ is at least $1/3$.
-
+>
 **Claim 3:** The fourth message computed by $S^*$ is computationally indistinguishable from the fourth message computed by Alice.
-
+>
 We will simply sketch here the proofs (again see Goldreich's book for full proofs):
-
+>
 For Claim 1, note that if $b'=0$ then the message is _identical_ to the way Alice computes it.
 If $b'=1$ then the difference is that $S^*$ computes some strings $y_{i,j}$ of the form $G(x_{i,j})+z$ where Alice would compute the corresponding strings as $G(x_{i,j})$ this is indistinguishable because $G$ is a pseudorandom generator (and the distribution $U_{3n}\oplus z$ is the same as $U_{3n}$).
-
+>
 Claim 2 is a corolloary of Claim 1. If $V^*$ managed to pick a message $b$ such that $\Pr[ b=b' ] < 1/2 - negl(n)$ then in particular it could distinguish between the first message of Alice (that is computed independently of $b'$ and hence contains no information about it) from the first message of $V^*$.
-
+>
 For Claim 3, note that again if $b=0$ then the message is computed in a way identical to what Alice does. If $b=1$ then this message is also computed in a way identical to Alice, since it does not matter if instead of picking $C'$ at random, we picked a random permutation $\pi$ and let $C'$ be the image of the Hamiltonian cycle under this permutation.
-
-This completes the proof of the theorem. QED
-
-
+>
+This completes the proof of the theorem.
 
 
 
@@ -334,7 +344,9 @@ The reason that a protocol for Hamiltonicity is more interesting than a protocol
 This means that for every other NP language $L$, we can use the reduction from $L$ to Hamiltonicity combined with protocol ZK-Ham to give a zero knowledge proof system for $L$. In particular this means that we can have zero knowledge proofs for the following languages:
 
 * The language of numbers $m$ such that there exists a prime $p$ dividing $m$ whose remainder modulo $10$ is $7$>
+
 * The language of tuples $X,e,c_1,\ldots,c_n$ such that $c_i$ is an encryption of a number $x_i$ with $\sum x_i = X$. (This is essentially what we needed in the voting example above).
+
 * For every efficient function $F$, the  language of pairs $x,y$ such that there exists some input $r$ satisfying $y=F(x\|r)$. (This is what we often need in the "protocol compiling" applications to show that a particular output was produced by the correct program $F$ on public input $x$ and private input $r$.)
 
 ![Using a zero knowledge protocol for Hamiltonicity we can obtain a zero knowledge protocol for any language $L$ in NP. For example, if the public input is a SAT formula $\varphi$ and the Prover's secret input is a satisfying assignment $x$ for $\varphi$ then the verifier can run the reduction on $\varphi$ to obtain a graph $H$ and the prover can run the same reduction to obtain from $x$ a Hamiltonian cycle $C$ in $H$. They can then run the ZK-Ham protocol to prove that indeed $H$ is Hamiltonian (and hence the original formula was satisfiable) without revealing any information the verifier could not have obtain on his own.](../figure/zk-ham.jpg){#tmplabelfig width=80% }
