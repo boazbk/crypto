@@ -158,14 +158,18 @@ We will show how we can use this to obtain a polynomial-time algorithm $S$ that 
 Clearly, we can repeat this for all the possible $q$ values of $a$ to learn the first coordinate exactly, and then continue in this way to learn all coordinates.
 >
 Our algorithm $S$ gets as input the pair $(A,y)$ where $y=Ax+e$ and we need to decide whether $x_1 = a$.
-Now consider the instance $A+(r\|0^m\|\cdots \|0^m),y+ar$, where $r$ is a random vector in $\Z_q^m$ and the matrix $(r\|0^m\|\cdots \|0^m)$ is simply the matrix with first column equal to $r$ and all other columns equal to $0$. Note that if $A$ is random then $A+r\|0^m\|\cdots \|0^m)$ is random as well.
-Now note that $Ax + (r|0^m\cdots \|0^m)x = Ax + x_1 r$ and hence if $x_1 = a$ then we still have an input of the same form.
-However, if $x_1 \neq a$ then this amounts to adding a non-zero multiple of the random vector $r$ to the noise vector, and hence we get an instance of the form $(A',y')$
-with random $A',y'$.  
-Hence if we send this input to our the decision algorithm $D$, then we would get $1$ with probability $p+\epsilon$  if $x_1=a$ and an output of $1$ with probability $p$ otherwise.
+Now consider the instance $A+(r\|0^m\|\cdots \|0^m),y+ar$, where $r$ is a random vector in $\Z_q^m$ and the matrix $(r\|0^m\|\cdots \|0^m)$ is simply the matrix with first column equal to $r$ and all other columns equal to $0$.
+If $A$ is random then $A+r\|0^m\|\cdots \|0^m)$ is random as well.
+Now note that $Ax + (r|0^m\cdots \|0^m)x = Ax + x_1 r$ and hence if $x_1 = a$ then we still have an input of the same form $(A',A'x+e)$.
+>
+In contrast, we claim that if if $x_1 \neq a$ then the distribution $(A',y')$ where $A'=A+(r\|0^m\|\cdots \|0^m)$ and $y'= Ax + e + ar$ is identical to the uniform distribution over a random uniformly chosent matrix $A'$ and a random and independent uniformly chosen vector $y'$.
+Indeed, we can write this distribution as $(A',y')$ where $A'$ is chosen uniformly at random, and $y'= A'x + e + (a-x_1)r$ where $r$ is a random and independent vector. (Can you see why?)
+Since $a-x_1 \neq 0$, this amounts to adding a random and independent vector $r'$ to $y'$, which means that the distribution $(A',y')$ is uniform and independent.
+>
+Hence if we send the input $(A',y')$ to our the decision algorithm $D$, then we would get $1$ with probability $p+\epsilon$  if $x_1=a$ and an output of $1$ with probability $p$ otherwise.
 >
 Now the crucial observation is that if our decision algorithm $D$ requires $m$ equations to succeed with bias $\epsilon$, we can use $100mn/\epsilon^2$ equations (which is still polynomial) to invoke it $100n/\epsilon^2$ times.
-This allows us to distinguish with probability $1-2^{-n}$ between the case that $D$ outputs $1$ with probability $p+\epsilon$ and the case that it outputs $1$ with probability $p$ (this follows from the Chernoff bound we discussed in the mathematical background handout; can you see why?).
+This allows us to distinguish with probability $1-2^{-n}$ between the case that $D$ outputs $1$ with probability $p+\epsilon$ and the case that it outputs $1$ with probability $p$ (this follows from the Chernoff bound; can you see why?).
 Hence by using polynomially more samples than the decision algorithm $D$, we get a search algorithm $S$ that can actually recover $x$.
 
 ## An LWE based encryption scheme
@@ -246,7 +250,11 @@ But if there was some polynomial-time algorithm $T$ distinguishing $D$ from $D'$
 We will finish the proof by showing that  the distribution $D'$ is _statistically indistinguishable_ (i.e., has negligible total variation distance) from $\overline{D}$.
 This follows from the following claim:
 >
-__CLAIM:__ Suppose that $m > 100 n \log q$. If $A'$ is a random $m\times n+1$ matrix in $\Z_q^m$, then with probability at least $1-2^{-n}$, the distribution $Z_{A'}$ over $\Z_q^m$ which is obtained by choosing $w$ at random in $\{0,1\}^m$ and outputting $w^\top A'$ has at most $2^{-n}$ statistical distance from the uniform distribution over  $\Z_q^{n+1}$.
+__CLAIM:__ Suppose that $m > 100 n \log q$. If $A'$ is a random $m\times n+1$ matrix in $\Z_q^m$, then with probability at least $1-2^{-n}$ over the choice of $A'$, the distribution $Z_{A'}$ over $\Z_q^n$ which is obtained by choosing $w$ at random in $\{0,1\}^m$ and outputting $w^\top A'$ has at most $2^{-n}$ statistical distance from the uniform distribution over  $\Z_q^{n+1}$.
+>
+Note that the randomness used for the distribution $Z_{A'}$ is only obtained by the choice of $w$, and _not_ by the choice of $A'$ that is fixed.
+(This passes a basic "sanity check" since $w$ has $m$ random bits, while the uniform distribution over $\Z_q^n$ requires $n \log q \ll m$ random bits, and hence  $Z_{A'}$ at least has a "fighting chance" in being statistically close to it.)
+Another way to state the same claim is that the pair $(A',w^\top A')$ is statistically indistinguishable from the uniform distribution $(A',z)$ where $z$ is a vector chosen independently at random from $\Z_q^n$.
 >
 The claim completes the proof of the theorem, since letting $A'$ be the matrix $(A|y)$ and $z=(a,\sigma)$, we see that the distribution $D'$, as the form $(A',z)$ where $A'$ is a uniformly random  $m\times (n+1)$ matrix and $z$ is sampled from $Z_{A'}$ (i.e., $z=w^\top A'$ where $w$ is uniformly chosen in $\{0,1\}^m$).
 Hence this means that  the statistical distance of $D'$ from $\overline{D}$ (where all elements are uniform) is $O(2^{-n})$.
@@ -254,7 +262,7 @@ Hence this means that  the statistical distance of $D'$ from $\overline{D}$ (whe
 >
 We will not do the whole proof of the claim (which uses the mod $q$ version of the [leftover hash lemma](https://goo.gl/KXpccP) which  we mentioned before and is also "Wikipedia-able") but the idea is simple.
 For every $m\times (n+1)$ matrix $A'$ over $\Z_q$, define $h_{A'}:\Z_q^m \rightarrow \Z_q^n$ to be the map $h_{A'}(w)=w^\top A'$.
-This collection can be shown to be a "good" hash function collection in some specific technical sense.
+This collection can be shown to be a "good" hash function collection in some specific technical sense, which in particular implies that for every distribution $D$ with much more than $n\log q$ bits of min-entropy, with all but negligible probability over the choice of $A'$, $h_{A'}(D)$ is statistically indistinguishable from the uniform distribution.
 Now when we choose $w$ at random in $\{0,1\}^m$, it is coming from a distribution with $m$ bits of entropy.
 If $m \gg (n+1)\log q$, then because the output of this function is so much smaller than $m$, we expect it to be completely uniform, and this is what's shown by the leftover hash lemma.
 
