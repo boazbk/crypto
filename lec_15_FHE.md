@@ -72,7 +72,7 @@ We  focus on encryption for single bits.  This is without loss of generality for
 Let $\cF = \cup \cF_\ell$ be a class of functions where every $f\in\cF_\ell$ maps $\{0,1\}^\ell$ to $\{0,1\}$.  
 An _$\cF$-homomorphic public key encryption scheme_ is a CPA secure public key encryption scheme $(G,E,D)$ such that there exists a polynomial-time algorithm $EVAL:\{0,1\}^* \rightarrow \{0,1\}^*$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$,  $x_1,\ldots,x_\ell \in \{0,1\}$, and $f\in \cF_\ell$ of description size $|f|$ at most $poly(\ell)$ it holds that:
 >
-* $c=EVAL_e(1^n,f,E_e(x_1),\ldots,E_e(x_\ell))$ has length at most $n$ \
+* $c=EVAL_e(f,E_e(x_1),\ldots,E_e(x_\ell))$ has length at most $n$ \
 * $D_d(c)=f(x_1,\ldots,x_\ell)$.
 
  \
@@ -301,13 +301,14 @@ We have now defined the key generation, encryption and decryption.
 CPA security follows from the security of the original scheme, where by circular security we refer exactly to the condition that the scheme is secure even if the adversary gets a single encryption of the public key.[^leveled]
 This latter condition is not known to be implied by standard CPA security but as far as we know is satisfied by all natural public key encryptions, including the LWE-based ones we will plug into this theorem later on.
 >
-So, now all that is left is to define the $NANDEVAL$ operation. On input two ciphertexts $c$ and $c'$, we will construct the function $f:\{0,1\}^n\rightarrow\{0,1\}$ (where $n$ is the length of the secret key) such that $f(d)=D_d(c) \;NAND\; D_d(c')$.
-It would be useful to pause at this point and make sure you understand what are the inputs to $f$, what are "hardwired constants" and what is its output.
-The ciphertexts $c$ and $c'$ are simply treated as fixed strings and are _not_ part of the input to $f$.
-Rather $f$ is a function (depending on the strings $c,c'$) that maps the secret key into a bit.
-When running $NANDEVAL$ we of course do not know the secret key $d$, but we can still design this function $f$.
-Now $NANDEVAL(c,c')$ will simply equal $EVAL(f,c^*)$.
-Since $c^* = E_e(d)$, we get that $D_d(EVAL(f,c^*))=D_d(f(d))=D_d(D_d(c) \;NAND\; D_d(c'))$.
+So, now all that is left is to define the $NANDEVAL$ operation. On input two ciphertexts $c$ and $c'$, we will construct the function $f_{c,c'}:\{0,1\}^n\rightarrow\{0,1\}$ (where $n$ is the length of the secret key) such that $f_{c,c'}(d)=D_d(c) \;NAND\; D_d(c')$.
+It would be useful to pause at this point and make sure you understand what are the inputs to $f_{c,c'}$, what are "hardwired constants" and what is its output.
+The ciphertexts $c$ and $c'$ are simply treated as fixed strings and are _not_ part of the input to $f_{c,c'}$.
+Rather $f_{c,c'}$ is a function (depending on the strings $c,c'$) that maps the secret key into a bit.
+When running $NANDEVAL$ we of course do not know the secret key $d$, but we can still design a circuit that computes this function $f_{c,c'}$.
+Now $NANDEVAL(c,c')$ will simply be defined as $EVAL(f_{c,c'},c^*)$.
+Since $c^* = E_e(d)$, we get that
+$$D_d(NANDEVAL(c,c'))= D_d(EVAL(f_{c,c'},c^*))=f_{c,c'}(d) =D_d(c) \;NAND\; D_d(c') \;.$$
 Thus indeed we map _any_ pair of ciphertexts $c,c'$ that decrypt to $b,b'$ into a ciphertext $c''$ that decrypts to $b \;NAND\; b'$.
 This is all that we needed to prove.
 
