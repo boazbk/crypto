@@ -251,11 +251,12 @@ For CPA security we need to prove that (for fixed $\mathbb{G}$ of size $p$ and r
 >
 We make the following claim:
 >
-__CLAIM:__ For a fixed $\mathbb{G}$ of size $p$, generator $g$  for $\mathbb{G}$, and given random oracle $H$, if there is a size $T$  distinguisher  $A$ with $\epsilon$ advantage  between the distribution $(g^a,g^b,H(g^{ab}))$ and the distribution $(g^a,g^b,U_\ell)$ (where $a,b$ are chosen uniformly and independently in $\Z_{p}$) then there is a size $poly(T)$ algorithm $A'$ to solve the Diffie-Hellman problem with respect to $\mathbb{G},g$ with success at least $\epsilon$. That is, for random $a,b \in \Z_p$, $A'(g,g^a,g^b)=g^{ab}$ with probability at least $\epsilon/T$.
+__CLAIM:__ For a fixed $\mathbb{G}$ of size $p$, generator $g$  for $\mathbb{G}$, and given random oracle $H$, if there is a size $T$  distinguisher  $A$ with $\epsilon$ advantage  between the distribution $(g^a,g^b,H(g^{ab}))$ and the distribution $(g^a,g^b,U_\ell)$ (where $a,b$ are chosen uniformly and independently in $\Z_{p}$) then there is a size $poly(T)$ algorithm $A'$ to solve the Diffie-Hellman problem with respect to $\mathbb{G},g$ with success at least $\epsilon$. That is, for random $a,b \in \Z_p$, $A'(g,g^a,g^b)=g^{ab}$ with probability at least $\epsilon/(2T)$.
 >
-__Proof of claim:__ The proof is simple. We claim that under the assumptions above, $a$ makes the query $g^{ab}$ to its oracle $H$ with probability at most $\epsilon$ since otherwise, by the "lazy evaluation" paradigm, we can assume that $H(g^{ab})$ is chosen independently at random after $A$'s attack is completed and hence it is indistinguishable from a uniform output. Therefore, on input $g,g^a,g^b$, $A'$ can simulate $A$ and simply output one of the at most $T$ queries that $A$ makes to $H$ at random, and will be successful with probability at least $\epsilon/T$.
+__Proof of claim:__ The proof is simple. We claim that under the assumptions above, $a$ makes the query $g^{ab}$ to its oracle $H$ with probability at least $\epsilon/2$ since otherwise, by the "lazy evaluation" paradigm, we can assume that $H(g^{ab})$ is chosen independently at random after $A$'s attack is completed and hence (conditioned on the adversary not making that querty), the value $H(g^{ab})$  is indistinguishable from a uniform output.
+Therefore, on input $g,g^a,g^b$, $A'$ can simulate $A$ and simply output one of the at most $T$ queries that $A$ makes to $H$ at random, and will be successful with probability at least $\epsilon/(2T)$.
 >
-Now given the claim, we can complete the proof of security via the following hybrids. Define the following "hubrid" distributions (where in all cases $a,b$ are chosen uniformly and independently in $\Z_{p}$):
+Now given the claim, we can complete the proof of security via the following hybrids. Define the following "hybrid" distributions (where in all cases $a,b$ are chosen uniformly and independently in $\Z_{p}$):
 >
 * $H_0$: $(g^a,g^b,H(g^{ab}) \oplus m)$ \
 * $H_1$: $(g^a,g^b,U_\ell \oplus m)$ \

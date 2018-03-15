@@ -176,9 +176,12 @@ We can abstract away the particular construction of the RSA and Rabin functions 
 We make the following definition
 
 > # {.definition title="Trapdoor permutation" #TDPdef}
-A _trapdoor permutation family (TDP)_  is a family of functions $\{ p_k \}$ such that for every $k\in\{0,1\}^n$, the function $p_k$ is a permutation on $\{0,1\}^n$ and the map $k,x \mapsto p_k(x)$ is efficiently computable, but: \
-* For every efficient adversary $A$, $\Pr_{y\in\{0,1\}^n}[ A(y)=p_k^{-1}(y) ] = negl(n)$. \
-* There is a _key generation algorithm_ $G$ such that on input $1^n$ it outputs a pair $(k,\tau)$ such that the map $\tau,y \mapsto p_k^{-1}(y)$. \
+A _trapdoor permutation family (TDP)_  is a family of functions $\{ p_k \}$ such that for every $k\in\{0,1\}^n$, the function $p_k$ is a permutation on $\{0,1\}^n$ and:\
+* There is a _key generation algorithm_ $G$ such that on input $1^n$ it outputs a pair $(k,\tau)$ such that the maps $k,x \mapsto p_k(x)$ and $\tau,y \mapsto p_k^{-1}(y)$ are efficiently computable. \
+* For every efficient adversary $A$, $\Pr_{(k,\tau) \leftarrow_R G(1^n), y\in\{0,1\}^n}[ A(k,y)=p_k^{-1}(y) ] < negl(n)$.
+
+
+ \
 
 > # {.remark title="Domain of permutations" #permutationsovergroups}
 The RSA function is not a permutation over the set of strings but rather over $\Z^*_m$ for some $m=pq$. However, if we find primes $p,q$ in the interval $[2^{n/2}(1-negl(n)),2^{n/2}]$, then $m$ will be in the interval $[2^n(1-negl(n)),2^n]$ and hence $\Z^*_m$ (which has size $pq - p - q +1 = 2^n(1-negl(n))$) can be thought of as essentially identical to $\{0,1\}^n$, since we will always pick elements from $\{0,1\}^n$ at random and hence they will be in $\Z^*_m$ with probability $1-negl(n)$. It is widely believed that for every sufficiently large $n$ there is a prime in the interval $[2^n-poly(n),2^n]$ (this follows from  the _Extended Reimann Hypothesis_) and Baker, Harman and Pintz _proved_ that there is a prime in the interval $[2^n-2^{0.6n},2^n]$.[^padding]
