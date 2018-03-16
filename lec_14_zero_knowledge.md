@@ -10,8 +10,8 @@ Typically a proof that some assertion X is true, also reveals some information a
 When Hercule Poirot proves that Norman Gale killed Madame Giselle he does so by showing _how_ Gale committed the murder by dressing up as a flight attendant and stabbing Madame Gisselle with a poisoned dart.
 Could Hercule convince us beyond a reasonable doubt that Gale did the crime without giving any information on _how_ the crime was committed?
 Can the Russians prove to the U.S. that a sealed box contains an authentic nuclear warhead without revealing anything about its design?
-Can I prove to you that the number $m=385,608,108,395,369,363,400,501,273,594,475,104,405,448,848,047,062,278,473,983$ has a prime factor whose last digit is $7$ without giving you any information about  $m$'s prime factors?^[In case you are curious, the factors of $m$ are $1,172,192,558,529,627,184,841,954,822,099$ and $328,963,108,995,562,790,517,498,071,717$.]
-We won't answer the first question, but will show some insights on the latter two.
+Can I prove to you that the number $m=385,608,108,395,369,363,400,501,273,594,475,104,405,448,848,047,062,278,473,983$ has a prime factor whose last digit is $7$ without giving you any information about  $m$'s prime factors?
+We won't answer the first question, but will show some insights on the latter two.^[In case you are curious, the factors of $m$ are $1,172,192,558,529,627,184,841,954,822,099$ and $328,963,108,995,562,790,517,498,071,717$.]
 
 _Zero knowledge proofs_ are proofs that fully convince that a statement is true without yielding _any additional knowledge_.
 So, after seeing a zero knowledge proof that $m$ has a factor ending with $7$, you'll be no
@@ -80,7 +80,7 @@ So, zero knowledge proofs are wondeful objects, but how do we get them?
 In fact, we haven't answered the even more basic question of how do we _define_ zero knowledge?
 We have to start by the most basic task of defining what we mean by a _proof_.
 
-A _proof system_ can be thought of as an algorithm $\Pi$ that takes as input a _statement_ which is some string $x$ and another string $\pi$ known as the _proof_ and outputs $1$ if and only if $\pi$ is a valid proof that the statement $x$ is correct.
+A _proof system_ can be thought of as an algorithm $V$ (for "verifier") that takes as input a _statement_ which is some string $x$ and another string $\pi$ known as the _proof_ and outputs $1$ if and only if $\pi$ is a valid proof that the statement $x$ is correct.
 For example:
 
 * In _Euclidean geometry_, _statements_ are geometric facts such as "in any triangle the degrees sum to 180 degrees" and the _proofs_ are step by step derivations of the statements from the five basic [postulates](https://en.wikipedia.org/wiki/Euclidean_geometry).
@@ -93,7 +93,7 @@ For example:
 [^encoding]: Integers can be coded as sets in various ways. For example, one can encode $0$ as $\emptyset$ and if $N$ is the set encoding $n$, we can encode $n+1$ using the set $|N|+1$ cardinality set  $\{ N \} \cup N$.   
 
 
-All these proof systems have the property that the verifying algorithm $\Pi$ is _efficient_.
+All these proof systems have the property that the verifying algorithm $V$ is _efficient_.
 Indeed, that's the whole point of a proof $\pi$- it's a sequence of symbols that makes it easy to verify that the statement is true.
 
 <!-- We will also assume for the sake of simplicity that the proof $\pi$ is always of length at most polynomial in the statement $x$.
@@ -107,11 +107,32 @@ Lets start with an informal example:
 
 Now consider a more "mathematical" example along similar lines.
 Recall that if $x$ and $m$ are numbers then we say that $x$ is a _quadratic residue_ modulo $m$ if there is some $s$ such that $x=s^2 \pmod{m}$.
-It is very easy to prove that $x$ is a quadratic residue, but can Alice, even if she can do arbitrary computations,  prove to Bob that $x$ is _not_ a residue?
-Here is one way to do this. Given $x$ and $m$, Bob will pick some random $s\in \Z^*_m$ (e.g., by picking a random number in $\{1,\ldots,m-1\}$  and discarding it if it has nontrivial g.c.d. with $m$) and toss a coin $b\in\{0,1\}$. If $b=0$ then Bob will send $s^2 \pmod{m}$ to Alice and otherwise he will send $xs^2 \pmod{m}$ to Alice.
-Alice will respond with $b'=0$ if Bob sent a quadratic residue and with $b'=1$ otherwise. Now note that if $x$ is a non-residue then $xs^2$ will have to be a non-residue as well (since if it had a root $s'$ then $s's^{-1}$ would be a root of $x$). Hence it will always be the case that $b'=b$.
+Let us define the function $NQR(m,x)$ to output $1$ if and only if $x \neq s^2 \pmod{m}$ for every $s \in \{0,\ldots, m-1\}$.
+There is a very simple way to prove statements of the form "$NQR(m,x)=0$": just give out $s$.
+However, here is an interactive proof system to prove statements of the form "$NQR(m,x)=1$":
+
+* We have two parties: __Alice__ and __Bob__. The __common input__ is $(m,x)$ and Alice wants to convince Bob that $NQR(m,x)=1$. (That is, that $x$ is _not_ a quadratic residue modulo $m$).
+
+* We assume that Alice can compute $NQR(m,w)$ for every $w\in \{0,\ldots,m\}$  but Bob is  polynomial time.
+
+* The protocol will work as follows:
+
+1. Bob will pick some random $s\in \Z^*_m$ (e.g., by picking a random number in $\{1,\ldots,m-1\}$  and discarding it if it has nontrivial g.c.d. with $m$) and toss a coin $b\in\{0,1\}$. If $b=0$ then Bob will send $s^2 \pmod{m}$ to Alice and otherwise he will send $xs^2 \pmod{m}$ to Alice.
+
+2. Alice will use her ability to compute $NQR(m,\cdot)$ to  respond with $b'=0$ if Bob sent a quadratic residue and with $b'=1$ otherwise.
+
+3. Bob _accepts_ the proof if $b=b'$.
+
+To see that Bob will indeed accept the proof, note that if $x$ is a non-residue then $xs^2$ will have to be a non-residue as well (since if it had a root $s'$ then $s's^{-1}$ would be a root of $x$). Hence it will always be the case that $b'=b$.
+
+
 Moreover, if $x$ _was_ a quadratic residue of the form $x=s'^2 \pmod{m}$ for some $s'$, then $xs^2=(s's)^2$ is simply a random quadratic residue, which means that in this case Bob's message is distributed the same regardless of whether $b=0$ or $b=1$, and no matter what she does, Alice has  probability at most $1/2$ of guessing $b$.
 Hence if Alice is always successful than after $n$ repetitions Bob would have $1-2^{-n}$ confidence that $x$ is indeed a non-residue modulo $m$.
+
+
+> # { .pause }
+Please stop and make sure you see the similarities between this protocol and the one for demonstrating that the two pieces of plastic do not have identical colors.
+
 
 <!-- Recall that two graphs $G_0$ and $G_1$ are isomorphic if one can permute the vertices of $G_0$ to make it into $G_1$.
 There have been some recent great advances by Babai for this problem, but there is still not a truly efficient algorithm to test whether a pair of graphs has this property.
