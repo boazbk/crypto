@@ -28,15 +28,13 @@ Before we  talk about how to achieve zero knowledge, let us discuss some of its 
 ### Nuclear disarmanent
 
 The United States and Russia have reached a dangerous and expensive equilibrium by which each has about [7000 nuclear warheads](https://www.armscontrol.org/factsheets/Nuclearweaponswhohaswhat), much more than is needed to decimate each others' population (and the population of much of the rest of the world).[^population]
-Havine so many weapons increases the chance of "leakage" of weapons, or of a launch (which can result in a an all our war) through fault in communications or rogue commanders.
+Havine so many weapons increases the chance of "leakage" of weapons, or of an accidental launch (which can result in a an all our war) through fault in communications or rogue commanders.
 This also threatens the delicate balance of the [Non-Proliferation Treaty](https://en.wikipedia.org/wiki/Treaty_on_the_Non-Proliferation_of_Nuclear_Weapons) which at its core is a bargain where non-weapons states agree not to pursue nuclear weapons and the five nuclear weapon states agree to make progress on nuclear disarmament.
-These weapons are also very expensive to maintain.
-
-
-
 These huge quantities of nuclear weapons are not only dangerous, as they increase the chance of a leak or of an individual failure or rogue commander causing a world catastrophe, but also extremely expensive to maintain.
-Indeed, U.S. President Obama called in 2009 to set as a long term goal a "world without nuclear weapons" and in 2012 talked about concretely talking to Russia about reducing  "not only our strategic nuclear warheads, but also tactical weapons and warheads in reserve".
-On the other side, Russian President Putin has said already in 2000 that he sees "no obstacles that could hamper future deep cuts of strategic offensive armaments" (though lately has been talking about developing new missiles).
+
+For all of these reasons, in 2009, U.S. President Obama called to set as a long term goal a "world without nuclear weapons" and in 2012 talked about concretely talking to Russia about reducing  "not only our strategic nuclear warheads, but also tactical weapons and warheads in reserve".
+On the other side, Russian President Putin has said already in 2000 that he sees "no obstacles that could hamper future deep cuts of strategic offensive armaments".
+(Though as of 2018, political winds on both sides have shifted away from disarmament and more toward armament.)
 
 There are many reasons why progress on nuclear disarmanent has been so slow, and most of them have nothing to do with zero knowledge or any other piece of technology.
 But there are some technical hurdles as well.
@@ -56,7 +54,7 @@ But of course to maintain voter privacy, we need to prove this without actually 
 
 ### More applications
 
-I chose these two examples above exactly because they are hardly the first that come to mind when thinking about zero knowledge.
+I chose these two examples above precisely because they are hardly the first that come to mind when thinking about zero knowledge.
 Zero knowledge has been used for many cryptographic applications.
 One such application (originating from work of Fiat and Shamir) is the use for _identification protocols_.
 Here Alice knows a solution $x$ to a puzzle $P$, and proves her identity to Bob by, for example, providing an encryption $c$ of $x$ and proving in zero knowledge that
@@ -90,7 +88,7 @@ For example:
 * We can many define other "theories". For example, a theory where the statements are pairs $(x,m)$ such that $x$ is a quadratic residue modulo $m$  and a proof for $x$ is the number $s$ such that $x=s^2 \pmod{m}$, or a theory where the theorems are _Hamlitonian_ graphs $G$ (graphs on $n$ vertices that contain an $n$-long cycle) and the proofs are the description of the cycle.
 
 
-[^encoding]: Integers can be coded as sets in various ways. For example, one can encode $0$ as $\emptyset$ and if $N$ is the set encoding $n$, we can encode $n+1$ using the set $|N|+1$ cardinality set  $\{ N \} \cup N$.   
+[^encoding]: Integers can be coded as sets in various ways. For example, one can encode $0$ as $\emptyset$ and if $N$ is the set encoding $n$, we can encode $n+1$ using the   $n+1$-element set  $\{ N \} \cup N$.   
 
 
 All these proof systems have the property that the verifying algorithm $V$ is _efficient_.
@@ -100,12 +98,25 @@ Indeed, that's the whole point of a proof $\pi$- it's a sequence of symbols that
 While this is not necessarily always the case, in our setting, we can always think of the length of the proof as an extra input, but it's convenient to think of it as simply being contained in the statement.   -->
 
 To achieve the notion of zero knowledge proofs, Goldwasser and Micali had to consider a generalization of proofs from static sequences of symbols to _interactive probabilistic protocols_ between a prover and a verifier.
-Lets start with an informal example:
+Let's start with an informal example.
+The vast majority of humans have three types of cone cells in their eyes.
+This is the reason why [we perceive the sky as blue](http://www.patarnott.com/atms749/pdf/blueSkyHumanResponse.pdf) (see also [this](https://www.forbes.com/sites/briankoberlein/2017/01/11/earths-skies-are-violet-we-just-see-them-as-blue/#33aaaf0f735f)), despite its color being quite a different spectrum than the blue of the rainbow, is that the projection of the sky's color to our cones is closest to the projection of blue.
+It has been suggested that a tiny fraction of the human population might have four functioning cones (in fact, only women, as it would require two X chromosomes and a certain mutation).
+How would a person _prove_ to another that she is a in fact such a [tetrachromat](https://en.wikipedia.org/wiki/Tetrachromacy) ?
 
->Suppose that Alice is a [tetrachormat](https://en.wikipedia.org/wiki/Tetrachromacy) and can distinguish between the color of two pieces of plastic that are otherwise identical. How can she prove this to Bob? Here is one protocol. They will repeat the following experiment: Alice turns her back and Bob tosses a coin and with probability 1/2 leaves the pieces as they are, and with probability 1/2 switches the right piece with the left piece. Alice needs to guess whether Bob switched the pieces or not. If she is always successful after $n$ repetition then Bob will have $1-2^{-n}$ confidence that the pieces are truly different.
 
 
-Now consider a more "mathematical" example along similar lines.
+>___Proof of tetrachromacy:__
+>
+>Suppose that Alice is a tetrachromat and can distinguish between the colors of two pieces of plastic that would be identical to a trichromat. She wants to prove to a trichromat Bob that the two pieces are not identical. She can do this as follows:
+>
+Alice and Bob will repeat the following experiment $n$ times: Alice turns her back and Bob tosses a coin and with probability 1/2 leaves the pieces as they are, and with probability 1/2 switches the right piece with the left piece. Alice needs to guess whether Bob switched the pieces or not.
+>
+If Alice is  successful in all of the $n$ repetitions then Bob will have $1-2^{-n}$ confidence that the pieces are truly different.
+
+
+
+We now consider a more "mathematical" example along similar lines.
 Recall that if $x$ and $m$ are numbers then we say that $x$ is a _quadratic residue_ modulo $m$ if there is some $s$ such that $x=s^2 \pmod{m}$.
 Let us define the function $NQR(m,x)$ to output $1$ if and only if $x \neq s^2 \pmod{m}$ for every $s \in \{0,\ldots, m-1\}$.
 There is a very simple way to prove statements of the form "$NQR(m,x)=0$": just give out $s$.
@@ -113,7 +124,7 @@ However, here is an interactive proof system to prove statements of the form "$N
 
 * We have two parties: __Alice__ and __Bob__. The __common input__ is $(m,x)$ and Alice wants to convince Bob that $NQR(m,x)=1$. (That is, that $x$ is _not_ a quadratic residue modulo $m$).
 
-* We assume that Alice can compute $NQR(m,w)$ for every $w\in \{0,\ldots,m\}$  but Bob is  polynomial time.
+* We assume that Alice can compute $NQR(m,w)$ for every $w\in \{0,\ldots,m-1\}$  but Bob is  polynomial time.
 
 * The protocol will work as follows:
 
@@ -161,15 +172,17 @@ In many texts proof systems are defined with respect to _languages_ as opposed t
 These two viewpoints are completely equivalent via the mapping $f \longleftrightarrow L$ where $L = \{ x \;| f(x) = 1 \}$.
 
 
-Note that we don't necessarily require the prover to be efficient (and indeed, in examples such as the graph non-isomorphism question, it might not be).
+Note that we don't necessarily require the prover to be efficient (and indeed, in some cases  it might not be).
 On the other hand, our soundness condition holds even if the prover uses a non efficient strategy.[^arguments]
 We say that a proof system has an _efficient prover_ if there is an NP-type  proof system $\Pi$ for $L$ (that is some efficient algorithm $\Pi$ such that there exists $\pi$ with $\Pi(x,\pi)=1$ iff $x\in L$ and such that $\Pi(x,\pi)=1$ implies that $|\pi|\leq poly(|x|)$), such that the strategy for $P$ can be implemented efficiently given any static proof $\pi$ for $x$ in this system.
 
 
-[^arguments]: People have considered the notions of zero knowledge systems where soundness holds only with respect to efficient provers; these are known as _argument systems_.
+[^arguments]: People have considered the notion of zero knowledge systems where soundness holds only with respect to efficient provers; these are known as _argument systems_.
 
 > # {.remark title="Notation for strategies" #strategies}
-Up until now, we always considered cryptographic protocols where Alice and Bob trusted one another, but were worries about some adversary controlling the channel between them. Now we are in a somewhat more "suspicious" setting where the parties do not fully trust one another. In such protocols there is always a "prescribed" or **honest** strategy that a particular party _should_ follow, but we generally don't want the other parties' security to rely on some else's good intention, and hence analyze also the case where a party uses an arbitrary **malicious** strategy. We sometimes also consider the **honest but curious** case where the adversary is passive and only collects information, but does not deviate from the prescribed strategy. Note that protocols typically only guarantee security for party A when it behaves honestly - a party can always chose to violate its own security and there is not much we can (or should?) do about it.
+Up until now, we always considered cryptographic protocols where Alice and Bob trusted one another, but were worried about some adversary controlling the channel between them. Now we are in a somewhat more "suspicious" setting where the parties do not fully trust one another. In such protocols there is always a "prescribed" or **honest** strategy that a particular party _should_ follow, but we generally don't want the other parties' security to rely on some else's good intention, and hence analyze also the case where a party uses an arbitrary **malicious** strategy. We sometimes also consider the **honest but curious** case where the adversary is passive and only collects information, but does not deviate from the prescribed strategy.
+>
+Protocols typically only guarantee security for party A when it behaves honestly - a party can always chose to violate its own security and there is not much we can (or should?) do about it.
 
 
 ## Defining zero knowledge
@@ -182,9 +195,7 @@ However she prefers not to reveal $s$.
 Can  she convince Bob that such an $s$ exist without revealing any information about it? Here is a way to do so:
 
 
-__Protocol ZK-QR:__
-
-0. Public input for Alice and Bob: $x,m$; Alice's private input is $s$ such that $x=s^2 \pmod{m}$.
+__Protocol ZK-QR:__ Public input for Alice and Bob: $x,m$; Alice's private input is $s$ such that $x=s^2 \pmod{m}$.
 
 1. Alice will pick a random $s'$ and send to Bob $x' = xs'^2 \pmod{m}$.
 
@@ -192,10 +203,15 @@ __Protocol ZK-QR:__
 
 3. If $b=0$ then Alice reveals $ss'$, hence giving out a root for $x'$; if $b=1$ then Alice reveals $s'$, hence showing a root for $x'x^{-1}$.
 
-4. Bob checks that the value $s''$ revealed by Alice is indeed a root of $x'x^{-b}$, if so then it "accepts" this round.
+4. Bob checks that the value $s''$ revealed by Alice is indeed a root of $x'x^{-b}$, if so then it "accepts" the proof.
 
-If $x$ was _not_ a  quadratic residue then no matter how $x'$ was chosen, either $x'$ or $x'x^{-1}$ is _not_ a residue and hence Bob will reject each round eith probability at least $1/2$.
-On the other hand, we claim that we didn't really reveal anything about $s$. Indeed, if Bob chooses $0$, then the two messages he sees can be thought of as a random quadratic residue $x'$ and its root, while if Bob chooses $1$, then the two messages he sees are $x$ times a random quadratic residue, and the root of that residue.
+If $x$ was _not_ a  quadratic residue then no matter how $x'$ was chosen, either $x'$ or $x'x^{-1}$ is _not_ a residue and hence Bob will reject the proof with probability at least $1/2$.
+By repeating this $n$ times, we can reduce the probability of Bob accepting a the proof of a non residue  to $2^{-n}$.
+
+
+On the other hand, we claim that we didn't really reveal anything about $s$.
+Indeed, if Bob chooses $b=0$, then the two messages $(x',ss')$ he sees can be thought of as a random quadratic residue $x'$ and its root.
+If Bob  chooses $b=1$ then after dividing by $x$ (which he could have done by himself) he still gets a random residue $x''$ and its root $s'$.
 In both cases, the distribution of these two messages is completely independent of $s$, and hence intuitively yields no additional information about it beyond whatever Bob knew before.
 
 To define zero knowledge mathematically we follow the following intuition:
@@ -220,7 +236,8 @@ That is, we can show the verifier does not gain anything from the interaction, b
 > # {.remark title="The simulation paradigm" #simulationrem}
 The natural way to define security is to say that a system is secure if some "laundry list" of bad outcomes X,Y,Z can't happen.
 The definition of zero knowledge is different. Rather than giving a list of the events that are _not allowed_ to occur, it gives a maximalist _simulation_ condition.
-That is, at its heart the definition of zero knowledge says the following: clearly, we cannot prevent the verifier from running an efficient algorithm $S^*$ on the public input, but we want to ensure that this is the most he can learn from the interaction.
+>
+At its heart the definition of zero knowledge says the following: clearly, we cannot prevent the verifier from running an efficient algorithm $S^*$ on the public input, but we want to ensure that this is the most he can learn from the interaction.
 This _simulation paradigm_ has become the standard way to define security of a great many cryptographic applications.
 That is, we bound what an adversary Eve can learn by postulating some hypothetical adversary Lilith that is under much harsher conditions (e.g., does not get to interact with the prover) and ensuring that Eve cannot learn anything that Lilith couldn't have learned either.
 This has an advantage of being the most conservative definition possible, and also phrasing security in _positive_ terms- there exists a simulation - as opposed to the typical _negative_ terms - events X,Y,Z can't happen. Since it's often easier for us to think of positive terms, paradoxically sometimes this stronger security condition is easier to prove. Zero knowledge is in some sense the simplest setting of the simulation paradigm and we'll see it time and again in dealing with more advanced notions.
@@ -242,8 +259,7 @@ Since Bob only sends a single bit, we can think of this strategy as composed of 
 >
 * $V_2(x,m,x',s'')$ is whatevery Bob outputs after seeing Alice's response $s''$ to the bit $b$.
 >
-Both $V_1$ and $V_2$ are efficiently computable. We now need to come up with an efficient simulator $S^*$ that is a standalone algorithm that on input $x,m$ will  
-output a distribution indistinguishable from the output $V^*$.
+Both $V_1$ and $V_2$ are efficiently computable. We now need to come up with an efficient simulator $S^*$ that is a standalone algorithm that on input $x,m$ will output a distribution indistinguishable from the output $V^*$.
 The simulator $S^*$ will work as follows:
 >
 1. Pick $b'\leftarrow_R\{0,1\}$.
