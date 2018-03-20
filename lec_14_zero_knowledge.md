@@ -16,7 +16,7 @@ We won't answer the first question, but will show some insights on the latter tw
 _Zero knowledge proofs_ are proofs that fully convince that a statement is true without yielding _any additional knowledge_.
 So, after seeing a zero knowledge proof that $m$ has a factor ending with $7$, you'll be no
 closer to knowing $m$'s factorization than you were before.
-Zero knowledge proofs were invented by Goldasser, Micali and Rackoff in 1982 and have since been used in great many settings.
+Zero knowledge proofs were invented by Goldwasser, Micali and Rackoff in 1982 and have since been used in great many settings.
 How would you achieve such a thing, or even define it? And why on earth would it be useful?
 This is the topic of this lecture.
 
@@ -28,7 +28,7 @@ Before we  talk about how to achieve zero knowledge, let us discuss some of its 
 ### Nuclear disarmanent
 
 The United States and Russia have reached a dangerous and expensive equilibrium by which each has about [7000 nuclear warheads](https://www.armscontrol.org/factsheets/Nuclearweaponswhohaswhat), much more than is needed to decimate each others' population (and the population of much of the rest of the world).[^population]
-Havine so many weapons increases the chance of "leakage" of weapons, or of an accidental launch (which can result in a an all our war) through fault in communications or rogue commanders.
+Having so many weapons increases the chance of "leakage" of weapons, or of an accidental launch (which can result in an all out war) through fault in communications or rogue commanders.
 This also threatens the delicate balance of the [Non-Proliferation Treaty](https://en.wikipedia.org/wiki/Treaty_on_the_Non-Proliferation_of_Nuclear_Weapons) which at its core is a bargain where non-weapons states agree not to pursue nuclear weapons and the five nuclear weapon states agree to make progress on nuclear disarmament.
 These huge quantities of nuclear weapons are not only dangerous, as they increase the chance of a leak or of an individual failure or rogue commander causing a world catastrophe, but also extremely expensive to maintain.
 
@@ -36,7 +36,7 @@ For all of these reasons, in 2009, U.S. President Obama called to set as a long 
 On the other side, Russian President Putin has said already in 2000 that he sees "no obstacles that could hamper future deep cuts of strategic offensive armaments".
 (Though as of 2018, political winds on both sides have shifted away from disarmament and more toward armament.)
 
-There are many reasons why progress on nuclear disarmanent has been so slow, and most of them have nothing to do with zero knowledge or any other piece of technology.
+There are many reasons why progress on nuclear disarmament has been so slow, and most of them have nothing to do with zero knowledge or any other piece of technology.
 But there are some technical hurdles as well.
 One of those hurdles is that for the U.S. and Russia to go beyond restricting the number of _deployed_ weapons to significantly reducing the _stockpiles_, they need to find a way for one country to verifiably prove that it has dismantled warheads.
 As mentioned in my [work with Glaser and Goldston](http://www.nature.com/nature/journal/v510/n7506/full/nature13457.html) (see also [this page](http://nuclearfutures.princeton.edu/warhead-verification/)), a key stumbling block is that the design of a nuclear warhard is of course highly classified and about the last thing in the world that the U.S. would like to share with Russia and vice versa.
@@ -48,7 +48,7 @@ So, how can the U.S. convince the Russian that it has destroyed a warhead, when 
 ### Voting
 
 Electronic voting has been of great interest for many reasons.
-One potential advantaghe is that it could allow completely transparent vote counting, where every citizen could verify that the votes were counted correctly.
+One potential advantage is that it could allow completely transparent vote counting, where every citizen could verify that the votes were counted correctly.
 For example, Chaum suggested an approach to do so by publishing an encryption of every vote and then having the central authority _prove_ that the final outcome corresponds to the counts of all the plaintexts.
 But of course to maintain voter privacy, we need to prove this without actually revealing those plaintexts. Can we do so?
 
@@ -74,7 +74,7 @@ Normally, such proofs might require the parties to reveal their secret inputs, h
 
 ## Defining and constructing zero knowledge proofs
 
-So, zero knowledge proofs are wondeful objects, but how do we get them?
+So, zero knowledge proofs are wonderful objects, but how do we get them?
 In fact, we haven't answered the even more basic question of how do we _define_ zero knowledge?
 We have to start by the most basic task of defining what we mean by a _proof_.
 
@@ -85,7 +85,7 @@ For example:
 
 * In [_Zermalo-Frankel + Axiom of Choice (ZFC)_](https://en.wikipedia.org/wiki/Zermelo%E2%80%93Fraenkel_set_theory) a _statement_ is some purported fact about sets (e.g., the Reimann Hypothesis[^encoding]), and a _proof_ is a step by step derivation of it from the axioms.
 
-* We can many define other "theories". For example, a theory where the statements are pairs $(x,m)$ such that $x$ is a quadratic residue modulo $m$  and a proof for $x$ is the number $s$ such that $x=s^2 \pmod{m}$, or a theory where the theorems are _Hamlitonian_ graphs $G$ (graphs on $n$ vertices that contain an $n$-long cycle) and the proofs are the description of the cycle.
+* We can many define other "theories". For example, a theory where the statements are pairs $(x,m)$ such that $x$ is a quadratic residue modulo $m$  and a proof for $x$ is the number $s$ such that $x=s^2 \pmod{m}$, or a theory where the theorems are _Hamiltonian_ graphs $G$ (graphs on $n$ vertices that contain an $n$-long cycle) and the proofs are the description of the cycle.
 
 
 [^encoding]: Integers can be coded as sets in various ways. For example, one can encode $0$ as $\emptyset$ and if $N$ is the set encoding $n$, we can encode $n+1$ using the   $n+1$-element set  $\{ N \} \cup N$.   
@@ -128,7 +128,7 @@ However, here is an interactive proof system to prove statements of the form "$N
 
 * The protocol will work as follows:
 
-1. Bob will pick some random $s\in \Z^*_m$ (e.g., by picking a random number in $\{1,\ldots,m-1\}$  and discarding it if it has nontrivial g.c.d. with $m$) and toss a coin $b\in\{0,1\}$. If $b=0$ then Bob will send $s^2 \pmod{m}$ to Alice and otherwise he will send $xs^2 \pmod{m}$ to Alice.
+1. Bob will pick some random $s\in \Z^*_m$ (e.g., by picking a random number in $\{1,\ldots,m-1\}$  and discard it if it has nontrivial g.c.d. with $m$) and toss a coin $b\in\{0,1\}$. If $b=0$ then Bob will send $s^2 \pmod{m}$ to Alice and otherwise he will send $xs^2 \pmod{m}$ to Alice.
 
 2. Alice will use her ability to compute $NQR(m,\cdot)$ to  respond with $b'=0$ if Bob sent a quadratic residue and with $b'=1$ otherwise.
 
@@ -180,7 +180,7 @@ We say that a proof system has an _efficient prover_ if there is an NP-type  pro
 [^arguments]: People have considered the notion of zero knowledge systems where soundness holds only with respect to efficient provers; these are known as _argument systems_.
 
 > # {.remark title="Notation for strategies" #strategies}
-Up until now, we always considered cryptographic protocols where Alice and Bob trusted one another, but were worried about some adversary controlling the channel between them. Now we are in a somewhat more "suspicious" setting where the parties do not fully trust one another. In such protocols there is always a "prescribed" or **honest** strategy that a particular party _should_ follow, but we generally don't want the other parties' security to rely on some else's good intention, and hence analyze also the case where a party uses an arbitrary **malicious** strategy. We sometimes also consider the **honest but curious** case where the adversary is passive and only collects information, but does not deviate from the prescribed strategy.
+Up until now, we always considered cryptographic protocols where Alice and Bob trusted one another, but were worried about some adversary controlling the channel between them. Now we are in a somewhat more "suspicious" setting where the parties do not fully trust one another. In such protocols there is always a "prescribed" or **honest** strategy that a particular party _should_ follow, but we generally don't want the other parties' security to rely on someone else's good intention, and hence analyze also the case where a party uses an arbitrary **malicious** strategy. We sometimes also consider the **honest but curious** case where the adversary is passive and only collects information, but does not deviate from the prescribed strategy.
 >
 Protocols typically only guarantee security for party A when it behaves honestly - a party can always chose to violate its own security and there is not much we can (or should?) do about it.
 
@@ -257,7 +257,7 @@ Since Bob only sends a single bit, we can think of this strategy as composed of 
 >
 * $V_1(x,m,x')$ outputs the bit $b$ that Bob chooses on input $x,m$ and after Alice's first message is $x'$.
 >
-* $V_2(x,m,x',s'')$ is whatevery Bob outputs after seeing Alice's response $s''$ to the bit $b$.
+* $V_2(x,m,x',s'')$ is whatever Bob outputs after seeing Alice's response $s''$ to the bit $b$.
 >
 Both $V_1$ and $V_2$ are efficiently computable. We now need to come up with an efficient simulator $S^*$ that is a standalone algorithm that on input $x,m$ will output a distribution indistinguishable from the output $V^*$.
 The simulator $S^*$ will work as follows:
@@ -304,7 +304,7 @@ There are known ways to achieve zero knowledge with negligible soundness error a
 ## Zero knowledge proof for Hamiltonicity.
 
 We now show a proof for another language.
-Suppose that Alice and Bob know an $n$-vertex graph $G$ and Alice knows a _Hamiltonian cycle_ $C$ in this graph (i.e.. a legth $n$ simple cycle- one that traverses all vertices exactly once).
+Suppose that Alice and Bob know an $n$-vertex graph $G$ and Alice knows a _Hamiltonian cycle_ $C$ in this graph (i.e.. a length $n$ simple cycle- one that traverses all vertices exactly once).
 Here is how Alice can prove that such a cycle exists without revealing any information about it:
 
 __Protocol ZK-Ham:__
@@ -365,7 +365,7 @@ We will simply sketch here the proofs (again see Goldreich's book for full proof
 For Claim 1, note that if $b'=0$ then the message is _identical_ to the way Alice computes it.
 If $b'=1$ then the difference is that $S^*$ computes some strings $y_{i,j}$ of the form $G(x_{i,j})+z$ where Alice would compute the corresponding strings as $G(x_{i,j})$ this is indistinguishable because $G$ is a pseudorandom generator (and the distribution $U_{3n}\oplus z$ is the same as $U_{3n}$).
 >
-Claim 2 is a corolloary of Claim 1. If $V^*$ managed to pick a message $b$ such that $\Pr[ b=b' ] < 1/2 - negl(n)$ then in particular it could distinguish between the first message of Alice (that is computed independently of $b'$ and hence contains no information about it) from the first message of $V^*$.
+Claim 2 is a corollary of Claim 1. If $V^*$ managed to pick a message $b$ such that $\Pr[ b=b' ] < 1/2 - negl(n)$ then in particular it could distinguish between the first message of Alice (that is computed independently of $b'$ and hence contains no information about it) from the first message of $V^*$.
 >
 For Claim 3, note that again if $b=0$ then the message is computed in a way identical to what Alice does. If $b=1$ then this message is also computed in a way identical to Alice, since it does not matter if instead of picking $C'$ at random, we picked a random permutation $\pi$ and let $C'$ be the image of the Hamiltonian cycle under this permutation.
 >
@@ -380,7 +380,7 @@ This completes the proof of the theorem.
 The reason that a protocol for Hamiltonicity is more interesting than a protocol for Quadratic residuosity is that Hamiltonicity is an NP-complete question.
 This means that for every other NP language $L$, we can use the reduction from $L$ to Hamiltonicity combined with protocol ZK-Ham to give a zero knowledge proof system for $L$. In particular this means that we can have zero knowledge proofs for the following languages:
 
-* The language of numbers $m$ such that there exists a prime $p$ dividing $m$ whose remainder modulo $10$ is $7$>
+* The language of numbers $m$ such that there exists a prime $p$ dividing $m$ whose remainder modulo $10$ is $7$.
 
 * The language of tuples $X,e,c_1,\ldots,c_n$ such that $c_i$ is an encryption of a number $x_i$ with $\sum x_i = X$. (This is essentially what we needed in the voting example above).
 
