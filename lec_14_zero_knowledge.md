@@ -106,7 +106,7 @@ How would a person _prove_ to another that she is a in fact such a [tetrachromat
 
 
 
->___Proof of tetrachromacy:__
+>__Proof of tetrachromacy:__
 >
 >Suppose that Alice is a tetrachromat and can distinguish between the colors of two pieces of plastic that would be identical to a trichromat. She wants to prove to a trichromat Bob that the two pieces are not identical. She can do this as follows:
 >
