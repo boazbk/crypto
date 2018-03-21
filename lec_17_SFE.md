@@ -143,9 +143,8 @@ Amazingly, we can obtain such a protocol for _every_ functionality:
 
 
 > # {.theorem title="Fundamental theorem of cryptography" #MPCthm}
-
-> # {.proof data-ref="MPCthm"}
 Under reasonable assumptions[^assumptions] for every polynomial-time computable $k$-functionality $F$ there is a polynomial-time protocol that computes it securely.
+
 
 [^assumptions]: Originally this was shown under the assumption of trapdoor permutations (which can be derived from the Factoring or RSA  conjectures) but it is known today under a variety of other assumptions, including in particular the LWE conjecture.
 
@@ -227,7 +226,8 @@ For example, there might be several reasons why we would want to "split" a secre
 
 * On the other side, a company might wish to split its own key between several servers residing in different countries, to ensure not one of them is completely under one jurisdiction. Or it might do such splitting for technical reasons, so that if there is a break in into a single site, the key is not compromised.
 
-There are several other such examples. One problem with this approach is that splitting a cryptographic key is not the same  as cutting a 100 dollar bill in half.
+There are several other such examples.
+One problem with this approach is that splitting a cryptographic key is not the same  as cutting a 100 dollar bill in half.
 If you simply give half of the bits to each party, you could significantly harm security. (For example, it is possible to recover the full RSA key [from only $27\%$ of its bits](http://eprint.iacr.org/2008/510.pdf)).
 
 Here is a better approach, known as [secret sharing](https://en.wikipedia.org/wiki/Secret_sharing):
@@ -306,7 +306,7 @@ We have seen commitments before, but let us now formally define the notion:
 > # {.definition title="Commitment scheme" #commitmentdef}
 A _commitment scheme_ for strings of length $\ell$ is a two party protocol between the _sender_ and _receiver_ satisfying the following:
 >
-* __Hiding (sender's security):__ For every two sender inputs $x,x' \in \{0,1\}^\ell$, and no matter what efficient strategy the receiver uses, it cannot distinguish between the interaction with the sender when the latter uses $x$ as opposed to when it uses $x$'.
+* __Hiding (sender's security):__ For every two sender inputs $x,x' \in \{0,1\}^\ell$, and no matter what efficient strategy the receiver uses, it cannot distinguish between the interaction with the sender when the latter uses $x$ as opposed to when it uses $x'$.
 >
 * __Binding (reciever's security):__ No matter what (efficient or non efficient) strategy the sender uses, if the reciever follows the protocol then with probability $1-negl(n)$, there will exist at most a single string $x\in\{0,1\}^\ell$ such that the transcript is consistent with the input $x$ and some sender randomness $r$.
 
