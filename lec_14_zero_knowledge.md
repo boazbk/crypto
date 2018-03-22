@@ -25,7 +25,7 @@ This is the topic of this lecture.
 Before we  talk about how to achieve zero knowledge, let us discuss some of its potential applications:
 
 
-### Nuclear disarmanent
+### Nuclear disarmament
 
 The United States and Russia have reached a dangerous and expensive equilibrium by which each has about [7000 nuclear warheads](https://www.armscontrol.org/factsheets/Nuclearweaponswhohaswhat), much more than is needed to decimate each others' population (and the population of much of the rest of the world).[^population]
 Having so many weapons increases the chance of "leakage" of weapons, or of an accidental launch (which can result in an all out war) through fault in communications or rogue commanders.
@@ -42,7 +42,7 @@ One of those hurdles is that for the U.S. and Russia to go beyond restricting th
 As mentioned in my [work with Glaser and Goldston](http://www.nature.com/nature/journal/v510/n7506/full/nature13457.html) (see also [this page](http://nuclearfutures.princeton.edu/warhead-verification/)), a key stumbling block is that the design of a nuclear warhard is of course highly classified and about the last thing in the world that the U.S. would like to share with Russia and vice versa.
 So, how can the U.S. convince the Russian that it has destroyed a warhead, when it cannot let Russian experts anywhere near it?
 
-[^population]: To be fair, "only" about 170 million americans live in the [50 largest metropolitan areas](https://www.currentresults.com/Weather-Extremes/US/largest-cities-list.php) and so arguably many people will survive at least the initial impact of a nuclear war, though it had been estimated that even a "small" nuclear war involving detonation of 100 not too large warheads could have [devastating global consequences](http://onlinelibrary.wiley.com/doi/10.1002/2013EF000205/full).
+[^population]: To be fair, "only" about 170 million Americans live in the [50 largest metropolitan areas](https://www.currentresults.com/Weather-Extremes/US/largest-cities-list.php) and so arguably many people will survive at least the initial impact of a nuclear war, though it had been estimated that even a "small" nuclear war involving detonation of 100 not too large warheads could have [devastating global consequences](http://onlinelibrary.wiley.com/doi/10.1002/2013EF000205/full).
 
 
 ### Voting
@@ -83,7 +83,7 @@ For example:
 
 * In _Euclidean geometry_, _statements_ are geometric facts such as "in any triangle the degrees sum to 180 degrees" and the _proofs_ are step by step derivations of the statements from the five basic [postulates](https://en.wikipedia.org/wiki/Euclidean_geometry).
 
-* In [_Zermalo-Frankel + Axiom of Choice (ZFC)_](https://en.wikipedia.org/wiki/Zermelo%E2%80%93Fraenkel_set_theory) a _statement_ is some purported fact about sets (e.g., the Reimann Hypothesis[^encoding]), and a _proof_ is a step by step derivation of it from the axioms.
+* In [_Zermelo-Fraenkel + Axiom of Choice (ZFC)_](https://en.wikipedia.org/wiki/Zermelo%E2%80%93Fraenkel_set_theory) a _statement_ is some purported fact about sets (e.g., the Riemann Hypothesis[^encoding]), and a _proof_ is a step by step derivation of it from the axioms.
 
 * We can many define other "theories". For example, a theory where the statements are pairs $(x,m)$ such that $x$ is a quadratic residue modulo $m$  and a proof for $x$ is the number $s$ such that $x=s^2 \pmod{m}$, or a theory where the theorems are _Hamiltonian_ graphs $G$ (graphs on $n$ vertices that contain an $n$-long cycle) and the proofs are the description of the cycle.
 
@@ -309,7 +309,7 @@ Here is how Alice can prove that such a cycle exists without revealing any infor
 
 __Protocol ZK-Ham:__
 
-0. **Common input:** graph $H$ (in the form of an $n\times n$ adjacency matrix); **Alice's private input:** a Hamiltonian cycle $C=(C_1,\ldots,C_n)$ which are distinct vertices such that $(C_\ell,C_{j+1})$ is an edge in $H$ for all $\ell\in\{1,\ldots,n-1\}$ and $(C_n,C_1)$ is an edge as well.
+0. **Common input:** graph $H$ (in the form of an $n\times n$ adjacency matrix); **Alice's private input:** a Hamiltonian cycle $C=(C_1,\ldots,C_n)$ which are distinct vertices such that $(C_\ell,C_{\ell+1})$ is an edge in $H$ for all $\ell\in\{1,\ldots,n-1\}$ and $(C_n,C_1)$ is an edge as well.
 
 1. Bob chooses a random string $z\in \{0,1\}^{3n}$
 
