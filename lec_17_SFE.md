@@ -12,13 +12,13 @@ However, I think a better definition would be:
 >_Cryptography is about replacing trust with mathematics._
 
 After all, the reason we work so hard in cryptography is because a lack of trust.
-We wouldn't need encryption if Alice and Bob could be guaranteed that their communication, despite going through wireless and wired networks controlled and snooped upon by a plethora of entities, would be as reliable as if it has been hand delivered by a  letter-carrier as reliable as [Patti Whitcomb](http://old.iolaregister.com/Local%20News/Stories/Weatherwontstopcarriers.html),as opposed to the nosy Eve who might look in the messages, or the malicious Mallory, who might tamper with them.
+We wouldn't need encryption if Alice and Bob could be guaranteed that their communication, despite going through wireless and wired networks controlled and snooped upon by a plethora of entities, would be as reliable as if it has been hand delivered by a  letter-carrier as reliable as [Patti Whitcomb](http://old.iolaregister.com/Local%20News/Stories/Weatherwontstopcarriers.html), as opposed to the nosy Eve who might look in the messages, or the malicious Mallory, who might tamper with them.
 We wouldn't need zero knowledge proofs  if Vladimir could simply say "trust me Barack, this is an authentic nuke".
 We wouldn't need electronic signatures if we could trust that all software updates are designed to make our devices safer and not, to pick a random example, to turn our phones into surveillance devices.
 
 Unfortunately, the  world we live in is not as ideal, and we need these cryptographic tools.
 But what is the limit of what we can achieve?
-Are  these examples of encryption, authentication, zero knowledge etc.. isolated cases of good fortune, or are they special cases of a more general theory of what is possible in cryptography?
+Are  these examples of encryption, authentication, zero knowledge etc. isolated cases of good fortune, or are they special cases of a more general theory of what is possible in cryptography?
 It turns out that the latter is the case and there is in fact an extremely general formulation that (in some sense) captures all of the above and much more.
 This notion is called _multiparty secure computation_ or sometimes _secure function evaluation_ and is the topic of this lecture.
 We will show (a relaxed version of) what I like to call "the fundamental theorem of cryptography", namely that under natural computational conjectures (and in particular the LWE conjecture, as well as the RSA or Factoring assumptions) essentially every cryptographic task can be achieved.
