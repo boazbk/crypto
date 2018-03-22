@@ -366,4 +366,4 @@ It can be shown that if we use this coin tossing protocol at the beginning and t
 
 
 The notion of multiparty secure computation - defining it and achieving it - is quite subtle and I do urge you to read some of the other references listed above as well.
-In particular, the slides and videos from the [Bar Ilan winter school on secure computation and efficiency](http://crypto.biu.ac.il/1st-biu-winter-school), as well as the ones from the  [winter school on advances in practical multiparty computation](http://crypto.biu.ac.il/5th-biu-winter-school) are  great sources for this and related materials.
+In particular, the slides and videos from the [Bar Ilan winter school on secure computation and efficiency](https://cyber.biu.ac.il/event/the-1st-biu-winter-school/), as well as the ones from the  [winter school on advances in practical multiparty computation](https://cyber.biu.ac.il/event/the-5th-biu-winter-school/) are  great sources for this and related materials.
