@@ -30,7 +30,7 @@ But before we can even state the result, we need to talk about how can we even d
 
 The key notion is that cryptography aims to replace _trust_.
 Therefore, we imagine an _ideal world_ where there is some universally trusted party  (cryptographer Silvio Micali likes to denote by Jimmy Carter, but feel free to swap in your own favorite trustworthy personality) that communicates with all participants of the protocol or interaction, including potentially the adversary.
-We define security by stating that whatever the adversary can achieve in our real world, could have also been achieved in the real world.
+We define security by stating that whatever the adversary can achieve in our real world, could have also been achieved in the ideal world.
 
 For example, for obtaining secure communication, Alice will send her message to the trusted party, who will then convey it to Bob.
 The adversary learns nothing about the message's contents, nor can she change them.
