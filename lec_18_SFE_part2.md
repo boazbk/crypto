@@ -29,11 +29,14 @@ Let $F$ be a two party functionality.  Lets start with the case that $F$ is _det
 We'll later show an easy reduction from the general case to this one.
 Here is a suggested protocol for Alice and Bob to run on inputs $x,y$ respectively so that Alice will learn $F(x,y)$ but nothing more about $y$, and Bob will learn nothing about $x$ that he didn't know before.
 
->__Protocol 2PC:__
+![An honest but curious protocol for two party computation using a fully homomorphic encryption scheme with circuit privacy. ](../figure/twopcprotfig.png){#twopcprotfig .class width=300px height=300px}
+
+
+>__Protocol 2PC:__ (See [twopcprotfig](){.ref})
 >
 * __Assumptions:__ $(G,E,D,EVAL)$ is a fully homomorphic encryption scheme.
 >
-* __Inputs:__ Alice's input is $x\in\{0,1\}^n$ and Bob's input is $y\in\{0,1\}^n$. The goal is for Alice to learn only $F(x,y)$ and Bob learn nothing.
+* __Inputs:__ Alice's input is $x\in\{0,1\}^n$ and Bob's input is $y\in\{0,1\}^n$. The goal is for Alice to learn only $F(x,y)$ and Bob to learn nothing.
 >
 * __Alice->Bob:__ Alice generates $(e,d)\leftarrow_R G(1^n)$ and sends $e$ and $c=E_e(x)$.
 >
