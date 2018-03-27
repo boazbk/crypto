@@ -156,17 +156,14 @@ Let $a\in \Z_q$ and $T\in\mathbb{N}$ be such that $aT<q/2$. If we let $X$ be the
 let $X'$ be the distribution obtained by taking  $a+x (\mod q)$ for $x$ chosen in the same way, then
 $$\sum_{y \in \Z_q} \left| \Pr[X=y] - \Pr[X'=y] \right| <|a|/T$$
 
+![If $a \ll T$ then the uniform distribution over the interval $[-T,+T]$ is statistically close to the uniform distribution over the interval $[-T+a,+T+a]$, since the statistical distance is proportional to the event (which happens with probability $a/T$) that a random sample from one distribution falls inside the symmetric difference of the two intervals.](../figure/statdistintervals.png){#statdistintervalsfig .class width=300px height=300px}
+
 > # {.proof data-ref="noiseandsignallem"}
-This has a simple "proof by picture": consider the intervals $[-T,+T]$ and $[-T+a,+T+a]$ on the number line
->
-```
-------*---*----------------------*--------------------------*-----*----
-     -T -T+a                     0                         +T    +T+a
-```
->
-Note that the symmetric difference of these two intervals is only about a $1/T$ fraction of their union.
+This has a simple "proof by picture": consider the intervals $[-T,+T]$ and $[-T+a,+T+a]$ on the number line (see [statdistintervalsfig](){.ref}).
+Note that the symmetric difference of these two intervals is only about a $a/T$ fraction of their union.
 More formally, $X$ is the uniform distribution over the $2T+1$ numbers in the interval $[-T,+T]$ while $X'$ is the uniform distribution over the shifted version of this interval $[-T+a,+T+a]$.
-There are exactly $2|a|$ numbers which get probability zero under one of those distributions and probability $(2T+1)^{-1}<(2T)^{-1}$ under the other. QED
+There are exactly $2|a|$ numbers which get probability zero under one of those distributions and probability $(2T+1)^{-1}<(2T)^{-1}$ under the other.
+
 
 
 We will also use the following lemma:
