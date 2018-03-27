@@ -57,7 +57,7 @@ __Proof:__ Bob only receives a single message in this protocol of the form $(e,c
 The simulator $S$ will generate $(e,d) \leftarrow_R G(1^n)$ and compute $(e,c)$ where $c=E_e(0^n)$. (As usual $0^n$ denotes the length $n$ string consisting of all zeroes.)
 No matter what $x$ is, the output of $S$ is indistinguishable from the message Bob receives by the security of the encryption scheme. QED
 
-(In fact, this protocol is secure even against a _malicious_ strategy of Bob- can you see why?)
+(In fact, Claim B holds even against a  _malicious_ strategy of Bob- can you see why?)
 
 We would now hope that we can prove the same regarding Alice's security. That is prove the following:
 
