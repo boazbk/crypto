@@ -106,7 +106,7 @@ That is, for every $z\in\{0,1\}^*$, the probability that $EVAL_e(f,c_1,\ldots,c_
 Perfect circuit privacy is a strong property, that also automatically implies that $D_d(EVAL(f,E_e(x_1),\ldots,E_e(x_\ell)))=f(x)$ (can you see why?).
 In particular, once you understand the definition, the following lemma is a fairly straightforward exercise.
 
-> # {.lemma #cirpprivacylem}
+> # {.lemma #circprivacylem}
 If $(G,E,D,EVAL)$ satisfies perfect circuit privacy then if $(e,d) = G(1^n)$ then for every two functions $f,f':\{0,1\}^\ell\rightarrow\{0,1\}$ of $poly(n)$ description size and every $x\in\{0,1\}^\ell$ such that $f(x)=f'(x)$, and every algorithm $A$,
 $$| \Pr[ A(d,EVAL(f,E_e(x_1),\ldots,E_e(x_\ell)))=1] -  \Pr[ A(d,EVAL(f',E_e(x_1),\ldots,E_e(x_\ell)))=1] | < negl(n) \label{eqcircprivacy}.$$
 
