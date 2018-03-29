@@ -19,7 +19,7 @@ Now if we open both slits then it seems that the fraction should be $\alpha+\bet
 However, this is not what actually happens when we run this experiment.
 It can be that the detector is  hit a _smaller_ number of times when two slits are open than when only a single one hits.
 It's almost as if the electron checks whether two slits are open, and if they are, it changes the path it takes.
-If we try to "catch the electron in the act" and place a detector right next to each slit so we can count which electron went through which slit then something even more bizzare happened.
+If we try to "catch the electron in the act" and place a detector right next to each slit so we can count which electron went through which slit then something even more bizarre happened.
 The mere fact that we _measured_ the electron path changes the actual path it takes, and now this "destructive interference" pattern is gone and the detector  will be hit   $\alpha+\beta$ fraction of the time.
 
 ![The setup of the double slit experiment](../figure/double-slit-setup.PNG){#tmplabelfig width=50% }
@@ -317,10 +317,10 @@ Let $u_\perp$ be the unit vector orthogonal to $u$ in this subspace and let $x^*
 Restricted to this subspace, $U^*$ is a reflection along the axis $x^*_\perp$ and $U$ is a reflection along the axis $u$.
 
 Now, let $\theta$ be the angle between $u$ and $x^*_\perp$.
-These vectors are very close to each other and so $\theta$ is very small but not zero - it is equal to $\sin^{-1} 2^{-n/2}$ which is roughly $2^{-n/2}$.
+These vectors are very close to each other and so $\theta$ is very small but not zero - it is equal to $\sin^{-1}( 2^{-n/2})$ which is roughly $2^{-n/2}$.
 Now if our state $v$ has  angle $\alpha \geq 0$  with $u$, then as long as $\alpha$ is not too large (say $\alpha<\pi/8$) then this means that $v$ has angle
 $u+\theta$ with $x^*_\perp$.
-That means taht $U^*v$ will have angle $-\alpha-\theta$ with $x^*_\perp$ or $-\alpha-2\theta$ with $u$, and hence $UU^*v$ will have angle
+That means that $U^*v$ will have angle $-\alpha-\theta$ with $x^*_\perp$ or $-\alpha-2\theta$ with $u$, and hence $UU^*v$ will have angle
 $\alpha+2\theta$ with $u$.
 Hence in one application from $UU^*$ we move $2\theta$ radians away from $u$, and in $O(2^{-n/2})$ steps the angle between $u$ and our state will be at least some constant $\epsilon>0$.
 Since we live in the two dimensional space spanned by $u$ and $\ket{x}$, it would mean that the dot product of our state and $\ket{x}$ will be at least some constant as well. QED
