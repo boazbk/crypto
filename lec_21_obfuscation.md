@@ -36,12 +36,12 @@ A _UA-secure encryption_ (which stands for secure against an [Underwood](https:/
 The technical term for this notion is _witness encryption_  by which we mean that for every circuit $F$ we have an algorithm $E$ that on input $F$ and a message $m$ creates a ciphertext $c$ that in a CPA secure, and there is an algorithm $D$ that on input $c$ and some string $w$,  outputs $m$ if $F(w)=1$.
 In other words, instead of the key being a unique string, the key is _any_ string $w$ that satisfies a certain condition.
 Witness encryption can be used for other applications.
-For example, you could encrypt a message to future members of humanity, that can be decrypted only using a valid proof of the Reimann Hypothesis.
+For example, you could encrypt a message to future members of humanity, that can be decrypted only using a valid proof of the Riemann Hypothesis.
 
 ## Deniable encryption
 
 Here is another scenario that is seemingly not  covered by our current tools.
-Suppose that Alice uses a public key system $(G,E,D)$ to encrypt a message $m$ by computing $c=E_e(m;r)$ and sending  $c$  to Bob that will compute $m=D_d(c)$.
+Suppose that Alice uses a public key system $(G,E,D)$ to encrypt a message $m$ by computing $c=E_e(m,r)$ and sending  $c$  to Bob that will compute $m=D_d(c)$.
 The ciphertext is intercepted by Bob's archenemy Freddie Baskerville Ignatius (or FBI for short) who has the means to force Alice to reveal the message and as proof reveal the randomness used in encryption as well.
 Could Alice find, for any choice of $m'$, some string $r'$ that is pseudorandom and still $c$ equals $E_e(m',r')$?
 An encryption scheme with this property is called  _deniable _, since we Alice can deny she sent $m$ and claim she sent $m'$ instead.[^pumpkin]
@@ -128,7 +128,7 @@ That is, given a private key encryption scheme $(E,D)$ we can transform it to a 
 The new encryption algorithm $E'$ takes $e$ and $c$ and simply outputs $e(c)$.
 
 These days we know other approaches for obtaining public key encryption, but the obfuscation-based approach has significant additional flexibility.
-To turn this into a fully homomorphic encryption, we simply publish the obfuscation of $c,c' \mapsto D_k(c) NAND D_k(c')$.
+To turn this into a fully homomorphic encryption, we simply publish the obfuscation of $c,c' \mapsto D_k(c) ~NAND~ D_k(c')$.
 To turn this into a functional encryption, for every function $f$ we can define $d_f$ as the obfuscation of $c \mapsto f(D_k(c))$.
 
 We can also use obfuscation to get a witness encryption, to encrypt a message $m$ to be opened using any $w$ such that $F(w)=1$, we can obfuscate the function that maps $w$ to $m$ if $F(w)=1$ and outputs ```error``` otherwise.
@@ -170,7 +170,7 @@ There does not exist a strong VBB obfuscator.
 Suppose towards a contradiction that there exists a strong VBB obfuscator $\mathcal{O}$. Let $F_{\alpha,\beta}$ be defined as above, and let $A$ be the adversary that on input a
 circuit $C'$ simply outputs $C'$. We claim that for every $S$ there exists some $\alpha,\beta$ and an efficient algorithm $D_{\alpha,\beta}$
 >
-$\left| \Pr[ D_{\alpha,\beta}(A(\mathcal{O}(F_{\alpha,\beta}))=1] -\Pr[ D_{\alpha,beta}(S^{F_{\alpha,\beta}}(1^{10n}))=1 ] \right| > 0.9 \;\; (*)$
+$\left| \Pr[ D_{\alpha,\beta}(A(\mathcal{O}(F_{\alpha,\beta}))=1] -\Pr[ D_{\alpha,\beta}(S^{F_{\alpha,\beta}}(1^{10n}))=1 ] \right| > 0.9 \;\; (*)$
 >
 these probabilities are over the coins of $\mathcal{O}$ and the simulator $S$. Note that we identify the function $F_{\alpha,\beta}$ with the obvious circuit of size at most $10n$ that computes it.
 >
@@ -184,7 +184,7 @@ We claim that there exists some $\alpha,\beta$ such that this will happen with n
 Indeed, assume $S$ makes $T=poly(n)$ queries and pick $\alpha,\beta$ independently and uniformly at random from $\{0,1\}^n$.
 For every $i=1,\ldots,T$, let $E_i$ be the event that the $i^{th}$ query of $S$ is the first in which it gets a response other than $0^n$.
 The probability of $E_i$ is at most $2^{-n}$ because as long as $S$ got all responses to be $0^n$, it got no information about $\alpha$ and so the choice of $S$'s $i^{th}$ query is indepednent of $\alpha$ which is chosen at random in $\{0,1\}^n$.
-By a union bouns, the probability that $S$ got any response other than $0^n$ is negligible.
+By a union bound, the probability that $S$ got any response other than $0^n$ is negligible.
 In which case if we let $C'$ be the output of $S$ and let $\beta' = C'(\alpha)$, then $\beta'$ is independent of $\beta$ and so the probability that they are equal is at most $2^{-n}$.
 
 The adversary in the proof of [strongvbblem](){.ref} does not seem very impressive.
@@ -197,7 +197,7 @@ We'll prove a slightly weaker version of [obfimpthm](){.ref}:
 If fully homomorphic encryption exists then there is no VBB secure obfuscating compiler.
 
 
-(To get the original theorem from this, note that if VBB obfuscation exist then we can transform any private key encryption into a fully homomorphic public key encryption.)
+(To get the original theorem from this, note that if VBB obfuscation exists then we can transform any private key encryption into a fully homomorphic public key encryption.)
 
 
 > # {.proof data-ref="obfimpweakthm"}
@@ -240,7 +240,7 @@ Now if neither case happens, then $S$ does not receive any information about $\g
 
 > # { .pause }
 This proof is simple but deserves a second read.
-A crcucial point here is to use FHE to allow the adversary to essentially "feed $C'$ to itself" so it can obtain from an encryption of $\alpha$ an encryption of $\beta$, even though that would not be possible using black box access only.
+A crucial point here is to use FHE to allow the adversary to essentially "feed $C'$ to itself" so it can obtain from an encryption of $\alpha$ an encryption of $\beta$, even though that would not be possible using black box access only.
 
 ## Indistinguishability obfuscation
 
@@ -253,7 +253,7 @@ However, already in that paper we noticed that there was a variant of obfuscatio
 We say a compiler $\mathcal{O}$ is an _indistinguishability obfuscator (IO)_ if for every two circuits $C,C'$ that have the same size and compute the same function,
 the random variables $\mathcal{O}(C)$ and $\mathcal{O}(C')$ are computationally indistinguishable.
 
-It is a good exercise to understand why the proof of the impossiblity result above does not apply to rule out IO.
+It is a good exercise to understand why the proof of the impossibility result above does not apply to rule out IO.
 Nevertheless, a reasonable guess would be that:
 
 1. IO is impossible to achieve.
