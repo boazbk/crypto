@@ -1,4 +1,4 @@
-# Quantum computing and cryptography II: Shor's Algorithm
+# Quantum computing and cryptography II
 
 
 
