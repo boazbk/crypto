@@ -1,19 +1,23 @@
-# Quantum computing and cryptography II
+# Quantum computing and cryptography II: Shor's Algorithm
 
-## Shor's Algorithm
+
 
 Bell's Inequality is powerful demonstration that there is something very strange going on with quantum mechanics.
 But could this "strangeness" be of any use to solve computational problems not directly related to quantum systems?
 A priori, one could guess the answer is _no_.
 In 1994 Peter Shor showed that one would be wrong:
 
-__Theorem (Shor's Theorem):__ The map that takes an integer $m$ into its prime factorization is efficiently quantumly computable. Specifically, it can be computed using $O(\log^3 m)$ quantum gates.
+
+> # {.theorem title="Shor's Theorem" #shorthm}
+The map that takes an integer $m$ into its prime factorization is efficiently quantumly computable. Specifically, it can be computed using $O(\log^3 m)$ quantum gates.
+
 
 This is an exponential improvement over the best known classical algorithms, which as we mentioned before,  take roughly $2^{\tilde{O(\log^{1/3}m)}}$ time.
 
 We will now sketch the ideas behind Shor's algorithm. In fact, Shor proved the following more general theorem:
 
-__Theorem:__ There is a quantum polynomial time algorithm that given a multiplicative Abelian group $\mathbb{G}$ and element $g\in\mathbb{G}$ computes the _order_ of $g$ in the group.
+> # {.theorem title="Order Finding Algorithm" #hiddengroupthm}
+There is a quantum polynomial time algorithm that given a multiplicative Abelian group $\mathbb{G}$ and element $g\in\mathbb{G}$ computes the _order_ of $g$ in the group.
 
 Recall that the order of $g$ in $\mathbb{G}$ is the smallest positive integer $a$ such that $g^a = 1$. By "given a group" we mean that we can represent the elements of the group as strings of length $O(\log |\mathbb{G}|)$ and there is a $poly(\log|\mathbb{G}|)$ algorithm to perform multiplication
 in the group.
@@ -49,13 +53,16 @@ One can show that if $f$ is $h^*$-periodic then we can recover $h^*$ from this d
 Shor carried out this approach for the group $\mathbb{H}=\Z^*_q$ for some $q$, but we will start be seeing this for the group $\mathbb{H} = \{0,1\}^n$ with the XOR operation.
 This case is known as _Simon's algorithm_ (given by Dan Simon in 1994) and actually preceded (and inspired) Shor's algorithm:
 
-__Theorem (Simon's Algorithm):__ If $f:\{0,1\}^n\rightarrow\{0,1\}^*$ is polynomial time computable and satisfies the property that $f(x)=f(y)$ iff $x\oplus y = h^*$ then there exists
+
+> # {.theorem title="Simon's Algorithm" #simonsthm}
+If $f:\{0,1\}^n\rightarrow\{0,1\}^*$ is polynomial time computable and satisfies the property that $f(x)=f(y)$ iff $x\oplus y = h^*$ then there exists
 a quantum polynomial-time algorithm that outputs a random $h\in \{0,1\}^n$ such that $\iprod{h,h^*}=0 \pmod{2}$.
+
 
 Note that given $O(n)$ such samples, we can recover $h^*$ with high probability by solving the corresponding linear equations.
 
-
-__Proof:__ Let $HAD$ be the $2\times 2$ unitary  matrix corresponding to the  one qubit operation $\ket{0} \mapsto \tfrac{1}{\sqrt{2}}(\ket{0}+\ket{1})$ and
+> # {.proof data-ref="simonsthm"}
+Let $HAD$ be the $2\times 2$ unitary  matrix corresponding to the  one qubit operation $\ket{0} \mapsto \tfrac{1}{\sqrt{2}}(\ket{0}+\ket{1})$ and
 $\ket{1} \mapsto \tfrac{1}{\sqrt{2}}(\ket{0}-\ket{1})$  or $\ket{a}\mapsto \tfrac{1}{\sqrt{2}}(\ket{0}+(-1)^a\ket{1})$.
 Given the state $\ket{0^{n+m}}$ we can apply this map to each one of the first $n$ qubits to get the state
 $2^{-n/2}\sum_{x\in\{0,1\}^n}\ket{x}\ket{0^m}$
@@ -81,7 +88,9 @@ We now describe how to achieve Shor's algorithm for order finding. We will not d
 
 That is, we prove the following theorem:
 
-__Theorem (Shor's Algorithm):__ For every $\ell$ and $a\in\Z^*_\ell$, there is a quantum $poly(log \ell)$ algorithm to find the order of $a$ in $\Z^*_\ell$.
+> # {.theorem title="Shor's Algorithm, restated" #shortwothm}
+For every $\ell$ and $a\in\Z^*_\ell$, there is a quantum $poly(log \ell)$ algorithm to find the order of $a$ in $\Z^*_\ell$.
+
 
 
 The idea is similar to Simon's algorithm.  We consider the map $x \mapsto a^x (\mod \ell)$ which is a periodic map over $\Z_m$ where $m=|\Z^*_\ell|$ with period being the order of $a$.  
@@ -183,12 +192,15 @@ $T(m)=O(m\log m)$.
 The *quantum Fourier transform* is an algorithm to change the state of a
 quantum register from $f \in \mathbb{C}^m$ to its Fourier transform $\hat{f}$.
 
-**Theorem (Quantum Fourier Transform, Bernstein Vazirani):**
+
+> # {.theorem title="Quantum Fourier Transform (Bernstein-Vazirani)" #quantumftthm}
 For every $m$ and $m =2^m$ there is a quantum algorithm that uses
 $O(m^2)$ elementary quantum operations and transforms a quantum register
 in state $f = \sum_{x\in\Z_m} f(x)\ket{x}$ into the state
 $\hat{f}= \sum_{x\in\Z_m} \hat{f}(x) \ket{x}$, where
 $\hat{f}(x) = \tfrac{1}{\sqrt{m}} \sum_{y\in \Z_m} \omega^{xy}f(x)$.
+
+
 
 The crux of the algorithm is the FFT equations, which allow the problem of computing $FT_m$,
 the problem of size $m$, to be split into two identical subproblems of
@@ -198,14 +210,17 @@ divide-and-conquer classical algorithm can be implemented as a fast
 quantum algorithm; we are really using the structure of the problem
 here.)
 
-**Operation**  | **State** (neglecting normalizing factors)
----------------|------------------------------------------------:
-_intial state:_               | $f= \sum_{x\in\Z_m} f(x)\ket{x}$
-Recursively run $FT_{m/2}$ on $m-1$ most significant qubits | $(FT_{m/2}f_{even})\ket{0} + (FT_{m/2}f_{odd})\ket{1}$
-If LSB is $1$ then compute $W$ on $m-1$ most significant qubits (see below). | $(FT_{m/2}f_{even})\ket{0} + (W FT_{m/2}f_{odd})\ket{1}$
-Apply Hadmard gate $H$ to least significant qubit. | $(FT_{m/2}f_{even})(\ket{0}+\ket{1})$ $+$ $(W FT_{m/2}f_{odd})(\ket{0}-\ket{1}) =$
-                                                  -| $(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd})\ket{0} + (FT_{m/2}f_{even}-W FT_{m/2}f_{odd})\ket{1}$
-Move LSB to the most significant position          | $\ket{0}(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd}) + \ket{1}(FT_{m/2}f_{even}- W FT_{m/2}f_{odd}) = \hat{f}$
+We now describe the algorithm and the state, neglecting normalizing factors.
+
+1. _intial state:_                $f= \sum_{x\in\Z_m} f(x)\ket{x}$
+
+2.  Recursively run $FT_{m/2}$ on $m-1$ most significant qubits (state: $(FT_{m/2}f_{even})\ket{0} + (FT_{m/2}f_{odd})\ket{1}$)
+
+3. If LSB is $1$ then compute $W$ on $m-1$ most significant qubits (see below). (state : $(FT_{m/2}f_{even})\ket{0} + (W FT_{m/2}f_{odd})\ket{1}$)
+
+4. Apply Hadmard gate $H$ to least significant qubit.  (state: $(FT_{m/2}f_{even})(\ket{0}+\ket{1})$ $+$ $(W FT_{m/2}f_{odd})(\ket{0}-\ket{1}) =$ $(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd})\ket{0} + (FT_{m/2}f_{even}-W FT_{m/2}f_{odd})\ket{1}$)
+
+5. Move LSB to the most significant position         (state: $\ket{0}(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd}) + \ket{1}(FT_{m/2}f_{even}- W FT_{m/2}f_{odd}) = \hat{f}$)
 
 
 The transformation $W$ on $m-1$ qubits can be defined by $\ket{x} \mapsto \omega^x = \omega^{\sum_{i=0}^{m-2} 2^ix_i}$ (where $x_i$ is
@@ -221,11 +236,14 @@ The final state is equal to $\hat{f}$ by the FFT equations (we leave this as an 
 
 We now present the central step in Shor’s factoring algorithm: a quantum polynomial-time algorithm to find the *order* of an integer $a$ modulo an integer $\ell$.
 
-__Theorem (order finding algorithm, restated):__ There is a polynomial-time quantum algorithm that
+
+> # {.theorem title="Order finding algorithm, restated" #orderdinfindrestatethm}
+There is a polynomial-time quantum algorithm that
 on input $A,N$ (represented in binary) finds the smallest $r$ such that $A^r=1 \pmod{N}$.
 
-Let $m=\ceil{5\log m}$ and let $m=2^m$. Our register will consist of
-$m+polylog(N)$ qubits. Note that the function $x
+
+Let $t=\ceil{5\log (A+N)}$. Our register will consist of
+$t+polylog(N)$ qubits. Note that the function $x
 \mapsto A^x \pmod{N}$ can be computed in $polylog(N)$ time and so we will assume that we can
 compute the map $\ket{x}\ket{y} \mapsto \ket{x}\ket{y\oplus (A^x \pmod{N})}$ (where we identify a number $X \in \set{0,\ldots,N-1}$ with its representation as  a binary
 string of length $\log N$).[^9] Now we describe the order-finding
@@ -233,14 +251,15 @@ algorithm. It uses a tool of elementary number theory called *continued fraction
 an arbitrary real number $\alpha$ with a rational number $p/q$ where
 there is a prescribed upper bound on $q$ (see below)
 
-**Operation** | **State** (*including* normalizing factors)
---------------|------------------------------------------------:
-Apply Fourier transform to the first $m$ bits. | $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m}\ket{x})\ket{0^n}$
-Compute the transformation $\ket{x}\ket{y} \mapsto \ket{x}\ket{y \oplus (A^x \pmod{N})}$. | $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m} \ket{x}\ket{A^x \pmod{N}}$
-Measure the second register to get a value $y_0$. | $\tfrac{1}{\sqrt{K}}\sum_{\ell=0}^{K-1}\ket{x_0 + \ell r}\ket{y_0}$ where $x_0$ is the smallest number such that $A^{x_0} = y_0 \pmod{N}$ and $K= \floor{(m-1-x_0)/r}$.
-Apply the Fourier transform to the first register. | $\tfrac{1}{\sqrt{m}\sqrt{K}} \left(\sum_{x\in\Z_n}\sum_{\ell=0}^{K-1} \omega^{(x_0+\ell r)x}\ket{x} \right) \ket{y_0}$
+We now describe the algorithm and the state, this time *including* normalizing factors.
 
+1. Apply Fourier transform to the first $m$ bits. (state:  $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m}\ket{x})\ket{0^n}$)
 
+2. Compute the transformation $\ket{x}\ket{y} \mapsto \ket{x}\ket{y \oplus (A^x \pmod{N})}$. (state: $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m} \ket{x}\ket{A^x \pmod{N}}$)
+
+3.  Measure the second register to get a value $y_0$.  (state: $\tfrac{1}{\sqrt{K}}\sum_{\ell=0}^{K-1}\ket{x_0 + \ell r}\ket{y_0}$ where $x_0$ is the smallest number such that $A^{x_0} = y_0 \pmod{N}$ and $K= \floor{(m-1-x_0)/r}$.)
+
+4.  Apply the Fourier transform to the first register. (state:  $\tfrac{1}{\sqrt{m}\sqrt{K}} \left(\sum_{x\in\Z_n}\sum_{\ell=0}^{K-1} \omega^{(x_0+\ell r)x}\ket{x} \right) \ket{y_0}$)
 
 In the analysis, it will suffice to show that this algorithm outputs the order $r$ with probability at least $\Omega(1/\log N)$ (we can always
 amplify the algorithm’s success by running it several times and taking
@@ -308,7 +327,7 @@ probability $\Omega((1/\sqrt{r})^2) =\Omega(1/r)$.
 before the measurement in the final step of the order-finding algorithm,
 the coefficient of $\ket{x}$ is at least $\Omega(\tfrac{1}{\sqrt{r}})$.
 
-**Proof of Lemma 2** We prove the lemma for the
+**Proof of Lemma 1** We prove the lemma for the
 case that $r$ is coprime to $m$, leaving the general case to the reader. In this case, the map
 $x \mapsto rx \pmod{m}$ is a permutation of $\Z^*_m$. There are at least
 $\Omega(r/\log r)$ numbers in $[1..r/10]$ that are coprime to $r$ (take
@@ -318,7 +337,7 @@ $rx \pmod{m} = xr - \floor{xr/m}m$ is in $[1..r/10]$ and coprime to $r$. But thi
 $\floor{rx/m}$ can not have a nontrivial shared factor with $r$, as
 otherwise this factor would be shared with $rx \pmod{m}$ as well.
 
-**Proof of Lemma 1:** Let $x$ be such that
+**Proof of Lemma 2:** Let $x$ be such that
 $0 < xr \pmod{m} < r/10$. The absolute value of $\ket{x}$’s coefficient
 in the state before the measurement is
 $$\tfrac{1}{\sqrt{K}\sqrt{m}}\left| \sum_{\ell=0}^{K-1} \omega^{\ell r x} \right| \;,$$ where
@@ -337,7 +356,8 @@ $\sin \alpha \sim \alpha$ for small angles $\alpha$), the coefficient of
 $x$ is at least
 $\tfrac{\sqrt{r}}{4M}\ceil{m/r} \geq \tfrac{1}{8\sqrt{r}}$
 
-This completes the proof  of the main lemma. QED
+This completes the proof  of  [orderdinfindrestatethm](){.ref}.
+
 
 <!--
 ## Reducing factoring to order finding. {#quantum:sec:orderfind}
@@ -483,7 +503,7 @@ There is another way in which quantum mechanics interacts with cryptography. The
 
 
 
-[^1]: Of course, it is unclear why humans or detectors placed by humans erve to “collapse” the probability wave, and inanimate objects such as slits do not. This is one of the puzzles of quantum mechanics, see the chapter notes.
+[^1]: Of course, it is unclear why humans or detectors placed by humans serve to “collapse” the probability wave, and inanimate objects such as slits do not. This is one of the puzzles of quantum mechanics, see the chapter notes.
 
 [^2]: We note that in quantum mechanics the above is known as a *pure*  quantum state.
 
