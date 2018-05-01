@@ -9,7 +9,7 @@ Let us stop and think of the notions we have seen in cryptography. We have seen 
 
 * _Public key encryption_ and _digital signatures_ that enable Alice and Bob to set up such a virtually secure channel without _sharing a prior key_. This enables our "information economy" and protects virtually every financial transaction over the web. Moreover, it is the crucial mechanism for supplying "over the air" software updates which smart devices whether its  phones, cars, thermostats or anything else. Some had predicted that this invention will change the nature of our form of government to [crypto anarchy](http://www.activism.net/cypherpunk/crypto-anarchy.html) and while this may be hyperbole, governments everywhere are [worried](https://www.fbi.gov/about-us/otd/going-dark-issue) about this invention.   
 
-* _Hash functions_ and _pseudorandom function_ enable us to create authentication tokens for deriving one-time passwords out of shared keys, or deriving long keys from short passwords. They are also useful as a tool in _password based key exchange_, which enables two parties to communicate securely (with fairly good is not overwhelming probability)  when they share a 6 digit PIN, even if the adversary can easily afford much much more than $10^6$ computational cycles.  
+* _Hash functions_ and _pseudorandom function_ enable us to create authentication tokens for deriving one-time passwords out of shared keys, or deriving long keys from short passwords. They are also useful as a tool in _password based key exchange_, which enables two parties to communicate securely (with fairly good but not overwhelming probability)  when they share a 6 digit PIN, even if the adversary can easily afford much much more than $10^6$ computational cycles.  
 
 * _Fully homomorphic encryption_ allows computing over encrypted data. Bob could prepare Alice's taxes without knowing what her income is, and more generally store all her data and perform computations on it, without knowing what the data is.
 
@@ -100,11 +100,11 @@ Could we come up for a regular expression $R$ with a program $P$ such that $P(x)
 All these applications and more could in principle be solved by a single general tool known as _virtual black-box (VBB) secure software obfuscation_.
 In fact, such an obfuscation is a general tool that can also be directly used to yield public key encryption, fully homomorphic encryption, zero knowledge proofs, secure function evaluation, and many more applications.
 
-We will now give  the definition of VBB secure obfuscation and prove the central result about it, which is unfortunately that secure VBB obufscators do not exist.
-We will then talk about the relaxed notion of _indistinguishablity obfuscators_ (IO) - this object turn out to be good enough for many of the above applications and whether it exists is one of the most exciting open questions in cryptography at the moment.
+We will now give  the definition of VBB secure obfuscation and prove the central result about it, which is unfortunately that secure VBB obfuscators do not exist.
+We will then talk about the relaxed notion of _indistinguishablity obfuscators_ (IO) - this object turns out to be good enough for many of the above applications and whether it exists is one of the most exciting open questions in cryptography at the moment.
 We will survey some of the research on this front.
 
-Lets define a _compiler_ to be an efficient (i.e., polynomial time) possibly probabilistic map $\mathcal{O}$ that takes a Boolean circuit $C$ on $n$ bits of input and outputs a Boolean circuit $C'$ that also takes $n$ input bits and computes the same function; i.e., $C(x)=C'(x)$ for every $x\in\{0,1\}^n$.
+Let's define a _compiler_ to be an efficient (i.e., polynomial time) possibly probabilistic map $\mathcal{O}$ that takes a Boolean circuit $C$ on $n$ bits of input and outputs a Boolean circuit $C'$ that also takes $n$ input bits and computes the same function; i.e., $C(x)=C'(x)$ for every $x\in\{0,1\}^n$.
 (If $\mathcal{O}$ is probabilistic then this should happen for every choice of its coins.)
 This might seem a strange definition, since it even allows the trivial compiler $\mathcal{O}(C)=C$.
 That is OK, since later we will require additional properties such as the following:
@@ -201,7 +201,7 @@ If fully homomorphic encryption exists then there is no VBB secure obfuscating c
 
 
 > # {.proof data-ref="obfimpweakthm"}
-Let $(G,E,D,EVAL)$ be a fully homomorpphic encryption scheme.
+Let $(G,E,D,EVAL)$ be a fully homomorphic encryption scheme.
 For strings $d,e,c,\alpha,\beta,\gamma$, we will define the function $F_{e,c,\alpha,\beta,\gamma}$ as follows: for inputs of the form $00x$, it will output $\beta$ if and only if $x=\alpha$, and otherwise output $0^n$.
 For inputs of the form $01c'$, it will output $\gamma$ iff $D_d(c')=\beta$ and otherwise output $0^n$.
 And for the input $1^n$, it will output $c$.
