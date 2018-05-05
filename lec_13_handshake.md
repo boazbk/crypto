@@ -10,7 +10,7 @@ Our tools for achieving this goal are:
 
 * Private key (aka symmetric) encryption schemes - block ciphers and stream ciphers.
 
-* Private key (aka symmetric) message authentication codes and psedorandom functions.
+* Private key (aka symmetric) message authentication codes and pseudorandom functions.
 
 * Hash functions that are used both as ways to compress messages for authentication as well as key derivation and other tasks.
 
@@ -19,13 +19,13 @@ and CCA (chosen ciphertext attacks), for hash functions we talk about collision-
 
 ## Cryptography's obsession with adjectives.
 
-As we learn more and more cryptography we see more and more adjectives, every notion seems to have modifiers such as "non malleable", "leakage-resilient", "identity based", "concurrently secure", "adaptive", "non-interactive", etc.. etc... .
+As we learn more and more cryptography we see more and more adjectives, every notion seems to have modifiers such as "non-malleable", "leakage-resilient", "identity based", "concurrently secure", "adaptive", "non-interactive", etc.. etc... .
 Indeed, this motivated a parody web page of an [automatic crypto paper title generator](https://cseweb.ucsd.edu/~mihir/crypto-topic-generator.html).
 Unlike algorithms, where typically there are  straightforward _quantitative_ tradeoffs (e.g., faster is better), in cryptography there are many _qualitative_ ways protocols can vary based on the assumptions they operate under and the notions of security they provide.
 
 In particular, the following issues arise when considering the task of securely transmitting information between two parties Alice and Bob:
 
-* **Infrastructure/setup assumptions:** What kind of setup can Alice and Bob rely upon? For example in the TLS protocol, typically Alice is a website and Bob is user; Using the infrastructure of certificate authorities, Bob has a trusted way to obtain Alice's _public signature key_, while Alice doesn't know anything about Bob. But there are many other variants as well. Alice and Bob could share a (low entropy) _password_. One of them might have some hardware token, or they might have a secure out of band channel (e.g., text messages) to transmit a short amount of information. There are even variants where the parties authenticate by something they _know_, with one recent example being the notion of _witness encryption_ (Garg, Gentry, Sahai, and Waters) where one can encrypt information in a "digital time capsule" to be opened by anyone who, for example, finds a proof of the Reimann hypothesis.
+* **Infrastructure/setup assumptions:** What kind of setup can Alice and Bob rely upon? For example in the TLS protocol, typically Alice is a website and Bob is user; Using the infrastructure of certificate authorities, Bob has a trusted way to obtain Alice's _public signature key_, while Alice doesn't know anything about Bob. But there are many other variants as well. Alice and Bob could share a (low entropy) _password_. One of them might have some hardware token, or they might have a secure out of band channel (e.g., text messages) to transmit a short amount of information. There are even variants where the parties authenticate by something they _know_, with one recent example being the notion of _witness encryption_ (Garg, Gentry, Sahai, and Waters) where one can encrypt information in a "digital time capsule" to be opened by anyone who, for example, finds a proof of the Riemann hypothesis.
 
 * **Adversary access:** What kind of attacks do we need to protect against. The simplest setting is a _passive_ eavesdropping adversary (often called "Eve") but we sometimes consider an _active person-in-the-middle_ attacks (sometimes called "Mallory"). We sometimes consider notions of _graceful recovery_. For example, if the adversary manages to hack into one of the parties then it can clearly read their communications from that time onwards, but we would want their past communication to be protected (a notion known as _forward secrecy_). If we rely on trusted infrastructure such as certificate authorities, we could ask what happens if the adversary breaks into those. Sometimes we rely on the security of several entities or secrets, and we want to consider adversaries that control _some_ but not _all_ of them, a notion known as _threshold cryptography_.
 
@@ -222,7 +222,7 @@ If both parties have public signature keys, then they can simply sign their mess
 reducing active security to passive security (though one needs to include identities in the signatures to ensure non repeating of messages, see [here](http://link.springer.com/article/10.1007%2FBF00124891)).
 
 The most efficient variants of Diffie Hellman achieve authentication implicitly, where the basic protocol remains the same (sending $X=g^x$ and $Y=g^y$) but the computation of the secret shared key involves some authentication information.
-Of these protocols a particularly efficient variant is the MQV protocol of Law, Menezes, Qu, Solinas and Vanstone (which is based on similar principles as DSA signatures), and its variant [HMQV](https://eprint.iacr.org/2005/176.pdf) by Krawczyk that has some improved security properties and analysis
+Of these protocols a particularly efficient variant is the MQV protocol of Law, Menezes, Qu, Solinas and Vanstone (which is based on similar principles as DSA signatures), and its variant [HMQV](https://eprint.iacr.org/2005/176.pdf) by Krawczyk that has some improved security properties and analysis.
 
 
 ## Password authenticated key exchange.
