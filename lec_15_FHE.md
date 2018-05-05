@@ -1,7 +1,7 @@
 # Fully homomorphic encryption: Introduction and bootstrapping
 
 
-In today's era of "cloud computing", much of individual's and businesses' data is stored and computed on by third parties such as Google, Microsoft, Apple, Amazon,  Facebook, Dropbox and many others.
+In today's era of "cloud computing", much of individuals' and businesses' data is stored and computed on by third parties such as Google, Microsoft, Apple, Amazon,  Facebook, Dropbox and many others.
 Classically, cryptography provided solutions to protecting [data in motion](https://www.schneier.com/blog/archives/2010/06/data_at_rest_vs.html) from point A to point B.
 But these are not always sufficient to protect [data at rest](https://en.wikipedia.org/wiki/Data_at_rest) and particularly [data in use](https://en.wikipedia.org/wiki/Data_in_use).
 For example, suppose that  _Alice_ has some data $x \in \{0,1\}^n$ (in modern applications $x$ would well be terabytes in length or larger) that she wishes to store with the cloud service _Bob_, but is afraid that Bob will be hacked, subpoenaed or simply does not completely trust Bob.
@@ -24,13 +24,13 @@ In particular in our scenario above (see  [fhefig](){.ref}), such a scheme will 
 
 Unlike the case of a trapdoor function, where it only took a year for  Diffie and Hellman's challenge to be answered by RSA, in the case of fully homomorphic encryption for more than 30 years cryptographers had no constructions achieving this goal.
 In fact, some people suspected that there is something inherently incompatible between the security of an encryption scheme and the ability of a user to perform all these operations on ciphertexts.
-Stanford cryptogapher Dan Boneh used to joke to incoming graduate students that he will immediately sign the thesis of anyone who  came up with a fully homomorphic encryption.
+Stanford cryptographer Dan Boneh used to joke to incoming graduate students that he will immediately sign the thesis of anyone who  came up with a fully homomorphic encryption.
 But he never expected that he will actually encounter such a thesis, until in 2009, Boneh's student Craig Gentry released a [paper](https://crypto.stanford.edu/craig/) doing just that.
 Gentry's paper shook the world of cryptography, and instigated a flurry of research results making his scheme more efficient, reducing the assumptions it relied on, extending and applying it, and much more.
 In particular,  Brakerski and Vaikuntanathan managed to obtain a fully homomorphic encryption scheme based only on the _Learning with Error (LWE)_ assumption we have seen before.
 
 
-Although there is  [open source library](http://shaih.github.io/HElib/), as well as [other](https://www.dcsec.uni-hannover.de/fileadmin/ful/mitarbeiter/brenner/wahc14_RC.pdf)
+Although there is an [open source library](http://shaih.github.io/HElib/), as well as [other](https://www.dcsec.uni-hannover.de/fileadmin/ful/mitarbeiter/brenner/wahc14_RC.pdf)
 [implementations](https://eprint.iacr.org/2014/816), there is still much work to be done in order to turn FHE from theory to practice.
 For a comparable level of security, the  encryption and decryption operations of a fully homomorphic encryption scheme are several orders of magnitude  slower than a conventional public key system, and (depending on its complexity) homomorphically evaluating a circuit can be significantly more taxing.
 However, this is a fast evolving field, and already since 2009 significant optimizations have been discovered that reduced the computational and storage overhead by many orders of magnitudes.
@@ -40,7 +40,7 @@ As in public key encryption, one would imagine that for larger data one would us
 In this lecture and the next one we will focus on the fully homomorphic encryption schemes that are _easiest to describe_, rather than the ones that are most _efficient_ (though the efficient schemes share many similarities with the ones we will talk about).
 As is generally the case for lattice based encryption, the current most efficient schemes are based on _ideal_ lattices and on assumptions such as ring LWE or the security of the NTRU cryptosystem.[^ideal]
 
-[^ideal]: As we mentioned before, as a general rule of thumb, the difference between the ideal schemes and the one that we describe is that in the ideal setting one deals with _structured_ matrices that have a compact representation as a single vector and also enable fast FFT-like matrix-vector multiplication. This saves a factor of about $n$ in the storage and computation requirements (where $n$ is the dimension of the subspace/lattice). However, there can be some subtle security implications for ideal lattices as well, see e.g., [here](https://eprint.iacr.org/2016/127) , [here](https://eprint.iacr.org/2015/313), [here](https://eprint.iacr.org/2016/139), and [here](https://eprint.iacr.org/2015/676).
+[^ideal]: As we mentioned before, as a general rule of thumb, the difference between the ideal schemes and the one that we describe is that in the ideal setting one deals with _structured_ matrices that have a compact representation as a single vector and also enable fast FFT-like matrix-vector multiplication. This saves a factor of about $n$ in the storage and computation requirements (where $n$ is the dimension of the subspace/lattice). However, there can be some subtle security implications for ideal lattices as well, see e.g., [here](https://eprint.iacr.org/2016/127), [here](https://eprint.iacr.org/2015/313), [here](https://eprint.iacr.org/2016/139), and [here](https://eprint.iacr.org/2015/676).
 
 
 > # {.remark title="Lesson from verifying computation" #verifyinglessonrem}
@@ -48,7 +48,7 @@ To take the distance between theory and practice in perspective, it might be use
 In the early 1990's researchers (motivated initially by zero knowledge proofs) came up with the notion of [probabilistically checkable proofs (PCP's)](http://madhu.seas.harvard.edu/papers/2009/pcpcacm.pdf) which could yield in principle extremely succinct ways to check correctness of computation.
 >
 Probabilistically checkable proofs can be thought of as "souped up" versions of NP completeness reductions and like these reductions, have been mostly used for _negative_ results, especially since the initial proofs were extremely complicated and also included enormous hidden constants.
-However, with time people have slowly understood these better and made them more efficient (e.g., see [this survey](http://m.cacm.acm.org/magazines/2015/2/182636-verifying-computations-without-reexecuting-them/fulltext)) and it has now reached the point where these results, are  [nearly practical](http://cacm.acm.org/magazines/2016/2/197429-pinocchio/abstract) (see also [this](https://eprint.iacr.org/2016/646) )and in fact these  ideas underly at least one [startup](http://z.cash).
+However, with time people have slowly understood these better and made them more efficient (e.g., see [this survey](http://m.cacm.acm.org/magazines/2015/2/182636-verifying-computations-without-reexecuting-them/fulltext)) and it has now reached the point where these results, are  [nearly practical](http://cacm.acm.org/magazines/2016/2/197429-pinocchio/abstract) (see also [this](https://eprint.iacr.org/2016/646)) and in fact these ideas underly at least one [startup](http://z.cash).
 Overall,  constructions for verifying computation have improved by at least 20 orders of magnitude over the last two decades. (We will talk about some of these constructions later in this course.)
 If progress on fully homomorphic encryption follows a similar trajectory, then we can expect the road to practical utility to be very long, but there is hope that it's not a "bridge to nowhere".
 
@@ -72,7 +72,7 @@ We  focus on encryption for single bits.  This is without loss of generality for
 Let $\cF = \cup \cF_\ell$ be a class of functions where every $f\in\cF_\ell$ maps $\{0,1\}^\ell$ to $\{0,1\}$.  
 An _$\cF$-homomorphic public key encryption scheme_ is a CPA secure public key encryption scheme $(G,E,D)$ such that there exists a polynomial-time algorithm $EVAL:\{0,1\}^* \rightarrow \{0,1\}^*$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$,  $x_1,\ldots,x_\ell \in \{0,1\}$, and $f\in \cF_\ell$ of description size $|f|$ at most $poly(\ell)$ it holds that:
 >
-* $c=EVAL_e(f,E_e(x_1),\ldots,E_e(x_\ell))$ has length at most $n$ \
+* $c=EVAL_e(f,E_e(x_1),\ldots,E_e(x_\ell))$ has length at most $n$. \
 * $D_d(c)=f(x_1,\ldots,x_\ell)$.
 
  \
