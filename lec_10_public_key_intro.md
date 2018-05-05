@@ -236,7 +236,7 @@ In particular we can make the following conjecture:
 That is, for every polynomial $q:\N \rightarrow \N$, if $n$ is large enough, then with probability at least $1-1/q(n)$ over the choice of a uniform prime $p\in [2^n]$ and $g\in \Z_p$, for every circuit $A$ of size at most  $q(n)$, the probability that $A(g,p,g^a,g^b)$ outputs $h$ such that $g^{ab} = h \mod p$ is at most $1/q(n)$ where the probability is taken over $a,b$ chosen at random in $\Z_p$.^[In practice people often take $g$ to be a generator of a group significantly smaller in size than $p$, which enables $a,b$ to be smaller numbers and hence multiplication to be more efficient. We ignore this optimization in our discussions.]
 
 > # { .pause }
-Please take your time to re-read the following conjecture until you are sure you understand what it means. Victor Shoup's excellent and online available book [A Computational Introduction to Number Theory and Algebra](http://www.shoup.net/ntb/) has an in depth treatment of groups, generators, and the discrete log and Diffie-Hellman problem. See also Chapters 10.4 and 10.5 in the Boneh Shoup book, and Chapters 8.3 and 11.4 in the Katz-Lindell book.
+Please take your time to re-read the following conjecture until you are sure you understand what it means. Victor Shoup's excellent and online available book [A Computational Introduction to Number Theory and Algebra](http://www.shoup.net/ntb/) has an in depth treatment of groups, generators, and the discrete log and Diffie-Hellman problem. See also Chapters 10.4 and 10.5 in the Boneh-Shoup book, and Chapters 8.3 and 11.4 in the Katz-Lindell book.
 
 > # {.theorem title="Diffie-Hellman security in Random Oracle Model" #DHROMthm}
 Suppose that the Computational Diffie-Hellman Conjecture for mod prime groups is true. Then, the Diffie-Hellman public key encryption  is CPA secure in the random oracle model.
@@ -244,8 +244,8 @@ Suppose that the Computational Diffie-Hellman Conjecture for mod prime groups is
 > # {.proof data-ref="DHROMthm"}
 For CPA security we need to prove that (for fixed $\mathbb{G}$ of size $p$ and random oracle $H$) the following two distributions are computationally indistinguishable for every two strings $m,m' \in \{0,1\}^\ell$:
 >
-* $(g^a,g^b,H(g^{ab})\oplus m)$ for $a,b$ chosen uniformly and independently in $\Z_{p}$ \
-* $(g^a,g^b,H(g^{ab})\oplus m')$ chosen uniformly and independently in $\Z_{p}$.
+* $(g^a,g^b,H(g^{ab})\oplus m)$ for $a,b$ chosen uniformly and independently in $\Z_{p}$. \
+* $(g^a,g^b,H(g^{ab})\oplus m')$ for $a,b$ chosen uniformly and independently in $\Z_{p}$.
 >
 (can you see why this implies CPA security? you should pause here and verify this!)
 >
@@ -261,7 +261,7 @@ Now given the claim, we can complete the proof of security via the following hyb
 * $H_0$: $(g^a,g^b,H(g^{ab}) \oplus m)$ \
 * $H_1$: $(g^a,g^b,U_\ell \oplus m)$ \
 * $H_2$: $(g^a,g^b,U_\ell \oplus m')$ \
-* $H_3$: $(g^a,g^b,H(g^{ab}) \oplus m)$
+* $H_3$: $(g^a,g^b,H(g^{ab}) \oplus m')$
 >
 The claim implies that $H_0 \approx H_1$. Indeed otherwise we could transform a distinguisher $T$ between $H_0$ and $H_1$ to a distinguisher $T'$ violating the claim by letting $T'(h,h',z) = T(h,h',z \oplus m)$.
 >
@@ -528,7 +528,7 @@ This is in a very high level the SSL/TLS protocol, but there are many details in
 
 ![The cipher and certificate used by '''Google.com'''. Note that Google has a 2048bit RSA signature key which it then uses to authenticate an elliptic curve based Diffie-Hellman key exchange protocol to create session keys for the block cipher AES with 128 bit key in Galois Counter Mode.](../figure/googletls.jpg){#tmplabelfig width=40% }
 
-![Digital signatures and other forms of electronic signatures are legally binding in many jurisdictions. This is some material from the website of the electronic signing company DocuSign](../figure/docusign.jpg){#tmplabelfig width=80% }
+![Digital signatures and other forms of electronic signatures are legally binding in many jurisdictions. This is some material from the website of the electronic signing company DocuSign.](../figure/docusign.jpg){#tmplabelfig width=80% }
 
 >__Example:__ Here is the list of certificate authorities that were trusted by default (as of spring 2016) by Mozilla products: Actalis, Amazon, AS Sertifitseerimiskeskuse (SK), Atos, Autoridad de Certificacion Firmaprofesional, Buypass, CA Disig a.s., Camerfirma, CerticÃ¡mara S.A., Certigna, Certinomis, certSIGN, China Financial Certification Authority (CFCA), China Internet Network Information Center (CNNIC), Chunghwa Telecom Corporation, Comodo, ComSign, Consorci AdministraciÃ³ Oberta de Catalunya (Consorci AOC,  CATCert), Cybertrust Japan / JCSI, D-TRUST, Deutscher Sparkassen Verlag GmbH (S-TRUST,  DSV-Gruppe), DigiCert, DocuSign (OpenTrust/Keynectis), e-tugra, EDICOM, Entrust, GlobalSign, GoDaddy, Government of France (ANSSI,  DCSSI), Government of Hong Kong (SAR),  Hongkong Post,  Certizen, Government of Japan,  Ministry of Internal Affairs and Communications, Government of Spain,  Autoritat de CertificaciÃ³ de la Comunitat Valenciana (ACCV), Government of Taiwan,  Government Root Certification Authority (GRCA), Government of The Netherlands,  PKIoverheid, Government of Turkey,  Kamu Sertifikasyon Merkezi (Kamu SM), HARICA, IdenTrust, Izenpe S.A., Microsec e-SzignÃ³ CA, NetLock Ltd., PROCERT, QuoVadis, RSA the Security Division of EMC, SECOM Trust Systems Co. Ltd., Start Commercial (StartCom) Ltd., Swisscom (Switzerland) Ltd, SwissSign AG, Symantec / GeoTrust, Symantec / Thawte, Symantec / VeriSign, T-Systems International GmbH (Deutsche Telekom), Taiwan-CA Inc. (TWCA), TeliaSonera, Trend Micro, Trustis, Trustwave, TurkTrust, Unizeto Certum, Visa, Web.com, Wells Fargo Bank N.A., WISeKey, WoSign CA Limited
 
@@ -556,6 +556,6 @@ of which is either $0$ or $1$.
 Thus, $\binom{2N}{N} \leq \prod_{\substack{1 \leq P \leq 2N \\
 P \text{ prime }}} P^{\floor{\tfrac{\log 2N}{\log P}}}$. Taking logs we get that
 $$N \leq \log \binom{2N}{N}$$
-$$\leq \sum_{P \text{prime} \in [2n]} \floor{\tfrac{\log 2N}{\log P}}\log P$$
-$$\leq \sum_{P \text{prime} \in [2n]} \log 2N$$
+$$\leq \sum_{P \text{ prime} \in [2n]} \floor{\tfrac{\log 2N}{\log P}}\log P$$
+$$\leq \sum_{P \text{ prime} \in [2n]} \log 2N$$
 establishing that the number of primes in $[1,N]$ is $\Omega(\tfrac{N}{\log N})$.
