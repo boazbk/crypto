@@ -147,7 +147,7 @@ indistinguishable:
 >
 * $\{ (A,Ax+e) \}$ where $A$ is random $m\times n$ matrix in $\Z_q$, $x$ is random in $\Z_q^n$ and $e\in \Z_q^m$ is random noise vector of magnitude $\delta$.
 >
-* $\{ (A,y) \}$ where $A$ is random $m\times n$ matrix in $\Z_q$ and $y$ is random in $\Z_q^m$
+* $\{ (A,y) \}$ where $A$ is random $m\times n$ matrix in $\Z_q$ and $y$ is random in $\Z_q^m$.
 
 > # {.proof data-ref="LWEsearchtodecthm"}
 Suppose that we had a decisional adversary $D$ that succeeds in distinguishing the two distributions above with bias $\epsilon$.
@@ -158,8 +158,8 @@ We will show how we can use this to obtain a polynomial-time algorithm $S$ that 
 Clearly, we can repeat this for all the possible $q$ values of $a$ to learn the first coordinate exactly, and then continue in this way to learn all coordinates.
 >
 Our algorithm $S$ gets as input the pair $(A,y)$ where $y=Ax+e$ and we need to decide whether $x_1 = a$.
-Now consider the instance $A+(r\|0^m\|\cdots \|0^m),y+ar$, where $r$ is a random vector in $\Z_q^m$ and the matrix $(r\|0^m\|\cdots \|0^m)$ is simply the matrix with first column equal to $r$ and all other columns equal to $0$.
-If $A$ is random then $A+r\|0^m\|\cdots \|0^m)$ is random as well.
+Now consider the instance $(A+(r\|0^m\|\cdots \|0^m),y+ar)$, where $r$ is a random vector in $\Z_q^m$ and the matrix $(r\|0^m\|\cdots \|0^m)$ is simply the matrix with first column equal to $r$ and all other columns equal to $0$.
+If $A$ is random then $A+(r\|0^m\|\cdots \|0^m)$ is random as well.
 Now note that $Ax + (r|0^m\cdots \|0^m)x = Ax + x_1 r$ and hence if $x_1 = a$ then we still have an input of the same form $(A',A'x+e)$.
 >
 In contrast, we claim that if if $x_1 \neq a$ then the distribution $(A',y')$ where $A'=A+(r\|0^m\|\cdots \|0^m)$ and $y'= Ax + e + ar$ is identical to the uniform distribution over a random uniformly chosent matrix $A'$ and a random and independent uniformly chosen vector $y'$.
@@ -225,8 +225,8 @@ Thus [LWEENCthm](){.ref}  will follow from the following lemma:
 
 
 > # {.lemma #LWEENClem}
-Let $q,m,\delta$ be set as in LWEENC,
-Then assuming the LWE conjecture, the following distributions are computationally indistinguishable:
+Let $q,m,\delta$ be set as in LWEENC.
+Then, assuming the LWE conjecture, the following distributions are computationally indistinguishable:
 >
 *  $D$: The distribution over four-tuples of the form  $(A,y,w^\top A,\iprod{w,y})$  where $A$ is uniform in $\Z_q^{m\times n}$, $x$ is uniform in $\Z_q^n$, $e \in Z_q$ is chosen with $e_i \in \{-\delta q,\ldots,+\delta q\}$, $y=Ax+e$, and $w$ is uniform in $\{0,1\}^m$.
 >
