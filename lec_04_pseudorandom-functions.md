@@ -14,7 +14,7 @@ At a first look, the notion of extending the output length of a pseudorandom gen
 After all we want our generator to be _efficient_ and just writing down the output will take exponential time. However, there is a way around this conundrum.
 While we can't efficiently write down the full output, we can require that it would be possible, given an index $i\in \{0,\ldots,2^n-1\}$, to compute the $i^{th}$
 bit of the output in polynomial time.^[In this course we will often index strings and numbers starting from zero rather than one, and so typically index the coordinates of a string $y\in \{0,1\}^N$ as $0,\ldots,N-1$ rather than $1,\ldots,N$. But we will not be religious about it and occasionally "lapse" into one-based indexing. In almost all cases, this makes no difference.]
-That is, we require that the function $i \mapsto G(S)_i$ is efficiently computable and (by security of the pseudorandom generator)
+That is, we require that the function $i \mapsto G(s)_i$ is efficiently computable and (by security of the pseudorandom generator)
 indistinguishable from a function that maps each index $i$ to an independent random bit in $\{0,1\}$. This is the notion of a _pseudorandom function generator_ which is a bit subtle to define and construct, but turns out to have great many applications in cryptography.
 
 
@@ -38,7 +38,7 @@ Informally, if $F$ is a pseudorandom function generator, then if we choose a ran
 then no efficient algorithm can distinguish between black box access to $f_s(\cdot)$ and black box access to a completely random function (see [prfmodelfig](){.ref}).
 Thus often instead of talking about a pseudorandom function generator we will refer to a _pseudorandom function collection_ $\{ f_s \}$ where by that we mean that the map $F(s,i)=f_s(i)$ is a pseudorandom function generator.
 
-![In a pseudorandom function, an adversary cannot tell whether they are given a black box that computes the function $i \mapsto F(s,i)$ for some secret $s$ that was chosen at random and fixed, or whether the black box computes a completely random function that tosses a fresh random coin whenever it's given a new input $i$](../figure/pseudorandom_function.jpg){#prfmodelfig width="50%" }
+![In a pseudorandom function, an adversary cannot tell whether they are given a black box that computes the function $i \mapsto F(s,i)$ for some secret $s$ that was chosen at random and fixed, or whether the black box computes a completely random function that tosses a fresh random coin whenever it's given a new input $i$.](../figure/pseudorandom_function.jpg){#prfmodelfig width="50%" }
 
 In the next lecture we will see the proof of following theorem (due to Goldreich, Goldwasser, and Micali)
 
@@ -48,10 +48,10 @@ Assuming the PRG conjecture, there exists a secure pseudorandom function generat
 But before we see the proof of [prffromprgthmone](){.ref}, let us see why pseudorandom functions could be useful.
 
 
-## One time passwords (e.g., Google Authenticator, RSA ID, etc..)
+## One time passwords (e.g. Google Authenticator, RSA ID, etc.)
 
 Until now we have talked about the task of _encryption_, or protecting the  _secrecy_ of messages. But the task of _authentication_, or protecting the
-_integrity_ of messages is no less important. For example, consider the case that you receive a software update for your PC, phone, car, pacemaker, etc..
+_integrity_ of messages is no less important. For example, consider the case that you receive a software update for your PC, phone, car, pacemaker, etc.
 over an open connection such as an unencrypted Wi-Fi. Then the contents of that update are not secret, but it is of crucial importance that no malicious
 attacker had modified the code and that it was unchanged from the message sent out by the company. Similarly, when you log into your bank, you might be much more
 concerned about the possibility of someone impersonating you and cleaning out your account than you are about the secrecy of your information.
@@ -71,7 +71,7 @@ The problem is that Mallory does not have to learn the password $p$ in order to 
 
 ### How do pseudorandom functions help in the login problem?
 
-The idea is that they create what's known as a _one time password_. Alice and Bob will share an index $s\in\{0,1\}^n$ for the pseudorandom function generator $\{ f_s \}$. When Alice wants to prove to Bob her identity, Bob will choose a random $i\leftarrow_R\{0,1\}^n$, and send $i$ to Alice, and then Alice will send $f_s(i),f_s(i+1),\ldots,f_s(i+\ell-1)$ to Bob where $\ell$ is some parameter (you can think of $\ell=n$ for simplicity). Bob will check that indeed $y=f_S(i)$ and if so accept the session as authentic.
+The idea is that they create what's known as a _one time password_. Alice and Bob will share an index $s\in\{0,1\}^n$ for the pseudorandom function generator $\{ f_s \}$. When Alice wants to prove to Bob her identity, Bob will choose a random $i\leftarrow_R\{0,1\}^n$, and send $i$ to Alice, and then Alice will send $f_s(i),f_s(i+1),\ldots,f_s(i+\ell-1)$ to Bob where $\ell$ is some parameter (you can think of $\ell=n$ for simplicity). Bob will check that indeed $y=f_s(i)$ and if so accept the session as authentic.
 
 The formal protocol is as follows:
 
