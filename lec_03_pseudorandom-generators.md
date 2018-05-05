@@ -44,7 +44,7 @@ distribution on ${\{0,1\}}^t$.
 >
 We say that $G:\{0,1\}^* \rightarrow \{0,1\}^*$ is a _pseudorandom generator_ with length function $\ell:\N \rightarrow \N$ (where $\ell(n)>n$) if $G$ is computable in polynomial time, and there are functions $T(n)>n^{\omega(1)}$ and $\epsilon(n)<n^{-\omega(1)}$ such that
 $$G(U_n) \approx_{T(n),\epsilon(n)} U_{\ell(n)} \label{prgdefeq}$$
-for every $n\in \N$
+for every $n\in \N$.
 
 > # { .pause }
 This definition (as is often the case in cryptography) is a bit long, so you want to take your time parsing it. In particular you should verify that you understand why the condition [prgdefeq](){.eqref} is the same as saying that for every polynomial $p:\N \rightarrow \N$, if $n$ is sufficiently large, then for every circuit $D$ of at most $T$ gates (or equivalently, for every straightline program $D$ of at most $T$ lines):
@@ -132,7 +132,7 @@ The proof of [lengthextendprgthm](){.ref} is indicative of many practical constr
 
 > # {.remark title="Unpredictablity and indistinguishability- an alternative approach for proving the length extension theorem" #alternativelengthextendrem}
 The notion that being random is the same as being "unpredictable" can be formalized as follows.
-One can show that a random variable $X$ over $\{0,1\}^n$ is pseudorandom if and only every efficient algorithm $A$ succeeds in the following experiment with probability at most $1/2+negl(n)$: $A$ is given $i$ chosen at random in $\{0,\ldots,n-1\}$ and $x_1,\ldots,x_i$ where $(x_1,\ldots,x_n)$ is drawn
+One can show that a random variable $X$ over $\{0,1\}^n$ is pseudorandom if and only if every efficient algorithm $A$ succeeds in the following experiment with probability at most $1/2+negl(n)$: $A$ is given $i$ chosen at random in $\{0,\ldots,n-1\}$ and $x_1,\ldots,x_i$ where $(x_1,\ldots,x_n)$ is drawn
 from $X$ and wins if it outputs $x_{i+1}$. It is a good optional exercise to prove this, and to use that to give an alternative proof of the length extension theorem.  
 
 ## Stream ciphers
@@ -189,7 +189,7 @@ $$
 >
 for some non-negligible $\epsilon=\epsilon(n)>0$. Then the adversary $Eve$
 defined as $Eve(y) = Eve'(y\oplus m)$ would be also efficient and would break
-the security of the PRG with non-negligible success. This concludes the proof of the claim and hence of the theorem.
+the security of the PRG with non-negligible success. This concludes the proof of the claim and hence the theorem.
 
 If the PRG outputs $t(n)$ bits instead of $n+1$ then we automatically
 get an encryption scheme with $t(n)$ long message length. In fact, in practice
@@ -198,7 +198,7 @@ of messages in advance. Every time we need to encrypt another bit (or another
 block) $m_i$ of the message, we run the basic PRG to update our state and obtain
 some new randomness $y_i$ that we can XOR with the message and ouput. Such
 constructions are known as *stream ciphers* in the literature. In much
-of the practical literature the mame *stream cipher* is used both for the
+of the practical literature the name *stream cipher* is used both for the
 pseudorandom generator itself, as well as for the encryption scheme that is
 obtained by combining it with the one-time pad.
 
@@ -219,7 +219,7 @@ It can be shown that (assuming the protocol is completed) the output is a random
 
 So far we have made the conjectures that objects such as ciphers and
 pseudorandom generators *exist*, without giving any hint as to how they would
-actually look like. (Though we have  examples such as Ceasar cipher, Vignere, and Enigma of what secure ciphers _don't_ look like.)
+actually look like. (Though we have  examples such as the Caesar cipher, Vignere, and Enigma of what secure ciphers _don't_ look like.)
 As mentioned above, we do not know how to *prove* that
 any particular function is a pseudorandom generator.
 However,  there are quite simple *candidates* (i.e.,  functions that are conjectured to be secure pseudorandom generators), though care must be taken in constructing them.
@@ -451,6 +451,7 @@ The idea is to give a "non constructive" proof of existence of the pseudorandom 
 In  particular this means that there _exists_ a single $G$ that is a valid $(T,\epsilon)$ pseudorandom generator.
 The probabilistic method is just a _proof technique_ to demonstrate the existence of such a function.
 Ultimately, our goal is to show the existence of  a _deterministic_ function $G$ that satisfies
+the conditions of a $(T, \epsilon)$ PRG.
 
 The above discussion might be rather abstract at this point, but would become clearer after seeing the proof.
 
