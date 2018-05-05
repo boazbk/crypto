@@ -19,7 +19,7 @@ Rather we have  a collection of anonymous and autonomous parties that somehow ne
 Before talking about cryptocurrencies, let's talk about currencies in general.^[I am not an economist by any stretch of the imagination, so please take the dicussion below with a huge grain of salt. I  would appreciate any comments on it.]
 At an abstract level, a _currency_ requires two components:
 
-* A scarce resource
+* A scarce resource.
 
 * A mechanism for determining and transferring _ownership_ of certain quantities of this resource.
 
