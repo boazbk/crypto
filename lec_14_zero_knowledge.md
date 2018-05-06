@@ -325,7 +325,7 @@ __Protocol ZK-Ham:__
 Protocol ZK-Ham is a zero knowledge proof system for the language of Hamiltonian graphs.[^zkcredit]
 
 > # {.proof data-ref="zkhamthm"}
-We need to prove **completeness**, **soundness**, and zero **knowledge**.
+We need to prove **completeness**, **soundness**, and **zero knowledge**.
 >
 **Completeness** can be easily verified, and so we leave this to the reader.
 >
@@ -377,7 +377,7 @@ This completes the proof of the theorem.
 
 ### Why is this interesting?
 
-The reason that a protocol for Hamiltonicity is more interesting than a protocol for Quadratic residuosity is that Hamiltonicity is an NP-complete question.
+The reason that a protocol for Hamiltonicity is more interesting than a protocol for quadratic residuosity is that Hamiltonicity is an NP-complete question.
 This means that for every other NP language $L$, we can use the reduction from $L$ to Hamiltonicity combined with protocol ZK-Ham to give a zero knowledge proof system for $L$. In particular this means that we can have zero knowledge proofs for the following languages:
 
 * The language of numbers $m$ such that there exists a prime $p$ dividing $m$ whose remainder modulo $10$ is $7$.

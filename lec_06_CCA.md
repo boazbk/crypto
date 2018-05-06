@@ -12,16 +12,16 @@ Let's start by reviewing what we have learned so far:
 A basic object is a _pseudorandom generator_ and we considered the _PRG Conjecture_ which stipulates the existence of an efficiently computable function $G:\{0,1\}^n\rightarrow\{0,1\}^{n+1}$
 such that $G(U_n)\approx U_{n+1}$ (where $U_m$ denotes the uniform distribution on $\{0,1\}^m$ and $\approx$ denotes computational indistinguishability).
 
-* We showed that the PRG conjecture implies a pseudorandom generator of any polynomial output length which in particular via the stream cipher construction implies a computationally secure encryption with plaintext  arbitrarily larger than the key. (The only restriction is that the plaintext is of polynomial size which is anyway needed if we want to actually be able to read and write it.)
+* We showed that the PRG conjecture implies a pseudorandom generator of any polynomial output length which in particular via the stream cipher construction implies a computationally secure encryption with plaintext  arbitrarily larger than the key. (The only restriction is that the plaintext is of polynomial size which is needed anyway  if we want to actually be able to read and write it.)
 
 * We then showed that the PRG conjecture actually implies a stronger object known as a _pseudorandom function (PRF) function collection_: this is a collection $\{ f_s \}$ of functions such that if we choose $s$ at random and fix it, and give an adversary a black box computing $i \mapsto f_s(i)$ then she can't tell the difference between this and a blackbox computing a random function.
 
-* Pseudorandom functions turn out to be useful for _identification protocols_, _message authentication codes_ and this strong notion of security of encryption known as _chosen plaintext attack (CPA) security_ where we allow to encrypt _many messages of Eve's choice_ and still require that the next message hides all information except for what Eve already knew before.
+* Pseudorandom functions turn out to be useful for _identification protocols_, _message authentication codes_ and this strong notion of security of encryption known as _chosen plaintext attack (CPA) security_ where we are allowed to encrypt _many messages of Eve's choice_ and still require that the next message hides all information except for what Eve already knew before.
 
 
 ## Going beyond CPA
 
-It may seem that we have finally nailed down the security definition for encryption. After all, what could be stronger than allowing Eve unfettered access to the encryption function. Clearly an encryption satisfying this property will hide the contents of the message in all practical circumstances.
+It may seem that we have finally nailed down the security definition for encryption. After all, what could be stronger than allowing Eve unfettered access to the encryption function? Clearly an encryption satisfying this property will hide the contents of the message in all practical circumstances.
 Or will it?
 
 > # { .pause }
@@ -61,7 +61,7 @@ So, the adversary doesn't need to decrypt the message- by spoofing the ciphertex
 One issue is that Eve modifies $m_1$ then it is unlikely that the CRC code will still check out, and hence Bob would reject the packet.
 However,  [CRC 32](https://goo.gl/5aqEHB) - the CRC algorithm  used by WEP - is    _linear_ modulo $2$, which means that for every  pair of strings $x_1,x_2$, $CRC(m_1\oplus x_1,m_2 \oplus m_2)=CRC(m_1,m_2)\oplus CRC(x_1,x_2)$.
 This means that if the original ciphertext $c$ was an encryption of the message
-$m=(m_1,m_2,CRC(m_1,m_2))$ then $c'=c \oplus (x_1,0,CRC(x_1,0))$ will be an encryption of the message $m'=(m_1 \oplus x_1, m_2, CRC(x_1\oplus m_1,m_2))$. (Where $0$ denotes a string of zeroes of the same length as $m_2$, and hence $m_2 \oplus 0 = m_2$.)
+$m=(m_1,m_2,CRC(m_1,m_2))$ then $c'=c \oplus (x_1,0,CRC(x_1,0))$ will be an encryption of the message $m'=(m_1 \oplus x_1, m_2, CRC(x_1\oplus m_1,m_2))$ (where $0$ denotes a string of zeroes of the same length as $m_2$, and hence $m_2 \oplus 0 = m_2$).
 Therefore by XOR'ing $c$ with $(x_1,0,CRC(x_1,0))$, the adversary Mallory can ensure that Bob  will deliver the message $m_2$ to the IP address $m_1 \oplus x_1$ of her choice (see [WEPattackfig](){.ref}).
 
 ![The attack on the WEP protocol allowing the adversary Mallory to read encrypted messages even when Alice uses a CPA secure encryption.](../figure/wep-attack.jpg){#WEPattackfig width=90% }
@@ -69,7 +69,7 @@ Therefore by XOR'ing $c$ with $(x_1,0,CRC(x_1,0))$, the adversary Mallory can en
 ### Chosen ciphertext security
 
 This is not an isolated example but in fact an instance of a general pattern of many breaks in practical protocols.
-Some examples of protocols broken through similar means include [XML encryption](http://www.nds.rub.de/media/nds/veroeffentlichungen/2011/10/22/HowToBreakXMLenc.pdf) ,  [IPSec](https://www.cs.columbia.edu/~smb/papers/badesp.pdf) (see also [here](https://eprint.iacr.org/2005/416)) as well as  JavaServer Faces, Ruby on Rails, ASP.NET, and the Steam gaming client (see the Wikipedia page on [Padding Oracle Attacks](https://goo.gl/b5aKYg)).
+Some examples of protocols broken through similar means include [XML encryption](http://www.nds.rub.de/media/nds/veroeffentlichungen/2011/10/22/HowToBreakXMLenc.pdf),  [IPSec](https://www.cs.columbia.edu/~smb/papers/badesp.pdf) (see also [here](https://eprint.iacr.org/2005/416)) as well as  JavaServer Faces, Ruby on Rails, ASP.NET, and the Steam gaming client (see the Wikipedia page on [Padding Oracle Attacks](https://goo.gl/b5aKYg)).
 
 
 The point is that often our adversaries can be _active_ and modify the communication between sender and receiver, which in effect gives them access not just to choose _plaintexts_ of their choice to encrypt but even to have some impact on the _ciphertexts_ that are decrypted. This motivates the following notion of security (see also [CCAgamefig](){.ref}):
@@ -84,7 +84,7 @@ efficient adversary  _Mallory_ wins in the following game with probability at mo
 * Mallory outputs $b'$ and _wins_ if $b'=b$.
 
 
-![the CCA security game](../figure/cca-game.jpg){#CCAgamefig width=50% }
+![The CCA security game.](../figure/cca-game.jpg){#CCAgamefig width=50% }
 
 
 
@@ -100,10 +100,10 @@ The WEP example shows that the definition does capture a practical issue in secu
 * __This definition seems to be too weak:__ What justification do we have for not allowing Mallory to make the query $c^*$ to the decryption box? After all she is an adversary so she could do whatever she wants. The answer is that the definition would be clearly impossible to achieve if Mallory could simply get the decryption of $c^*$ and learn whether it was an encryption of $m_0$ or $m_1$. So this restriction is the absolutely minimal one we could make without causing the notion to be obviously impossible. Perhaps surprisingly, it turns out that once we make this minimal restriction, we can in fact construct CCA-secure encryptions.
 
 
-__What does CCA has to do with WEP?__ The CCA security game is somewhat strange, and it might not be immediately clear whether it has anything to do with the attack we described on the WEP protocol. However, it turns out that using a CCA secure encryption _would_ have prevented that attack. The key is the following claim:
+__What does CCA have to do with WEP?__ The CCA security game is somewhat strange, and it might not be immediately clear whether it has anything to do with the attack we described on the WEP protocol. However, it turns out that using a CCA secure encryption _would_ have prevented that attack. The key is the following claim:
 
 > # {.lemma #ccaweplem}
-Suppose that $(E,D)$ is a CCA secure encryption, then there is no efficient algorithm that given an encryption $c$ of the plaintext $(m_1,m_2)$ outputs a ciphertext $c'$ that decrypts to $(m'_1,m_2)$ where $m'_1\neq m_1$.
+Suppose that $(E,D)$ is a CCA secure encryption. Then, there is no efficient algorithm that given an encryption $c$ of the plaintext $(m_1,m_2)$ outputs a ciphertext $c'$ that decrypts to $(m'_1,m_2)$ where $m'_1\neq m_1$.
 
 
 In particular [ccaweplem](){.ref} rules out the attack of transforming $c$ that encrypts a message starting with a some address $IP$ to a ciphertext that starts with a different address $IP'$. Let us now sketch its proof.
@@ -195,7 +195,7 @@ To handle this issue $Eve$   will follow the common approach of "winging it and 
 The crucial observation is that because we are in case II things _will_ work out.
 After all, the only way $Eve$ makes a mistake is if she returns an error message
 where the original decryption box would not have done so, but this happens with probability at most $\epsilon/10$. Hence, if $M'$ has success $1/2+\epsilon$ in the CCA game, then even if it's the case that $M'$ always outputs the wrong answer when $Eve$ makes this mistake, we will still get success at least $1/2+0.9\epsilon$.
-Since $\epsilon$ is non negligible, this would contradict the CPA security of $(E,D)$ therby concluding the proof of the theorem.
+Since $\epsilon$ is non negligible, this would contradict the CPA security of $(E,D)$ thereby concluding the proof of the theorem.
 
 > # { .pause }
 This proof is emblematic of a general principle for proving CCA security.
@@ -239,7 +239,7 @@ We leave it as an (excellent!) exercise to prove that the resulting scheme is CC
 
 
 
-## Padding, chopping and their pitfalls: the "buffer overflow" of cryptography
+## Padding, chopping, and their pitfalls: the "buffer overflow" of cryptography
 
 In this course we typically focus on the simplest case where messages have a  _fixed size_. But in fact, in real life we often need to chop long messages into blocks, or pad messages so that their length becomes an integral multiple of the block size. Moreover, there are several subtle ways to get this wrong, and these have been used in several practical attacks.
 
@@ -256,7 +256,7 @@ If you placed a message $m$ in a sealed envelope, you should not be able to modi
 CCA security comes much closer to realizing the metaphor, and hence is considered as the "gold standard" of secure encryption.
 This is important even if you do not intend to write poetry about encryption.
 _Formal verification_ of computer programs is an area that is growing in importance given that computer programs become both more complex and more mission critical.
-Cryptographic protocols can fail in  subtle  ways, and even published proofs of security can turn out to have bugs in them.
+Cryptographic protocols can fail in subtle ways, and even published proofs of security can turn out to have bugs in them.
 Hence there is a line of research dedicated to finding ways to _automatically_ prove security of cryptographic protocols.
 Much of these line of research is based on simple models to describe protocols that are known as _Dolev Yao models_, based on the first paper that proposed such models.
 These models define an _algebraic_ form of security, where rather than thinking of   messages, keys, and ciphertexts as binary string, we think of them as abstract entities.
@@ -264,4 +264,4 @@ There are certain rules for manipulating these symbols.
 For example, given a key $k$ and a message $m$ you can create the ciphertext $\{ m \}_k$, which you can decrypt back to $m$ using the same key.
 However the assumption is that any information that cannot be obtained by such manipulation is unknown.
 
-Translating a proof of security in this algebra to proof for real world adversaries is highly non trivial. However, to have even a fighting a chance, the encryption scheme needs to be as strong as possible, and in particular it turns out that security notions such as CCA play a crucial role.
+Translating a proof of security in this algebra to a proof for real world adversaries is highly non trivial. However, to have even a fighting chance, the encryption scheme needs to be as strong as possible, and in particular it turns out that security notions such as CCA play a crucial role.
