@@ -29,7 +29,7 @@ Let us consider the  "lazy evaluation" implementation  of the black box for $A$ 
 That is, at every point in time there are nodes in the full binary tree that are labeled and nodes which we haven't yet labeled. When $A$ makes a query $i$, this query corresponds to the path $i_1\ldots i_n$ in the tree. We look at the lowest (furthest away from the root) node $v$  on this path which has been labeled by some value $y$, and then we continue labelling the path from $v$ downwards until we reach $i$.
 In other words, we label the two children of $v$ by $G_0(y)$ and $G_1(y)$, and then if the path $i$ involves the first child then we label its children by $G_0(G_0(y))$ and $G_1(G_0(y))$, and so on and so forth (see [oracleevaltreefig](){.ref}).
 >
-![When the adversary queries $i$, the oracle takes the path from $i$ to the root and computes the generator on the minimum number of internal nodes that is needed to obtain the label of the $i^{th}$ leaf](../figure/prf-oracle-step.jpg){#oracleevaltreefig width=80% }
+![When the adversary queries $i$, the oracle takes the path from $i$ to the root and computes the generator on the minimum number of internal nodes that is needed to obtain the label of the $i^{th}$ leaf.](../figure/prf-oracle-step.jpg){#oracleevaltreefig width=80% }
 >
 A moment's thought shows that this is just another (arguably cumbersome) way to describe the oracle that simply computes the map $i\mapsto f_s(i)$. And so the experiment of running $A$ with this oracle produces precisely the same result as running $A$ with access to $f_s(\cdot)$. Note that since $A$ has running time at most $T$, the number of times our oracle will need to label an internal node is at most $T' \leq 2nT$ (since we label at most $2n$ nodes for every query $i$).
 >
@@ -39,7 +39,7 @@ Note that the $0^{th}$ hybrid corresponds to the case where the oracle implement
 >
 We can now describe our distinguisher $D$ for the pseudorandom generator. On input a string $y\in\{0,1\}^{2n}$ $D$ will run $A$ and the $j^{th}$ oracle inside its belly with one difference- when the time comes to label the $j^{th}$ node, instead of doing this by applying the pseudorandom generator to the label of its parent $v$  (which is what should happen in the $j^{th}$ oracle) it uses its input $y$ to label the two children of $v$.
 >
-Now, if $y$ was completely random then we get exactly the distribution of the $j+1^{st}$ oracle, and hence in this case $D$ simulates internally the $j+1^{st}$ hybrid. However, if $y=G(s)$ for a random $s\in\{0,1\}^n$ it might not be obvious if we get the distribution of the $j^{th}$ oracle, since in that oracle the label for the children of $v$ was supposed to be the result of applying the pseudorandom generator to the label of $v$ and not to some other random string. However, because $v$ was labeled _before_ the $j^{th}$ step then we know that it was actually labeled by a random string. Moreover, since we use lazy evaluation we know that step $j$ is the _first_ time where we actually use the value of the label of $v$. Hence, if at this point we _resampled_ this label and used a completely independent random string then the distribution would be _identical_ . Hence if $y=G(U_n)$ then $D$ actually does simulate the distribution of the $j^{th}$ hybrid in its belly, and thus if $A$ had advantage $\epsilon$ in breaking the PRF $\{ f_s \}$ then $D$ will have advantage $\epsilon/T'$ in breaking the PRG $G$ thus obtaining a contradiction.
+Now, if $y$ was completely random then we get exactly the distribution of the $j+1^{st}$ oracle, and hence in this case $D$ simulates internally the $j+1^{st}$ hybrid. However, if $y=G(s)$ for a random $s\in\{0,1\}^n$ it might not be obvious if we get the distribution of the $j^{th}$ oracle, since in that oracle the label for the children of $v$ was supposed to be the result of applying the pseudorandom generator to the label of $v$ and not to some other random string. However, because $v$ was labeled _before_ the $j^{th}$ step then we know that it was actually labeled by a random string. Moreover, since we use lazy evaluation we know that step $j$ is the _first_ time where we actually use the value of the label of $v$. Hence, if at this point we _resampled_ this label and used a completely independent random string then the distribution would be _identical_. Hence if $y=G(U_n)$ then $D$ actually does simulate the distribution of the $j^{th}$ hybrid in its belly, and thus if $A$ had advantage $\epsilon$ in breaking the PRF $\{ f_s \}$ then $D$ will have advantage $\epsilon/T'$ in breaking the PRG $G$ thus obtaining a contradiction.
 >
 This proof is ultimately not very hard but is rather confusing. I urge you to also look at the proof of this theorem as is written in Section 7.5 (pages 265-269) of the KL book.
 
@@ -54,7 +54,7 @@ One can also obtain practical constructions of PRFs from _block ciphers_, which 
 
 ## Securely encrypting many messages - chosen plaintext security
 
-Let's get back to our favorite task of _encryption_ .
+Let's get back to our favorite task of _encryption_.
 We seemed to have nailed down the definition of secure encryption, or did we?
 
 > # { .pause }
@@ -70,7 +70,7 @@ For Alice and Bob to encrypt messages in this way, they must maintain a _synchro
 
 There is another way in which treating many messages as a single tuple is unsatisfactory.
 In real life, Eve might be able to have some impact on _what_ messages Alice encrypts.
-For example, the Katz-Lindell book describes several instances in world war II where Allied forces made particular military manouvers for the sole purpose of causing the axis forces to send encryptions of messages of the Allies' choosing.
+For example, the Katz-Lindell book describes several instances in World War II where Allied forces made particular military maneuver for the sole purpose of causing the axis forces to send encryptions of messages of the Allies' choosing.
 To consider a  more modern example, today Google uses encryption for all of its search traffic including (for the most part) the _ads_ that are displayed on the page.
 But this means that an attacker, by paying Google, can cause it to encrypt arbitrary text of their choosing.
 This kind of attack, where Eve _chooses_ the message she wants to be encrypted is called a _chosen plaintext attack_.
@@ -85,7 +85,7 @@ An encryption scheme $(E,D)$ is _secure against chosen plaintext attack (CPA sec
 2. Eve gets the length of the key $1^n$ as input.[^unary] \
 3. Eve interacts with $E$ for $t=poly(n)$ rounds as follows: in the $i^{th}$ round, Eve chooses a message $m_i$ and obtains $c_i= E_k(m_i)$. \
 4. Then Eve chooses two messages $m_0,m_1$, and gets $c^* = E_k(m_b)$ for $b\leftarrow_R\{0,1\}$. \
-5. Eve _wins_ if she outpus $b$. \
+5. Eve _wins_ if she outputs $b$. \
 
 [^unary]: Giving Eve the key as a sequence of $n$ $1'$s as opposed to in binary representation is a common notational convention in cryptography. It makes no difference except that it makes the input length for Eve of length $n$, which makes sense since we want to allow Eve to run in $poly(n)$ time.
 
@@ -94,8 +94,8 @@ An encryption scheme $(E,D)$ is _secure against chosen plaintext attack (CPA sec
 ![In the CPA game, Eve interacts with the encryption oracle and at the end chooses $m_0,m_1$, gets an encryption $c^*=E_k(m_b)$ and outputs $b'$. She _wins_ if $b'=b$](../figure/cpa-game.jpg){#cpasecgamefig width=50% }
 
 [cpasecuredef](){.ref} is illustrated in [cpasecgamefig](){.ref}.
-Our previous notion of computational secrecy (i.e., [compsecdef](){.ref}) correspons to the case that we skip Step 3 above.
-Since Step 3 only gives the adversay more power (and hence is only more likely to win), CPA security ([cpasecuredef](){.ref}) is _stronger_ than computational secrecy  ([compsecdef](){.ref}), in the sense that every CPA secure encryption $(E,D)$ is also computationally secure.
+Our previous notion of computational secrecy (i.e., [compsecdef](){.ref}) corresponds to the case that we skip Step 3 above.
+Since Step 3 only gives the adversary more power (and hence is only more likely to win), CPA security ([cpasecuredef](){.ref}) is _stronger_ than computational secrecy  ([compsecdef](){.ref}), in the sense that every CPA secure encryption $(E,D)$ is also computationally secure.
 It turns out that CPA security is _strictly stronger_, in the sense that without modification, our stream ciphers cannot be CPA secure. In fact, we have a stronger, and intially somewhat surprising theorem:
 
 > # {.theorem title="CPA security requires randomization" #CPAsecrandomthm}
