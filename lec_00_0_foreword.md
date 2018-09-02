@@ -46,7 +46,7 @@ learning a new way of thinking is its own reward.
 ## Syllabus
 
 In this fast-paced course, I plan to start from the very basic notions of
-cryptogrpahy and by the end of the term reach some of the exciting advances that
+cryptography and by the end of the term reach some of the exciting advances that
 happened in the last few years such as the construction of *fully homomorphic
 encryption*, a notion that Brian Hayes called "one of the most amazing magic
 tricks in all of computer science", and *indistinguishability obfuscators* which
