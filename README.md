@@ -9,3 +9,6 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-NoDer
 
 While these notes will remain freely and publicly available, I may also create a printed book version of them in the future.
 By making any contribution to this work, such as a typo fix or any other suggestion or edit, you are assigning me the rights to use your contribution in both the online or any other version of this work.
+
+
+These notes are produced using a set of scripts written by [David Steurer](https://www.dsteurer.org/), together with [Pandoc](https://pandoc.org), and the Tufte  [LaTeX](https://tufte-latex.github.io/tufte-latex/)  and [css](https://edwardtufte.github.io/tufte-css/) templates. See also [introtcs.org](https://introtcs.org) and [sumofsquares.org](https://sumofsquares.org) for other lecture notes using (variants of) the same scripts.
