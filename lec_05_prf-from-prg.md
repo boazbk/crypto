@@ -76,7 +76,7 @@ But this means that an attacker, by paying Google, can cause it to encrypt arbit
 This kind of attack, where Eve _chooses_ the message she wants to be encrypted is called a _chosen plaintext attack_.
 You might think that we are already covering this with our current definition that requires security _for every_  pair of messages and so in particular this pair could chosen by Eve. However, in the case of multiple messages, we would want to allow Eve to be able to choose $m_2$ _after_ she saw the encryption of $m_1$.
 
-All that leads us to the following definition, which is a strenghtening of our definition of computational security:
+All that leads us to the following definition, which is a strengthening of our definition of computational security:
 
 > # {.definition title="Chosen Plaintext Attack (CPA) secure encryption" #cpasecuredef}
 An encryption scheme $(E,D)$ is _secure against chosen plaintext attack (CPA secure)_ if for every polynomial time $Eve$, Eve wins with probability at most $1/2+negl(n)$ in the game defined below:
@@ -144,12 +144,12 @@ Let $\ell:\N \rightarrow \N$ be some function that is polynomially bounded (i.e.
 2. Every function $f_s$ is a permutation of $\{0,1\}^\ell$ (i.e., a one to one and onto map). \
 3. There is an efficient algorithm that on input $s,y$ returns $f_s^{-1}(y)$.
 >
-The parameter $n$ is known as the _key length_ of the pseudorandom permuation collection and the parameter  $\ell=\ell(n)$ is known as the  _input length_ or _block length_. Often, $\ell=n$ and so in most cases you can safely ignore this distinction.
+The parameter $n$ is known as the _key length_ of the pseudorandom permutation collection and the parameter  $\ell=\ell(n)$ is known as the  _input length_ or _block length_. Often, $\ell=n$ and so in most cases you can safely ignore this distinction.
 
 > # { .pause }
 At first look [PRPdef](){.ref} might seem not to make sense, since on one hand it requires the map $x \mapsto f_s(x)$ to be a permutation, but on the other hand it can be shown that with high probability a random map $H:\{0,1\}^\ell \rightarrow \{0,1\}^\ell$ will _not_ be a permutation.
 How can then such a collection be pseudorandom?
-The key insight is that while a random map might not be a permutation,  it is not possible to distinguish with a polynomial number of queries between a black box that computes a random function and a black box that computes a random permuation.
+The key insight is that while a random map might not be a permutation,  it is not possible to distinguish with a polynomial number of queries between a black box that computes a random function and a black box that computes a random permutation.
 Understanding why this is the case, and why this means that [PRPdef](){.ref} is reasonable, is crucial to getting intuition to this notion, and so I suggest you pause now and make sure you understand these points.
 
 As usual with a new concept, we want to know whether it is possible to achieve and is useful. The former is established by the following theorem:
@@ -177,7 +177,7 @@ They are typically constructed by repeating one after the other a number of very
 Each such iteration is called a _round_.
 If there are $t$ rounds, then the key $k$ is typically expanded into a longer string, which we think of as a  $t$ tuple of strings  $(k_1,\ldots,k_t)$ via some pseudorandom generator known as the _key scheduling algorithm_.
 The $i$-th string in the tuple is known as the _round key_ and is used  in the $i^{th}$ round.
-Each round is typically composed of several components: there is a "key mixing component" that performs some simple permutation based on the key (often as simply as XOR'ing the key), there is a "mixing component" that mixes the bits of the block so that bits that were intially nearby don't stay close to one another, and then there is some non-linear component (often obtained by applying some simple non-linear functions known as "S boxes" to each small block of the input) that ensures that the overall cipher will not be an affine function.
+Each round is typically composed of several components: there is a "key mixing component" that performs some simple permutation based on the key (often as simply as XOR'ing the key), there is a "mixing component" that mixes the bits of the block so that bits that were initially nearby don't stay close to one another, and then there is some non-linear component (often obtained by applying some simple non-linear functions known as "S boxes" to each small block of the input) that ensures that the overall cipher will not be an affine function.
 Each one of these operations is an easily reversible operations, and hence decrypting the cipher simply involves running the rounds backwards.
 
 ![A typical round of a block cipher, $k_i$ is the $^{th}$ round key, $x_i$ is the block before the $i^{th}$ round and $x_{i+1}$ is the block at the end of this round.](../figure/block-cipher-round.jpg){#blockcipherfig width=50% }
@@ -185,7 +185,7 @@ Each one of these operations is an easily reversible operations, and hence decry
 
 ## Encryption modes
 
-How do we use a block cipher to actually encrypt traffic? Well we could use it as a PRF in the construction above, but in practice people use other ways.^[Partially this is because in the above construction we had to encode a plaintext of length $n$ with a ciphertext of length $2n$ meaning an overhead of 100 percent in the communicatoin.]
+How do we use a block cipher to actually encrypt traffic? Well we could use it as a PRF in the construction above, but in practice people use other ways.^[Partially this is because in the above construction we had to encode a plaintext of length $n$ with a ciphertext of length $2n$ meaning an overhead of 100 percent in the communication.]
 The most natural approach would be that to encrypt a message $m$, we simply use $p_s(m)$ where $\{ p_s \}$ is the PRP/block cipher. This is known as the _electronic code book (ECB) mode_ of a block cipher (see [ecbonefig](){.ref}). Note that we can easily decrypt since we can compute $p_s^{-1}(m)$. However, this is a _deterministic_ encryption and hence cannot be CPA secure. Moreover, this is actually a real problem of security on realistic inputs (see [ecbtwofig](){.ref}).
 
 

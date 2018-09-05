@@ -4,9 +4,9 @@
 We've now compiled all the tools that are needed for the basic goal of cryptography (which is still being subverted quite often) allowing Alice and Bob to exchange messages assuring their integrity and confidentiality over a channel that is observed or controlled by an adversary.
 Our tools for achieving this goal are:
 
-* Public key (aka assymetric) encryption schemes.
+* Public key (aka asymmetric) encryption schemes.
 
-* Public key  (aka assymetric) digital signatures schemes.
+* Public key  (aka asymmetric) digital signatures schemes.
 
 * Private key (aka symmetric) encryption schemes - block ciphers and stream ciphers.
 
@@ -109,7 +109,7 @@ efficient Mallory wins in the following game with probability at most $1/2+ negl
 >
 * For $poly(n)$ rounds, Mallory gets access to the function $c \mapsto D_d(c)$. (She doesn't need access to $m \mapsto E_e(m)$ since she already knows $e$.)
 >
-* Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\{0,1\}$, and Mallory gets $c^* = E_e(m_b)$. (Note that she of course does _not_ get the randmoness used to generate this challenge encryption.)
+* Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\{0,1\}$, and Mallory gets $c^* = E_e(m_b)$. (Note that she of course does _not_ get the randomness used to generate this challenge encryption.)
 >
 * Mallory now gets another $poly(n)$ rounds of access to the function  $c \mapsto D_d(c)$ except that she is not allowed to query $c^*$.
 >

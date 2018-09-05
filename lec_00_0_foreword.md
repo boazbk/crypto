@@ -103,13 +103,13 @@ Depending on time, I plan to cover the following notions:
 -   Part III: Pubic key encryption
 
     1.  **Public key cryptography and the obfuscation paradigm:** How did
-        Diffie, Hellman, Merkle, Ellis even dare to *imagine* the possiblity of
+        Diffie, Hellman, Merkle, Ellis even dare to *imagine* the possibility of
         public key encryption?
 
     2.  **Constructing public key encryption: Factoring, discrete log, and
         lattice based systems:** We'll discuss several variants for constructing
         public key systems, including those that are widely deployed such as
-        RSA, Diffie-Hellman, and the ellyptic curve variants, as well as some
+        RSA, Diffie-Hellman, and the elliptic curve variants, as well as some
         variants of *lattice based cryptosystems* that have the advantage of not
         being broken by quantum computers, as well as being more versatile. The
         former is the reason why the NSA has advised people to transition to

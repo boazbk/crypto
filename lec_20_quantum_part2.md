@@ -212,7 +212,7 @@ here.)
 
 We now describe the algorithm and the state, neglecting normalizing factors.
 
-1. _intial state:_                $f= \sum_{x\in\Z_m} f(x)\ket{x}$
+1. _initial state:_                $f= \sum_{x\in\Z_m} f(x)\ket{x}$
 
 2.  Recursively run $FT_{m/2}$ on $m-1$ most significant qubits (state: $(FT_{m/2}f_{even})\ket{0} + (FT_{m/2}f_{odd})\ket{1}$)
 
@@ -497,7 +497,7 @@ computed in $polylog(q_n)$ time.
 
 
 
-### Quantum cryptogrpahy
+### Quantum cryptography
 
 There is another way in which quantum mechanics interacts with cryptography. These "spooky actions at a distance" have been suggested by Weisner and Bennet-Brassard as a way in which parties can create a secret shared key over an insecure channel. On one hand, this concept does not require as much control as general-purpose quantum computing, and so it has in fact been [demonstrated physically](https://en.wikipedia.org/wiki/Quantum_key_distribution#Quantum_Key_Distribution_Networks). On the other hand, unlike transmitting standard digital information, this "insecure channel" cannot be an arbitrary media such as wifi etc.. but rather one needs fiber optics, lasers, etc.. Unlike quantum computers, where we only need one of those to break RSA, to actually use key exchange at scale we need to setup these type of networks, and so it is unclear if this approach will ever dominate the solution of Alice sending to Bob a Brink's truck with the shared secret key. People have proposed some other ways to use the interesting properties of quantum  mechanics for cryptographic purposes including [quantum money](https://en.wikipedia.org/wiki/Quantum_money) and [quantum software protection](http://www.scottaaronson.com/papers/noclone-ccc.pdf).
 

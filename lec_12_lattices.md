@@ -162,7 +162,7 @@ Now consider the instance $(A+(r\|0^m\|\cdots \|0^m),y+ar)$, where $r$ is a rand
 If $A$ is random then $A+(r\|0^m\|\cdots \|0^m)$ is random as well.
 Now note that $Ax + (r|0^m\cdots \|0^m)x = Ax + x_1 r$ and hence if $x_1 = a$ then we still have an input of the same form $(A',A'x+e)$.
 >
-In contrast, we claim that if if $x_1 \neq a$ then the distribution $(A',y')$ where $A'=A+(r\|0^m\|\cdots \|0^m)$ and $y'= Ax + e + ar$ is identical to the uniform distribution over a random uniformly chosent matrix $A'$ and a random and independent uniformly chosen vector $y'$.
+In contrast, we claim that if if $x_1 \neq a$ then the distribution $(A',y')$ where $A'=A+(r\|0^m\|\cdots \|0^m)$ and $y'= Ax + e + ar$ is identical to the uniform distribution over a random uniformly chosen matrix $A'$ and a random and independent uniformly chosen vector $y'$.
 Indeed, we can write this distribution as $(A',y')$ where $A'$ is chosen uniformly at random, and $y'= A'x + e + (a-x_1)r$ where $r$ is a random and independent vector. (Can you see why?)
 Since $a-x_1 \neq 0$, this amounts to adding a random and independent vector $r'$ to $y'$, which means that the distribution $(A',y')$ is uniform and independent.
 >

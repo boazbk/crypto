@@ -210,7 +210,7 @@ Here is how we can get a public key encryption from a trapdoor permutation schem
 
 
 > # { .pause }
-Please verify that you undestand why TDPENC is a _valid_ encryption scheme, in the sense that decryption of an encryption of $m$ yields $m$.
+Please verify that you understand why TDPENC is a _valid_ encryption scheme, in the sense that decryption of an encryption of $m$ yields $m$.
 
 
 > # {.theorem title="Public key encryption from trapdoor permutations" #TDPpkcthm}
@@ -244,8 +244,8 @@ In the "forgetful experiment", the second component of the ciphertext $z^* = w^*
 Hence in this "forgetful experiment" the adversary gets no information about $b^*$ and its probability of winning is at most $1/2$.
 But the forgetful experiment is identical to the actual experiment if the value $x^*$ is only queried to $H$ once.
 Apart from the query of $x^*$ by the challenger, all other queries to $H$ are made by the adversary.
-Under our assumption, the adverdsary makes the query $x^*$ with probability at most $\epsilon$, and conditioned on this not happening the two experiments are identical.
-Since the probability of winning in the forgetful experiment is at most $1/2$, the probability of winning in the overall experiment is less than $1/2+\epsilon$, thus yielding a contradiction and establishing the claim. (These kind of  analayses on sample spaces can be confusing; See [TDPENCgnomefig](){.ref} for a graphical illustration of this argument.)
+Under our assumption, the adversary makes the query $x^*$ with probability at most $\epsilon$, and conditioned on this not happening the two experiments are identical.
+Since the probability of winning in the forgetful experiment is at most $1/2$, the probability of winning in the overall experiment is less than $1/2+\epsilon$, thus yielding a contradiction and establishing the claim. (These kind of  analyses on sample spaces can be confusing; See [TDPENCgnomefig](){.ref} for a graphical illustration of this argument.)
 >
 Given the claim, we can now construct our inverter algorithm $I$ as follows:
 >
