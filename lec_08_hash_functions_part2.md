@@ -97,7 +97,7 @@ The certificate $\pi$ consists of a sequence of $\log t$ pairs of size-$n$ block
 from the $i^{th}$ coordinate of $x$ to the final root $y$. The last pair of blocks is the a preimage of $y$ under $h$, while each pair on this list is a preimage of
 one of the blocks in the next pair. If $x_i \neq b$, then the first pair of blocks cannot be identical to the pair of blocks of $x$ that contains the $i^{th}$ coordinate.
 However, since we know the final root $y$ is identical, if we compare the corresponding path in $x$ to $\pi$, we will see that at some point there must be
-an input $z$ in the path from $x$ and a distict input $z'$ in $\pi$ that hash to the same output.
+an input $z$ in the path from $x$ and a distinct input $z'$ in $\pi$ that hash to the same output.
 
 ## Proofs of Retrievability
 

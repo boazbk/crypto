@@ -7,7 +7,7 @@ See also the [mathematical background](http://www.introtcs.org/public/lec_00_1_m
 
 
 At Harvard, much of this material (and more) is taught in Stat 110 "Introduction
-to Probability", CS20 "Discrete Mathemtics", and AM107 "Graph Theory and
+to Probability", CS20 "Discrete Mathematics", and AM107 "Graph Theory and
 Combinatorics". Some good sources for this material are the lecture notes by
 Papadimitriou and Vazirani (see home page of Umesh Vaziarani), Lehman, Leighton
 and Meyer from MIT Course 6.042 "Mathematics For Computer Science" (Chapters 1-2

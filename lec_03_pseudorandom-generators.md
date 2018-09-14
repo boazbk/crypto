@@ -167,7 +167,7 @@ D_k(c) = G(k) \oplus c
 $$
 >
 Just like in the one time pad, $D_k(E_k(m)) = G(k) \oplus G(k) \oplus m = m$.
-Moreover, the encryption and decruption algorithms are clearly efficient and so
+Moreover, the encryption and decryption algorithms are clearly efficient and so
 the only thing that's left is to prove security or that for every pair $m,m'$ of plaintexts,
 $E_{U_n}(m) \approx E_{U_n}(m')$. We show this by proving the following claim:
 >
@@ -196,7 +196,7 @@ get an encryption scheme with $t(n)$ long message length. In fact, in practice
 if we use the length extension for PRG's, we don't need to decide on the length
 of messages in advance. Every time we need to encrypt another bit (or another
 block) $m_i$ of the message, we run the basic PRG to update our state and obtain
-some new randomness $y_i$ that we can XOR with the message and ouput. Such
+some new randomness $y_i$ that we can XOR with the message and output. Such
 constructions are known as *stream ciphers* in the literature. In much
 of the practical literature the name *stream cipher* is used both for the
 pseudorandom generator itself, as well as for the encryption scheme that is
@@ -401,7 +401,7 @@ This is an excellent point for you to stop and try to answer this question on yo
 Given the known constants and known output,  figuring out the set of potential seeds can be thought of as solving a _single_ equation in 40 variables.
 However, this equation is clearly overdetermined, and will have a solution regardless of whether the observed value is indeed an output of the generator, or it is chosen uniformly at random.
 
-More concretely,  we can use linear-eqaution solving to  compute (given the known constants $c_1,\ldots,c_{40} \in \Z_{2^{48}}$ and the output $y \in \Z_{2^{48}}$) the linear subspace $V$ of all vectors $(s_1,\ldots,s_{40}) \in (\Z_{2^{48}})^{40}$ such that $\sum s_i c_i = y \pmod{2^{48}}$.
+More concretely,  we can use linear-equation solving to  compute (given the known constants $c_1,\ldots,c_{40} \in \Z_{2^{48}}$ and the output $y \in \Z_{2^{48}}$) the linear subspace $V$ of all vectors $(s_1,\ldots,s_{40}) \in (\Z_{2^{48}})^{40}$ such that $\sum s_i c_i = y \pmod{2^{48}}$.
 But, regardless of whether $y$ was generated at random from $\Z_{2^{48}}$, or $y$ was generated as an output of the generator, the subspace $V$ will always have the same dimension (specifically, since it is formed by a single linear equation over $40$ variables, the dimension will be $39$.)
 To break the generator we seem to need to be able to decide whether this linear subspace $V \subseteq (\Z_{2^{48}})^{40}$ contains a _Boolean vector_ (i.e., a vector $s\in \{0,1\}^n$).
 Since the condition that a vector is Boolean is not defined by linear equations, we cannot use Gaussian elimination to break the generator.

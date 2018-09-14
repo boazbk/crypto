@@ -308,7 +308,7 @@ There are several reasons to believe the cipher conjecture. We now  briefly ment
 
 - _Concrete candidates:_ As we will see in the next lecture, there are several concrete candidate ciphers using keys shorter than messages for which despite _tons_ of effort, no one knows how to break them. Some of them are widely used and hence governments and other benign or not so benign organizations have every reason to invest huge resources in trying to break them. Despite that as far as we know (and we know a little more after Edward Snowden's revelations) there is no significant break known for the most popular ciphers. Moreover, there are other ciphers that can be based on canonical mathematical problems such as factoring large integers or decoding random linear codes that are immensely interesting in their own right, independently of their cryptographic applications.
 
-- _Minimalism:_ Clearly if the cipher conjecture is false then we also don't have a secure encryption with a key, say, twice as long as the message. But it turns out the cipher conjecture is in fact _necessary_  for essentially every cryptographic primitive, including not just private key and public key encryptions but also digital signatures, hash functions, pseudorandom generators, and more. That is, if the cipher conjecture is false then to a large extent crytpgoraphy does not exist, and so we essentially have to assume this conjecture if we want to do any kind of cryptography.
+- _Minimalism:_ Clearly if the cipher conjecture is false then we also don't have a secure encryption with a key, say, twice as long as the message. But it turns out the cipher conjecture is in fact _necessary_  for essentially every cryptographic primitive, including not just private key and public key encryptions but also digital signatures, hash functions, pseudorandom generators, and more. That is, if the cipher conjecture is false then to a large extent cryptography does not exist, and so we essentially have to assume this conjecture if we want to do any kind of cryptography.
 
 ## Why care about the cipher conjecture?
 
@@ -529,9 +529,9 @@ There is a crucial difference between key material and such "as hoc" randomness.
 Keys need to be not only chosen at random, but also shared in advance between the sender and receiver, and stored securely throughout their lifetime.
 The "coin tosses" used by a randomized encryption scheme are generated "on the fly" and are not known to the receiver, nor do they need to be stored long term by the sender.
 So, allowing such randomized encryption does not make a difference for most applications of encryption schemes.
-In fact, as we will see later in this course, randomized encryption is _necessary_ for security against more sophisticated attackes such as chosen plaintext and chosen ciphertext attacks, as well as for obtaining secure _public key_ encryptions.
+In fact, as we will see later in this course, randomized encryption is _necessary_ for security against more sophisticated attacks such as chosen plaintext and chosen ciphertext attacks, as well as for obtaining secure _public key_ encryptions.
 We will use the notation $E_k(m;r)$ to denote the output of the encryption algorithm on key $k$, message $m$ and using internal randomness $r$.
-We often supress the notation for the randomness, and hence use $E_k(m)$ to denote the random variable obtained by sampling a random $r$ and outputting $E_k(m;r)$.
+We often suppress the notation for the randomness, and hence use $E_k(m)$ to denote the random variable obtained by sampling a random $r$ and outputting $E_k(m;r)$.
 
 We can now show that given an encryption scheme with messages one bit longer than the key, we can obtain a (randomized) encryption scheme with arbitrarily long messages:
 
@@ -591,7 +591,7 @@ $$
 Note that $\hat{E}$ is not a valid encryption scheme since it's not at all clear
 there is a decryption algorithm for it. It is just an hypothetical tool we use
 for the proof.
-Since both $E$ and $\hat{E}$ are randomized encryption schemes (with $E$ using $(t-1)n$ bits of randomness for the emphemeral keys $k_1,\ldots,k_{t-1}$ and $\hat{E}$ using $(2t-1)n$ bits of randomness for the ephemeral keys $k_1,\ldots,k_t,k'_2,\ldots,k'_t$), we can also write
+Since both $E$ and $\hat{E}$ are randomized encryption schemes (with $E$ using $(t-1)n$ bits of randomness for the ephemeral keys $k_1,\ldots,k_{t-1}$ and $\hat{E}$ using $(2t-1)n$ bits of randomness for the ephemeral keys $k_1,\ldots,k_t,k'_2,\ldots,k'_t$), we can also write
 [lengthextendclaimeq](){.eqref} as
 $$
 E_{U_n}(m; U'_{tn}) \approx \hat{E}_{U_n}(m; U'_{(2t-1)n})  

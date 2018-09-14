@@ -119,7 +119,7 @@ for every  efficient adversary $A$ mapping $\{0,1\}^*$ to $\{0,1\}$, there  exis
 
 
 
-(Note that the distributions above are of a single bit, and so being indistinguishable simply means that the probability of outputing $1$ is equal in both cases up to a negligible additive factor.)
+(Note that the distributions above are of a single bit, and so being indistinguishable simply means that the probability of outputting $1$ is equal in both cases up to a negligible additive factor.)
 
 ## Applications of obfuscation
 
@@ -134,15 +134,15 @@ To turn this into a functional encryption, for every function $f$ we can define 
 We can also use obfuscation to get a witness encryption, to encrypt a message $m$ to be opened using any $w$ such that $F(w)=1$, we can obfuscate the function that maps $w$ to $m$ if $F(w)=1$ and outputs ```error``` otherwise.
 To solve the patch problem, for a given regular expression we can obfuscate the function that maps $x$ to $R(x)$.
 
-## Impossiblity of obfuscation
+## Impossibility of obfuscation
 
 So far, we've learned that in cryptography no concept is too fantastic to be realized.
 Unfortunately, VBB secure obfuscation [is an exception](http://www.boazbarak.org/Papers/obfuscate.pdf):
 
-> # {.theorem title="Impossiblity of Obfuscation" #obfimpthm}
+> # {.theorem title="impossibility of Obfuscation" #obfimpthm}
 Under the PRG assumption, there does not exist a VBB secure obfuscating compiler.
 
-### Proof of impossiblity of VBB obfuscation
+### Proof of impossibility of VBB obfuscation
 
 We will now show the proof of [obfimpthm](){.ref}.
 For starters, note that obfuscation is trivial for _learnable_ functions.
@@ -156,7 +156,7 @@ But it already suggests that we should use an unlearnable function for our negat
 Here is an extremely simple unlearnable function.
 For every $\alpha,\beta\in\{0,1\}^n$, we define $F_{\alpha,\beta}:\{0,1\}^n\rightarrow\{0,1\}^n$ to be the function that on input $x$ outputs $\beta$ if $x=\alpha$ and otherwise outputs $0^n$.
 
-Given black box access for this function for a random $\alpha,\beta$, it's extremely unlikely that we would hit $\alpha$ with a polynomial number of queries and hence will not be able to recover $\beta$ and so in particular will not be able to learn a circuit that computes $F_{\alpha,\beta}$.^[Pseudorandom functions can be used to construct examples of functions that are unlearnable in the much stronger sense that we cannot achieve the machine learning goal of outputing some circuit that _approximately predicts_ the function.]
+Given black box access for this function for a random $\alpha,\beta$, it's extremely unlikely that we would hit $\alpha$ with a polynomial number of queries and hence will not be able to recover $\beta$ and so in particular will not be able to learn a circuit that computes $F_{\alpha,\beta}$.^[Pseudorandom functions can be used to construct examples of functions that are unlearnable in the much stronger sense that we cannot achieve the machine learning goal of outputting some circuit that _approximately predicts_ the function.]
 
 This function already yields a counterexample for a stronger version of the VBB definition.
 We define a _strong VBB obfuscator_ to be a compiler $\mathcal{O}$ that satisfies the above definition for adversaries that can output not just one bit but an arbitrary long string.
@@ -183,7 +183,7 @@ On the other hand, for $D_{\alpha,\beta}$ to output $1$ on $C' = S^{F_{\alpha,\b
 We claim that there exists some $\alpha,\beta$ such that this will happen with negligible probability.
 Indeed, assume $S$ makes $T=poly(n)$ queries and pick $\alpha,\beta$ independently and uniformly at random from $\{0,1\}^n$.
 For every $i=1,\ldots,T$, let $E_i$ be the event that the $i^{th}$ query of $S$ is the first in which it gets a response other than $0^n$.
-The probability of $E_i$ is at most $2^{-n}$ because as long as $S$ got all responses to be $0^n$, it got no information about $\alpha$ and so the choice of $S$'s $i^{th}$ query is indepednent of $\alpha$ which is chosen at random in $\{0,1\}^n$.
+The probability of $E_i$ is at most $2^{-n}$ because as long as $S$ got all responses to be $0^n$, it got no information about $\alpha$ and so the choice of $S$'s $i^{th}$ query is independent of $\alpha$ which is chosen at random in $\{0,1\}^n$.
 By a union bound, the probability that $S$ got any response other than $0^n$ is negligible.
 In which case if we let $C'$ be the output of $S$ and let $\beta' = C'(\alpha)$, then $\beta'$ is independent of $\beta$ and so the probability that they are equal is at most $2^{-n}$.
 

@@ -31,7 +31,7 @@ the activity of _breaking_ them, and _cryptology_ is the name for the union of t
 broad science of constructing and analyzing the security of not just encryptions but many schemes and protocols for protecting the confidentiality and integrity
 of communication and computation.
 
-In 1587, Mary the queen of Scots, and the heir to the throne of England, wanted to arrange the assasination of her cousin, queen Elisabeth I of
+In 1587, Mary the queen of Scots, and the heir to the throne of England, wanted to arrange the assassination of her cousin, queen Elisabeth I of
 England, so that she could ascend to the throne and finally escape the house arrest under which she has been for the last 18 years.
 As part of this complicated plot, she sent a coded letter to Sir Anthony Babington. It is what's known as a _substitution cipher_ where each letter is transformed into a different symbol, and so the resulting letter looks something like the following (see [figmaryletter](){.ref}):
 
@@ -49,9 +49,9 @@ As in many things, this is the subject of a great XKCD cartoon (see [xkcdnavajof
 
 
 The [Vigenère cipher](https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher) is named after Blaise de Vigenère  who described it in a book in 1586 (though it was invented earlier by Bellaso).
-The idea is to use a collection of subsitution cyphers - if there are $n$ different ciphers then the first letter of the plaintext is encoded with the first cipher, the second with the second cipher,
+The idea is to use a collection of substitution cyphers - if there are $n$ different ciphers then the first letter of the plaintext is encoded with the first cipher, the second with the second cipher,
 the $n^{th}$ with the $n^{th}$ cipher, and then the $n+1^{st}$ letter is again encoded with the first cipher.
-The key is usually a word or a phrase of $n$ letters, and the $i^{th}$ substition cipher is obtained by shifting each letter $k_i$ positions in the alphabet.
+The key is usually a word or a phrase of $n$ letters, and the $i^{th}$ substitution cipher is obtained by shifting each letter $k_i$ positions in the alphabet.
 This "flattens" the frequencies and makes it much harder to do frequency analysis, which is why this cipher was considered "unbreakable" for 300+ years and got the nickname
 "le chiffre indéchiffrable" ("the unbreakable cipher").
 Nevertheless, Charles Babbage cracked the Vigenère cipher in 1854 (though he  did not publish it).
@@ -242,7 +242,7 @@ A corollary is that  having a huge number of key combinations does not guarantee
 without trying all options.
 
 [^enigmacalc]: There are about $10^{68}$ atoms in the galaxy, so even if we assumed that each one of those atoms was a computer that can process say
-$10^{21}$ decryption attempts per second (as the speed of light is $10^9$ meters per second and the diamter of an atom is about $10^{-12}$ meters), then
+$10^{21}$ decryption attempts per second (as the speed of light is $10^9$ meters per second and the diameter of an atom is about $10^{-12}$ meters), then
 it would still take $10^{113-89} = 10^{24}$ seconds, which is about $10^{17}$ years to exhaust all possibilities, while the sun is estimated to burn out in
 about 5 billion years.
 
@@ -331,7 +331,7 @@ The key insight of Shannon was that in a secure encryption scheme
 the ciphtertext should not reveal _any additional information_ about the
 plaintext.  So, if for example it was a priori possible for Eve to guess the
 plaintext with some probability $1/k$  (e.g., because there were only $k$
-possiblities for it) then she should not be able to guess it with higher
+possibilities for it) then she should not be able to guess it with higher
 probability after seeing the ciphertext.
 This can be formalized as follows:
 
