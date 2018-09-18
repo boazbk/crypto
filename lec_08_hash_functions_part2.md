@@ -13,13 +13,13 @@ But unfortunately, many of the current users of cryptography are _humans_ which,
 There are $62^8 \approx 2^{48}$ ways to select a password of 8 upper and lower case letters + numbers, but some letter/numbers combinations end up being chosen
 much more frequently than others.
 Due to several large scale hacks, very large databases of passwords have been made public,
-and one [estimate](https://blogs.dropbox.com/tech/2012/04/zxcvbn-realistic-password-strength-estimation/) is that 90 percent of the passwords chosen by users are contained in a list of about  $10,000 \approx 2^{14}$ strings.
+and one [estimate](https://blogs.dropbox.com/tech/2012/04/zxcvbn-realistic-password-strength-estimation/) is that 91 percent of the passwords chosen by users are contained in a list of about $1,000 \approx 2^{10}$ strings.
 
 
 If we choose a password at random from some set $D$ then the _entropy_ of the password is simply $\log_2 |D|$.
 However, estimating the entropy of real life passwords is rather difficult.
 For example, suppose that I use the winning Massachussets Mega-Lottery numbers as my password.
-A priory, my password consists of $5$ numbers between $1$ till $75$ and so its entropy is $\log_2 (75^5) \approx 31$.
+A priori, my password consists of $5$ numbers between $1$ till $75$ and so its entropy is $\log_2 (75^5) \approx 31$.
 However, if an attacker _knew_ that I did this, the entropy might be something like $\log(520) \approx 9$ (since there were only 520 such numbers selected in the last 10 years).
 Moreover, if they knew exactly what draw I based my password on, then they would it exactly and hence the entropy (from their point of view) would be zero.
 This is worthwhile to emphasize:
