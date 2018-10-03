@@ -160,13 +160,13 @@ prime factorization, without proving it. Here is what a proof could look like.
 We will prove the following two lemmas:
 
 
-> # {.lemma #primesfirstlem}
+> # {.lemma title="Existence of prime divisor" #primesfirstlem}
 For every integer $n>1$, there exists a prime $p>1$ that divides
 $n$.
 
 
 
-> # {.lemma #primesseclem}
+> # {.lemma title="Existence of co-prime" #primesseclem}
 For every set of integers $p_1,\ldots,p_k>1$, there exists a number
 $n$ such that none of $p_1,\ldots,p_k$ divide $n$.
 
@@ -232,7 +232,7 @@ For example, the probability that $x$ has an even number of ones is $\Pr[A]$ whe
 In the case $n=3$, $A=\{ 000,011,101,110 \}$, and hence $\Pr[A]=\tfrac{4}{8}=\tfrac{1}{2}$.
 It turns out this is true for every $n$:
 
-> # {.lemma #evenprob}
+> # {.lemma title="Even one's" #evenprob}
 $$\Pr_{x\sim \{0,1\}^n}[ \text{$\sum_{i=0}^{n-1} x_i$ is even }] = 1/2$$
 
 > # { .pause }
@@ -420,7 +420,7 @@ We say that two random variables $X:\{0,1\}^n \rightarrow \R$ and $Y:\{0,1\}^n \
 In other words, $X$ and $Y$ are independent if $\Pr[ X=u \wedge Y=v]=\Pr[X=u]\Pr[Y=v]$ for every $u,v \in \R$.
 For example, if two random variables depend on the result of tossing different coins then they are independent:
 
-> # {.lemma  #indcoins}
+> # {.lemma title="Independant random variables" #indcoins}
 Suppose that $S=\{ s_0,\ldots, s_{k-1} \}$ and $T=\{ t_0 ,\ldots, t_{m-1} \}$ are disjoint subsets of $\{0,\ldots,n-1\}$ and let
 $X,Y:\{0,1\}^n \rightarrow \R$ be random variables such that $X=F(x_{s_0},\ldots,x_{s_{k-1}})$ and $Y=G(x_{t_0},\ldots,x_{t_{m-1}})$ for some functions $F: \{0,1\}^k \rightarrow \R$ and $G: \{0,1\}^m \rightarrow \R$.
 Then $X$ and $Y$ are independent.
