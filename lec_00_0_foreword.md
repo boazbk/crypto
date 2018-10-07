@@ -100,7 +100,7 @@ Depending on time, I plan to cover the following notions:
         Justifying our "axiom" of pseudo-random generators by deriving it from a
         weaker assumption.
 
--   Part III: Pubic key encryption
+-   Part III: Public key encryption
 
     1.  **Public key cryptography and the obfuscation paradigm:** How did
         Diffie, Hellman, Merkle, Ellis even dare to *imagine* the possibility of
