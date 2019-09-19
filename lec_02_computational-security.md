@@ -24,11 +24,11 @@ scheme that uses, say, a $128$ bit key, with a $129$ bit message:
 # We assume we have access to the function Decrypt(key,ciphertext)
 def Distinguish(ciphertext,plaintext1,plaintext2):
     bias = 0
-    key = [0]*128 #128 0's
-    while(sum(key)<128):
+    key = [0] * 128 #128 0's
+    while(sum(key) < 128):
         p = Decrypt(key,ciphertext)
-        if p==plaintext1: bias++
-        if p==plaintext2: bias--
+        if p==plaintext1: bias += 1
+        if p==plaintext2: bias -= 1
         increment(key)
     return bias
 
@@ -36,8 +36,8 @@ def Distinguish(ciphertext,plaintext1,plaintext2):
 # to most significant bit. Assume not all bits are 1.
 def increment(key):
     i = key.index(0);
-    for j in range(i-1): key[j]=0
-    key[i]=1
+    for j in range(i): key[j] = 0
+    key[i] = 1
 ```
 
 Now, generating, distributing, and protecting huge keys causes immense
