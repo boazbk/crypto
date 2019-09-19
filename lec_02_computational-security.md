@@ -16,6 +16,8 @@ to the following simple Python program that can break every encryption
 scheme that uses, say, a $128$ bit key, with a $129$ bit message:
 
 ```python
+from itertools import product # Import an iterator for cartesian products
+
 # Gets ciphertext as input and two potential plaintexts
 # Positive return value means first is more likely,
 # negative means second is more likely,
@@ -24,20 +26,11 @@ scheme that uses, say, a $128$ bit key, with a $129$ bit message:
 # We assume we have access to the function Decrypt(key,ciphertext)
 def Distinguish(ciphertext,plaintext1,plaintext2):
     bias = 0
-    key = [0]*128 #128 0's
-    while(sum(key)<128):
-        p = Decrypt(key,ciphertext)
-        if p==plaintext1: bias++
-        if p==plaintext2: bias--
-        increment(key)
+    for key in product([0,1], repeat = 128): # Iterate over all possible keys of lenght 128
+        p = Decrypt(key, ciphertext)
+        if p == plaintext1: bias += 1
+        if p == plaintext2: bias -= 1
     return bias
-
-# increment key when thought of as a number sorted from least significant
-# to most significant bit. Assume not all bits are 1.
-def increment(key):
-    i = key.index(0);
-    for j in range(i-1): key[j]=0
-    key[i]=1
 ```
 
 Now, generating, distributing, and protecting huge keys causes immense
