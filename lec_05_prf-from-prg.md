@@ -96,13 +96,13 @@ An encryption scheme $(E,D)$ is _secure against chosen plaintext attack (CPA sec
 [cpasecuredef](){.ref} is illustrated in [cpasecgamefig](){.ref}.
 Our previous notion of computational secrecy (i.e., [compsecdef](){.ref}) corresponds to the case that we skip Step 3 above.
 Since Step 3 only gives the adversary more power (and hence is only more likely to win), CPA security ([cpasecuredef](){.ref}) is _stronger_ than computational secrecy  ([compsecdef](){.ref}), in the sense that every CPA secure encryption $(E,D)$ is also computationally secure.
-It turns out that CPA security is _strictly stronger_, in the sense that without modification, our stream ciphers cannot be CPA secure. In fact, we have a stronger, and intially somewhat surprising theorem:
+It turns out that CPA security is _strictly stronger_, in the sense that without modification, our stream ciphers cannot be CPA secure. In fact, we have a stronger, and initially somewhat surprising theorem:
 
 > # {.theorem title="CPA security requires randomization" #CPAsecrandomthm}
 There is no CPA secure $(E,D)$ where $E$ is _deterministic_.
 
 > # {.proof data-ref="CPAsecrandomthm"}
-The proof is very simple: Eve will only use a single round of interacting with $E$ where she will ask for the encryption $c_1$ of $0^\ell$. In the second  round, Eve will choose $m_0=0^{\ell}$ and $m_1=1^{\ell}$, and get $c^*=E_k(m_b)$ she wil then output $0$ if and only if $c^*=c_1$.
+The proof is very simple: Eve will only use a single round of interacting with $E$ where she will ask for the encryption $c_1$ of $0^\ell$. In the second  round, Eve will choose $m_0=0^{\ell}$ and $m_1=1^{\ell}$, and get $c^*=E_k(m_b)$ she will then output $0$ if and only if $c^*=c_1$.
 
 
 ![Insecurity of deterministic encryption](../figure/code_talkers.png){#xkcdnavajotwofig width=50% }

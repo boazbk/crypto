@@ -118,7 +118,7 @@ __Claim 1:__ Let `PRF-Login*` be the hypothetical variant of the protocol `PRF-L
 >
 (If  `PRF-Login*` is easier to prove secure than  `PRF-Login`, you might wonder why we bother with `PRF-Login` in the first place and not simply use `PRF-Login*`. The reason is that specifying a random function $H$ requires specifying $2^n$ bits, and so that would be a _huge_ shared key. So `PRF-Login*` is not a protocol we can actually run but rather a hypothetical "mental experiment" that helps us in arguing about the security of `PRF-Login`.)
 >
-__Proof of Claim 1:__ Let $i_1,\ldots,i_{2T}$ be the nonces chosen by Bob and recieved by Alice in the first $T$ iterations.
+__Proof of Claim 1:__ Let $i_1,\ldots,i_{2T}$ be the nonces chosen by Bob and received by Alice in the first $T$ iterations.
 That is, $i_1$ is the nonce chosen by Bob in the first iteration while $i_2$ is the nonce that Alice received in the first iteration (if Mallory doesn't modify it then $i_1=i_2$), similarly $i_3$ is the nonce chosen by Bob in the second iteration while $i_4$ is the nonce received by Alice and so on and so forth. Let $i$ be the nonce chosen in the $T+1^{st}$ iteration in which Mallory tries to impersonate Alice.
 We claim that the probability that there exists some $j\in\{1,\ldots,2T\}$ such that $|i-i_j|<2\ell$ is at most $(8\ell T/2^n$. Indeed, let $S$ be the union of all the intervals of the form $\{ i_j-2\ell+1,\ldots, i_j+2\ell-1 \}$ for $1 \leq j \leq 2T$. Since it's a union of $2T$ intervals each of length less than $4\ell$, $S$ contains at most $8T\ell$ elements, but so the probability that $i\in S$ is $|S|/2^n \leq (8T\ell)/2^n$.  Now, if there does _not_ exists a $j$ such that
 $|i-i_j|<2\ell$ then it means in particular that all the

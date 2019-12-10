@@ -80,7 +80,7 @@ the existence of pseudorandom generators. Nevertheless they are widely believed
 to exist and hence we make the following conjecture:
 
 >**Conjecture (The PRG conjecture):** For every $n$, there exists a pseudorandom
-generator $G$ mapping $n$ bits to $n+1$ bits.^[The name "The PRG conjecture" is non-standard. In the literature this is known as the conjecture of existence of pseudorandom generators. This is a weaker form of "The Optimal PRG Conjecture" presented in my [intro to theoretical CS lecture notes](https://goo.gl/G7bU4M) since the PRG conjecture only posits the existence of pseudorandom generators with arbitrary polynomial blowup, as opposed to an exponential blowup posited in the optimal PRF conjecture.]
+generator $G$ mapping $n$ bits to $n+1$ bits.^[The name "The PRG conjecture" is non-standard. In the literature this is known as the conjecture of existence of pseudorandom generators. This is a weaker form of "The Optimal PRG Conjecture" presented in my [intro to theoretical CS lecture notes](https://goo.gl/G7bU4M) since the PRG conjecture only posits the existence of pseudorandom generators with arbitrary polynomial blowup, as opposed to an exponential blowup posited in the optimal PRG conjecture.]
 
 As was the case for the cipher conjecture, and any other conjecture, there are two natural questions
 regarding the PRG conjecture: why should we believe it and why should we care. Fortunately, the answer to the first question is simple:
@@ -130,7 +130,7 @@ with an input distributed according to $H_i$. Hence we get that $| \E[ Eve'(G'(U
 The proof of [lengthextendprgthm](){.ref} is indicative of many practical constructions of pseudorandom generators. Many operating systems keep track of an initial _seed_ of randomness, and  supply a system call `rand` such that every call to `rand` applies a pseudorandom generator $G'$ to the current seed, uses part of the output to update the seed, and returns the remainder to the caller.
 
 
-> # {.remark title="Unpredictablity and indistinguishability- an alternative approach for proving the length extension theorem" #alternativelengthextendrem}
+> # {.remark title="Unpredictability and indistinguishability- an alternative approach for proving the length extension theorem" #alternativelengthextendrem}
 The notion that being random is the same as being "unpredictable" can be formalized as follows.
 One can show that a random variable $X$ over $\{0,1\}^n$ is pseudorandom if and only if every efficient algorithm $A$ succeeds in the following experiment with probability at most $1/2+negl(n)$: $A$ is given $i$ chosen at random in $\{0,\ldots,n-1\}$ and $x_1,\ldots,x_i$ where $(x_1,\ldots,x_n)$ is drawn
 from $X$ and wins if it outputs $x_{i+1}$. It is a good optional exercise to prove this, and to use that to give an alternative proof of the length extension theorem.  
@@ -270,7 +270,7 @@ This includes as a special case the *linear congruential generator* where $t=1$ 
 All these generators are unfortunately insecure due to the great bane of
 cryptography- the *Gaussian elimination algorithm* which students typically encounter in any linear algebra class.^[Despite the name, the algorithm goes at least as far back as the Chinese *Jiuzhang Suanshu* manuscript, circa 150 B.C.]
 
-> # {.theorem title="The unfortunate theorem for cryptography" #gaussianelimthm}
+> # {.theorem title="The unfortunate theorem for cryptographyhy" #gaussianelimthm}
 There is a polynomial time algorithm to solve
 $m$ linear equations in $n$ variables (or to certify no solution exists) over
 any ring.

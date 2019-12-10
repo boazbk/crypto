@@ -26,7 +26,7 @@ from itertools import product # Import an iterator for cartesian products
 # We assume we have access to the function Decrypt(key,ciphertext)
 def Distinguish(ciphertext,plaintext1,plaintext2):
     bias = 0
-    for key in product([0,1], repeat = 128): # Iterate over all possible keys of lenght 128
+    for key in product([0,1], repeat = 128): # Iterate over all possible keys of length 128
         p = Decrypt(key, ciphertext)
         if p == plaintext1: bias += 1
         if p == plaintext2: bias -= 1
@@ -503,7 +503,7 @@ $tn$ bit keys and $t(n+1)$ bit messages.
 This might seem "obvious" but in cryptography, even obvious facts are
 sometimes wrong, so it's important to prove this formally. Luckily, this is a
 fairly straightforward implication of the fact that computational
-indisinguishability is preserved under many samples. That is, by the security of
+indistinguishability is preserved under many samples. That is, by the security of
 $(E',D')$ we know that for every two messages $m,m' \in {\{0,1\}}^{n+1}$,
 $E_k(m) \approx E_k(m')$ where $k$ is chosen from the distribution $U_n$.
 Therefore by the indistinguishability of many samples lemma, for every two
