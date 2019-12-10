@@ -420,7 +420,7 @@ We say that two random variables $X:\{0,1\}^n \rightarrow \R$ and $Y:\{0,1\}^n \
 In other words, $X$ and $Y$ are independent if $\Pr[ X=u \wedge Y=v]=\Pr[X=u]\Pr[Y=v]$ for every $u,v \in \R$.
 For example, if two random variables depend on the result of tossing different coins then they are independent:
 
-> # {.lemma title="Independant random variables" #indcoins}
+> # {.lemma title="Independent random variables" #indcoins}
 Suppose that $S=\{ s_0,\ldots, s_{k-1} \}$ and $T=\{ t_0 ,\ldots, t_{m-1} \}$ are disjoint subsets of $\{0,\ldots,n-1\}$ and let
 $X,Y:\{0,1\}^n \rightarrow \R$ be random variables such that $X=F(x_{s_0},\ldots,x_{s_{k-1}})$ and $Y=G(x_{t_0},\ldots,x_{t_{m-1}})$ for some functions $F: \{0,1\}^k \rightarrow \R$ and $G: \{0,1\}^m \rightarrow \R$.
 Then $X$ and $Y$ are independent.
@@ -701,4 +701,4 @@ you can get a head start by working on them now.
             $F(x)=1$ under $P$ and $Q$ respectively differ by at most $0.1$.
             Therefore, if the number of samples is smaller than a constant times
             $1/\epsilon^2$ then there is simply *no test* that can reliably
-            distinguish between these two possiblities.
+            distinguish between these two possibilities.

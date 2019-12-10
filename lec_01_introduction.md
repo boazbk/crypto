@@ -49,7 +49,7 @@ As in many things, this is the subject of a great XKCD cartoon (see [xkcdnavajof
 
 
 The [Vigenère cipher](https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher) is named after Blaise de Vigenère  who described it in a book in 1586 (though it was invented earlier by Bellaso).
-The idea is to use a collection of substitution cyphers - if there are $n$ different ciphers then the first letter of the plaintext is encoded with the first cipher, the second with the second cipher,
+The idea is to use a collection of substitution ciphers - if there are $n$ different ciphers then the first letter of the plaintext is encoded with the first cipher, the second with the second cipher,
 the $n^{th}$ with the $n^{th}$ cipher, and then the $n+1^{st}$ letter is again encoded with the first cipher.
 The key is usually a word or a phrase of $n$ letters, and the $i^{th}$ substitution cipher is obtained by shifting each letter $k_i$ positions in the alphabet.
 This "flattens" the frequencies and makes it much harder to do frequency analysis, which is why this cipher was considered "unbreakable" for 300+ years and got the nickname
@@ -72,7 +72,7 @@ Just as many ciphers in history, this has also been believed by the Germans to b
 mounting evidence to that effect. (In fact, some German generals refused to believe it was broken even _after_ the war.)
 Breaking Enigma was an heroic effort which was initiated by the Poles and then completed by the British at Bletchley Park; as part of this effort they built arguably the world's
 first large scale mechanical computation devices (though they looked more similar to washing machines than to iPhones). They were also helped along the way by some quirks and errors
-of the german operators.
+of the German operators.
 For example, the fact that their messages ended with "Heil Hitler" turned out to be quite useful.
 Here is one entertaining anecdote: the Enigma machine would never map a letter to itself.
 In March 1941, Mavis Batey, a cryptanalyst at Bletchley Park received a very long message that she tried to decrypt.
@@ -80,7 +80,7 @@ She then noticed a curious property--- the message did _not_ contain the letter 
 She realized that for such a long message not contain "L" could not happen by chance, and hence surmised that the original message probably composed _only_ of L's.
 That is, it must have been the case that the operator, perhaps to test the machine, have simply sent out a message where he repeatedly pressed the letter "L".
 This observation helped her decode the next message, which helped inform of a planned Italian attack and secure a resounding British victory in what became known as "the Battle of Cape Matapan".
-Mavis also helped break another Enigma machine which helped in the effort of feeding the Germans with the false information that the main allied invasion would take place in Pas de Calais rather than on Normandy.  See [this inteview with Sir Harry Hinsley](http://www.cix.co.uk/~klockstone/hinsley.htm) for more
+Mavis also helped break another Enigma machine which helped in the effort of feeding the Germans with the false information that the main allied invasion would take place in Pas de Calais rather than on Normandy.  See [this interview with Sir Harry Hinsley](http://www.cix.co.uk/~klockstone/hinsley.htm) for more
 on the effect of breaking the Enigma on the war. General Eisenhower said that the intelligence from Bletchley park was of "priceless value" and made a "very decisive contribution to the Allied war effort".
 
 
@@ -113,7 +113,7 @@ for every $k\in \{0,1\}^n$ and $x \in \{0,1\}^{\ell}$,
 $$
 D(k,E(k,x))=x \;. \label{eqvalidenc}
 $$
-We will typically write the first input (i.e., the key) to the encryption and decryption functions as a subscribt, and so write [eqvalidenc](){.eqref} as $D_k(E_k(x))=x$.
+We will typically write the first input (i.e., the key) to the encryption and decryption functions as a subscript, and so write [eqvalidenc](){.eqref} as $D_k(E_k(x))=x$.
 
 
 > _A note on notation:_ We will always use $i,j,\ell,n$ to denote natural
@@ -192,7 +192,7 @@ if the probability that an attacker can guess $X$ is at most $2^{-k}$. People th
 (close to) uniformly at random. All of this process, and especially understanding the amount of information an attacker may have on the entropy sources, is a bit of a dark art and indeed a number of attacks on cryptographic
 systems were actually enabled by weak generation of randomness. Here are a few examples.
 
-One of the first attacks was on the SSL implementation of Netscape (_the_ browser at the time). Netscape use the following "unpredicatable" information--- the time of day and a process ID both of which turned out to be quite
+One of the first attacks was on the SSL implementation of Netscape (_the_ browser at the time). Netscape use the following "unpredictable" information--- the time of day and a process ID both of which turned out to be quite
 predictable (who knew attackers have clocks too?). Netscape tried to protect its security through "security through obscurity" by not releasing the source code for their pseudorandom generator, but it was reverse engineered by [Ian Goldberg and David Wagner](https://www.cs.berkeley.edu/~daw/papers/ddj-netscape.html)  (Ph.D students at the time) who demonstrated this attack.
 
 In 2006 a programmer removed a line of code from the procedure to generate entropy in OpenSSL package distributed by Debian since it caused a warning in some automatic verification code. As a result for two years (until this was
@@ -251,7 +251,7 @@ Here is an attempt at such a definition:
 
 
 > # {.definition title="Security of encryption: first attempt" #securefirstattemptdef}
-An encyption scheme $(E,D)$ is
+An encryption scheme $(E,D)$ is
 _$n$-secure_ if no matter what method Eve employs, the probability that she
 can recover the true key $k$ from the ciphertext $c$ is at most $2^{-n}$.
 
@@ -306,7 +306,7 @@ So, if before the definition was too weak, the new definition is too strong and 
 The problem is that of course we could guess a fixed message with probability one, so perhaps we could try to consider a definition with a _random_ message. That is:
 
 > # {.definition title="Security of encryption: third attempt" #securethirdattemptdef}
-An encyption scheme $(E,D)$  is _$n$-secure_ if no matter what method Eve employs, if $x$ is chosen at random
+An encryption scheme $(E,D)$  is _$n$-secure_ if no matter what method Eve employs, if $x$ is chosen at random
 from $\{0,1\}^\ell$, the probability that she can recover $x$ from the ciphertext
 $c=E_k(x)$ is at most $2^{-n}$.
 
@@ -328,7 +328,7 @@ So far all of our attempts at definitions oscillated between being too strong
 (and hence impossible) or too weak (and hence not guaranteeing actual
 security).
 The key insight of Shannon was that in a secure encryption scheme
-the ciphtertext should not reveal _any additional information_ about the
+the ciphertext should not reveal _any additional information_ about the
 plaintext.  So, if for example it was a priori possible for Eve to guess the
 plaintext with some probability $1/k$  (e.g., because there were only $k$
 possibilities for it) then she should not be able to guess it with higher
@@ -500,12 +500,12 @@ Since $|S_0| = 2^n < 2^L$, this means that $|I|>|S_0|$ and so in particular ther
 
 ### Advanced comment: Adding probability into the picture
 
-There is a sense in which both our secrecy and our impossiblity results might not be fully convincing, and that is that we did not explicitly consider
+There is a sense in which both our secrecy and our impossibility results might not be fully convincing, and that is that we did not explicitly consider
 algorithms that use _randomness_ . For example, maybe Eve can break a perfectly secret encryption if she is not modeled as a deterministic function
 $Eve:\{0,1\}^o\rightarrow\{0,1\}^\ell$ but rather a _probabilistic_ process. Similarly, maybe the encryption and decryption functions could be probabilistic
 processes as well. It turns out that none of those matter. For the former, note that a probabilistic process can be thought of as a _distribution_ over functions,
 in the sense that we have a collection of functions $f_1,...,f_N$ mapping $\{0,1\}^o$ to $\{0,1\}^\ell$, and some probabilities $p_1,\ldots,p_N$ (non-negative
 numbers summing to $1$), so we now think of Eve as selecting the function $f_i$ with probability $p_i$. But if none of those functions can give an advantage
-better than $1/2$, then neither can this collection. A similar (though more involved) argument shows that the impossiblity result showing that the
+better than $1/2$, then neither can this collection. A similar (though more involved) argument shows that the impossibility result showing that the
 key must be at least as long as the message still holds even if the encryption and decryption algorithms are allowed to be probabilistic processes as well
 (working this out is a great exercise).

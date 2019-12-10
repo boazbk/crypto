@@ -8,14 +8,14 @@
 >   resolve."* Edgar Allan Poe, 1841
 
 Cryptography - the art or science of "secret writing" - has been around for
-several millenia, and for almost all of that time Edgar Allan Poe's quote above
+several millennia, and for almost all of that time Edgar Allan Poe's quote above
 held true. Indeed, the history of cryptography is littered with the figurative
 corpses of cryptosystems believed secure and then broken, and sometimes with the
 actual corpses of those who have mistakenly placed their faith in these
 cryptosystems. Yet, something changed in the last few decades. New cryptosystems
 have been found that have not been broken despite being subjected to immense
 efforts involving both human ingenuity and computational power on a scale that
-completely dwarves the "crypto breakers" of Poe's time. Even more amazingly,
+completely dwarfs the "crypto breakers" of Poe's time. Even more amazingly,
 these cryptosystem are not only seemingly unbreakable, but they also achieve
 this under much harsher conditions. Not only do today's attackers have more
 computational power but they also have more data to work with. In Poe's age, an
