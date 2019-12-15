@@ -39,7 +39,7 @@ On the other side, Russian President Putin has said already in 2000 that he sees
 There are many reasons why progress on nuclear disarmament has been so slow, and most of them have nothing to do with zero knowledge or any other piece of technology.
 But there are some technical hurdles as well.
 One of those hurdles is that for the U.S. and Russia to go beyond restricting the number of _deployed_ weapons to significantly reducing the _stockpiles_, they need to find a way for one country to verifiably prove that it has dismantled warheads.
-As mentioned in my [work with Glaser and Goldston](http://www.nature.com/nature/journal/v510/n7506/full/nature13457.html) (see also [this page](http://nuclearfutures.princeton.edu/warhead-verification/)), a key stumbling block is that the design of a nuclear warhard is of course highly classified and about the last thing in the world that the U.S. would like to share with Russia and vice versa.
+As mentioned in my [work with Glaser and Goldston](http://www.nature.com/nature/journal/v510/n7506/full/nature13457.html) (see also [this page](http://nuclearfutures.princeton.edu/warhead-verification/)), a key stumbling block is that the design of a nuclear warhead is of course highly classified and about the last thing in the world that the U.S. would like to share with Russia and vice versa.
 So, how can the U.S. convince the Russian that it has destroyed a warhead, when it cannot let Russian experts anywhere near it?
 
 [^population]: To be fair, "only" about 170 million Americans live in the [50 largest metropolitan areas](https://www.currentresults.com/Weather-Extremes/US/largest-cities-list.php) and so arguably many people will survive at least the initial impact of a nuclear war, though it had been estimated that even a "small" nuclear war involving detonation of 100 not too large warheads could have [devastating global consequences](http://onlinelibrary.wiley.com/doi/10.1002/2013EF000205/full).
@@ -69,7 +69,7 @@ Another very generic application is for "compiling protocols". As we've seen tim
 Thus it would be wonderful if we could "compile" a protocol that is secure with respect to passive attacks into one that is secure with respect to active ones.
 As was first shown by Goldreich, Micali, and Wigderson, zero knowledge proofs yield a very general such compiler.
 The idea is that all parties prove in zero knowledge that they follow the protocol's specifications.
-Normally, such proofs might require the parties to reveal their secret inputs, hence violating security, but zero knowledge precisely guarantees that we can verify correct behaviour without access to these inputs.
+Normally, such proofs might require the parties to reveal their secret inputs, hence violating security, but zero knowledge precisely guarantees that we can verify correct behavior without access to these inputs.
 
 
 ## Defining and constructing zero knowledge proofs
@@ -149,10 +149,10 @@ Please stop and make sure you see the similarities between this protocol and the
 There have been some recent great advances by Babai for this problem, but there is still not a truly efficient algorithm to test whether a pair of graphs has this property.
 Suppose though Alice is an "isomorphomat" - she does have the computational ability to find such isomorphisms, if they exist, and wants to convince Bob that a pair of $n$-vertex graphs $G_0$ and $G_1$ are not _isomorphic_.
 She can tell him "trust me, I know how to find isomorphisms and couldn't find one for this pair", but he may view this as less than fully convincing.
-However, he could be convinced by the following protocol: he will repeat the following experiements: pick $b$ at random in $\{0,1\}$  and pick $\sigma$ to be a random permutation of $\{1,\ldots,n \}$. He then lets $H$ be the graph obtained by permuting the vertices of $G_b$ according to $\sigma$ and sends $H$ to Alice.
+However, he could be convinced by the following protocol: he will repeat the following experiments: pick $b$ at random in $\{0,1\}$  and pick $\sigma$ to be a random permutation of $\{1,\ldots,n \}$. He then lets $H$ be the graph obtained by permuting the vertices of $G_b$ according to $\sigma$ and sends $H$ to Alice.
 Now Alice using her isomorphism powers finds out whether $H$ is isomorphic to $G_0$ or $G_1$ and sends the index $b'\in\{0,1\}$ of the isomorphic graph to Bob.
 If the graphs were _not_  isomorphic, then $b'$ would equal $b$ with probability $1$, since $H$ can only be isomorphic to one of the graphs.
-On ther other hand, if the graphs were isomorphic then $H$ is distributed identically no matter what $b$ was, and so no matter what she does Alice has probability at most $1/2$ of finding $b'$ that equals $b$.
+On the other hand, if the graphs were isomorphic then $H$ is distributed identically no matter what $b$ was, and so no matter what she does Alice has probability at most $1/2$ of finding $b'$ that equals $b$.
 Thus if Alice always succeeds then after $n$ repetitions Bob can have $1-2^{-n}$ confidence that the graphs are _not_ isomorphic.
 -->
 
@@ -168,7 +168,7 @@ A _probabilistic proof for $f$_ (i.e., a proof for statements of the form "$f(x)
 * __Soundness:__ If If $f(x)=0$ then for any arbitrary (efficient or non efficient) algorithm $P^*$, if $P^*$ and $V$ are  given input $x$  and interact then at the end $V$ will output ```Accept``` with probability at most $0.1$
 
 > # {.remark title="Functions vs languages" #funclangrem}
-In many texts proof systems are defined with respect to _languages_ as opposed to _functions_. That is, instead of talking about a function $f:\{0,1\}^* \rightarrow \{0,1\}$ we talk about a _lanugage_ $L \subseteq \{0,1\}^*$.
+In many texts proof systems are defined with respect to _languages_ as opposed to _functions_. That is, instead of talking about a function $f:\{0,1\}^* \rightarrow \{0,1\}$ we talk about a _language_ $L \subseteq \{0,1\}^*$.
 These two viewpoints are completely equivalent via the mapping $f \longleftrightarrow L$ where $L = \{ x \;| f(x) = 1 \}$.
 
 
@@ -245,7 +245,7 @@ This has an advantage of being the most conservative definition possible, and al
 
 The definition of zero knowledge is confusing since intuitively one thing that if the verifier gained confidence that the statement is true than surely he must have learned _something_.
 This is another one of those cases where cryptography is counterintuitive.
-To understand it better, it is worthwhile to see the formal proof that the protocol above for quadratic residousity is zero knowledge:
+To understand it better, it is worthwhile to see the formal proof that the protocol above for quadratic residuosity is zero knowledge:
 
 
 > # {.theorem title="Zero knowledge for quadratic residuosity" #zkqrthm}
@@ -271,7 +271,7 @@ The simulator $S^*$ will work as follows:
 4. Output $V_2(x,m,x',s'')$.
 >
 The correctness of the simulator follows from the following claims (all of which assume that $x$ is actually a quadratic residue, since otherwise
-we don't need to make any guarantees and in any case Alice's behaviour is not well defined):
+we don't need to make any guarantees and in any case Alice's behavior is not well defined):
 >
 __Claim 1:__ The distribution of $x'$ computed by $S^*$ is identical to the distribution of $x'$ chosen by Alice.
 >

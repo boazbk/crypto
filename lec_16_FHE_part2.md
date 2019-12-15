@@ -136,7 +136,7 @@ Similarly, if $C$ is an $m\times n$ matrix, then we denote by $\hat{C}$ the $m\t
 While encoding in the binary basis is not a linear operation, the _decoding_ operation is linear as one can see in [eqbinaryencoding](){.eqref}.
 We let $Q$ be the $n \times (n\log q)$ "decoding" matrix that maps an encoding vector $\hat{v}$ back to the original vector $v$.
 Specifically, every row of $Q$ is composed of $n$ blocks each of $\log q$ size, where the $i$-th row has only the $i$-th block nonzero, and equal to the values $(1,2,4,\ldots,2^{\log q-1})$.
-It's a good exercise to verify that for every vector $v$ and matrix $C$, $Q\hat{v}=v$  and $\hat{C}Q^\top =C$. (See [encodevecfig](){.ref} amd [encodematrixfig](){.ref}.)
+It's a good exercise to verify that for every vector $v$ and matrix $C$, $Q\hat{v}=v$  and $\hat{C}Q^\top =C$. (See [encodevecfig](){.ref} and [encodematrixfig](){.ref}.)
 
 [^ceil]: If we were being pedantic the length of the vector (and other constant below) should be the integer $\ceil{\log q}$ but I omit the ceiling symbols for simplicity of notation.
 
@@ -209,7 +209,7 @@ Please take your time to read the definition of the scheme, and go over
 
 ![In our fully homomorphic encryption, the public key is a trapdoor generator $G_s$. To encrypt a bit $b$, we output $C=\widehat{(bQ^\top +D)}$ where $D$ is a $(n\log q) \times n$ matrix whose rows are generated using $G_s$.](../figure/fheenc.png){#fheencfig .class width=300px height=300px}
 
-![We decrypt a ciphertext $C=\widehat{(bQ^\top +D)}$ by looking at the first coordinate of $CQ^\top s$ (or equivalently, $CQ^\top Q\hat{s}$). If $b=0$ then this equals to the first coordinate of $Ds$, which is at most $\sqrt{q}$ in magintude. If $b=1$ then we get an extra factor of $Q^\top s$ which we set to be in the interval $(0.499q,0.51q)$. We can think of either $s$ or $\hat{s}$ as our secret key.](../figure/fhedec.png){#fhedecfig .class width=300px height=300px}
+![We decrypt a ciphertext $C=\widehat{(bQ^\top +D)}$ by looking at the first coordinate of $CQ^\top s$ (or equivalently, $CQ^\top Q\hat{s}$). If $b=0$ then this equals to the first coordinate of $Ds$, which is at most $\sqrt{q}$ in magnitude. If $b=1$ then we get an extra factor of $Q^\top s$ which we set to be in the interval $(0.499q,0.51q)$. We can think of either $s$ or $\hat{s}$ as our secret key.](../figure/fhedec.png){#fhedecfig .class width=300px height=300px}
 
 
 
@@ -265,7 +265,7 @@ This completes the proof of CPA security (can you see why?).
 
 
 If we want to plug in this scheme in the bootstrapping theorem, then we will also assume that it  is _circular secure_.
-It seems a reasonable assumption though unfortuantely at the moment we do not know how to derive it from LWE.
+It seems a reasonable assumption though unfortunately at the moment we do not know how to derive it from LWE.
 (If we don't want to make this assumption we can still obtained a _leveled_ fully homomorphic encryption as discussed in the previous lecture.)
 
 ### Homomorphism
@@ -300,7 +300,7 @@ In our case we can think of the secret key as the binary string $\hat{s}$ which 
 Given a ciphertext $C$, the decryption algorithm takes the dot product modulo $q$ of $s$ with the first row of $CQ^\top$ (or, equivalently, the dot product of $\hat{q}$ with $CQ^\top Q$) and outputs $0$ (respectively $1$) if the resulting number is small (respectively large).
 
 
-By repeatedly applying the noisy homomorphism lemma ([noisehomolem](){.ref}), we can show that can homorphically evaluate every circuit of NAND gates whose _depth_ $\ell$  satisfies $(2n\log q)^\ell \ll q$.
+By repeatedly applying the noisy homomorphism lemma ([noisehomolem](){.ref}), we can show that can homomorphically evaluate every circuit of NAND gates whose _depth_ $\ell$  satisfies $(2n\log q)^\ell \ll q$.
 If $q = 2^{\sqrt{n}}$ then (assuming $n$ is sufficiently large) then as long as $\ell < n^{0.49}$ this will be satisfied.
 
 In particular to show that $f(\cdot)$ can be homomorphically evaluated it will suffice to show that for every fixed vector $c\in \Z_q^{n\log q}$ there is a $polylog(n) \ll n^{0.49}$ depth circuit $F$ that on input a string $\hat{s}\in\{0,1\}^{n \log q}$ will output $0$ if $|\iprod{c,\hat{s}}|  < q/10$ and output $1$ if $|\iprod{c,\hat{s}}|  > q/5$.

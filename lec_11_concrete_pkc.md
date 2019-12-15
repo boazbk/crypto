@@ -13,7 +13,7 @@ For every number $m$, we define $\Z_m$ to be the set $\{0,\ldots,m-1\}$ with the
 When two elements are in $\Z_n$ then we will always assume that all operations are done modulo $m$ unless stated otherwise.
 We let $\Z^*_m = \{ a\in \Z_m : gcd(a,m)=1 \}$. Note that $m$ is prime if and only if $|\Z^*_m|=m-1$.
 For every $a \in \Z^*_m$ we can find using the extended gcd algorithm an element $b$ (typically denoted as $a^{-1}$) such that $ab=1$ (can you see why?).
-The set $\Z^*_m$ is an abelian group with the multiplication operation, and hence by the observations of the previous lecture,
+The set $\Z^*_m$ is an Abelian group with the multiplication operation, and hence by the observations of the previous lecture,
 $a^{|\Z^*_m|}=1$ for every $a\in \Z^*_m$. In the case that $m$ is prime, this result is known as "Fermat's Little Theorem" and is typically stated as $a^{p-1}=1 \pmod{p}$ for every $a\neq 0$.
 
 > # {.remark title="Note on $n$ bits vs a number $n$" #smallvsbigrem}
@@ -28,7 +28,7 @@ To keep things interesting (or more honestly, because I keep running out of lett
 When you see an instance of $m$, make sure you understand what  is its usage.
 
 
-### Primaliy testing
+### Primality testing
 
 One procedure we often need is to find a prime of $n$ bits. The typical way people do it is by choosing a random $n$-bit number $p$, and testing whether it is prime.
 We showed in the previous lecture that a random $n$ bit number is prime with probability at least $\Omega(1/n^2)$ (in fact the probability is $\tfrac{1\pm o(1)}{\ln n}$ by the [Prime Number Theorem](https://goo.gl/ChrXJY)).
@@ -190,7 +190,7 @@ A _trapdoor permutation family (TDP)_  is a family of functions $\{ p_k \}$ such
 
 
 > # {.remark title="Domain of permutations" #permutationsovergroups}
-The RSA function is not a permutation over the set of strings but rather over $\Z^*_m$ for some $m=pq$. However, if we find primes $p,q$ in the interval $[2^{n/2}(1-negl(n)),2^{n/2}]$, then $m$ will be in the interval $[2^n(1-negl(n)),2^n]$ and hence $\Z^*_m$ (which has size $pq - p - q +1 = 2^n(1-negl(n))$) can be thought of as essentially identical to $\{0,1\}^n$, since we will always pick elements from $\{0,1\}^n$ at random and hence they will be in $\Z^*_m$ with probability $1-negl(n)$. It is widely believed that for every sufficiently large $n$ there is a prime in the interval $[2^n-poly(n),2^n]$ (this follows from  the _Extended Reimann Hypothesis_) and Baker, Harman and Pintz _proved_ that there is a prime in the interval $[2^n-2^{0.6n},2^n]$.[^padding]
+The RSA function is not a permutation over the set of strings but rather over $\Z^*_m$ for some $m=pq$. However, if we find primes $p,q$ in the interval $[2^{n/2}(1-negl(n)),2^{n/2}]$, then $m$ will be in the interval $[2^n(1-negl(n)),2^n]$ and hence $\Z^*_m$ (which has size $pq - p - q +1 = 2^n(1-negl(n))$) can be thought of as essentially identical to $\{0,1\}^n$, since we will always pick elements from $\{0,1\}^n$ at random and hence they will be in $\Z^*_m$ with probability $1-negl(n)$. It is widely believed that for every sufficiently large $n$ there is a prime in the interval $[2^n-poly(n),2^n]$ (this follows from  the _Extended Riemann Hypothesis_) and Baker, Harman and Pintz _proved_ that there is a prime in the interval $[2^n-2^{0.6n},2^n]$.[^padding]
 
 [^padding]: Another, more minor issue is that the description of the key might not have the same length as $\log m$; I defined them to be the same for simplicity of notation, and this can be ensured via some padding and concatenation tricks.
 
