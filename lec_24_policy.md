@@ -8,7 +8,7 @@ I would like you to read some of the sources below (and maybe others) and reflec
 The discussion is often framed as weighing privacy against security, but I encourage you to look critically at both issues.
 It is often instructive to try to compare the current situation with both the historical past as well as some ideal desired world.
 It is also worthwhile to consider cryptography in the broader contexts.
-Some people on both the pro regulation and anti regulation camps exeggarate the role of cryptography.  
+Some people on both the pro regulation and anti regulation camps exaggerate the role of cryptography.  
 On one hand, cryptography is likely not to bring about the "crypto anarchy" regime hoped for in the crypto anarchist manifesto.
 For example, more than the growth of bitcoin, we are seeing a turn away from cash into credit cards and other forms of much more traceable and _less_ anonymous forms of payments (interestingly, these forms of payments are often enabled by cryptography).
 On the other hand, despite the fears raised by government agencies of "going dark" there are powerful commercial incentives to collect vast amounts of data and store them at search-warrant friendly servers.
@@ -39,7 +39,7 @@ Some questions that are worth considering are:
 
 * Are some cryptographic (or crypto related) tools inherently morally problematic? Rogaway suggests that this may be true for fully homomorphic encryption and differential privacy- do you agree?
 
-* What are the most significant scenarios where cryptography can impact positively or negatively? Large scale terror attacks? "Ordinary" crimes (that still claim the lives of many more people than terror attacks)?  Attacks against cyber infrastructure or personal data? Political dissidents in opressive regimes? Mass government or corporate surveilance?
+* What are the most significant scenarios where cryptography can impact positively or negatively? Large scale terror attacks? "Ordinary" crimes (that still claim the lives of many more people than terror attacks)?  Attacks against cyber infrastructure or personal data? Political dissidents in oppressive regimes? Mass government or corporate surveillance?
 
 *  How are these issues different in the U.S. as opposed to other countries? Is the debate too U.S. centric?
 
@@ -60,7 +60,7 @@ Since such a discussion might be sometimes hard to hold in the abstract, let us 
 The impetus for the current iteration of the security vs privacy debate were the [Snowden revelations](http://www.theguardian.com/us-news/the-nsa-files) on the massive scale of surveillance by the NSA on citizens in the U.S. and around the globe.
 Concurrently, in plain sight, companies such as Apple, Google, Facebook, and others are also collecting massive amounts of information on their users.
 Some of the backlash to the Snowden revelations was increased pressure on companies to support stronger "end-to-end" encryption such as some data does not reside on companies' servers, that have become suspect.
-We're now seeing some "backlash to the backlash" with law enforcement and government officials around the globe trying to ban such encryption technlogoy or mandate government backdoors.
+We're now seeing some "backlash to the backlash" with law enforcement and government officials around the globe trying to ban such encryption technology or mandate government backdoors.
 
 
 ### FBI vs Apple case
@@ -90,7 +90,7 @@ There was no sign of forced entry and so it is quite likely she knew her assaila
 Her family believes that the clues to her murderer's identity could be found in her iPhone, but since it is locked they have no way of extracting this information.
 One can imagine other cases as well.
 Recently a mother found her kidnapped daughter using the [Find my iPhone](http://www.nbcnews.com/news/us-news/find-my-iphone-icloud-lead-cops-kidnapped-teen-n521486) procedure.
-It is not hard to concieve of a case where unlocking a phone is the key to saving someone's life.
+It is not hard to conceive of a case where unlocking a phone is the key to saving someone's life.
 Would such cases change your view of the above questions?
 
 ### Juniper backdoor case and the OPM break-in
@@ -100,7 +100,7 @@ This was a  break in to the  firewalls of Juniper networks by an unknown party t
 (see also   [here](https://rpw.sh/blog/2015/12/21/the-backdoored-backdoor/)  and [here](http://blog.cryptographyengineering.com/2015/12/on-juniper-backdoor.html) for more).
 
 Because of the nature of this break in, whomever is responsible for it could have decrypted much of the traffic without leaving any traces, and so we don't know the damage caused, but such hacks can have much more significant consequences than forcing people to change their credit card numbers.
-When the [federal office of personell management was hacked](https://www.lawfareblog.com/why-opm-hack-far-worse-you-imagine) sensitive information about millions of people who have gone through the security clearance was extracted.
+When the [federal office of personnel management was hacked](https://www.lawfareblog.com/why-opm-hack-far-worse-you-imagine) sensitive information about millions of people who have gone through the security clearance was extracted.
 This includes fingerprints, extensive personal information from interviews and polygraph sessions, and much more.
 Such information can help then gain access to more information, whether it's using the fingerprint to unlock a phone or using the extensive knowledge of social connections, habits and interests to launch very targeted attacks to extract information from particular individuals.
 

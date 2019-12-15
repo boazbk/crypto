@@ -96,7 +96,7 @@ The definition above is a little too strong, in the following sense.
 Consider the case that $k=2$ where there are two parties Alice  (Party $1$) and Bob (Party $2$) that wish to compute some output $F(x_1,x_2)$.
 If Bob is controlled by the adversary then he clearly can simply abort the protocol and prevent Alice from computing $y_1$.
 Thus, in this case in the actual execution of the protocol the output $y_1$ will be some error message (which we denote by $\bot$).
-But we did not allow this possiblity for the idealized adversary $S$: if $1\not\in S$ then it must be the case that the output $y_1$ is equal to $y'_1$ for some $(y'_1,y'_2)=F(x_1,x_2)$.  
+But we did not allow this possibility for the idealized adversary $S$: if $1\not\in S$ then it must be the case that the output $y_1$ is equal to $y'_1$ for some $(y'_1,y'_2)=F(x_1,x_2)$.  
 This means that we would be able to distinguish between the output in the real and ideal setting.[^honest-maj]
 This motivates the following, slightly more messy definition, that allows for the ability of the adversary to abort the execution at any point in time:
 
@@ -159,7 +159,7 @@ There is in fact not a single theorem but rather many variants of this fundament
 
 
 * __Fairness, guaranteed output delivery:__ The definition above does not attempt to protect against "denial of service" attacks, in the sense that the adversary is allowed, even in the ideal case, to prevent the honest parties from receiving their outputs.  
-As mentioned above, without honest majority this is essential for simlar reasons to the  issue we discussed in [our lecture on bitcoin](http://www.boazbarak.org/cs127/chap07_hash_functions.pdf)  why achieving consensus is hard if there isn't a honest majority.
+As mentioned above, without honest majority this is essential for similar reasons to the  issue we discussed in [our lecture on bitcoin](http://www.boazbarak.org/cs127/chap07_hash_functions.pdf)  why achieving consensus is hard if there isn't a honest majority.
 When there is an honest majority, we can achieve the property of _guaranteed output delivery_, which offers protection against such "denial of service" attacks.
 Even when there is no guaranteed output delivery, we might want the property of _fairness_, whereas we guarantee that if the honest parties don't get the output then neither does the adversary.
 There has been extensive study of fairness and there are protocols achieving  variants on it under various computational and setup assumptions.
@@ -308,10 +308,10 @@ A _commitment scheme_ for strings of length $\ell$ is a two party protocol betwe
 >
 * __Hiding (sender's security):__ For every two sender inputs $x,x' \in \{0,1\}^\ell$, and no matter what efficient strategy the receiver uses, it cannot distinguish between the interaction with the sender when the latter uses $x$ as opposed to when it uses $x'$.
 >
-* __Binding (reciever's security):__ No matter what (efficient or non efficient) strategy the sender uses, if the reciever follows the protocol then with probability $1-negl(n)$, there will exist at most a single string $x\in\{0,1\}^\ell$ such that the transcript is consistent with the input $x$ and some sender randomness $r$.
+* __Binding (receiver's security):__ No matter what (efficient or non efficient) strategy the sender uses, if the receiver follows the protocol then with probability $1-negl(n)$, there will exist at most a single string $x\in\{0,1\}^\ell$ such that the transcript is consistent with the input $x$ and some sender randomness $r$.
 
 
-That is, a commitment is the digital analog to placing a message in a sealed envelope to be opened at a later time. To commit to a message $x$ the sender and reciever interact according to the protocol, and to _open_ the commitment the sender simply sends $x$ as well as the random coins it used during the commitment phase.
+That is, a commitment is the digital analog to placing a message in a sealed envelope to be opened at a later time. To commit to a message $x$ the sender and receiver interact according to the protocol, and to _open_ the commitment the sender simply sends $x$ as well as the random coins it used during the commitment phase.
 The variant we defined above is known as _computationally hiding and statistically binding_, since the sender's security is only guaranteed against efficient receivers while the binding property is guaranteed against all senders.
 There are also statistically hiding and computationally binding commitments, though it can be shown that we need to restrict to efficient strategies for at least one of the parties.
 
@@ -340,7 +340,7 @@ We will not prove security but will only sketch it here, see [Section 7.3.2 in G
 
 * To argue that we maintain security for _Alice_ we use the zero knowledge property: we claim that Bob could not learn anything from the zero knowledge proofs precisely because he could have simulated them by himself. We also use the hiding property of the commitment scheme. To prove security formally we \ need to  show that whatever Bob learns in the modified protocol, he could have learned in the original protocol as well. We do this by _simulating_ Bob by replacing the commitment scheme with commitment to some random junk instead of $x_1$ and the zero knowledge proofs with their simulated version. The proof of security requires a hybrid argument, and is again a good exercise to try to do it on your own.
 
-* To argue that we maintain security for _Bob_ we use the binding property of the commitment scheme as well as the soundness property of the zero knowledge system. Once again for the formal proof we need to show that we could transform any potentially malicious strategy for Alice in the modified protocol into an "honest but curious" strategy in the original protocol (also allowing Alice the ability to abort the protocol). It turns out that to do so, it is not enough that the zero knowledge system is sound but we need a stronger property known as a _proof of knowledge_. We will not define it formally, but roughly speaking it means we can transform any prover strategy that convinces the verifier that a statement is true with non-negligible probability into an algorithm that outputs the underlying secret (i.e., $x_1$ and $r_com$ in our case).  This is crucial in order to trasnform Alice's potentially malicious strategy into an honest but curious strategy.
+* To argue that we maintain security for _Bob_ we use the binding property of the commitment scheme as well as the soundness property of the zero knowledge system. Once again for the formal proof we need to show that we could transform any potentially malicious strategy for Alice in the modified protocol into an "honest but curious" strategy in the original protocol (also allowing Alice the ability to abort the protocol). It turns out that to do so, it is not enough that the zero knowledge system is sound but we need a stronger property known as a _proof of knowledge_. We will not define it formally, but roughly speaking it means we can transform any prover strategy that convinces the verifier that a statement is true with non-negligible probability into an algorithm that outputs the underlying secret (i.e., $x_1$ and $r_com$ in our case).  This is crucial in order to transform Alice's potentially malicious strategy into an honest but curious strategy.
 
 
 We can repeat this transformation for Bob (or Charlie, David, etc.. in the $k>2$ party case) to transform a protocol secure in the honest but curious setting into a protocol secure (allowing for aborts) in the malicious setting.

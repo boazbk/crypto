@@ -193,7 +193,7 @@ Indeed, the definition of strong VBB security might simply be an overkill, and  
 However, as mentioned above, plain VBB is impossible to achieve as well.
 We'll prove a slightly weaker version of [obfimpthm](){.ref}:
 
-> # {.theorem title="Impossiblity of Obfuscation from FHE" #obfimpweakthm}
+> # {.theorem title="Impossibility of Obfuscation from FHE" #obfimpweakthm}
 If fully homomorphic encryption exists then there is no VBB secure obfuscating compiler.
 
 

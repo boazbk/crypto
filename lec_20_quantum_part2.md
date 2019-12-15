@@ -218,7 +218,7 @@ We now describe the algorithm and the state, neglecting normalizing factors.
 
 3. If LSB is $1$ then compute $W$ on $m-1$ most significant qubits (see below). (state : $(FT_{m/2}f_{even})\ket{0} + (W FT_{m/2}f_{odd})\ket{1}$)
 
-4. Apply Hadmard gate $H$ to least significant qubit.  (state: $(FT_{m/2}f_{even})(\ket{0}+\ket{1})$ $+$ $(W FT_{m/2}f_{odd})(\ket{0}-\ket{1}) =$ $(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd})\ket{0} + (FT_{m/2}f_{even}-W FT_{m/2}f_{odd})\ket{1}$)
+4. Apply Hadamard gate $H$ to least significant qubit.  (state: $(FT_{m/2}f_{even})(\ket{0}+\ket{1})$ $+$ $(W FT_{m/2}f_{odd})(\ket{0}-\ket{1}) =$ $(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd})\ket{0} + (FT_{m/2}f_{even}-W FT_{m/2}f_{odd})\ket{1}$)
 
 5. Move LSB to the most significant position         (state: $\ket{0}(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd}) + \ket{1}(FT_{m/2}f_{even}- W FT_{m/2}f_{odd}) = \hat{f}$)
 

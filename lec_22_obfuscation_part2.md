@@ -68,7 +68,7 @@ We now show an IBE construction due to Boneh and Franklin[^history] how we can o
 
 * __Key distribution:__  Given an arbitrary string $id\in\{0,1\}^*$, we generate the decryption key corresponding to $id$, as $d_{id} = H(id)^a$.
 
-* __Encryption:__ To encrypt a message $m\in\{0,1\}^\ell$ given the public paramters and some id $id$, we choose $c\in \{0,\ldots,|\mathbb{G}|-1\}$, and output $g^c,H'(id\|\varphi(h,H(id))^c) \oplus m$
+* __Encryption:__ To encrypt a message $m\in\{0,1\}^\ell$ given the public parameters and some id $id$, we choose $c\in \{0,\ldots,|\mathbb{G}|-1\}$, and output $g^c,H'(id\|\varphi(h,H(id))^c) \oplus m$
 
 * __Decryption:__ Given the secret key $d_{id}$ and a ciphertext $h',y$, we output $H'(id\|\varphi(d_{id},h'))\oplus x$
 
@@ -99,7 +99,7 @@ We will build an algorithm $B$ that on input $\mathbb{G}_1,\mathbb{G}_2,g,g^a,g^
 
 The algorithm $B$ will guess $i_0, j_0 \leftarrow_R \{1,\ldots, T\}$ and simulate $A$ "in its belly" giving it the public key $g^a$, and act as follows:
 
-* When $A$ makes a query to $H$ with $id$, then for all but the $i_0^{th}$ queries,  $B$ will chooose a random $b_{id} \in \{0,\ldots, |\mathbb{G}|\}$ (as usual we'll assume $|\mathbb{G}|$ is prime), choose $e_{id}=g^{b_{id}}$ and define $H(id)=e_{id}$.  Let $id_0$ be the $i_0^{th}$ query $A$ made to the oracle. We define $H(i_0)=g^b$ (where $g^b$ is the input to $B$- recall that $B$ does not know $b$.)
+* When $A$ makes a query to $H$ with $id$, then for all but the $i_0^{th}$ queries,  $B$ will choose a random $b_{id} \in \{0,\ldots, |\mathbb{G}|\}$ (as usual we'll assume $|\mathbb{G}|$ is prime), choose $e_{id}=g^{b_{id}}$ and define $H(id)=e_{id}$.  Let $id_0$ be the $i_0^{th}$ query $A$ made to the oracle. We define $H(i_0)=g^b$ (where $g^b$ is the input to $B$- recall that $B$ does not know $b$.)
 
 * When $A$ makes a query to the key distribution oracle with $id$ then if $id\neq id_0$ then $B$ will then respond with $d_{id}=(g^a)^{b_{id}}$. If $id = id_0$ then $B$ aborts and fails.
 
@@ -127,7 +127,7 @@ We will now show how using such a multilinear map we can get a construction for 
 We will only show the construction, without talking about the security definition, the assumption, or security reductions.
 
 Given some circuit $C:\{0,1\}^n\rightarrow\{0,1\}$ and some message $x$ we want to "encrypt" $x$ in a way that given $w$ such that $C(w)=1$ it would be possible to decrypt $x$, and otherwise it should be hard.
-It should be noted that the encrypting party itself does not know any such $w$ and indeed (as in the case of the proof of Reimann hypothesis) might not even know if such a $w$ exists.
+It should be noted that the encrypting party itself does not know any such $w$ and indeed (as in the case of the proof of Riemann hypothesis) might not even know if such a $w$ exists.
 The idea is the following.
 We use the fact that the ```Exact Cover``` problem is NP complete to map $C$ into collection of subsets $S_1,\ldots,S_{m}$ of the universe $U$ (where $m,|U|=poly(|C|,n)$)
 such that there exists $w$ with $C(w)=1$ if and only if there exists $d$ sets $S_{i_1},\ldots,S_{i_d}$ that are a partition of $U$ (i.e., every element in $U$ is covered by exactly one of these sets), and moreover there is an efficient way to map $w$ to such a partition and vice versa.

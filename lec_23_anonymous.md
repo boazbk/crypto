@@ -11,7 +11,7 @@ There are two main concepts aimed at achieving anonymity:
 
 ## Steganography
 
-The goal in a stegnaographic communication is to hide cryptographic (or non cryptographic) content without being detected.
+The goal in a steganographic communication is to hide cryptographic (or non cryptographic) content without being detected.
 The idea is simple: let's start with the _symmetric case_ and assume Alice and Bob share a shared key $k$ and Alice wants to transmit a bit $b$ to Bob.
 We assume that Alice and has a choice of $t$ words $w_1,\ldots,w_t$ that would be reasonable for her to send at this point in the conversation.
 Alice will choose a word $w_i$ such that $f_k(w_i)=b$ where $\{ f_k \}$ is a pseudorandom function collection.
@@ -36,7 +36,7 @@ But note that if $H$ is a random oracle, then $H(w^1),\ldots,H(w^\ell)$ is going
 
 ## Tor
 
-Basic arhictecture. Attacks
+Basic architecture. Attacks
 
 ## Telex
 
