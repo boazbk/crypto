@@ -19,7 +19,7 @@ Below is a review of some of the various reductions we saw in class that are cov
 * Pseudorandom permutation (PRP's) to CPA secure encryption / block cipher modes: Section 3.5.2, Section 3.6.2
 * Hash function applications: fingerprinting, Merkle trees, passwords: Section 5.6
 * Coin tossing over the phone: we saw a construction in class that used a _commitment scheme_ built out of a pseudorandom generator. Section 5.6.5 shows an alternative construction using random oracles.
-* PRP's from PRF's: we only sketched the construction which can be found inSection 7.6
+* PRP's from PRF's: we only sketched the construction which can be found in Section 7.6
 
 One major point we did _not_ talk about in this course was _one way functions_. The definition of a one way function is quite simple:
 

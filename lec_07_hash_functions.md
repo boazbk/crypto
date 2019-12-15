@@ -27,7 +27,7 @@ The original currencies were based on [commodity money](https://goo.gl/K7awAW). 
 However, as commerce increased, carrying around (and protecting) the large quantity of the commodities became impractical, and societies shifted to [representative money](https://goo.gl/K6c4qP), where the currency is not the commodity itself but rather a certificate that provides the right to the commodity.
 Representative money requires trust in some central authority that would respect the certificate.
 The next step in the evolution of currencies was  [fiat money](https://en.wikipedia.org/wiki/Fiat_money), which is a currency (like today's dollar, ever since the U.S. moved off the [gold standard](https://goo.gl/SPN5BS)) that does not correspond to any commodity, but rather only relies on trust in a central authority.
-(Another example is the Roman coins, which though originally made of silver, have underdone a continous process of [debasement](https://goo.gl/ZDkGzL) until they contained less than two percent of it.)
+(Another example is the Roman coins, which though originally made of silver, have underdone a continuous process of [debasement](https://goo.gl/ZDkGzL) until they contained less than two percent of it.)
 One advantage (sometimes disadvantage) of a fiat currency is that it allows for more flexible monetary policy on parts of the central authority.
 
 ### Bitcoin architecture

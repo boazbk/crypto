@@ -1,6 +1,6 @@
 # Public key cryptography
 
-People have been dreaming about heavier than air flight since at least the days of Leonardo Da Vinci (not to mention Icarus from the greek mythology).
+People have been dreaming about heavier than air flight since at least the days of Leonardo Da Vinci (not to mention Icarus from the Greek mythology).
 Jules Verne wrote with rather insightful details about going to the moon in 1865.
 But, as far as I know, in all the thousands of years people have been using secret writing, until about 50 years ago no one  has considered the possibility of communicating securely
 without first exchanging a shared secret key. However, in the late 1960's and early 1970's, several people started to question this "common wisdom".
@@ -182,7 +182,7 @@ If large scale physical devices that simulate this model, known as _quantum comp
 
 We will start by describing cryptosystems based on the first family (which was discovered before the other, as well as much more widely implemented), and in future lectures talk about the second family.
 
-### Diffie-Hellman Encryption (aka El-Gamal)
+### Diffie-Hellman Encryption (aka Elm-Gamal)
 
 The Diffie-Hellman public key system is built on the presumed difficulty of the _discrete logarithm problem_:
 
@@ -253,7 +253,7 @@ We make the following claim:
 >
 __CLAIM:__ For a fixed $\mathbb{G}$ of size $p$, generator $g$  for $\mathbb{G}$, and given random oracle $H$, if there is a size $T$  distinguisher  $A$ with $\epsilon$ advantage  between the distribution $(g^a,g^b,H(g^{ab}))$ and the distribution $(g^a,g^b,U_\ell)$ (where $a,b$ are chosen uniformly and independently in $\Z_{p}$) then there is a size $poly(T)$ algorithm $A'$ to solve the Diffie-Hellman problem with respect to $\mathbb{G},g$ with success at least $\epsilon$. That is, for random $a,b \in \Z_p$, $A'(g,g^a,g^b)=g^{ab}$ with probability at least $\epsilon/(2T)$.
 >
-__Proof of claim:__ The proof is simple. We claim that under the assumptions above, $a$ makes the query $g^{ab}$ to its oracle $H$ with probability at least $\epsilon/2$ since otherwise, by the "lazy evaluation" paradigm, we can assume that $H(g^{ab})$ is chosen independently at random after $A$'s attack is completed and hence (conditioned on the adversary not making that querty), the value $H(g^{ab})$  is indistinguishable from a uniform output.
+__Proof of claim:__ The proof is simple. We claim that under the assumptions above, $a$ makes the query $g^{ab}$ to its oracle $H$ with probability at least $\epsilon/2$ since otherwise, by the "lazy evaluation" paradigm, we can assume that $H(g^{ab})$ is chosen independently at random after $A$'s attack is completed and hence (conditioned on the adversary not making that quety), the value $H(g^{ab})$  is indistinguishable from a uniform output.
 Therefore, on input $g,g^a,g^b$, $A'$ can simulate $A$ and simply output one of the at most $T$ queries that $A$ makes to $H$ at random, and will be successful with probability at least $\epsilon/(2T)$.
 >
 Now given the claim, we can complete the proof of security via the following hybrids. Define the following "hybrid" distributions (where in all cases $a,b$ are chosen uniformly and independently in $\Z_{p}$):
@@ -469,7 +469,7 @@ and
 $$H(m^*)+aF(f^*)=b\sigma^*$$
 or
 $$b= (H(m^*)-H(m))(\sigma-\sigma^*)^{-1} \mod p$$
-since all of the valus $H(m^*),H(m),\sigma,\sigma^*$ are known, this means we can compute $b$, and hence also recover the unknown value $a$.
+since all of the values $H(m^*),H(m),\sigma,\sigma^*$ are known, this means we can compute $b$, and hence also recover the unknown value $a$.
 >
 If Case II happens, then we split it into two cases as well.
 __Case IIa__ is that this happens and $F(f^*)$ is queried _before_ $H(m^*)$ is queried, and __Case IIb__ is that this happens and $F(f^*)$ is queried after $H(m^*)$ is queried.
@@ -501,12 +501,12 @@ However, it is known how to obtain schemes that do not rely on this heuristic, a
 
 ## Putting everything together - security in practice.
 
-Let us discuss briefly how public key cryptography is used to secure web trafic through the SSL/TLS protocol that we all use when we use ```https://``` URLs.
+Let us discuss briefly how public key cryptography is used to secure web traffic through the SSL/TLS protocol that we all use when we use ```https://``` URLs.
 The security this achieve is quite amazing. No matter what wired or wireless network you are using, no matter what country you are in, as long as your device (e.g., phone/laptop/etc..) and the server you are talking to (e.g., Google, Amazon, Microsoft etc.) is functioning properly, you can communicate securely without any party in the middle able to either learn  or modify the contents of your interaction.[^steg]
 
 [^steg]: They are able to know that such an interaction took place and the amount of bits exchanged. Preventing these kind of attacks is more subtle and approaches for solutions are  known as _steganography_ and _anonymous routing_.
 
-In the web setting, therre are _servers_ who have public keys, and _users_ who generally don't have such keys. Ideally, as a user, you should already know the public keys of all the entities you communicate with e.g., ```amazon.com```, ```google.com```, etc. However, how are you going to learn those public keys?
+In the web setting, there are _servers_ who have public keys, and _users_ who generally don't have such keys. Ideally, as a user, you should already know the public keys of all the entities you communicate with e.g., ```amazon.com```, ```google.com```, etc. However, how are you going to learn those public keys?
 The traditional answer was that because they are _public_ these keys are much easier to communicate and the servers could even post them as ads on the _New York Times_. Of course these days everyone reads the _Times_ through ```nytimes.com``` and so this seems like a chicken-and-egg type of problem.
 
 The solution goes back again to the quote of Archimedes of "Give me a fulcrum, and I shall move the world". The  idea is that trust can be _transitive_. Suppose you have a Mac. Then you have already trusted Apple with quite a bit of your personal information, and so you might be fine if this Mac came pre-installed with the Apple public key which you trust to be authentic. Now, suppose that you want to communicate with ```Amazon.com```. Now, _you_ might not know the correct public key for Amazon, but _Apple_ surely does. So Apple can supply Amazon with a signed message to the effect of
@@ -524,7 +524,7 @@ Once Bob knows Alice's public key they are in business- he can use that to send 
 
 This is in a very high level the SSL/TLS protocol, but there are many details inside it including the exact security notions needed from the encryption, how the two parties negotiate _which_ cryptographic algorithm to use, and more. All these issues can and have been used for attacks on this protocol. For two recent discussions see [this blog post](http://blog.cryptographyengineering.com/2013/12/how-does-nsa-break-ssl.html) and [this website](https://weakdh.org/).
 
-![When you connect to a webpage protected by SSL/TLS, the Browswer displays information on the certificate's authenticity](../figure/certificate.jpg){#tmplabelfig width=80% }
+![When you connect to a webpage protected by SSL/TLS, the Browser displays information on the certificate's authenticity](../figure/certificate.jpg){#tmplabelfig width=80% }
 
 ![The cipher and certificate used by '''Google.com'''. Note that Google has a 2048bit RSA signature key which it then uses to authenticate an elliptic curve based Diffie-Hellman key exchange protocol to create session keys for the block cipher AES with 128 bit key in Galois Counter Mode.](../figure/googletls.jpg){#tmplabelfig width=40% }
 
