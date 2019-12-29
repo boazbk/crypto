@@ -1,3 +1,8 @@
+---
+title: "Pseudorandom functions"
+filename: "lec_04_pseudorandom-functions"
+chapternum: "4"
+---
 
 
 
@@ -88,7 +93,7 @@ What is crucial is that it never repeats itself, to foil a replay attack.
 For this reason in many applications Alice and Bob compute $i$ as a function of the current time (for example, the index of the current minute based on some agreed-upon starting point), and hence we can make it into a one message protocol.
 Also the parameter $\ell$ is sometimes chosen to be deliberately short so that it will be easy for people to type the values $y_1,\ldots,y_\ell$.
 
-![The Google Authenticator app is one popular example of a one-time password scheme using pseudorandom functions. Another example is RSA's SecurID token.](../figure/google-authenticator.jpg){#tmplabelfig width=50%}
+![The Google Authenticator app is one popular example of a one-time password scheme using pseudorandom functions. Another example is RSA's SecurID token.](../figure/google-authenticator.jpg){#tmplabelfig  .margin}
 
 _Why is this secure?_ The key to understanding schemes using pseudorandom functions is to imagine what would happen if instead of a _pseudo_ random function, $f_s$ would be an _actual_ random function.
 In a truly random function, every one of the values $f_s(0),\ldots,f_s(2^n-1)$ is chosen independently and uniformly at random from $\{0,1\}$.

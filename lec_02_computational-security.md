@@ -1,4 +1,11 @@
-# Computational Secrecy
+---
+title: "Computational security"
+filename: "lec_02_computational_security"
+chapternum: "2"
+---
+
+
+# Computational Security
 
 
 
@@ -183,7 +190,9 @@ parts of such proofs are typically:
 -   Analyzing the probability of success and in particular showing that if $Eve$
     had non-negligible advantage then so will $Eve'$.
 
-![We show that the security of $S'$ implies the security of $S$ by transforming an adversary $Eve$ breaking $S$ into an adversary $Eve'$ breaking $S'$](../figure/reduction.jpg){#tmplabelfig width=50% }
+
+
+![We show that the security of $S'$ implies the security of $S$ by transforming an adversary $Eve$ breaking $S$ into an adversary $Eve'$ breaking $S'$.](../figure/reduction.jpg){ #reductiongenfig .margin  }
 
 Note that, just like in the context of NP completeness or uncomputability reductions, security reductions work _backwards_.
 That is, we construct the scheme $S$ based on the scheme $S'$, but then prove that we can transform an algorithm breaking $S$ into an algorithm breaking $S'$.

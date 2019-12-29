@@ -1,3 +1,10 @@
+---
+title: "Fully Homomorphic Encryption"
+filename: "lec_15_FHE"
+chapternum: "16"
+---
+
+
 # Fully homomorphic encryption: Introduction and bootstrapping
 
 
@@ -20,7 +27,7 @@ This notion later became known as _fully homomorphic encryption (FHE)_ which is 
 In particular in our scenario above (see  [fhefig](){.ref}), such a scheme will allow Bob, given an encryption of $x$, to compute the encryption of $f(x)$ and send this ciphertext to Alice without ever getting the secret key and so without ever learning anything about $x$ (or $f(x)$ for that matter).
 
 
-![A fully homomorphic encryption can be used to store data on the cloud in encrypted form, but still have the cloud provider be able to evaluate functions on the data in encrypted form (without ever learning either the inputs or the outputs of the function they evaluate).](../figure/fhedescription.png){#fhefig .class width=300px height=300px}
+![A fully homomorphic encryption can be used to store data on the cloud in encrypted form, but still have the cloud provider be able to evaluate functions on the data in encrypted form (without ever learning either the inputs or the outputs of the function they evaluate).](../figure/fhedescription.png){#fhefig  .margin}
 
 Unlike the case of a trapdoor function, where it only took a year for  Diffie and Hellman's challenge to be answered by RSA, in the case of fully homomorphic encryption for more than 30 years cryptographers had no constructions achieving this goal.
 In fact, some people suspected that there is something inherently incompatible between the security of an encryption scheme and the ability of a user to perform all these operations on ciphertexts.
@@ -69,8 +76,8 @@ We start by defining _partially homomorphic_ encryption.
 We  focus on encryption for single bits.  This is without loss of generality for CPA security (CCA security is anyway ruled out for homomorphic encryption- can you see why?), though there are more efficient constructions that encrypt several bits at a time.
 
 > # {.definition title="Partially Homomorphic Encryption" #partialhomdef}
-Let $\cF = \cup \cF_\ell$ be a class of functions where every $f\in\cF_\ell$ maps $\{0,1\}^\ell$ to $\{0,1\}$.  
-An _$\cF$-homomorphic public key encryption scheme_ is a CPA secure public key encryption scheme $(G,E,D)$ such that there exists a polynomial-time algorithm $EVAL:\{0,1\}^* \rightarrow \{0,1\}^*$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$,  $x_1,\ldots,x_\ell \in \{0,1\}$, and $f\in \cF_\ell$ of description size $|f|$ at most $poly(\ell)$ it holds that:
+Let $\mathcal{F} = \cup \mathcal{F}_\ell$ be a class of functions where every $f\in\mathcal{F}_\ell$ maps $\{0,1\}^\ell$ to $\{0,1\}$.  
+An _$\mathcal{F}$-homomorphic public key encryption scheme_ is a CPA secure public key encryption scheme $(G,E,D)$ such that there exists a polynomial-time algorithm $EVAL:\{0,1\}^* \rightarrow \{0,1\}^*$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$,  $x_1,\ldots,x_\ell \in \{0,1\}$, and $f\in \mathcal{F}_\ell$ of description size $|f|$ at most $poly(\ell)$ it holds that:
 >
 * $c=EVAL_e(f,E_e(x_1),\ldots,E_e(x_\ell))$ has length at most $n$. \
 * $D_d(c)=f(x_1,\ldots,x_\ell)$.
@@ -86,11 +93,11 @@ By artificially increasing the randomness for the key generation algorithm, this
 You should also understand the distinction between ciphertexts that are the output of the encryption algorithm on the plaintext $b$, and ciphertexts that decrypt to $b$, see [evalciphertextfig](){.ref}.
 
 
-![In a valid encryption scheme $E$, the set of ciphertexts $c$ such that $D_d(c)=b$ is a superset of the set of ciphertexts $c$ such that $c=E_e(b;r)$ for some  $r \in \{0,1\}^{t}$ where $t$ is the number of random bits used by the encryption algorithm. Our definition of partially homomorphic encryption scheme requires that for every $f:\{0,1\}^\ell \rightarrow \{0,1\}$ in our family and $x\in \{0,1\}^\ell$, if $c_i \in  E_e(x_i;\{0,1\}^t)$ for $i=1..\ell$ then $EVAL(f,c_1,\ldots,c_\ell)$ is in the superset $\{ c \;|\; D_d(c)=f(x) \}$ of $E_e(f(x);\{0,1\}^t)$. For example if we apply $EVAL$ to the $OR$ function and ciphertexts $c,c'$ that were obtained as encryptions of $1$ and $0$ respectively, then the output is a ciphertext $c''$ that would be decrypted to $OR(1,0)=1$, even if $c''$ is not in the smaller set of possible outputs of the encryption algorithm on $1$. This distinction between the smaller and larger set is the reason why we cannot automatically apply the $EVAL$ function to ciphertexts that are obtained from the outputs of previous $EVAL$ operations.](../figure/evalciphertexts.png){#evalciphertextfig .class width=300px height=300px}
+![In a valid encryption scheme $E$, the set of ciphertexts $c$ such that $D_d(c)=b$ is a superset of the set of ciphertexts $c$ such that $c=E_e(b;r)$ for some  $r \in \{0,1\}^{t}$ where $t$ is the number of random bits used by the encryption algorithm. Our definition of partially homomorphic encryption scheme requires that for every $f:\{0,1\}^\ell \rightarrow \{0,1\}$ in our family and $x\in \{0,1\}^\ell$, if $c_i \in  E_e(x_i;\{0,1\}^t)$ for $i=1..\ell$ then $EVAL(f,c_1,\ldots,c_\ell)$ is in the superset $\{ c \;|\; D_d(c)=f(x) \}$ of $E_e(f(x);\{0,1\}^t)$. For example if we apply $EVAL$ to the $OR$ function and ciphertexts $c,c'$ that were obtained as encryptions of $1$ and $0$ respectively, then the output is a ciphertext $c''$ that would be decrypted to $OR(1,0)=1$, even if $c''$ is not in the smaller set of possible outputs of the encryption algorithm on $1$. This distinction between the smaller and larger set is the reason why we cannot automatically apply the $EVAL$ function to ciphertexts that are obtained from the outputs of previous $EVAL$ operations.](../figure/evalciphertexts.png){#evalciphertextfig  .margin}
 
 
 
-A _fully homomomorphic encryption_ is simply a partially homomorphic encryption scheme for the family $\cF$ of _all_ functions, where the description of a function is as a circuit (say composed of [NAND](https://en.wikipedia.org/wiki/NAND_gate) gates, which are known to be a universal basis).
+A _fully homomomorphic encryption_ is simply a partially homomorphic encryption scheme for the family $\mathcal{F}$ of _all_ functions, where the description of a function is as a circuit (say composed of [NAND](https://en.wikipedia.org/wiki/NAND_gate) gates, which are known to be a universal basis).
 
 ### Another application: fully homomorphic encryption for verifying computation
 
@@ -149,12 +156,12 @@ Note that if $y$ is a random vector in $\Z_q^m$ then so is $-\beta y$ and so the
 >
 * To encrypt $b\in\{0,1\}$, choose $w\in\{0,1\}^m$ and output $w^\top A + (b,0,\ldots,0)$
 >
-* To decrypt $c\in\Z_q^n$, output $0$ iff $|\iprod{c,s}| \leq q/10$, where for $x\in\Z_q$ we defined $|x| = \min \{ x , q-x \}$.
+* To decrypt $c\in\Z_q^n$, output $0$ iff $|\langle c,s \rangle| \leq q/10$, where for $x\in\Z_q$ we defined $|x| = \min \{ x , q-x \}$.
 
 
  \
 
-The decryption algorithm recovers the original plaintext since   $\iprod{c,s}= w^\top A s + s_1 b$ and $|w^\top A s| \leq m\sqrt{q} \ll q$.
+The decryption algorithm recovers the original plaintext since   $\langle c,s \rangle= w^\top A s + s_1 b$ and $|w^\top A s| \leq m\sqrt{q} \ll q$.
 It turns out that this scheme is homomorphic with respect to the class of _linear functions_ modulo $2$. Specifically we make the following claim:
 
 
@@ -169,13 +176,13 @@ Try to show that $c = c_1 + \cdots +c_\ell$ (where addition is done as vectors i
 > # {.proof data-ref="parityhomlem"}
 The proof is quite simple. $EVAL$ will simply add the ciphertexts as vectors in $\Z_q$.
 If $c = \sum c_i$ then
-$$\iprod{c,s} = \sum b_i \floor{\tfrac{q}{2}}  +  \xi \mod  q$$
+$$\langle c,s \rangle = \sum b_i \floor{\tfrac{q}{2}}  +  \xi \mod  q$$
 where  $\xi \in \Z_q$ is a "noise term" such that   $|\xi| \leq \ell m \sqrt{q} \ll q$.
 Since $|\floor{\tfrac{q}{2}}-  \tfrac{q}{2}|<1$, adding at most $\ell$ terms of this difference adds at most $\ell$, and so we can also write
-$$\iprod{c,s} = \floor{ \sum b_i \tfrac{q}{2} }  +  \xi' \mod  q$$
+$$\langle c,s \rangle = \floor{ \sum b_i \tfrac{q}{2} }  +  \xi' \mod  q$$
 for $|\xi'| \leq \ell m \sqrt{q} + \ell \ll q$.
-If $\sum b_i$ is even then $\sum b_i \tfrac{q}{2}$ is an integer multiple of $q$ and hence in this case $|\iprod{c,s}| \ll q$.
-If $\sum b_i$ is odd  $\floor{\sum b_i \tfrac{q}{2}} = \floor{q/2} \mod q$ and so in this case $|\iprod{c,s}| = q/2 \pm o(q) > q/10$.
+If $\sum b_i$ is even then $\sum b_i \tfrac{q}{2}$ is an integer multiple of $q$ and hence in this case $|\langle c,s \rangle| \ll q$.
+If $\sum b_i$ is odd  $\floor{\sum b_i \tfrac{q}{2}} = \floor{q/2} \mod q$ and so in this case $|\langle c,s \rangle| = q/2 \pm o(q) > q/10$.
 
 Several other encryption schemes are also homomorphic with respect to linear functions, and even before Gentry's construction people have managed to achieve homomorphism with respect to slightly larger classes (e.g., quadratic functions by Boneh, Goh and Nissim) but not significantly so.
 
@@ -186,14 +193,14 @@ On input $1^n$ key generation algorithm outputs a vector $s\in\Z_q^m$ with $s_1 
 
 * Any polynomial number of samples from the distribution $G_s(1^n)$ is computationally indistinguishable from independent samples from the uniform distribution over $\Z_q^n$
 
-* If $c$ is output by $G_s(1^n)$ then $|\iprod{c,s}| \leq n\sqrt{q}$.
+* If $c$ is output by $G_s(1^n)$ then $|\langle c,s \rangle| \leq n\sqrt{q}$.
 
-Thus $s$ can be thought of a "trapdoor" for the generator that allows to distinguish between a random vector $c\in \Z_q^n$ (that with high probability would satisfy $|\iprod{c,s}|\geq q/10$)
+Thus $s$ can be thought of a "trapdoor" for the generator that allows to distinguish between a random vector $c\in \Z_q^n$ (that with high probability would satisfy $|\langle c,s \rangle|\geq q/10$)
 and an output of the generator.
 We use $G_s$ to encrypt a bit $b$ by letting $c \leftarrow_R G_s(1^n)$ and outputting $c + (b,0,\ldots,0)^\top$.
 In the particular instantiation above we obtain $G_s$ by sampling the matrix $A$ from the LWE assumption and having $G_s$ output $w^\top A$ for a random $w\in\{0,1\}^n$, but we can ignore this particular implementation detail in the forgoing.
 
-![In a _trapdoor generator_, we have two ways to generate randomized algorithms. That is, we have some algorithms $GEN$ and $GEN'$ such that $GEN$ outputs a pair $(G_s,s)$ and $GEN'$ outputs $G'$ with $G_s,G'$ being themselves algorithms (e.g., randomized circuits). The conditions we require are that __(1)__ the descriptions of the circuits $G_s$ and $G'$ (considering them as distributions over strings) are computationally indistinguishable and __(2)__ the distribution $G'(1^n)$ is _statistically indistinguishable_ from the uniform distribution , __(3)__ there is an efficient algorithm that given the secret "trapdoor" $s$ can distinguish the output of $G_s$ from the uniform distribution. In particular __(1)__,__(2)__, and __(3)__ together imply that it is _not_ feasible to exract $s$ from the description of $G_s$.](../figure/trapdoorprg.png){#TDPgenfig .class width=300px height=300px}
+![In a _trapdoor generator_, we have two ways to generate randomized algorithms. That is, we have some algorithms $GEN$ and $GEN'$ such that $GEN$ outputs a pair $(G_s,s)$ and $GEN'$ outputs $G'$ with $G_s,G'$ being themselves algorithms (e.g., randomized circuits). The conditions we require are that __(1)__ the descriptions of the circuits $G_s$ and $G'$ (considering them as distributions over strings) are computationally indistinguishable and __(2)__ the distribution $G'(1^n)$ is _statistically indistinguishable_ from the uniform distribution , __(3)__ there is an efficient algorithm that given the secret "trapdoor" $s$ can distinguish the output of $G_s$ from the uniform distribution. In particular __(1)__,__(2)__, and __(3)__ together imply that it is _not_ feasible to exract $s$ from the description of $G_s$.](../figure/trapdoorprg.png){#TDPgenfig  .margin}
 
 
 Note that this trapdoor generator satisfies the following stronger property: we can generate an alternative generator $G'$ such that the description of $G'$ is indistinguishable from the description of $G_s$ but such that $G'$ actually does produce   (up to exponentially small statistical error)  the uniform distribution over $\Z_q^n$.
@@ -251,7 +258,7 @@ We will show a "partially homomorphic encryption" (based on a later work of Gent
 ## Bootstrapping: Fully Homomorphic "escape velocity"
 
 
-![The "Bootstrapping Theorem" shows that once a partially homomorphic encryption scheme is homomorphic with respect to a rich enough family of functions, and specifically a family that contains its own decryption algorithm, then it can be converted to a fully homomorphic encryption scheme that can be used to evaluate _any_ function.](../figure/fheescape.png){#bootstrapfig .class width=300px height=300px}
+![The "Bootstrapping Theorem" shows that once a partially homomorphic encryption scheme is homomorphic with respect to a rich enough family of functions, and specifically a family that contains its own decryption algorithm, then it can be converted to a fully homomorphic encryption scheme that can be used to evaluate _any_ function.](../figure/fheescape.png){#bootstrapfig  .margin}
 
 The bootstrapping theorem is quite surprising.
 A priori you might expect that given that a homomorphic encryption for linear functions was not trivial to do, a homomorphic encryption for quadratics would be harder, cubics even harder and so on and so forth.
@@ -265,14 +272,14 @@ We now show the bootstrapping theorem:
 
 
 > # {.theorem title="Bootstrapping Theorem, Gentry 2009" #bootstrapthm}
-Suppose that $(G,E,D)$ is a CPA circular[^circular] secure partially homomorphic encryption scheme  for the family $\cF$ and suppose that for every pair of ciphertexts $c,c'$  the map $d \mapsto D_d(c) \;NAND\; D_d(c')$ is in $\cF$. Then $(G,E,D)$ can be turned a fully homomorphic encryption scheme.
+Suppose that $(G,E,D)$ is a CPA circular[^circular] secure partially homomorphic encryption scheme  for the family $\mathcal{F}$ and suppose that for every pair of ciphertexts $c,c'$  the map $d \mapsto D_d(c) \;NAND\; D_d(c')$ is in $\mathcal{F}$. Then $(G,E,D)$ can be turned a fully homomorphic encryption scheme.
 
 
 [^circular]: You can ignore the condition of circular security in a first read - we will discuss it later.
 
 ### Radioactive legos analogy
 
-![To  build a castle from radioactive Lego bricks, which can be kept safe in a special ziploc bag for 10 seconds, we can: 1) Place the bricks in a bag, and place the bag inside an outer bag. 2) Manipulate the inner bag through the outer bag to remove the bricks from it in 9 seconds, and spend 1 second putting one brick in place 3) Now the outer bag has 9 seconds of life left, and we can put it inside a new bag and repeat the process.](../figure/fheziplocbag.png){#ziplocbagfig .class width=300px height=300px}
+![To  build a castle from radioactive Lego bricks, which can be kept safe in a special ziploc bag for 10 seconds, we can: 1) Place the bricks in a bag, and place the bag inside an outer bag. 2) Manipulate the inner bag through the outer bag to remove the bricks from it in 9 seconds, and spend 1 second putting one brick in place 3) Now the outer bag has 9 seconds of life left, and we can put it inside a new bag and repeat the process.](../figure/fheziplocbag.png){#ziplocbagfig  .margin}
 
 
 Here is one analogy for bootstrapping, inspired by Gentry's [survey](https://crypto.stanford.edu/craig/easy-fhe.pdf).

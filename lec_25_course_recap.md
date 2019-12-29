@@ -1,3 +1,10 @@
+---
+title: "Course recap"
+filename: "lec_25_course_recap"
+chapternum: "26"
+---
+
+
 # Course recap
 
 It might be worthwhile to recall what we learned in this course:

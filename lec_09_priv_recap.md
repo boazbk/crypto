@@ -1,3 +1,10 @@
+---
+title: "Private key crypto recap"
+filename: "lec_00_0_foreword"
+chapternum: "9"
+---
+
+
 # Private key crypto recap
 
 

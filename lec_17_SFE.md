@@ -1,3 +1,11 @@
+---
+title: "Multiparty secure computation"
+filename: "lec_17_SFE"
+chapternum: "18"
+---
+
+
+
 # Multiparty secure computation I: Definition and Honest-But-Curious to Malicious complier
 
 

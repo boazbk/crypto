@@ -1,3 +1,11 @@
+---
+title: "Zero Knowledge proofs"
+filename: "lec_14_zero_knowledge"
+chapternum: "15"
+---
+
+
+
 #  Zero knowledge proofs
 
 The notion of _proof_ is central to so many fields.

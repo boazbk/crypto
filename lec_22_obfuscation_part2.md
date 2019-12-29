@@ -1,3 +1,10 @@
+---
+title: "Obfuscation II: applications"
+filename: "lec_22_obfuscation_part2"
+chapternum: "23"
+---
+
+
 #  More obfuscation, exotic encryptions
 
 Fully homomorphic encryption is an extremely powerful notion, but it does not allow us to obtain fine control over the access to information.

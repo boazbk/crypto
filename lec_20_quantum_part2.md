@@ -1,3 +1,10 @@
+---
+title: "Quantum II: Shor"
+filename: "lec_20_quantum_part2"
+chapternum: "21"
+---
+
+
 # Quantum computing and cryptography II
 
 
@@ -56,25 +63,25 @@ This case is known as _Simon's algorithm_ (given by Dan Simon in 1994) and actua
 
 > # {.theorem title="Simon's Algorithm" #simonsthm}
 If $f:\{0,1\}^n\rightarrow\{0,1\}^*$ is polynomial time computable and satisfies the property that $f(x)=f(y)$ iff $x\oplus y = h^*$ then there exists
-a quantum polynomial-time algorithm that outputs a random $h\in \{0,1\}^n$ such that $\iprod{h,h^*}=0 \pmod{2}$.
+a quantum polynomial-time algorithm that outputs a random $h\in \{0,1\}^n$ such that $\langle h,h^* \rangle=0 \pmod{2}$.
 
 
 Note that given $O(n)$ such samples, we can recover $h^*$ with high probability by solving the corresponding linear equations.
 
 > # {.proof data-ref="simonsthm"}
-Let $HAD$ be the $2\times 2$ unitary  matrix corresponding to the  one qubit operation $\ket{0} \mapsto \tfrac{1}{\sqrt{2}}(\ket{0}+\ket{1})$ and
-$\ket{1} \mapsto \tfrac{1}{\sqrt{2}}(\ket{0}-\ket{1})$  or $\ket{a}\mapsto \tfrac{1}{\sqrt{2}}(\ket{0}+(-1)^a\ket{1})$.
-Given the state $\ket{0^{n+m}}$ we can apply this map to each one of the first $n$ qubits to get the state
-$2^{-n/2}\sum_{x\in\{0,1\}^n}\ket{x}\ket{0^m}$
+Let $HAD$ be the $2\times 2$ unitary  matrix corresponding to the  one qubit operation $|0\rangle \mapsto \tfrac{1}{\sqrt{2}}(|0\rangle+|1\rangle)$ and
+$|1\rangle \mapsto \tfrac{1}{\sqrt{2}}(|0\rangle-|1\rangle)$  or $|a\rangle\mapsto \tfrac{1}{\sqrt{2}}(|0\rangle+(-1)^a|1\rangle)$.
+Given the state $|0^{n+m\rangle}$ we can apply this map to each one of the first $n$ qubits to get the state
+$2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle|0^m\rangle$
 and then we can apply the gates of $f$ to map this to the state
-$2^{-n/2}\sum_{x\in\{0,1\}^n}\ket{x}\ket{f(x)}$
+$2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle|f(x)\rangle$
 now suppose that we apply this operation again to the first $n$ qubits then we get the state
-$2^{-n}\sum_{x\in\{0,1\}^n}\prod_{i=1}^n(\ket{0}+(-1)^{x_i}\ket{1})\ket{f(x)}$
-which if we open up each one of these product and look at all $2^n$ choices $y\in\{0,1\}^n$ (with $y_i=0$ corresponding to picking $\ket{0}$ and $y_i=1$ corresponding to picking $\ket{1}$ in the $i^{th}$ product) we get
-$2^{-n}\sum_{x\in\{0,1\}^n}\sum_{y\in\{0,1\}^n}(-1)^{\iprod{x,y}}\ket{y}\ket{f(x)}$.
+$2^{-n}\sum_{x\in\{0,1\}^n}\prod_{i=1}^n(|0\rangle+(-1)^{x_i}|1\rangle)|f(x)\rangle$
+which if we open up each one of these product and look at all $2^n$ choices $y\in\{0,1\}^n$ (with $y_i=0$ corresponding to picking $|0\rangle$ and $y_i=1$ corresponding to picking $|1\rangle$ in the $i^{th}$ product) we get
+$2^{-n}\sum_{x\in\{0,1\}^n}\sum_{y\in\{0,1\}^n}(-1)^{\langle x,y \rangle}|y\rangle|f(x)\rangle$.
 Now under our assumptions for every particular $z$ in the image of $f$, there exist exactly two preimages $x$ and $x\oplus h^*$ such that $f(x)=f(x+h^*)=z$.
-So, if $\iprod{y,h^*}=0 \pmod{2}$, we get that $(-1)^{\iprod{x,y}}+(-1)^{\iprod{x,y+h^*}}=2$ and otherwise we get $(-1)^{\iprod{x,y}}+(-1)^{\iprod{x,y+h^*}}=0$.
-Therefore, if measure the state we will get a pair $(y,z)$ such that $\iprod{y,h^*}=0 \pmod{2}$. QED
+So, if $\langle y,h^* \rangle=0 \pmod{2}$, we get that $(-1)^{\langle x,y \rangle}+(-1)^{\langle x,y+h^* \rangle}=2$ and otherwise we get $(-1)^{\langle x,y \rangle}+(-1)^{\langle x,y+h^* \rangle}=0$.
+Therefore, if measure the state we will get a pair $(y,z)$ such that $\langle y,h^* \rangle=0 \pmod{2}$. QED
 
 Simon's algorithm seems to really use the special bit-wise structure of the group $\{0,1\}^n$, so one could wonder if it has any relevance for the group $\Z^*_m$ for some exponentially large $m$.
 It turns out that the same insights that underlie the well known  Fast Fourier Transform (FFT) algorithm can be used to essentially follow the same strategy for this group as well.
@@ -120,11 +127,11 @@ $\hat{f}(x) = \tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m} f(x)\omega^{xy}$
 
 where $\omega  = e^{2\pi i/m}$.
 
-The Fourier transform is simply a representation of $f$ in the *Fourier basis* $\set{ \chi_x }_{x \in \Z_m}$, where $\chi_x$ is the
+The Fourier transform is simply a representation of $f$ in the *Fourier basis* $\{  \chi_x \}_{x \in \Z_m}$, where $\chi_x$ is the
 vector/function whose $y^{th}$ coordinate is
 $\tfrac{1}{\sqrt{m}\omega^{xy}}$. Now the inner product of any two vectors
 $\chi_x,\chi_z$ in this basis is equal to
-$$\iprod{\chi_x,\chi_z} = \tfrac{1}{m}\sum_{y\in\Z_m} \omega^{xy} \overline{\omega^{zy}} = \tfrac{1}{m}\sum_{y\in\Z_m} \omega^{(x-z)y}  \;.$$
+$$\langle \chi_x,\chi_z \rangle = \tfrac{1}{m}\sum_{y\in\Z_m} \omega^{xy} \overline{\omega^{zy}} = \tfrac{1}{m}\sum_{y\in\Z_m} \omega^{(x-z)y}  \;.$$
 But if $x=z$ then $\omega^{(x-z)}=1$ and hence this sum is equal to $1$. On
 the other hand, if $x \neq z$, then this sum is equal to
 $\tfrac{1}{m} \tfrac{1 -\omega^{(x-y)m}}{1-\omega^{x-y}}=
@@ -196,8 +203,8 @@ quantum register from $f \in \mathbb{C}^m$ to its Fourier transform $\hat{f}$.
 > # {.theorem title="Quantum Fourier Transform (Bernstein-Vazirani)" #quantumftthm}
 For every $m$ and $m =2^m$ there is a quantum algorithm that uses
 $O(m^2)$ elementary quantum operations and transforms a quantum register
-in state $f = \sum_{x\in\Z_m} f(x)\ket{x}$ into the state
-$\hat{f}= \sum_{x\in\Z_m} \hat{f}(x) \ket{x}$, where
+in state $f = \sum_{x\in\Z_m} f(x)|x\rangle$ into the state
+$\hat{f}= \sum_{x\in\Z_m} \hat{f}(x) |x\rangle$, where
 $\hat{f}(x) = \tfrac{1}{\sqrt{m}} \sum_{y\in \Z_m} \omega^{xy}f(x)$.
 
 
@@ -212,23 +219,23 @@ here.)
 
 We now describe the algorithm and the state, neglecting normalizing factors.
 
-1. _initial state:_                $f= \sum_{x\in\Z_m} f(x)\ket{x}$
+1. _initial state:_                $f= \sum_{x\in\Z_m} f(x)|x\rangle$
 
-2.  Recursively run $FT_{m/2}$ on $m-1$ most significant qubits (state: $(FT_{m/2}f_{even})\ket{0} + (FT_{m/2}f_{odd})\ket{1}$)
+2.  Recursively run $FT_{m/2}$ on $m-1$ most significant qubits (state: $(FT_{m/2}f_{even})|0\rangle + (FT_{m/2}f_{odd})|1\rangle$)
 
-3. If LSB is $1$ then compute $W$ on $m-1$ most significant qubits (see below). (state : $(FT_{m/2}f_{even})\ket{0} + (W FT_{m/2}f_{odd})\ket{1}$)
+3. If LSB is $1$ then compute $W$ on $m-1$ most significant qubits (see below). (state : $(FT_{m/2}f_{even})|0\rangle + (W FT_{m/2}f_{odd})|1\rangle$)
 
-4. Apply Hadmard gate $H$ to least significant qubit.  (state: $(FT_{m/2}f_{even})(\ket{0}+\ket{1})$ $+$ $(W FT_{m/2}f_{odd})(\ket{0}-\ket{1}) =$ $(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd})\ket{0} + (FT_{m/2}f_{even}-W FT_{m/2}f_{odd})\ket{1}$)
+4. Apply Hadmard gate $H$ to least significant qubit.  (state: $(FT_{m/2}f_{even})(|0\rangle+|1\rangle)$ $+$ $(W FT_{m/2}f_{odd})(|0\rangle-|1\rangle) =$ $(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd})|0\rangle + (FT_{m/2}f_{even}-W FT_{m/2}f_{odd})|1\rangle$)
 
-5. Move LSB to the most significant position         (state: $\ket{0}(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd}) + \ket{1}(FT_{m/2}f_{even}- W FT_{m/2}f_{odd}) = \hat{f}$)
+5. Move LSB to the most significant position         (state: $|0\rangle(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd}) + |1\rangle(FT_{m/2}f_{even}- W FT_{m/2}f_{odd}) = \hat{f}$)
 
 
-The transformation $W$ on $m-1$ qubits can be defined by $\ket{x} \mapsto \omega^x = \omega^{\sum_{i=0}^{m-2} 2^ix_i}$ (where $x_i$ is
+The transformation $W$ on $m-1$ qubits can be defined by $|x\rangle \mapsto \omega^x = \omega^{\sum_{i=0}^{m-2} 2^ix_i}$ (where $x_i$ is
 the $i^{th}$ qubit of $x$). It can be easily seen to be the result of
-applying for every $i\in \set{0,\ldots,m-2}$ the following elementary
+applying for every $i\in \{ 0,\ldots,m-2\}$ the following elementary
 operation on the $i^{th}$ qubit of the register:
 
-$\ket{0} \mapsto \ket{0}$ and $\ket{1} \mapsto \omega^{2^i}\ket{1}$.
+$|0\rangle \mapsto |0\rangle$ and $|1\rangle \mapsto \omega^{2^i}|1\rangle$.
 
 The final state is equal to $\hat{f}$ by the FFT equations (we leave this as an exercise)
 
@@ -245,7 +252,7 @@ on input $A,N$ (represented in binary) finds the smallest $r$ such that $A^r=1 \
 Let $t=\ceil{5\log (A+N)}$. Our register will consist of
 $t+polylog(N)$ qubits. Note that the function $x
 \mapsto A^x \pmod{N}$ can be computed in $polylog(N)$ time and so we will assume that we can
-compute the map $\ket{x}\ket{y} \mapsto \ket{x}\ket{y\oplus (A^x \pmod{N})}$ (where we identify a number $X \in \set{0,\ldots,N-1}$ with its representation as  a binary
+compute the map $|x\rangle|y\rangle \mapsto |x\rangle|y\oplus (A^x \pmod{N\rangle)}$ (where we identify a number $X \in \{ 0,\ldots,N-1\}$ with its representation as  a binary
 string of length $\log N$).[^9] Now we describe the order-finding
 algorithm. It uses a tool of elementary number theory called *continued fractions* which allows us to approximate (using a classical algorithm)
 an arbitrary real number $\alpha$ with a rational number $p/q$ where
@@ -253,13 +260,13 @@ there is a prescribed upper bound on $q$ (see below)
 
 We now describe the algorithm and the state, this time *including* normalizing factors.
 
-1. Apply Fourier transform to the first $m$ bits. (state:  $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m}\ket{x})\ket{0^n}$)
+1. Apply Fourier transform to the first $m$ bits. (state:  $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m}|x\rangle)|0^n\rangle$)
 
-2. Compute the transformation $\ket{x}\ket{y} \mapsto \ket{x}\ket{y \oplus (A^x \pmod{N})}$. (state: $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m} \ket{x}\ket{A^x \pmod{N}}$)
+2. Compute the transformation $|x\rangle|y\rangle \mapsto |x\rangle|y \oplus (A^x \pmod{N\rangle)}$. (state: $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m} |x\rangle|A^x \pmod{N\rangle}$)
 
-3.  Measure the second register to get a value $y_0$.  (state: $\tfrac{1}{\sqrt{K}}\sum_{\ell=0}^{K-1}\ket{x_0 + \ell r}\ket{y_0}$ where $x_0$ is the smallest number such that $A^{x_0} = y_0 \pmod{N}$ and $K= \floor{(m-1-x_0)/r}$.)
+3.  Measure the second register to get a value $y_0$.  (state: $\tfrac{1}{\sqrt{K}}\sum_{\ell=0}^{K-1}|x_0 + \ell r\rangle|y_0\rangle$ where $x_0$ is the smallest number such that $A^{x_0} = y_0 \pmod{N}$ and $K= \floor{(m-1-x_0)/r}$.)
 
-4.  Apply the Fourier transform to the first register. (state:  $\tfrac{1}{\sqrt{m}\sqrt{K}} \left(\sum_{x\in\Z_n}\sum_{\ell=0}^{K-1} \omega^{(x_0+\ell r)x}\ket{x} \right) \ket{y_0}$)
+4.  Apply the Fourier transform to the first register. (state:  $\tfrac{1}{\sqrt{m}\sqrt{K}} \left(\sum_{x\in\Z_n}\sum_{\ell=0}^{K-1} \omega^{(x_0+\ell r)x}|x\rangle \right) |y_0\rangle$)
 
 In the analysis, it will suffice to show that this algorithm outputs the order $r$ with probability at least $\Omega(1/\log N)$ (we can always
 amplify the algorithm’s success by running it several times and taking
@@ -283,7 +290,7 @@ computes a rational approximation for $x/m$, the denominator it will
 find will indeed be $r$.
 
 To prove the claim, we compute for every $x \in \Z_m$ the absolute value
-of $\ket{x}$’s coefficient before the measurement. Up to some
+of $|x\rangle$’s coefficient before the measurement. Up to some
 normalization factor this is
 
 $\left|  \sum_{\ell=0}^{c-1} \omega^{(x_0+\ell r)x} \right| = \left| \omega^{x_0c'c} \right| \left| \sum_{\ell=0}^{c-1} \omega^{r\ell x} \right| = 1 \cdot  \left| \sum_{\ell=0}^{c-1} \omega^{r\ell x} \right| \;.$
@@ -325,7 +332,7 @@ probability $\Omega((1/\sqrt{r})^2) =\Omega(1/r)$.
 
 **Lemma 2:** If $x$ satisfies $0 < xr \pmod{m} < r/10$ then,
 before the measurement in the final step of the order-finding algorithm,
-the coefficient of $\ket{x}$ is at least $\Omega(\tfrac{1}{\sqrt{r}})$.
+the coefficient of $|x\rangle$ is at least $\Omega(\tfrac{1}{\sqrt{r}})$.
 
 **Proof of Lemma 1** We prove the lemma for the
 case that $r$ is coprime to $m$, leaving the general case to the reader. In this case, the map
@@ -338,7 +345,7 @@ $\floor{rx/m}$ can not have a nontrivial shared factor with $r$, as
 otherwise this factor would be shared with $rx \pmod{m}$ as well.
 
 **Proof of Lemma 2:** Let $x$ be such that
-$0 < xr \pmod{m} < r/10$. The absolute value of $\ket{x}$’s coefficient
+$0 < xr \pmod{m} < r/10$. The absolute value of $|x\rangle$’s coefficient
 in the state before the measurement is
 $$\tfrac{1}{\sqrt{K}\sqrt{m}}\left| \sum_{\ell=0}^{K-1} \omega^{\ell r x} \right| \;,$$ where
 $K = \floor{(m-x_0-1)/r}$. Note that $\tfrac{m}{2r} < K < \tfrac{m}{r}$
@@ -373,7 +380,7 @@ furthermore, $X^{r/2} \neq -1 \pmod{N}$ is at least $\nicefrac{1}{4}$.
 
 \[quantum:lem:factoring1\] For every $N$ and $Y$, if $Y^2 = 1 \pmod{N}$
 but $Y
-\pmod{N}\not\in\set{+1,-1}$ then $gcd(Y-1,N)\not\in{1,N}$.
+\pmod{N}\not\in\{ +1,-1\}$ then $gcd(Y-1,N)\not\in{1,N}$.
 
 Together, lemmas \[quantum:lem:factoring2\]
 and \[quantum:lem:factoring1\] show that given a composite $N$ that is
@@ -411,7 +418,7 @@ probability at least $\half$, the order of $Y$ is even: a number of the
 form $2^kc$ for $k \geq 1$ and $c$ odd. We then show that with
 probability at least $\half$, the order of $Z$ has the form $2^{\ell}d$
 for $d$ odd and $\ell \neq k$. This implies that the order of $X$ is
-$r=2^{\max\set{k,\ell}}lcm(c,d)$ (where $lcm$ denotes the least common
+$r=2^{\max\{ k,\ell\}}lcm(c,d)$ (where $lcm$ denotes the least common
 multiple) which, means that $X^{r/2}$ will be equal to $1$ in at least
 one coordinate. Since $-1 \pmod{N}$ is isomorphic to the tuple
 $\tupl{ -1 , -1 }$ this means that $X^{r/2} \neq -1 \pmod{P}$.

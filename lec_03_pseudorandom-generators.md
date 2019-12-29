@@ -1,3 +1,10 @@
+---
+title: "Pseudorandomness"
+filename: "lec_03_pseudorandom-generators"
+chapternum: "3"
+---
+
+
 
 # Pseudorandomness
 

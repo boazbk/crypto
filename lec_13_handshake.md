@@ -1,3 +1,11 @@
+---
+title: "Secure communication over insecure channels"
+filename: "lec_13_handshake"
+chapternum: "14"
+---
+
+
+
 # Establishing secure connections over insecure channels
 
 
@@ -74,7 +82,7 @@ Indeed, the standard protocol for securing the web: the [transport Layer Securit
 We now illustrate one of those attacks.
 
 
-### Bleichenbacher's attack on RSA PKCS $\sharp$1 V1.5 and  SSL V3.0
+### Bleichenbacher's attack on RSA PKCS V1.5 and  SSL V3.0
 
 If you have a public key, a natural approach is to take the encryption-based protocol and simply skip the first step since Bob already knows the public
 key $e$ of Alice.
@@ -245,4 +253,4 @@ Security requirements: forward secrecy, deniability.
 
 * Importance of "perfect forward secrecy"
 
-![How the NSA feels about breaking encrypted communication](../figure/NSA_Page_29.jpg){#tmplabelfig width=50% }
+![How the NSA feels about breaking encrypted communication](../figure/NSA_Page_29.jpg){#tmplabelfig  .margin }

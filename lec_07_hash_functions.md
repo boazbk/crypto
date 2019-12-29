@@ -1,3 +1,10 @@
+---
+title: "Hash functions and random oracles"
+filename: "lec_07_hash_functions"
+chapternum: "7"
+---
+
+
 # Hash functions and random oracles
 
 
@@ -150,7 +157,7 @@ The only problem is that this is of course clearly impossible- $2^N$ is _much_ b
 Luckily we are in the magical world of crypto where the impossible is routine and the unimaginable is occasional.
 So, we can actually find a function $H$ that is "essentially" one to one.
 
-![A collision-resistant hash function is a map that from a large universe to a small one that is "practically one to one" in the sense that collisions for the function do exist but are hard to find.](../figure/hash_function.jpg){#tmplabelfig width=50% }
+![A collision-resistant hash function is a map that from a large universe to a small one that is "practically one to one" in the sense that collisions for the function do exist but are hard to find.](../figure/hash_function.jpg){#tmplabelfig  .margin }
 
 The main idea is the following simple result, which can be thought of as one side of the so called ["birthday paradox"](https://goo.gl/GSPrDW):
 

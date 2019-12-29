@@ -1,3 +1,10 @@
+---
+title: "PRFs from PRGs"
+filename: "lec_05_prf-from-prg"
+chapternum: "5"
+---
+
+
 #  Pseudorandom functions from pseudorandom generators
 
 
@@ -23,7 +30,7 @@ I've mentioned before that the first step of writing a proof is convincing yours
 >
 Given an  adversary $A$ that can distinguish in time $T$ a black box for $f_s(\cdot)$ from a black-box for a random function with advantage $\epsilon$, we need to come up with an adversary $D$ that can distinguish in time $poly(T)$ an input of the form $G(s)$ (where $s$ is random in $\{0,1\}^n$) from an input of the form $y$ where $y$ is random in $\{0,1\}^{2n}$ with bias at least $\epsilon/poly(T)$.
 >
-![In the  "lazy evaluation" implementation of the black box to the adversary, we label every node in the tree only when we need it. In this figure check marks correspond to nodes that have been labeled and question marks to nodes that are still unlabeled.](../figure/prf-lazy-eval.jpg){#lazyevalprffig width=50% }
+![In the  "lazy evaluation" implementation of the black box to the adversary, we label every node in the tree only when we need it. In this figure check marks correspond to nodes that have been labeled and question marks to nodes that are still unlabeled.](../figure/prf-lazy-eval.jpg){#lazyevalprffig  .margin }
 >
 Let us consider the  "lazy evaluation" implementation  of the black box for $A$ illustrated in [lazyevalprffig](){.ref}.
 That is, at every point in time there are nodes in the full binary tree that are labeled and nodes which we haven't yet labeled. When $A$ makes a query $i$, this query corresponds to the path $i_1\ldots i_n$ in the tree. We look at the lowest (furthest away from the root) node $v$  on this path which has been labeled by some value $y$, and then we continue labelling the path from $v$ downwards until we reach $i$.
@@ -91,7 +98,7 @@ An encryption scheme $(E,D)$ is _secure against chosen plaintext attack (CPA sec
 
 
 
-![In the CPA game, Eve interacts with the encryption oracle and at the end chooses $m_0,m_1$, gets an encryption $c^*=E_k(m_b)$ and outputs $b'$. She _wins_ if $b'=b$](../figure/cpa-game.jpg){#cpasecgamefig width=50% }
+![In the CPA game, Eve interacts with the encryption oracle and at the end chooses $m_0,m_1$, gets an encryption $c^*=E_k(m_b)$ and outputs $b'$. She _wins_ if $b'=b$](../figure/cpa-game.jpg){#cpasecgamefig  .margin }
 
 [cpasecuredef](){.ref} is illustrated in [cpasecgamefig](){.ref}.
 Our previous notion of computational secrecy (i.e., [compsecdef](){.ref}) corresponds to the case that we skip Step 3 above.
@@ -105,7 +112,7 @@ There is no CPA secure $(E,D)$ where $E$ is _deterministic_.
 The proof is very simple: Eve will only use a single round of interacting with $E$ where she will ask for the encryption $c_1$ of $0^\ell$. In the second  round, Eve will choose $m_0=0^{\ell}$ and $m_1=1^{\ell}$, and get $c^*=E_k(m_b)$ she wil then output $0$ if and only if $c^*=c_1$.
 
 
-![Insecurity of deterministic encryption](../figure/code_talkers.png){#xkcdnavajotwofig width=50% }
+![Insecurity of deterministic encryption](../figure/code_talkers.png){#xkcdnavajotwofig  .margin }
 
 This proof is so simple that you might think it shows a problem with the definition, but it is actually a real problem with security.
 If you encrypt many messages and some of them repeat themselves, it is possible to get significant information by seeing the repetition pattern (que the XKCD cartoon again, see [xkcdnavajotwofig](){.ref}).
@@ -157,7 +164,7 @@ As usual with a new concept, we want to know whether it is possible to achieve a
 > # {.theorem title="PRP's from PRFs" #PRPfromPRF}
 If the PRF conjecture holds (and hence by [prfthm](){.ref} also if the PRG conjecture holds) then there exists a pseudorandom permutation collection.
 
-![We build a PRP $p$ on $2n$ bits from three PRFs $f_{s_1},f_{s_2},f_{s_3}$ on $n$ bits by letting $p_{s_1,s_2,s_3}(x_1,x_2)=(z_1,y_2)$ where $y_1 = x_1 \oplus f_{s_1}(x_2)$, $y_2 = x_2 \oplus f_{s_2}(y_1)$ and $z_1 = f_{s_3}(y_2) \oplus y_1$.](../figure/feistel.jpg){#feistelfig width=50% }
+![We build a PRP $p$ on $2n$ bits from three PRFs $f_{s_1},f_{s_2},f_{s_3}$ on $n$ bits by letting $p_{s_1,s_2,s_3}(x_1,x_2)=(z_1,y_2)$ where $y_1 = x_1 \oplus f_{s_1}(x_2)$, $y_2 = x_2 \oplus f_{s_2}(y_1)$ and $z_1 = f_{s_3}(y_2) \oplus y_1$.](../figure/feistel.jpg){#feistelfig  .margin }
 
 We will not show the proof of this theorem here, but [feistelfig](){.ref} illustrates how the construction of a pseudorandom permutation from a pseudorandom function looks like.
 The construction (known as the Luby-Rackoff construction) uses several rounds of what is known as the [Feistel Transformation](https://en.wikipedia.org/wiki/Feistel_cipher) that maps a function $f:\{0,1\}^n \rightarrow \{0,1\}^n$ into a permutation $g:\{0,1\}^{2n} \rightarrow \{0,1\}^{2n}$ using the map $(x,y) \mapsto (x,f(x) \oplus y)$.
@@ -180,7 +187,7 @@ The $i$-th string in the tuple is known as the _round key_ and is used  in the $
 Each round is typically composed of several components: there is a "key mixing component" that performs some simple permutation based on the key (often as simply as XOR'ing the key), there is a "mixing component" that mixes the bits of the block so that bits that were initially nearby don't stay close to one another, and then there is some non-linear component (often obtained by applying some simple non-linear functions known as "S boxes" to each small block of the input) that ensures that the overall cipher will not be an affine function.
 Each one of these operations is an easily reversible operations, and hence decrypting the cipher simply involves running the rounds backwards.
 
-![A typical round of a block cipher, $k_i$ is the $^{th}$ round key, $x_i$ is the block before the $i^{th}$ round and $x_{i+1}$ is the block at the end of this round.](../figure/block-cipher-round.jpg){#blockcipherfig width=50% }
+![A typical round of a block cipher, $k_i$ is the $^{th}$ round key, $x_i$ is the block before the $i^{th}$ round and $x_{i+1}$ is the block at the end of this round.](../figure/block-cipher-round.jpg){#blockcipherfig  .margin }
 
 
 ## Encryption modes
@@ -191,16 +198,16 @@ The most natural approach would be that to encrypt a message $m$, we simply use 
 
 
 
-![In the Electronic Codebook  (ECB) mode every message is encrypted deterministically and independently](../figure/ecb-mode.jpg){#ecbonefig width=50% }
+![In the Electronic Codebook  (ECB) mode every message is encrypted deterministically and independently](../figure/ecb-mode.jpg){#ecbonefig  .margin }
 
-![An encryption of the Linux penguin (left image) using ECB mode (middle image) vs CBC mode (right image). The ECB encryption is insecure as it reveals much structure about the original image. Image taken from Wikipedia.](../figure/ECB_prob.jpg){#ecbtwofig width=50% }
+![An encryption of the Linux penguin (left image) using ECB mode (middle image) vs CBC mode (right image). The ECB encryption is insecure as it reveals much structure about the original image. Image taken from Wikipedia.](../figure/ECB_prob.jpg){#ecbtwofig  .margin }
 
 
 A more secure way to use a block cipher to encrypt is the _cipher block chaining mode_ where we XOR every message with the previous ciphertext ([cbcmodefig](){.ref}). For the first message we XOR a string known as the _initialization vector_ or IV. Note that if we lose a block to traffic in the CBC mode then we are unable to decrypt the next block, but can recover from that point onwards.
 It turns out that using this mode with a random IV can yield CPA security, though one has to be careful in how you go about it, see the exercises.
 
 
-![In the Cypher-Block-Chaining (CBC) the encryption of the previous message is XOR'ed into the current message prior to encrypting. The first message is XOR'ed with an _initialization vector_ (IV) that if chosen randomly, ensures CPA security.](../figure/cbc-mode.jpg){#cbcmodefig width=50% }
+![In the Cypher-Block-Chaining (CBC) the encryption of the previous message is XOR'ed into the current message prior to encrypting. The first message is XOR'ed with an _initialization vector_ (IV) that if chosen randomly, ensures CPA security.](../figure/cbc-mode.jpg){#cbcmodefig  .margin }
 
 
 In the _output feedback mode (OFB)_ we encrypt the all zero string using CBC mode to get a sequence $(y_1,y_2,\ldots)$ of pseudorandom outputs that we can use as a stream cipher.

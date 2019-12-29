@@ -1,3 +1,11 @@
+---
+title: "Chosen Ciphertext Security"
+filename: "lec_06_CCA"
+chapternum: "6"
+---
+
+
+
 # Chosen Ciphertext Security
 
 
@@ -84,7 +92,7 @@ efficient adversary  _Mallory_ wins in the following game with probability at mo
 * Mallory outputs $b'$ and _wins_ if $b'=b$.
 
 
-![The CCA security game.](../figure/cca-game.jpg){#CCAgamefig width=50% }
+![The CCA security game.](../figure/cca-game.jpg){#CCAgamefig  .margin }
 
 
 

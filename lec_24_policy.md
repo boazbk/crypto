@@ -1,3 +1,10 @@
+---
+title: "Ethical, moral and policy considerations"
+filename: "lec_24_policy"
+chapternum: "25"
+---
+
+
 # Ethical, moral, and policy dimensions to cryptography
 
 

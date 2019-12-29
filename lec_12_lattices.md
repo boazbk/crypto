@@ -1,4 +1,11 @@
-# Lattice based crypto
+---
+title: "Lattice based cryptography"
+filename: "lec_12_lattices"
+chapternum: "12"
+---
+
+
+# Lattice based cryptography
 
 
 
@@ -70,13 +77,13 @@ If you have a CPA secure public key encryption scheme for single bit messages th
 Can you see why?
 
 
-We think of the public key as the set  of equations $\iprod{a_1,x}=y_1,\ldots, \iprod{a_m,x}=y_m$ in the unknown variables $x$.
+We think of the public key as the set  of equations $\langle a_1,x \rangle=y_1,\ldots, \langle a_m,x \rangle=y_m$ in the unknown variables $x$.
 The idea is that to encrypt the value $0$ we will generate a new _correct_ equation on $x$, while to encrypt the value $1$ we will generate an _incorrect_ equation.
-To decrypt a ciphertext $(a,\sigma)\in \Z_q^{n+1}$, we think of it as an equation of the form $\iprod{a,x}=\sigma$ and output $1$ if and only if the equation is correct.
+To decrypt a ciphertext $(a,\sigma)\in \Z_q^{n+1}$, we think of it as an equation of the form $\langle a,x \rangle=\sigma$ and output $1$ if and only if the equation is correct.
 
 How does the encrypting algorithm, that does not know $x$, get a correct or incorrect equation on demand?
-One way would be to simply take two equations $\iprod{a_i,x}=y_i$ and $\iprod{a_j,x}=y_j$ and add them together to get the equation $\iprod{a_i+a_j,x}=y_i+y_j$.
-This equation is correct and so one can use it to encrypt $0$, while to encrypt $1$ we simply add some fixed nonzero number $\alpha\in\Z_q$ to the right hand side to get the incorrect equation $\iprod{a_i+a_j,x}= y_i+y_j + \alpha$.
+One way would be to simply take two equations $\langle a_i,x \rangle=y_i$ and $\langle a_j,x \rangle=y_j$ and add them together to get the equation $\langle a_i+a_j,x \rangle=y_i+y_j$.
+This equation is correct and so one can use it to encrypt $0$, while to encrypt $1$ we simply add some fixed nonzero number $\alpha\in\Z_q$ to the right hand side to get the incorrect equation $\langle a_i+a_j,x \rangle= y_i+y_j + \alpha$.
 However, even if it's hard to solve for $x$ given the equations, an attacker (who also knows the public key $(A,y)$) can try itself all pairs of equations and do the same thing.
 
 Our solution for this is simple- just add more equations! If the encryptor adds a random subset of equations then there are $2^m$ possibilities for that, and an attacker can't guess them all.
@@ -86,9 +93,9 @@ Thus, at least intuitively, the following encryption scheme would be "secure" in
 >
 * _Key generation_:  Pick random $m\times n$ matrix $A$ over $\Z_q$, and $x\leftarrow_R\Z_q^n$, the secret key is $x$ and the public key is $(A,y)$ where $y=Ax$.
 >
-* _Encryption_: To encrypt a message $b\in\{0,1\}$, pick $w\in\{0,1\}^m$ and output $w^\top A,\iprod{w,y}+\alpha b$ for some fixed nonzero $\alpha\in\Z_q$.
+* _Encryption_: To encrypt a message $b\in\{0,1\}$, pick $w\in\{0,1\}^m$ and output $w^\top A,\langle w,y \rangle+\alpha b$ for some fixed nonzero $\alpha\in\Z_q$.
 >
-* _Decryption:_ To decrypt a ciphertext $(a,\sigma)$, output $0$ iff $\iprod{a,x}=\sigma$.
+* _Decryption:_ To decrypt a ciphertext $(a,\sigma)$, output $0$ iff $\langle a,x \rangle=\sigma$.
 
 
  \
@@ -138,7 +145,7 @@ The _LWE conjecture_ is that for every polynomial $p(n)$ there is some polynomia
 
 It turns out that if the LWE is hard, then it is even hard to distinguish between random equations and nearly correct ones:
 
-![The search to decision reduction ([LWEsearchtodecthm](){.ref}) implies that under the LWE conjecture,  for every $m=poly(n)$, if we choose and fix a random $m\times n$ matrix $A$ over $\Z_q$, the distribution $Ax+e$ is indistinguishable from a random vector in $\Z_q^m$, where    $x$ is  a random vector in $\Z_q^n$ and $e$ is a random "short" vector in $\Z_q^m$. The two distributions are indistinguishable even to an adversary that knows $A$.](../figure/lwevecindist.png){#figid .class width=300px height=300px}
+![The search to decision reduction ([LWEsearchtodecthm](){.ref}) implies that under the LWE conjecture,  for every $m=poly(n)$, if we choose and fix a random $m\times n$ matrix $A$ over $\Z_q$, the distribution $Ax+e$ is indistinguishable from a random vector in $\Z_q^m$, where    $x$ is  a random vector in $\Z_q^n$ and $e$ is a random "short" vector in $\Z_q^m$. The two distributions are indistinguishable even to an adversary that knows $A$.](../figure/lwevecindist.png){#figid  .margin}
 
 
 > # {.theorem title="Search to decision reduction for LWE" #LWEsearchtodecthm}
@@ -184,9 +191,9 @@ We can now show the secure variant of our original encryption scheme:
 >
 * _Key generation:_ Pick $x\in\Z_q^n$. The private key is $x$ and the public key is $(A,y)$ with $y=Ax+e$ with $e$ a $\delta$-noise vector and $A$ a random $m\times n$ matrix.
 >
-* _Encrypt:_ To encrypt $b\in\{0,1\}$ given the key $(A,y)$, pick $w\in\{0,1\}^m$ and output $w^\top A, \iprod{w,y}+b\floor{q/2}$ (all computations are done in $\Z_q$).
+* _Encrypt:_ To encrypt $b\in\{0,1\}$ given the key $(A,y)$, pick $w\in\{0,1\}^m$ and output $w^\top A, \langle w,y \rangle+b\floor{q/2}$ (all computations are done in $\Z_q$).
 >
-* _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|\iprod{a,x}-\sigma|<q/10$.
+* _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|\langle a,x \rangle-\sigma|<q/10$.
 
  \
 
@@ -195,7 +202,7 @@ We can now show the secure variant of our original encryption scheme:
 The scheme LWEENC is also described in [lweencdescfig](){.ref} with slightly different notation. I highly recommend you stop and verify you understand why the two descriptions are equivalent.
 
 
-![In the encryption scheme LWEENC, the public key is a matrix $A'=(A|y)$, where $y=As+e$ and $s$ is the secret key. To encrypt a bit $b$ we choose a random $w \leftarrow_R \{0,1\}^m$, and output $w^\top A' + (0,\ldots,0,b\floor{\tfrac{q}{2}})$. We decrypt $c \in \Z_q^{n+1}$ to zero with key $s$ iff $|\iprod{c,(s,-1)}| \leq q/10$ where the inner product is done modulo $q$. ](../figure/lweencdesc.png){#lweencdescfig .class width=300px height=300px}
+![In the encryption scheme LWEENC, the public key is a matrix $A'=(A|y)$, where $y=As+e$ and $s$ is the secret key. To encrypt a bit $b$ we choose a random $w \leftarrow_R \{0,1\}^m$, and output $w^\top A' + (0,\ldots,0,b\floor{\tfrac{q}{2}})$. We decrypt $c \in \Z_q^{n+1}$ to zero with key $s$ iff $|\langle c,(s,-1) \rangle| \leq q/10$ where the inner product is done modulo $q$. ](../figure/lweencdesc.png){#lweencdescfig  .margin}
 
 
 
@@ -207,12 +214,12 @@ in the sense that the decrypting an encryption of $b$ returns the value $b$. But
 With high probability, the decryption of the encryption of $b$ equals $b$.
 
 > # {.proof data-ref="LWEcorrectlem"}
-$\iprod{w^\top A,x} = \iprod{w,Ax}$. Hence, if $y=Ax+e$ then $\iprod{w,y} = \iprod{w^\top A,x} + \iprod{w,e}$.
-But since every coordinate of $w$ is either $0$ or $1$, $|\iprod{w,e}|<\delta m q < q/10$ for our choice of parameters.[^cancellations]
-So, we get that if $a= w^\top A$ and $\sigma = \iprod{w,y}+b\floor{q/2}$ then $\sigma - \iprod{a,x} = \iprod{w,e} + b\floor{q/2}$ which will be smaller than
+$\langle w^\top A,x \rangle = \langle w,Ax \rangle$. Hence, if $y=Ax+e$ then $\langle w,y \rangle = \langle w^\top A,x \rangle + \langle w,e \rangle$.
+But since every coordinate of $w$ is either $0$ or $1$, $|\langle w,e \rangle|<\delta m q < q/10$ for our choice of parameters.[^cancellations]
+So, we get that if $a= w^\top A$ and $\sigma = \langle w,y \rangle+b\floor{q/2}$ then $\sigma - \langle a,x \rangle = \langle w,e \rangle + b\floor{q/2}$ which will be smaller than
 $q/10$ iff $b=0$.
 
-[^cancellations]: In fact, due to the fact that the _signs_ of the error vector's entries are different, we expect the errors to have significant cancellations and hence we would expect $|\iprod{w,e}|$ to only be roughly of magnitude $\sqrt{m}\delta q$, but this is not crucial for our discussions.
+[^cancellations]: In fact, due to the fact that the _signs_ of the error vector's entries are different, we expect the errors to have significant cancellations and hence we would expect $|\langle w,e \rangle|$ to only be roughly of magnitude $\sqrt{m}\delta q$, but this is not crucial for our discussions.
 
 We now prove security of the LWE based encryption:
 
@@ -228,7 +235,7 @@ Thus [LWEENCthm](){.ref}  will follow from the following lemma:
 Let $q,m,\delta$ be set as in LWEENC.
 Then, assuming the LWE conjecture, the following distributions are computationally indistinguishable:
 >
-*  $D$: The distribution over four-tuples of the form  $(A,y,w^\top A,\iprod{w,y})$  where $A$ is uniform in $\Z_q^{m\times n}$, $x$ is uniform in $\Z_q^n$, $e \in Z_q$ is chosen with $e_i \in \{-\delta q,\ldots,+\delta q\}$, $y=Ax+e$, and $w$ is uniform in $\{0,1\}^m$.
+*  $D$: The distribution over four-tuples of the form  $(A,y,w^\top A,\langle w,y \rangle)$  where $A$ is uniform in $\Z_q^{m\times n}$, $x$ is uniform in $\Z_q^n$, $e \in Z_q$ is chosen with $e_i \in \{-\delta q,\ldots,+\delta q\}$, $y=Ax+e$, and $w$ is uniform in $\{0,1\}^m$.
 >
 * $\overline{D}$: The distribution over four-tuples $(A,y',a,\sigma)$ where  all entries are uniform: $A$ is uniform in $\Z_q^{m\times n}$, $y'$ is uniform in $\Z_q^m$, $a$ is uniform in $\Z_q^n$ and $\sigma$ is uniform in $\Z_q$.
 
@@ -241,11 +248,11 @@ You can then use it to show that the concatenation of the public key and encrypt
 We now prove [LWEENClem](){.ref}, which will complete the proof of [LWEENCthm](){.ref}.
 
 > # {.proof data-ref="LWEENClem"}
-Define $D$ to be the distribution $(A,y,w^\top A,\iprod{w,y})$ as in the lemma's statement (i.e., $y=Ax+e$ for some $x$, $e$ chosen as above).
-Define $D'$ to be the distribution $(A,y',w^\top A, \iprod{w,y'})$ where $y'$ is chosen uniformly in $\Z_q^m$.
+Define $D$ to be the distribution $(A,y,w^\top A,\langle w,y \rangle)$ as in the lemma's statement (i.e., $y=Ax+e$ for some $x$, $e$ chosen as above).
+Define $D'$ to be the distribution $(A,y',w^\top A, \langle w,y' \rangle)$ where $y'$ is chosen uniformly in $\Z_q^m$.
 We claim that $D'$ is computationally indistinguishable from $D$ under the LWE conjecture.
 Indeed by [LWEsearchtodecthm](){.ref} (search to  decision reduction) this conjecture implies that the distribution $X$ over pairs   $(A,y)$ with $y=Ax+e$  is indistinguishable from the distribution $X'$ over pairs $(A,y')$ where $y'$ is uniform.
-But if there was some polynomial-time algorithm $T$ distinguishing $D$ from $D'$ then we can design a randomized  polynomial-time algorithm $T'$ distinguishing $X$ from $X'$ with the same advantage by setting $T'(A,y)=T(A,y,w^\top A,\iprod{w,y})$ for random $w \leftarrow_R \{0,1\}^m$.
+But if there was some polynomial-time algorithm $T$ distinguishing $D$ from $D'$ then we can design a randomized  polynomial-time algorithm $T'$ distinguishing $X$ from $X'$ with the same advantage by setting $T'(A,y)=T(A,y,w^\top A,\langle w,y \rangle)$ for random $w \leftarrow_R \{0,1\}^m$.
 >
 We will finish the proof by showing that  the distribution $D'$ is _statistically indistinguishable_ (i.e., has negligible total variation distance) from $\overline{D}$.
 This follows from the following claim:
@@ -282,7 +289,7 @@ It can be shown that we can  assume without loss of generality that $B$ is full 
 Note that given a basis $B$ we can generate vectors in $L$, as well as test whether a vector $v$ is in $L$ by testing if $B^{-1}v$ is an integer vector.
 There can be many different bases for the same lattice, and some of them are easier to work with than others (see [latticebasesfig](){.ref}).
 
-![A _lattice_ is a discrete subspace $L \subseteq \R^n$ that is closed under _integer_ combinations. A _basis_ for the lattice is a minimal set $b_1,\ldots,b_m$ (typically $m=n$) such that every $u \in L$ is an integer combination of $b_1,\ldots,b_m$. The same lattice can have different bases. In this figure the lattice is a set of points in $\R^2$, and the black vectors $v_1,v_2$ and the ref vectors $u_1,u_2$ are two alternative bases for it. Generally we consider the basis $u_1,u_2$ "better" since the vectors are shorter and it is less "skewed".](../figure/Lattice-reduction.png){#latticebasesfig .class width=300px height=300px}
+![A _lattice_ is a discrete subspace $L \subseteq \R^n$ that is closed under _integer_ combinations. A _basis_ for the lattice is a minimal set $b_1,\ldots,b_m$ (typically $m=n$) such that every $u \in L$ is an integer combination of $b_1,\ldots,b_m$. The same lattice can have different bases. In this figure the lattice is a set of points in $\R^2$, and the black vectors $v_1,v_2$ and the ref vectors $u_1,u_2$ are two alternative bases for it. Generally we consider the basis $u_1,u_2$ "better" since the vectors are shorter and it is less "skewed".](../figure/Lattice-reduction.png){#latticebasesfig  .margin}
 
 Some classical computational questions on lattices are:
 

@@ -1,3 +1,10 @@
+---
+title: "Public key encryption candidates"
+filename: "lec_11_concrete_pkc"
+chapternum: "11"
+---
+
+
 # Concrete candidates for public key crypto
 
 
@@ -263,7 +270,7 @@ Therefore, since by the claim the adversary will make the query $x^*$ to $H$ wit
 
 
 
-![In the proof of security of TDPENC, we show that if the assumption of the claim is violated, the "forgetful experiment" is identical to the real experiment with probability larger $1-\epsilon$. In such a case, even if all that probability mass was on the points in the sample space where the adversary in the forgetful experiment will lose and the adversary of the real experiment will win, the probability of winning in the latter experiment would still be less than $1/2+\epsilon$.](../figure/gnomeTDPENC.png){#TDPENCgnomefig .class width=300px height=300px}
+![In the proof of security of TDPENC, we show that if the assumption of the claim is violated, the "forgetful experiment" is identical to the real experiment with probability larger $1-\epsilon$. In such a case, even if all that probability mass was on the points in the sample space where the adversary in the forgetful experiment will lose and the adversary of the real experiment will win, the probability of winning in the latter experiment would still be less than $1/2+\epsilon$.](../figure/gnomeTDPENC.png){#TDPENCgnomefig  .margin}
 
 > # { .pause }
 This proof of [TDPpkcthm](){.ref} is not very long but it is somewhat subtle. Please re-read it and make sure you understand it.
@@ -304,14 +311,14 @@ Our inverter $I$ works as follows:
 >
 * $I$ will guess at random $t^*$ which is the step in which the adversary will query to $H$ the message $m^*$ that it is eventually going to forge in. With probability $1/T'$ the guess will be correct.
 >
-* $I$ simulates the execution of $A$. Except for step $t^*$, whenever $A$ makes a new query $m$ to the random oracle, $I$ will choose a random $x\getsr \{0,1\}^n$, compute $y=p_k(x)$ and designate $H(m)=y$.  In step $t^*$, when the adversary makes the query $m^*$, the inverter $I$ will return $H(m^*)=y^*$. $I$ will record the values $(x,y)$ and so in particular will always know $p_k^{-1}(H(m))$ for every $H(m) \neq y^*$ that it returned as answer from its oracle on query $m$.
+* $I$ simulates the execution of $A$. Except for step $t^*$, whenever $A$ makes a new query $m$ to the random oracle, $I$ will choose a random $x\leftarrow \{0,1\}^n$, compute $y=p_k(x)$ and designate $H(m)=y$.  In step $t^*$, when the adversary makes the query $m^*$, the inverter $I$ will return $H(m^*)=y^*$. $I$ will record the values $(x,y)$ and so in particular will always know $p_k^{-1}(H(m))$ for every $H(m) \neq y^*$ that it returned as answer from its oracle on query $m$.
 >
 * When $A$ makes the query $m$ to the signature box, then since $m$ was queried before to $H$, if $m \neq m^*$ then $I$ returns $x=p_k^{-1}(H(m))$ using its records. If $m=m^*$ then $I$ halts and outputs "failure".
 >
 * At the end of the game, the adversary outputs $(m^*,x^*)$. If $p_k(x^*)=y^*$ then $I$ outputs $x^*$.
 >
 We claim that, conditioned on the probability $\geq \epsilon/T'$ event that the adversary is successful and the final message $m^*$ is the one queried in step $t^*$, we provide a perfect simulation of the actual game.
-Indeed, while in an actual game, the value $y=H(m)$ will be chosen independently at random in $\bits^n$, this is equivalent to choosing  $x \leftarrow_R \{0,1\}^n$ and letting $y=p_k(x)$.
+Indeed, while in an actual game, the value $y=H(m)$ will be chosen independently at random in $\{0,1\}^n$, this is equivalent to choosing  $x \leftarrow_R \{0,1\}^n$ and letting $y=p_k(x)$.
 After all, a permutation applied to the uniform distribution is uniform.
 >
 Therefore with probability at least $\epsilon/T'$ the inverter $I$ will output $x^*$ such that $p_k(x^*)=y^*$ hence succeeding in the inverter.

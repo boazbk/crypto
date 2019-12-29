@@ -1,3 +1,10 @@
+---
+title: "FHE II: Construction"
+filename: "lec_16_FHE_part2"
+chapternum: "17"
+---
+
+
 #  Fully homomorphic encryption : Construction
 
 In the last lecture we defined fully homomorphic encryption, and showed the "bootstrapping theorem" that transforms a partially homomorphic encryption scheme into a fully homomorphic encryption, as long as the original scheme can homomorphically evaluate its own decryption circuit.
@@ -20,7 +27,7 @@ That is, for every two ciphertexts $c$ and $c'$, the function $d \mapsto D_d(c)\
 
 
 
-In the linear homomorphic scheme we saw in the last lecture, every  ciphertext was a vector $c\in\Z_q^n$ such that $\iprod{c,s}$  equals (up to scaling by $\floor{\tfrac{q}{2}}$)  the plaintext bit.
+In the linear homomorphic scheme we saw in the last lecture, every  ciphertext was a vector $c\in\Z_q^n$ such that $\langle c,s \rangle$  equals (up to scaling by $\floor{\tfrac{q}{2}}$)  the plaintext bit.
 We saw that adding two ciphertexts modulo $q$ corresponded to XOR'ing (i.e., adding modulo $2$) the corresponding two plaintexts.
 That is, if we define $c \oplus c'$ as $c+c' \pmod{q}$ then performing the $\oplus$ operation on the ciphertexts corresponds to adding modulo $2$ the plaintexts.
 
@@ -41,7 +48,7 @@ In particular, above   $C$ is an $n\times n$ _matrix_ with entries in $\Z_q$, $s
 See [naivegswfig](){.ref} for a visual representation of the ciphertexts in this "naive" encryption scheme.
 Keeping track of the dimensions of all objects will become only more important in the rest of this lecture.
 
-![In the "naive" version of the GSW encryption, to encrypt a bit $b$ we output an $n\times n$ matrix $C$ such that $Cs=bs$ where $s \in \Z_q^n$ is the secret key. In this scheme we can transform encryptions $C,C'$ of $b,b'$ respectively to an encryption $C''$ of $NAND(b,b')$ by letting $C'' = I-CC'$.](../figure/naivegsw.png){#naivegswfig .class width=300px height=300px}
+![In the "naive" version of the GSW encryption, to encrypt a bit $b$ we output an $n\times n$ matrix $C$ such that $Cs=bs$ where $s \in \Z_q^n$ is the secret key. In this scheme we can transform encryptions $C,C'$ of $b,b'$ respectively to an encryption $C''$ of $NAND(b,b')$ by letting $C'' = I-CC'$.](../figure/naivegsw.png){#naivegswfig  .margin}
 
 Given $C$ and $s$ we can recover $b$ by just checking if $Cs=s$ or $Cs=0^n$.
 The scheme  allows homomorphic evaluation of both addition (modulo $q$) and multiplication, since if $Cs = bs$ and $C's=b's$ then we can define
@@ -140,9 +147,9 @@ It's a good exercise to verify that for every vector $v$ and matrix $C$, $Q\hat{
 
 [^ceil]: If we were being pedantic the length of the vector (and other constant below) should be the integer $\ceil{\log q}$ but I omit the ceiling symbols for simplicity of notation.
 
-![We can encode a vector $s\in \Z_q^n$ as a vector $\hat{s} \in \Z_q^{n\log q}$ that has only entries in $\{0,1\}$ by using the binary encoding, replacing every coordinate of $s$ with a $\log q$-sized block in $\hat{s}$. The decoding operation is _linear_ and so we can write $s=Q\hat{s}$ for a specific (simple) $n \times (n\log q)$ matrix $Q$.](../figure/encodevec.png){#encodevecfig .class width=300px height=300px}
+![We can encode a vector $s\in \Z_q^n$ as a vector $\hat{s} \in \Z_q^{n\log q}$ that has only entries in $\{0,1\}$ by using the binary encoding, replacing every coordinate of $s$ with a $\log q$-sized block in $\hat{s}$. The decoding operation is _linear_ and so we can write $s=Q\hat{s}$ for a specific (simple) $n \times (n\log q)$ matrix $Q$.](../figure/encodevec.png){#encodevecfig  .margin}
 
-![We can encode an $n\times n$ matrix $C$ over $\Z_q$ by an $n\times (n \log q)$ matrix $\hat{C}$ using the binary basis. We have the equation $C=\hat{C}Q^\top$ where $Q$ is the same matrix we use to decode a vector.](../figure/encodematrix.png){#encodematrixfig .class width=300px height=300px}
+![We can encode an $n\times n$ matrix $C$ over $\Z_q$ by an $n\times (n \log q)$ matrix $\hat{C}$ using the binary basis. We have the equation $C=\hat{C}Q^\top$ where $Q$ is the same matrix we use to decode a vector.](../figure/encodematrix.png){#encodematrixfig  .margin}
 
 
 In our final scheme the ciphertext encrypting $b$ will be an $(n\log q)\times (n\log q)$ matrix $C$ with small coefficients such that $Cv =bv + e$ for a "short" $e \in \Z_q^{n\log q}$ and $v=Q^\top s$ for $s\in\Z_q^n$.
@@ -181,7 +188,7 @@ It is not hard to show that we can relax our assumption to $q(n)$-LWE $q(n)=2^{p
 
 >__FHEENC:__
 >
-* **Key generation:**  As in the scheme of last lecture the secret key is $s\in\Z_s^n$ and the public key is a generator $G_s$ such that samples from $G_s(1^n)$ are indistinguishable from independent random samples from $\Z_q^n$ but if $c$ is output by $G_s$ then $|\iprod{c,s}|<\sqrt{q}$, where the inner product (as all other computations) is done modulo $q$ and for every $x\in\Z_q=\{0,\ldots,q-1\}$ we define $|x|=\min \{ x, q-x \}$.
+* **Key generation:**  As in the scheme of last lecture the secret key is $s\in\Z_s^n$ and the public key is a generator $G_s$ such that samples from $G_s(1^n)$ are indistinguishable from independent random samples from $\Z_q^n$ but if $c$ is output by $G_s$ then $|\langle c,s \rangle|<\sqrt{q}$, where the inner product (as all other computations) is done modulo $q$ and for every $x\in\Z_q=\{0,\ldots,q-1\}$ we define $|x|=\min \{ x, q-x \}$.
 As before, we can assume that $s_1 = \floor{q/2}$ which implies that  $(Q^\top s)_1$ is also $\floor{q/2}$ since (as can be verified by direct inspection) the first row of $Q^\top$ is $(1,0,\ldots,0)$. 
 >
 * **Encryption:** To encrypt $b\in\{0,1\}$, let $d_1,\ldots,d_(n\log q) \leftarrow_R G_s(1^n)$ output $C=\widehat{(bQ^\top +D)}$ where $D$ is the matrix whose rows are $d_1,\ldots,d_{n\log q}$ generated from $G_s$. (See [fheencfig](){.ref})
@@ -207,9 +214,9 @@ Please take your time to read the definition of the scheme, and go over
 
 
 
-![In our fully homomorphic encryption, the public key is a trapdoor generator $G_s$. To encrypt a bit $b$, we output $C=\widehat{(bQ^\top +D)}$ where $D$ is a $(n\log q) \times n$ matrix whose rows are generated using $G_s$.](../figure/fheenc.png){#fheencfig .class width=300px height=300px}
+![In our fully homomorphic encryption, the public key is a trapdoor generator $G_s$. To encrypt a bit $b$, we output $C=\widehat{(bQ^\top +D)}$ where $D$ is a $(n\log q) \times n$ matrix whose rows are generated using $G_s$.](../figure/fheenc.png){#fheencfig  .margin}
 
-![We decrypt a ciphertext $C=\widehat{(bQ^\top +D)}$ by looking at the first coordinate of $CQ^\top s$ (or equivalently, $CQ^\top Q\hat{s}$). If $b=0$ then this equals to the first coordinate of $Ds$, which is at most $\sqrt{q}$ in magintude. If $b=1$ then we get an extra factor of $Q^\top s$ which we set to be in the interval $(0.499q,0.51q)$. We can think of either $s$ or $\hat{s}$ as our secret key.](../figure/fhedec.png){#fhedecfig .class width=300px height=300px}
+![We decrypt a ciphertext $C=\widehat{(bQ^\top +D)}$ by looking at the first coordinate of $CQ^\top s$ (or equivalently, $CQ^\top Q\hat{s}$). If $b=0$ then this equals to the first coordinate of $Ds$, which is at most $\sqrt{q}$ in magintude. If $b=1$ then we get an extra factor of $Q^\top s$ which we set to be in the interval $(0.499q,0.51q)$. We can think of either $s$ or $\hat{s}$ as our secret key.](../figure/fhedec.png){#fhedecfig  .margin}
 
 
 
@@ -303,8 +310,8 @@ Given a ciphertext $C$, the decryption algorithm takes the dot product modulo $q
 By repeatedly applying the noisy homomorphism lemma ([noisehomolem](){.ref}), we can show that can homorphically evaluate every circuit of NAND gates whose _depth_ $\ell$  satisfies $(2n\log q)^\ell \ll q$.
 If $q = 2^{\sqrt{n}}$ then (assuming $n$ is sufficiently large) then as long as $\ell < n^{0.49}$ this will be satisfied.
 
-In particular to show that $f(\cdot)$ can be homomorphically evaluated it will suffice to show that for every fixed vector $c\in \Z_q^{n\log q}$ there is a $polylog(n) \ll n^{0.49}$ depth circuit $F$ that on input a string $\hat{s}\in\{0,1\}^{n \log q}$ will output $0$ if $|\iprod{c,\hat{s}}|  < q/10$ and output $1$ if $|\iprod{c,\hat{s}}|  > q/5$.
-(We don't care what $F$ does otherwise. The above suffices since given a ciphertext $C$ we can use $F$ with the vector $c$ being the top row of $CQ^\top Q$, and hence $\iprod{c,\hat{s}}$ would correspond to the first entry of $CQ^\top s$. Note that if $F$ has depth $\ell$ then the function $f()$ above has depth at most $\ell+1$.)
+In particular to show that $f(\cdot)$ can be homomorphically evaluated it will suffice to show that for every fixed vector $c\in \Z_q^{n\log q}$ there is a $polylog(n) \ll n^{0.49}$ depth circuit $F$ that on input a string $\hat{s}\in\{0,1\}^{n \log q}$ will output $0$ if $|\langle c,\hat{s \rangle}|  < q/10$ and output $1$ if $|\langle c,\hat{s \rangle}|  > q/5$.
+(We don't care what $F$ does otherwise. The above suffices since given a ciphertext $C$ we can use $F$ with the vector $c$ being the top row of $CQ^\top Q$, and hence $\langle c,\hat{s \rangle}$ would correspond to the first entry of $CQ^\top s$. Note that if $F$ has depth $\ell$ then the function $f()$ above has depth at most $\ell+1$.)
 
 > # { .pause }
 Please make sure you understand the above argument.
@@ -327,8 +334,8 @@ Let us now show this more formally:
 
 > # {.lemma #decdepthlem}
 For every $c\in\Z_q^m$ there exists some function $f:\{0,1\}^m\rightarrow\{0,1\}$ such that: \
-1. For every $\hat{s}\in \{0,1\}^n$ such that  $|\iprod{\hat{s},c}|<0.1q$, $f(\hat{s})=0$ \
-2. For every $\hat{s}\in \{0,1\}^n$ such that $0.4q<|\iprod{\hat{s},c}|<0.6q$, $f(\hat{s})=1$ \
+1. For every $\hat{s}\in \{0,1\}^n$ such that  $|\langle \hat{s \rangle,c}|<0.1q$, $f(\hat{s})=0$ \
+2. For every $\hat{s}\in \{0,1\}^n$ such that $0.4q<|\langle \hat{s \rangle,c}|<0.6q$, $f(\hat{s})=1$ \
 3. There is a circuit computing $f$ of depth at most $100(\log m)^3$.
 
 > # {.proof data-ref="decdepthlem"}

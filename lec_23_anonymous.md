@@ -1,3 +1,10 @@
+---
+title: "Anonymous communication"
+filename: "lec_23_anonymous"
+chapternum: "24"
+---
+
+
 #  Anonymous communication
 
 

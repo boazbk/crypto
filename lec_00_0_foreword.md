@@ -1,5 +1,10 @@
+---
+title: "Foreword and Syllabus"
+filename: "lec_00_0_foreword"
+chapternum: "p"
+---
 
- 
+
 
 # Foreword and Syllabus
 

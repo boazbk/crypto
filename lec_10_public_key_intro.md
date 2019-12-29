@@ -1,3 +1,10 @@
+---
+title: "Public key cryptography"
+filename: "lec_10_public_key_intro"
+chapternum: "10"
+---
+
+
 # Public key cryptography
 
 People have been dreaming about heavier than air flight since at least the days of Leonardo Da Vinci (not to mention Icarus from the greek mythology).
@@ -86,7 +93,7 @@ We now discuss how we define security for public key encryption. As mentioned ab
 it took quite a while for cryptographers to arrive at the "right" definition,
 but in the interest of time we will skip ahead to what by now is the standard basic notion (see also [PKCfig](){.ref}):
 
-![In a public key encryption, the receiver Bob generates a _pair_ of keys $(e,d)$, The _encryption key_ $e$ is used for encryption, and the _decryption key_ is used for decryption. We call it a public key system since the security of the scheme does not rely on the adversary Eve not knowing the encryption key. Hence Bob can publicize the key $e$  to a great many potential receivers, and still ensure confidentiality of the messages he receives.](../figure/pkenccartoon.png){#PKCfig .class width=300px height=300px}
+![In a public key encryption, the receiver Bob generates a _pair_ of keys $(e,d)$, The _encryption key_ $e$ is used for encryption, and the _decryption key_ is used for decryption. We call it a public key system since the security of the scheme does not rely on the adversary Eve not knowing the encryption key. Hence Bob can publicize the key $e$  to a great many potential receivers, and still ensure confidentiality of the messages he receives.](../figure/pkenccartoon.png){#PKCfig  .margin}
 
 > # {.definition title="Public key encryption" #pubkeydef}
 A triple of efficient algorithms $(G,E,D)$ is a _public key encryption scheme_ if it satisfies

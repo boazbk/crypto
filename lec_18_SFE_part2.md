@@ -1,3 +1,10 @@
+---
+title: "MPC II: Construction from FHE"
+filename: "lec_18_SFE_part2"
+chapternum: "19"
+---
+
+
 # Multiparty secure computation: Construction using Fully Homomorphic Encryption
 
 
@@ -29,7 +36,7 @@ Let $F$ be a two party functionality.  Lets start with the case that $F$ is _det
 We'll later show an easy reduction from the general case to this one.
 Here is a suggested protocol for Alice and Bob to run on inputs $x,y$ respectively so that Alice will learn $F(x,y)$ but nothing more about $y$, and Bob will learn nothing about $x$ that he didn't know before.
 
-![An honest but curious protocol for two party computation using a fully homomorphic encryption scheme with circuit privacy. ](../figure/twopcprotfig.png){#twopcprotfig .class width=300px height=300px}
+![An honest but curious protocol for two party computation using a fully homomorphic encryption scheme with circuit privacy. ](../figure/twopcprotfig.png){#twopcprotfig  .margin}
 
 
 >__Protocol 2PC:__ (See [twopcprotfig](){.ref})
@@ -159,7 +166,7 @@ Let $a\in \Z_q$ and $T\in\mathbb{N}$ be such that $aT<q/2$. If we let $X$ be the
 let $X'$ be the distribution obtained by taking  $a+x (\mod q)$ for $x$ chosen in the same way, then
 $$\sum_{y \in \Z_q} \left| \Pr[X=y] - \Pr[X'=y] \right| <|a|/T$$
 
-![If $a \ll T$ then the uniform distribution over the interval $[-T,+T]$ is statistically close to the uniform distribution over the interval $[-T+a,+T+a]$, since the statistical distance is proportional to the event (which happens with probability $a/T$) that a random sample from one distribution falls inside the symmetric difference of the two intervals.](../figure/statdistintervals.png){#statdistintervalsfig .class width=300px height=300px}
+![If $a \ll T$ then the uniform distribution over the interval $[-T,+T]$ is statistically close to the uniform distribution over the interval $[-T+a,+T+a]$, since the statistical distance is proportional to the event (which happens with probability $a/T$) that a random sample from one distribution falls inside the symmetric difference of the two intervals.](../figure/statdistintervals.png){#statdistintervalsfig  .margin}
 
 > # {.proof data-ref="noiseandsignallem"}
 This has a simple "proof by picture": consider the intervals $[-T,+T]$ and $[-T+a,+T+a]$ on the number line (see [statdistintervalsfig](){.ref}).
@@ -180,7 +187,7 @@ We omit the proof of [productstatisticialdistlem](){.ref} and leave it as an exe
 We will actually only use [productstatisticialdistlem](){.ref}  for  distributions above; you can obtain intuition for it by considering the $m=2$ case where we compare the rectangles of the forms $[-T,+T]\times [-T,+T]$ and $[-T+a,+T+a]\times[-T+b,+T+b]$. You can see that their union has size roughly $4T^2$ while their symmetric difference has size roughly $2T\cdot 2a + 2T\cdot 2b$, and so if $|a|,|b| \leq \delta T$ then the symmetric difference is roughly a $2\delta$ fraction of the union.
 
 We will not provide the full details, but together these lemmas show that  $EVAL$ can use bootstrapping to reduce the magnitude of the noise to roughly $2^{n^{0.1}}$ and then add an additional random noise of roughly, say, $2^{n^{0.2}}$ which would make it statistically indistinguishable from the actual encryption.
-Here are some hints on how to make this work: the idea is that in order to "re-randomize" a ciphertext $C$ we need a very noisy encryption of zero and add it to $C$. The normal encryption will use noise of magnitude $2^{n^{0.2}}$ but we will provide an encryption of the secret key with smaller magnitude $2^{n^{0.1}/polylog(n)}$ so we can use bootstrapping to reduce the noise. The main idea that allows to add noise is that at the end of the day, our scheme boils down to LWE instances that have the form $(c,\sigma)$ where $c$ is a random vector in $\Z_q^{n-1}$ and $\sigma = \iprod{c,s}+a$ where $a \in [-\eta,+\eta]$ is a small noise addition.
+Here are some hints on how to make this work: the idea is that in order to "re-randomize" a ciphertext $C$ we need a very noisy encryption of zero and add it to $C$. The normal encryption will use noise of magnitude $2^{n^{0.2}}$ but we will provide an encryption of the secret key with smaller magnitude $2^{n^{0.1}/polylog(n)}$ so we can use bootstrapping to reduce the noise. The main idea that allows to add noise is that at the end of the day, our scheme boils down to LWE instances that have the form $(c,\sigma)$ where $c$ is a random vector in $\Z_q^{n-1}$ and $\sigma = \langle c,s \rangle+a$ where $a \in [-\eta,+\eta]$ is a small noise addition.
 If we take any such input and add to $\sigma$ some $a' \in [-\eta',+\eta']$ then we create the effect of completely re-randomizing the noise. However, completely analyzing this requires non-trivial amount of care and work.
 
 <!--
