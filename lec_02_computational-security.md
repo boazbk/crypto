@@ -1,6 +1,6 @@
 ---
 title: "Computational security"
-filename: "lec_02_computational_security"
+filename: "lec_02_computational-security"
 chapternum: "2"
 ---
 
