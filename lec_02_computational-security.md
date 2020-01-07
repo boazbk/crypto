@@ -9,8 +9,6 @@ chapternum: "2"
 
 
 
-
-
 **Additional reading:**  Sections 2.3 and 2.4 in Boneh-Shoup book. Chapter 3 up to and including Section 3.3 in Katz-Lindell book.
 
 Recall our cast of characters- Alice and Bob want to communicate securely over a

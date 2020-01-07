@@ -619,8 +619,32 @@ See [chernoffstirlingex](){.ref}  for a proof of the simple (but highly useful a
 
 ## Exercises
 
-The following exercises will be part of the first problem set in the course, so
-you can get a head start by working on them now.
+
+
+> ### {.exercise }
+Prove that for every finite $S,T$, there are $(|T|+1)^{|S|}$ partial functions from $S$ to $T$.
+
+
+
+
+::: {.exercise title="$O$-notation" #ohnotationex}
+For every pair of functions $F,G$ below, determine which of the following relations holds: $F=O(G)$, $F=\Omega(G)$, $F=o(G)$ or $F=\omega(G)$.
+
+a. $F(n)=n$, $G(n)=100n$.
+
+b. $F(n)=n$, $G(n)=\sqrt{n}$.
+
+c. $F(n)=n\log n$, $G(n)=2^{(\log (n))^2}$.
+
+d. $F(n)=\sqrt{n}$, $G(n)=2^{\sqrt{\log n}}$
+
+e. $F(n) = \binom{n}{\ceil{0.2 n}}$ ,  $G(n) = 2^{0.1 n}$ (where $\binom{n}{k}$ is the number of $k$-sized subsets of a set of size $n$) and $g(n) = 2^{0.1 n}$. See footnote for hint.^[one way to do this is to use [Stirling's approximation for the factorial function.](https://goo.gl/cqEmS2).]
+:::
+
+> ### {.exercise}
+Give an example of a pair of functions $F,G:\N \rightarrow \N$ such that neither $F=O(G)$ nor $G=O(F)$ holds.
+
+
 
 
 ::: {.exercise title="Properties of expectation and variance" #propexpecvariance}
