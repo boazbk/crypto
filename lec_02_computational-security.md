@@ -63,14 +63,18 @@ of) the pitfalls of so many cryptosystems in history is that we insist on very
 precisely *defining* what it means for a scheme to be secure.
 
 Let us defer the discussion how one defines a function being computable in "less
-than $T$ operations" and just say that there is a way to formally do so. Given
-the perfect secrecy definition we saw last time, a natural attempt for defining
+than $T$ operations" and just say that there is a way to formally do so. We will want to say that a scheme has "$256$ bits of security" if it is not possible to break it using less than $2^{256}$ operations,
+and more generally that it has $t$ bits of security if it can't be broken using less than $2^t$
+operations.
+Given the perfect secrecy definition we saw last time, a natural attempt for defining
 Computational secrecy would be the following:
 
 
 > # {.definition title="Computational secrecy (first attempt)" #firstcompdef}
 An encryption scheme $(E,D)$ has _$t$ bits of computational secrecy_
-if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$ computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2$.^[It is important to keep track of  what  is known and unknown to the adversary Eve. The adversary knows the set $\{ m_0,m_1 \}$ of potential messages, and the ciphertext $y=E_k(m_b)$. The only things she doesn't know are whether $b=0$ or $b=1$, and the value of the secret key $k$. In particular, because $m_0$ and $m_1$ are known to Eve, it does not matter whether we define Eve's goal in this "security game" as outputting $m_b$ or as outputting $b$.]
+if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$ computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2$.
+
+__Note:__ It is important to keep track of  what  is known and unknown to the adversary Eve. The adversary knows the set $\{ m_0,m_1 \}$ of potential messages, and the ciphertext $y=E_k(m_b)$. The only things she doesn't know are whether $b=0$ or $b=1$, and the value of the secret key $k$. In particular, because $m_0$ and $m_1$ are known to Eve, it does not matter whether we define Eve's goal in this "security game" as outputting $m_b$ or as outputting $b$.
 
 [firstcompdef](){.ref} seems very natural, but is in fact _impossible_ to achieve if the key is shorter than the message.
 
@@ -82,13 +86,16 @@ The reason [firstcompdef](){.ref} can't be achieved that if the message is even 
 longer than the key, we can always have a very efficient procedure
 that achieves success probability of about $1/2 + 2^{-n-1}$ by guessing the key.  That is, we can replace the loop in the Python program `Distinguish` by choosing the key at random. Since we have some small chance of guessing correctly, we will get a small advantage over half.
 
-To fix this definition, we do not consider guessing with such a tiny advantage as a "true break" of the scheme, and hence this will be the actual definition we use.
+
+Of course an advantage of  $2^{-256}$ in guessing the message is not really something we would worry about.
+For example, since the earth is about 5 billion years old, we can estimate the chance that an asteroid of the magnitude that caused the dinosaurs' extinction will hit us this very second to be about $2^{-60}$.
+Hence we want to relax the notion of computational security so it would not  consider guessing with such a tiny advantage as a "true break" of the scheme.
+The resulting  definition is the following:
 
 > # {.definition title="Computational secrecy (concrete)" #compsecconcdef}
 An encryption scheme $(E,D)$ has _$t$ bits of computational secrecy[^sec_bits]_  if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$ computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2+2^{-t}$.
 
-[^sec_bits]: This is a slight simplification of the typical notion of "$t$ bits of security". In the more standard definition we'd say that a scheme has $t$ bits of security if for every $t_1+t_2 \leq t$, an attacker running in $2^{t_1}$ time can't get success probability advantage more than $2^{-t_2}$. However these two definitions only differ from one another by at most a factor of two. This may be important for practical applications (where the difference between $64$ and $32$ bits of security could be crucial) but won't matter for our concerns.
-
+[^sec_bits]: Another version of  "$t$ bits of security" is that a scheme has $t$ bits of security if for every $t_1+t_2 \leq t$, an attacker running in $2^{t_1}$ time can't get success probability advantage more than $2^{-t_2}$. However these two definitions only differ from one another by at most a factor of two. This may be important for practical applications (where the difference between $64$ and $32$ bits of security could be crucial) but won't matter for our concerns.
 
 
 Having learned our lesson, let's try to see that this strategy does give us the
@@ -202,9 +209,15 @@ In fact, cryptographic reductions can be even subtler, since they involve an int
 
 For practical security, often every bit of security matters.
 We want our keys to be as short as possible and our schemes to be as fast as possible while satisfying a particular level of security.
-However, for understanding the *principles* behind cryptography, keeping track of those bits can be a distraction, and so just like we do for algorithms, we will use *asymptotic
-analysis* (also known as *big Oh notation*) to sweep many of those details under
-the carpet.
+In practice we would usually like to ensure that when we use a smallish security parameter such as $n$ in the few hundreds or thousands then:
+
+- The *honest parties* (the parties running the encryption and decryption algorithms) are extremely efficient, something like 100-1000 cycles per byte of data processed. In theory terms we would want them be using an $O(n)$ or at worst $O(n^2)$ time algorithms with not-too-big hidden constants.
+
+- We want to protect against *adversaries* (the parties trying to break the encryption) that  have much vaster computational capabilities. A typical modern encryption is built so that using standard key sizes it can  withstand the combined computational powers of all computers on earth for several decades. In theory terms we would want the time to break the scheme be at least $2^{\Omega(n)}$ or $2^(\Omega(\sqrt{n})$ / $2^{\Omega(n^{1/3})}$ with not too small hidden constants. 
+
+
+
+For understanding the *principles* behind cryptography, keeping track of those bits can be a distraction, and so just like we do in algorithms courses, we will use *asymptotic analysis* (also known as *big Oh notation*) to sweep many of those details under the carpet.
 
 To a first approximation, there will be only two types of running times we will
 encounter in this course:
@@ -224,21 +237,41 @@ Another way to say it is that in this course, if a scheme has any security at al
 These are not all the theoretically possible running times.
 One can have intermediate functions such as $n^{\log n}$ though we will generally not
 encounter those.
-To make things clean (and to correspond to standard terminology), we will say that an algorithm $A$ is *efficient* if it runs in time $poly(n)$ when $n$ is its input length (which will always be the same, up to polynomial factors, as the key length). If $\mu(n)$ is some probability that depends on the input/key length parameter $n$, then we say that $\mu(n)$ is *negligible* if it's smaller than every polynomial. That is, for every $c,d$ there is some $N$, such that if $n>N$ then $\mu(n) < 1/(cn)^d$. Note that for
-every non-constant polynomials $p,q$, $\mu(n)$ is negligible if and only if the
-function $\mu'(n) = p(\mu(q(n)))$ is negligible.
+To make things clean (and to correspond to standard terminology), we will say that an algorithm $A$ is *efficient* if it runs in time $poly(n)$ when $n$ is its input length (which will always be the same, up to polynomial factors, as the key length). If $\mu(n)$ is some probability that depends on the input/key length parameter $n$, then we say that $\mu(n)$ is *negligible* if it's smaller than every polynomial. 
+That is, we make the  following definition
 
-> # {.remark title="Asymptotic analysis" #asymptotic}
+::: {.definition title="Negligible function" #negligibledef}
+A function $\mu:\mathbb{N} \rightarrow [0,\infty)$ is _negligible_ if for every polynomial $p:\N \rightarrow \N$ there exists $N \in \N$ such that $\mu(n) < \tfrac{1}{p(n)}$ for every $n>N$.^[Negligible functions are sometimes defined with image equalling $[0,1]$ as opposed to the set $[0,\infty)$ of non-negative real numbers, since they are typically used to bound probabilities. However, this does not make much difference since if $\mu$ is negligible then for large enough $N$, $\mu(n)$ will be smaller than one. ]
+:::
+
+The following exercises are good ways to get some comfort with this definition
+
+::: {.exercise title="Negligible functions properties" #negligible}
+1. Let $\mu:\N \rightarrow [0,\infty)$ be a negligible function. Prove that for every polynomials $p,q:\R \rightarrow \R$ with non-negative coefficients, the function $\mu':\N \rightarrow [0,\infty)$ defined as $\mu'(n) = p(\mu(q(n)))$ is negligible. 
+
+2. Let $\mu:\N \rightarrow \R$. Prove that $\mu$ is negligible if and only if for every constant $c$, $\lim_{n \rightarrow \infty} n^c \mu(n) = 0$.
+:::
+
+
+::: {.remark title="Asymptotic analysis" #asymptotic}
 The above definitions could be confusing if you haven't encountered asymptotic analysis before. Reading the beginning of Chapter 3 (pages 43-51) in the KL book, as well as the mathematical background lecture in my [intro to TCS notes](http://www.introtcs.org/public/index.html) can be extremely useful. As a rule of thumb, if every time you see the word "polynomial" you imagine the function $n^{10}$ and every time you see the word "negligible" you imagine the function $2^{-\sqrt{n}}$ then you will get the right intuition.
->
-What you need to remember is that negligible is much smaller than any inverse polynomial, while polynomials are closed under multiplication, and so we have the "equations" $negligible\times polynomial = negligible$ and $polynomial \times polynomial = polynomial$. As mentioned, in practice people really want to get as close as possible to $n$ bits of security with an $n$ bit key, but  we would be happy as long as the security grows with the key, so when we say a scheme is "secure" you can think of it having $\sqrt{n}$ bits of security (though any function growing faster than $\log n$ would be fine as well).
 
+What you need to remember is that negligible is much smaller than any inverse polynomial, while polynomials are closed under multiplication, and so we have the "equations" 
+
+$$negligible\times polynomial = negligible$$ 
+
+and 
+
+$$polynomial \times polynomial = polynomial$$ 
+
+As mentioned, in practice people really want to get as close as possible to $n$ bits of security with an $n$ bit key, but  we would be happy as long as the security grows with the key, so when we say a scheme is "secure" you can think of it having $\sqrt{n}$ bits of security (though any function growing faster than $\log n$ would be fine as well).
+:::
 
 From now on, we will require all of our encryption schemes to be *efficient*
 which means that the encryption and decryption algorithms should run in
 polynomial time. Security will mean that any efficient adversary can make at
 most a negligible gain in the probability of guessing the message over its a
-priori probability.^[Note that there is a subtle issue here with the order of quantifiers. For a scheme to be efficient, the algorithms such as encryption and decryption need to run in some _fixed_ polynomial time such as $n^2$ or $n^3$. In contrast we allow the adversary to run in _any_ polynomial time. That is, for every $c$, if $n$ is large enough, then the scheme should be secure against an adversary that runs in time $n^c$. This is a general principle in cryptography that we always allow the adversary potentially much more resources than those used by the honest users. In practical security we often assume that the gap between the honest use and the adversary resources can be _exponential_. For example, a low power embedded device can encrypt messages that, as far as we know, are undecipherable even by a nation-state using super-computers and massive data centers.]
+priori probability.^[Note that there is a subtle issue here with the order of quantifiers. For a scheme to be efficient, the algorithms such as encryption and decryption need to run in some _fixed_ polynomial time such as $n^2$ or $n^3$. In contrast we allow the adversary to run in _any_ polynomial time. That is, for every $c$, if $n$ is large enough, then the scheme should be secure against an adversary that runs in time $n^c$. This is in line with the general principle in cryptography that we always allow the adversary potentially much more resources than those used by the honest users. In practical security we often assume that the gap between the honest use and the adversary resources can be _exponential_. For example, a low power embedded device can encrypt messages that, as far as we know, are undecipherable even by a nation-state using super-computers and massive data centers.]
 That is, we make the following definition:
 
 > # {.definition title="Computational secrecy (asymptotic)" #compsecdef}
@@ -252,15 +285,24 @@ negligible function $\mu(\cdot)$.
 One more detail that we've so far ignored is what does it mean exactly for a
 function to be computable using at most $T$ operations.
 Fortunately, when we don't really care about the difference between $T$ and, say, $T^2$, then
-essentially every reasonable definition gives the same answer.
+essentially every reasonable definition gives the same answer.^[With some caveats that need to be added due to _quantum computers_: we'll get to those later in the course, though they won't change most of our theory.]
 Formally, we can use the notions of Turing machines, Boolean circuits, or straightline programs to define complexity. For concreteness, lets define that a function $F:{\{0,1\}}^n\rightarrow{\{0,1\}}^m$
-has complexity at most $T$ if there is a Boolean circuit that computes $F$ using at most $T$ NAND gates (or equivalently, there is a NAND program computing $F$ in at most $T$ lines).
-(There is nothing special about NAND, and we can use any other universal gate set.) We will often also consider
-*probabilistic* functions in which case we allow the circuit a RAND gate that
+has complexity at most $T$ if there is a Boolean circuit that computes $F$ using at most $T$ Boolean gates (say AND/OR/NOT or NAND, or you can choose your favorite universal gate sets.)
+We will often also consider *probabilistic* functions in which case we allow the circuit a RAND gate that
 outputs a single random bit (though this in general does not give extra power).
 The fact that we only care about asymptotics means you don't really need to
 think of gates, etc.. when arguing in cryptography. However, it is comforting to
 know that this notion has a precise mathematical formulation.
+
+We could also have used Turing Machines. The main reason we use circuits, which are a non-uniform model, is that:
+
+1. Circuits can express _finite_ computation, while Turing machines only make sense for computing on arbitrarily large input lengths, and so we can make sense of notions such as "$t$ bits of computational security".
+
+2. Circuits allow the notion of "hardwiring" whereby if we can compute a certain function $F:\{0,1\}^{n+s} \rightarrow \{0,1\}^m$ using a circuit of $T$ gates and have a string $w \in \{0,1\}^s$ then we can compute the function $x \mapsto F(xw)$ using $T$ gates as well. This is useful in many cryptograhic proofs.
+
+One can build  the theory of cryptography using Turing machines as well,  but it is more cumbersome.
+
+__Computing beyond functions.__ Later on in the course, both our cryptographic schemes and the adversaries will extend beyond simple functions that map an input to an output, and we will consider _interactive algorithms_ that exchange messages with one another. Such an algorithm can be implemented using circuits or Turing machines that take as input the prior state and the history of messages up to a certain point in the interaction, and output the next message in the interaction. The number of operations used in such a strategy is the total number of gates used in computing all the messages.
 
 
 
@@ -649,16 +691,30 @@ for the sake of symmetry and simplicity of exposition.
 ### Appendix: The computational model
 
 For concreteness sake let us give a precise definition of what it means for a function or probabilistic process $f$ mapping $\{0,1\}^n$ to $\{0,1\}^m$ to be computable using $T$ operations.
-This is the model of RAND programs as in my [introduction to TCS lecture notes](http://introtcs.org), also known as the model of (probabilistic) Boolean circuits.
 
-> # {.definition title="Probabilistic straightline program" #randprogdef}
+* If you have taken any course on computational complexity (such as Harvard CS 121), then this is the model of Boolean circuits, except that we also allow randomization.
+
+* If you have not taken such a course, you might simple take it on faith that it is possible to model what it means for an algorithm to be able to map an input $x$ into an output $f(x)$ using $T$ "elementary operations".
+
+
+In both cases you might want to skip this appendix and only return to it if you find something confusing..
+
+The model we use is a Boolean circuit that also has a $RAND$ gate that outputs a random bit. 
+We could use as the basic set of gates the standard $AND$, $OR$ and $NOT$ but for simplicity we use the one-element set $NAND$. 
+We represent the circuit as a straightline program, but this is of course just a matter of convenience.
+As shown (for example) in the  [CS 121 textbook](http://introtcs.org),  these two representations are identical.
+
+::: {.definition title="Probabilistic straightline program" #randprogdef}
 A _probabilistic straightline program_ consists of a sequence of lines, each one of them one of the following forms:
->
-* `foo = bar NAND baz` where `foo`,`bar`,`baz` are variable identifiers. \
-* `foo = RAND`  where `foo` is a variable identifier. \
->
-Given a program $\pi$, we say that its _size_ is the number of lines it contains. Variables beginning with `x_` and `y_` are considered input and output variables respectively. We require such variables to have the forms `x_`$0$,$\ldots$,`x_`$n-1$ for some $n>0$ and `y_`$0$, $\ldots$, `y_`$m-1$.
-The program computes the  probabilistic process that maps $\{0,1\}^n$ to $\{0,1\}^m$ in the natural way.
+
+* `foo = bar NAND baz` where `foo`,`bar`,`baz` are variable identifiers. 
+
+* `foo = RAND`  where `foo` is a variable identifier. 
+
+:::
+
+Given a program $\pi$, we say that its _size_ is the number of lines it contains. Variables of the form `X[`$i$`]` or `Y[`$j$`]`  are considered input and output variables respectively.
+If the input variables range from $0$ to $n-1$ and the output variables range from $0$ to $m-1$ then the program computes the  probabilistic process that maps $\{0,1\}^n$ to $\{0,1\}^m$ in the natural way.
 If $F$ is a (probabilistic or deterministic)  map of $\{0,1\}^n$ to $\{0,1\}^m$, the _complexity_ of $F$ is the size of the smallest program $P$ that computes it.
 
 If you haven't taken a class such as CS121 before, you might wonder how such a simple model captures complicated programs that use loops, conditionals, and more complex data types than simply a bit in $\{0,1\}$, not to mention some special purpose crypto-breaking devices that might involve tailor-made hardware. It turns out that it does (for the same reason we can compile complicated programming languages to run on silicon chips with a very limited instruction set). In fact, as far as we know, this model can capture even computations that happen in nature, whether it's in a bee colony or the human brain (which contains about $10^{10}$ neurons, so should in principle be simulatable by a program that has up to a few order of magnitudes of the same number of lines). Crucially, for cryptography, we care about such programs not because we want to actually run them, but because we want to argue about their _non existence_.[^quantum] If we have a process that cannot be computed by a straightline program of length shorter than $2^{128}>10^{38}$ then it seems safe to say that a computer the size of the human brain (or even all the human and nonhuman brains on this planet) will not be able to perform it either.

@@ -127,14 +127,19 @@ We will often write the first input (i.e., the key) to the encryption and decryp
 ![A private-key encryption scheme is a pair of algorithms $E,D$ such that for every key $k\in \{0,1\}^n$ and plaintext $x\in \{0,1\}^{L(n)}$, $y=E_k(x)$ is a ciphertext of length $C(n)$. The encryption scheme is _valid_ if for every such $y$, $D_k(y)=x$. That is, the decryption of an encryption of $x$ is $x$, as long as both encryption and decryption use the same key.](../figure/encryptionvalid.png){#validencryption .margin}
 
 
+The validity condition implies that for any fixed $k$, the map $x \mapsto E_k(x)$ is one to one (can you see why?) and hence the ciphertext length is always at least the plaintext length. Thus we typically focus on the plaintext length as the quantity to  optimize in an encryption scheme.
+The _larger_ $L(n)$ is, the better the scheme, since it means we need a shorter secret key to protect messages of the same length.
 
-::: {.remark title="Notation" #notation}
+
+
+
+::: {.remark title="A note on notation, and comparison with Katz-Lindell, Boneh-Shoup, and other texts." #notation}
 _A note on notation:_ We will always use $i,j,\ell,n$ to denote natural
 numbers. 
 
 The number $n$ will often denote the length of our secret key.
 The length of the key (or another closely related number) is often known as the  _security parameter_ in the literature. Katz-Lindell also uses $n$ to denote this parameter, while Boneh-Shoup and Rosulek use $\lambda$ for it. (Some texts also use the greek lettter $\kappa$ for the same parameter.) 
-We use $n$ to correspond with the standard algorithmic notation for input length (as in $O(n)$ time algorithms).
+We chose to denote the security parameter by $n$ as to correspond with the standard algorithmic notation for input length (as in $O(n)$ or $O(n^2)$  time algorithms).
 
 We often use   $\ell$ to denote the length of the message, sometimes also known as "block length" since longer
 messages are simply chopped into "blocks" of length $\ell$ and also appropriately padded. 
@@ -142,11 +147,9 @@ messages are simply chopped into "blocks" of length $\ell$ and also appropriatel
 We will use $k$ to denote the secret key, $m$ to denote the secret plaintext message, and $c$ to denote the encrypted ciphertext.
 Note that $c,m$  and $k$ are not numbers but rather bit strings of lengths $o,\ell$ and $n$
 respectively.  
+
+For simplicity, we denote the space of possible keys as $\{0,1\}^n$ and the space of possible messages as $\{0,1\}^\ell$ for $\ell=L(n)$. Boneh-Shoup uses a more general notation of $\mathcal{K}$ for the space of all possible keys and $\mathcal{M}$ for the space of all possible messages. This does not make much difference since we can represent every discrete object such as a key or message as a binary string. (One difference is that in principle the space of all possible messages could include messages of unbounded length, though in such a case what is done in both theory and practice is to break these up into finite-size blocks and encrypt one block at a time.) 
 :::
-
-The validity condition implies that for any fixed $k$, the map $x \mapsto E_k(x)$ is one to one (can you see why?) and hence the ciphertext length is always at least the plaintext length. Thus we typically focus on the plaintext length as the quantity to  optimize in an encryption scheme.
-The _larger_ $L(n)$ is, the better the scheme, since it means we need a shorter secret key to protect messages of the same length.
-
 
 
 ## Defining security of encryption
@@ -399,6 +402,26 @@ We only sketch the proof. The condition in the exercise is equivalent to perfect
 For every $M = \{ x,x' \}$, if $Y$ and $Y'$ are identical then clearly for every $Eve$, $\Pr[ Eve(E_k(x))=1] = \Pr[ Eve(E_k(x'))=1]$ since these correspond applying $Eve$ on the same distribution $Y=Y'$.
 On the other hand, if $Y$ and $Y'$ are not identical then there must exist some ciphertext $c^*$ such that $\Pr[ Y=c^*] > \Pr[ Y'=c^*]$ (or vice versa).
 The adversary that on input $c$ will guess that $c$ is an encryption of $x$ if $c=c^*$ and otherwise will toss a coin will have some advantage over $1/2$ in distinguishing an encryption of $x$ from an encryption of $x'$.
+:::
+
+We summarize the equivalent definitions of perfect secrecy in the following theorem, whose (omitted) proof follows from [twotomanythm](){.ref} and [perfectsecrecyequiv](){.ref} as well as similar proof ideas.
+
+::: {.theorem title="Perfect secrecy equivalent conditions" #perfectsecrecythm}
+Let $(E,D)$ be a valid encryption scheme with message length $L(n)$. Then the following conditions are equivalent:
+
+1. $(E,D)$ is perfectly secret as per [perfectsecrecydef](){.ref}.
+
+2. For every pair of messages $x_0,x_1 \in \{0,1\}^{L(n)}$, the distributions $\{ E_k(x_0) \}_{k \sim \{0,1\}^n}$ and  $\{ E_k(x_1) \}_{k \sim \{0,1\}^n}$ are identical.
+
+3. (Two-message security: Eve can't guess which of one of two messages was encrypted with success better than half.) For every function $Eve:\{0,1\}^{C(n)} \rightarrow \{0,1\}^{L(n)}$ and pair of messages $x_0,x_1 \in \{0,1\}^{L(n)}$, 
+
+$$\Pr_{b \sim \{0,1\}, k \sim \{0,1\}^n} [ Eve(E_k(x_b))=x_b ] \leq 1/2$$
+
+4. (Arbitrary prior security: Eve can't guess which message was encrypted with success better than her prior information.) For every distribution $\mathcal{D}$ over $\{0,1\}^{L(n)}$, and $Eve:\{0,1\}^{C(n)} \rightarrow \{0,1\}^{L(n)}$,
+
+$$\Pr_{x \sim \mathcal{D}, k \sim \{0,1\}^n}[ Eve(E_k(x))=x ] \leq max(\mathcal{D})$$
+
+where we denote $max(\mathcal{D}) = \max_{x^*\in \{0,1\}^{L(n)}} \Pr_{x \sim \mathcal{D}}[x=x^*]$ to be the largest probability of any element under $\mathcal{D}$. 
 :::
 
 
