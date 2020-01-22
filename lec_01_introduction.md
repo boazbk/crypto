@@ -559,6 +559,41 @@ But if none of those functions can give an advantage better than $1/2$, then nei
 A similar (though more involved) argument shows that the impossiblity result showing that the key must be at least as long as the message still holds even if the encryption and decryption algorithms are allowed to be probabilistic processes as well (working this out is a great exercise).
 :::
 
+### Amplifying success probability
+
+[longkeysthm](){.ref} implies that for every encryption scheme $(E,D)$ with $L(n)>n$, there is a pair of messages $x_0,x_1$ and an attacker $Eve$ that can distinguish between an encryption of $x_0$ and an encryption of $x_1$ with success better than $1/2$. But perhaps Eve's success is only marginally better than half, say $0.50001$? It turns out that's not the case. If  the message is even somewhat larger than the key, the success of Eve can be very close to $1$:
+
+::: {.theorem title="Short keys imply high probability attack" #longkeyhighprob}
+Let $(E,D)$ be an encryption scheme with $L(n)=n+t$. Then there is a function $Eve$ and pair of messages $x_0,x_1$ such that 
+$$\Pr_{k \leftarrow_R \{0,1\}^n b \leftarrow_R \{0,1\}}[ Eve(E_k(x_b) = x_b] \geq 1- 2^{-t-1}\;.$$
+:::
+
+
+::: {.proof data-ref="longkeyhighprob"}
+As in the proof of [longkeysthm](){.ref}, let $L=L(n)$ and let $x_0 = 0^L$ and $S_0 = \{ E_k(x) : x\in \{0,1\}^n \}$ be the set of size at most $2^n$ of all ciphertexts corresponding to $x_0$.
+We claim that
+
+$$\Pr_{k \leftarrow_R \{0,1\}^n , x \in \{0,1\}^\ell}[ E_k(x) \in S_0 ] \leq 2^{-t}\;. \label{eqlongkeyprobproof}$$
+
+We show this by arguing that this bound holds for every fixed $k$, when we take the probability over $x$, and so in particular it holds also for random $k$.
+Indeed, for every fixed $k$, the map $x \mapsto E_k(x)$ is a one-to-one map, and so the distribution of $E_k(x)$ for random $x\in \{0,1\}^n$ is uniform over some set $T_k$ of size $2^{n+t}$.
+For every $k$, the probability over $x$ that $E_k(x) \in S_0$  is equal to 
+$$\tfrac{|T_k \cap S_0|}{|T_k|} \leq \tfrac{|S_0|}{|T_k}| \leq \tfrac{2^n}{2^{n+t}}=2^{-t}$$
+thus proving [eqlongkeyprobproof](){.eqref}.
+
+Now, for every $x$, define $p_x$ to be $\Pr_{k \leftarrow_R \{0,1\}^n}[ E_k(x) \in S_0]$. By [eqlongkeyprobproof](){.eqref}, the expectation of $p_x$ over random $x \leftarrow_R \{0,1\}^n$ is at most $2^{-t}$ and so in particular by the averaging argument _there exists_ some $x_1$ such that $p_{x_1} \leq 2^{-t}$.
+Yet that means that the following adversary $Eve$ will be able to distinguish between an encryption of $x_0$ and an encryption of $x_1$ with probability at least $1-2^{-t-1}$:
+
+* __Input:__ A ciphertext $y\in \{0,1\}^*$
+
+* __Operation:__ If $y\in S_0$, output $x_0$, otherwise output $x_1$.
+
+The probability that $Eve(E_k(x_0))=x_0$ is equal to $1$, while the probability that $Eve(E_k(x_1))=x_1$ is equal to $1-p_{x_1} \geq 1- 2^{-t}$. Hence the overall probability of $Eve$ guessing correctly is 
+
+$$
+\tfrac{1}{2} \cdot 1 + \tfrac{1}{2} \cdot \left( 1-2^{-t} \right) = 1 - 2^{-t-1} \;.
+$$
+:::
 
 
 
