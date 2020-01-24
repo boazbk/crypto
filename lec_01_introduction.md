@@ -202,7 +202,7 @@ if the probability that an attacker can guess $X$ is at most $2^{-k}$. People th
 (close to) uniformly at random. All of this process, and especially understanding the amount of information an attacker may have on the entropy sources, is a bit of a dark art and indeed a number of attacks on cryptographic
 systems were actually enabled by weak generation of randomness. Here are a few examples.
 
-One of the first attacks was on the SSL implementation of Netscape (_the_ browser at the time). Netscape use the following "unpredicatable" information--- the time of day and a process ID both of which turned out to be quite
+One of the first attacks was on the SSL implementation of Netscape (_the_ browser at the time). Netscape used the following "unpredicatable" information--- the time of day and a process ID both of which turned out to be quite
 predictable (who knew attackers have clocks too?). Netscape tried to protect its security through "security through obscurity" by not releasing the source code for their pseudorandom generator, but it was reverse engineered by [Ian Goldberg and David Wagner](https://www.cs.berkeley.edu/~daw/papers/ddj-netscape.html)  (Ph.D students at the time) who demonstrated this attack.
 
 In 2006 a programmer removed a line of code from the procedure to generate entropy in OpenSSL package distributed by Debian since it caused a warning in some automatic verification code. As a result for two years (until this was
@@ -239,7 +239,7 @@ But in fact it is this method that has led Shannon to formulate his theory of se
 
 The most natural way to attack an encryption is for Eve to guess all possible keys.
 In many encryption schemes this number is enormous and this attack is completely infeasible.
-For example, the theoretical number of possibilities in the Enigma cipher was about $10^{113}$ which roughly means that even if we built a filled the milky way galaxy with computers operating at light speed, the sun would still die out before it finished examining all the possibilities.[^enigmacalc] One can understand why the Germans thought it was impossible to break. (Note that despite the number of possibilities being so enormous, such a key can still be easily specified and shared between Alice and Bob by writing down $113$ digits on a piece of paper.)
+For example, the theoretical number of possibilities in the Enigma cipher was about $10^{113}$ which roughly means that even if we filled the milky way galaxy with computers operating at light speed, the sun would still die out before it finished examining all the possibilities.[^enigmacalc] One can understand why the Germans thought it was impossible to break. (Note that despite the number of possibilities being so enormous, such a key can still be easily specified and shared between Alice and Bob by writing down $113$ digits on a piece of paper.)
 Ray Miller of the NSA had calculated that, in the way the Germans used the machine, the number of possibilities was "only" $10^{23}$, but this is still extremely difficult to pull off even today, and many orders of magnitudes above the computational powers during the WW-II era.
 Thus clearly, it is sometimes possible to break an encryption without trying all possibilities.
 A corollary is that  having a huge number of key combinations does not guarantee security, as an attacker might find a shortcut (as the allies did for Enigma) and recover the key without trying all options.
