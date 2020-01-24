@@ -45,13 +45,15 @@ Much of cryptography is about trying to make this intuition more formal, and
 harnessing it to build secure systems. The basic object we want is the
 following:
 
-> # {.definition title="Pseudorandom generator" #prgdef}
+::: {.definition title="Pseudorandom generator" #prgdef}
 A function $G:{\{0,1\}}^n\rightarrow{\{0,1\}}^\ell$  is a $(T,\epsilon)$ *pseudorandom generator* if  $G(U_n) \approx_{T,\epsilon} U_\ell$ where $U_t$ denotes the uniform
 distribution on ${\{0,1\}}^t$.
->
+
 We say that $G:\{0,1\}^* \rightarrow \{0,1\}^*$ is a _pseudorandom generator_ with length function $\ell:\N \rightarrow \N$ (where $\ell(n)>n$) if $G$ is computable in polynomial time, and there are functions $T(n)>n^{\omega(1)}$ and $\epsilon(n)<n^{-\omega(1)}$ such that
 $$G(U_n) \approx_{T(n),\epsilon(n)} U_{\ell(n)} \label{prgdefeq}$$
 for every $n\in \N$.
+:::
+
 
 > # { .pause }
 This definition (as is often the case in cryptography) is a bit long, so you want to take your time parsing it. In particular you should verify that you understand why the condition [prgdefeq](){.eqref} is the same as saying that for every polynomial $p:\N \rightarrow \N$, if $n$ is sufficiently large, then for every circuit $D$ of at most $T$ gates (or equivalently, for every straightline program $D$ of at most $T$ lines):

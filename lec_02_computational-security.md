@@ -9,7 +9,7 @@ chapternum: "2"
 
 
 
-**Additional reading:**  Sections 2.3 and 2.4 in Boneh-Shoup book. Chapter 3 up to and including Section 3.3 in Katz-Lindell book.
+**Additional reading:**  Sections 2.2 and 2.3 in Boneh-Shoup book. Chapter 3 up to and including Section 3.3 in Katz-Lindell book.
 
 Recall our cast of characters- Alice and Bob want to communicate securely over a
 channel that is monitored by the nosy Eve. In the last lecture, we have seen the
@@ -79,7 +79,7 @@ __Note:__ It is important to keep track of  what  is known and unknown to the ad
 [firstcompdef](){.ref} seems very natural, but is in fact _impossible_ to achieve if the key is shorter than the message.
 
 > # { .pause }
-Before reading further, you might want to stop and think if you can _prove_ that there is no, say, $\sqrt{n}$ secure encryption scheme satisfying [firstcompdef](){.ref} with $\ell = n+1$ and where the time to compute the encryption is polynomial.
+Before reading further, you might want to stop and think if you can _prove_ that there is no, say, encryption scheme with $\sqrt{n}$ bits of computational security satisfying [firstcompdef](){.ref} with $\ell = n+1$ and where the time to compute the encryption is polynomial.
 
 
 The reason [firstcompdef](){.ref} can't be achieved that if the message is even one bit
@@ -113,52 +113,56 @@ seeing $E_k(m_b)$ is at most $1/|M|+2^{-t+1}$.
 Before proving this theorem note that it gives us a pretty strong guarantee. In
 the exercises we will strengthen it even further showing that no matter what
 prior information Eve had on the message before, she will never get any
-non-negligible new information on it. One way to phrase it is that if the sender  used a $256$-bit secure encryption to encrypt a message, then your
+non-negligible new information on it.^[The latter property is known as "semantic security", see also section 3.2.2 of Katz Lindell on "semantic security" and Section 2 of Boneh-Shoup "computational ciphers and semantic security".] 
+One way to phrase it is that if the sender  used a $256$-bit secure encryption to encrypt a message, then your
 chances of getting to learn any additional information about it before the
 universe collapses are more or less the same as the chances that a fairy will
 materialize and whisper it in your ear.
 
+
+
 > # { .pause }
 Before reading the proof, try to again review the proof of [twotomanythm](){.ref}, and see if you can generalize it yourself to the computational setting.
 
-> # {.proof data-ref="twotomanycomp"}
+::: {.proof data-ref="twotomanycomp"}
 The proof is rather similar to the equivalence of guessing one of two
 messages vs. one of many messages for perfect secrecy (i.e., [twotomanythm](){.ref}). However, in the
 computational context we need to be careful in keeping track of Eve's running time.
 In the  proof of [twotomanythm](){.ref} we showed that if there exists:
->
+
 -   A subset $M\subseteq {\{0,1\}}^\ell$ of messages
->
+
 and
->
+
 -   An adversary $Eve:{\{0,1\}}^o\rightarrow{\{0,1\}}^\ell$ such that
->
+
     $$
     \Pr_{m{\leftarrow_{\tiny R}}M, k{\leftarrow_{\tiny R}}{\{0,1\}}^n}[ Eve(E_k(m))=m ] > 1/|M|
     $$
->
+
 Then there exist two messages $m_0,m_1$ and an adversary
 $Eve':{\{0,1\}}^0\rightarrow{\{0,1\}}^\ell$ such that $\Pr_{b{\leftarrow_{\tiny R}}{\{0,1\}},k{\leftarrow_{\tiny R}}{\{0,1\}}^n}[Eve'(E_k(m_b))=m_b ] > 1/2$.
->
+
 To adapt this proof to the computational setting and complete the proof of the
 current theorem it suffices  to show that:
->
--   If the probability of $Eve$ succeeding was $\tfrac{1}{|M|} +
-    \epsilon$ then the probability of $Eve'$ succeeding is at least
-    $\tfrac{1}{2} + \epsilon/2$.
->
--   If $Eve$ can be computed in $T$ operations, then $Eve'$ can be
-    computed in $T + 100\ell + 100$ operations.
->
+
+-   If the probability of $Eve$ succeeding was $\tfrac{1}{|M|} + \epsilon$ then the probability of $Eve'$ succeeding is at least $\tfrac{1}{2} + \epsilon/2$.
+
+-   If $Eve$ can be computed in $T$ operations, then $Eve'$ can be computed in $T + 100\ell + 100$ operations.
+
 This will imply that if $Eve$ ran in polynomial time and had polynomial advantage over $1/|M|$ in guessing a  plaintext chosen from $M$, then $Eve'$ would run in polynomial time and have polynomial advantage over $1/2$ in guessing a plaintext chosen from $\{ m_0,m_1\}$.
->
+
 The first item  can be shown by simply doing the same proof more carefully,
 keeping track how the advantage over $\tfrac{1}{|M|}$ for $Eve$ translates into
-an advantage over $\tfrac{1}{2}$ for $Eve'$. As the world's most annoying saying goes, doing this is an excellent exercise for the reader. The item point is obtained by
-looking at the definition of $Eve'$ from that proof. On input $c$, $Eve'$
+an advantage over $\tfrac{1}{2}$ for $Eve'$.
+As the world's most annoying saying goes, doing this is an excellent exercise for the reader. 
+
+The second item  is obtained by looking at the definition of $Eve'$ from that proof. On input $c$, $Eve'$
 computed $m=Eve(c)$ (which costs $T$ operations), checked if $m=m_0$
 (which costs, say, at most $5\ell$ operations), and then outputted either $1$ or a
 random bit (which is a constant, say at most $100$ operations).
+:::
+
 
 
 ### Proof by reduction
@@ -280,7 +284,7 @@ random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability
 that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2+\mu(n)$ for some
 negligible function $\mu(\cdot)$.
 
-### Counting number of operations.
+### Counting number of operations. { #countoperation } 
 
 One more detail that we've so far ignored is what does it mean exactly for a
 function to be computable using at most $T$ operations.
@@ -302,7 +306,10 @@ We could also have used Turing Machines. The main reason we use circuits, which 
 
 One can build  the theory of cryptography using Turing machines as well,  but it is more cumbersome.
 
-__Computing beyond functions.__ Later on in the course, both our cryptographic schemes and the adversaries will extend beyond simple functions that map an input to an output, and we will consider _interactive algorithms_ that exchange messages with one another. Such an algorithm can be implemented using circuits or Turing machines that take as input the prior state and the history of messages up to a certain point in the interaction, and output the next message in the interaction. The number of operations used in such a strategy is the total number of gates used in computing all the messages.
+
+::: {.remark title="Computing beyond functions" #computebeyondfunctions}
+Later on in the course, both our cryptographic schemes and the adversaries will extend beyond simple functions that map an input to an output, and we will consider _interactive algorithms_ that exchange messages with one another. Such an algorithm can be implemented using circuits or Turing machines that take as input the prior state and the history of messages up to a certain point in the interaction, and output the next message in the interaction. The number of operations used in such a strategy is the total number of gates used in computing all the messages.
+:::
 
 
 
@@ -390,20 +397,22 @@ consider this question of when two distributions are *computationally
 indistinguishable* more broadly:
 
 
-> # {.definition title="Computational Indistinguishability" #compindef}
+::: {.definition title="Computational Indistinguishability" #compindef}
 Let $X$ and $Y$ be two
 distributions over ${\{0,1\}}^o$. We say that $X$ and $Y$ are
 $(T,\epsilon)$*-computationally indistinguishable*, denoted by $X
 \approx_{T,\epsilon} Y$, if for every function $Eve$ computable with at most $T$
 operations,
->
+
 $$
 | \Pr[ Eve(X) = 1 ] - \Pr[ Eve(Y) = 1 ] | \leq \epsilon \;.
 $$
->
-We say that $X$ and $Y$ are simply *computationally indistinguishable*, denoted
+
+We say that $X$ and $Y$ over $\{0,1\}^o$ are simply *computationally indistinguishable*, denoted
 by $X\approx Y$, if they are $(T,\epsilon)$ indistinguishable for every
 polynomial $T(o)$ and inverse polynomial $\epsilon(o)$.[^3]
+:::
+
 
 [^3]: This definition implicitly assumes that $X$ and $Y$ are actually
 *parameterized* by some number $n$ (that is polynomially related to $o$) so for
