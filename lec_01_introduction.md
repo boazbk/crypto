@@ -363,10 +363,16 @@ chosen from $M'$ with probability larger than $1/2$.
 
 Let's fix the message $x_0$ to be the all zeroes message and pick $x_1$ at random in $M$.
 Under our assumption, it holds that for random key $k$ and message $x_1\in M$,
-$$\Pr_{k \leftarrow \{0,1\}^n, x_1 \leftarrow M}[Eve(E_k(x_1))=x_1]  > 1/|M|\;.$$
-On the other hand, for every choice of $k$, $x'= Eve(E_k(x_0))$ is a fixed string independent on the choice of $x_1$, and so if we pick $x_1$ at random in $M$, then the probability that $x_1=x'$ is at most $1/|M|$, or in other words $$\Pr_{k \leftarrow \{0,1\}^n, x_1 \leftarrow M}[Eve(E_k(x_0))=x_1]  \leq  1/|M|\;.$$
+$$\Pr_{k \leftarrow_R \{0,1\}^n, x_1 \leftarrow_R M}[Eve(E_k(x_1))=x_1]  > 1/|M|\;.$$
+On the other hand, for every choice of $k$, $x'= Eve(E_k(x_0))$ is a fixed string independent on the choice of $x_1$, and so if we pick $x_1$ at random in $M$, then the probability that $x_1=x'$ is at most $1/|M|$, or in other words 
 
-Thus in particular, due to linearity of expectation, there _exists_
+$$\Pr_{k \leftarrow_R \{0,1\}^n, x_1 \leftarrow_R M}[Eve(E_k(x_0))=x_1]  \leq  1/|M|\;. \label{eqhitcipher}$$
+
+We can also write [eqhitcipher](){.eqref} as 
+$$
+\E_{x_1 \leftarrow_R \{0,1\}^n} \Pr[ Eve(E_k(x_0))=x_1] \leq 1/|M| 
+$$
+and so in particular, due to linearity of expectation, there _exists_
 some $x_1$ satisfying
 $$ \Pr[Eve(E_k(x_1))=x_1]   > \Pr[Eve(E_k(x_0))=x_1] \;.$$
 (Can you see why? This is worthwhile stopping and reading again.)
