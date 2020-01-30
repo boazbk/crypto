@@ -28,14 +28,12 @@ from itertools import product # Import an iterator for cartesian products
 # negative means second is more likely,
 # 0 means both have same likelihood.
 #
-# We assume we have access to the function Decrypt(key,ciphertext)
+# We assume we have access to the function Encrypt(key,ciphertext)
 def Distinguish(ciphertext,plaintext1,plaintext2):
-    bias = 0
     for key in product([0,1], repeat = 128): # Iterate over all possible keys of lenght 128
-        p = Decrypt(key, ciphertext)
-        if p == plaintext1: bias += 1
-        if p == plaintext2: bias -= 1
-    return bias
+        if Encrypt(key, plaintext1)==ciphertext:
+            return plaintext1
+    return plaintext2
 ```
 
 Now, generating, distributing, and protecting huge keys causes immense
