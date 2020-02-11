@@ -9,8 +9,6 @@ chapternum: "4"
 
 # Pseudorandom functions
 
-(testing pull request)
-
 
 In the last lecture we saw the notion of _pseudorandom generators_, and introduced the __PRG conjecture__ that there exists a pseudorandom
 generator mapping $n$ bits to $n+1$ bits. We have seen the _length extension_ theorem that when given such a pseudorandom generator, we can
