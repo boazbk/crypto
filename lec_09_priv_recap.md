@@ -11,7 +11,7 @@ chapternum: "9"
 We now review all that we have learned about _private key_ cryptography before we embark on the wonderful
 journey to _public key_ cryptography.
 
-b
+
 This material is mostly covered in Chapters 1 to 9 of the Katz Lindell book, and now would be a good time for you to read the corresponding proofs
 in the book. It is often helpful to see the same proof presented in a slightly different way.
 Below is a review of some of the various reductions we saw in class that are covered in the KL book, with pointers to the corresponding sections.

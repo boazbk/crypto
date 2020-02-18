@@ -163,10 +163,14 @@ on the event that $X=x$.
 If $(p_1,\ldots,p_m)$ is a vector of probabilities summing up to $1$ and let us assume they are rounded so that for every $i$, $p_i = k_i/2^n$ for some integer $k_i$.
 We can then split the set $\{0,1\}^n$ into $m$ disjoint sets $S_1,\ldots,S_m$ where $|S_i|=k_i$, and consider the probability distribution $(X,Y)$ where $Y$ is uniform
 over $\{0,1\}^n$, and $X$ is equal to $i$ whenever $Y\in S_i$. Therefore, by the principles above we know that
-$H_{Shannon}(X,Y)=n$ (since $X$ is completely determined $Y$ and hence $(X,Y)$ is uniform over a set of $2^n$ elements),
-and $H(Y|X)=\log k_i$. Thus the chain rule tells us that
-$H_{Shannon}(X) = n - \E[Y|X] =  n - \sum_{i=1}^m p_i k_i = \sum_{i=1}^m p_i \log(p_i)$
-since $p_i = k_i/2^n$ and hence $\log(p_i)=\log(k_i)-n$.
+$H_{Shannon}(X,Y)=n$ (since $X$ is completely determined $Y$ and hence $(X,Y)$ is uniform over a set of $2^n$ elements), and $H(Y|X)= \E \log k_i$. Thus the chain rule tells us that
+$H_{Shannon}(X) = n - \E[Y|X] =  n - \sum_{i=1}^m p_i k_i = n -  \sum_{i=1}^m p_i \log(2^n p_i)$
+since $p_i = k_i/2^n$. Since $\log(2^n p_i) = n + \log(p_i)$ we see that this means that
+$$
+H_{Shannon}(X) =  n - \sum_i p_i \cdot n  - \sum_i p_i \log(p_i) = - \sum_i p_i \log (p_i)
+$$
+using the fact that $\sum_i p_i = 1$.
+
 
 The Shannon entropy has many attractive properties, but it turns out that for cryptographic applications, the notion of _min entropy_ is more appropriate.
 For a distribution $X$ the _min-entropy_ is simply defined as $H_{\infty}(X)= \min_x \log(1/\Pr[X=x])$.[^infty]
@@ -177,7 +181,7 @@ We can now formally define the notion of an extractor:
 A function $h:\{0,1\}^{\ell+n}\rightarrow\{0,1\}^n$ is a _randomness extractor_ ("extractor" for short) if for every distribution $X$ over $\{0,1\}^\ell$ with min entropy at least $2n$, if we pick
 $s$ to be a random "salt", the distribution $h(X)$ is computationally indistinguishable from the uniform distribution.[^params]
 
-[^infty]:  The notation $H_{\infty}(\cdot)$ for  min entropy comes from the fact that one can define a [_family_](https://goo.gl/HvVgu1) of entropy like functions, containing a function for every non-negative number $p$ based on the $p$-norm of the probability distribution. That is, the Rényi  entropy of order $p$ is defined as $H_p(X)=(1-p)^{-1}\log(\sum_x \Pr[X=x]^p)$. The min entropy can be thought of as the limit of $H_p$ when $p$ tends to infinity while the Shannon entropy is the limit as $p$ tends to $1$. The entropy $H_2(\cdot)$ is related to the _collision probability_ of $X$ and is often used as well. The min entropy is the smallest among all the entropies and hence it is the most _conservative_ (and so appropriate for usage in cryptography). For _flat sources_, which are uniform over a certain subset, all entropies coincide.
+[^infty]:  The notation $H_{\infty}(\cdot)$ for  min entropy comes from the fact that one can define a [_family_](https://goo.gl/HvVgu1) of entropy like functions, containing a function for every non-negative number $p$ based on the $p$-norm of the probability distribution. That is, the Rényi  entropy of order $p$ is defined as $H_p(X)=(1-p)^{-1}-\log(\sum_x \Pr[X=x]^p)$. The min entropy can be thought of as the limit of $H_p$ when $p$ tends to infinity while the Shannon entropy is the limit as $p$ tends to $1$. The entropy $H_2(\cdot)$ is related to the _collision probability_ of $X$ and is often used as well. The min entropy is the smallest among all the entropies and hence it is the most _conservative_ (and so appropriate for usage in cryptography). For _flat sources_, which are uniform over a certain subset, all entropies coincide.
 
 [^params]: The pseudorandomness literature studies the notion of extractors much more generally and consider all possible variations for parameters such as the entropy requirement, the salt (more commonly known as seed) size, the distance from uniformity, and more. The type of notion we consider here is known in that literature as a "strong seeded extractor". See [Vadhan's monograph](https://goo.gl/XHQjTB) for an in-depth treatment of this topic.
 
