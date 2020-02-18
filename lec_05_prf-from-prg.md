@@ -123,7 +123,7 @@ Here pseudorandom functions come to the rescue:
 [^high-ent]: If the messages are guaranteed to have _high entropy_ which roughly means that the probability that a message repeats itself is negligible, then it is possible to have a secure deterministic private-key encryption, and this is sometimes used in practice. (Though often some sort of randomization or padding is added to ensure this property, hence in effect creating a randomized encryption.) Deterministic encryptions can sometimes be useful for applications such as efficient queries on encrypted databases. See [this lecture](https://goo.gl/GWJLFd) in Dan Boneh's coursera course.
 
 > # {.theorem title="CPA security from PRFs" #cpafromprfthm}
-Suppose that $\{ f_s \}$ is a PRF collection where $f_s:\{0,1\}^n\rightarrow\{0,1\}^\ell$, then the following is a CPA secure encryption scheme: $E_s(m)=(r,f_s(r)\oplus m)$ and $D_s(r,z)=f_s(r)\oplus z$.
+Suppose that $\{ f_s \}$ is a PRF collection where $f_s:\{0,1\}^n\rightarrow\{0,1\}^\ell$, then the following is a CPA secure encryption scheme: $E_s(m)=(r,f_s(r)\oplus m)$ where $r \leftarrow_R \{0,1\}^n$, and $D_s(r,z)=f_s(r)\oplus z$.
 
 
 > # {.proof data-ref="cpafromprfthm"}
