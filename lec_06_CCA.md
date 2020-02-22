@@ -178,7 +178,7 @@ Suppose, for the sake of contradiction, that there exists an adversary $M'$ that
 at least $1/2+\epsilon$. We consider the following two cases:
 >
 __Case I:__ With probability at least $\epsilon/10$, at some point during the CCA game, $M'$ sends to its decryption box a ciphertext $(c,\sigma)$ that is
-not identical to one of the ciphertexts it previously obtained from its decryption box, and obtains from it a non-error response.
+not identical to one of the ciphertexts it previously obtained from its encryption box, and obtains from it a non-error response.
 >
 __Case II:__ The event above happens with probability smaller than $\epsilon/10$.
 >
