@@ -33,13 +33,26 @@ is always given to the adversary. This is simply because by "polynomial time adv
 The notation $A^{F(s,\cdot)}$ means that $A$ has _black box_ (also known as _oracle_) access to the function that
 maps $i$ to $F(s,i)$. That is, $A$ can choose an index $i$, query the box and get $F(s,i)$, then choose a new index $i'$, query the box to get $F(s,i')$, and so on for
 a polynomial number of queries.
-The notation $H \leftarrow_R \{0,1\}^n\rightarrow \{0,1\}$ means that $H$ is  a completely random function that maps every index $i$ to an independent and random different bit.
-Thaus, the notation $A^H$ in the equation above means $A$ has access to a completely random black box that returns a random bit for any new query made, and on previously seen queries returns the same bit as before.
-Finally one last note: below we will identify the set $[2^n] = \{0,\ldots,2^n-1\}$ with the set $\{0,1\}^n$ (there
-is a one to one mapping between those sets using the binary representation), and so we will treat $i$ interchangeably as a number in $[2^n]$ or a string in $\{0,1\}^n$.
+The notation $H \leftarrow_R [2^n] \rightarrow \{0,1\}$ means that $H$ is  a completely random function that maps every index $i$ to an independent and random different bit.
+
+> # {.remark title="Completely Random Functions" #randfuncs}
+This notion of a randomly chosen function can be difficult to wrap your mind around. Try to imagine a table of all of the strings in $\{0, 1\}^n$. We now go to each possible input, randomly generate a bit to be its output, and write down the result in the table. When we're done, we have a length $2^n$ lookup table that maps each input to an output that was generated uniformly at random and independently of all other outputs. This lookup table is now our random function $H$.
+>
+In practice it's too cumbersome to actually generate all $2^n$ bits, and sometimes in theory it's convenient to think of each output as generated only after a query is made. This leads to adopting the _lazy evaluation model_. In the lazy evaluation model, we imagine that a lazy person is sitting in a room with the same lookup table as before, but with all entries blank. If someone makes some query $H(s)$, the lazy person checks if the entry for $s$ in the lookup table is blank. If so, the lazy evaluator generates a random bit, writes down the result for $s$, and returns it. Otherwise, if an output has already been generated for $s$ previously (because $s$ has been queried before), the lazy evaluator simply returns this value. Can you see why this model is more convenient in some ways?
+>
+One last way to think about how a completely random function is determined is to first observe that there exist a total of $2^{2^n}$ functions from $\{0, 1\}^n$ to $\{0, 1\}$ (can you see why? It may be easier to think of them as functions from $[2^n]$ to $\{0, 1\}). We choose one of them uniformly at random to be $H$, and it's still the case that for any given input $s$ the result $H(s)$ is $0$ or $1$ with equal probability independent of any other input.
+>
+Regardless of which model we use to think about generating $H$, after we've chosen $H$ and put it in a black box, the behavior of $H$ is in some sense "deterministic" because given the same query it will always return the same result. However, before we ever make any given query $s$ we can only guess $H(s)$ correctly with probability $\tfrac{1}{2}$, because without previously observing $H(s)$ it is effectively random and undecided to us (just like in the lazy evaluator model).
+
+> # { .pause }
+Now would be a fantastic time to stop and think deeply about the three constructions in the remark above, and in particular why they are all equivalent. If you don't feel like thinking then at the very least you should make a mental note to come back later if you're confused, because this idea will be very useful down the road.
+
+
+Thus, the notation $A^H$ in the PRF definition means $A$ has access to a completely random black box that returns a random bit for any new query made, and on previously seen queries returns the same bit as before.
+Finally one last note: below we will identify the set $[2^n] = \{0,\ldots,2^n-1\}$ with the set $\{0,1\}^n$ (there is a one to one mapping between those sets using the binary representation), and so we will treat $i$ interchangeably as a number in $[2^n]$ or a string in $\{0,1\}^n$.
 
 Informally, if $F$ is a pseudorandom function generator, then if we choose a random string $s$ and consider the function $f_s$ defined by $f_s(i) = F(s,i)$,
-no efficient algorithm can distinguish between black box access to $f_s(\cdot)$ and black box access to a completely random function (see [prfmodelfig](){.ref}).
+no efficient algorithm can distinguish between black box access to $f_s(\cdot)$ and black box access to a completely random function (see [prfmodelfig](){.ref}). Notably, black box access implies that a priori the adversary does not know which function it's querying. From the adversary's point of view, they query some oracle $O$ (which behind the scenes is either $f_s(\cdot)$ or $H$), and must decide if $O = f_s(\cdot)$ or $O = H$.
 Thus often instead of talking about a pseudorandom function generator we will refer to a _pseudorandom function collection_ $\{ f_s \}$ where by that we mean the map $F(s,i)=f_s(i)$ is a pseudorandom function generator.
 
 ![In a pseudorandom function, an adversary cannot tell whether they are given a black box that computes the function $i \mapsto F(s,i)$ for some secret $s$ that was chosen at random and fixed, or whether the black box computes a completely random function that tosses a fresh random coin whenever it's given a new input $i$.](../figure/pseudorandom_function.jpg){#prfmodelfig width="50%" }
@@ -56,7 +69,7 @@ But before we see the proof of [prffromprgthmone](){.ref}, let us see why pseudo
 
 Until now we have talked about the task of _encryption_, or protecting the  _secrecy_ of messages. But the task of _authentication_, or protecting the
 _integrity_ of messages is no less important. For example, consider the case that you receive a software update for your PC, phone, car, pacemaker, etc.
-over an open connection such as an unencrypted Wi-Fi connection. The contents of that update are not secret, but it is of crucial importance that it was unchanged from the message sent out by the company and that no malicious
+over an open channel such as an unencrypted Wi-Fi connection. The contents of that update are not secret, but it is of crucial importance that it was unchanged from the message sent out by the company and that no malicious
 attacker had modified the code. Similarly, when you log into your bank, you might be much more
 concerned about the possibility of someone impersonating you and cleaning out your account than you are about the secrecy of your information.
 
