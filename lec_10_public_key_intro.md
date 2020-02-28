@@ -571,16 +571,16 @@ establishing that the number of primes in $[1,N]$ is $\Omega(\tfrac{N}{\log N})$
 Below are optional group theory related exercises and proofs meant to help gain an intuition with group theory. 
 ### Note that in this class, we tend only to talk about finite commutative groups $\mathbb{G}$, but there are more general groups:
 * For example, the integers (i.e. infinitely many elements) where the operation is addition is a commutative group: if $a,b,c$ are integers, then $a+b = b+a$ (commutativity), $(a+b)+c = a+(b+c)$ (associativity), $a+0 = a$ (so $0$ is the identity element here; we typically think of the identity as $1$, especially when the group operation is multiplication), and $a+(-a) = 0$ (i.e. for any integer, we are allowed to think of its additive inverse, which is also an integer).
-* A non-commutative group (or a non-abelian group) is a group such that $\exists a,b \in \mathbb{G}$ but $a * b \neq b * a$ (where $*$ is the group operation). One example is the set of $2 \times 2$ matrices (over the real numbers) which are invertible, and the operation is matrix multiplication. The identity element is the traditional identity matrix, and each matrix has an inverse (and the product of two invertible matrices is still invertibe), and matrix multiplication satisfies associativity. However, matrix multiplication here need not satisfy commutativity.
+* A non-commutative group (or a non-abelian group) is a group such that $\exists a,b \in \mathbb{G}$ but $a * b \neq b * a$ (where $*$ is the group operation). One example (of an infinite, non commutative group) is the set of $2 \times 2$ matrices (over the real numbers) which are invertible, and the operation is matrix multiplication. The identity element is the traditional identity matrix, and each matrix has an inverse (and the product of two invertible matrices is still invertible), and matrix multiplication satisfies associativity. However, matrix multiplication here need not satisfy commutativity.
 ### In this class, we restrict ourselves to finite commutative groups to avoid complications with infinite group orders and annoyances with non-commutative operations. For the problems below, assume that a "group" is really a "finite commutative group".
 ## Solved exercises:
 
-* Is the set $S = \{1,2,3,4,5,6\}$ a group if the operation is multiplication mod $7$? What if the operation is addition mod $7$?
+* __Q__: Is the set $S = \{1,2,3,4,5,6\}$ a group if the operation is multiplication mod $7$? What if the operation is addition mod $7$?
 __Answer:__ Yes (if multiplication) and no (if addition). 
 To prove that something is a group, we run through the definition of a group. This set is finite, and multiplication (even multiplication mod some number) will satisfy commutativity and associativity. The identity element is $1$ because any number times $1$, even mod $7$, is still itself. To find inverses, we can in this case literally find the inverses. $1 * 1 \mod 7 = 1 \mod 7$ (so the inverse of $1$ is $1$). $2 * 4 \mod 7 = 8 \mod 7 = 1 \mod 7$ (so the inverse of $2$ is $4$, and from commutativity, the inverse of $4$ is $2$). $3 * 5 \mod 7 = 15 \mod 7 = 1 \mod 7$ (so the inverse of $3$ is $5$, and the inverse of $5$ is $3$). $6 * 6 \mod 7 = 36 \mod 7 = 1 \mod 7$ (so $6$ is its own inverse; notice that an element can be its own inverse, even if it is not the identity $1$).
-The set $S$ is not a group if the operation is addition for many reasons: one way to see this $1+6 \mod 7 = 0 \mod 7$, but $0$ is not an element of $S$, so this group is not _closed_ under its operation (implicit in the definition of a group is the idea that a group's operation must send two group elements to another element _within the same group_). 
+The set $S$ is not a group if the operation is addition for many reasons: one way to see this $1+6 \mod 7 = 0 \mod 7$, but $0$ is not an element of $S$, so this group is not _closed_ under its operation (implicit in the definition of a group is the idea that a group's operation must send two group elements to another element _within the same set of group elements_). 
 
-* What are the generators of the group $\{1,2,3,4,5,6 \}$, where the operation is multiplication mod $7$?
+* __Q__:  What are the generators of the group $\{1,2,3,4,5,6 \}$, where the operation is multiplication mod $7$?
 __Answer:__ $3$ and $5$.
 Recall that a generator of a group is an element $g$ such that $\{g,g^2,g^3,\cdots\}$ is the entire group. We can directly check the elements here:
 ${1,1^2,1^3,\cdots\} = \{1\}$, so $1$ is not a generator. 
@@ -590,33 +590,33 @@ $4$ is not a generator because $4^3 \mod 7  = 64 \mod 7 = 1 \mod 7$, so just lik
 $5$ is a generator because $5^2 \mod 6 = 4, 5^3 \mod 7 = 20 \mod 7 = 6, 5^4 \mod 7 = 30 \mod 7 = 2, 5^5 \mod 7 = 10 \mod 7 = 3, 5^6 \mod 7 = 15 \mod 7 = 1$, so just like $3$, $5$ is a generator.
 $6$ is not a generator becaue $6^2 \mod 7= 1 \mod 7$, so just like $2$, the set $\{6,6^2,6^3,\cdots\}$ cannot contain all elements (it will just have $1$ and $6$).
 
-* What is the order of every element in the group $\{1,2,3,4,5,6 \}$, where the operation is multiplication mod $7$?
-__Answer:__ The orders ( of $1,2,3,4,5,6$) are $1,3, 6, 3, 6, 2$. 
+* __Q__:  What is the order of every element in the group $\{1,2,3,4,5,6 \}$, where the operation is multiplication mod $7$?
+__Answer:__ The orders (of $1,2,3,4,5,6$) are $1,3, 6, 3, 6, 2$, respectively. 
 This can be seen from the work of the previous problem, where we test out powers of elements.
 Notice that all of these orders divide the number of elements in our group. This is not a coincidence, and it is an example of Lagrange's Theorem, which states that the size of every subgroup of a group will divide the order of a group. Recall that a subgroup is simply a subset of the group which is a group in its own right and is closed under the operation of the group.
 
 
-* Suppose we have some (finite, commutative) group $\mathbb{G}$. Prove that the inverse of any element is unique (i.e. prove that if $a \in \mathbb{G}$, then if $b,c \in \mathbb{G}$ such that $ab = 1$ and $ac = 1$, then $b=c$).
+* __Q__:  Suppose we have some (finite, commutative) group $\mathbb{G}$. Prove that the inverse of any element is unique (i.e. prove that if $a \in \mathbb{G}$, then if $b,c \in \mathbb{G}$ such that $ab = 1$ and $ac = 1$, then $b=c$).
 __Answer:__ Suppose that $a \in \mathbb{G}$ and that $b,c \in \mathbb{G}$ such that $ab = 1$ and $ac = 1$. Then we know that $ab = ac$, and then we can apply $a^{-1}$ to both sides (we are guarunteed that $a$ has SOME inverse $a^{-1}$ in the group), and so we have $a^{-1}ab = a^{-1}ac$, but we know that $a^{-1}a = 1$ (and we can use associativity of a group), so $(1)b = (1)c$ so $b = c$. QED.
 
-* Suppose we have some (finite, commutative) group $\mathbb{G}$. Prove that the identity element is unique (i.e. if $ca = c$ for all $c \in \mathbb{G}$ and if $cb = c$ for all $c \in \mathbb{G}$, then $a=b$).
+* __Q__:  Suppose we have some (finite, commutative) group $\mathbb{G}$. Prove that the identity element is unique (i.e. if $ca = c$ for all $c \in \mathbb{G}$ and if $cb = c$ for all $c \in \mathbb{G}$, then $a=b$).
 __Answer:__  Suppose that $ca = c$ for all $c \in \mathbb{G}$ and that $cb = c$ for all $c \in \mathbb{G}$. Then we can say that $ca =c = cb$ (for any $c$, but we can choose some $c$ in particular, we could have picked $c=1$). And then $c$ has some inverse element $c^{-1}$ in the group, so $c^{-1}ca = c^{-1}cb$, but $c^{-1}c = 1$, so $a = b$ as desired. QED
 
 ### The next few problems are related to quadratic residues, but these problems are a bit more general (in particular, we are considering some group, and a subgroup which are all of the elements of the first group which are squares)
 
-* Suppose that $\mathbb{G}$ is some (finite, commutative) group, and $\mathbb{H}$ is the set defined by $\mathbb{H} := \{ h \in \mathbb{G}: \exists g \in G, g^2 = h\}$. Verify that $\mathbb{H}$ is a subgroup of $\mathbb{G}$.
+* __Q__:  Suppose that $\mathbb{G}$ is some (finite, commutative) group, and $\mathbb{H}$ is the set defined by $\mathbb{H} := \{ h \in \mathbb{G}: \exists g \in G, g^2 = h\}$. Verify that $\mathbb{H}$ is a subgroup of $\mathbb{G}$.
 __Answer__ To be a subgroup, we need to make sure that $\mathbb{H}$ is a group in its own right (in particular, that it contains the identity, that it contains inverses, and that it is closed under multiplication; associativity and commutativity follow because we are within a larger set  $\mathbb{G}$ which satisfies associativity and commutativity).
-_Identity_ Well, $1^1 = 1$, so $1 \in \mathbb{H}$, so $\mathbb{H}$ has the identity element. 
+_Identity_ Well, $1^2 = 1$, so $1 \in \mathbb{H}$, so $\mathbb{H}$ has the identity element. 
 _Inverses_ If $h \in \mathbb{H}$, then $g^2 = h$ for some $g \in \mathbb{G}$, but $g$ has an inverse in $\mathbb{G}$, and we can look at $g^2(g^{-1})^2 = (gg^{-1})^2 = 1^2 = 1$ (where I used commutativity and associativity, as well as the definition of the inverse). It is clear that $(g^{-1})^2 \in \mathbb{H}$ because there exists an element in $\mathbb{G}$ (specifically, $g^{-1}$) whose square is $(g^{-1})^2$. Therefore $h$ has an inverse in $\mathbb{H}$, where if $h=g^2$, then $h^{-1} = (g^{-1})^2$.
 _Closure under operation_ If $h_1,h_2 \in \mathbb{H}$, then there exist $g_1,g_2 \in \mathbb{G}$ where $h_1 = (g_1)^2, h_2 = (g_2)^2$. So $h_1h_2 = (g_1)^2(g_2)^2 = (g_1g_2)^2$, so $h_1h_2 \in \mathbb{H}$. 
 Therefore, $\mathbb{H}$ is a subgroup of $\mathbb{G}$.
 
 ### __Assumptions:__ For the next problem, assume that $|\mathbb{G}|$ is an even number and is known, and that $g^{|\mathbb{G}|}=1$ for any $g \in \mathbb{G}$. Also assume that $\mathbb{G}$ is a cyclic group, i.e. there is some $g \in \mathbb{G}$ such that any element $f \in \mathbb{G}$ can be written as $f^k$ for some integer $k$. Also assume that exponentiation is efficient in this context (i.e. we can compute $g^r$ for any $0 \leq r \leq |\mathbb{G}|$ in an efficient time for any $g \in \mathbb{G}$).
 
-* Under the assumptions stated above, prove that there is an efficient way to check if some element of $\mathbb{G}$ is also an element of $\mathbb{H}$, where $\mathbb{H}$ is still the subgroup of squares of elements of $\mathbb{G}$ (note: running through all possible elements of $\mathbb{G}$ may not be efficient, so this cannot be your strategy). 
+* __Q__:  Under the assumptions stated above, prove that there is an efficient way to check if some element of $\mathbb{G}$ is also an element of $\mathbb{H}$, where $\mathbb{H}$ is still the subgroup of squares of elements of $\mathbb{G}$ (note: running through all possible elements of $\mathbb{G}$ may not be efficient, so this cannot be your strategy). 
 __Answer:__
 
-Suppose that we recieve some element $g \in \mathbb{G}$. We want to know if there exists some $g' \in \mathbb{G}$ such that $g = (g')^2$ (this is equivalent to being in $\mathbb{H}$). To do so, compute $g^{|\mathbb{G}|/2}$. I claim that $g^{|\mathbb{G}|/2}=1$ if and only if $g \in \mathbb{H}$.
+Suppose that we recieve some element $g \in \mathbb{G}$. We want to know if there exists some $g' \in \mathbb{G}$ such that $g = (g')^2$ (this is equivalent to $g$ being in $\mathbb{H}$). To do so, compute $g^{|\mathbb{G}|/2}$. I claim that $g^{|\mathbb{G}|/2}=1$ if and only if $g \in \mathbb{H}$.
 
 (Proving the if): If $g \in \mathbb{H}$, then $g=(g')^2$ for some $g' \in \mathbb{G}$. We then have that $g^{|\mathbb{G}|/2} = ((g')^2)^{|\mathbb{G}|/2} = (g')^{|\mathbb{G}|}$. But from our assumption, an element raised to the order of the group is $1$, so $(g')^{|\mathbb{G}|} = 1$, so $g^{|\mathbb{G}|/2} = 1$. As a result, if $g \in \mathbb{H}$, then $g^{|\mathbb{G}|/2} = 1$.
 
@@ -625,7 +625,7 @@ $g^{|\mathbb{G}|/2} = (f^{2k+1})^{|\mathbb{G}|/2} = f^{|\mathbb{G}| + |\mathbb{G
 We can use the assumption that any element raised to its group's order is $1$, so $1 = g^{|\mathbb{G}|/2}  = f^{|\mathbb{G}|}f^{|\mathbb{G}|/2} = f^{|\mathbb{G}|/2}$. 
 This tells us that the order of $f$ is at most $|\mathbb{G}|/2$, but this is a contradiction because $f$ is a generator of $\mathbb{G}$, so its order cannot be less than $|\mathbb{G}|$ (if it were, then looking at $\{f,f^2,f^3,\cdots\}$, we would only count at most half of the elements before cycling back to $1,f,f^2,\cdots$, so this set wouldn't contain all of $\mathbb{G}$). As a result, we have reached a contradiction, so $g^{|\mathbb{G}|/2} = 1$ means that $g = f^{2k} = (f^k)^2$, so $g \in \mathbb{H}$.
 
-We are given that this exponentiation is efficient, so checking $g^{|\mathbb{G}|/2} == 1$ is an efficient and correct way to test if $g \in \mathbb{H}$. 
+We are given that this exponentiation is efficient, so checking $g^{|\mathbb{G}|/2} == 1$ is an efficient and correct way to test if $g \in \mathbb{H}$. QED.
 
 This proof idea came from [here](https://crypto.stanford.edu/pbc/notes/numbertheory/qr.html) as well as from the 2/25/20 lecture at Harvard given by MIT professor Yael Kalai.
 
