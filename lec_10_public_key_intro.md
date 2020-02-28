@@ -568,4 +568,26 @@ $$\leq \sum_{P \text{ prime} \in [2n]} \log 2N$$
 establishing that the number of primes in $[1,N]$ is $\Omega(\tfrac{N}{\log N})$.
 
 # Additional Group Theory Exercises and Proofs
+Below are optional group theory related exercises and proofs meant to help gain an intuition with group theory. 
+### Note that in this class, we tend only to talk about finite commutative groups $\mathbb{G}$, but there are more general groups:
+* For example, the integers (i.e. infinitely many elements) where the operation is addition is a commutative group: if $a,b,c$ are integers, then $a+b = b+a$ (commutativity), $(a+b)+c = a+(b+c)$ (associativity), $a+0 = a$ (so $0$ is the identity element here; we typically think of the identity as $1$, especially when the group operation is multiplication), and $a+(-a) = 0$ (i.e. for any integer, we are allowed to think of its additive inverse, which is also an integer).
+* A non-commutative group (or a non-abelian group) is a group such that $\exists a,b \in \mathbb{G}$ but $a * b \neq b * a$ (where $*$ is the group operation). One example is the set of $2 \times 2$ matrices (over the real numbers) which are invertible, and the operation is matrix multiplication. The identity element is the traditional identity matrix, and each matrix has an inverse (and the product of two invertible matrices is still invertibe), and matrix multiplication satisfies associativity. However, matrix multiplication here need not satisfy commutativity.
+### In this class, we restrict ourselves to finite commutative groups to avoid complications with infinite group orders and annoyances with non-commutative operations. For the problems below, assume that a "group" is really a "finite commutative group".
+## Solved exercises:
+
+* Is the set $S = \{1,2,3,4,5,6\}$ a group if the operation is multiplication mod $7$? What if the operation is addition mod $7$?
+__Answer:__ Yes (if multiplication) and no (if addition). 
+To prove that something is a group, we run through the definition of a group. This set is finite, and multiplication (even multiplication mod some number) will satisfy commutativity and associativity. The identity element is $1$ because any number times $1$, even mod $7$, is still itself. To find inverses, we can in this case literally find the inverses. $1 * 1 \mod 7 = 1 \mod 7$ (so the inverse of $1$ is $1$). $2 * 4 \mod 7 = 8 \mod 7 = 1 \mod 7$ (so the inverse of $2$ is $4$, and from commutativity, the inverse of $4$ is $2$). $3 * 5 \mod 7 = 15 \mod 7 = 1 \mod 7$ (so the inverse of $3$ is $5$, and the inverse of $5$ is $3$). $6 * 6 \mod 7 = 36 \mod 7 = 1 \mod 7$ (so $6$ is its own inverse; notice that an element can be its own inverse, even if it is not the identity $1$).
+The set $S$ is not a group if the operation is addition for many reasons: one way to see this $1+6 \mod 7 = 0 \mod 7$, but $0$ is not an element of $S$, so this group is not _closed_ under its operation (implicit in the definition of a group is the idea that a group's operation must send two group elements to another element _within the same group_). 
+
+* What are the generators of the group $\{1,2,3,4,5,6 \}$, where the operation is multiplication mod $7$?
+__Answer:__ $3$ and $5$.
+Recall that a generator of a group is an element $g$ such that $\{g,g^2,g^3,\cdots\}$ is the entire group. We can directly check the elements here:
+${1,1^2,1^3,\cdots\} = \{1\}$, so $1$ is not a generator. 
+$2$ is not a generator because $2^3 \mod 7 = 8 \mod 7 = 1$, so the set $\{2,2^2,2^3,2^4,\cdots\}$ is really the set $\{2,4,1\}$, which is not the entire group.
+$3$ will be a generator because $3^2 \mod 7 = 9 \mod 7 = 2 \mod 7$, $3^3 \mod 7 = 2*3 \mod 7 = 6 \mod 7$, $3^3 \mod 7 = 18 \mod 7 = 4 \mod 7$, $3^4 = 12 \mod 7 = 5$, $3^5 \mod 7 = 15 \mod 7 = 1$, so $\{3,3^2,3^3,3^4,3^5,3^6,3^7 \} = \{3,2,6,4,5,1\}$, which are all of the elements.
+$4$ is not a generator because $4^3 \mod 7  = 64 \mod 7 = 1 \mod 7$, so just like $2$, we won't get every element.
+$5$ is a generator because $5^2 \mod 6 = 4, 5^3 \mod 7 = 20 \mod 7 = 6, 5^4 \mod 7 = 30 \mod 7 = 2, 5^5 \mod 7 = 10 \mod 7 = 3, 5^6 \mod 7 = 15 \mod 7 = 1$, so just like $3$, $5$ is a generator.
+$6$ is not a generator becaue $6^2 \mod 7= 1 \mod 7$, so just like $2$, the set $\{6,6^2,6^3,\cdots\}$ cannot contain all elements (it will just have $1$ and $6$).
+
 
