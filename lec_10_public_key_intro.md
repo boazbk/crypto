@@ -590,4 +590,45 @@ $4$ is not a generator because $4^3 \mod 7  = 64 \mod 7 = 1 \mod 7$, so just lik
 $5$ is a generator because $5^2 \mod 6 = 4, 5^3 \mod 7 = 20 \mod 7 = 6, 5^4 \mod 7 = 30 \mod 7 = 2, 5^5 \mod 7 = 10 \mod 7 = 3, 5^6 \mod 7 = 15 \mod 7 = 1$, so just like $3$, $5$ is a generator.
 $6$ is not a generator becaue $6^2 \mod 7= 1 \mod 7$, so just like $2$, the set $\{6,6^2,6^3,\cdots\}$ cannot contain all elements (it will just have $1$ and $6$).
 
+* What is the order of every element in the group $\{1,2,3,4,5,6 \}$, where the operation is multiplication mod $7$?
+__Answer:__ The orders ( of $1,2,3,4,5,6$) are $1,3, 6, 3, 6, 2$. 
+This can be seen from the work of the previous problem, where we test out powers of elements.
+Notice that all of these orders divide the number of elements in our group. This is not a coincidence, and it is an example of Lagrange's Theorem, which states that the size of every subgroup of a group will divide the order of a group. Recall that a subgroup is simply a subset of the group which is a group in its own right and is closed under the operation of the group.
 
+
+* Suppose we have some (finite, commutative) group $\mathbb{G}$. Prove that the inverse of any element is unique (i.e. prove that if $a \in \mathbb{G}$, then if $b,c \in \mathbb{G}$ such that $ab = 1$ and $ac = 1$, then $b=c$).
+__Answer:__ Suppose that $a \in \mathbb{G}$ and that $b,c \in \mathbb{G}$ such that $ab = 1$ and $ac = 1$. Then we know that $ab = ac$, and then we can apply $a^{-1}$ to both sides (we are guarunteed that $a$ has SOME inverse $a^{-1}$ in the group), and so we have $a^{-1}ab = a^{-1}ac$, but we know that $a^{-1}a = 1$ (and we can use associativity of a group), so $(1)b = (1)c$ so $b = c$. QED.
+
+* Suppose we have some (finite, commutative) group $\mathbb{G}$. Prove that the identity element is unique (i.e. if $ca = c$ for all $c \in \mathbb{G}$ and if $cb = c$ for all $c \in \mathbb{G}$, then $a=b$).
+__Answer:__  Suppose that $ca = c$ for all $c \in \mathbb{G}$ and that $cb = c$ for all $c \in \mathbb{G}$. Then we can say that $ca =c = cb$ (for any $c$, but we can choose some $c$ in particular, we could have picked $c=1$). And then $c$ has some inverse element $c^{-1}$ in the group, so $c^{-1}ca = c^{-1}cb$, but $c^{-1}c = 1$, so $a = b$ as desired. QED
+
+### The next few problems are related to quadratic residues, but these problems are a bit more general (in particular, we are considering some group, and a subgroup which are all of the elements of the first group which are squares)
+
+* Suppose that $\mathbb{G}$ is some (finite, commutative) group, and $\mathbb{H}$ is the set defined by $\mathbb{H} := \{ h \in \mathbb{G}: \exists g \in G, g^2 = h\}$. Verify that $\mathbb{H}$ is a subgroup of $\mathbb{G}$.
+__Answer__ To be a subgroup, we need to make sure that $\mathbb{H}$ is a group in its own right (in particular, that it contains the identity, that it contains inverses, and that it is closed under multiplication; associativity and commutativity follow because we are within a larger set  $\mathbb{G}$ which satisfies associativity and commutativity).
+_Identity_ Well, $1^1 = 1$, so $1 \in \mathbb{H}$, so $\mathbb{H}$ has the identity element. 
+_Inverses_ If $h \in \mathbb{H}$, then $g^2 = h$ for some $g \in \mathbb{G}$, but $g$ has an inverse in $\mathbb{G}$, and we can look at $g^2(g^{-1})^2 = (gg^{-1})^2 = 1^2 = 1$ (where I used commutativity and associativity, as well as the definition of the inverse). It is clear that $(g^{-1})^2 \in \mathbb{H}$ because there exists an element in $\mathbb{G}$ (specifically, $g^{-1}$) whose square is $(g^{-1})^2$. Therefore $h$ has an inverse in $\mathbb{H}$, where if $h=g^2$, then $h^{-1} = (g^{-1})^2$.
+_Closure under operation_ If $h_1,h_2 \in \mathbb{H}$, then there exist $g_1,g_2 \in \mathbb{G}$ where $h_1 = (g_1)^2, h_2 = (g_2)^2$. So $h_1h_2 = (g_1)^2(g_2)^2 = (g_1g_2)^2$, so $h_1h_2 \in \mathbb{H}$. 
+Therefore, $\mathbb{H}$ is a subgroup of $\mathbb{G}$.
+
+### __Assumptions:__ For the next problem, assume that $|\mathbb{G}|$ is an even number and is known, and that $g^{|\mathbb{G}|}=1$ for any $g \in \mathbb{G}$. Also assume that $\mathbb{G}$ is a cyclic group, i.e. there is some $g \in \mathbb{G}$ such that any element $f \in \mathbb{G}$ can be written as $f^k$ for some integer $k$. Also assume that exponentiation is efficient in this context (i.e. we can compute $g^r$ for any $0 \leq r \leq |\mathbb{G}|$ in an efficient time for any $g \in \mathbb{G}$).
+
+* Under the assumptions stated above, prove that there is an efficient way to check if some element of $\mathbb{G}$ is also an element of $\mathbb{H}$, where $\mathbb{H}$ is still the subgroup of squares of elements of $\mathbb{G}$ (note: running through all possible elements of $\mathbb{G}$ may not be efficient, so this cannot be your strategy). 
+__Answer:__
+
+Suppose that we recieve some element $g \in \mathbb{G}$. We want to know if there exists some $g' \in \mathbb{G}$ such that $g = (g')^2$ (this is equivalent to being in $\mathbb{H}$). To do so, compute $g^{|\mathbb{G}|/2}$. I claim that $g^{|\mathbb{G}|/2}=1$ if and only if $g \in \mathbb{H}$.
+
+(Proving the if): If $g \in \mathbb{H}$, then $g=(g')^2$ for some $g' \in \mathbb{G}$. We then have that $g^{|\mathbb{G}|/2} = ((g')^2)^{|\mathbb{G}|/2} = (g')^{|\mathbb{G}|}$. But from our assumption, an element raised to the order of the group is $1$, so $(g')^{|\mathbb{G}|} = 1$, so $g^{|\mathbb{G}|/2} = 1$. As a result, if $g \in \mathbb{H}$, then $g^{|\mathbb{G}|/2} = 1$.
+
+(Proving the only if): Now suppose that $g^{|\mathbb{G}|/2} = 1$. At this point, we use the fact that $\mathbb{G}$ is cyclic, so let $f \in \mathbb{G}$ be the generator of $\mathbb{G}$. We know that $g$ is some power of $f$, and this power is either even or odd. If the power is even, we are done. If the power is odd, then $g = f^{2k+1}$ for some natural number $k$. And then we see
+$g^{|\mathbb{G}|/2} = (f^{2k+1})^{|\mathbb{G}|/2} = f^{|\mathbb{G}| + |\mathbb{G}|/2} = f^{|\mathbb{G}|}f^{|\mathbb{G}|/2}$. 
+We can use the assumption that any element raised to its group's order is $1$, so $1 = g^{|\mathbb{G}|/2}  = f^{|\mathbb{G}|}f^{|\mathbb{G}|/2} = f^{|\mathbb{G}|/2}$. 
+This tells us that the order of $f$ is at most $|\mathbb{G}|/2$, but this is a contradiction because $f$ is a generator of $\mathbb{G}$, so its order cannot be less than $|\mathbb{G}|$ (if it were, then looking at $\{f,f^2,f^3,\cdots\}$, we would only count at most half of the elements before cycling back to $1,f,f^2,\cdots$, so this set wouldn't contain all of $\mathbb{G}$). As a result, we have reached a contradiction, so $g^{|\mathbb{G}|/2} = 1$ means that $g = f^{2k} = (f^k)^2$, so $g \in \mathbb{H}$.
+
+We are given that this exponentiation is efficient, so checking $g^{|\mathbb{G}|/2} == 1$ is an efficient and correct way to test if $g \in \mathbb{H}$. 
+
+This proof idea came from [here](https://crypto.stanford.edu/pbc/notes/numbertheory/qr.html) as well as from the 2/25/20 lecture at Harvard given by MIT professor Yael Kalai.
+
+__Commentary on assumptions and proof__: Proving that $g^{|\mathbb{G}|}=1$ is a useful exercise in its own right, but it overlaps somewhat with our problem sets of 2020, so we will not prove it here; observe that if $\mathbb{G}$ is the set of $\{1,2,3,\cdots,p-1\}$ for some prime $p$, then this is a special case of Fermat's Little Theorem, which states that $a^{p-1} \mod p = 1$ for $a \in \{1,2,3,\cdots,p-1\}$. 
+Also, one can prove that $Z_p^{\*}$ (the set of numbers $0,1,2,\cdots,p-1$, with operation multiplication mod $p$) for $p$ a prime is cyclic, where one method can be found [here](https://crypto.stanford.edu/pbc/notes/numbertheory/gen.html), where the proof comes down to factorizing certain polynomials and decomposing numbers in terms of prime powers. 
+We can then see that this proof above says that there is an efficient way to test whether an element of $Z_p^{\*}$ is a square or not.
