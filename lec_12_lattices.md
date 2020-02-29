@@ -50,6 +50,37 @@ Currently lattice based cryptography is the only real "game in town" for potenti
 Lattice based cryptography is a huge area, and in this lecture and this course we only touch on few aspects of it.
 I highly recommend [Chris Peikert's Survey](https://web.eecs.umich.edu/~cpeikert/pubs/lattice-survey.pdf) for a much more in depth treatment of this area.
 
+### Quick linear algebra recap
+
+A _field_ $\mathbb{F}$ is a set that supports the operations $+,\cdot$ and contains the numbers $0$ and $1$ (more formally the additive identity and multiplicative identity) with the usual properties that the real numbers have. (That is associative, commutative, and distributive law, the fact that for every  $x \in \mathbb{F}$ there is an element $-x$ such that $x + (-x) = 0$ and that if $x \neq 0$ there is an element $x^{-1}$ such that $x \cdot x^{-1} = 1$.) 
+Apart from the real numbers, the main field we  will be interested in this section is the field $\Z_q$ of the numbers $\{0,1,\ldots,q-1\}$ with addition and multiplication done modulo $q$, where $q$ is a prime number.^[While this won't be of interest for us in this chapter, one can also define finite fields whose size is a _prime power_ of the form $q^k$ where $q$ is a prime and $k$ is an integer; this is sometimes useful and in particular fields of size $2^k$ are sometimes used in practice. In such fields we usually think of the elements as _vector_ $v \in (\Z_q)^k$ with addition done component-wise but multiplication is not defined component-wise (since otherwise a vector with a single coordinate zero would not have an inverse) but in a different way, via interpreting these vectors as coefficients of a degree $k-1$ polynomial.]
+
+You should be comfortable with the following notions:
+
+* A vector $v \in \mathbb{F}^n$ and a _matrix_ $M \in \mathbb{F}^{m \times n}$. An $m\times n$ matrix  has $m$ rows and $n$ columns. We think of vectors as _column vectors_ and so we can think of a vector $v \in \mathbb{F}^n$ as an $n\times 1$ matrix.  We write the $i$-the coordinate of $v$ as $v_i$ and the $(i,j)$-th coordinate of $M$ as $M_{i,j}$ (i.e. the coordinate in the $i$-th row and the $j$-th column.) We often write a vector $v$ as $(v_1,\ldots,v_n)$ but we still mean that it's a column vector unless we say otherwise.
+
+* If $\alpha \in \mathbb{F}$ is a _scalar_ (i.e., a number) and $v \in \mathbb{F}^n$ is a vector then  $\alpha v$ is the vector $(\alpha v_1 ,\ ldots, \alpha v_n)$. If $u,v$ are $n$ dimensional vectors then $u+v$ is the vector $(u_1+v_1,\ldots,u_n+v_n)$.
+
+
+* A _linear subspace_ $V \subseteq \mathbb{F}^n$ is a non-empty set of vectors  such that for every vectors $u,v \in V$ and $\alpha,\beta \in \mathbb{F}$, $\alpha u + \beta v  \in V$. In particular this means that  $V$ contains the all zero vector $0^n$ (can you see why?). A subset $A \subseteq V$ is _linearly independent_ if there is no collection  $a_1,\ldots,a_k \in A$  and scalars $\alpha_1,\ldots,\alpha_k$ such that $\sum \alpha_i a_i = 0^n$. It is known (and not hard to prove) that if $A$ is linearly independent then $|A| \leq n$.  It is known that for every such linear subspace there is a linearly independent set $B = \{ b_1,\ldots,b_d \}$ of vectors, with $d \leq n$, such that for every $u \in \V$ there exist $\alpha_1,\ldots,\alpha_d$ such that $v = \sum \alpha_i b_i$. Such a set is known as a _basis_ for $V$. A subspace $V$ has many bases, but all of them have the same size $d$ which is known as the _dimension_ of $V$. An _affine subspace_ is a set $U$ of the form $\{ u_0 + v : v\in V \}$ where $V$ is a linear subspace. We can also write $U$ as $u_0 + V$. We denote the dimension of $U$ as the dimension of $V$ in such a case.
+
+
+
+* The inner product (also known as "dot product")  $\langle u,v \rangle$ between two vectors of the same dimension $n$ that is defined as $\sum u_i v_i$ (addition done in the field $\mathbb{F}$).^[There is a much more general notion of inner product typically defined, and in particular over fields such as the complex numbers we would define the inner product as $\sum \overline{u}_i v_i$ where for $a\in \mathbb{C}$, $\overline{a}$ denotes the _complex conjugate_ of $a$. However, we stick to the simple case above for this chapter.]
+
+* The _matrix product_ $AB$ of an $m \times k$ and a $k\times n$ matrix, that results in an $m\times n$ matrix. If we think of the rows of $A$ as the vectors $A_1,\ldots,A_m \in \mathbb{F}^k$ and the columns of $B$ as $B_1,\ldots,B_n$, then the $(i,j)$-th coordinate of $AB$  is $\langle A_i , B_j \rangle$. Matrix product is associative and satisfies the distributive law but is _not commutative_: there are  pairs of square matrices $A,B$ such that $AB \neq BA$.
+
+* The _transpose_ of an $n\times m$ matrix $A$  is the $m\times n$ matrix $A^\top$ such that $(A^\top)_{i,j} = A_{j,i}$.
+
+* The _inverse_ of a square $n\times n$ matrix $A$ is the matrix $A^{-1}$ such that $AA^{-1} = I$ where $I$ is the $n\times n$ _identity matrix_ such that $I_{i,j}=1$ if $i=j$ and $I_{i,j}=0$ otherwise.
+
+* The _rank_ of an $m\times n$ matrix $A$ is the minimum number $r$ such that we can write $A$ as $\sum_{i=1}^r u_i(v_i)^\top$  where $u_i \in \mathbb{F}^m$ and $v_i \in \mathbb{F}^n$. It can be shown that an $n\times n$ matrix is full rank if and only if it has an inverse.
+
+* Solving _linear equations_ can be thought of as the task of given an $m \times n$ matrix $A$ and $m$-dimensional vector $y$, finding the $n$-dimensional vector $x$ such that $Ax = y$. If the rank of $A$ is at least $n$ (which in particular means that $m \geq n$) then it means that by dropping $m-n$ rows of $A$ and coordinates of $y$ we can obtain the equation $A'x = y'$ where $A'$ is an $n\times n$ matrix that has an inverse. In this case a solution (if it exists) will be equal to $(A')^{-1}y$.  If for a set of equations we have $m>n$ and we can find two such matrices $A',A''$ such that $(A')^{-1}y \neq (A'')^{-1}y$ then we say it is _over determined_ and in such a case it has no solutions. If a set of equations has more variables $n$ than equations $m$ we say it's _under-determined_. In such a case it either has no solutions or the solutions form an affinte subspace of dimension at least $n-m$. 
+
+
+* The _gaussian elimination_ algorithm can be used to obtain, given a set of equations $Ax = y$ a solution to $x$ if such exists or a certification that no solution exists. It can be executed in time polynomial in the dimensions and the bit complexity of the numbers involved. This algorithm can also be used to obtain an inverse of a given matrix $A$, if such an inverse exists.
+
 
 ## A world without Gaussian elimination
 
@@ -89,16 +120,18 @@ However, even if it's hard to solve for $x$ given the equations, an attacker (wh
 Our solution for this is simple- just add more equations! If the encryptor adds a random subset of equations then there are $2^m$ possibilities for that, and an attacker can't guess them all.
 Thus, at least intuitively, the following encryption scheme would be "secure" in the Gaussian-elimination free world of attackers that haven't taken freshman linear algebra:
 
->__Scheme LwoE-ENC:__  Public key encryption under the hardness of "learning linear equations without errors".
->
+
+::: { .quote} 
+
+__Scheme "LwoE-ENC":__  Public key encryption under the hardness of "learning linear equations without errors".
+
 * _Key generation_:  Pick random $m\times n$ matrix $A$ over $\Z_q$, and $x\leftarrow_R\Z_q^n$, the secret key is $x$ and the public key is $(A,y)$ where $y=Ax$.
->
+
 * _Encryption_: To encrypt a message $b\in\{0,1\}$, pick $w\in\{0,1\}^m$ and output $w^\top A,\langle w,y \rangle+\alpha b$ for some fixed nonzero $\alpha\in\Z_q$.
->
+
 * _Decryption:_ To decrypt a ciphertext $(a,\sigma)$, output $0$ iff $\langle a,x \rangle=\sigma$.
 
-
- \
+:::
 
 
 
