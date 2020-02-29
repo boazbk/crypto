@@ -102,7 +102,8 @@ An encryption scheme $(E,D)$ is _secure against chosen plaintext attack (CPA sec
 2. Eve gets the length of the key $1^n$ as input.[^unary] \
 3. Eve interacts with $E$ for $t=poly(n)$ rounds as follows: in the $i^{th}$ round, Eve chooses a message $m_i$ and obtains $c_i= E_k(m_i)$. \
 4. Then Eve chooses two messages $m_0,m_1$, and gets $c^* = E_k(m_b)$ for $b\leftarrow_R\{0,1\}$. \
-5. Eve _wins_ if she outputs $b$. \
+5. Eve continues to interact with $E$ for another $poly(n)$ rounds, as in Step 3. \
+6. Eve _wins_ if she outputs $b$. \
 
 [^unary]: Giving Eve the key as a sequence of $n$ $1'$s as opposed to in binary representation is a common notational convention in cryptography. It makes no difference except that it makes the input length for Eve of length $n$, which makes sense since we want to allow Eve to run in $poly(n)$ time.
 
@@ -111,8 +112,8 @@ An encryption scheme $(E,D)$ is _secure against chosen plaintext attack (CPA sec
 ![In the CPA game, Eve interacts with the encryption oracle and at the end chooses $m_0,m_1$, gets an encryption $c^*=E_k(m_b)$ and outputs $b'$. She _wins_ if $b'=b$](../figure/cpa-game.jpg){#cpasecgamefig  .margin }
 
 [cpasecuredef](){.ref} is illustrated in [cpasecgamefig](){.ref}.
-Our previous notion of computational secrecy (i.e., [compsecdef](){.ref}) corresponds to the case that we skip Step 3 above.
-Since Step 3 only gives the adversary more power (and hence is only more likely to win), CPA security ([cpasecuredef](){.ref}) is _stronger_ than computational secrecy  ([compsecdef](){.ref}), in the sense that every CPA secure encryption $(E,D)$ is also computationally secure.
+Our previous notion of computational secrecy (i.e., [compsecdef](){.ref}) corresponds to the case that we skip Steps 3 and 5 above.
+Since Steps 3 and 5 only give the adversary more power (and hence is only more likely to win), CPA security ([cpasecuredef](){.ref}) is _stronger_ than computational secrecy  ([compsecdef](){.ref}), in the sense that every CPA secure encryption $(E,D)$ is also computationally secure.
 It turns out that CPA security is _strictly stronger_, in the sense that without modification, our stream ciphers cannot be CPA secure. In fact, we have a stronger, and intially somewhat surprising theorem:
 
 > # {.theorem title="CPA security requires randomization" #CPAsecrandomthm}
@@ -133,7 +134,7 @@ Here pseudorandom functions come to the rescue:
 [^high-ent]: If the messages are guaranteed to have _high entropy_ which roughly means that the probability that a message repeats itself is negligible, then it is possible to have a secure deterministic private-key encryption, and this is sometimes used in practice. (Though often some sort of randomization or padding is added to ensure this property, hence in effect creating a randomized encryption.) Deterministic encryptions can sometimes be useful for applications such as efficient queries on encrypted databases. See [this lecture](https://goo.gl/GWJLFd) in Dan Boneh's coursera course.
 
 > # {.theorem title="CPA security from PRFs" #cpafromprfthm}
-Suppose that $\{ f_s \}$ is a PRF collection where $f_s:\{0,1\}^n\rightarrow\{0,1\}^\ell$, then the following is a CPA secure encryption scheme: $E_s(m)=(r,f_s(r)\oplus m)$ and $D_s(r,z)=f_s(r)\oplus z$.
+Suppose that $\{ f_s \}$ is a PRF collection where $f_s:\{0,1\}^n\rightarrow\{0,1\}^\ell$, then the following is a CPA secure encryption scheme: $E_s(m)=(r,f_s(r)\oplus m)$ where $r \leftarrow_R \{0,1\}^n$, and $D_s(r,z)=f_s(r)\oplus z$.
 
 
 > # {.proof data-ref="cpafromprfthm"}
