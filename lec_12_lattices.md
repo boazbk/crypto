@@ -238,13 +238,13 @@ Hence by using polynomially more samples than the decision algorithm $D$, we get
 
 
 
-## An LWE based encryption scheme
+## An LWE based encryption scheme { #lweencsec }
 
 We can now show the secure variant of our original encryption scheme:
 
 
 ::: {.quote }
-__LWE-based encryption LWEENC:__
+__LWE-based encryption LWE-ENC:__
 * _Parameters:_ Let $\delta(n)=1/n^4$ and let $q=poly(n)$ be a prime such that LWE holds w.r.t. $q,\delta$. We let $m = n^2\log q$.
 
 * _Key generation:_ Pick $x\in\Z_q^n$. The private key is $x$ and the public key is $(A,y)$ with $y=Ax+e$ with $e$ a $\delta$-noise vector and $A$ a random $m\times n$ matrix.
