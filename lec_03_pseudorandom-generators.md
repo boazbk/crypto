@@ -157,7 +157,21 @@ The notion that being random is the same as being "unpredictable" can be formali
 One can show that a random variable $X$ over $\{0,1\}^n$ is pseudorandom if and only if every efficient algorithm $A$ succeeds in the following experiment with probability at most $1/2+negl(n)$: $A$ is given $i$ chosen at random in $\{0,\ldots,n-1\}$ and $x_1,\ldots,x_i$ where $(x_1,\ldots,x_n)$ is drawn
 from $X$ and wins if it outputs $x_{i+1}$. It is a good optional exercise to prove this, and to use that to give an alternative proof of the length extension theorem.
 
-TODO: Expand this into a whole section.
+A function $G:\{0,1\}^*\to \{0,1\}^*$ is *unpredictable* with length function $l(n)$ if for, any $n$ and polynomially-sized circuit $P$, <length condition> and for any $1\le i<l(n)$, $P(P(y_1,\ldots,y_{i-1})=y_i)\le \frac12+negl(n).$
+
+Theorem: PRG and unpredictable are equivalent.
+
+For the forward direction, suppose for contradiction that there exists some $i$ and some circuit $P$ can predict $y_i$ given $y_1,\ldots,y_{i-1}$. Consider the adversary $Eve$ that, given a string $y$, runs the circuit $P$ on $y_1,\ldots,y_{i-1}$, checks if the output is equal to $y_i$ and if so output 1. On a random input Eve outputs 1 with probability $\frac12$ while on a pseudorandom input Eve outputs 1 with probability $\ge \frac12+1/p(n)$.
+
+For the backward direction. Let $H_i$ be the distribution where the first $i$ bits come from $G(U_n)$ while the last $n-i$ bits are all random. Notice that $H_0=U_m$ and $H_n=G(U_n)$, then it suffices to show that $H_{i-1}\cong H_i$ for all $i$. If not, consider the program $P$ that, on input $(y_1,\ldots,y_i)$, picks the bit $\hat y_{i+1},\ldots, \hat y_n$ at random. If $Eve(y_1y_2\ldots y_i\hat y_{i+1}\cdots \hat y_n)=1$, then $P$ outputs $\hat y_{i+1}$. Else, $P$ outputs $1-\hat y_{i+1}$.
+
+If equal, the distribution is $H_{i+1}$. If not, the distribution is $H_i$. Show that they are different, $P$ succeeds with large probability and we done.
+
+Theorem: Suppose there exists a function $G'$ that is unpredictable with $l(n)=n+1$. Then, for any polynomial $p$ there exists a function $G$ that is unpredictable with $l(n)=p(n)$.
+
+Lecture note incomplete: assume $G'(x)=f(x)\|b(x)$ where $f$ is a permutation on $\{0,1\}^n$. Use the same construction as the one in the original proof of the length extension theorem.
+
+Observe that $G$ is unpredictable iff the reverse of $G$ is unpredictable. Suppose a program $P$ can predict $y_i$ given $y_{i+1},\ldots,y_m$. Given $x_i$, the adversary $P'$ can compute $y_{i+1},y_m$ and feed it to Phillip to predict $y_i$ so $G'$ is predictable, a contradiction.
 
 ## Stream ciphers
 
@@ -463,6 +477,8 @@ The ciphers Salsa and ChaCha, designed by Dan Bernstein, have a similar design t
 [^fn]:I typically do not include references in these lecture notes, and leave them to the texts, but I make here an exception because Itsik Mantin was a close friend of mine in grad school.
 
 ## Case Study 3: Blum-Blum-Shub
+Blum-blum-shub is the generator $G:S\to S\times\{0,1\}$. Has a fixed parameter $N=PQ$. The set $S$ is the set of quadratic residues mod $N$. That is, $$S=\{x^2\mid \operatorname{gcd}(x,N)=1\}.$$ Then, $x\mapsto x^2$ is a permutation of $S$. Let $G(x)=x^2\|LSB(x).$
+
 TODO: Construct the example used in class.
 
 ## Non-constructive existence of pseudorandom generators
