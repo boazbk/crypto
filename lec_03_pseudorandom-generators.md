@@ -12,22 +12,23 @@ chapternum: "3"
 
 __Reading:__ Katz-Lindell Section 3.3, Boneh-Shoup Chapter 3
 
+Edited and expanded by Richard Xu in Spring 2020.
 
 The nature of randomness has troubled philosophers, scientists, statisticians
 and laypeople for many years.[^abc] Over the years people have given different
 answers to the question of what does it mean for data to be random, and what is
 the nature of probability. The movements of the planets initially looked random
-and arbitrary, but then the early astronomers managed to find *order* and make
-some *predictions* on them. Similarly we have made great advances in predicting
-the weather, and probably will continue to do so.
+and arbitrary, but then early astronomers managed to find *order* and make
+some *predictions* on them. Similarly, we have made great advances in predicting
+the weather and will probably continue to do so.
 So, while these days it seems as if the event of whether or not it will rain a week from today
-is *random*, we could imagine that in with time we will be able to predict the weather further into the future.
+is *random*, we could imagine that in the future we will be able to predict the weather accurately.
 Even the canonical notion of a random experiment -tossing a coin -
-turns out that it [might not be as random as you'd think](http://statweb.stanford.edu/~susan/papers/headswithJ.pdf), with about a
-51% chance that the second toss will have the same result as the first one.
+[might not be as random as you'd think](http://statweb.stanford.edu/~susan/papers/headswithJ.pdf):
+the second toss will have the same result as the first one with about a 51% chance.
 (Though [see also this experiment](https://www.stat.berkeley.edu/~aldous/Real-World/coin_tosses.html).)
 It is conceivable that at some point someone would discover some function $F$
-that given the first 100 coin tosses by any given person can predict the value of the
+that, given the first 100 coin tosses by any given person, can predict the value of the
 101$^{th}$.[^def]
 In all these examples, the physics underlying the event, whether it's the
 planets' movement, the weather, or coin tosses, did not change but only
@@ -54,11 +55,11 @@ That is, $G$ is a $(T,\epsilon)$ pseudorandom generators if no circuit of at mos
 
 As we did for the case of encryption, we will typically use _asymptotic terms_ to describe cryptographic pseudorandom generator. We say that $G$ is simply a pseudorandom generator if it is 
 $(p(n),1/p(n))$-pseudorandom generator for every polynomial $p(\cdot)$. 
-In other words, we define pseudorandom generators as follows
+In other words, we define pseudorandom generators as follows:
 
 ::: {.definition title="Pseudorandom generator" #prgdef}
 Let $G:\{0,1\}^* \rightarrow \{0,1\}^*$ be some function computable in polynomial time.
-We say that $G$ is a _pseudorandom generator_ with length function $\ell:\N \rightarrow \N$ (where $\ell(n)>n$)if 
+We say that $G$ is a _pseudorandom generator_ with length function $\ell:\N \rightarrow \N$ (where $\ell(n)>n$) if 
 
 * For every $x\in \{0,1\}^*$, $|G(x)| = \ell(|x|)$.
 
@@ -77,7 +78,7 @@ non-trivial, as for $\ell=n$ the function $G(x)=x$ clearly satisfies that
 $G(U_n)$ is identical to (and hence in particular indistinguishable from) the distribution
 $U_n$.
 (Make sure that you understand this last statement!)
-However, for $\ell>n$ this is no longer trivial at all, and in particular if we didn't
+However, for $\ell>n$ this is no longer trivial at all. In particular, if we didn't
 restrict the running time of $Eve$ then no such pseudo-random generator would
 exist:
 
@@ -97,8 +98,8 @@ $1/2$.
 It is not hard to show that if $P=NP$ then the above algorithm Eve can be made
 efficient.
 In particular, at the moment we do not know how to *prove*
-the existence of pseudorandom generators. Nevertheless they are widely believed
-to exist and hence we make the following conjecture:
+the existence of pseudorandom generators. Nevertheless we believe that pseudorandom generators exist
+and hence we make the following conjecture:
 
 >**Conjecture (The PRG conjecture):** For every $n$, there exists a pseudorandom
 generator $G$ mapping $n$ bits to $n+1$ bits.^[The name "The PRG conjecture" is non-standard. In the literature this is known as the conjecture of existence of pseudorandom generators. This is a weaker form of "The Optimal PRG Conjecture" presented in my [intro to theoretical CS lecture notes](https://goo.gl/G7bU4M) since the PRG conjecture only posits the existence of pseudorandom generators with arbitrary polynomial blowup, as opposed to an exponential blowup posited in the optimal PRF conjecture.]
@@ -108,7 +109,7 @@ regarding the PRG conjecture: why should we believe it and why should we care. F
 it is known that the cipher conjecture _implies_ the PRG conjecture, and hence if we believe the former we should believe the latter.
 (The proof is highly non-trivial and we may not get to see it in this course.)
 As for the second question, we will see that the PRG conjecture implies a great number of useful cryptographic tools, including the cipher conjecture (i.e., the two conjectures are in fact equivalent).
-We start by showing that once we can get to an output that is one bit longer than the input, we can in fact obtain any number of bits.
+We start by showing that once we can get to an output that is one bit longer than the input, we can in fact obtain any polynomial number of bits.
 
 > # {.theorem title="Length Extension for PRG's" #lengthextendprgthm}
 Suppose that the PRG conjecture is
@@ -120,7 +121,7 @@ mapping $n$ bits to $t(n)$ bits.
 
 > # {.proof data-ref="lengthextendprgthm"}
 The proof of this theorem is very similar to the length extension theorem for
-ciphers,  and in fact this theorem can be used to give an alternative proof for the former theorem.  
+ciphers, and in fact this theorem can be used to give an alternative proof for the former theorem.  
 >
 The construction is illustrated in [lengthextendprgfig](){.ref}.
 We are given a pseudorandom generator $G'$ mapping $n$ bits into $n+1$ bits and need to construct a pseudorandom generator $G$ mapping $n$ bits to $t=t(n)$
@@ -148,30 +149,31 @@ with an input distributed according to $H_i$. Hence we get that $| \E[ Eve'(G'(U
 
 [^seed]:Because we use a small input to grow a large pseudorandom string, the input to a pseudorandom generator is often known as its *seed*.
 
-The proof of [lengthextendprgthm](){.ref} is indicative of many practical constructions of pseudorandom generators. Many operating systems keep track of an initial _seed_ of randomness, and  supply a system call `rand` such that every call to `rand` applies a pseudorandom generator $G'$ to the current seed, uses part of the output to update the seed, and returns the remainder to the caller.
+The proof of [lengthextendprgthm](){.ref} is indicative of many practical constructions of pseudorandom generators. Many operating systems keep track of an initial _seed_ of randomness, and  supply a system call `rand` that applies a pseudorandom generator $G'$ to the current seed, uses part of the output to update the seed, and returns the remainder to the caller.
 
+### Unpredictability: an alternative approach for proving the length extension theorem
 
-> # {.remark title="Unpredictablity and indistinguishability- an alternative approach for proving the length extension theorem" #alternativelengthextendrem}
 The notion that being random is the same as being "unpredictable" can be formalized as follows.
 One can show that a random variable $X$ over $\{0,1\}^n$ is pseudorandom if and only if every efficient algorithm $A$ succeeds in the following experiment with probability at most $1/2+negl(n)$: $A$ is given $i$ chosen at random in $\{0,\ldots,n-1\}$ and $x_1,\ldots,x_i$ where $(x_1,\ldots,x_n)$ is drawn
-from $X$ and wins if it outputs $x_{i+1}$. It is a good optional exercise to prove this, and to use that to give an alternative proof of the length extension theorem.  
+from $X$ and wins if it outputs $x_{i+1}$. It is a good optional exercise to prove this, and to use that to give an alternative proof of the length extension theorem.
+
+TODO: Expand this into a whole section.
 
 ## Stream ciphers
 
-We now show a connection between our two notions:
+We now show a connection between psuedorandom generators and encryption schemes:
 
 > # {.theorem title="PRG conjecture implies  Cipher conjectures" #PRGandcipherthm}
 If the PRG conjecture is true then so is the cipher conjecture.
 
 It turns out that the converse direction is also true, and hence
-these two conjectures are *equivalent*, though we will probably not show the
+these two conjectures are *equivalent*. We will probably not show the
 (quite non-trivial) proof of this fact in this course. (We might show some
 weaker version of this harder direction.)
 
 
 > # {.proof data-ref="PRGandcipherthm"}
-The construction is actually quite simple, recall that the *one time
-pad* is a perfectly secure cipher but its only problem was that to encrypt an
+Recall that the *one time pad* is a perfectly secure cipher but its only problem was that to encrypt an
 $n+1$ long message it needed an $n+1$ long bit key. Now using a pseudorandom
 generator, we can map an $n$-bit long key into an $n+1$-bit long string that
 looks random enough that we could use it as a key for the one-time pad. That is,
@@ -199,18 +201,20 @@ is indistinguishable from the one-time-pad encryption of $m$, which is
 identically distributed to the one-time pad encryption of $m'$ which (by another
 application of the claim) is indistinguishable from $E_{U_n}(m')$ and so the
 theorem follows from the triangle inequality. Thus all that's left is to prove
-the claim:
+the claim.
 >
-**Proof of claim:** Suppose that there was an efficient adversary $Eve'$ such
+**Proof of claim:** Suppose that for some non-negligible $\epsilon=\epsilon(n)>0$ there is an efficient adversary $Eve'$ such
 that
 >
 $$
-\left| {\mathbb{E}}[ Eve'(G(U_n)\oplus m)] - {\mathbb{E}}[ Eve'(U_{n+1}\oplus m) ] \right| \geq \epsilon
+\left| {\mathbb{E}}[ Eve'(G(U_n)\oplus m)] - {\mathbb{E}}[ Eve'(U_{n+1}\oplus m) ] \right| \geq \epsilon.
 $$
 >
-for some non-negligible $\epsilon=\epsilon(n)>0$. Then the adversary $Eve$
+Then the adversary $Eve$
 defined as $Eve(y) = Eve'(y\oplus m)$ would be also efficient and would break
 the security of the PRG with non-negligible success. This concludes the proof of the claim and hence the theorem.
+>
+TODO: the proof of this theorem is quite winded. Rewrite it.
 
 If the PRG outputs $t(n)$ bits instead of $n+1$ then we automatically
 get an encryption scheme with $t(n)$ long message length. In fact, in practice
@@ -219,13 +223,13 @@ of messages in advance. Every time we need to encrypt another bit (or another
 block) $m_i$ of the message, we run the basic PRG to update our state and obtain
 some new randomness $y_i$ that we can XOR with the message and output. Such
 constructions are known as *stream ciphers* in the literature. In much
-of the practical literature the name *stream cipher* is used both for the
-pseudorandom generator itself, as well as for the encryption scheme that is
+of the practical literature, the name *stream cipher* is used both for the
+pseudorandom generator itself as well as for the encryption scheme that is
 obtained by combining it with the one-time pad.
 
 
 > # {.remark title="Using pseudorandom generators for coin tossing over the phone" #cointossingphonerm}
-The following is a cute application of pseudorandom generators. Alice and Bob want to toss a fair coin over the phone. They use a pseudorandom generator $G:\{0,1\}^b\rightarrow\{0,1\}^{3n}$.
+The following is a cute application of pseudorandom generators. Alice and Bob want to toss a fair coin over the phone. They use a pseudorandom generator $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$.
 >
 *  Alice will send $z\leftarrow_R\{0,1\}^{3n}$ to Bob \
 * Bob picks $s\leftarrow_R\{0,1\}^n$ and with probability $1/2$ sends $G(s)$ (case I) and with probability $1/2$ sends $G(s)\oplus z$ (case II).\
@@ -233,6 +237,8 @@ The following is a cute application of pseudorandom generators. Alice and Bob wa
 * Bob  reveals what he sent in the previous stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$.
 >
 It can be shown that (assuming the protocol is completed) the output is a random coin, which neither Alice or Bob can control or predict with more than negligible advantage over half. (Trying to formalize this and prove it is an excellent exercise.)
+>
+TODO: this remark is better made into its own section, since it doesn't quite relate to the proof.
 
 ## What do pseudorandom generators actually look like?
 
@@ -240,10 +246,10 @@ It can be shown that (assuming the protocol is completed) the output is a random
 
 So far we have made the conjectures that objects such as ciphers and
 pseudorandom generators *exist*, without giving any hint as to how they would
-actually look like. (Though we have  examples such as the Caesar cipher, Vignere, and Enigma of what secure ciphers _don't_ look like.)
+actually look like. (Though we have examples such as the Caesar cipher, Vignere, and Enigma of what secure ciphers _don't_ look like.)
 As mentioned above, we do not know how to *prove* that
 any particular function is a pseudorandom generator.
-However,  there are quite simple *candidates* (i.e.,  functions that are conjectured to be secure pseudorandom generators), though care must be taken in constructing them.
+However, there are quite simple *candidates* (i.e., functions that are conjectured to be secure pseudorandom generators), though care must be taken in constructing them.
 We now consider candidates for functions that maps $n$ bits
 to $n+1$ bits (or more generally $n+c$ for some constant $c$ ) and look at least
 somewhat "randomish".
@@ -257,13 +263,13 @@ Boneh-Shoup book.
 
 ### Attempt 0: The counter generator
 
-Just to get started, let's show an example of an obviously bogus pseudorandom generator.
-We define  the "counter pseudorandom generator" $G:\{0,1\}^n \rightarrow \{0,1\}^{n+1}$ as follows.
+To get started, let's look at an example of an obviously bogus pseudorandom generator.
+We define the "counter pseudorandom generator" $G:\{0,1\}^n \rightarrow \{0,1\}^{n+1}$ as follows.
 $G(s)=(s',b)$ where $s' = s + 1 \mod 2^n$ (treating $s$ and $s'$ as numbers in $\{0,\ldots,2^n-1\}$) and $b$ is the least significant digit of $s'$.
 It's a great exercise to work out why this is _not_ a secure pseudorandom generator.
 
 > # { .pause }
-You should really pause here and make sure you see why the "counter   pseudorandom generator" is not a secure pseudorandom generator. Show that this is true even if we replace the least significant digit by the $k$-th digit for every $0 \leq k < n$.
+You should really pause here and make sure you see why the "counter pseudorandom generator" is not a secure pseudorandom generator. Show that this is true even if we replace the least significant digit by the $k$-th digit for every $0 \leq k < n$.
 
 
 ### Attempt 1: The linear checksum / linear feedback shift register (LFSR)
@@ -307,7 +313,7 @@ can solve the equations to get the unique solution for the original state $s$
 and from which point we can predict all outputs of the generator, or they are
 dependent, which means that we can predict some of the outputs even without
 recovering the original state.
-Either way the generator is $*\sharp !$’ed (where
+Either way, the generator is $*\sharp !$’ed (where
 $* \sharp !$ refers to whatever verb you prefer to use when your system is broken).
 See also this [1977 paper](http://alumni.cs.ucr.edu/~jsun/random-number.pdf)
 of James Reed.
@@ -456,6 +462,8 @@ The ciphers Salsa and ChaCha, designed by Dan Bernstein, have a similar design t
 
 [^fn]:I typically do not include  references in these lecture notes, and leave them to the texts, but I make here an exception because Itsik Mantin was a close friend of mine in grad school.
 
+## Case Study 3: Blum-Blum-Shub
+TODO: Construct the example used in class.
 
 ## Non-constructive existence of pseudorandom generators
 
