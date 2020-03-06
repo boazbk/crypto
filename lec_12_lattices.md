@@ -59,10 +59,10 @@ You should be comfortable with the following notions:
 
 * A vector $v \in \mathbb{F}^n$ and a _matrix_ $M \in \mathbb{F}^{m \times n}$. An $m\times n$ matrix  has $m$ rows and $n$ columns. We think of vectors as _column vectors_ and so we can think of a vector $v \in \mathbb{F}^n$ as an $n\times 1$ matrix.  We write the $i$-the coordinate of $v$ as $v_i$ and the $(i,j)$-th coordinate of $M$ as $M_{i,j}$ (i.e. the coordinate in the $i$-th row and the $j$-th column.) We often write a vector $v$ as $(v_1,\ldots,v_n)$ but we still mean that it's a column vector unless we say otherwise.
 
-* If $\alpha \in \mathbb{F}$ is a _scalar_ (i.e., a number) and $v \in \mathbb{F}^n$ is a vector then  $\alpha v$ is the vector $(\alpha v_1 ,\ ldots, \alpha v_n)$. If $u,v$ are $n$ dimensional vectors then $u+v$ is the vector $(u_1+v_1,\ldots,u_n+v_n)$.
+* If $\alpha \in \mathbb{F}$ is a _scalar_ (i.e., a number) and $v \in \mathbb{F}^n$ is a vector then  $\alpha v$ is the vector $(\alpha v_1 ,\ldots, \alpha v_n)$. If $u,v$ are $n$ dimensional vectors then $u+v$ is the vector $(u_1+v_1,\ldots,u_n+v_n)$.
 
 
-* A _linear subspace_ $V \subseteq \mathbb{F}^n$ is a non-empty set of vectors  such that for every vectors $u,v \in V$ and $\alpha,\beta \in \mathbb{F}$, $\alpha u + \beta v  \in V$. In particular this means that  $V$ contains the all zero vector $0^n$ (can you see why?). A subset $A \subseteq V$ is _linearly independent_ if there is no collection  $a_1,\ldots,a_k \in A$  and scalars $\alpha_1,\ldots,\alpha_k$ such that $\sum \alpha_i a_i = 0^n$. It is known (and not hard to prove) that if $A$ is linearly independent then $|A| \leq n$.  It is known that for every such linear subspace there is a linearly independent set $B = \{ b_1,\ldots,b_d \}$ of vectors, with $d \leq n$, such that for every $u \in \V$ there exist $\alpha_1,\ldots,\alpha_d$ such that $v = \sum \alpha_i b_i$. Such a set is known as a _basis_ for $V$. A subspace $V$ has many bases, but all of them have the same size $d$ which is known as the _dimension_ of $V$. An _affine subspace_ is a set $U$ of the form $\{ u_0 + v : v\in V \}$ where $V$ is a linear subspace. We can also write $U$ as $u_0 + V$. We denote the dimension of $U$ as the dimension of $V$ in such a case.
+* A _linear subspace_ $V \subseteq \mathbb{F}^n$ is a non-empty set of vectors  such that for every vectors $u,v \in V$ and $\alpha,\beta \in \mathbb{F}$, $\alpha u + \beta v  \in V$. In particular this means that  $V$ contains the all zero vector $0^n$ (can you see why?). A subset $A \subseteq V$ is _linearly independent_ if there is no collection  $a_1,\ldots,a_k \in A$  and scalars $\alpha_1,\ldots,\alpha_k$ such that $\sum \alpha_i a_i = 0^n$. It is known (and not hard to prove) that if $A$ is linearly independent then $|A| \leq n$.  It is known that for every such linear subspace there is a linearly independent set $B = \{ b_1,\ldots,b_d \}$ of vectors, with $d \leq n$, such that for every $u \in V$ there exist $\alpha_1,\ldots,\alpha_d$ such that $v = \sum \alpha_i b_i$. Such a set is known as a _basis_ for $V$. A subspace $V$ has many bases, but all of them have the same size $d$ which is known as the _dimension_ of $V$. An _affine subspace_ is a set $U$ of the form $\{ u_0 + v : v\in V \}$ where $V$ is a linear subspace. We can also write $U$ as $u_0 + V$. We denote the dimension of $U$ as the dimension of $V$ in such a case.
 
 
 
@@ -74,12 +74,23 @@ You should be comfortable with the following notions:
 
 * The _inverse_ of a square $n\times n$ matrix $A$ is the matrix $A^{-1}$ such that $AA^{-1} = I$ where $I$ is the $n\times n$ _identity matrix_ such that $I_{i,j}=1$ if $i=j$ and $I_{i,j}=0$ otherwise.
 
-* The _rank_ of an $m\times n$ matrix $A$ is the minimum number $r$ such that we can write $A$ as $\sum_{i=1}^r u_i(v_i)^\top$  where $u_i \in \mathbb{F}^m$ and $v_i \in \mathbb{F}^n$. It can be shown that an $n\times n$ matrix is full rank if and only if it has an inverse.
+* The _rank_ of an $m\times n$ matrix $A$ is the minimum number $r$ such that we can write $A$ as $\sum_{i=1}^r u_i(v_i)^\top$  where $u_i \in \mathbb{F}^m$ and $v_i \in \mathbb{F}^n$. We can think of the $u_i$'s as the columns of an $m\times r$ matrix $U$ and the $v_i$'s as the rows of an $r\times n$ matrix $V$, and hence the rank of $A$ is the minimum $r$ such that $A=UV$ where $U$ is $m\times r$ and $V$ is $r\times n$. It can be shown that an $n\times n$ matrix is full rank if and only if it has an inverse.
 
 * Solving _linear equations_ can be thought of as the task of given an $m \times n$ matrix $A$ and $m$-dimensional vector $y$, finding the $n$-dimensional vector $x$ such that $Ax = y$. If the rank of $A$ is at least $n$ (which in particular means that $m \geq n$) then it means that by dropping $m-n$ rows of $A$ and coordinates of $y$ we can obtain the equation $A'x = y'$ where $A'$ is an $n\times n$ matrix that has an inverse. In this case a solution (if it exists) will be equal to $(A')^{-1}y$.  If for a set of equations we have $m>n$ and we can find two such matrices $A',A''$ such that $(A')^{-1}y \neq (A'')^{-1}y$ then we say it is _over determined_ and in such a case it has no solutions. If a set of equations has more variables $n$ than equations $m$ we say it's _under-determined_. In such a case it either has no solutions or the solutions form an affinte subspace of dimension at least $n-m$. 
 
 
 * The _gaussian elimination_ algorithm can be used to obtain, given a set of equations $Ax = y$ a solution to $x$ if such exists or a certification that no solution exists. It can be executed in time polynomial in the dimensions and the bit complexity of the numbers involved. This algorithm can also be used to obtain an inverse of a given matrix $A$, if such an inverse exists.
+
+
+::: {.remark title="Keep track of dimensions!" #dimensionsrem}
+Throughout this chapter, and while working in lattice based cryptography in general, it is crucial to keep track of the dimensions. Whenever you see a symbol such as $v,A,x,y$ ask yourself:
+
+* Is it a _scalar_, a _vector_ or a _matrix_?
+
+* If it is a vector or a matrix, what are its dimensions?
+
+* If it's a matrix, is it "square" (i.e., $m=n$), "short and fat" (i.e., $m \ll n$) or "tall and skinny"? ($m\gg n$)?
+:::
 
 
 ## A world without Gaussian elimination
@@ -108,7 +119,7 @@ If you have a CPA secure public key encryption scheme for single bit messages th
 Can you see why?
 
 
-We think of the public key as the set  of equations $\langle a_1,x \rangle=y_1,\ldots, \langle a_m,x \rangle=y_m$ in the unknown variables $x$.
+If $a_1,\ldots,a_m$ are the rows of $A$, we can think of the public key as the set  of equations $\langle a_1,x \rangle=y_1,\ldots, \langle a_m,x \rangle=y_m$ in the unknown variables $x$.
 The idea is that to encrypt the value $0$ we will generate a new _correct_ equation on $x$, while to encrypt the value $1$ we will generate an _incorrect_ equation.
 To decrypt a ciphertext $(a,\sigma)\in \Z_q^{n+1}$, we think of it as an equation of the form $\langle a,x \rangle=\sigma$ and output $1$ if and only if the equation is correct.
 
@@ -118,6 +129,9 @@ This equation is correct and so one can use it to encrypt $0$, while to encrypt 
 However, even if it's hard to solve for $x$ given the equations, an attacker (who also knows the public key $(A,y)$) can try itself all pairs of equations and do the same thing.
 
 Our solution for this is simple- just add more equations! If the encryptor adds a random subset of equations then there are $2^m$ possibilities for that, and an attacker can't guess them all.
+That is, if the rows of $A$ are $a_1,\ldots,a_m$, then we can pick a vector $w \in \{0,1\}^m$ at random, and consider the equation $\langle a ,x \rangle = y$ where $a = \sum w_i a_i$ and $y = \sum w_i y_i$.
+In other words, we can think of this as the equation $w^\top A x = \langle w,y \rangle$ (note that $\langle w,y \rangle = w^\top y$ and so we can think of this as the equation that we obtain from $Ax = y$ by multiplying both sides on the right by the row vector $w^\top$).
+
 Thus, at least intuitively, the following encryption scheme would be "secure" in the Gaussian-elimination free world of attackers that haven't taken freshman linear algebra:
 
 
@@ -136,7 +150,7 @@ __Scheme "LwoE-ENC":__  Public key encryption under the hardness of "learning li
 
 
 > # { .pause }
-Please stop here and make sure that you see why this is a valid encryption, and this description corresponds to the previous one; as usual all calculations are done modulo $q$.
+Please stop here and make sure that you see why this is a valid encryption (not in the sense that it is secure - it's not - but in the sense that decryption of an encryption of $b$ returns the bit $b$), and this description corresponds to the previous one; as usual all calculations are done modulo $q$.
 
 
 
@@ -161,17 +175,25 @@ So, unless $\delta$ was truly tiny (and $q$ truly big, in which case the differe
 
 The _Learning With Errors (LWE)_ conjecture is that this is _inherent_:
 
->__Conjecture (Learning with Errors, Regev 2005):__ Let $q=q(n)$ and $\delta=\delta(n)$ be some functions.
-The _Learning with Error (LWE) conjecture with respect to $q,\delta$_, is that for every polynomial-time adversary $E$
-and $m=poly(n)$, the probability that $E(A,Ax+e)=x$ is negligible, where $A$ is a random $m\times n$ matrix in $\Z_q$,
-$x$ is random in $\Z_q^n,$ and $e \in \Z_q^m$ is a random noise vector with magnitude $\delta q$.[^noise]
->
-The _LWE conjecture_ is that for every polynomial $p(n)$ there is some polynomial $q(n)$ such that LWE holds with respect to $q(n)$ and $\delta(n)=1/p(n)$.[^superpoly]
+::: {.quote}
+__Conjecture (Learning with Errors, Regev 2005):__ Let $q=q(n)$  and $\delta=\delta(n)$ be some functions.
+The _Learning with Error (LWE) conjecture with respect to $q,\delta$_,denoted as $LWE_{q,\delta}$, is the following conjecture: for every polynomial $m(n)$ and polynomial-time adversary $R$, 
 
+$$\Pr[ R(A,Ax+e) = x ] < negl(n)$$
+where for $q=q(n)$ and $\delta = \delta(n)$, this probability is taken over $A$  a random $m\times n$ matrix in $\Z_q$, $x$ a random vector in $\Z_q^n,$ and $e$ a random "noise vector" in $\Z_q^m$ where $|e_i| < \delta q$ for every $i \in [m]$.[^noise]
+
+
+The _LWE conjecture_ (without any parameters) is that there is some absolute constant $c$ such that for every polynomial $p(n)$ there, if $q(n) > p(n)^c$ then LWE holds with respect to $q(n)$  and $\delta(n)=1/p(n)$.[^superpoly]
+:::
 
 [^noise]: One can think of $e$ as chosen by simply letting every coordinate be chosen at random in $\{ -\delta q, -\delta q + 1 , \ldots, +\delta q \}$. For technical reasons, we sometimes consider other distributions and in particular the _discrete Gaussian_ distribution which is obtained by letting every coordinate of $e$ be an independent Gaussian random variable with standard deviation $\delta q$, conditioned on it being an integer. (A closely related distribution is obtained by picking such a Gaussian random variable and then rounding it to the nearest integer.)
 
 [^superpoly]: People sometimes also consider variants where both $p(n)$ and $q(n)$ can  be as large as exponential.
+
+It is important to note the order of quantifiers in the learning with error conjecture.
+If we want to handle a noise of low enough magnitude (say $\delta(n) = 1/n^2$) then we need to choose the modulos $q$ to be large enough (for example it is believed that $q > n^4$ will be good enough for this case) and then the adversary can choose $m(n)$ to be as big a polynomial as they like, and of course run in time which is an arbitrary polynomial in $n$.
+Therefore we can think of such an adversary $R$ as getting access to a "magic box" that they can use $m=poly(n)$ number of times to get  "noisy equations on $x$" of the form $(a_i,y_i)$ with $a_i\in \Z_q^n$, $y_i \in \Z_q$ where $y_i = \langle a_i, x \rangle + e_i$).
+
 
 
 ## Search to decision
@@ -181,54 +203,58 @@ It turns out that if the LWE is hard, then it is even hard to distinguish betwee
 ![The search to decision reduction ([LWEsearchtodecthm](){.ref}) implies that under the LWE conjecture,  for every $m=poly(n)$, if we choose and fix a random $m\times n$ matrix $A$ over $\Z_q$, the distribution $Ax+e$ is indistinguishable from a random vector in $\Z_q^m$, where    $x$ is  a random vector in $\Z_q^n$ and $e$ is a random "short" vector in $\Z_q^m$. The two distributions are indistinguishable even to an adversary that knows $A$.](../figure/lwevecindist.png){#figid  .margin}
 
 
-> # {.theorem title="Search to decision reduction for LWE" #LWEsearchtodecthm}
+::: {.theorem title="Search to decision reduction for LWE" #LWEsearchtodecthm}
 If the LWE conjecture is true then for every $q=poly(n)$ and $\delta=1/poly(n)$ and $m=poly(n)$, the following two distributions are computationally
 indistinguishable:
->
-* $\{ (A,Ax+e) \}$ where $A$ is random $m\times n$ matrix in $\Z_q$, $x$ is random in $\Z_q^n$ and $e\in \Z_q^m$ is random noise vector of magnitude $\delta$.
->
-* $\{ (A,y) \}$ where $A$ is random $m\times n$ matrix in $\Z_q$ and $y$ is random in $\Z_q^m$.
 
-> # {.proof data-ref="LWEsearchtodecthm"}
+* $\{ (A,Ax+e) \}$ where $A$ is random $m\times n$ matrix in $\Z_q$, $x$ is random in $\Z_q^n$ and $e\in \Z_q^m$ is random noise vector of magnitude $\delta$.
+
+* $\{ (A,y) \}$ where $A$ is random $m\times n$ matrix in $\Z_q$ and $y$ is random in $\Z_q^m$.
+:::
+
+::: {.proof data-ref="LWEsearchtodecthm"}
 Suppose that we had a decisional adversary $D$ that succeeds in distinguishing the two distributions above with bias $\epsilon$.
 For example, suppose that $D$ outputs $1$ with probability $p+\epsilon$ on inputs from the first distribution, and outputs  $1$ with probability $p$
 on inputs from the second distribution.
->
+
 We will show how we can use this to obtain a polynomial-time algorithm $S$ that on input $m$ noisy equations on $x$ and a value $a\in\ Z_q$, will learn with high probability whether or not the first coordinate of $x$ equals $a$.
 Clearly, we can repeat this for all the possible $q$ values of $a$ to learn the first coordinate exactly, and then continue in this way to learn all coordinates.
->
+
 Our algorithm $S$ gets as input the pair $(A,y)$ where $y=Ax+e$ and we need to decide whether $x_1 = a$.
 Now consider the instance $(A+(r\|0^m\|\cdots \|0^m),y+ar)$, where $r$ is a random vector in $\Z_q^m$ and the matrix $(r\|0^m\|\cdots \|0^m)$ is simply the matrix with first column equal to $r$ and all other columns equal to $0$.
 If $A$ is random then $A+(r\|0^m\|\cdots \|0^m)$ is random as well.
 Now note that $Ax + (r|0^m\cdots \|0^m)x = Ax + x_1 r$ and hence if $x_1 = a$ then we still have an input of the same form $(A',A'x+e)$.
->
+
 In contrast, we claim that if if $x_1 \neq a$ then the distribution $(A',y')$ where $A'=A+(r\|0^m\|\cdots \|0^m)$ and $y'= Ax + e + ar$ is identical to the uniform distribution over a random uniformly chosen matrix $A'$ and a random and independent uniformly chosen vector $y'$.
 Indeed, we can write this distribution as $(A',y')$ where $A'$ is chosen uniformly at random, and $y'= A'x + e + (a-x_1)r$ where $r$ is a random and independent vector. (Can you see why?)
 Since $a-x_1 \neq 0$, this amounts to adding a random and independent vector $r'$ to $y'$, which means that the distribution $(A',y')$ is uniform and independent.
->
+
 Hence if we send the input $(A',y')$ to our the decision algorithm $D$, then we would get $1$ with probability $p+\epsilon$  if $x_1=a$ and an output of $1$ with probability $p$ otherwise.
->
+
 Now the crucial observation is that if our decision algorithm $D$ requires $m$ equations to succeed with bias $\epsilon$, we can use $100mn/\epsilon^2$ equations (which is still polynomial) to invoke it $100n/\epsilon^2$ times.
 This allows us to distinguish with probability $1-2^{-n}$ between the case that $D$ outputs $1$ with probability $p+\epsilon$ and the case that it outputs $1$ with probability $p$ (this follows from the Chernoff bound; can you see why?).
 Hence by using polynomially more samples than the decision algorithm $D$, we get a search algorithm $S$ that can actually recover $x$.
+:::
+
+
 
 ## An LWE based encryption scheme
 
 We can now show the secure variant of our original encryption scheme:
 
 
->__LWE-based encryption LWEENC:__
->
->
+::: {.quote }
+__LWE-based encryption LWEENC:__
 * _Parameters:_ Let $\delta(n)=1/n^4$ and let $q=poly(n)$ be a prime such that LWE holds w.r.t. $q,\delta$. We let $m = n^2\log q$.
->
-* _Key generation:_ Pick $x\in\Z_q^n$. The private key is $x$ and the public key is $(A,y)$ with $y=Ax+e$ with $e$ a $\delta$-noise vector and $A$ a random $m\times n$ matrix.
->
-* _Encrypt:_ To encrypt $b\in\{0,1\}$ given the key $(A,y)$, pick $w\in\{0,1\}^m$ and output $w^\top A, \langle w,y \rangle+b\floor{q/2}$ (all computations are done in $\Z_q$).
->
-* _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|\langle a,x \rangle-\sigma|<q/10$.
 
- \
+* _Key generation:_ Pick $x\in\Z_q^n$. The private key is $x$ and the public key is $(A,y)$ with $y=Ax+e$ with $e$ a $\delta$-noise vector and $A$ a random $m\times n$ matrix.
+
+* _Encrypt:_ To encrypt $b\in\{0,1\}$ given the key $(A,y)$, pick $w\in\{0,1\}^m$ and output $w^\top A, \langle w,y \rangle+b\floor{q/2}$ (all computations are done in $\Z_q$).
+
+* _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|\langle a,x \rangle-\sigma|<q/10$.
+:::
+
+
 
 
 > # { .pause }
@@ -239,18 +265,18 @@ The scheme LWEENC is also described in [lweencdescfig](){.ref} with slightly dif
 
 
 
-Unlike our typical schemes,
-here it is not immediately clear that this encryption is valid,
+Unlike our typical schemes, here it is not immediately clear that this encryption is valid,
 in the sense that the decrypting an encryption of $b$ returns the value $b$. But this is the case:
 
 > # {.lemma #LWEcorrectlem}
 With high probability, the decryption of the encryption of $b$ equals $b$.
 
-> # {.proof data-ref="LWEcorrectlem"}
+::: {.proof data-ref="LWEcorrectlem"}
 $\langle w^\top A,x \rangle = \langle w,Ax \rangle$. Hence, if $y=Ax+e$ then $\langle w,y \rangle = \langle w^\top A,x \rangle + \langle w,e \rangle$.
 But since every coordinate of $w$ is either $0$ or $1$, $|\langle w,e \rangle|<\delta m q < q/10$ for our choice of parameters.[^cancellations]
 So, we get that if $a= w^\top A$ and $\sigma = \langle w,y \rangle+b\floor{q/2}$ then $\sigma - \langle a,x \rangle = \langle w,e \rangle + b\floor{q/2}$ which will be smaller than
 $q/10$ iff $b=0$.
+:::
 
 [^cancellations]: In fact, due to the fact that the _signs_ of the error vector's entries are different, we expect the errors to have significant cancellations and hence we would expect $|\langle w,e \rangle|$ to only be roughly of magnitude $\sqrt{m}\delta q$, but this is not crucial for our discussions.
 
@@ -264,13 +290,14 @@ For a public key encryption scheme with messages that are just bits, CPA securit
 Thus [LWEENCthm](){.ref}  will follow from the following lemma:
 
 
-> # {.lemma #LWEENClem}
+::: {.lemma #LWEENClem}
 Let $q,m,\delta$ be set as in LWEENC.
 Then, assuming the LWE conjecture, the following distributions are computationally indistinguishable:
->
+
 *  $D$: The distribution over four-tuples of the form  $(A,y,w^\top A,\langle w,y \rangle)$  where $A$ is uniform in $\Z_q^{m\times n}$, $x$ is uniform in $\Z_q^n$, $e \in Z_q$ is chosen with $e_i \in \{-\delta q,\ldots,+\delta q\}$, $y=Ax+e$, and $w$ is uniform in $\{0,1\}^m$.
->
+
 * $\overline{D}$: The distribution over four-tuples $(A,y',a,\sigma)$ where  all entries are uniform: $A$ is uniform in $\Z_q^{m\times n}$, $y'$ is uniform in $\Z_q^m$, $a$ is uniform in $\Z_q^n$ and $\sigma$ is uniform in $\Z_q$.
+:::
 
 
 > # { .pause }
@@ -280,31 +307,34 @@ You can then use it to show that the concatenation of the public key and encrypt
 
 We now prove [LWEENClem](){.ref}, which will complete the proof of [LWEENCthm](){.ref}.
 
-> # {.proof data-ref="LWEENClem"}
+::: {.proof data-ref="LWEENClem"}
 Define $D$ to be the distribution $(A,y,w^\top A,\langle w,y \rangle)$ as in the lemma's statement (i.e., $y=Ax+e$ for some $x$, $e$ chosen as above).
 Define $D'$ to be the distribution $(A,y',w^\top A, \langle w,y' \rangle)$ where $y'$ is chosen uniformly in $\Z_q^m$.
+
 We claim that $D'$ is computationally indistinguishable from $D$ under the LWE conjecture.
 Indeed by [LWEsearchtodecthm](){.ref} (search to  decision reduction) this conjecture implies that the distribution $X$ over pairs   $(A,y)$ with $y=Ax+e$  is indistinguishable from the distribution $X'$ over pairs $(A,y')$ where $y'$ is uniform.
 But if there was some polynomial-time algorithm $T$ distinguishing $D$ from $D'$ then we can design a randomized  polynomial-time algorithm $T'$ distinguishing $X$ from $X'$ with the same advantage by setting $T'(A,y)=T(A,y,w^\top A,\langle w,y \rangle)$ for random $w \leftarrow_R \{0,1\}^m$.
->
+
 We will finish the proof by showing that  the distribution $D'$ is _statistically indistinguishable_ (i.e., has negligible total variation distance) from $\overline{D}$.
 This follows from the following claim:
->
+
 __CLAIM:__ Suppose that $m > 100 n \log q$. If $A'$ is a random $m\times n+1$ matrix in $\Z_q^m$, then with probability at least $1-2^{-n}$ over the choice of $A'$, the distribution $Z_{A'}$ over $\Z_q^n$ which is obtained by choosing $w$ at random in $\{0,1\}^m$ and outputting $w^\top A'$ has at most $2^{-n}$ statistical distance from the uniform distribution over  $\Z_q^{n+1}$.
->
+
 Note that the randomness used for the distribution $Z_{A'}$ is only obtained by the choice of $w$, and _not_ by the choice of $A'$ that is fixed.
 (This passes a basic "sanity check" since $w$ has $m$ random bits, while the uniform distribution over $\Z_q^n$ requires $n \log q \ll m$ random bits, and hence  $Z_{A'}$ at least has a "fighting chance" in being statistically close to it.)
 Another way to state the same claim is that the pair $(A',w^\top A')$ is statistically indistinguishable from the uniform distribution $(A',z)$ where $z$ is a vector chosen independently at random from $\Z_q^n$.
->
+
 The claim completes the proof of the theorem, since letting $A'$ be the matrix $(A|y)$ and $z=(a,\sigma)$, we see that the distribution $D'$, as the form $(A',z)$ where $A'$ is a uniformly random  $m\times (n+1)$ matrix and $z$ is sampled from $Z_{A'}$ (i.e., $z=w^\top A'$ where $w$ is uniformly chosen in $\{0,1\}^m$).
 Hence this means that  the statistical distance of $D'$ from $\overline{D}$ (where all elements are uniform) is $O(2^{-n})$.
 (Please make sure you understand this reasoning!)
->
-We will not do the whole proof of the claim (which uses the mod $q$ version of the [leftover hash lemma](https://goo.gl/KXpccP) which  we mentioned before and is also "Wikipedia-able") but the idea is simple.
+
+We will not do the whole proof of the claim (which uses the mod $q$ version of the [leftover hash lemma](https://goo.gl/KXpccP) which  we mentioned before and is also "Wikipedia-able" - the **scribe writers** for this lecture should add those details thogh!) but the idea is simple.
 For every $m\times (n+1)$ matrix $A'$ over $\Z_q$, define $h_{A'}:\Z_q^m \rightarrow \Z_q^n$ to be the map $h_{A'}(w)=w^\top A'$.
 This collection can be shown to be a "good" hash function collection in some specific technical sense, which in particular implies that for every distribution $D$ with much more than $n\log q$ bits of min-entropy, with all but negligible probability over the choice of $A'$, $h_{A'}(D)$ is statistically indistinguishable from the uniform distribution.
 Now when we choose $w$ at random in $\{0,1\}^m$, it is coming from a distribution with $m$ bits of entropy.
 If $m \gg (n+1)\log q$, then because the output of this function is so much smaller than $m$, we expect it to be completely uniform, and this is what's shown by the leftover hash lemma.
+:::
+
 
 
 
