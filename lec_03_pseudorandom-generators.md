@@ -21,6 +21,7 @@ the nature of probability. The movements of the planets initially looked random
 and arbitrary, but then early astronomers managed to find *order* and make
 some *predictions* on them. Similarly, we have made great advances in predicting
 the weather and will probably continue to do so.
+
 So, while these days it seems as if the event of whether or not it will rain a week from today
 is *random*, we could imagine that in the future we will be able to predict the weather accurately.
 Even the canonical notion of a random experiment -tossing a coin -
@@ -30,6 +31,7 @@ the second toss will have the same result as the first one with about a 51% chan
 It is conceivable that at some point someone would discover some function $F$
 that, given the first 100 coin tosses by any given person, can predict the value of the
 101$^{th}$.[^def]
+
 In all these examples, the physics underlying the event, whether it's the
 planets' movement, the weather, or coin tosses, did not change but only
 our powers to predict them.
@@ -47,8 +49,7 @@ harnessing it to build secure systems. The basic object we want is the
 following:
 
 ::: {.definition title="Pseudorandom generator (concrete)" #prgdefconcrete}
-A function $G:{\{0,1\}}^n\rightarrow{\{0,1\}}^\ell$ is a $(T,\epsilon)$ *pseudorandom generator* if $G(U_n) \approx_{T,\epsilon} U_\ell$ where $U_t$ denotes the uniform
-distribution on ${\{0,1\}}^t$.
+A function $G:{\{0,1\}}^n\rightarrow{\{0,1\}}^\ell$ is a $(T,\epsilon)$ *pseudorandom generator* if $G(U_n) \approx_{T,\epsilon} U_\ell$ where $U_t$ denotes the uniform distribution on ${\{0,1\}}^t$.
 :::
 
 That is, $G$ is a $(T,\epsilon)$ pseudorandom generators if no circuit of at most $T$ gates can distinguish with bias better than $\epsilon$ between the output of $G$ (on a random input) and a uniformly random string of the same length.
@@ -153,25 +154,29 @@ The proof of [lengthextendprgthm](){.ref} is indicative of many practical constr
 
 ### Unpredictability: an alternative approach for proving the length extension theorem
 
-The notion that being random is the same as being "unpredictable" can be formalized as follows.
-One can show that a random variable $X$ over $\{0,1\}^n$ is pseudorandom if and only if every efficient algorithm $A$ succeeds in the following experiment with probability at most $1/2+negl(n)$: $A$ is given $i$ chosen at random in $\{0,\ldots,n-1\}$ and $x_1,\ldots,x_i$ where $(x_1,\ldots,x_n)$ is drawn
-from $X$ and wins if it outputs $x_{i+1}$. It is a good optional exercise to prove this, and to use that to give an alternative proof of the length extension theorem.
+The notion that being random is the same as being "unpredictable", as discussed at the beginning of this chapter, can be formalized as follows.
 
-A function $G:\{0,1\}^*\to \{0,1\}^*$ is *unpredictable* with length function $l(n)$ if for, any $n$ and polynomially-sized circuit $P$, <length condition> and for any $1\le i<l(n)$, $P(P(y_1,\ldots,y_{i-1})=y_i)\le \frac12+negl(n).$
+::: {.definition title="Unpredictable function" #unpreddef}
+An efficiently computable function $G:\{0,1\}^* \rightarrow \{0,1\}^*$ is *unpredictable* if, for any $n$, $1\le i<\ell(n)$ and polynomially-cized circuit $P$, $$\Pr_{y\leftarrow G(U_n)}[P(y_1,\ldots,y_{i-1}) = y_i] \le \frac12+negl(n).$$ Here, $\ell(n)$ is the length function of $G$ and $y\leftarrow G(U_n)$ denotes that $y$ is a random output of $G$. In other words, no polynomial-sized circuit can predict the next bit of the output of $G$ given the previous bits significantly better than guessing.
+:::
 
-Theorem: PRG and unpredictable are equivalent.
+We now show that the condition for a function $G$ to be unpredictable is equivalent to the condition for it to be a secure PRG. The proof is detailed to give you another example of reduction proof.
 
-For the forward direction, suppose for contradiction that there exists some $i$ and some circuit $P$ can predict $y_i$ given $y_1,\ldots,y_{i-1}$. Consider the adversary $Eve$ that, given a string $y$, runs the circuit $P$ on $y_1,\ldots,y_{i-1}$, checks if the output is equal to $y_i$ and if so output 1. On a random input Eve outputs 1 with probability $\frac12$ while on a pseudorandom input Eve outputs 1 with probability $\ge \frac12+1/p(n)$.
+> # {.lemma #unpredequiv}
+Let $G:\{0,1\}^* \rightarrow \{0,1\}^*$ be a function with length function $\ell(n)$, then $G$ is a secure PRG iff it is unpredictable.
 
-For the backward direction. Let $H_i$ be the distribution where the first $i$ bits come from $G(U_n)$ while the last $n-i$ bits are all random. Notice that $H_0=U_m$ and $H_n=G(U_n)$, then it suffices to show that $H_{i-1}\cong H_i$ for all $i$. If not, consider the program $P$ that, on input $(y_1,\ldots,y_i)$, picks the bit $\hat y_{i+1},\ldots, \hat y_n$ at random. If $Eve(y_1y_2\ldots y_i\hat y_{i+1}\cdots \hat y_n)=1$, then $P$ outputs $\hat y_{i+1}$. Else, $P$ outputs $1-\hat y_{i+1}$.
+> # {.proof data-ref="unpredequiv"}
+For the forward direction, suppose for contradiction that there exists some $i$ and some circuit $P$ can predict $y_i$ given $y_1,\ldots,y_{i-1}$ with probability $p\ge \frac12+\epsilon(n)$ for non-negligible $\epsilon$. Consider the adversary $Eve$ that, given a string $y$, runs the circuit $P$ on $y_1,\ldots,y_{i-1}$, checks if the output is equal to $y_i$ and if so output 1.
+>
+If $y=G(x)$ for a uniform $x$, then $P$ succeeds with probability $p$. If $y$ is uniformly random, then we can imagine that the bit $y_i$ is generated *after* $P$ finished its calculation. The bit $y_i$ is $0$ or $1$ with equal probability, so $P$ succeeds with probability $\frac12$. Since $Eve$ outputs 1 when $P$ succeeds,$$\left| \Pr[Eve(G(U_n))=1] - \Pr[ Eve(U_\ell)=1] \right|=|p-\frac12|\ge \epsilon(n),$$ a contradiction.
+>
+For the backward direction, let $G$ be an unpredictable function. Let $H_i$ be the distribution where the first $i$ bits come from $G(U_n)$ while the last $n-i$ bits are all random. Notice that $H_0=U_m$ and $H_n=G(U_n)$, so it suffices to show that $H_{i-1}\cong H_{i}$ for all $i$.
+>
+Suppose $H_{i-1}\ncong H_{i}$ for some $i$, i.e. there exists some $Eve$ and non-negligible $\epsilon$ such that $$\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Consider the program $P$ that, on input $(y_1,\ldots,y_{i-1})$, picks the bit $\hat y_{i},\ldots, \hat y_n$ uniformly at random. Then, $P$ calls $Eve$ on the generated input. If $Eve$ outputs $1$ then $P$ outputs $\hat y_{i}$, and otherwise it outputs $1-\hat y_{i}$.
+>
+The string $(y_1,\ldots,y_{i-1}, \hat y_i,\ldots,\hat y_n)$ has the same distribution as $H_{i-1}$. However, conditioned on $\hat y_i=y_i$, the string has distribution equal to $H_{i}$. Let $p$ be the probability that $Eve$ outputs $1$ if $\hat y_i=y_i$ and $q$ be the same probability when $\hat y_i\neq y_i$, then we get $$p-\frac12(p+q)=\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Therefore, the probability $P$ outputs the correct value is equal to $\frac12p+\frac12(1-q)=\frac12+\epsilon(n)2$, a contradiction.
 
-If equal, the distribution is $H_{i+1}$. If not, the distribution is $H_i$. Show that they are different, $P$ succeeds with large probability and we done.
-
-Theorem: Suppose there exists a function $G'$ that is unpredictable with $l(n)=n+1$. Then, for any polynomial $p$ there exists a function $G$ that is unpredictable with $l(n)=p(n)$.
-
-Lecture note incomplete: assume $G'(x)=f(x)\|b(x)$ where $f$ is a permutation on $\{0,1\}^n$. Use the same construction as the one in the original proof of the length extension theorem.
-
-Observe that $G$ is unpredictable iff the reverse of $G$ is unpredictable. Suppose a program $P$ can predict $y_i$ given $y_{i+1},\ldots,y_m$. Given $x_i$, the adversary $P'$ can compute $y_{i+1},y_m$ and feed it to Phillip to predict $y_i$ so $G'$ is predictable, a contradiction.
+The definition of unpredictability is useful because many of our candidates for pseudorandom generators appeal to the unpredictability definition in their proofs. For example, the Blum-Blum-Shub generator we will see later in the chapter is proved to be unpredictable if the "quadratic residuosity problem" is hard. It is also nice to know that our intuition at the beginning of the chapter can be formalized.
 
 ## Stream ciphers
 
@@ -204,31 +209,21 @@ D_k(c) = G(k) \oplus c
 $$
 >
 Just like in the one time pad, $D_k(E_k(m)) = G(k) \oplus G(k) \oplus m = m$.
-Moreover, the encryption and decryption algorithms are clearly efficient and so
-the only thing that's left is to prove security or that for every pair $m,m'$ of plaintexts,
-$E_{U_n}(m) \approx E_{U_n}(m')$. We show this by proving the following claim:
+Moreover, the encryption and decryption algorithms are clearly efficient. We will prove security
+of this encryption by showing the stronger claim that $E_{U_n}(m)\approx U_{n+1}$ for any $m$.
 >
-**Claim:** For every $m\in{\{0,1\}}^{n+1}$, $E_{U_n}(m) \approx U_{n+1} \oplus m$.
->
-The claim implies the security of the scheme, since it means that $E_{U_n}(m)$
-is indistinguishable from the one-time-pad encryption of $m$, which is
-identically distributed to the one-time pad encryption of $m'$ which (by another
-application of the claim) is indistinguishable from $E_{U_n}(m')$ and so the
-theorem follows from the triangle inequality. Thus all that's left is to prove
-the claim.
->
-**Proof of claim:** Suppose that for some non-negligible $\epsilon=\epsilon(n)>0$ there is an efficient adversary $Eve'$ such
+Notice that $U_{n+1}=U_{n+1}\oplus m$, as we showed in the security of the one-time pad.
+Suppose that for some non-negligible $\epsilon=\epsilon(n)>0$ there is an efficient adversary $Eve'$ such
 that
 >
 $$
 \left| {\mathbb{E}}[ Eve'(G(U_n)\oplus m)] - {\mathbb{E}}[ Eve'(U_{n+1}\oplus m) ] \right| \geq \epsilon.
 $$
 >
-Then the adversary $Eve$
-defined as $Eve(y) = Eve'(y\oplus m)$ would be also efficient and would break
-the security of the PRG with non-negligible success. This concludes the proof of the claim and hence the theorem.
->
-TODO: the proof of this theorem is quite winded. Rewrite it.
+Then the adversary $Eve$ defined as $Eve(y) = Eve'(y\oplus m)$ would be also efficient. Furthermore, if $y$
+is pseudorandom then $Eve(y)=Eve'(G(U_n)\oplus m)$ and if $y$ is uniformly random then $Eve'(U_{n+1}\oplus m)$.
+Then, $Eve$ can distinguish the two distributions with advantage $\epsilon$, a contradiction.
+
 
 If the PRG outputs $t(n)$ bits instead of $n+1$ then we automatically
 get an encryption scheme with $t(n)$ long message length. In fact, in practice
@@ -251,8 +246,7 @@ The following is a cute application of pseudorandom generators. Alice and Bob wa
 * Bob reveals what he sent in the previous stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$.
 >
 It can be shown that (assuming the protocol is completed) the output is a random coin, which neither Alice or Bob can control or predict with more than negligible advantage over half. (Trying to formalize this and prove it is an excellent exercise.)
->
-TODO: this remark is better made into its own section, since it doesn't quite relate to the proof.
+
 
 ## What do pseudorandom generators actually look like?
 
@@ -536,3 +530,7 @@ $$
 is at most $2^{-T^2}$.
 [{prgdefeqchernoff}](){.eqref} follows directly from the Chernoff bound.
 If we let for every $i\in [L]$ the random variable $X_i$ denote $P(y_i)$, then since $y_0,\ldots,y_{L-1}$ is chosen independently at random, these are independently and identically distributed random variables with mean $\E_{y \sim \{0,1\}^m}[P(y)]= \Pr_{y\sim \{0,1\}^m}[ P(y)=1]$ and hence the probability that they deviate from their expectation by $\epsilon$ is at most $2\cdot 2^{-\epsilon^2 L/2}$.
+
+## Bibliographical notes
+1. [Blum Blum Shub paper](https://www.math.tamu.edu/~rojas/bbs.pdf). Paper requires some number-theoretic background such as quadratic reciprocity, which you can learn from [this resource](http://www.cs.miami.edu/home/burt/learning/Csc609.062/docs/bbs.pdf).
+
