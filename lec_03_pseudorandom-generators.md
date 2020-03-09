@@ -470,10 +470,19 @@ The ciphers Salsa and ChaCha, designed by Dan Bernstein, have a similar design t
 
 [^fn]:I typically do not include references in these lecture notes, and leave them to the texts, but I make here an exception because Itsik Mantin was a close friend of mine in grad school.
 
-## Case Study 3: Blum-Blum-Shub
-Blum-blum-shub is the generator $G:S\to S\times\{0,1\}$. Has a fixed parameter $N=PQ$. The set $S$ is the set of quadratic residues mod $N$. That is, $$S=\{x^2\mid \operatorname{gcd}(x,N)=1\}.$$ Then, $x\mapsto x^2$ is a permutation of $S$. Let $G(x)=x^2\|LSB(x).$
+## Case Study 3: B.B.S.
+B.B.S., which stands for the authors Blum, Blum and Shub, is a simple generator constructed from a potentially hard problem in number theory.
 
-TODO: Construct the example used in class.
+Let $n=pq$, where $p,q$ are primes. Then, the set $Q_n$ of *quadratic residues modulo $n$* is the set $$Q_n=\{x^2\mid \gcd(x,N)=1\}.$$ The definition extends the concept of "perfect squares" when we are working with standard integers. Notice that each number in $Q_n$ has at least one square root. We will see later in the course that if $n=pq$ then these numbers will have $4$ square roots.
+
+The B.B.S. generator chooses $n=pq$, where $p,q$ are prime and $p,q\equiv 3\pmod{4}$. The second condition guarentees that for each $y\in Q_n$, exactly one of its square roots fall in $Q_n$. It also maintains an initial state $x\in\{0,1\}^n$, initialized to the seed.
+
+```python
+def BBS(x):
+    return (x * x % n, x % 2)
+```
+
+In other words, it calculates the least significant bit of $x$ and squares its internal state. The security of this generator is based on the *quadratic residuosity problem*, which asks, given a number $x$, whether $x\in Q_n$. The number theory required takes a while to develop. However, it is interesting and I recommend the reader to search up this particular generator.
 
 ## Non-constructive existence of pseudorandom generators
 
@@ -530,7 +539,4 @@ $$
 is at most $2^{-T^2}$.
 [{prgdefeqchernoff}](){.eqref} follows directly from the Chernoff bound.
 If we let for every $i\in [L]$ the random variable $X_i$ denote $P(y_i)$, then since $y_0,\ldots,y_{L-1}$ is chosen independently at random, these are independently and identically distributed random variables with mean $\E_{y \sim \{0,1\}^m}[P(y)]= \Pr_{y\sim \{0,1\}^m}[ P(y)=1]$ and hence the probability that they deviate from their expectation by $\epsilon$ is at most $2\cdot 2^{-\epsilon^2 L/2}$.
-
-## Bibliographical notes
-1. [Blum Blum Shub paper](https://www.math.tamu.edu/~rojas/bbs.pdf). Paper requires some number-theoretic background such as quadratic reciprocity, which you can learn from [this resource](http://www.cs.miami.edu/home/burt/learning/Csc609.062/docs/bbs.pdf).
 
