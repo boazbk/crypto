@@ -103,7 +103,7 @@ the existence of pseudorandom generators. Nevertheless we believe that pseudoran
 and hence we make the following conjecture:
 
 >**Conjecture (The PRG conjecture):** For every $n$, there exists a pseudorandom
-generator $G$ mapping $n$ bits to $n+1$ bits.^[The name "The PRG conjecture" is non-standard. In the literature this is known as the conjecture of existence of pseudorandom generators. This is a weaker form of "The Optimal PRG Conjecture" presented in my [intro to theoretical CS lecture notes](https://goo.gl/G7bU4M) since the PRG conjecture only posits the existence of pseudorandom generators with arbitrary polynomial blowup, as opposed to an exponential blowup posited in the optimal PRF conjecture.]
+generator $G$ mapping $n$ bits to $n+1$ bits.^[The name "The PRG conjecture" is non-standard. In the literature this is known as the conjecture of existence of pseudorandom generators. This is a weaker form of "The Optimal PRG Conjecture" presented in my [intro to theoretical CS lecture notes](https://goo.gl/G7bU4M) since the PRG conjecture only posits the existence of pseudorandom generators with arbitrary polynomial blowup, as opposed to an exponential blowup posited in the optimal PRG conjecture.]
 
 As was the case for the cipher conjecture, and any other conjecture, there are two natural questions
 regarding the PRG conjecture: why should we believe it and why should we care. Fortunately, the answer to the first question is simple:
@@ -157,7 +157,7 @@ The proof of [lengthextendprgthm](){.ref} is indicative of many practical constr
 The notion that being random is the same as being "unpredictable", as discussed at the beginning of this chapter, can be formalized as follows.
 
 ::: {.definition title="Unpredictable function" #unpreddef}
-An efficiently computable function $G:\{0,1\}^* \rightarrow \{0,1\}^*$ is *unpredictable* if, for any $n$, $1\le i<\ell(n)$ and polynomially-cized circuit $P$, $$\Pr_{y\leftarrow G(U_n)}[P(y_1,\ldots,y_{i-1}) = y_i] \le \frac12+negl(n).$$ Here, $\ell(n)$ is the length function of $G$ and $y\leftarrow G(U_n)$ denotes that $y$ is a random output of $G$. In other words, no polynomial-sized circuit can predict the next bit of the output of $G$ given the previous bits significantly better than guessing.
+An efficiently computable function $G:\{0,1\}^* \rightarrow \{0,1\}^*$ is *unpredictable* if, for any $n$, $1\le i<\ell(n)$ and polynomially-sized circuit $P$, $$\Pr_{y\leftarrow G(U_n)}[P(y_1,\ldots,y_{i-1}) = y_i] \le \frac12+negl(n).$$ Here, $\ell(n)$ is the length function of $G$ and $y\leftarrow G(U_n)$ denotes that $y$ is a random output of $G$. In other words, no polynomial-sized circuit can predict the next bit of the output of $G$ given the previous bits significantly better than guessing.
 :::
 
 We now show that the condition for a function $G$ to be unpredictable is equivalent to the condition for it to be a secure PRG. The proof is detailed to give you another example of reduction proof.
@@ -254,7 +254,7 @@ It can be shown that (assuming the protocol is completed) the output is a random
 
 So far we have made the conjectures that objects such as ciphers and
 pseudorandom generators *exist*, without giving any hint as to how they would
-actually look like. (Though we have examples such as the Caesar cipher, Vignere, and Enigma of what secure ciphers _don't_ look like.)
+actually look like. (Though we have examples such as the Caesar cipher, Vigenere, and Enigma of what secure ciphers _don't_ look like.)
 As mentioned above, we do not know how to *prove* that
 any particular function is a pseudorandom generator.
 However, there are quite simple *candidates* (i.e., functions that are conjectured to be secure pseudorandom generators), though care must be taken in constructing them.
@@ -475,7 +475,7 @@ B.B.S., which stands for the authors Blum, Blum and Shub, is a simple generator 
 
 Let $n=pq$, where $p,q$ are primes. Then, the set $Q_n$ of *quadratic residues modulo $n$* is the set $$Q_n=\{x^2\mid \gcd(x,N)=1\}.$$ The definition extends the concept of "perfect squares" when we are working with standard integers. Notice that each number in $Q_n$ has at least one square root. We will see later in the course that if $n=pq$ then these numbers will have $4$ square roots.
 
-The B.B.S. generator chooses $n=pq$, where $p,q$ are prime and $p,q\equiv 3\pmod{4}$. The second condition guarentees that for each $y\in Q_n$, exactly one of its square roots fall in $Q_n$. It also maintains an initial state $x\in\{0,1\}^n$, initialized to the seed.
+The B.B.S. generator chooses $n=pq$, where $p,q$ are prime and $p,q\equiv 3\pmod{4}$. The second condition guarantees that for each $y\in Q_n$, exactly one of its square roots fall in $Q_n$. It also maintains an initial state $x\in\{0,1\}^n$, initialized to the seed.
 
 ```python
 def BBS(x):
