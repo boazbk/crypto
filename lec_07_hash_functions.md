@@ -16,10 +16,10 @@ is purely coincidental.
 ## The "Bitcoin" Problem
 
 
-Using cryptography to create a _centralized_ digital-currency is fairly straightforward, and indeed this is what is done by Visa, Mastercard etc..
+Using cryptography to create a _centralized_ digital-currency is fairly straightforward, and indeed this is what is done by Visa, Mastercard, and so on.
 The main challenge with Bitcoin is that it is _decentralized_.
-There is no trusted server,  there are  no "user accounts", no central authority to adjudicate claims.
-Rather we have  a collection of anonymous and autonomous parties that somehow need to agree on what is a valid payment.
+There is no trusted server, there are no "user accounts", no central authority to adjudicate claims.
+Rather we have a collection of anonymous and autonomous parties that somehow need to agree on what is a valid payment.
 
 ### The Currency Problem
 
@@ -42,8 +42,28 @@ One advantage (sometimes disadvantage) of a fiat currency is that it allows for 
 Bitcoin is a fiat currency without a central authority.
 A priori this seems like a contradiction in terms.
 If there is no trusted central authority, how can we ensure a scarce resource?  who settles claims of ownership? and who sets monetary policy?
-Bitcoin (and other cryptocurrencies) is about the solution for these problems via cryptographic means.
 
+For instance, one problem we are particularly concerned with is the
+_double-spend_ problem. The following scenario is a double-spend:
+
+1. Adversary $A$ orders a pizza from Pinocchio's.
+2. $A$ gives Pinocchio's a particular "set" of money $m$.
+3. $A$ eats the pizza.
+4. $A$ gives that same set of money $m$ to another Domino's _such that
+   Pinocchio's no longer has that money_.
+5. $A$ eats the second pizza.
+
+With cash, this situation is unfathomable. But think about a credit card: if you
+can "revoke" (or dispute) the first payment, you could take money away from
+Pinocchio's _after_ you've received some goods or services. Also consider that
+rather than giving $m$ to Domino's in step 4, $A$ could just give $m$ back to
+itself.
+
+We want to make it difficult or impossible for the anyone to perform a
+double-spend like this.
+
+Bitcoin (and other cryptocurrencies) aims to provide cryptographic solutions to
+this problem and more.
 
 The basic unit in the Bitcoin system is a _coin_.
 Each coin has a unique identifier, and a current _owner_ .[^Satoshi]
