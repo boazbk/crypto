@@ -5,7 +5,7 @@ chapternum: "17"
 ---
 
 
-#  Fully homomorphic encryption : Construction
+#  Fully homomorphic encryption: Construction {chapfhetwo }
 
 In the last lecture we defined fully homomorphic encryption, and showed the "bootstrapping theorem" that transforms a partially homomorphic encryption scheme into a fully homomorphic encryption, as long as the original scheme can homomorphically evaluate its own decryption circuit.
 In this lecture we will show an encryption scheme (due to Gentry, Sahai and Waters, henceforth GSW) meeting the latter property.
@@ -162,7 +162,7 @@ $$(C\oplus C')v = (C+C')v = (b+b')v + (e+e') \label{eqfheaddfinal}$$
 
 and
 
-$$(C\otimes C')v = \widehat{(CQ^\top)}C'v = \widehat{(CQ^\top)}(bv+e') \;. \label{fhemultfinaleqfirst}$$
+$$(C\otimes C')v = \widehat{(CQ^\top)}C'v = \widehat{(CQ^\top)}(b'v+e') \;. \label{fhemultfinaleqfirst}$$
 
 But since $v=Q^\top s$ and $\hat{A}Q^\top = A$ for every matrix $A$, the righthand side of [fhemultfinaleqfirst](){.eqref} equals
 
@@ -359,6 +359,15 @@ This completes the proof that our scheme can fit into the bootstrapping theorem 
 Now would be a good point to go back and see you understand how all the pieces fit together to obtain the complete construction of the fully homomorphic encryption scheme.
 
 
-## Example application: Private information retrieval
 
-To be completed
+
+
+## Advanced topics:
+
+
+* Fully homomorphic encryption for approximate computation over the real numbers: [CKKS](https://eprint.iacr.org/2016/421.pdf)
+
+* Bandwidth efficient fully homomorphic encryption [GH](https://eprint.iacr.org/2019/733.pdf)
+
+* Using fully homomorphic encryption to achieve private information retrieval. 
+

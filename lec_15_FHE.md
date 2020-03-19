@@ -5,7 +5,7 @@ chapternum: "16"
 ---
 
 
-# Fully homomorphic encryption: Introduction and bootstrapping
+# Fully homomorphic encryption: Introduction and bootstrapping {#chapfheone } 
 
 
 In today's era of "cloud computing", much of individuals' and businesses' data is stored and computed on by third parties such as Google, Microsoft, Apple, Amazon,  Facebook, Dropbox and many others.
@@ -138,8 +138,10 @@ for every $m=poly(n)$ there is a distribution $LWE_q$ over pairs $(A,s)$ such th
 * The distribution $A$ where $(A,s)$ is sampled from $LWE_q$ is computationally indistinguishable from the uniform distribution of $m\times n$ matrices over $\Z_q$.
 :::
 
-The _LWE conjecture_ is that $q(n)$-dLWE holds for every $q(n)$ that is at most $poly(n)$.
+The _dLWE conjecture_ is that $q(n)$-dLWE holds for every $q(n)$ that is at most $poly(n)$.
 This is not exactly the same phrasing we used before, but as we sketch below, it is essentially equivalent to it.
+One can also make the stronger conjecture that $q(n)$-dLWE holds even for $q(n)$ that is _super polynomial_ in $n$ (e.g., $q(n)$ magnitude roughly $2^n$  - note that such a number can still be described in $n$ bits and we can still efficiently perform operations such as addition and multiplication modulo $q$).
+This stronger conjecture also seems well supported by evidence and we will use it in future lectures.
 
 > # { .pause }
 It is a good idea for you to pause here and try to show the equivalence on your own.
@@ -159,9 +161,9 @@ __LWE-ENC' encryption:__
 
 * _Key generation:_ Choose $(A,s)$ from $LWE_q$ where $m$ satisfies $q^{1/4} \gg m \log q \gg n$.
 
-* To _encrypt_ $b\in\{0,1\}$, choose $w\in\{0,1\}^m$ and output $w^\top A + \floor{\tfrac{q}{2}}(b,0,\ldots,0)$
+* To _encrypt_ $b\in\{0,1\}$, choose $w\in\{0,1\}^m$ and output $w^\top A + (b,0,\ldots,0)$. 
 
-* To _decrypt_ $c\in\Z_q^n$, output $0$ iff $|\langle c,s \rangle| \leq q/10$, where for $x\in\Z_q$ we defined $|x| = \min \{ x , q-x \}$.
+* To _decrypt_ $c\in\Z_q^n$, output $0$ iff $|\langle c,s \rangle| \leq q/10$, where for $x\in\Z_q$ we defined $|x| = \min \{ x , q-x \}$. (Recall that the first coordinate of $s$ is $\floor{q/2}$.
 :::
 
 
@@ -172,11 +174,12 @@ It turns out that this scheme is homomorphic with respect to the class of _linea
 
 
 > # {.lemma #parityhomlem}
-For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c_1,\ldots,c_\ell$ encrypting via LWEENC bits $b_1,\ldots,b_\ell \in \{0,1\}$, outputs a ciphertext $c$ encrypting $b_1 \oplus \cdots \oplus b_\ell$.
+For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c_1,\ldots,c_\ell$ encrypting via LWEENC bits $b_1,\ldots,b_\ell \in \{0,1\}$, outputs a ciphertext $c$ whose decryption $b_1 \oplus \cdots \oplus b_\ell$.
 
 > # { .pause }
 This claim is not hard to prove, but working it out for yourself can be a good way to get more familiarity with LWE-ENC' and the kind of manipulations we'll be making time and again in the constructions of many lattice based cryptographic primitives.
 Try to show that $c = c_1 + \cdots +c_\ell$ (where addition is done as vectors in $\Z_q$) will be the encryption $b_1 \oplus \cdots \oplus b_\ell$.
+Note that if $q$ is _super polynomial_  in $n$ then $\ell$ can be an arbitrarily large polynomial in $n$.
 
 
 > # {.proof data-ref="parityhomlem"}
