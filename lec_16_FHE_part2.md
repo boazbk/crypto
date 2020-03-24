@@ -367,7 +367,42 @@ Now would be a good point to go back and see you understand how all the pieces f
 
 * Fully homomorphic encryption for approximate computation over the real numbers: [CKKS](https://eprint.iacr.org/2016/421.pdf)
 
-* Bandwidth efficient fully homomorphic encryption [GH](https://eprint.iacr.org/2019/733.pdf)
+### Bandwidth efficient fully homomorphic encryption  [GH](https://eprint.iacr.org/2019/733.pdf)
 
-* Using fully homomorphic encryption to achieve private information retrieval. 
+When we define homomorphic encryption in Definition 16.3, we only consider a class of single-output functions $\mathcal{F}$. Now we want to extend the difinition to multiple-output function and consider how bandwidth efficient the fully homomorphic encryption can be. More specifically, if we want to guarantee that the result of decryption is (or contains) $f(x_1,\ldots,x_\ell)$, what is the minimal possible length of the ciphertext? Let us first define the compressible fully homomorphic encryption scheme.
+
+::: {.definition title="Compressible Fully Homomorphic Encryption" #compFHE}  A _compressible fully homomorphic public key encryption scheme_  is a CPA secure public key encryption scheme $(G,E,D)$ such that there exist polynomial-time algorithms $EVAL, COMP:{0,1}^* \rightarrow {0,1}^*$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$, $x_1,\ldots,x_\ell \in \{0,1\}$, and $f:\{0,1\}^\ell\rightarrow \{0,1\}^*$ which can be described by a circuit, it holds that:
+
+-   $c=EVAL_e(f,E_e(x_1),\ldots,E_e(x_\ell))$.
+
+-   $c^*=COMP(c)$.
+    
+-   $D_d(c^*) $ has $f(x_1,\ldots,x_\ell)$ as its prefix. :::
+
+This definition is similar to the standard fully homomorphic encryption except an additional compression step. The bandwidth efficiency of a compressible fully homomorphic encryption is often described by the rate which is defined as follows:
+    
+ ::: {.definition title="Rate of Compressible Fully Homomorphic Encryption" #ratecompFHE}  A compressible fully homomorphic public key encryption scheme has rate $\alpha=\alpha(n)$ if for for every $(e,d)=G(1^n)$, $\ell=poly(n)$, $x_1,\ldots,x_\ell \in \{0,1\}$, and $f:\{0,1\}^\ell\rightarrow \{0,1\}^*$ with sufficiently long output, it holds that
+$$\alpha |c^*|\leq |f(x_1,\ldots,x_\ell)|.$$ :::
+
+The following theorem answers the question before, which states that the nearly optimal rate, say a rate arbitrarily close to 1 can be achieved.
+
+> # {.theorem title="Nearly Optimal Rate, Gentry and Halevi 2019" #optrate}
+
+For any $\epsilon>0$, there exists a compressive fully homomorphic encryption scheme with rate being $1-\epsilon$ under the LWE assumption.
+ 
+### Using fully homomorphic encryption to achieve private information retrieval.
+
+Private information retrieval (PIR) allows the client to retrive the $i$-th entry of  a database which has totally $n$ entries without letting the server know $i$. We only consider the single-server case here. Obviously, a trivial solution is that the server sends the entire database to the client. 
+
+One simple case of PIR is that each entry is a bit, for which the trivial solution above has the communication complexity being $n$. Kushilevitz and Ostrovsky 1997 reduced the the complexity to be smaller than $O(n^\epsilon)$ for any $\epsilon>0$. After that, some work (e.g., Cachin et al. 1999) further reduced the complexity to $polylog(n)$. 
+
+One observation is that fully homomorphic encryption can be applied to applied to the single-server PIR via the following procedures:
+
+-   The client computes $E_e(i)$ and sends it to the server.
+
+-   The server evaluates $c=EVAL(f,E_e(i))$, where $f(i)$ returns the $i$-th entry of the database, and sends it (or its compressed version $c^*$) back to the client.
+    
+-   The client decrypts $D_d(c)$ or $D_d(c^*)$ and obtains the $i$-th entry of the database.
+
+Since there exists compressive fully homomorphic encryption scheme with nearly optimal rate, say rate arbitrarily close to $1$, we can immediately get rate-$(1-\epsilon)$ PIR for any $\epsilon$. (Note that this result holds only for database whose entries is quite large, since the rate is defined for circuits with sufficiently long output.) Prior to the theorem by Gentry and Halevi 2019, Kiayias et al. 2015 also constructed a PIR scheme with nearly optimal rate/bandwidth efficiency. The application of fully homomorphic encryption to PIR is a fascinating field; except the bandwidth efficiency, people may be also interested in the computational cost.
 
