@@ -72,7 +72,7 @@ All of these transactions are recorded in a public _ledger_.
 
 [^Satoshi]: This is  one of the places where we simplify and deviate from the actual Bitcoin system. In the actual Bitcoin system, the atomic unit is known as a _Satoshi_ and one Bitcoin (abbreviated BTC) is $10^8$ Satoshis. For reasons of efficiency, there is no individual identifier per Satoshi and transactions can involve transfer and creation of multiple Satoshis. However, conceptually we can think of atomic coins each of which has a unique identifier.
 
-Since there are no user accounts in Bitcoin, the "entities" $P$ and $Q$ are not identifiers of any person or account.
+Since there are no user accounts in Bitcoin, the "entities" $P$ and $Q$ are not identifiers of any physical person.
 Rather  $P$ and $Q$ are  "computational puzzles".
 A _computational puzzle_ can be thought of as a string $\alpha$ that specifies some "problem" such that it's easy to verify whether some other string $\beta$ is a "solution" for $\alpha$, but it is hard to find such a solution on your own.
 (Students with complexity background will recognize here the class **NP**.)
@@ -82,22 +82,29 @@ More accurately, a transaction involving the coin $ID$ is self-validating if it 
 > # { .pause }
 Please re-read the previous paragraph, to make sure you follow the logic.
 
+One theoretical example of a puzzle is the following: if $alpha$ is the puzzle,
+an entity can "prove" that they own coins assigned to $alpha$ if they can
+produce numbers $A,B$ such that $N=A\cdot B$.
 
+Another more generic example (that you can keep in mind as a potential
+implementation for the puzzles we use here) is: $\alpha$ is some string in
+$\{0,1\}^{2n}$ and $\beta$ will be a string in $\{0,1\}^n$ such that $\alpha =
+G(\beta)$ where $G:\{0,1\}^n\rightarrow\{0,1\}^{2n}$ is some pseudorandom
+generator.
 
-One example of a puzzle is that  $\alpha$ can encode some large integer $N$, and a solution $\beta$ will encode a pair of numbers $A,B$ such that $N=A\cdot B$.
-Another more generic example (that you can keep in mind as a potential implementation for the puzzles we use here) is that $\alpha$  will be a string in $\{0,1\}^{2n}$ while $\beta$ will be a string in $\{0,1\}^n$ such that $\alpha = G(\beta)$ where $G:\{0,1\}^n\rightarrow\{0,1\}^{2n}$ is some pseudorandom generator.
-The real Bitcoin system typically  uses puzzles based on _digital signatures_, a concept we will learn about later in this course, but you can simply think of $P$ as specifying some abstract puzzle and every person that can solve $P$ can perform transactions on the coins owned by $P$.[^signatures]
-In particular if you lost the solution to the puzzle then you have no access to the coin, and if someone stole the solution from you, then you have no recourse or way to get your coin back. People have managed to [lose millions of dollars](http://readwrite.com/2014/01/13/what-happens-to-lost-Bitcoins) in this way.
+The real Bitcoin system typically uses puzzles based on _digital signatures_, a concept we will learn about later in this course, but you can simply think of $P$ as specifying some abstract puzzle and every person that can solve $P$ can construct transactions with the coins owned by $P$.[^signatures]
+Unfortunately, this means if you _lose_ the solution to the puzzle then you have no access to the coin. More alarmingly, if someone steals the solution from you, then you have no recourse or way to get your coin back. People have managed to [lose millions of dollars](http://readwrite.com/2014/01/13/what-happens-to-lost-Bitcoins) in this way.
 
-[^signatures]: There are reasons why Bitcoin uses digital signatures and not these puzzles. The main issue is that we want to bind the puzzle not just to the coin but also to the particular transaction, so that if you know the solution to the puzzle $P$ corresponding to the coin $ID$ and want to use that to transfer it to $Q$, it won't be possible for someone to take your  solution and use that to transfer the coin to $Q'$ before your transaction is added to the public ledger. We will come back to this issue after we learn about digital signatures.
+[^signatures]: There are reasons why Bitcoin uses digital signatures and not these puzzles. The main issue is that we want to bind the puzzle not just to the coin but also to the particular transaction, so that if you know the solution to the puzzle $P$ corresponding to the coin $ID$ and want to use that to transfer it to $Q$, it won't be possible for someone to take your  solution and use that to transfer the coin to $Q'$ before your transaction is added to the public ledger. We will come back to this issue after we learn about digital signatures. As a quick preview, in Bitcoin the puzzle is as follows: whoever can produce a digital signature with the private key corresponding to the public key $P$ can claim these coins.
 
 ## The Bitcoin Ledger
 
 The main idea behind Bitcoin is that there is a public _ledger_ that contains an ordered list of all the transactions that were ever performed and are considered as valid in the system. Given such a ledger, it is easy to answer the question of who owns any particular coin.
 The main problem is how does a collection of anonymous parties without any central authority agree on this ledger? This is an instance of the _consensus_ problem in
-distributed computing. This seems quite scary, as there are very strong negative results known for this problem; for example the famous [Fischer, Lynch  Patterson (FLP) result](http://the-paper-trail.org/blog/a-brief-tour-of-flp-impossibility/) showed that if there is even one party that has a _benign_ failure (i.e., it halts and stop responding) then it is impossible to guarantee consensus in an asynchronous network. Things are better if we assume synchrony (i.e., a global clock and some bounds on the latency of messages) as well as that a  majority or supermajority of the parties behave correctly. The central clock assumption is typically approximately maintained on the Internet, but the honest majority assumption seems quite suspicious.
-What does it mean a "majority of parties" in an anonymous network where a single person can create multiple "entities" and cause them to behave arbitrarily (known as "byzantine" faults in distributed parlance)? Also, why would we assume that even one party would behave honestly- if there is no central authority and it is profitable  to cheat then they everyone would cheat, wouldn't they?
+distributed computing. This seems quite scary, as there are very strong negative results known for this problem; for example the famous [Fischer, Lynch  Patterson (FLP) result](http://the-paper-trail.org/blog/a-brief-tour-of-flp-impossibility/) showed that if there is even one party that has a _benign_ failure (i.e., it halts and stop responding) then it is impossible to guarantee consensus **in a completely asynchronous network**. Things are better if we assume some degree of partial synchrony (i.e., a global clock and some bounds on the latency of messages) as well as that a majority or supermajority of the parties behave correctly.
 
+The partial synchrony assumption is typically approximately maintained on the Internet, but the honest majority assumption seems quite suspicious.
+What does it mean a "majority of parties" in an anonymous network where a single person can create multiple "entities" and cause them to behave arbitrarily maliciously (known as "byzantine" faults in distributed parlance)? Also, why would we assume that even one party would behave honestly- if there is no central authority and it is profitable  to cheat then they everyone would cheat, wouldn't they?
 
 ![The Bitcoin ledger consists of an ordered list of transactions. At any given point in time there might be several "forks" that continue the ledger, and different parties do not necessarily have to agree on them. However, the Bitcoin architecture is designed to ensure that the parties corresponding to a majority of the computing power will reach consensus on a single ledger. ](../figure/Bitcoin_ledger.jpg){#ledgerfig width=80% }
 
@@ -114,7 +121,7 @@ Consider a pseudorandom function $\{ f_k \}$ mapping $n$ bits to $\ell$ bits. On
 Stop here and try to think if indeed it is the case that one cannot find an input $x$ such that $f_k(x)=0^\ell$ using much fewer than $2^\ell$ steps.
 
 
-The main  question in using PRF's for proofs of work  is who is holding the key $k$ for the pseudorandom function.
+The main question in using PRF's for proofs of work is who is holding the key $k$ for the pseudorandom function.
 If there is a trusted server holding the key, then sure, finding such an input $x$ would take on average $2^\ell$ queries, but the whole point of Bitcoin is to _not_ have a trusted server.
 If we give $k$ to a party Alice, then can we guarantee that she can't find a "shortcut" to find such an input without running $2^\ell$ queries?  The answer, in general, is __no__.
 
@@ -130,9 +137,12 @@ Now if things would go as usual in this course then I would state a result  like
 
 >__Theorem:__ Under the PRG conjecture, there exist super strong PRF.
 
-Unfortunately such a  result is _not_ known to be true, and for a very good reason. Most natural ways to define "super strong PRF" will result in properties that
-can be shown to be _impossible to achieve_.
-Nevertheless, the intuition behind it still seems useful and so we have the following heuristic:
+Where again, the "super strong PRF" behaves like a truly random function _even
+to a party that holds the key_. Unfortunately such a  result is _not_ known to
+be true, and for a very good reason. Most natural ways to define "super strong
+PRF" will result in properties that can be shown to be _impossible to achieve_.
+Nevertheless, the intuition behind it still seems useful and so we have the
+following heuristic:
 
 >__The random oracle heuristic (aka "Random oracle model", Bellare-Rogaway 1993):__ If a "natural" protocol is secure when all parties have access to a random function $H:\{0,1\}^n\rightarrow\{0,1\}^\ell$, then it remains secure even when we give the parties the _description_ of a cryptographic hash function with the same input and output lengths.
 
@@ -143,16 +153,37 @@ The random oracle heuristic is very different from all the  conjectures we consi
 
 
 
-We can now specify the "proof of work" protocol for Bitcoin. Given some identifier $ID\in\{0,1\}^n$, an integer $T \ll 2^n$, and a hash function $H:\{0,1\}^{2n}\rightarrow\{0,1\}^n$, the proof of work corresponding to $ID$ and $T$ will be some $x\in\{0,1\}^*$ such that  the first $\lceil \log T \rceil$ bits of $H(ID\| x)$ are zero.[^number]
+_Under the random oracle model_, we can now specify the "proof of work" protocol for Bitcoin. Given some identifier $ID\in\{0,1\}^n$, an integer $T \ll 2^n$, and a hash function $H:\{0,1\}^{2n}\rightarrow\{0,1\}^n$, the proof of work corresponding to $ID$ and $T$ will be some $x\in\{0,1\}^*$ such that  the first $\lceil \log T \rceil$ bits of $H(ID\| x)$ are zero.[^number]
 
 [^number]: The actual Bitcoin protocol is slightly more general, where the proof is some $x$ such that $H(ID\|x)$, when interpreted as a number in $[2^n]$, is at most $T$. There are also other issues about how exactly $x$ is placed and $ID$ is computed from past history  that we ignore here.
 
 ### From Proof of Work to Consensus on Ledger
 
-How does proof of work help us in achieving consensus? The idea is that every transaction $t_i$ comes up with a proof of work of some  $T_i$ time with respect to some identifier that is unique to $t_i$.
-The _length_ of a ledger $(t_1,\ldots,t_n)$ is the sum of the corresponding $T_i$'s which correspond to the total number of cycles invested in creating this ledger.
+How does proof of work help us in achieving consensus?
 
-An honest party in the Bitcoin network will accept the longest valid ledger it is aware of. (A ledger is _valid_ if every transaction in it of the form "transfer the coin $ID$ from $P$ to $Q$" is self-certified by a solution of $P$, and the last transaction in the ledger involving $ID$ either transferred or minted the coin $ID$ to $P$). If a ledger $L$ corresponds to the majority of the cycles that were available in this network then every honest party would accept it, as any alternative ledger would be necessarily shorter. (See [ledgerfig](){.ref}.)
+We want every transaction $t_i$ in the Bitcoin system to have a corresponding
+proof of work. In particular, some proof of $T_i$ time "amount" of work with
+respect to some identifier that is unique to $t_i$.
+
+The _length_ of a ledger $(t_1,\ldots,t_n)$ is the sum of the corresponding
+$T_i$'s. In other words, the _length_ corresponds to the total number of cycles
+invested in creating this ledger.
+
+A ledger is valid if every transaction in the ledger of the form "transfer the
+coin $ID$ from $P$ to $Q$" is self-certified by a solution to $P$ and the last
+transaction in the ledger involving $ID$ either transferred or minted the coin
+$ID$ to $P$.
+
+An honest party in the Bitcoin network will accept the longest valid ledger (in
+terms of computational cycles) it is aware of. (A ledger is _valid_ if every
+transaction in it of the form "transfer the coin $ID$ from $P$ to $Q$" is
+self-certified by a solution of $P$, and the last transaction in the ledger
+involving $ID$ either transferred or minted the coin $ID$ to $P$). If a ledger
+$L$ corresponds to the majority of the cycles that were available in this
+network then every honest party would accept it, as any alternative ledger would
+be necessarily shorter. (See [ledgerfig](){.ref}.)
+
+
 
 The question is then how do we get to that happy state given that many parties might be non-malicious but still _selfish_ and might not want to volunteer their computing power for the goal of creating a consensus ledger.
 Bitcoin achieves this by giving some incentive, in the form of the ability to mint new coins, to any party that adds to the ledger.
