@@ -167,29 +167,42 @@ respect to some identifier that is unique to $t_i$.
 
 The _length_ of a ledger $(t_1,\ldots,t_n)$ is the sum of the corresponding
 $T_i$'s. In other words, the _length_ corresponds to the total number of cycles
-invested in creating this ledger.
+invested in creating this ledger. A ledger is _valid_ if every transaction in
+the ledger of the form "transfer the coin $ID$ from $P$ to $Q$" is
+self-certified by a solution to $P$.
 
-A ledger is valid if every transaction in the ledger of the form "transfer the
-coin $ID$ from $P$ to $Q$" is self-certified by a solution to $P$ and the last
-transaction in the ledger involving $ID$ either transferred or minted the coin
-$ID$ to $P$.
+Critically, participants (specifically _miners_) in the Bitcoin network are
+rewarded for adding valid entries to the ledger. In other words, they are given
+Bitcoins (which are newly minted for them) for performing the "work" required to
+add an entry to the ledger. However, honest participants (including non-miners,
+people who just read the ledger) will accept the longest known ledger as the
+ground truth. In addition, Bitcoin miners are rewarded for adding entry $i$
+_after_ entry $i+100$ is added to the ledger.  This gives miners an incentive to
+choose the longest ledger to contribute their work towards. To see why, consider
+the following rough approximation of the incentive structure:
 
-An honest party in the Bitcoin network will accept the longest valid ledger (in
-terms of computational cycles) it is aware of. (A ledger is _valid_ if every
-transaction in it of the form "transfer the coin $ID$ from $P$ to $Q$" is
-self-certified by a solution of $P$, and the last transaction in the ledger
-involving $ID$ either transferred or minted the coin $ID$ to $P$). If a ledger
-$L$ corresponds to the majority of the cycles that were available in this
-network then every honest party would accept it, as any alternative ledger would
-be necessarily shorter. (See [ledgerfig](){.ref}.)
+Remember that Bitcoin miners are rewarded for adding entry $i$ _after_ entry
+$i+100$ is added to the ledger. Thus, by spending "work" (which directly
+corresponds to CPU cycles, which directly corresponds to monetary value), miners
+are "betting" on whether a particular ledger will "win". Think of yourself as a
+miner, and consider a scenario in which there are two competing ledgers. Ledger
+1 has length $3$ and Ledger 2 has length $6$. That means miners have put roughly
+2x the amount of work (= CPU cycles = money) into Ledger 2. In order for Ledger
+1 to "win" (from your perspective that means reach length $104$ to claim your
+prize and to become longer than Ledger 2), you would have to perform $3$ entries
+worth of work _just to get Ledger 1 to length $6$_. But in the meantime, other
+miners will already be working on Ledger 2, further increasing its length! Thus
+you want to add entries to Ledger 2.
 
+If a ledger $L$ corresponds to the majority of the cycles that were available in
+this network then every honest party would accept it, as any alternative ledger
+would be necessarily shorter. (See [ledgerfig](){.ref}.)
 
-
-The question is then how do we get to that happy state given that many parties might be non-malicious but still _selfish_ and might not want to volunteer their computing power for the goal of creating a consensus ledger.
-Bitcoin achieves this by giving some incentive, in the form of the ability to mint new coins, to any party that adds to the ledger.
-This means that if we are already in the situation where there is a consensus ledger $L$, then every party has an interest in continuing this ledger $L$, and not any alternative, as they want their minting transaction to be part of the new consensus ledger.
-In contrast if they "fork" the consensus ledger then their work may well be for vain.
-Thus one can hope that the consensus ledger will continue to grow. (This is a rather hand-wavy and imprecise argument, see [this paper](https://eprint.iacr.org/2015/261) for a more in depth analysis; this  is also related to the phenomenon  known as [preferential attachment](https://en.wikipedia.org/wiki/Preferential_attachment).)
+Thus one can hope that the consensus ledger will continue to grow. (This is a
+rather hand-wavy and imprecise argument, see [this
+paper](https://eprint.iacr.org/2015/261) for a more in depth analysis; this  is
+also related to the phenomenon  known as [preferential
+attachment](https://en.wikipedia.org/wiki/Preferential_attachment).)
 
   __Cost to mine, mining pools:__ Generally, if you know that completing a $T$-cycle  proof will get you a single coin, then making a single query (which will succeed with probability $1/T$) is akin to buying a lottery ticket that costs you a single cycle and has probability $1/T$ to win a single coin. One difference over the actual lottery is that there is also some probability that you're working on the wrong fork of the ledger, but this incentivizes people to avoid this as much as possible. Another, perhaps even more major difference, is that things are setup so that this is a _profitable_ enterprise and the cost of a cycle is smaller than the value of $1/T$ coins. Just like in the lottery, people can and do gather in groups (known as "mining pools")  where they  pool together all their computing resources, and then split the award if they win it. Joining a pool doesn't change your expectation of winning but reduces the _variance_. In the extreme case, if everyone is in the same pool, then for every cycle you spend you get exactly $1/T$ coins. The way these pools work in practice is that someone that spent $C$ cycles looking for an output with all zeroes, only has probability $C/T$ of getting it, but is very likely to get an output that begins with $\log C$ zeroes. This output can serve as their own "proof of work" that they spent $C$ cycles and they can send it to the pool management so they get an appropriate share of the reward.
 
