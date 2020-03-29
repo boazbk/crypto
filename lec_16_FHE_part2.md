@@ -20,7 +20,7 @@ Assuming the LWE conjecture, there exists a partially homomorphic public key enc
 That is, for every two ciphertexts $c$ and $c'$, the function $d \mapsto D_d(c)\; NAND\; D_d(c')$  can be homomorphically evaluated by $EVAL$.
 
 
-Let us first state what "noisy homomorphic encryption" means, which is what we want in the real world.
+Before the detailed description and analysis, let us first outline our strategy. Something of essential importance is the following.
 
 ::: # {.definition title="Noisy Homomorphic Encryption" #NoisyHEdef}
 Suppose that $(G,E,D)$ is a CPA secure public key scheme and that $\eta$ is a measure which maps any ciphertext $c$ to its "noise" $\eta(c)\in \[0, \infty).$ Denote
@@ -34,6 +34,10 @@ $$\mathcal{C}_b^\theta=\{c:D_b(c)=b,\eta(c)\leq\theta \}.$$ $(G,E,D,NAND)$ is ca
 $$ENAND(c,c')\in\mathcal{C}_{b\overline{\wedge}b'}^{n^3\cdot \max\{\eta,\eta'\}}$$
 as long as $n^3\cdot \max\{\eta,\eta'\}<q/4$.
 ::: 
+
+The noisy homomorphic encryption actually states that if $C$ and $C'$ encrypt $b$ and $b'$ up to error $\eta$ and $\eta'$, respectively, then $ENAND(c,c')$ encrypts $NAND(b,b')$ up to some error which can be controlled by $\eta,\eta'$. The coefficient $n^3$ is not essential here; we just need the order $poly(n)$. This property allows us to perform the $ENAND$ operator repeatly as long as we can guarantee the accummulated error is smaller than $q/4$, which means that the decryption can be done correctly. The next theorem tells us how deep a circuit can be in a noisy homomorphic encryption framework.
+
+
 
 
 ## Prelude: from vectors to matrices
