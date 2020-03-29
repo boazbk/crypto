@@ -20,7 +20,19 @@ Assuming the LWE conjecture, there exists a partially homomorphic public key enc
 That is, for every two ciphertexts $c$ and $c'$, the function $d \mapsto D_d(c)\; NAND\; D_d(c')$  can be homomorphically evaluated by $EVAL$.
 
 
+Let us first state what "noisy homomorphic encryption" means, which is what we want in the real world.
+::: # {.definition title="Noisy Homomorphic Encryption" #NoisyHEdef}
+Suppose that $(G,E,D)$ is a CPA secure public key scheme and that $\eta$ is a measure which maps any ciphertext $c$ to its "noise" $\eta(c)\in \[0, \infty).$ Denote
+$$\mathcal{C}_b^\theta=\{c:D_b(c)=b,\eta(c)\leq\theta \}.$$ $(G,E,D,NAND)$ is called a _noisy homomorphic encryption scheme_ if the followings holds for some $q=q(n)$:
 
+* $E_e(b)\in \mathcal{C}_b^{\sqrt{q}}$ for any plaintext $b$.
+
+* If $c\in\mathcal{C}_b^\eta$ with $\eta\leq q/4$, then $D_e(c)=b$.
+
+* For any $c\in\mathcal{C}_b^\eta$ and $c'\in\mathcal{C}_{b'}^{\eta'}$, it holds that
+$$ENAND(c,c')\in\mathcal{C}_{b\overline{\wedge}b'}^{n^3\cdot \max\{\eta,\eta'\}}$$
+as long as $n^3\cdot \max\{\eta,\eta'\}<q/4$.
+::: 
 
 
 ## Prelude: from vectors to matrices
@@ -79,14 +91,6 @@ We now discuss how we can obtain an encryption in  the real world where, as much
 As usual, the idea is to "fool Gaussian elimination with noise" but we will see that we have to be much more careful about "noise management", otherwise even for the party holding the secret key the noise will overwhelm the signal.[^chaos]
 
 [^chaos]: For this reason, Craig Gentry called his highly recommended survey on fully homomorphic encryption and other advanced constructions [computing on the edge of chaos](https://eprint.iacr.org/2014/610).
-
-Let us first state what "noisy homomorphic encryption" means, which is what we want in the real world.
-> # {.definition title="Noisy Homomorphic Encryption" #NoisyHEdef}
-Suppose that $(G,E,D)$ is a CPA secure public key scheme and that $\eta$ is a measure which maps any ciphertext $c$ to its "noise" $\eta(c)\in \[0, \infty).$ Denote
-$$\mathcal{C}_b^\theta=\{D_b(c)=b,\eta(c)\leq\theta \}.$$ $(G,E,D,NAND)$ is called a _noisy homomorphic encryption scheme_ if the followings holds:
-
-
-
 
 
 The main idea is that we can expect the following problem to be hard for a random secret $s\in\Z_q^n$: distinguish between samples of random matrices $C$ and matrices where $Cs = bs + e$ for some $b\in\{0,1\}$ and "short" $e$ satisfying $|e_i| \leq \sqrt{q}$ for all $i$.
@@ -173,7 +177,7 @@ If we keep track of the parameters in the above analysis, we can see that
 
 $$C \overline{\wedge} C' = (I - C \otimes C')$$
 
-then if $C$ encrypts $b$ and $C'$ encrypts $b'$ with noise vectors $e,e'$ satisfying $\max |e_i| \leq \mu$ and $\max |e'_i| \leq \mu'$ then  $C \overline{\wedge} C'$ encrypts $b \; NAND\; b'$ up to a vector of maximum magnitude at most $O(\mu + n\log q \mu')$.
+then if $C$ encrypts $b$ and $C'$ encrypts $b'$ with noise vectors $e,e'$ satisfying $\max |e_i| \leq \mu$ and $\max |e'_i| \leq \mu'$ then  $C \overline{\wedge} C'$ encrypts $b \; NAND\; b'$ up to a vector of maximum magnitude at most $O(\mu + n\log q \mu')$, which is definitely smaller than $n^3\cdot \max\{\eta,\eta,\}$ for $q=2^{\sqrt{n}}$.
 
 
 ## Putting it all together
@@ -189,7 +193,7 @@ It is not hard to show that we can relax our assumption to $q(n)$-LWE $q(n)=2^{p
 * **Key generation:**  As in the scheme of last lecture the secret key is $s\in\Z_s^n$ and the public key is a generator $G_s$ such that samples from $G_s(1^n)$ are indistinguishable from independent random samples from $\Z_q^n$ but if $c$ is output by $G_s$ then $|\langle c,s \rangle|<\sqrt{q}$, where the inner product (as all other computations) is done modulo $q$ and for every $x\in\Z_q=\{0,\ldots,q-1\}$ we define $|x|=\min \{ x, q-x \}$.
 As before, we can assume that $s_1 = \floor{q/2}$ which implies that  $(Q^\top s)_1$ is also $\floor{q/2}$ since (as can be verified by direct inspection) the first row of $Q^\top$ is $(1,0,\ldots,0)$. 
 >
-* **Encryption:** To encrypt $b\in\{0,1\}$, let $d_1,\ldots,d_(n\log q) \leftarrow_R G_s(1^n)$ output $C=\widehat{(bQ^\top +D)}$ where $D$ is the matrix whose rows are $d_1,\ldots,d_{n\log q}$ generated from $G_s$. (See [fheencfig](){.ref})
+* **Encryption:** To encrypt $b\in\{0,1\}$, let $d_1,\ldots,d_{n\log q} \leftarrow_R G_s(1^n)$ output $C=\widehat{(bQ^\top +D)}$ where $D$ is the matrix whose rows are $d_1,\ldots,d_{n\log q}$ generated from $G_s$. (See [fheencfig](){.ref})
 >
 * **Decryption:** To decrypt the ciphertext $C$, we output $0$ if $|(CQ^\top s)_1|<0.1q$ and output $1$ if $0.6q>|(CQ^\top s)_1|>0.4q$, see [fhedecfig](){.ref}. (It doesn't matter what we output on other cases.)
 >
@@ -247,15 +251,13 @@ $$CQ^\top s = bQ^\top s + e$$
 where $\max |e_i| \ll \sqrt{q}$.
 
 > # {.proof data-ref="fhecorrectlem"}   
-For starters, let us see that the dimensions make sense: the encryption of $b$ is computed by $C=\widehat{(bQ^\top +D)}$ where $D$ is an $(n\log q)\times n$ matrix satisfying $|Ds|_i \leq \sqrt{q}$ for every $i$ and $I$ is the $(n\log q)\times (n\log q)$.
+For starters, let us see that the dimensions make sense: the encryption of $b$ is computed by $C=\widehat{(bQ^\top +D)}$ where $D$ is an $(n\log q)\times n$ matrix satisfying $|Ds|_i \leq \sqrt{q}$ for every $i$.
 >
 Since $Q^\top$ is also an $(n \log q) \times n$ matrix, adding $bQ^\top$ (i.e. either $Q^\top$ or the all-zeroes matrix, depending on whether or not $b=1$) to $D$ makes sense and applying the $\hat{\cdot}$ operation will transform every row to length $n\log q$ and hence $C$ is indeed a square $(n\log q)\times (n \log q)$ matrix.
 >
 Let us now see what this matrix $C$ does to the vector $v=Q^\top s$.
 Using the fact that $\hat{M}Q^\top = M$ for every matrix $M$, we get that
->
 $$Cv = (bQ^\top + D) s = bv+  Ds$$
->
 but by construction $|(Ds)_i| \leq \sqrt{q}$ for every $i$.
 
 [fhecorrectlem](){.ref} implies correctness of decryption since by construction we ensured that $(Q^\top s)_1 \in (0.499q,0.5001q)$ and hence we get that if $b=0$ then  $|(Cv)_1|=o(q)$ and if $b=1$ then $0.499q-o(q) \leq |(C_v)_1|  \leq 0.501q + o(q)$.
@@ -264,7 +266,7 @@ but by construction $|(Ds)_i| \leq \sqrt{q}$ for every $i$.
 ### CPA Security
 
 To show CPA security we need to show that an encryption of $0$ is indistinguishable from an encryption of $1$.
-However, by the security of the trapdoor generator, an encryption of $b$ computed according to our algorithm will be indistinguishable from an encryption of $b$ obtained when the matrix $D$ is a random $(q\log n)\times n$ matrix.
+However, by the security of the trapdoor generator, an encryption of $b$ computed according to our algorithm will be indistinguishable from an encryption of $b$ obtained when the matrix $D$ is a random $(n\log q)\times n$ matrix.
 Now in this case the encryption is obtained by applying the $\hat{\cdot}$ operation to $bQ^\top +D$ but if $D$ is uniformly random then for every choice of $b$, $bQ^\top + D$ is uniformly random (since a fixed matrix plus a random matrix  yields a random matrix) and hence the matrix $bQ^\top + D$ (and so also the matrix $\widehat{bQ^\top+D}$) contains no information about $b$.
 This completes the proof of CPA security (can you see why?).
 
@@ -296,20 +298,18 @@ Adding the identity for the NAND operation adds at most $\mu(C)+\mu(C')$ to the 
 ### Shallow decryption circuit
 
 Recall that to plug in our homomorphic encryption scheme into the bootstrapping theorem, we needed to show that for every ciphertexts $C,C'$ (generated by the encryption algorithm) the function $f:\{0,1\}^{n \log q} \rightarrow \{0,1\}$ defined as
-
 $$f(d) = D_d(C) \;NAND\; D_d(C')$$
-
 can be homomorphically evaluated where $d$ is the secret key and $D_d(C)$ denotes the decryption algorithm applied to $C$.
 
 In our case we can think of the secret key as the binary string $\hat{s}$ which describes our vector $s$ as a bit string of length $n\log q$.
-Given a ciphertext $C$, the decryption algorithm takes the dot product modulo $q$ of $s$ with the first row of $CQ^\top$ (or, equivalently, the dot product of $\hat{q}$ with $CQ^\top Q$) and outputs $0$ (respectively $1$) if the resulting number is small (respectively large).
+Given a ciphertext $C$, the decryption algorithm takes the dot product modulo $q$ of $s$ with the first row of $CQ^\top$ (or, equivalently, the dot product of $\hat{s}$ with the first row of $CQ^\top Q$) and outputs $0$ (respectively $1$) if the resulting number is small (respectively large).
 
 
 By repeatedly applying the noisy homomorphism lemma ([noisehomolem](){.ref}), we can show that can homorphically evaluate every circuit of NAND gates whose _depth_ $\ell$  satisfies $(2n\log q)^\ell \ll q$.
 If $q = 2^{\sqrt{n}}$ then (assuming $n$ is sufficiently large) then as long as $\ell < n^{0.49}$ this will be satisfied.
 
 In particular to show that $f(\cdot)$ can be homomorphically evaluated it will suffice to show that for every fixed vector $c\in \Z_q^{n\log q}$ there is a $polylog(n) \ll n^{0.49}$ depth circuit $F$ that on input a string $\hat{s}\in\{0,1\}^{n \log q}$ will output $0$ if $|\langle c,\hat{s \rangle}|  < q/10$ and output $1$ if $|\langle c,\hat{s \rangle}|  > q/5$.
-(We don't care what $F$ does otherwise. The above suffices since given a ciphertext $C$ we can use $F$ with the vector $c$ being the top row of $CQ^\top Q$, and hence $\langle c,\hat{s \rangle}$ would correspond to the first entry of $CQ^\top s$. Note that if $F$ has depth $\ell$ then the function $f()$ above has depth at most $\ell+1$.)
+(We don't care what $F$ does otherwise. The above suffices since given a ciphertext $C$ we can use $F$ with the vector $c$ being the top row of $CQ^\top Q$, and hence $\langle c,\hat{s} \rangle$ would correspond to the first entry of $CQ^\top s$. Note that if $F$ has depth $\ell$ then the function $f()$ above has depth at most $\ell+1$.)
 
 > # { .pause }
 Please make sure you understand the above argument.
@@ -324,7 +324,7 @@ As a hint, one needs to keep track of the "carry".
 
 
 
-Fortunately, because we only care about accuracy up to $q/10$, if we add $m$ numbers, we can drop all but the first $100\log m$ most significant digits of our numbers, since including them can change the sum of the $n$ numbers by at most $m(q/m^{100}) \ll q$.
+Fortunately, because we only care about accuracy up to $q/10$, if we add $m$ numbers, we can drop all but the first $100\log m$ most significant digits of our numbers, since including them can change the sum of the $m$ numbers by at most $m(q/m^{100}) \ll q$.
 Hence we can easily do this work in $poly(\log m)$  depth, which is $poly(\log n)$ since $m=poly(n)$.
 
 Let us now show this more formally:
@@ -332,8 +332,8 @@ Let us now show this more formally:
 
 > # {.lemma #decdepthlem}
 For every $c\in\Z_q^m$ there exists some function $f:\{0,1\}^m\rightarrow\{0,1\}$ such that: \
-1. For every $\hat{s}\in \{0,1\}^n$ such that  $|\langle \hat{s \rangle,c}|<0.1q$, $f(\hat{s})=0$ \
-2. For every $\hat{s}\in \{0,1\}^n$ such that $0.4q<|\langle \hat{s \rangle,c}|<0.6q$, $f(\hat{s})=1$ \
+1. For every $\hat{s}\in \{0,1\}^n$ such that  $|\langle \hat{s} \rangle,c|<0.1q$, $f(\hat{s})=0$ \
+2. For every $\hat{s}\in \{0,1\}^n$ such that $0.4q<|\langle \hat{s} \rangle,c|<0.6q$, $f(\hat{s})=1$ \
 3. There is a circuit computing $f$ of depth at most $100(\log m)^3$.
 
 > # {.proof data-ref="decdepthlem"}
@@ -345,7 +345,7 @@ Hence we can add any pair of such numbers modulo $\tilde{q}$ in depth $O(\log m)
 Now we can add the $m$ numbers by adding pairs, and then adding up the results, and this way in a binary tree of depth $\log m$ to get a total depth of $O(\log m)^3$.
 So, all that is left to prove is that this function $f$ satisfies the conditions (1) and (2).
 >
-Note that $|\sum \hat{s}_i \tilde{c}_i - \sum \hat{s}_i c_i | < mq/m^10 = q/m^9$ so now we want to show that the effect of taking modulo $\tilde{q}$ is not much different from taking modulo $q$.
+Note that $|\sum \hat{s}_i \tilde{c}_i - \sum \hat{s}_i c_i | < mq/m^{10} = q/m^9$ so now we want to show that the effect of taking modulo $\tilde{q}$ is not much different from taking modulo $q$.
 Indeed, note that this sum (before a modular reduction) is an integer between $0$ and $qm$. If $x$ is such an integer and we
 divide $x$ by $q$ to write $x = kq+ r$ for $r<q$, then since $x<qm$, $k<m$, and so we can write $x = k\tilde{q} + k(q-\tilde{q})+r$ so the difference between $k \mod q$ and $k \mod{\tilde{q}}$ will be (in our standard modular metric)  at most $mq/m^{10}=q/m^9$. Overall we get that if $\sum \hat{s}_i c_i \mod{q}$ is in the interval $[0.4q, 0.6q]$ then $\sum \hat{s}_i \tilde{c}_i ( \mod{\tilde{q}})$ will be in the interval $[0.4q-100q/m^9, 0.6q+100q/m^9]$ which is contained in $[0.3\tilde{q},0.7\tilde{q}]$.
 
