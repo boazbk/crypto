@@ -5,7 +5,7 @@ chapternum: "17"
 ---
 
 
-#  Fully homomorphic encryption: Construction {chapfhetwo }
+#  Fully homomorphic encryption: Construction
 
 In the last lecture we defined fully homomorphic encryption, and showed the "bootstrapping theorem" that transforms a partially homomorphic encryption scheme into a fully homomorphic encryption, as long as the original scheme can homomorphically evaluate its own decryption circuit.
 In this lecture we will show an encryption scheme (due to Gentry, Sahai and Waters, henceforth GSW) meeting the latter property.
@@ -56,13 +56,9 @@ $C \oplus C' = C + C'$ (where on the righthand side, addition is simply done in 
 
 
 Indeed, one can verify that both addition and multiplication succeed since
-
 $$(C+C')s = (b+b')s$$
-
 and
-
 $$CC's = C(b's) = bb's$$
-
 where all these equalities are in $\Z_q$.
 
 Addition modulo $q$ is not the same as XOR, but given these multiplication and addition operations, we can implement the NAND operation as well.
@@ -84,6 +80,14 @@ As usual, the idea is to "fool Gaussian elimination with noise" but we will see 
 
 [^chaos]: For this reason, Craig Gentry called his highly recommended survey on fully homomorphic encryption and other advanced constructions [computing on the edge of chaos](https://eprint.iacr.org/2014/610).
 
+Let us first state what "noisy homomorphic encryption" means, which is what we want in the real world.
+> # {.definition title="Noisy Homomorphic Encryption" #NoisyHEdef}
+Suppose that $(G,E,D)$ is a CPA secure public key scheme and that $\eta$ is a measure which maps any ciphertext $c$ to its "noise" $\eta(c)\in \[0, \infty).$ Denote
+$$\mathcal{C}_b^\theta=\{D_b(c)=b,\eta(c)\leq\theta \}.$$ $(G,E,D,NAND)$ is called a _noisy homomorphic encryption scheme_ if the followings holds:
+
+
+
+
 
 The main idea is that we can expect the following problem to be hard for a random secret $s\in\Z_q^n$: distinguish between samples of random matrices $C$ and matrices where $Cs = bs + e$ for some $b\in\{0,1\}$ and "short" $e$ satisfying $|e_i| \leq \sqrt{q}$ for all $i$.
 This yields a natural candidate for an encryption scheme where we encrypt $b$ by a matrix $C$ satisfying $Cs = bs + e$ where $e$ is a "short" vector.[^short]
@@ -93,11 +97,8 @@ This yields a natural candidate for an encryption scheme where we encrypt $b$ by
 
 We can now try to check what adding and multiplying two matrices does to the noise.
 If $Cs = bs+e$ and $C's=b's+e'$ then
-
 $$(C+C')s = (b+b')s+(e+e') \label{eqhomadd}$$
-
 and
-
 $$CC's = C(b's+e')+e =bb's+ (b'e+Ce')\;. \label{eqhommult} $$
 
 
@@ -141,9 +142,9 @@ Similarly, if $C$ is an $m\times n$ matrix, then we denote by $\hat{C}$ the $m\t
 (We still think of the entries of these vectors and matrices as elements of $\Z_q$ and so all calculations are still done modulo $q$.)
 
 While encoding in the binary basis is not a linear operation, the _decoding_ operation is linear as one can see in [eqbinaryencoding](){.eqref}.
-We let $Q$ be the $n \times (n\log q)$ "decoding" matrix that maps an encoding vector $\hat{v}$ back to the original vector $v$.
+We let $Q$ be the $n \times (n\log q)$ "decoding" matrix that maps an encoding vector $\hat{s}$ back to the original vector $s$.
 Specifically, every row of $Q$ is composed of $n$ blocks each of $\log q$ size, where the $i$-th row has only the $i$-th block nonzero, and equal to the values $(1,2,4,\ldots,2^{\log q-1})$.
-It's a good exercise to verify that for every vector $v$ and matrix $C$, $Q\hat{v}=v$  and $\hat{C}Q^\top =C$. (See [encodevecfig](){.ref} amd [encodematrixfig](){.ref}.)
+It's a good exercise to verify that for every vector $s\in \Z_q^n$ and matrix $C\in \Z_q^{n\times n}$, $Q\hat{s}=s$  and $\hat{C}Q^\top =C$. (See [encodevecfig](){.ref} amd [encodematrixfig](){.ref}.)
 
 [^ceil]: If we were being pedantic the length of the vector (and other constant below) should be the integer $\ceil{\log q}$ but I omit the ceiling symbols for simplicity of notation.
 
@@ -157,11 +158,8 @@ Now given ciphertexts $C,C'$ that encrypt $b,b'$ respectively, we will define $C
 
 
 Since we have $Cv = bv + e$ and $C'v = b'v + e'$ we get that
-
 $$(C\oplus C')v = (C+C')v = (b+b')v + (e+e') \label{eqfheaddfinal}$$
-
 and
-
 $$(C\otimes C')v = \widehat{(CQ^\top)}C'v = \widehat{(CQ^\top)}(b'v+e') \;. \label{fhemultfinaleqfirst}$$
 
 But since $v=Q^\top s$ and $\hat{A}Q^\top = A$ for every matrix $A$, the righthand side of [fhemultfinaleqfirst](){.eqref} equals
