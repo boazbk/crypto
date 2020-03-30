@@ -41,7 +41,7 @@ The noisy homomorphic encryption actually states that if $C$ and $C'$ encrypt $b
 If there exists a noisy homomorphic encryption scheme with $q=2^{\sqrt{n}}$, then the it can be extended to a homomorphic encryption scheme for any circuit with depth smaller than $polylog(n)$.
 
 > # {.proof data-ref="Depththm"}
-For any function $f:\{0,1\}^n\rightarrow \{0,1\}$ which can be described by a circuit with depth $\ell$, we can compute $EVAL(f,E_e(x_1),\cdots,E_e(x_n))$ with error up to $\sqrt(q)(n^3)^\ell$. (The initial error for $E_e(x_i)$ is smaller than $\sqrt{n}$ and the error will be accumulated with rate up to $n^3$.) Thus, to guarantee that $EVAL(f,E_e(x_1),\cdots,E_e(x_n))$ can be decrypted to $f(x_1,\cdots,x_n)$ correctly, we only need 
+For any function $f:\{0,1\}^m\rightarrow \{0,1\}$ which can be described by a circuit with depth $\ell$, we can compute $EVAL(f,E_e(x_1),\cdots,E_e(x_m))$ with error up to $\sqrt(q)(n^3)^\ell$. (The initial error for $E_e(x_i)$ is smaller than $\sqrt{n}$ and the error will be accumulated with rate up to $n^3$.) Thus, to guarantee that $EVAL(f,E_e(x_1),\cdots,E_e(x_m))$ can be decrypted to $f(x_1,\cdots,x_m)$ correctly, we only need $\sqrt(q)(n^3)^\ell\ll q$, i.e., $n^{3\ell}\ll \sqrt{q}=2^{\sqrt{n}/2}$. This is equalvent to $3\ell\log(n)\ell \sqrt{n}/2$, which can be guaranteed when $\ell =n^{o(1)}$ or $\ell=polylog(n)$.
 
 With [Depththm](){.ref}, the rest is to verify that the function $d \mapsto D_d(c)\; NAND\; D_d(c')$ can be computed by a circuit with depth being $polylog(n)$. And then we can obtain a fully homomorphic encryption scheme. We will head into some details show how to construct things we want in the rest of this chapter. The most technical and interesting part would be how to upperbound the noise/error.
 
@@ -378,7 +378,7 @@ Now would be a good point to go back and see you understand how all the pieces f
 
 ### Bandwidth efficient fully homomorphic encryption  [GH](https://eprint.iacr.org/2019/733.pdf)
 
-When we define homomorphic encryption in Definition 16.3, we only consider a class of single-output functions $\mathcal{F}$. Now we want to extend the difinition to multiple-output function and consider how bandwidth efficient the fully homomorphic encryption can be. More specifically, if we want to guarantee that the result of decryption is (or contains) $f(x_1,\ldots,x_\ell)$, what is the minimal possible length of the ciphertext? Let us first define the compressible fully homomorphic encryption scheme.
+When we define homomorphic encryption in [naivegswfig](){.ref}, we only consider a class of single-output functions $\mathcal{F}$. Now we want to extend the difinition to multiple-output function and consider how bandwidth efficient the fully homomorphic encryption can be. More specifically, if we want to guarantee that the result of decryption is (or contains) $f(x_1,\ldots,x_\ell)$, what is the minimal possible length of the output of EVAL function? Let us first define the compressible fully homomorphic encryption scheme.
 
 ::: {.definition title="Compressible Fully Homomorphic Encryption" #compFHE}  A _compressible fully homomorphic public key encryption scheme_  is a CPA secure public key encryption scheme $(G,E,D)$ such that there exist polynomial-time algorithms $EVAL, COMP:{0,1}^* \rightarrow {0,1}^*$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$, $x_1,\ldots,x_\ell \in \{0,1\}$, and $f:\{0,1\}^\ell\rightarrow \{0,1\}^*$ which can be described by a circuit, it holds that:
 
