@@ -374,7 +374,7 @@ Now would be a good point to go back and see you understand how all the pieces f
 ## Advanced topics:
 
 
-* Fully homomorphic encryption for approximate computation over the real numbers: [CKKS](https://eprint.iacr.org/2016/421.pdf)
+### Fully homomorphic encryption for approximate computation over the real numbers: [CKKS](https://eprint.iacr.org/2016/421.pdf)
 
 ### Bandwidth efficient fully homomorphic encryption  [GH](https://eprint.iacr.org/2019/733.pdf)
 
@@ -386,17 +386,16 @@ When we define homomorphic encryption in [partialhomdef](){.ref}, we only consid
 
 -   $c^*=COMP(c)$.
     
--   $D_d(c^*) $ has $f(x_1,\ldots,x_\ell)$ as its prefix. :::
+-   $f(x_1,\ldots,x_\ell)$ is a prefix of $D_d(c^*) $. :::
 
 This definition is similar to the standard fully homomorphic encryption except an additional compression step. The bandwidth efficiency of a compressible fully homomorphic encryption is often described by the rate which is defined as follows:
     
- ::: {.definition title="Rate of Compressible Fully Homomorphic Encryption" #ratecompFHE}  A compressible fully homomorphic public key encryption scheme has rate $\alpha=\alpha(n)$ if for for every $(e,d)=G(1^n)$, $\ell=poly(n)$, $x_1,\ldots,x_\ell \in \{0,1\}$, and $f:\{0,1\}^\ell\rightarrow \{0,1\}^*$ with sufficiently long output, it holds that
+ ::: {.definition title="Rate of Compressible Fully Homomorphic Encryption" #ratecompFHE}  A compressible fully homomorphic public key encryption scheme has _rate_ $\alpha=\alpha(n)$ if for for every $(e,d)=G(1^n)$, $\ell=poly(n)$, $x_1,\ldots,x_\ell \in \{0,1\}$, and $f:\{0,1\}^\ell\rightarrow \{0,1\}^*$ with sufficiently long output, it holds that
 $$\alpha |c^*|\leq |f(x_1,\ldots,x_\ell)|.$$ :::
 
-The following theorem answers the question before, which states that the nearly optimal rate, say a rate arbitrarily close to 1 can be achieved.
+The following theorem answers the question before, which states that the nearly optimal rate, say a rate arbitrarily close to 1, can be achieved.
 
-> # {.theorem title="Nearly Optimal Rate, Gentry and Halevi 2019" #optrate}
-
+> # {.theorem title="Nearly Optimal Rate, [Gentry and Halevi 2019](https://eprint.iacr.org/2019/733.pdf)" #optrate}
 For any $\epsilon>0$, there exists a compressive fully homomorphic encryption scheme with rate being $1-\epsilon$ under the LWE assumption.
  
 ### Using fully homomorphic encryption to achieve private information retrieval.
@@ -413,5 +412,5 @@ One observation is that fully homomorphic encryption can be applied to applied t
     
 -   The client decrypts $D_d(c)$ or $D_d(c^*)$ and obtains the $i$-th entry of the database.
 
-Since there exists compressive fully homomorphic encryption scheme with nearly optimal rate, say rate arbitrarily close to $1$, we can immediately get rate-$(1-\epsilon)$ PIR for any $\epsilon$. (Note that this result holds only for database whose entries is quite large, since the rate is defined for circuits with sufficiently long output.) Prior to the theorem by Gentry and Halevi 2019, Kiayias et al. 2015 also constructed a PIR scheme with nearly optimal rate/bandwidth efficiency. The application of fully homomorphic encryption to PIR is a fascinating field; except the bandwidth efficiency, people may be also interested in the computational cost.
+Since there exists compressive fully homomorphic encryption scheme with nearly optimal rate (see [optrate](){.ref}), we can immediately get rate-$(1-\epsilon)$ PIR for any $\epsilon$. (Note that this result holds only for database whose entries is quite large, since the rate is defined for circuits with sufficiently long output.) Prior to the theorem by [Gentry and Halevi 2019](https://eprint.iacr.org/2019/733.pdf), Kiayias et al. 2015 also constructed a PIR scheme with nearly optimal rate/bandwidth efficiency. The application of fully homomorphic encryption to PIR is a fascinating field; except the bandwidth efficiency, people may be also interested in the computational cost. We refer to [Gentry and Halevi 2019](https://eprint.iacr.org/2019/733.pdf) for more details.
 
