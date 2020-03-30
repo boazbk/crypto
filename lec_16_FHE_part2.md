@@ -5,7 +5,7 @@ chapternum: "17"
 ---
 
 
-#  Fully homomorphic encryption: Construction
+#  Fully homomorphic encryption: Construction {#chapfhetwo } 
 
 In the last lecture we defined fully homomorphic encryption, and showed the "bootstrapping theorem" that transforms a partially homomorphic encryption scheme into a fully homomorphic encryption, as long as the original scheme can homomorphically evaluate its own decryption circuit.
 In this lecture we will show an encryption scheme (due to Gentry, Sahai and Waters, henceforth GSW) meeting the latter property.
@@ -378,7 +378,7 @@ Now would be a good point to go back and see you understand how all the pieces f
 
 ### Bandwidth efficient fully homomorphic encryption  [GH](https://eprint.iacr.org/2019/733.pdf)
 
-When we define homomorphic encryption in [naivegswfig](){.ref}, we only consider a class of single-output functions $\mathcal{F}$. Now we want to extend the difinition to multiple-output function and consider how bandwidth efficient the fully homomorphic encryption can be. More specifically, if we want to guarantee that the result of decryption is (or contains) $f(x_1,\ldots,x_\ell)$, what is the minimal possible length of the output of EVAL function? Let us first define the compressible fully homomorphic encryption scheme.
+When we define homomorphic encryption in [partialhomdef](){.ref}, we only consider a class of single-output functions $\mathcal{F}$. Now we want to extend the difinition to multiple-output function and consider how bandwidth efficient the fully homomorphic encryption can be. More specifically, if we want to guarantee that the result of decryption is (or contains) $f(x_1,\ldots,x_\ell)$, what is the minimal possible length of the output of EVAL function? Let us first define the compressible fully homomorphic encryption scheme.
 
 ::: {.definition title="Compressible Fully Homomorphic Encryption" #compFHE}  A _compressible fully homomorphic public key encryption scheme_  is a CPA secure public key encryption scheme $(G,E,D)$ such that there exist polynomial-time algorithms $EVAL, COMP:{0,1}^* \rightarrow {0,1}^*$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$, $x_1,\ldots,x_\ell \in \{0,1\}$, and $f:\{0,1\}^\ell\rightarrow \{0,1\}^*$ which can be described by a circuit, it holds that:
 
