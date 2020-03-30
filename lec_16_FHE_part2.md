@@ -35,9 +35,15 @@ $$ENAND(c,c')\in\mathcal{C}_{b\overline{\wedge}b'}^{n^3\cdot \max\{\eta,\eta'\}}
 as long as $n^3\cdot \max\{\eta,\eta'\}<q/4$.
 ::: 
 
-The noisy homomorphic encryption actually states that if $C$ and $C'$ encrypt $b$ and $b'$ up to error $\eta$ and $\eta'$, respectively, then $ENAND(c,c')$ encrypts $NAND(b,b')$ up to some error which can be controlled by $\eta,\eta'$. The coefficient $n^3$ is not essential here; we just need the order $poly(n)$. This property allows us to perform the $ENAND$ operator repeatly as long as we can guarantee the accummulated error is smaller than $q/4$, which means that the decryption can be done correctly. The next theorem tells us how deep a circuit can be in a noisy homomorphic encryption framework.
+The noisy homomorphic encryption actually states that if $C$ and $C'$ encrypt $b$ and $b'$ up to error $\eta$ and $\eta'$, respectively, then $ENAND(c,c')$ encrypts $NAND(b,b')$ up to some error which can be controlled by $\eta,\eta'$. The coefficient $n^3$ is not essential here; we just need the order $poly(n)$. This property allows us to perform the $ENAND$ operator repeatly as long as we can guarantee the accumulated error is smaller than $q/4$, which means that the decryption can be done correctly. The next theorem tells us with what depth, a circuit that can be computed homomorphically.
 
+> # {.theorem #Depththm}
+If there exists a noisy homomorphic encryption scheme with $q=2^{\sqrt{n}}$, then the it can be extended to a homomorphic encryption scheme for any circuit with depth smaller than $polylog(n)$.
 
+> # {.proof data-ref="Depththm"}
+For any function $f:\{0,1\}^n\rightarrow \{0,1\}$ which can be described by a circuit with depth $\ell$, we can compute $EVAL(f,E_e(x_1),\cdots,E_e(x_n))$ with error up to $\sqrt(q)(n^3)^\ell$. (The initial error for $E_e(x_i)$ is smaller than $\sqrt{n}$ and the error will be accumulated with rate up to $n^3$.) Thus, to guarantee that $EVAL(f,E_e(x_1),\cdots,E_e(x_n))$ can be decrypted to $f(x_1,\cdots,x_n)$ correctly, we only need 
+
+With [Depththm](){.ref}, the rest is to verify that the function $d \mapsto D_d(c)\; NAND\; D_d(c')$ can be computed by a circuit with depth being $polylog(n)$. And then we can obtain a fully homomorphic encryption scheme. We will head into some details show how to construct things we want in the rest of this chapter. The most technical and interesting part would be how to upperbound the noise/error.
 
 
 ## Prelude: from vectors to matrices
