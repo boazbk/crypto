@@ -226,7 +226,7 @@ Using a discrete logarithm algorithm, we can compute the private key $a$ from th
 
 Unfortunately, no such result is known in the other direction. However in the random oracle model, we can prove that this protocol is secure assuming the task of computing $g^{ab}$ from $g^a$ and $g^b$ (which is now known as the _Diffie-Hellman problem_) is hard.[^DDH]
 
-[^DDH]: One can get security results for this protocol without a random oracle if we assume a stronger variant known as the _Decisional Diffie-Hellman (DDH)_ assumption.
+[^DDH]: One can get security results for this protocol without a random oracle if we assume a stronger variant known as the _Decisional Diffie-Hellman (DDH)_ assumption: for a random $a,b, u \in \mathbb{Z}_p$ (prime $p$), the triple $(g^a, g^b, g^{ab})\approx (g^a, g^b, g^u)$. This implies CDH (can you see why?). DDH also restricts our focus to groups of prime order. In particular, DDH does not hold in even-order groups. For example, DDH does not hold in $\mathbb{Z}^*_p=\{1,2\ldots p-1\}$ (with group operation multiplication $\mod p$) since half of its elements are quadratic residues _and_ it is efficient to test if an element is a quadratic residue using Fermat’s little theorem (can you see why? See Exercise 10.7). However, DDH holds in subgroups of $\mathbb{Z}^*_p$ of prime order. If $p$ is a safe prime (i.e. $p=2q+1$ for a prime $q$), then we can instead use the subgroup of quadratic residues, which has prime order $q$. See Boneh-Shoup 10.4.1 for more details on the underlying groups for CDH and DDH.
 
 
 
@@ -573,6 +573,18 @@ Below are optional group theory related exercises and proofs meant to help gain 
 * A non-commutative group (or a non-abelian group) is a group such that $\exists a,b \in \mathbb{G}$ but $a * b \neq b * a$ (where $*$ is the group operation). One example (of an infinite, non commutative group) is the set of $2 \times 2$ matrices (over the real numbers) which are invertible, and the operation is matrix multiplication. The identity element is the traditional identity matrix, and each matrix has an inverse (and the product of two invertible matrices is still invertible), and matrix multiplication satisfies associativity. However, matrix multiplication here need not satisfy commutativity.
 
 In this class, we restrict ourselves to finite commutative groups to avoid complications with infinite group orders and annoyances with non-commutative operations. For the problems below, assume that a "group" is really a "finite commutative group".
+
+Here are five more important groups used in cryptography other than $\mathbb{Z}_{p}$. Recall that groups are given by a set and a binary operation.
+
+* For some prime $p$, $\bZ_p^*=\{1,\ldots , p-1\}$, with operation multiplication mod $p$ (Note: the $^*$ is to distinguish this group from $\bZ_p$ with an additive operation and from $GF(p)$.)
+* The quadratic residues of $\bZ_p^*$: $Q_p=\{a^2:a\in \bZ_p^*\}$ with operation multiplication mod $p$
+* $\bZ_n^*$, where $n=p\cdot q$ (product of two primes)
+* The quadratic residues of $\bZ_n^*$:: $Q_n=\{a^2:a\in \bZ_n^*\}$, where $n=p\cdot q$
+* Elliptic curve groups  
+
+For more familiarity with group definitions, you could verify that the first 4 groups satisfy the group axioms. For cryptography, two operations need be efficient for elements $a,b$ in group $\mathbb{G}$:
+* Exponentiation: $a,b\mapsto a^b$. This is done efficiently using repeated squaring, i.e. generate all the squares up to $2^k$ and then use the binary representation. 
+* Inverse: $a \mapsto a^{-1}$. This is done efficiently in $\bZ_p^*$ by Fermat's little theorem. $a^{-1}=a^{p-2}\mod p$.
 
 ### Solved exercises:
 
