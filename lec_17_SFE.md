@@ -6,7 +6,9 @@ chapternum: "18"
 
 
 
-# Multiparty secure computation I: Definition and Honest-But-Curious to Malicious complier
+# Multiparty secure computation I: Definition and Honest-But-Curious to Malicious complier { #sfeonechap } 
+
+
 
 
 
@@ -274,10 +276,16 @@ We note that while fully homomorphic encryption yields a conceptually simple app
 We will focus on the case of _two parties_. The same ideas extend to $k>2$ parties but with some additional complications.
 
 
-## Malicious to honest but curious reduction
+## Malicious to honest but curious reduction { #hbctomalred }
 
-We start from the second stage. Giving a reduction transforming a protocol in the "honest but curious" setting into a protocol secure in the malicious setting.
-Note that a priori, it is not obvious at all that such a reduction should exist.
+We start from the second stage. Giving a reduction transforming a protocol in the "honest but curious" setting into a protocol secure in the malicious setting. That is, we will prove the following theorem:
+
+> ### {.theorem title="Honest-but-curious to malicious security compiler" #hbctomalthm}
+There is a polynomial-time "compiler" $C$ such that for every for every $k$ party protocol $(P_1,\ldots,P_k)$ (where all $P_i$'s are polynomial-time computable potentially randomized strategies), if we let  $(\tilde{P}_1,\ldots,\tilde{P}_k) = C(P_1,\ldots,P_k)$  will be a $k$-tuple polynomial-time computable strategies and moreover if $(P_1,\ldots,P_k)$ was a protocol for computing some (potentially randomized) functionality $F$ secure with respect to honest-but-curious adversaries, then $(\tilde{P}_1,\ldots,\tilde{P}_k)$ is a protocol for computing the same $F$ secure with respect to _malicious_ adversaries.
+
+The remainder of this section is devoted to the proof of [hbctomalthm](){.ref}. 
+For ease of notation we will focus on the $k=2$ case, where there are only two parties ("Alice" and "Bob") although these techniques generalize to arbitrary number of parties $k$.
+Note that a priori, it is not obvious at all that such a compiler should exist.
 In the "honest but curious" setting we assume the adversary follows the protocol to the letter.
 Thus a protocol where Alice gives away all her secrets to Bob if he merely [asks her to do so politely](https://xkcd.com/424/) can be secure in the "honest but curious" setting if Bob's instructions are not to ask.
 More seriously, it could very well be that Bob has an ability to deviate from the protocol in subtle ways that would be completely undetectable but allow him to learn Alice's secrets.

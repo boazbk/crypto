@@ -5,7 +5,9 @@ chapternum: "19"
 ---
 
 
-# Multiparty secure computation: Construction using Fully Homomorphic Encryption
+# Multiparty secure computation II: Construction using Fully Homomorphic Encryption { #sfetwochap } 
+
+
 
 
 In the last lecture we saw the definition of secure multiparty computation, as well as the compiler reducing the task of achieving security in the general (malicious) setting to the passive (honest-but-curious) setting.
@@ -39,19 +41,21 @@ Here is a suggested protocol for Alice and Bob to run on inputs $x,y$ respective
 ![An honest but curious protocol for two party computation using a fully homomorphic encryption scheme with circuit privacy. ](../figure/twopcprotfig.png){#twopcprotfig  .margin}
 
 
->__Protocol 2PC:__ (See [twopcprotfig](){.ref})
->
+:::
+__Protocol 2PC:__ (See [twopcprotfig](){.ref})
+
 * __Assumptions:__ $(G,E,D,EVAL)$ is a fully homomorphic encryption scheme.
->
+
 * __Inputs:__ Alice's input is $x\in\{0,1\}^n$ and Bob's input is $y\in\{0,1\}^n$. The goal is for Alice to learn only $F(x,y)$ and Bob to learn nothing.
->
+
 * __Alice->Bob:__ Alice generates $(e,d)\leftarrow_R G(1^n)$ and sends $e$ and $c=E_e(x)$.
->
+
 * __Bob->Alice:__ Bob computes define $f$ to be the function $f(x)=F(x,y)$ and sends $c'=EVAL(f,c)$ to Alice.
->
+
 * __Alice's output:__ Alice computes $z=D_d(c')$.
 
-   \
+:::
+
 
 
 
@@ -214,9 +218,93 @@ $\frac{2^{m+1}\eta^m \cdot (T+1)^m}{\eta^m\cdot 2^m T^m }
 
 -->
 
-## Bottom line: A two party honest but curious two party secure computation protocol
 
-We can now prove the following theorem:
 
-> # {.theorem title="Two party " #twopartycthm}
-If $(G,E,D,EVAL)$ is a statistically circuit private fully homomorphic encryption then Protocol 2PC is a secure two party computation protocol with respect to honest but curious adversaries.
+### Bottom line: A two party secure computation protocol
+
+Using the above we can obtain the following theorem:
+
+::: {.theorem title="Re-randomizable FHE" #rerandfhethm}
+If the LWE conjecture is true then there exists a tuple of polynomial-time randomized algorithms $(G,E,D,EVAL,RERAND)$ such that:
+
+* $(G,E,D,EVAL)$ is a CPA secure fully-homomorphic encryption for one bit messages. That is, if $(d,e)=G(1^n)$ then for every Boolean circuit $C$ with $\ell$ inputs and one output, and $x\in \{0,1\}^\ell$, the ciphertext $c = EVAL_e(C, E_e(x_1),\ldots, E_e(x_\ell)$ has length $n$ and $D_d(c)=C(x)$ with probability one over the random choices of the algorithms $E$ and $EVAL$.
+
+* For every pair of keys $(e,d) =G(1^n)$  there are two distributions $\mathcal{C}^0,\mathcal{C}^1$ over $\{0,1\}^n$ such that:
+
+  - For $b\in \{0,1\}$, $\Pr_{c \sim \mathcal{C}^b} [ D_d(c) = b ]=1$. That is, $\mathcal{C}^b$ is distributed over ciphertexts that decrypt to $b$. 
+
+  - For every ciphertext $c \in \{0,1\}^n$ in the image of either $E_e(\cdot)$ or $EVAL_e(\cdot)$, if $D_d(c)=b$ then $RERAND_e(c)$ is statistically indistinguishable from $\mathcal{C}^b$. That is, the output of $RERAND_e(c)$ is a ciphertext that decrypts to the same plaintext as $c$, but whose distribution is essentially independent  of $c$.
+
+:::
+
+
+> ### {.proofidea data-ref=""}
+We do not include the full proof but the idea is we use our standard LWE-based FHE and to rerandomize a ciphertext $c$ we will add to it an encryption of $0$ (which will not change the corresponding plaintext) and an additional noise vector that would be of much larger magnitude than the original noise vector of $c$, but still small enough so decryption succeeds. 
+
+
+Using the above re-randomizable encryption scheme, we can redefine $EVAL$ to add a $RERAND$ step at the end and achieve statistical circuit privacy. If we use Protocol 2PC with such a scheme then we get a two party computation protocol secure with respect to honest but curious adversaries. Using the compiler of [hbctomalthm](){.ref} we obtain a proof of [MPCthm](){.ref} for the two party setting:
+
+
+
+
+> # {.theorem title="Two party secure computation" #twopartycthm}
+If the LWE conjecture is true then for every (potentially randomized) functionality $F:\{0,1\}^{n_1} \times \{0,1\}^{n_2} \rightarrow \{0,1\}^{m_1} \times \{0,1\}^{m_2}$ there exists a polynomial-time protocol for computing the functionality $F$ secure with respect to potentially _malicious_ adversaries.
+
+
+## Beyond two parties
+
+We now sketch how to go beyond two parties. 
+It turns out that the compiler of honest-but-curious to malicious security works just as well in the many party setting, and so the crux of the matter is to obtain an _honest but curious_ secure protocol for $k>2$ parties.
+
+We start with the case of three parties - Alice, Bob, and Charlie.
+First, let us introduce some convenient notation (which is used in other settings as well).^[I believe this notation originates with Burrows–Abadi–Needham (BAN) logic though would be happy if scribe writers verify this.] 
+We will assume that each party initially generates private/public key pairs with respect to some fully homomorphic encryption (satisfying statistical circuit privacy) and sends them to the other parties.
+We will use $\{ x \}_A$ to denote the encryption of $x\in \{0,1\}^\ell$ using Alice's public key (similarly $\{ x \}_B$ and $\{ x \}_C$ will denote the encryptions of $x$ with respect to Bob's and Charlie's public key. We can also compose these and so denote by $\{ \{ x \}_A \}_B$ the encryption under Bob's key of the encryption under Alice's key of $x$.
+
+With the notation above, Protocol 2PC can be described as follows:
+
+:::
+__Protocol 2PC:__ (Using BAN notation)
+
+* __Inputs:__ Alice's input is $x\in\{0,1\}^n$ and Bob's input is $y\in\{0,1\}^n$. The goal is for Alice to learn only $F(x,y)$ and Bob to learn nothing.
+
+* __Alice->Bob:__ Alice sends $\{ x \}_A$ to Bob. (We omit from this description the public key of Alice which can be thought of as being concatenated to the ciphertext).
+
+* __Bob->Alice:__ Bob sends $\{ f(x,y) \}_A$ to Alice by running $EVAL_A$ on the ciphertext $\{ x\}_A$ and the map  $x \mapsto F(x,y)$. 
+
+* __Alice's output:__ Alice computes $f(x,y)$
+:::
+
+We can now describe the protocol for three parties. We will focus on the case where the goal is for Alice to learn $F(x,y,z)$ (where $x,y,z$ are the private inputs of Alice, Bob, and Charlie, respectively) and for Bob and Charlie to learn nothing. As usual we can reduce the general case to this by running the protocol multiple times with parties switching the roles of Alice, Bob, and Charlie.
+
+
+:::
+__Protocol 3PC:__ (Using BAN notation)
+
+* __Inputs:__ Alice's input is $x\in\{0,1\}^n$, Bob's input is $y\in\{0,1\}^n$, and Charlie's input is $z\in \{0,1\}^m$. The goal is for Alice to learn only $F(x,y,z)$ and for Bob and Charlie to learn nothing.
+
+* __Alice->Bob:__ Alice sends $\{ x \}_A$ to Bob. 
+
+* __Bob-->Charlie:__ Bob sends $\{ \{x\}_A , y \}_B$ to Charlie.
+
+* __Charlie-->Bob:__ Charlie sends $\{ \{ F(x,y,z) \}_A \}_B$ to Bob. Charlie can do this by running $EVAL_B$ on the ciphertext and on the (efficiently computable) map $c,y \mapsto EVAL_A(f_y,c)$ where $f_y$ is the circuit $x \mapsto F(x,y,z)$. (Please read this line several times!)
+
+* __Bob-->Alice:__  Bob sends $\{ f(x,y,z) \}_A$ to Alice by decrypting the ciphertext sent from Charlie. 
+
+* __Alice's output:__ Alice computes $f(x,y,z)$ by decrypting the ciphertext sent from Bob.
+:::
+
+> ### {.theorem title="Three party honest-but-curious secure computation" #threepartympc}
+If the underlying encryption is a fully homomorphic statistically circuit private encryption then Protocol 3PC is a secure protocol for the functionality $(x,y,z) \mapsto (F(x,y,z),\bot,\bot)$ with respect to honest-but-curious adversaries.
+
+
+
+
+::: {.proof data-ref="threepartympc"}
+To be completed.
+:::
+
+
+
+
+

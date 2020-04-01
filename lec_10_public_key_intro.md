@@ -579,7 +579,7 @@ Here are five more important groups used in cryptography other than $\mathbb{Z}_
 * For some prime $p$, $\mathbb{Z}_p^{\*}=\{1,\ldots , p-1\}$, with operation multiplication mod $p$ (Note: the $^{\*}$ is to distinguish this group from $\mathbb{Z}_p$ with an additive operation and from $GF(p)$.)
 * The quadratic residues of $\mathbb{Z}_p^{\*}$: $Q_p=\{a^2:a\in \mathbb{Z}_p^{\*}\}$ with operation multiplication mod $p$
 * $\mathbb{Z}_n^{\*}$, where $n=p\cdot q$ (product of two primes)
-* The quadratic residues of $\mathbb{Z}_n^{\*}$:: $Q_n=\{a^2:a\in \mathbb{Z}_n^{*\}\}$, where $n=p\cdot q$
+* The quadratic residues of $\mathbb{Z}_n^{\*}$:: $Q_n=\{a^2:a\in \mathbb{Z}_n^{*}\}$, where $n=p\cdot q$
 * Elliptic curve groups  
 
 For more familiarity with group definitions, you could verify that the first 4 groups satisfy the group axioms. For cryptography, two operations need be efficient for elements $a,b$ in group $\mathbb{G}$:
