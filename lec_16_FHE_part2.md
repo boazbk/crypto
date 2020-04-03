@@ -366,6 +366,8 @@ Now would be a good point to go back and see you understand how all the pieces f
 
 
 * Fully homomorphic encryption for approximate computation over the real numbers: [CKKS](https://eprint.iacr.org/2016/421.pdf)
+We saw how a fully homomorphic encryption for a plaintext bit $b$ can be constructed and we were able to evaluate addition and multiplication of ciphertexts as well as a NAND gate in the ciphertext space. One can also extend FHEENC scheme to encrypt a plaintext message $\mu \in \Z_q$ and can evaluate multi-bit integer additions and multiplications more efficiently. How about floating/fixed point operations? They are similar to integer operations, but we need to be able to evaulate rounding operation at the end of every computation. Unfortunately, it has been considered difficult to precisely evaluate the rounding operation. An easier solution is to assume approximate computations from the beginning and embrace errors caused by them.
+CKKS scheme, one of the recent schemes, addressed this challenge by relaxing the correctness property and allowing small errors in the decrypted results. In this scheme, the encryption noise, which is added to ensure the security, is also treated as part of errors occuring during approximate computations. In other words, it doesn't clearly separate the plaintext message and noise from its ciphertext representation. The precision loss of the decrypted evaluation result is proven to have at most one more bit compared to the plaintext computation result. This scheme can be especially useful in many data science and machine learning applications which does not require precise results, but only apporximate ones.
 
 * Bandwidth efficient fully homomorphic encryption [GH](https://eprint.iacr.org/2019/733.pdf)
 
