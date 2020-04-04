@@ -366,8 +366,18 @@ Now would be a good point to go back and see you understand how all the pieces f
 
 
 * Fully homomorphic encryption for approximate computation over the real numbers: [CKKS](https://eprint.iacr.org/2016/421.pdf)
+
 We saw how a fully homomorphic encryption for a plaintext bit $b$ can be constructed and we were able to evaluate addition and multiplication of ciphertexts as well as a NAND gate in the ciphertext space. One can also extend FHEENC scheme to encrypt a plaintext message $\mu \in \Z_q$ and can evaluate multi-bit integer additions and multiplications more efficiently. How about floating/fixed point operations? They are similar to integer operations, but we need to be able to evaulate rounding operation at the end of every computation. Unfortunately, it has been considered difficult to precisely evaluate the rounding operation. An easier solution is to assume approximate computations from the beginning and embrace errors caused by them.
-CKKS scheme, one of the recent schemes, addressed this challenge by relaxing the correctness property and allowing small errors in the decrypted results. In this scheme, the encryption noise, which is added to ensure the security, is also treated as part of errors occuring during approximate computations. In other words, it doesn't clearly separate the plaintext message and noise from its ciphertext representation. The precision loss of the decrypted evaluation result is proven to have at most one more bit compared to the plaintext computation result. This scheme can be especially useful in many data science and machine learning applications which does not require precise results, but only apporximate ones.
+
+CKKS scheme, one of the recent schemes, addressed this challenge by allowing small errors in the decrypted results. It's correctness property is more relaxed than what we've seen before. Now decryption does not necessarily be precise and indeed, this results in several additional good properties. 
+
+To get more sense on its construction, recall that when we decrypt a ciphertext in the FHEENC scheme, we had $CQ^\top s = bQ^\top s + e$ where $\max |e_i| \ll \sqrt{q}$. Since $(Q^\top s)_1 \in (0.499q, 0.5001q)$, multiplying by this term places a plaintext bit near the most significant bits of ciphertext where it cannot be polluted by the encryption noise. Therefore, we were able to precisely remove the noise $e$ we added for the security. However, this kind of separation actually makes an evaluation of the rounding operation difficult. 
+
+On the other hand, the CKKS scheme doesn't clearly separate the plaintext message and noise in its decryption structure. Specifically, we have the form of $c^\top s = m + e$ and the noise lies with the LSB part of the message and pollutes the message. Note that it is acceptable as long as it preserves a certain levels of precision. Now we can also evaluate rounding, which is called rescaling in the paper, by just dividing both a ciphertext $c$ and the parameter $q$ by some factor $p$. Also, we can handle this ciphertext with a different encryption parameter $q'=q/p$ using a technique, called modulus switching, but we will not go into a detail here.
+
+Besides, the precision loss of the decrypted evaluation result is proven to have at most one more bit loss compared to the plaintext computation result, which means the scheme's precision guarantee is near-optimal.
+
+This scheme offers an efficient homomorphic encryption setting for many data science and machine learning applications which does not require precise results, but only apporximate ones. There already exists open source libraries for this scheme and many practical applications such as logistic regression in the literature.
 
 * Bandwidth efficient fully homomorphic encryption [GH](https://eprint.iacr.org/2019/733.pdf)
 
