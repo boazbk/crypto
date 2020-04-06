@@ -12,23 +12,26 @@ chapternum: "3"
 
 __Reading:__ Katz-Lindell Section 3.3, Boneh-Shoup Chapter 3
 
+Edited and expanded by Richard Xu in Spring 2020.
 
 The nature of randomness has troubled philosophers, scientists, statisticians
 and laypeople for many years.[^abc] Over the years people have given different
 answers to the question of what does it mean for data to be random, and what is
 the nature of probability. The movements of the planets initially looked random
-and arbitrary, but then the early astronomers managed to find *order* and make
-some *predictions* on them. Similarly we have made great advances in predicting
-the weather, and probably will continue to do so.
+and arbitrary, but then early astronomers managed to find *order* and make
+some *predictions* on them. Similarly, we have made great advances in predicting
+the weather and will probably continue to do so.
+
 So, while these days it seems as if the event of whether or not it will rain a week from today
-is *random*, we could imagine that in with time we will be able to predict the weather further into the future.
+is *random*, we could imagine that in the future we will be able to predict the weather accurately.
 Even the canonical notion of a random experiment -tossing a coin -
-turns out that it [might not be as random as you'd think](http://statweb.stanford.edu/~susan/papers/headswithJ.pdf), with about a
-51% chance that the second toss will have the same result as the first one.
+[might not be as random as you'd think](http://statweb.stanford.edu/~susan/papers/headswithJ.pdf):
+the second toss will have the same result as the first one with about a 51% chance.
 (Though [see also this experiment](https://www.stat.berkeley.edu/~aldous/Real-World/coin_tosses.html).)
 It is conceivable that at some point someone would discover some function $F$
-that given the first 100 coin tosses by any given person can predict the value of the
+that, given the first 100 coin tosses by any given person, can predict the value of the
 101$^{th}$.[^def]
+
 In all these examples, the physics underlying the event, whether it's the
 planets' movement, the weather, or coin tosses, did not change but only
 our powers to predict them.
@@ -46,19 +49,18 @@ harnessing it to build secure systems. The basic object we want is the
 following:
 
 ::: {.definition title="Pseudorandom generator (concrete)" #prgdefconcrete}
-A function $G:{\{0,1\}}^n\rightarrow{\{0,1\}}^\ell$  is a $(T,\epsilon)$ *pseudorandom generator* if  $G(U_n) \approx_{T,\epsilon} U_\ell$ where $U_t$ denotes the uniform
-distribution on ${\{0,1\}}^t$.
+A function $G:{\{0,1\}}^n\rightarrow{\{0,1\}}^\ell$ is a $(T,\epsilon)$ *pseudorandom generator* if $G(U_n) \approx_{T,\epsilon} U_\ell$ where $U_t$ denotes the uniform distribution on ${\{0,1\}}^t$.
 :::
 
 That is, $G$ is a $(T,\epsilon)$ pseudorandom generators if no circuit of at most $T$ gates can distinguish with bias better than $\epsilon$ between the output of $G$ (on a random input) and a uniformly random string of the same length.
 
 As we did for the case of encryption, we will typically use _asymptotic terms_ to describe cryptographic pseudorandom generator. We say that $G$ is simply a pseudorandom generator if it is 
 $(p(n),1/p(n))$-pseudorandom generator for every polynomial $p(\cdot)$. 
-In other words, we define pseudorandom generators as follows
+In other words, we define pseudorandom generators as follows:
 
 ::: {.definition title="Pseudorandom generator" #prgdef}
 Let $G:\{0,1\}^* \rightarrow \{0,1\}^*$ be some function computable in polynomial time.
-We say that $G$ is a _pseudorandom generator_ with length function $\ell:\N \rightarrow \N$ (where $\ell(n)>n$)if 
+We say that $G$ is a _pseudorandom generator_ with length function $\ell:\N \rightarrow \N$ (where $\ell(n)>n$) if 
 
 * For every $x\in \{0,1\}^*$, $|G(x)| = \ell(|x|)$.
 
@@ -77,7 +79,7 @@ non-trivial, as for $\ell=n$ the function $G(x)=x$ clearly satisfies that
 $G(U_n)$ is identical to (and hence in particular indistinguishable from) the distribution
 $U_n$.
 (Make sure that you understand this last statement!)
-However, for $\ell>n$ this is no longer trivial at all, and in particular if we didn't
+However, for $\ell>n$ this is no longer trivial at all. In particular, if we didn't
 restrict the running time of $Eve$ then no such pseudo-random generator would
 exist:
 
@@ -97,18 +99,18 @@ $1/2$.
 It is not hard to show that if $P=NP$ then the above algorithm Eve can be made
 efficient.
 In particular, at the moment we do not know how to *prove*
-the existence of pseudorandom generators. Nevertheless they are widely believed
-to exist and hence we make the following conjecture:
+the existence of pseudorandom generators. Nevertheless we believe that pseudorandom generators exist
+and hence we make the following conjecture:
 
 >**Conjecture (The PRG conjecture):** For every $n$, there exists a pseudorandom
-generator $G$ mapping $n$ bits to $n+1$ bits.^[The name "The PRG conjecture" is non-standard. In the literature this is known as the conjecture of existence of pseudorandom generators. This is a weaker form of "The Optimal PRG Conjecture" presented in my [intro to theoretical CS lecture notes](https://goo.gl/G7bU4M) since the PRG conjecture only posits the existence of pseudorandom generators with arbitrary polynomial blowup, as opposed to an exponential blowup posited in the optimal PRF conjecture.]
+generator $G$ mapping $n$ bits to $n+1$ bits.^[The name "The PRG conjecture" is non-standard. In the literature this is known as the conjecture of existence of pseudorandom generators. This is a weaker form of "The Optimal PRG Conjecture" presented in my [intro to theoretical CS lecture notes](https://goo.gl/G7bU4M) since the PRG conjecture only posits the existence of pseudorandom generators with arbitrary polynomial blowup, as opposed to an exponential blowup posited in the optimal PRG conjecture.]
 
 As was the case for the cipher conjecture, and any other conjecture, there are two natural questions
 regarding the PRG conjecture: why should we believe it and why should we care. Fortunately, the answer to the first question is simple:
 it is known that the cipher conjecture _implies_ the PRG conjecture, and hence if we believe the former we should believe the latter.
 (The proof is highly non-trivial and we may not get to see it in this course.)
 As for the second question, we will see that the PRG conjecture implies a great number of useful cryptographic tools, including the cipher conjecture (i.e., the two conjectures are in fact equivalent).
-We start by showing that once we can get to an output that is one bit longer than the input, we can in fact obtain any number of bits.
+We start by showing that once we can get to an output that is one bit longer than the input, we can in fact obtain any polynomial number of bits.
 
 > # {.theorem title="Length Extension for PRG's" #lengthextendprgthm}
 Suppose that the PRG conjecture is
@@ -120,14 +122,14 @@ mapping $n$ bits to $t(n)$ bits.
 
 > # {.proof data-ref="lengthextendprgthm"}
 The proof of this theorem is very similar to the length extension theorem for
-ciphers,  and in fact this theorem can be used to give an alternative proof for the former theorem.  
+ciphers, and in fact this theorem can be used to give an alternative proof for the former theorem.
 >
 The construction is illustrated in [lengthextendprgfig](){.ref}.
 We are given a pseudorandom generator $G'$ mapping $n$ bits into $n+1$ bits and need to construct a pseudorandom generator $G$ mapping $n$ bits to $t=t(n)$
 bits for some polynomial $t(\cdot)$. The idea is that we maintain a state of $n$ bits, which are originally our input seed[^seed] $s_0$, and at the $i^{th}$ step we use $G'$
 to map $s_{i-1}$ to the $n+1$-long bit string $(s_i,y_i)$, output $y_i$ and keep $s_i$ as our new state.
 To prove the security of this construction
-we need to show that the distribution $G(U_n) = (y_1,\ldots,y_t)$  is computationally indistinguishable from the uniform distribution $U_t$. As usual, we will use the hybrid argument.
+we need to show that the distribution $G(U_n) = (y_1,\ldots,y_t)$ is computationally indistinguishable from the uniform distribution $U_t$. As usual, we will use the hybrid argument.
 For $i\in\{0,\ldots,t\}$ we define $H_i$ to be the distribution where the first $i$ bits chosen at uniform, whereas the last $t-i$ bits are computed as above.
 Namely, we choose $s_i$ at random in $\{0,1\}^n$ and continue the computation of $y_{i+1},\ldots,y_t$ from the state $s_i$.
 Clearly $H_0=G(U_n)$ and $H_t=U_t$ and hence by the triangle inequality it suffices to prove that $H_i \approx H_{i+1}$ for all $i\in\{0,\ldots,t-1\}$.
@@ -138,7 +140,7 @@ We illustrate these two hybrids in [lengthextendhybridfig](){.ref}.
 Now suppose otherwise, that there exists some adversary $Eve$ such that $\left| \E[Eve(H_i)] - \E[Eve(H_{i+1})] \right| \geq \epsilon$ for some non-negligible $\epsilon$.
 We will build from $Eve$ an adversary $Eve'$ breaking the security of the pseudorandom generator $G'$ (see [reductionlengthextendfig](){.ref}).
 >
-![Building an adversary $Eve'$ for $G'$ from an adversary $Eve$ distinguishing $H_i$ and $H_{i+1}$. The boxes marked with questions marks are those that are random or pseudorandom  depending on  whether we are in $H_i$ or $H_{i+1}$. Everything inside the dashed red lines is simulated by $Eve'$ that gets as input the $n+1$-bit string $(s_{i+1},y_{i+1})$.](../figure/length-extension-prg-adversary.jpg){#reductionlengthextendfig}
+![Building an adversary $Eve'$ for $G'$ from an adversary $Eve$ distinguishing $H_i$ and $H_{i+1}$. The boxes marked with questions marks are those that are random or pseudorandom depending on whether we are in $H_i$ or $H_{i+1}$. Everything inside the dashed red lines is simulated by $Eve'$ that gets as input the $n+1$-bit string $(s_{i+1},y_{i+1})$.](../figure/length-extension-prg-adversary.jpg){#reductionlengthextendfig}
 >
 On input of string $y$ of length $n+1$, $Eve'$ will interpret $y$ as $(s_{i+1},y_{i+1})$, choose $y_1,\ldots,y_i$ randomly and compute $y_{i+2},\ldots,y_t$ as in our pseudorandom generator's construction. $Eve'$ will then feed $(y_1,\ldots,y_t)$ to $Eve$ and output whatever $Eve$ does. Clearly, $Eve'$ is efficient if $Eve$ is. Moreover, one can see that if
 $y$ was random then $Eve'$ is feeding $Eve$ with an input distributed according to $H_{i+1}$ while if $y$ was of the form $G(s)$ for a random $s$ then $Eve'$ will feed $Eve$
@@ -148,30 +150,49 @@ with an input distributed according to $H_i$. Hence we get that $| \E[ Eve'(G'(U
 
 [^seed]:Because we use a small input to grow a large pseudorandom string, the input to a pseudorandom generator is often known as its *seed*.
 
-The proof of [lengthextendprgthm](){.ref} is indicative of many practical constructions of pseudorandom generators. Many operating systems keep track of an initial _seed_ of randomness, and  supply a system call `rand` such that every call to `rand` applies a pseudorandom generator $G'$ to the current seed, uses part of the output to update the seed, and returns the remainder to the caller.
+The proof of [lengthextendprgthm](){.ref} is indicative of many practical constructions of pseudorandom generators. Many operating systems keep track of an initial _seed_ of randomness, and supply a system call `rand` that applies a pseudorandom generator $G'$ to the current seed, uses part of the output to update the seed, and returns the remainder to the caller.
 
+### Unpredictability: an alternative approach for proving the length extension theorem
 
-> # {.remark title="Unpredictablity and indistinguishability- an alternative approach for proving the length extension theorem" #alternativelengthextendrem}
-The notion that being random is the same as being "unpredictable" can be formalized as follows.
-One can show that a random variable $X$ over $\{0,1\}^n$ is pseudorandom if and only if every efficient algorithm $A$ succeeds in the following experiment with probability at most $1/2+negl(n)$: $A$ is given $i$ chosen at random in $\{0,\ldots,n-1\}$ and $x_1,\ldots,x_i$ where $(x_1,\ldots,x_n)$ is drawn
-from $X$ and wins if it outputs $x_{i+1}$. It is a good optional exercise to prove this, and to use that to give an alternative proof of the length extension theorem.  
+The notion that being random is the same as being "unpredictable", as discussed at the beginning of this chapter, can be formalized as follows.
+
+::: {.definition title="Unpredictable function" #unpreddef}
+An efficiently computable function $G:\{0,1\}^* \rightarrow \{0,1\}^*$ is *unpredictable* if, for any $n$, $1\le i<\ell(n)$ and polynomially-sized circuit $P$, $$\Pr_{y\leftarrow G(U_n)}[P(y_1,\ldots,y_{i-1}) = y_i] \le \frac12+negl(n).$$ Here, $\ell(n)$ is the length function of $G$ and $y\leftarrow G(U_n)$ denotes that $y$ is a random output of $G$. In other words, no polynomial-sized circuit can predict the next bit of the output of $G$ given the previous bits significantly better than guessing.
+:::
+
+We now show that the condition for a function $G$ to be unpredictable is equivalent to the condition for it to be a secure PRG. The proof is detailed to give you another example of reduction proof.
+
+> # {.lemma #unpredequiv}
+Let $G:\{0,1\}^* \rightarrow \{0,1\}^*$ be a function with length function $\ell(n)$, then $G$ is a secure PRG iff it is unpredictable.
+
+> # {.proof data-ref="unpredequiv"}
+For the forward direction, suppose for contradiction that there exists some $i$ and some circuit $P$ can predict $y_i$ given $y_1,\ldots,y_{i-1}$ with probability $p\ge \frac12+\epsilon(n)$ for non-negligible $\epsilon$. Consider the adversary $Eve$ that, given a string $y$, runs the circuit $P$ on $y_1,\ldots,y_{i-1}$, checks if the output is equal to $y_i$ and if so output 1.
+>
+If $y=G(x)$ for a uniform $x$, then $P$ succeeds with probability $p$. If $y$ is uniformly random, then we can imagine that the bit $y_i$ is generated *after* $P$ finished its calculation. The bit $y_i$ is $0$ or $1$ with equal probability, so $P$ succeeds with probability $\frac12$. Since $Eve$ outputs 1 when $P$ succeeds,$$\left| \Pr[Eve(G(U_n))=1] - \Pr[ Eve(U_\ell)=1] \right|=|p-\frac12|\ge \epsilon(n),$$ a contradiction.
+>
+For the backward direction, let $G$ be an unpredictable function. Let $H_i$ be the distribution where the first $i$ bits come from $G(U_n)$ while the last $n-i$ bits are all random. Notice that $H_0=U_m$ and $H_n=G(U_n)$, so it suffices to show that $H_{i-1}\cong H_{i}$ for all $i$.
+>
+Suppose $H_{i-1}\ncong H_{i}$ for some $i$, i.e. there exists some $Eve$ and non-negligible $\epsilon$ such that $$\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Consider the program $P$ that, on input $(y_1,\ldots,y_{i-1})$, picks the bit $\hat y_{i},\ldots, \hat y_n$ uniformly at random. Then, $P$ calls $Eve$ on the generated input. If $Eve$ outputs $1$ then $P$ outputs $\hat y_{i}$, and otherwise it outputs $1-\hat y_{i}$.
+>
+The string $(y_1,\ldots,y_{i-1}, \hat y_i,\ldots,\hat y_n)$ has the same distribution as $H_{i-1}$. However, conditioned on $\hat y_i=y_i$, the string has distribution equal to $H_{i}$. Let $p$ be the probability that $Eve$ outputs $1$ if $\hat y_i=y_i$ and $q$ be the same probability when $\hat y_i\neq y_i$, then we get $$p-\frac12(p+q)=\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Therefore, the probability $P$ outputs the correct value is equal to $\frac12p+\frac12(1-q)=\frac12+\epsilon(n)2$, a contradiction.
+
+The definition of unpredictability is useful because many of our candidates for pseudorandom generators appeal to the unpredictability definition in their proofs. For example, the Blum-Blum-Shub generator we will see later in the chapter is proved to be unpredictable if the "quadratic residuosity problem" is hard. It is also nice to know that our intuition at the beginning of the chapter can be formalized.
 
 ## Stream ciphers
 
-We now show a connection between our two notions:
+We now show a connection between psuedorandom generators and encryption schemes:
 
-> # {.theorem title="PRG conjecture implies  Cipher conjectures" #PRGandcipherthm}
+> # {.theorem title="PRG conjecture implies Cipher conjectures" #PRGandcipherthm}
 If the PRG conjecture is true then so is the cipher conjecture.
 
 It turns out that the converse direction is also true, and hence
-these two conjectures are *equivalent*, though we will probably not show the
+these two conjectures are *equivalent*. We will probably not show the
 (quite non-trivial) proof of this fact in this course. (We might show some
 weaker version of this harder direction.)
 
 
 > # {.proof data-ref="PRGandcipherthm"}
-The construction is actually quite simple, recall that the *one time
-pad* is a perfectly secure cipher but its only problem was that to encrypt an
+Recall that the *one time pad* is a perfectly secure cipher but its only problem was that to encrypt an
 $n+1$ long message it needed an $n+1$ long bit key. Now using a pseudorandom
 generator, we can map an $n$-bit long key into an $n+1$-bit long string that
 looks random enough that we could use it as a key for the one-time pad. That is,
@@ -188,29 +209,21 @@ D_k(c) = G(k) \oplus c
 $$
 >
 Just like in the one time pad, $D_k(E_k(m)) = G(k) \oplus G(k) \oplus m = m$.
-Moreover, the encryption and decryption algorithms are clearly efficient and so
-the only thing that's left is to prove security or that for every pair $m,m'$ of plaintexts,
-$E_{U_n}(m) \approx E_{U_n}(m')$. We show this by proving the following claim:
+Moreover, the encryption and decryption algorithms are clearly efficient. We will prove security
+of this encryption by showing the stronger claim that $E_{U_n}(m)\approx U_{n+1}$ for any $m$.
 >
-**Claim:** For every $m\in{\{0,1\}}^{n+1}$, $E_{U_n}(m) \approx U_{n+1} \oplus  m$.
->
-The claim implies the security of the scheme, since it means that $E_{U_n}(m)$
-is indistinguishable from the one-time-pad encryption of $m$, which is
-identically distributed to the one-time pad encryption of $m'$ which (by another
-application of the claim) is indistinguishable from $E_{U_n}(m')$ and so the
-theorem follows from the triangle inequality. Thus all that's left is to prove
-the claim:
->
-**Proof of claim:** Suppose that there was an efficient adversary $Eve'$ such
+Notice that $U_{n+1}=U_{n+1}\oplus m$, as we showed in the security of the one-time pad.
+Suppose that for some non-negligible $\epsilon=\epsilon(n)>0$ there is an efficient adversary $Eve'$ such
 that
 >
 $$
-\left| {\mathbb{E}}[ Eve'(G(U_n)\oplus m)] - {\mathbb{E}}[ Eve'(U_{n+1}\oplus m) ] \right| \geq \epsilon
+\left| {\mathbb{E}}[ Eve'(G(U_n)\oplus m)] - {\mathbb{E}}[ Eve'(U_{n+1}\oplus m) ] \right| \geq \epsilon.
 $$
 >
-for some non-negligible $\epsilon=\epsilon(n)>0$. Then the adversary $Eve$
-defined as $Eve(y) = Eve'(y\oplus m)$ would be also efficient and would break
-the security of the PRG with non-negligible success. This concludes the proof of the claim and hence the theorem.
+Then the adversary $Eve$ defined as $Eve(y) = Eve'(y\oplus m)$ would be also efficient. Furthermore, if $y$
+is pseudorandom then $Eve(y)=Eve'(G(U_n)\oplus m)$ and if $y$ is uniformly random then $Eve'(U_{n+1}\oplus m)$.
+Then, $Eve$ can distinguish the two distributions with advantage $\epsilon$, a contradiction.
+
 
 If the PRG outputs $t(n)$ bits instead of $n+1$ then we automatically
 get an encryption scheme with $t(n)$ long message length. In fact, in practice
@@ -219,20 +232,21 @@ of messages in advance. Every time we need to encrypt another bit (or another
 block) $m_i$ of the message, we run the basic PRG to update our state and obtain
 some new randomness $y_i$ that we can XOR with the message and output. Such
 constructions are known as *stream ciphers* in the literature. In much
-of the practical literature the name *stream cipher* is used both for the
-pseudorandom generator itself, as well as for the encryption scheme that is
+of the practical literature, the name *stream cipher* is used both for the
+pseudorandom generator itself as well as for the encryption scheme that is
 obtained by combining it with the one-time pad.
 
 
 > # {.remark title="Using pseudorandom generators for coin tossing over the phone" #cointossingphonerm}
-The following is a cute application of pseudorandom generators. Alice and Bob want to toss a fair coin over the phone. They use a pseudorandom generator $G:\{0,1\}^b\rightarrow\{0,1\}^{3n}$.
+The following is a cute application of pseudorandom generators. Alice and Bob want to toss a fair coin over the phone. They use a pseudorandom generator $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$.
 >
-*  Alice will send $z\leftarrow_R\{0,1\}^{3n}$ to Bob \
+* Alice will send $z\leftarrow_R\{0,1\}^{3n}$ to Bob \
 * Bob picks $s\leftarrow_R\{0,1\}^n$ and with probability $1/2$ sends $G(s)$ (case I) and with probability $1/2$ sends $G(s)\oplus z$ (case II).\
 * Alice then picks a random $b\leftarrow_R\{0,1\}$ and sends it to Bob. \
-* Bob  reveals what he sent in the previous stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$.
+* Bob reveals what he sent in the previous stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$.
 >
 It can be shown that (assuming the protocol is completed) the output is a random coin, which neither Alice or Bob can control or predict with more than negligible advantage over half. (Trying to formalize this and prove it is an excellent exercise.)
+
 
 ## What do pseudorandom generators actually look like?
 
@@ -240,10 +254,10 @@ It can be shown that (assuming the protocol is completed) the output is a random
 
 So far we have made the conjectures that objects such as ciphers and
 pseudorandom generators *exist*, without giving any hint as to how they would
-actually look like. (Though we have  examples such as the Caesar cipher, Vignere, and Enigma of what secure ciphers _don't_ look like.)
+actually look like. (Though we have examples such as the Caesar cipher, Vigenere, and Enigma of what secure ciphers _don't_ look like.)
 As mentioned above, we do not know how to *prove* that
 any particular function is a pseudorandom generator.
-However,  there are quite simple *candidates* (i.e.,  functions that are conjectured to be secure pseudorandom generators), though care must be taken in constructing them.
+However, there are quite simple *candidates* (i.e., functions that are conjectured to be secure pseudorandom generators), though care must be taken in constructing them.
 We now consider candidates for functions that maps $n$ bits
 to $n+1$ bits (or more generally $n+c$ for some constant $c$ ) and look at least
 somewhat "randomish".
@@ -257,13 +271,13 @@ Boneh-Shoup book.
 
 ### Attempt 0: The counter generator
 
-Just to get started, let's show an example of an obviously bogus pseudorandom generator.
-We define  the "counter pseudorandom generator" $G:\{0,1\}^n \rightarrow \{0,1\}^{n+1}$ as follows.
+To get started, let's look at an example of an obviously bogus pseudorandom generator.
+We define the "counter pseudorandom generator" $G:\{0,1\}^n \rightarrow \{0,1\}^{n+1}$ as follows.
 $G(s)=(s',b)$ where $s' = s + 1 \mod 2^n$ (treating $s$ and $s'$ as numbers in $\{0,\ldots,2^n-1\}$) and $b$ is the least significant digit of $s'$.
 It's a great exercise to work out why this is _not_ a secure pseudorandom generator.
 
 > # { .pause }
-You should really pause here and make sure you see why the "counter   pseudorandom generator" is not a secure pseudorandom generator. Show that this is true even if we replace the least significant digit by the $k$-th digit for every $0 \leq k < n$.
+You should really pause here and make sure you see why the "counter pseudorandom generator" is not a secure pseudorandom generator. Show that this is true even if we replace the least significant digit by the $k$-th digit for every $0 \leq k < n$.
 
 
 ### Attempt 1: The linear checksum / linear feedback shift register (LFSR)
@@ -276,16 +290,16 @@ That is, $s'_1 = f(s)$ and $s'_i = s_{i-1}$ for $i\in\{2,\ldots,n\}$.
 
 LFSR's have several good properties- if the function $f(\cdot)$ is chosen properly then they can have very long _periods_
 (i.e., it can take an exponential number of steps until the state repeats itself), though that also holds for the simple "counter" generator we saw above.
-They also have the property that every individual bit is equal to $0$ or $1$ with probability exactly half  (the counter generator also shares this property).
+They also have the property that every individual bit is equal to $0$ or $1$ with probability exactly half (the counter generator also shares this property).
 
-A more interesting property is that  (if the function is selected properly) every two coordinates are independent from one another.
+A more interesting property is that (if the function is selected properly) every two coordinates are independent from one another.
 That is, there is some super-polynomial function $t(n)$ (in fact $t(n)$ can be exponential in $n$) such that if $\ell \neq \ell' \in \{0,\ldots, t(n) \}$, then if we look at the two random variables corresponding to the $\ell$-th and $\ell'$-th output of the generator (where randomness is the initial state) then they are distributed like two independent random coins. (This is non-trivial to show, and depends on the choice of $f$ - it is a challenging but useful exercise to work this out.)
-The counter generator fails badly at this condition:  the least significant bits between two consecutive states always flip.
+The counter generator fails badly at this condition: the least significant bits between two consecutive states always flip.
 
-There is a more general notion of a *linear generator* where the new state can be any invertible linear transformation of the previous state. That is, we interpret the state $s$ as an element of $\Z_q^t$ for some integers $q,t$,[^Zq] and let $s’=F(s)$ and the output $b=G(s)$ where $F:\Z_q^t\rightarrow\Z_q^t$  and $G:\Z_q^t\rightarrow\Z_q$ are invertible linear transformations (modulo $q$).
-This includes as a special case the *linear congruential generator* where $t=1$ and the map  $F(s)$ corresponds to taking $as \pmod{q}$ where $a$ is number co-prime to $q$.
+There is a more general notion of a *linear generator* where the new state can be any invertible linear transformation of the previous state. That is, we interpret the state $s$ as an element of $\Z_q^t$ for some integers $q,t$,[^Zq] and let $s’=F(s)$ and the output $b=G(s)$ where $F:\Z_q^t\rightarrow\Z_q^t$ and $G:\Z_q^t\rightarrow\Z_q$ are invertible linear transformations (modulo $q$).
+This includes as a special case the *linear congruential generator* where $t=1$ and the map $F(s)$ corresponds to taking $as \pmod{q}$ where $a$ is number co-prime to $q$.
 
-[^Zq]: A ring is a set of elements where addition and multiplication are defined and obey the natural rules of associativity and commutativity (though without necessarily having a multiplicative inverse for every element). For every integer $q$ we define $\Z_q$ (known as the _ring of integers modulo $q$_) to be the  set $\{0,\ldots,q-1\}$ where addition and multiplication is done modulo $q$.
+[^Zq]: A ring is a set of elements where addition and multiplication are defined and obey the natural rules of associativity and commutativity (though without necessarily having a multiplicative inverse for every element). For every integer $q$ we define $\Z_q$ (known as the _ring of integers modulo $q$_) to be the set $\{0,\ldots,q-1\}$ where addition and multiplication is done modulo $q$.
 
 
 All these generators are unfortunately insecure due to the great bane of
@@ -297,8 +311,8 @@ $m$ linear equations in $n$ variables (or to certify no solution exists) over
 any ring.
 
 
-Despite its seeming simplicity and ubiquity, Gaussian elimination  (and some generalizations and related algorithms such as Euclid’s extended g.c.d algorithm and the LLL lattice reduction algorithm) has been used time and again to break candidate cryptographic constructions.
-In particular, if we look at the first $n$ outputs of a linear  generator
+Despite its seeming simplicity and ubiquity, Gaussian elimination (and some generalizations and related algorithms such as Euclid’s extended g.c.d algorithm and the LLL lattice reduction algorithm) has been used time and again to break candidate cryptographic constructions.
+In particular, if we look at the first $n$ outputs of a linear generator
 $b_1,\ldots,b_n$ then we can write linear equations in the unknown initial state
 of the form $f_1(s)=b_1,\ldots,f_n(s)=b_n$ where the $f_i$'s are known linear
 functions.
@@ -307,7 +321,7 @@ can solve the equations to get the unique solution for the original state $s$
 and from which point we can predict all outputs of the generator, or they are
 dependent, which means that we can predict some of the outputs even without
 recovering the original state.
-Either way the generator is $*\sharp !$’ed (where
+Either way, the generator is $*\sharp !$’ed (where
 $* \sharp !$ refers to whatever verb you prefer to use when your system is broken).
 See also this [1977 paper](http://alumni.cs.ucr.edu/~jsun/random-number.pdf)
 of James Reed.
@@ -329,7 +343,7 @@ fact, the real bottleneck in using cryptographic pseudorandom generators is
 often the generation of *entropy* for their seed, as discussed in the previous
 lecture, and not their actual running time.)
 
-[^luhn]: That number is obtained by applying an algorithm of  [Hans Peter Luhn](https://goo.gl/SL8ahM) which applies a simple map to each digit of the card and then sums them up modulo 10.
+[^luhn]: That number is obtained by applying an algorithm of [Hans Peter Luhn](https://goo.gl/SL8ahM) which applies a simple map to each digit of the card and then sums them up modulo 10.
 
 
 ### From insecurity to security
@@ -359,14 +373,14 @@ When constructing **block ciphers** we often have _mixing_ transformation to ens
 
 This also works in the other direction.
 Many algorithmic and machine learning advances work by embedding a discrete problem in a continuous convex one.
-Some attacks on cryptographic objects can be thought of as  trying to recover some of the structure (e.g., by embedding modular arithmetic in the real line or "linearizing" non linear equations).
+Some attacks on cryptographic objects can be thought of as trying to recover some of the structure (e.g., by embedding modular arithmetic in the real line or "linearizing" non linear equations).
 
 
 
 
 ### Attempt 2: Linear Congruential Generators with dropped bits
 
-One  approach that is widely used in implementations of  pseudorandom generators is to take a linear generator such as the
+One approach that is widely used in implementations of pseudorandom generators is to take a linear generator such as the
 linear congruential generators described above, and use for the output a "chopped" version of the linear function and drop some of the
 least significant bits. The operation of dropping these bits is non-linear and hence the attack above does not immediately apply.
 Nevertheless, it turns out this attack can be generalized to handle this case, and hence even with dropped bits Linear Congruential Generators are completely insecure
@@ -374,7 +388,7 @@ and should be used (if at all) only in applications such as simulations where th
 Section 3.7.1 in the Boneh-Shoup book describes one attack against such generators that uses the notion of
 _lattice algorithms_ that we will encounter later in this course in very different contexts.
 
-##  Successful examples
+## Successful examples
 
 Let's now describe some _successful_ (at least per current knowledge) pseudorandom generators:
 
@@ -383,10 +397,10 @@ Let's now describe some _successful_ (at least per current knowledge) pseudorand
 
 Here is an extremely simple generator that is yet still secure[^ss_sec] as far as we know.
 
-[^ss_sec]: Actually modern computers will be able to break this generator via brute force, but if the length and number of the constants were doubled (or perhaps  quadrupled) this should be sufficiently secure, though longer to write down.
+[^ss_sec]: Actually modern computers will be able to break this generator via brute force, but if the length and number of the constants were doubled (or perhaps quadrupled) this should be sufficiently secure, though longer to write down.
 
 ```python
-# seed is a list of 40 zero/one  values
+# seed is a list of 40 zero/one values
 # output is a 48 bit integer
 def subset_sum_gen(seed):
   modulo = 0x1000000
@@ -396,7 +410,7 @@ def subset_sum_gen(seed):
      0x9122E7, 0xAFB10C, 0x18C2C8, 0x8FF050, 0x0239A3,  
      0x02E4E0, 0x779B76, 0x1C4FC2, 0x7C5150, 0x81E05E,  
      0x154647, 0xB80E68, 0xA042E5, 0xE20269, 0xD3B7F3,  
-     0xCC5FB9, 0x0BFC55, 0x847AE0, 0x8CFDF8, 0xE304B7,
+     0xCC5FB9, 0x0BFC55, 0x847AE0, 0x8CFDF8, 0xE304B7,  
      0x869ACE, 0xB4CDAB, 0xC8E31F, 0x00EDC7, 0xC50541,  
      0x0D6DDD, 0x695A2F, 0xA81062, 0x0123CA, 0xC6C5C3 ]
 
@@ -419,10 +433,10 @@ To get some intuition for its security, we can work out why (given that it seems
 > # { .pause }
 This is an excellent point for you to stop and try to answer this question on your own.
 
-Given the known constants and known output,  figuring out the set of potential seeds can be thought of as solving a _single_ equation in 40 variables.
+Given the known constants and known output, figuring out the set of potential seeds can be thought of as solving a _single_ equation in 40 variables.
 However, this equation is clearly overdetermined, and will have a solution regardless of whether the observed value is indeed an output of the generator, or it is chosen uniformly at random.
 
-More concretely,  we can use linear-equation solving to  compute (given the known constants $c_1,\ldots,c_{40} \in \Z_{2^{48}}$ and the output $y \in \Z_{2^{48}}$) the linear subspace $V$ of all vectors $(s_1,\ldots,s_{40}) \in (\Z_{2^{48}})^{40}$ such that $\sum s_i c_i = y \pmod{2^{48}}$.
+More concretely, we can use linear-equation solving to compute (given the known constants $c_1,\ldots,c_{40} \in \Z_{2^{48}}$ and the output $y \in \Z_{2^{48}}$) the linear subspace $V$ of all vectors $(s_1,\ldots,s_{40}) \in (\Z_{2^{48}})^{40}$ such that $\sum s_i c_i = y \pmod{2^{48}}$.
 But, regardless of whether $y$ was generated at random from $\Z_{2^{48}}$, or $y$ was generated as an output of the generator, the subspace $V$ will always have the same dimension (specifically, since it is formed by a single linear equation over $40$ variables, the dimension will be $39$.)
 To break the generator we seem to need to be able to decide whether this linear subspace $V \subseteq (\Z_{2^{48}})^{40}$ contains a _Boolean vector_ (i.e., a vector $s\in \{0,1\}^n$).
 Since the condition that a vector is Boolean is not defined by linear equations, we cannot use Gaussian elimination to break the generator.
@@ -443,7 +457,7 @@ def RC4(P,i,j):
 ```
 
 The function `RC4` takes as input the current state `P,i,j` of the generator and returns the new state together with a single output byte.
-The state of the generator consists of an array `P` of 256 bytes, which can be thought of as a  _permutation_ of the numbers $0,\ldots,255$ in the sense that we maintain the invariant that
+The state of the generator consists of an array `P` of 256 bytes, which can be thought of as a _permutation_ of the numbers $0,\ldots,255$ in the sense that we maintain the invariant that
 $\texttt{P}[i]\neq\texttt{P}[j]$ for every $i\neq j$, and two indices $i,j \in \{0,\ldots,255\}$.
 We can consider the initial state as the case where `P` is a completely random permutation and $i$ and $j$ are initialized to zero, although to save on initial seed size, typically RC4 uses some "pseudorandom" way to generate `P` from a shorter seed as well.
 
@@ -454,24 +468,37 @@ The ciphers Salsa and ChaCha, designed by Dan Bernstein, have a similar design t
 
 
 
-[^fn]:I typically do not include  references in these lecture notes, and leave them to the texts, but I make here an exception because Itsik Mantin was a close friend of mine in grad school.
+[^fn]:I typically do not include references in these lecture notes, and leave them to the texts, but I make here an exception because Itsik Mantin was a close friend of mine in grad school.
 
+## Case Study 3: B.B.S.
+B.B.S., which stands for the authors Blum, Blum and Shub, is a simple generator constructed from a potentially hard problem in number theory.
+
+Let $n=pq$, where $p,q$ are primes. Then, the set $Q_n$ of *quadratic residues modulo $n$* is the set $$Q_n=\{x^2\mid \gcd(x,N)=1\}.$$ The definition extends the concept of "perfect squares" when we are working with standard integers. Notice that each number in $Q_n$ has at least one square root. We will see later in the course that if $n=pq$ then these numbers will have $4$ square roots.
+
+The B.B.S. generator chooses $n=pq$, where $p,q$ are prime and $p,q\equiv 3\pmod{4}$. The second condition guarantees that for each $y\in Q_n$, exactly one of its square roots fall in $Q_n$. It also maintains an initial state $x\in\{0,1\}^n$, initialized to the seed.
+
+```python
+def BBS(x):
+    return (x * x % n, x % 2)
+```
+
+In other words, it calculates the least significant bit of $x$ and squares its internal state. The security of this generator is based on the *quadratic residuosity problem*, which asks, given a number $x$, whether $x\in Q_n$. The number theory required takes a while to develop. However, it is interesting and I recommend the reader to search up this particular generator.
 
 ## Non-constructive existence of pseudorandom generators
 
-We now show that, if we don't insist on _constructivity_ of pseudorandom generators, then we can show that there exists  pseudorandom generators with output that  _exponentially larger_   in the input length.
+We now show that, if we don't insist on _constructivity_ of pseudorandom generators, then there exists pseudorandom generators with output that are _exponentially larger_ than the input length.
 
 
 > # {.lemma title="Existence of inefficient pseudorandom generators" #prgexist}
-There is some absolute constant $C$ such that for every $\epsilon,T$, if $\ell > C (\log T + \log (1/\epsilon))$ and $m \leq T$,  then there is an $(T,\epsilon)$ pseudorandom generator $G: \{0,1\}^\ell \rightarrow \{0,1\}^m$.
+There is some absolute constant $C$ such that for every $\epsilon,T$, if $\ell > C (\log T + \log (1/\epsilon))$ and $m \leq T$, then there is an $(T,\epsilon)$ pseudorandom generator $G: \{0,1\}^\ell \rightarrow \{0,1\}^m$.
 
 
 > # {.proofidea data-ref="prgexist"}
-The proof uses an extremely useful technique known  as the "probabilistic method" which is not too hard mathematically but can be confusing at first.^[There is a whole (highly recommended) [book by Alon and Spencer](https://www.amazon.com/Probabilistic-Method-Discrete-Mathematics-Optimization/dp/1119061954/ref=dp_ob_title_bk)  devoted to this method.]
+The proof uses an extremely useful technique known as the "probabilistic method" which is not too hard mathematically but can be confusing at first.^[There is a whole (highly recommended) [book by Alon and Spencer](https://www.amazon.com/Probabilistic-Method-Discrete-Mathematics-Optimization/dp/1119061954/ref=dp_ob_title_bk) devoted to this method.]
 The idea is to give a "non constructive" proof of existence of the pseudorandom generator $G$ by showing that if $G$ was chosen at random, then the probability that it would be a valid $(T,\epsilon)$ pseudorandom generator is positive.
-In  particular this means that there _exists_ a single $G$ that is a valid $(T,\epsilon)$ pseudorandom generator.
+In particular this means that there _exists_ a single $G$ that is a valid $(T,\epsilon)$ pseudorandom generator.
 The probabilistic method is just a _proof technique_ to demonstrate the existence of such a function.
-Ultimately, our goal is to show the existence of  a _deterministic_ function $G$ that satisfies
+Ultimately, our goal is to show the existence of a _deterministic_ function $G$ that satisfies
 the conditions of a $(T, \epsilon)$ PRG.
 
 The above discussion might be rather abstract at this point, but would become clearer after seeing the proof.
@@ -488,27 +515,28 @@ Before proving Claim I, let us see why it implies [prgexist](){.ref}.
 We can identify a function $G:\{0,1\}^\ell \rightarrow \{0,1\}^m$ with its "truth table" or simply the list of evaluations on all its possible $2^\ell$ inputs. Since each output is an $m$ bit string,
 we can also think of $G$ as a string in $\{0,1\}^{m\cdot 2^\ell}$. We define $\mathcal{G}^m_\ell$ to be the set of all functions from $\{0,1\}^\ell$ to $\{0,1\}^\ell$. As discussed above we can identify $\mathcal{F}_\ell^m$ with $\{0,1\}^{m\cdot 2^\ell}$ and choosing a random function $G \sim \mathcal{F}_\ell^m$ corresponds to choosing a random $m\cdot 2^\ell$-long bit string.
 >
-For every NAND program / Boolean circuit  $P$ let $B_P$ be the event that, if we choose $G$ at random from $\mathcal{F}_\ell^m$ then  [prgdefeq](){.eqref} is violated with respect to the program $P$.
-It is important to understand what is the sample space that the event $B_P$ is defined over, namely this event depends on the choice of $G$ and so $B_P$ is a subset of $\mathcal{F}_\ell^m$. An equivalent way to define the  event $B_P$ is that it is the subset of  all functions  mapping $\{0,1\}^\ell$ to $\{0,1\}^m$  that violate [prgdefeq](){.eqref}, or in other words:
+For every NAND program / Boolean circuit $P$ let $B_P$ be the event that, if we choose $G$ at random from $\mathcal{F}_\ell^m$ then [prgdefeq](){.eqref} is violated with respect to the program $P$.
+It is important to understand what is the sample space that the event $B_P$ is defined over, namely this event depends on the choice of $G$ and so $B_P$ is a subset of $\mathcal{F}_\ell^m$. An equivalent way to define the event $B_P$ is that it is the subset of all functions mapping $\{0,1\}^\ell$ to $\{0,1\}^m$ that violate [prgdefeq](){.eqref}, or in other words:
 $$
-B_P = \left\{ G \in \mathcal{F}_\ell^m  \; \big| \; \left| \tfrac{1}{2^\ell}\sum_{s\in \{0,1\}^\ell} P(G(s)) - \tfrac{1}{2^m}\sum_{r \in \{0,1\}^m}P(r)  \right| > \epsilon  \right\} \;\;. \label{eq:eventdefine}
+B_P = \left\{ G \in \mathcal{F}_\ell^m \; \big| \; \left| \tfrac{1}{2^\ell}\sum_{s\in \{0,1\}^\ell} P(G(s)) - \tfrac{1}{2^m}\sum_{r \in \{0,1\}^m}P(r) \right| > \epsilon \right\} \;\;. \label{eq:eventdefine}
 $$
 (We've replaced here the probability statements in [prgdefeq](){.eqref} with the equivalent sums so as to reduce confusion as to what is the sample space that $B_P$ is defined over.)
 >
-To understand this proof it is crucial that you pause here and see how  the definition of $B_P$ above corresponds to [eq:eventdefine](){.eqref}. This may well take re-reading the above text once or twice, but it is a good exercise at parsing probabilistic statements and learning how to identify the _sample space_ that these statements correspond to.
+To understand this proof it is crucial that you pause here and see how the definition of $B_P$ above corresponds to [eq:eventdefine](){.eqref}. This may well take re-reading the above text once or twice, but it is a good exercise at parsing probabilistic statements and learning how to identify the _sample space_ that these statements correspond to.
 >
 Now, the number of programs of size $T$ (or circuits of size $T$) is at most $2^{O(T\log T)}$.
-Since $T\log T = o(T^2$)  this means that if  Claim I  is true, then by the union bound it holds that the probability of the union of $B_P$ over _all_ NAND programs of at most $T$ lines is at most $2^{O(T\log T)}2^{-T^2} < 0.1$ for sufficiently large $T$.
+Since $T\log T = o(T^2$) this means that if Claim I is true, then by the union bound it holds that the probability of the union of $B_P$ over _all_ NAND programs of at most $T$ lines is at most $2^{O(T\log T)}2^{-T^2} < 0.1$ for sufficiently large $T$.
 What is important for us about the number $0.1$ is that it is smaller than $1$.
 In particular this means that there _exists_ a single $G^* \in \mathcal{F}_\ell^m$ such that $G^*$ _does not_ violate [prgdefeq](){.eqref} with respect to any NAND program of at most $T$ lines, but that precisely means that $G^*$ is a $(T,\epsilon)$ pseudorandom generator.
 >
-Hence  conclude the proof of [prgexist](){.ref}, it suffices to prove Claim I.
+Hence, it suffices to prove Claim I to conclude the proof of [prgexist](){.ref}.
 Choosing a random $G: \{0,1\}^\ell \rightarrow \{0,1\}^m$ amounts to choosing $L=2^\ell$ random strings $y_0,\ldots,y_{L-1} \in \{0,1\}^m$ and letting $G(x)=y_x$ (identifying $\{0,1\}^\ell$ and $[L]$ via the binary representation).
 Hence the claim amounts to showing that for every fixed function $P:\{0,1\}^m \rightarrow \{0,1\}$,
-if $L >  2^{C (\log T + \log \epsilon)}$ (which by setting $C>4$, we can ensure is larger than $10 T^2/\epsilon^2$) then the probability that
+if $L > 2^{C (\log T + \log \epsilon)}$ (which by setting $C>4$, we can ensure is larger than $10 T^2/\epsilon^2$) then the probability that
 $$
-\left| \tfrac{1}{L}\sum_{i=0}^{L-1} P(y_s)  -  \Pr_{s \sim \{0,1\}^m}[P(s)=1] \right| > \epsilon \label{prgdefeqchernoff}
+\left| \tfrac{1}{L}\sum_{i=0}^{L-1} P(y_s) - \Pr_{s \sim \{0,1\}^m}[P(s)=1] \right| > \epsilon \label{prgdefeqchernoff}
 $$
 is at most $2^{-T^2}$.
 [{prgdefeqchernoff}](){.eqref} follows directly from the Chernoff bound.
-If we let for every $i\in  [L]$  the random variable $X_i$ denote $P(y_i)$, then since $y_0,\ldots,y_{L-1}$ is chosen independently at random, these are independently and identically distributed random variables with mean $\E_{y \sim \{0,1\}^m}[P(y)]= \Pr_{y\sim \{0,1\}^m}[ P(y)=1]$ and hence the probability that they deviate from their expectation by $\epsilon$ is at most $2\cdot 2^{-\epsilon^2 L/2}$.
+If we let for every $i\in [L]$ the random variable $X_i$ denote $P(y_i)$, then since $y_0,\ldots,y_{L-1}$ is chosen independently at random, these are independently and identically distributed random variables with mean $\E_{y \sim \{0,1\}^m}[P(y)]= \Pr_{y\sim \{0,1\}^m}[ P(y)=1]$ and hence the probability that they deviate from their expectation by $\epsilon$ is at most $2\cdot 2^{-\epsilon^2 L/2}$.
+

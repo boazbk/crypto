@@ -6,3 +6,4 @@ Simon Fischer
 William Fu
 Daniel Inge
 Kevin Liao
+Yeongil Ko
