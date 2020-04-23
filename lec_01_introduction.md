@@ -571,7 +571,7 @@ A similar (though more involved) argument shows that the impossiblity result sho
 
 ::: {.theorem title="Short keys imply high probability attack" #longkeyhighprob}
 Let $(E,D)$ be an encryption scheme with $L(n)=n+t$. Then there is a function $Eve$ and pair of messages $x_0,x_1$ such that 
-$$\Pr_{k \leftarrow_R \{0,1\}^n, b \leftarrow_R \{0,1\}}[ Eve(E_k(x_b) = x_b)] \geq 1- 2^{-t-1}\;.$$
+$$\Pr_{k \leftarrow_R \{0,1\}^n, b \leftarrow_R \{0,1\}}[ Eve(E_k(x_b)) = x_b] \geq 1- 2^{-t-1}\;.$$
 :::
 
 
