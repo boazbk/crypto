@@ -215,7 +215,7 @@ In practice we would usually like to ensure that when we use a smallish security
 
 - The *honest parties* (the parties running the encryption and decryption algorithms) are extremely efficient, something like 100-1000 cycles per byte of data processed. In theory terms we would want them be using an $O(n)$ or at worst $O(n^2)$ time algorithms with not-too-big hidden constants.
 
-- We want to protect against *adversaries* (the parties trying to break the encryption) that  have much vaster computational capabilities. A typical modern encryption is built so that using standard key sizes it can  withstand the combined computational powers of all computers on earth for several decades. In theory terms we would want the time to break the scheme be at least $2^{\Omega(n)}$ or $2^(\Omega(\sqrt{n})$ / $2^{\Omega(n^{1/3})}$ with not too small hidden constants. 
+- We want to protect against *adversaries* (the parties trying to break the encryption) that  have much vaster computational capabilities. A typical modern encryption is built so that using standard key sizes it can  withstand the combined computational powers of all computers on earth for several decades. In theory terms we would want the time to break the scheme be at least $2^{\Omega(n)}$ or $2^{\Omega(\sqrt{n})}$ / $2^{\Omega(n^{1/3})}$ with not too small hidden constants. 
 
 
 
@@ -249,7 +249,7 @@ A function $\mu:\mathbb{N} \rightarrow [0,\infty)$ is _negligible_ if for every 
 The following exercises are good ways to get some comfort with this definition
 
 ::: {.exercise title="Negligible functions properties" #negligible}
-1. Let $\mu:\N \rightarrow [0,\infty)$ be a negligible function. Prove that for every polynomials $p,q:\R \rightarrow \R$ with non-negative coefficients, the function $\mu':\N \rightarrow [0,\infty)$ defined as $\mu'(n) = p(\mu(q(n)))$ is negligible. 
+1. Let $\mu:\N \rightarrow [0,\infty)$ be a negligible function. Prove that for every polynomials $p,q:\R \rightarrow \R$ with non-negative coefficients such that $p(0) = 0$, the function $\mu':\N \rightarrow [0,\infty)$ defined as $\mu'(n) = p(\mu(q(n)))$ is negligible. 
 
 2. Let $\mu:\N \rightarrow \R$. Prove that $\mu$ is negligible if and only if for every constant $c$, $\lim_{n \rightarrow \infty} n^c \mu(n) = 0$.
 :::
@@ -628,7 +628,7 @@ need to show that $E_{U_n}(m) \approx E_{U_n}(m')$. The heart of the proof will
 be the following claim:
 >
 **Claim:** Let $\hat{E}$ be the algorithm that on input a message $m$ and key
-$k_0$ works like $E$ except that its the $i^{th}$ block contains
+$k_0$ works like $E$ except that its $i^{th}$ block contains
 $E'_{k_{i-1}}(k'_i,m_i)$ where $k'_i$ is a *random* string in ${\{0,1\}}^n$,
 that is chosen *independently* of everything else including the key $k_i$. Then,
 for every message $m\in{\{0,1\}}^t$
