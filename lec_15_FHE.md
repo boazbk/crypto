@@ -5,7 +5,7 @@ chapternum: "16"
 ---
 
 
-# Fully homomorphic encryption: Introduction and bootstrapping
+# Fully homomorphic encryption: Introduction and bootstrapping {#chapfheone } 
 
 
 In today's era of "cloud computing", much of individuals' and businesses' data is stored and computed on by third parties such as Google, Microsoft, Apple, Amazon,  Facebook, Dropbox and many others.
@@ -75,14 +75,15 @@ In practice, this could provide reasonable security against remote hackers, but 
 We start by defining _partially homomorphic_ encryption.
 We  focus on encryption for single bits.  This is without loss of generality for CPA security (CCA security is anyway ruled out for homomorphic encryption- can you see why?), though there are more efficient constructions that encrypt several bits at a time.
 
-> # {.definition title="Partially Homomorphic Encryption" #partialhomdef}
+::: {.definition title="Partially Homomorphic Encryption" #partialhomdef}
 Let $\mathcal{F} = \cup \mathcal{F}_\ell$ be a class of functions where every $f\in\mathcal{F}_\ell$ maps $\{0,1\}^\ell$ to $\{0,1\}$.  
 An _$\mathcal{F}$-homomorphic public key encryption scheme_ is a CPA secure public key encryption scheme $(G,E,D)$ such that there exists a polynomial-time algorithm $EVAL:\{0,1\}^* \rightarrow \{0,1\}^*$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$,  $x_1,\ldots,x_\ell \in \{0,1\}$, and $f\in \mathcal{F}_\ell$ of description size $|f|$ at most $poly(\ell)$ it holds that:
->
-* $c=EVAL_e(f,E_e(x_1),\ldots,E_e(x_\ell))$ has length at most $n$. \
-* $D_d(c)=f(x_1,\ldots,x_\ell)$.
 
- \
+* $c=EVAL_e(f,E_e(x_1),\ldots,E_e(x_\ell))$ has length at most $n$. 
+
+* $D_d(c)=f(x_1,\ldots,x_\ell)$.
+:::
+
 
 
 
@@ -109,7 +110,7 @@ Curiously the protocol involves "doubly encrypting" the input, and homomorphical
 
 * __Assumptions:__ We assume that all functions $f$ that the client will be interested in can be described by a string of length $n$.
 
-* __Preprocessing:__ The client generates a pair of keys $(e,d)$. In the initial stage the client computes the encrypted database $\overline{c}=E_e(x)$ and sends $\overline{c},e,e'$ to the server. It also computes $c^* = E_e(f^*)$ for some function $f^*$ as well as  $C^{**}=EVAL_{e}(eval,E_e(f^*)\|\overline{c})$  for some function $f^*$ and keeps $c^*,c^{**}$ for herself, where $eval(f,x)=f(x)$ is the circuit evaluation function.
+* __Preprocessing:__ The client generates a pair of keys $(e,d)$. In the initial stage the client computes the encrypted database $\overline{c}=E_e(x)$ and sends $\overline{c},e,e'$ to the server. It also computes $c^* = E_e(f^*)$ for some function $f^*$ as well as  $C^{**}=EVAL_{e}(eval,c^*\|\overline{c})$  for some function $f^*$ and keeps $c^*,c^{**}$ for herself, where $eval(f,x)=f(x)$ is the circuit evaluation function.
 
 
 * __Client query:__ To ask for an evaluation of $f$, the client generates a new random FHE keypair $(e',d')$, chooses $b \leftarrow_R \{0,1\}$ and lets $c_b = E_{e'}(E_e(f))$ and $c_{1-b}=E_{e'}(c^*)$. It sends the triple $e',c_0,c_1$ to the server.
@@ -128,20 +129,24 @@ The probability of detection can be amplified to $1-negl(n)$ using appropriate r
 It turns out that Regev's LWE-based encryption LWEENC we  saw  before is homomorphic with respect to the class of linear (mod 2) functions.
 Let us recall the LWE assumption and the encryption scheme based on it.
 
-> # {.definition title="LWE (simplified decision variant)" #LWEdef}
+::: {.definition title="LWE (simplified decision variant)" #LWEdef}
 Let $q=q(n)$ be some function mapping the natural numbers to primes. The _$q(n)$-decision learning with error ($q(n)$-dLWE) conjecture_ is the following:
 for every $m=poly(n)$ there is a distribution $LWE_q$ over pairs $(A,s)$ such that:
->
-* $A$ is an $m\times n$ matrix over $\Z_q$ and $s\in\Z_q^n$ satisfies $s_1=\floor{\tfrac{q}{2}}$ and $|As|_i \leq \sqrt{q}$ for every $i\in \{1,\ldots, m\}$.
->
-* The distribution $A$ where $(A,s)$ is sampled from $LWE_q$ is computationally indistinguishable from the uniform distribution of $m\times n$ matrices over $\Z_q$.
 
-The _LWE conjecture_ is that $q(n)$-dLWE holds for every $q(n)$ that is at most $poly(n)$.
-This is not exactly the same phrasing we used before, but can be shown to be essentially equivalent to it.
+* $A$ is an $m\times n$ matrix over $\Z_q$ and $s\in\Z_q^n$ satisfies $s_1=\floor{\tfrac{q}{2}}$ and $|As|_i \leq \sqrt{q}$ for every $i\in \{1,\ldots, m\}$.
+
+* The distribution $A$ where $(A,s)$ is sampled from $LWE_q$ is computationally indistinguishable from the uniform distribution of $m\times n$ matrices over $\Z_q$.
+:::
+
+The _dLWE conjecture_ is that $q(n)$-dLWE holds for every $q(n)$ that is at most $poly(n)$.
+This is not exactly the same phrasing we used before, but as we sketch below, it is essentially equivalent to it.
+One can also make the stronger conjecture that $q(n)$-dLWE holds even for $q(n)$ that is _super polynomial_ in $n$ (e.g., $q(n)$ magnitude roughly $2^n$  - note that such a number can still be described in $n$ bits and we can still efficiently perform operations such as addition and multiplication modulo $q$).
+This stronger conjecture also seems well supported by evidence and we will use it in future lectures.
 
 > # { .pause }
 It is a good idea for you to pause here and try to show the equivalence on your own.
 
+__Equivalence between LWE and DLWE:__ 
 The reason the two conjectures are equivalent are the following.
 Before we phrased the conjecture as recovering $s$ from a pair $(A',y)$ where $y=A's'+e$ and $|e_i|\leq \delta q$ for every $i$.
 We then showed a _search to decision_ reduction ([LWEsearchtodecthm](){.ref}) demonstrating that this is equivalent to the task of distinguishing between this case and the case that $y$ is a random vector.
@@ -149,28 +154,32 @@ If we now let $\alpha = \floor{\tfrac{q}{2}}$ and $\beta = \alpha^{-1} (\mod\;q)
 Note that if $y$ is a random vector in $\Z_q^m$ then so is $-\beta y$ and so the current form of the conjecture follows from the previous one.
 (To reduce the number of free parameters, we fixed $\delta$ to equal $1/\sqrt{q}$; in this form the conjecture becomes stronger as $q$ grows.)
 
+__A linearly-homomorphic encryption scheme:__ The following variant of the LWE-ENC described in [lweencsec](){.ref} turns out to be linearly homomorphic:
 
->__A linearly-homomorphic encryption scheme:__ We can describe the  encryption scheme  LWEENC presented in class as:
->
-* Key generation: Choose $(A,s)$ from $LWE_q$ where $m$ satisfies $q^{1/4} \gg m \log q \gg n$.
->
-* To encrypt $b\in\{0,1\}$, choose $w\in\{0,1\}^m$ and output $w^\top A + (b,0,\ldots,0)$
->
-* To decrypt $c\in\Z_q^n$, output $0$ iff $|\langle c,s \rangle| \leq q/10$, where for $x\in\Z_q$ we defined $|x| = \min \{ x , q-x \}$.
+::: {.quote }
+__LWE-ENC' encryption:__ 
+
+* _Key generation:_ Choose $(A,s)$ from $LWE_q$ where $m$ satisfies $q^{1/4} \gg m \log q \gg n$.
+
+* To _encrypt_ $b\in\{0,1\}$, choose $w\in\{0,1\}^m$ and output $w^\top A + (b,0,\ldots,0)$. 
+
+* To _decrypt_ $c\in\Z_q^n$, output $0$ iff $|\langle c,s \rangle| \leq q/10$, where for $x\in\Z_q$ we defined $|x| = \min \{ x , q-x \}$. (Recall that the first coordinate of $s$ is $\floor{q/2}$.
+:::
 
 
- \
+
 
 The decryption algorithm recovers the original plaintext since   $\langle c,s \rangle= w^\top A s + s_1 b$ and $|w^\top A s| \leq m\sqrt{q} \ll q$.
 It turns out that this scheme is homomorphic with respect to the class of _linear functions_ modulo $2$. Specifically we make the following claim:
 
 
 > # {.lemma #parityhomlem}
-For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c_1,\ldots,c_\ell$ encrypting via LWEENC bits $b_1,\ldots,b_\ell \in \{0,1\}$, outputs a ciphertext $c$ encrypting $b_1 \oplus \cdots \oplus b_\ell$.
+For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c_1,\ldots,c_\ell$ encrypting via LWEENC bits $b_1,\ldots,b_\ell \in \{0,1\}$, outputs a ciphertext $c$ whose decryption $b_1 \oplus \cdots \oplus b_\ell$.
 
 > # { .pause }
-This claim is not hard to prove, but working it out for yourself can be a good way to get more familiarity with LWEENC and the kind of manipulations we'll be making time and again in the constructions of many lattice based cryptographic primitives.
+This claim is not hard to prove, but working it out for yourself can be a good way to get more familiarity with LWE-ENC' and the kind of manipulations we'll be making time and again in the constructions of many lattice based cryptographic primitives.
 Try to show that $c = c_1 + \cdots +c_\ell$ (where addition is done as vectors in $\Z_q$) will be the encryption $b_1 \oplus \cdots \oplus b_\ell$.
+Note that if $q$ is _super polynomial_  in $n$ then $\ell$ can be an arbitrarily large polynomial in $n$.
 
 
 > # {.proof data-ref="parityhomlem"}
@@ -184,7 +193,7 @@ for $|\xi'| \leq \ell m \sqrt{q} + \ell \ll q$.
 If $\sum b_i$ is even then $\sum b_i \tfrac{q}{2}$ is an integer multiple of $q$ and hence in this case $|\langle c,s \rangle| \ll q$.
 If $\sum b_i$ is odd  $\floor{\sum b_i \tfrac{q}{2}} = \floor{q/2} \mod q$ and so in this case $|\langle c,s \rangle| = q/2 \pm o(q) > q/10$.
 
-Several other encryption schemes are also homomorphic with respect to linear functions, and even before Gentry's construction people have managed to achieve homomorphism with respect to slightly larger classes (e.g., quadratic functions by Boneh, Goh and Nissim) but not significantly so.
+Several other encryption schemes are also homomorphic with respect to linear functions. Even before Gentry's construction there were constructions of encryption schemes that are homomorphic with respect to somewhat larger classes (e.g., quadratic functions by Boneh, Goh and Nissim) but not significantly so.
 
 ### Abstraction: A trapdoor pseudorandom generator.
 
@@ -206,14 +215,19 @@ In the particular instantiation above we obtain $G_s$ by sampling the matrix $A$
 Note that this trapdoor generator satisfies the following stronger property: we can generate an alternative generator $G'$ such that the description of $G'$ is indistinguishable from the description of $G_s$ but such that $G'$ actually does produce   (up to exponentially small statistical error)  the uniform distribution over $\Z_q^n$.
 We can define trapdoor generators formally as follows
 
-> # {.definition title="Trapdoor generators" #tdpgendef}
+::: {.definition title="Trapdoor generators" #tdpgendef}
 A _trapdoor generator_ is a pair of randomized algorithms $GEN,GEN'$ that satisfy the following:
->
-* On input $1^n$, $GEN$ outputs a pair $(G_s,s)$ where $G_s$ is a string describing a _randomized_ circuit that itself takes $1^n$ as input and outputs a string of length $t$ where $t=t(n)$ is some polynomial. \
-* On input $1^n$, $GEN'$ outputs $G'$ where $G'$ is a string describing a randomized circuit that itself takes $1^n$ as input. \
-* The distributions $GEN(1^n)_1$ (i.e., the first output of $GEN(1^n)$ and $GEN'(1^n)$ are computationally indistinguishable \
-* With probability $1-negl(n)$ over the choice of $G'$ output by $GEN'$, the distribution $G'(1^n)$ is _statistically indistinguishable_ (i.e., within $negl(n)$ total variation distance) from $U_t$. \
+
+* On input $1^n$, $GEN$ outputs a pair $(G_s,s)$ where $G_s$ is a string describing a _randomized_ circuit that itself takes $1^n$ as input and outputs a string of length $t$ where $t=t(n)$ is some polynomial. 
+
+* On input $1^n$, $GEN'$ outputs $G'$ where $G'$ is a string describing a randomized circuit that itself takes $1^n$ as input. 
+
+* The distributions $GEN(1^n)_1$ (i.e., the first output of $GEN(1^n)$ and $GEN'(1^n)$ are computationally indistinguishable 
+
+* With probability $1-negl(n)$ over the choice of $G'$ output by $GEN'$, the distribution $G'(1^n)$ is _statistically indistinguishable_ (i.e., within $negl(n)$ total variation distance) from $U_t$. 
+
 * There is an efficient algorithm $T$ such that for every pair $(G_s,s)$ output by $GEN$, $\Pr[ T(s,G_s(1^n))=1] \geq 1- negl(n)$ (where this probability is over the internal randomness used by $G_s$ on the input $1^n$) but $\Pr[ T(s,U_t)=1] \leq 1/3$.^[The choice of $1/3$ is arbitrary, and can be amplified as needed.]
+:::
 
 
 
@@ -223,12 +237,17 @@ This is not an easy definition to parse, but looking at [TDPgenfig](){.ref} can 
 Make sure you understand why $LWEENC$ gives rise to a trapdoor generator satisfying all the conditions of [tdpgendef](){.ref}.
 
 
->__Aside: trapdoor generators in real life:__ In the above we use the notion of a "trapdoor" in the pseudorandom generator as a mathematical abstraction, but generators with actual trapdoors have arisen in practice. In 2007 the National Institute of Standards (NIST) released standards for pseudorandom generators. Pseudorandom generators are the quintessential private key primitive, typically built out of hash functions, block ciphers, and such and so it was surprising that NIST included in the list a pseudorandom generator based on public key tools - the [Dual EC DRBG](https://en.wikipedia.org/wiki/Dual_EC_DRBG) generator based on elliptic curve cryptography. This was already strange but became even more worrying when Microsoft researchers Dan Shumow and Niels Ferguson [showed](http://rump2007.cr.yp.to/15-shumow.pdf) that this generator _could_ have a trapdoor in the sense that it contained some hardwired constants that if generated in a particular way, there would be some information that (just like in $G_s$ above) allows to distinguish the generator from random (see here for a [2007 blog post](https://www.schneier.com/blog/archives/2007/11/the_strange_sto.html) on this issue). We learned more about this when leaks from the Snowden document [showed](http://www.reuters.com/article/us-usa-security-rsa-idUSBRE9BJ1C220131220) that the NSA secretly paid 10 million dollars to RSA to make this generator the default option in their Bsafe software.
->
+::: {.remark title="Trapdoor generators in real life" #trapdoorgenreal}
+In the above we use the notion of a "trapdoor" in the pseudorandom generator as a mathematical abstraction, but generators with actual trapdoors have arisen in practice. In 2007 the National Institute of Standards (NIST) released standards for pseudorandom generators. Pseudorandom generators are the quintessential private key primitive, typically built out of hash functions, block ciphers, and such and so it was surprising that NIST included in the list a pseudorandom generator based on public key tools - the [Dual EC DRBG](https://en.wikipedia.org/wiki/Dual_EC_DRBG) generator based on elliptic curve cryptography. This was already strange but became even more worrying when Microsoft researchers Dan Shumow and Niels Ferguson [showed](http://rump2007.cr.yp.to/15-shumow.pdf) that this generator _could_ have a trapdoor in the sense that it contained some hardwired constants that if generated in a particular way, there would be some information that (just like in $G_s$ above) allows to distinguish the generator from random (see here for a [2007 blog post](https://www.schneier.com/blog/archives/2007/11/the_strange_sto.html) on this issue). We learned more about this when leaks from the Snowden document [showed](http://www.reuters.com/article/us-usa-security-rsa-idUSBRE9BJ1C220131220) that the NSA secretly paid 10 million dollars to RSA to make this generator the default option in their Bsafe software.
+
+
 You'd think that this generator is long dead but it turns out to be the "gift that keeps on giving".
 In December of 2015, Juniper systems [announced](http://www.wired.com/2015/12/juniper-networks-hidden-backdoors-show-the-risk-of-government-backdoors/) that they have discovered a malicious code in their system, dating back to at least 2012 (possibly [2008](https://goo.gl/X6pAXV)), that would allow an attacker to surreptitiously decrypt all VPN traffic through their firewalls.
 The issue is that Juniper has been using the  Dual EC DRBG and someone has managed to replace the constant they were using with another one, one that they presumably knew the trapdoor for (see [here](https://rpw.sh/blog/2015/12/21/the-backdoored-backdoor/)  and [here](http://blog.cryptographyengineering.com/2015/12/on-juniper-backdoor.html) for more; of course unless you know to check for this, it's very hard by looking at the code to see that one arbitrary looking constant has been replaced by another).
 Apparently, even though this is very surprising to many people in law enforcement and government, inserting back doors into cryptographic primitives might end up making them less secure.
+:::
+
+
 
 
 
