@@ -332,4 +332,117 @@ By combining a collision-resistant hash function $h:\{0,1\}^* \rightarrow \{0,1\
 
 ## Hardcore bits and security without random oracles
 
-To be completed.
+The main problem with using trapdoor functions as the basis of public key encryption is twofold:
+>
+* The fact that $f$ is a trapdoor function does not rule out the possibility of computing $x$ from $f(x)$ when $x$ is of some special form. Recall that the security of a one-way function is given over a uniformly random input. Usually messages to be sent are not drawn from a uniform distribution, and it's possible that for some certain values of $x$ it is easy to invert $f(x)$, and those values of $x$ also happen to be commonly sent messages.
+>
+* The fact that $f$ is a trapdoor function does not rule out the possiblity of easily computing some partial information about $x$ from $f(x)$. Suppose we wished to play poker over a channel of bits. If even the suit or color of a card can be revealed from the encryption of that card, then it doesn't matter if the entire encryption cannot be inverted; being able to compute even a single bit of the plaintext makes the entire game invalid. The RSA and Rabin functions have not been successfully reversed, but nobody has been able to prove that they give _semantic security_.
+>
+The solution to these issues is to use a hardcore predicate of a one-way function $f$. We first define the security of a hardcore predicate, then show how it can be used to construct semantically secure encryption.
+
+> # {.definition title="Hardcore predicate" #HCPdef}
+Let $f:\{0, 1\}^n \rightarrow \{0, 1\}^n$ be a one-way function (we assume $f$ is length preserving for simplicity), $\ell(n)$ be a length function, and $h: \{0, 1\}^n \rightarrow \{0, 1\}^{\ell(n)}$ be polynomial time computable. We say $h$ is a __hardcore predicate__ of $f$ if for every efficient adversary $A$, every polynomial $p$, and all sufficiently large $n$, $$\left| \Pr[A(f(X_n), b(X_n)) = 1] - \Pr[A(f(X_n), R_{\ell(n)}) = 1]\right| < \frac{1}{p(n)}$$ where $X_n$ and $R_{\ell(n)}$ are independently and uniformly distributed over $\{0, 1\}^n$ and $\{0, 1\}^{\ell(n)}$, respectively.
+
+That is, given an input $x \leftarrow_R \{0, 1\}^n$ chosen uniformly at random, no efficient adversary can distingusih between a random string $r$ and $b(x)$ given $f(x)$ with non negligible advantage. This allows us to construct semantically secure public key encryption:
+
+>__Hardcore predicate-based public key encryption:__
+>
+* _Key generation:_ Run the standard key generation algorithm for the one-way function $f$ to get $(e, d)$, where $e$ is a public key used to compute the function $f$ and $d$ is a corresponding secret trapdoor key that makes it easy to invert $f$.
+>
+* _Encryption:_ To encrypt a message $m$ of length $n$ with public key $e$, pick $x \leftarrow_R \{0, 1\}^n$ uniformly at random and compute $(f_e(x), b(x) \oplus m)$.
+
+* _Decryption:_ To decrypt the ciphertext $(c, c')$ we first use the secret trapdoor key $d$ to compute $D_d(c) = D_d(f_e(x)) = x$, then compute $b(x)$ and $b(x) \oplus c' = m$
+
+> # { .pause }
+Please stop to verify that this is a valid public key encryption scheme.
+
+>
+Note that in this construction of public key encryption, the input to $f$ is $x$ drawn uniformly at random from $\{0, 1\}^n$, so the defininition of the one-wayness of $f$ can be applied directly. Furthermore, since $b(x)$ is indistinguishable from a random string $r$ even given $f(x)$, the output $b(x) \oplus m$ is essentially a one-time pad encryption of $m$, where the key can only be retrieved by someone who can invert $f$. Proving the security formally is left as an exercise.
+
+>
+This is all fine and good, but how do we actually construct a hardcore predicate? Blum and Micali were the first to construct a hardcore predicate based on the discrete logarithm problem, but the first construction for general one-way functions was given by Goldreich and Levin. Their idea is that if $f$ is one-way, then it's hard to guess the exclusive or of a random subset of the input to $f$ when given $f(x)$ and the subset itself.
+
+> # {.theorem title="A hardcore predicate for arbitrary one-way functions" #HCBthm}
+Let $f$ be a one-way function, and let $g$ be defined as $g(x, r) = (f(x), r)$, where $|x| = |r|$. Let $b(x, r) = \oplus_{i \in [n]} x_ir_i$ be the inner product $\mod 2$ of $x$ and $r$. Then $b$ is a hard core predicate of the function $g$.
+
+>
+The proof of this theorem follows the classic proof by reduction method, where we assume the existence of an adversary that can predict $b(x, r)$ given $g(x, r)$ with non negligible advantage and construct an adversary that inverts $f$ with non negligible probability. Let $A$ be a (possibly randomized) program and $\epsilon_A(n) > \tfrac{1}{p(n)}$ for some polynomial $n$ such that 
+
+$$\Pr[A(g(X_n, R_n)) = b(X_n, R_n)] = \tfrac{1}{2} + \epsilon_A(n)$$
+
+Where $X_n$ and $R_n$ are uniform and independent distributions over $\{0, 1\}^n$. We observe that $b$ being insecure and having an output of a single bit implies that such a program $A$ exists. First, we show that on at least $\epsilon_A(n)$ fraction of the possible inputs, program $A$ has a $\tfrac{\epsilon_A(n)}{2}$ advantage in predicting the output of $b$.
+
+> # {.lemma #EpsilonAdv}
+There exists a set $S \subseteq \{0, 1\}^n$ where $|S| > \epsilon_A(n) (2^n)$ such that for all $x \in S$,
+
+$$s(x) = \Pr[A(g(x, R_n)) = b(x, R_n)] \geq \frac{1}{2} + \frac{\epsilon_A(n)}{2}$$
+
+> # {.proof data-ref="EpsilonAdv"}
+The result follows from an averaging argument. Let $k = \frac{|S|}{2^n}$, $\displaystyle \alpha = \frac{1}{k} \sum_{x \in S} s(x)$ and $\displaystyle \beta = \frac{1}{1 - k} \sum_{x \notin S} s(x)$ be the averages of $s(x)$ over values in and not in $S$, respectively, so $k \alpha + (1 - k) \beta = \frac{1}{2} + \epsilon$. For notational convenience we set $\epsilon = \epsilon_A(n)$. By definition $\mathbb{E}[s(X_n)] = \frac{1}{2} + \epsilon$, so the fact that $\alpha \leq 1$ and $\beta < \frac{1}{2} + \frac{\epsilon}{2}$ gives $k + (1 - k) \left( \frac{1}{2} + \frac{\epsilon}{2} \right) > \frac{1}{2} + \epsilon$, and solving finds that $k > \epsilon$.
+
+>
+Now we observe that for any $r \in \{0, 1\}^n$, we have
+
+$$x_i = b(x, r) \oplus b(x, r \oplus e_i)$$
+
+where $e_i$ is the vector with all $0$s except a $1$ in the $i$th location. This observation follows from the definition of $b$, and it motivates the main idea of the reduction: Guess $b(x, r)$ and use $A$ to compute $b(x, r \oplus e_i)$, then put it together to find $x_i$ for all $i$. The reason guessing works will become clear later, but intuitively the reason we cannot simply use $A$ to compute both $b(x, r)$ and $b(x, r \oplus e_i)$ is that the probability $A$ guesses both correctly is only (standard union) bounded below by $1 - 2 \left(  \tfrac{1}{2} - \epsilon_A(n)\right) = 2\epsilon_A(n)$. However, if we can guess $b(x, r)$ correctly, then we only need to invoke $A$ one time to get a better than half probability of correctly determining $x_i$. It is then a simple matter of taking a majority vote over several such $r$ to determine each $x_i$.
+
+>
+Now the natural question is how can we possibly guess (and here we literally mean randomly guess) each value of $b(x, r)$? The key is that the values of $r$ only need to be _pairwise_ independent, since down the line we plan to use Chebyshev's inequality on the accuracy of our guesses^[This has to do with the fact that Chebyshev's inequality is based on the variances of random variables. If we had to use the Chernoff bound we would be in trouble, since that requires full independence. For more on these and other concentration bounds, we recommend referring to the text Probability and Computing, by Eli Upfal.]. This means that while we need $poly(n)$ many values of $r$, we can get away with guessing $\log (n)$ values of $b(x, r)$ and combining them with some trickery to get more while preserving pairwise independence. Since $2^{-\log n} = \tfrac{1}{n}$, with non negligible probability we can correctly guess all of our $b(x, r)$ for polynomially many $r$. We then use $A$ to compute $b(x, r \oplus e_i)$ for all $r$ and $i$, and since $A$ has a non negligible advantage by majority vote we can retrieve each value of $x_i$ to invert $f$, thus contradicting the one-wayness of $f$.
+
+> # { .pause }
+It is important that you understand why we cannot rely on invoking $A$ twice, on both $b(x, r)$ and $b(x, r \oplus e_i)$. It is also important that you understand why, with non neligible probability, we can correctly guess $b(x, r_1), \dots b(x, r_\ell)$ for $r_1, \dots r_\ell$ chosen independently and uniformly at random and $\ell = O(\log n)$. At the moment, it is not important what trickery is used to combine our guesses, but it will reduce confusion down the line if you understand why we can get away with pairwise independence in our inputs instead of complete mutual independence.
+
+Before moving on to the formal proof of our theorem, please stop to convince yourself that, given that some trickery exists, this strategy works for inverting $f$.
+
+> # {.proof data-ref="HCBthm"}
+
+We use the assumed existence of $A$ to construct $B$, a program that inverts $f$ (which we assume is length preserving for notational convenience). Pick $n = |x|$ and $l = \lceil \log(2n \cdot p(n)^2 + 1) \rceil$, where $\epsilon_A(n) > \tfrac{1}{p(n)}$. Next, choose $s^1, \dots s^l \in \{0, 1\}^n$ and $\sigma^1, \dots \sigma^l \in \{0, 1\}$ all independently and uniformly at random. Here we set $\sigma^i$ to be the guess for the value of $b(x, s^i)$. For each non-empty subset $J$ of $\{1, 2, \dots l\}$ let $r^J = \oplus_{j \in J} s^j$. We can observe that
+
+$$b(x, r^J) = b(x, \oplus_{j \in J} s^j) = \oplus_{j \in J} b(x, s^j)$$
+
+by the properties of addition modulo 2, so we can say $\rho^J = \oplus_{j \in J} \sigma^j$ is the correct guess for $b(x, r^J)$ as long as each of $\sigma^j$ for $j \in J$ are correct. We can easily verify that the values $r^J$ are pairwise independent and uniform, so this construction gives us $poly(n)$ many correct pairs $(b(x, r^J), \rho^J)$ with probability $\tfrac{1}{poly(n)}$, exactly as needed.
+
+Define $G(J, i) = \rho^J \oplus A(f(x), r^J \oplus e_i)$ to be the guess for $x_i$ computed using input $r^J$. From here, $B$ simply needs to set $x_i$ to the majority value of our guesses $G(J, i)$ over the possible choices of $J$ and output $x$.
+
+Now we prove that given that our guesses $\rho^J$ are all correct, for all $x \in S$ and for every $1 \leq i \leq n$, we have 
+
+$$\Pr \left[ \left| \{ J | G(J, i) = x_i \} \right| > \frac{1}{2}(2^l - 1) \right] > 1 - \frac{1}{2n}$$
+
+That is, with probability at least $1 - O(\tfrac{1}{n})$, more than half of our $(2^l - 1)$ guesses for $x_i$ are correct, where $2^l - 1$ is the number of non empty subsets $J$ of $\{1, 2, \dots l\}$.
+
+>
+For every $J$, define $I_J$ to be the indicator that $G(J, i) = x_i$, and we can observe that $I_J$ is bernoulli with expected value $s(x)$ (again, given that our guess for $b(x, r^J)$ is correct). Pairwise independence of the $I_J$ is given by the pairwise independence of the $r^J$. Setting $m = 2^l - 1$, defining $s(x) = \tfrac{1}{2} + \tfrac{1}{q(n)}$, and using Chebyshev's inequality, we get 
+
+$$
+\begin{align*}
+    \Pr \left[ \sum_{J}I_J \leq \frac{1}{2}m \right] &\leq \Pr \left[ \left| \sum_{J} I_J - \left(\frac{1}{2} + \frac{1}{q(n)} \right) m \right| \geq \frac{m}{q(n)}m \right] \\
+    &= \Pr \left[ \left| \sum_{J} I_J - \mathbb{E} \left[ \sum_{J} I_J \right] \right| \geq \frac{m}{q(n)} \right] \\
+    &\leq \frac{m \mathbf{Var}(I_J)}{\left(\frac{m}{q(n)}\right)^2} \\
+    &\leq \frac{\frac{1}{4}}{\left( \frac{1}{q(n)} \right)^2 m}
+\end{align*}
+$$
+
+Since $x \in S$ we know $\frac{1}{q(n)} \geq \frac{\epsilon_A(n)}{2} \geq \frac{1}{2p(n)}$, so
+
+$$\frac{\frac{1}{4}}{\left( \frac{1}{q(n)} \right)^2 m} \leq \frac{\frac{1}{4}}{\left( \frac{1}{2p(n)} \right)^2 2n \cdot p(n)^2} = \frac{1}{2n} $$
+
+Putting it all together, $B$ must first pick an $x \in S$, then correctly guess $\sigma^i$ for all $i \in [1, 2, \dots l]$, then $A$ must correctly compute $b(x, r^J \oplus e_i)$ on more than half of the $r^J$. Since each of these events happens independently, we get $B$'s success probability to be $\epsilon_A(n) (\tfrac{1}{2^l})(1 - \tfrac{1}{2n}) = \epsilon_A(n) (\tfrac{1}{2n p(n)^2}) ( 1 - \tfrac{1}{2n}) > (\tfrac{1}{p(n)})(\tfrac{1}{2np(n)^2})(\tfrac{1}{2}) = \tfrac{1}{4n p(n)^3}$, which is non negligible in $n$. This contradicts the assumption that $f$ is a one way function, so no adversary $A$ can predict $b(x, r)$ given $(f(x), r)$ with a non negligible advantage, and $b$ is a hardcore predicate of $g$.
+
+### Extending to more than one hardcore bit
+
+By definition, $b$ as constructed above is only a hardcore predicate of length $1$. While it's great that this method works for any arbitrary one-way function, in the real world messages are sometimes longer than a single bit. Fortunately, there is hope: Goldreich and Levin's hardcore bit construction can be used repeatedly to get a hardcore predicate of logarithmic length.
+
+> # {.theorem title="Logarithmically many hardcore bits for arbitrary one-way functions" #LogHCBthm}
+Let $f$ be a one-way function, and define $g_2(x, s) = (f(x), s)$, where $|x| = n$ and $|s| = 2n$. Let $c > 0$ be a constant, and $l(n) = \lceil c \log n \rceil$. Let $b_i(x, s)$ denote the innter product mod 2 of the binary vectors $x$ and $(s_{i + 1}, \dots s_{i + n})$, where $s = (s_1, \dots s_{2n})$. Then the function $h(x, s) = b_1(x, s) \dots b_{l(n)}(x, s)$ is a hardcore function of $g_2$.
+
+It's clear that this is an imporant improvement on a single hardcore bit, but still nowhere near useable in general; imagine encrypting a text document with a key exponentially long in the size of the document. A completely different approach is needed to obtain a hardcore predicate with length polynomial in the key size. Bellare, Stepanovs, and Tessaro manage to pull it off using indistinguishability obfuscation of circuits, a cryptographic primitive which, like the existence of PRGs, is assumed to exist.
+
+> # {.theorem title="Polynomially many hardcore bits for arbitrary one-way functions" #PolyHCBthm}
+Let $\mathbf{F}$ be a one-way function family and $\mathbf{G}$ be a punctured PRF with the same input length of $\mathbf{F}$. Then under the assumed existence of indistinguishability obfuscators, there exists a function family $\mathbf{H}$ that is hardcore for $\mathbf{F}$. Furthermore, the output length of $\mathbf{H}$ is the same as the output length of $\mathbf{G}$.
+
+Since the output length of $G$ can be polynomial in the length of its input, it follows that $H$ outputs polynomially many hardcore bits in the length of its input. The proofs of [LogHCBthm](){.ref} and [PolyHCBthm](){.ref} require the usage of results and concepts not yet covered in this course, but we refer interested readers to their original papers:
+
+Goldreich, O., 1995. Three XOR-lemmas-an exposition. In Electronic Colloquium on Computational Complexity (ECCC). 
+
+Bellare, M., Stepanovs, I. and Tessaro, S., 2014, December. Poly-many hardcore bits for any one-way function and a framework for differing-inputs obfuscation. In International Conference on the Theory and Application of Cryptology and Information Security (pp. 102-121). Springer, Berlin, Heidelberg.
