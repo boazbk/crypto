@@ -349,7 +349,7 @@ The min entropy of $w\gets_R\{0,1\}^m$ is the same as the entropy (because it is
 
 Now, we'll show this implies that for probability $\ge 1-2^{-n}$ over the selection of $A'$, the statistical distance between $w^\top A'$ and $z$ is less than $2^{-10n}$. If not, the distance between $(w^\top A',A')$ and $(z,A')$ would be at least $2^{-n}\cdot 2^{-n}>2^{-10n}$.
 
-Now for the proof of [Leftoverhashlem](){.ref}.
+Now for the proof of [Leftoverhashlem](){.ref} (based on notes from [Daniel Wichs's class](http://www.ccs.neu.edu/home/wichs/class/crypto-fall15/) [@wichsnotes]
 
 Let $Z$ be the random variable $(H(W),H)$, where the probability is over $H$ and $W$. Let $Z'$ be an independent copy of $Z$.
 
