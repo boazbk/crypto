@@ -318,25 +318,55 @@ But if there was some polynomial-time algorithm $T$ distinguishing $D$ from $D'$
 We will finish the proof by showing that  the distribution $D'$ is _statistically indistinguishable_ (i.e., has negligible total variation distance) from $\overline{D}$.
 This follows from the following claim:
 
-__CLAIM:__ Suppose that $m > 100 n \log q$. If $A'$ is a random $m\times n+1$ matrix in $\Z_q^m$, then with probability at least $1-2^{-n}$ over the choice of $A'$, the distribution $Z_{A'}$ over $\Z_q^n$ which is obtained by choosing $w$ at random in $\{0,1\}^m$ and outputting $w^\top A'$ has at most $2^{-n}$ statistical distance from the uniform distribution over  $\Z_q^{n+1}$.
+**CLAIM**: Suppose that $m > 100 n \log q$. If $A'$ is a random $m\times n+1$ matrix in $\Z_q^m$, then with probability at least $1-2^{-n}$ over the choice of $A'$, the distribution $Z_{A'}$ over $\Z_q^{n+1}$ which is obtained by choosing $w$ at random in $\{0,1\}^m$ and outputting $w^\top A'$ has at most $2^{-n}$ statistical distance from the uniform distribution over  $\Z_q^{n+1}$.
 
-Note that the randomness used for the distribution $Z_{A'}$ is only obtained by the choice of $w$, and _not_ by the choice of $A'$ that is fixed.
+Note that the randomness used for the distribution $Z_{A'}$ is only obtained by the choice of $w$, and *not* by the choice of $A'$ that is fixed.
 (This passes a basic "sanity check" since $w$ has $m$ random bits, while the uniform distribution over $\Z_q^n$ requires $n \log q \ll m$ random bits, and hence  $Z_{A'}$ at least has a "fighting chance" in being statistically close to it.)
-Another way to state the same claim is that the pair $(A',w^\top A')$ is statistically indistinguishable from the uniform distribution $(A',z)$ where $z$ is a vector chosen independently at random from $\Z_q^n$.
+Another way to state the same claim is that the pair $(A',w^\top A')$ is statistically indistinguishable from the uniform distribution $(A',z)$ where $z$ is a vector chosen independently at random from $\Z_q^{n+1}$.
 
 The claim completes the proof of the theorem, since letting $A'$ be the matrix $(A|y)$ and $z=(a,\sigma)$, we see that the distribution $D'$, as the form $(A',z)$ where $A'$ is a uniformly random  $m\times (n+1)$ matrix and $z$ is sampled from $Z_{A'}$ (i.e., $z=w^\top A'$ where $w$ is uniformly chosen in $\{0,1\}^m$).
 Hence this means that  the statistical distance of $D'$ from $\overline{D}$ (where all elements are uniform) is $O(2^{-n})$.
 (Please make sure you understand this reasoning!)
 
-We will not do the whole proof of the claim (which uses the mod $q$ version of the [leftover hash lemma](https://goo.gl/KXpccP) which  we mentioned before and is also "Wikipedia-able" - the **scribe writers** for this lecture should add those details thogh!) but the idea is simple.
-For every $m\times (n+1)$ matrix $A'$ over $\Z_q$, define $h_{A'}:\Z_q^m \rightarrow \Z_q^n$ to be the map $h_{A'}(w)=w^\top A'$.
+The proof of this claim relies on the [leftover hash lemma](https://goo.gl/KXpccP).
+
+First, the basic idea of the proof: For every $m\times (n+1)$ matrix $A'$ over $\Z_q$, define $h_{A'}:\Z_q^m \rightarrow \Z_q^n$ to be the map $h_{A'}(w)=w^\top A'$.
 This collection can be shown to be a "good" hash function collection in some specific technical sense, which in particular implies that for every distribution $D$ with much more than $n\log q$ bits of min-entropy, with all but negligible probability over the choice of $A'$, $h_{A'}(D)$ is statistically indistinguishable from the uniform distribution.
 Now when we choose $w$ at random in $\{0,1\}^m$, it is coming from a distribution with $m$ bits of entropy.
 If $m \gg (n+1)\log q$, then because the output of this function is so much smaller than $m$, we expect it to be completely uniform, and this is what's shown by the leftover hash lemma.
+
+Now we'll formalize this blueprint. First we need the leftover hash lemma.
+
+::: {.lemma #Leftoverhashlem}
+Fix $\epsilon>0$. Let $\mathcal{H}$ be a universal hash family with functions $h:\mathcal{W}\to\mathcal{V}$. Let $W$ be a random variable with output in $\mathcal{W}$ with $H_{\infty}(W)\ge \log|\mathcal{V}|+2\log(1/\epsilon)-2$. Then $(H(W),H)$ where $H$ follows a uniform distribution over $\mathcal{H}$ has statistical difference less than $\epsilon$ from $(V,H)$ where $V$ is uniform over $\mathcal{V}$.
 :::
 
+To explain what a *universal hash family* is, a family $\mathcal{H}$ of functions $h:\mathcal{W}\to\mathcal{V}$ is a universal hash family if $\Pr_{h\gets_R\mathcal{H}}[h(x)=h(x')]\le\frac{1}{|\mathcal{V}|}$ for all $x\neq x'$.
 
+First, let's see why [Leftoverhashlem](){.ref} implies the claim. Consider the hash family $\mathcal{H}=\{h_{A'}\}$, where $h_{A'}:\Z_q^m \rightarrow \Z_q^{n+1}$ is defined by $h_{A'}(w)=w^\top A'$. For this hash family, the probability over $A'$ of $w\neq w'$ colliding is $\Pr_{A'}[w^\top A'=w'^\top A']=\Pr_{A'}[(w-w')^\top A'=0]$. Since $A'$ is random, this is $1/(q^{n+1})$. So $\mathcal{H}$ is a universal hash family.
 
+The min entropy of $w\gets_R\{0,1\}^m$ is the same as the entropy (because it is uniform) which is $m$. The output of the hash family is in $\Z_q^{n+1}$, and $\log|\Z_q^{n+1}|=(n+1)\log q$. Since $m\ge(n+1)\log q+20n-2$ by assumption, [Leftoverhashlem](){.ref} implies that $(w^\top A',A')$ is $2^{-10n}$ close in terms of statistical distance to $(z,A')$ where $z$ is chosen uniformly in $\Z_q^{n+1}$. 
+
+Now, we'll show this implies that for probability $\ge 1-2^{-n}$ over the selection of $A'$, the statistical distance between $w^\top A'$ and $z$ is less than $2^{-10n}$. If not, the distance between $(w^\top A',A')$ and $(z,A')$ would be at least $2^{-n}\cdot 2^{-n}>2^{-10n}$.
+
+Now for the proof of [Leftoverhashlem](){.ref}.
+
+Let $Z$ be the random variable $(H(W),H)$, where the probability is over $H$ and $W$. Let $Z'$ be an independent copy of $Z$.
+
+Step 1: we'll show that $\Pr[Z=Z']\le\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}(1+4\epsilon^2)$.
+
+$$ \begin{aligned} \Pr[Z=Z']&=\Pr[(H(W),H)=(H'(W'),H')]\\&=\Pr[H=H']\cdot\Pr[H(W)=H(W')]\\&=\frac{1}{|\mathcal{H}|}\left(\Pr[W=W']+\Pr[H(W)=H(W')\wedge X\neq X']\right)\\&\le\frac{1}{|\mathcal{H}|}\left(\frac{1}{|\mathcal{V}|}\epsilon^2\cdot 4+\frac{1}{|\mathcal{V}|}\right)\\&=\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}(1+4\epsilon^2).\end{aligned} $$
+
+Step 2: we'll show this implies that the statistical difference between $(H(W),H)$ and $(V,H)$ is less than $\epsilon$. Denote the statistical difference by $\Delta((H(W),H),(V,H))$.
+
+$$ \begin{aligned} \Delta((H(W),H),(V,H))&=\frac{1}{2}\sum_{h,w}\left|\Pr[Z=(h(w),w)]-\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}\right|.\end{aligned} $$ Define $x_{h,w}=\Pr[Z=(h(w),h)]-\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}$ and $s_{h,w}=\text{sign}(x_{h,w})$. Write $x$ for the vector of all the $x_{h,w}$ and $s$ for the vector of all the $s_{h,w}$. Then $$\begin{aligned}\Delta((H(W),H),(V,H))&=\frac{1}{2}\langle x,s\rangle\\&\le\frac{1}{2}\|x\|_2\cdot\|s\|_2&\text{Cauchy-Schwarz}\\
+&=\frac{\sqrt{|\mathcal{H}|\cdot|\mathcal{V}|}}{2}\|x\|_2.\end{aligned}$$
+
+Let's expand $\|x\|_2$:
+$$\begin{aligned} \|x\|_2^2&=\sum_{h,w}\left(\Pr[Z=(h(w),h)]-\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}\right)^2\\&=\sum_{h,w}\left(\Pr[Z=(h(w),h)]^2-\frac{2\Pr[Z=(h(w),h)]}{|\mathcal{H}|\cdot|\mathcal{V}|}+\frac{1}{(|\mathcal{H}|\cdot|\mathcal{V}|)^2}\right)\\&\le\frac{1+4\epsilon^2}{|\mathcal{H}|\cdot|\mathcal{V}|}-\frac{2}{|\mathcal{H}|\cdot|\mathcal{V}|}+\frac{|\mathcal{H}|\cdot|\mathcal{V}|}{(|\mathcal{H}|\cdot|\mathcal{V}|)^2}\\&=\frac{4\epsilon^2}{|\mathcal{H}|\cdot|\mathcal{V}|}.\end{aligned}$$ When we plug this in to our expression for the statistical distance, we get
+$$\begin{aligned}\Delta((H(W),H),(V,H))&\le\frac{\sqrt{|\mathcal{H}|\cdot|\mathcal{V}|}}{2}\|x\|_2\\&\le \epsilon.\end{aligned}$$
+
+:::
 
 
 > # { .pause }
