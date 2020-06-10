@@ -415,12 +415,12 @@ That is, with probability at least $1 - O(\tfrac{1}{n})$, more than half of our 
 For every $J$, define $I_J$ to be the indicator that $G(J, i) = x_i$, and we can observe that $I_J$ is bernoulli with expected value $s(x)$ (again, given that our guess for $b(x, r^J)$ is correct). Pairwise independence of the $I_J$ is given by the pairwise independence of the $r^J$. Setting $m = 2^l - 1$, defining $s(x) = \tfrac{1}{2} + \tfrac{1}{q(n)}$, and using Chebyshev's inequality, we get 
 
 $$
-\begin{align*}
+\begin{aligned}
     \Pr \left[ \sum_{J}I_J \leq \frac{1}{2}m \right] &\leq \Pr \left[ \left| \sum_{J} I_J - \left(\frac{1}{2} + \frac{1}{q(n)} \right) m \right| \geq \frac{m}{q(n)}m \right] \\
     &= \Pr \left[ \left| \sum_{J} I_J - \mathbb{E} \left[ \sum_{J} I_J \right] \right| \geq \frac{m}{q(n)} \right] \\
     &\leq \frac{m \mathbf{Var}(I_J)}{\left(\frac{m}{q(n)}\right)^2} \\
     &\leq \frac{\frac{1}{4}}{\left( \frac{1}{q(n)} \right)^2 m}
-\end{align*}
+\end{aligned}
 $$
 
 Since $x \in S$ we know $\frac{1}{q(n)} \geq \frac{\epsilon_A(n)}{2} \geq \frac{1}{2p(n)}$, so

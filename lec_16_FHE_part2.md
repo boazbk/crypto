@@ -23,7 +23,7 @@ That is, for every two ciphertexts $c$ and $c'$, the function $d \mapsto D_d(c)\
 Before the detailed description and analysis, let us first outline our strategy. Something of essential importance is the following.
 
 ::: # {.definition title="Noisy Homomorphic Encryption" #NoisyHEdef}
-Suppose that $(G,E,D)$ is a CPA secure public key scheme and that $\eta$ is a measure which maps any ciphertext $c$ to its "noise" $\eta(c)\in \[0, \infty).$ Denote
+Suppose that $(G,E,D)$ is a CPA secure public key scheme and that $\eta$ is a measure which maps any ciphertext $c$ to its "noise" $\eta(c)\in [0, \infty).$ Denote
 $$\mathcal{C}_b^\theta=\{c:D_b(c)=b,\eta(c)\leq\theta \}.$$ $(G,E,D,NAND)$ is called a _noisy homomorphic encryption scheme_ if the followings holds for some $q=q(n)$:
 
 * $E_e(b)\in \mathcal{C}_b^{\sqrt{q}}$ for any plaintext $b$.
