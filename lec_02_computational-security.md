@@ -545,7 +545,7 @@ cryptography, and so it is important to get comfortable with it.
 ## The Length Extension Theorem
 
 We now turn to show the _length extension theorem_, stating that if we have an encryption for $n+1$-length messages with $n$-length keys, then we can obtain an encryption with $p(n)$-length messages for every polynomial $p(n)$.
-For a warm-up, let's show that the easier fact that we can transform an encryption such as above, into one that has keys of length $tn$ and messages of length $t(n+1)$ for every integer $t$:
+For a warm-up, let's show the easier fact that we can transform an encryption such as above, into one that has keys of length $tn$ and messages of length $t(n+1)$ for every integer $t$:
 
 
 > # {.theorem title="Security of repetition" #secrepthm}
@@ -648,7 +648,7 @@ $$
 where we use $U'_\ell$ to denote a random variable that is chosen uniformly at random from $\{0,1\}^\ell$ and independently from the choice of $U_n$ (which is chosen uniformly at random from $\{0,1\}^n$).
 >
 Once we prove the claim then we are done since we know that for
-every pair of message $m,m'$, $E_{U_n}(m) \approx \hat{E}_{U_n}(m)$ and
+every pair of messages $m,m'$, $E_{U_n}(m) \approx \hat{E}_{U_n}(m)$ and
 $E_{U_n}(m') \approx \hat{E}_{U_n}(m')$ but $\hat{E}_{U_n}(m) \approx
 \hat{E}_{U_n}(m')$ since $\hat{E}$ is essentially the same as the $t$-times
 repetition scheme we analyzed above. Thus by the triangle inequality we can
