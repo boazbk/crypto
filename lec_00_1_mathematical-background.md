@@ -26,7 +26,7 @@ For an excellent popular discussion of some of the mathematical concepts we'll t
 see the book _"How Not to Be Wrong"_ by Jordan Ellenberg.
 
 Although knowledge of algorithms is not strictly necessary, it would be quite
-useful. Students who did not take an algorithms class such as CS 124 might want to look at the books
+useful. Students who did not take an algorithms class such as CS 124 might want to look at one of the books
 (1) Corman, Leiserson, Rivest and Smith, (2) Dasgupte, Papadimitriou and
 Vaziarni, or (3) Kleinberg and Tardos. We do not require prior knowledge of
 complexity or computability but some basic familiarity could be useful.
