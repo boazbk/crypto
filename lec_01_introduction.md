@@ -5,9 +5,11 @@ chapternum: "1"
 ---
 
 
+
 # Introduction
 
 __Additional reading:__  Chapters 1 and 2 of Katz-Lindell book. Sections 2.1 (Introduction) and 2.2 (Shannon ciphers and perfect security) in the Boneh Shoup book. [^references]
+
 
 [^references]: Referring to a book such as Katz-Lindell or Boneh-Shoup can be useful during this course to supplement these notes with additional discussions, extensions, details, practical applications, or references. In particular, in the current state of these lecture notes, almost all references and credits are omitted  unless the name has become standard in the literature, or I believe that the story of some discovery can serve a pedagogical point. See the Katz-Lindell book for historical notes and references. This lecture shares a lot of text with (though is not identical to)  my lecture on cryptography in the [introduction to theoretical computer science](http://introtcs.org) lecture notes.
 
