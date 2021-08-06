@@ -462,12 +462,14 @@ There is a perfectly secret valid encryption scheme $(E,D)$ with $\ell(n)=n$.
 
 
 
-![In the _one time pad_ encryption scheme we encrypt a plaintext $m\in \{0,1\}^n$ with a key $k\in \{0,1\}^n$ by the ciphertext $m \oplus k$ where $\oplus$ denotes the bitwise XOR operation.](../figure/onetimepad.png){#onetimepadfig  .margin}
-
 
 > # {.proofidea data-ref="onetimepad"}
 Our scheme is the [one-time pad](https://en.wikipedia.org/wiki/One-time_pad) also known as the "Vernam Cipher", see [onetimepadfig](){.ref}.
 The encryption is exceedingly simple: to encrypt a message $m\in \{0,1\}^n$ with a key $k \in \{0,1\}^n$ we simply output $m \oplus k$ where $\oplus$ is the bitwise XOR operation that outputs the string corresponding to XORing each  coordinate of $m$ and $k$.
+
+
+![In the _one time pad_ encryption scheme we encrypt a plaintext $m\in \{0,1\}^n$ with a key $k\in \{0,1\}^n$ by the ciphertext $m \oplus k$ where $\oplus$ denotes the bitwise XOR operation.](../figure/onetimepad.png){#onetimepadfig  }
+
 
 ::: {.proof data-ref="onetimepad"}
 For two binary strings $a$ and $b$ of the same length $n$, we define $a \oplus b$ to be the string $c \in \{0,1\}^n$ such that $c_i = a_i + b_i \mod 2$ for every $i\in [n]$.
