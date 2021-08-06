@@ -418,7 +418,7 @@ Let $(E,D)$ be a valid encryption scheme with message length $\ell(n)$. Then the
 
 1. $(E,D)$ is perfectly secret as per [perfectsecrecydef](){.ref}.
 
-2. For every pair of messages $m_0,m_1 \in \{0,1\}^\ell(n)}$, the distributions $\{ E_k(m_0) \}_{k \sim \{0,1\}^n}$ and  $\{ E_k(m_1) \}_{k \sim \{0,1\}^n}$ are identical.
+2. For every pair of messages $m_0,m_1 \in \{0,1\}^{\ell(n)}$, the distributions $\{ E_k(m_0) \}_{k \sim \{0,1\}^n}$ and  $\{ E_k(m_1) \}_{k \sim \{0,1\}^n}$ are identical.
 
 3. (Two-message security: Eve can't guess which of one of two messages was encrypted with success better than half.) For every function $Eve:\{0,1\}^{C(n)} \rightarrow \{0,1\}^{\ell(n)}$ and pair of messages $m_0,m_1 \in \{0,1\}^{\ell(n)}$, 
 
