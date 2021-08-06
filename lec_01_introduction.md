@@ -33,7 +33,7 @@ of communication and computation.
 
 ## Some history
 
-In 1587, Mary the queen of Scots, and the heir to the throne of England, wanted to arrange the assassination of her cousin, queen Elisabeth I of
+In 1587, Mary the queen of Scots, and heir to the throne of England, wanted to arrange the assassination of her cousin, queen Elisabeth I of
 England, so that she could ascend to the throne and finally escape the house arrest under which she had been for the last 18 years.
 As part of this complicated plot, she sent a coded letter to Sir Anthony Babington.
 
@@ -117,21 +117,21 @@ $$ m = D_k(E_k(m)) \;.$$
 This motivates the following definition which attempts to capture what it means for an encryption scheme to be _valid_ or "make sense", regardless of whether or not it is _secure_:
 
 ::: {.definition title="Valid encryption scheme" #encryptiondef}
-Let $L:\N \rightarrow \N$ and $C:\N \rightarrow \N$ be two functions mapping natural numbers to natural numbers.
-A pair of polynomial-time computable functions $(E,D)$ mapping strings to strings is a _valid private key encryption scheme_ (or _encryption scheme_ for short) with plaintext length function $L(\cdot)$ and ciphertext length
-function $C(\cdot)$ if for every $n\in \N$,  $k\in \{0,1\}^n$ and $x \in \{0,1\}^{L(n)}$, $|E_k(x)|= C(n)$ and 
+Let $\ell:\N \rightarrow \N$ and $C:\N \rightarrow \N$ be two functions mapping natural numbers to natural numbers.
+A pair of polynomial-time computable functions $(E,D)$ mapping strings to strings is a _valid private key encryption scheme_ (or _encryption scheme_ for short) with plaintext length function $\ell(\cdot)$ and ciphertext length
+function $C(\cdot)$ if for every $n\in \N$,  $k\in \{0,1\}^n$ and $m \in \{0,1\}^{\ell(n)}$, $|E_k(m)|= C(n)$ and 
 $$
-D(k,E(k,x))=x \;. \label{eqvalidenc}
+D(k,E(k,m))=m \;. \label{eqvalidenc}
 $$
 :::
 
-We will often write the first input (i.e., the key) to the encryption and decryption as a subscript and so can write [eqvalidenc](){.eqref} also as  $D_k(E_k(x))=x$.
+We will often write the first input (i.e., the key) to the encryption and decryption as a subscript and so can write [eqvalidenc](){.eqref} also as  $D_k(E_k(m))=m$.
 
-![A private-key encryption scheme is a pair of algorithms $E,D$ such that for every key $k\in \{0,1\}^n$ and plaintext $x\in \{0,1\}^{L(n)}$, $y=E_k(x)$ is a ciphertext of length $C(n)$. The encryption scheme is _valid_ if for every such $y$, $D_k(y)=x$. That is, the decryption of an encryption of $x$ is $x$, as long as both encryption and decryption use the same key.](../figure/encryptionvalid.png){#validencryption .margin}
+![A private-key encryption scheme is a pair of algorithms $E,D$ such that for every key $k\in \{0,1\}^n$ and plaintext $x\in \{0,1\}^{\ell(n)}$, $c=E_k(m)$ is a ciphertext of length $C(n)$. The encryption scheme is _valid_ if for every such $y$, $D_k(y)=x$. That is, the decryption of an encryption of $x$ is $x$, as long as both encryption and decryption use the same key.](../figure/valid_encryption_fig.png){#validencryption}
 
 
-The validity condition implies that for any fixed $k$, the map $x \mapsto E_k(x)$ is one to one (can you see why?) and hence the ciphertext length is always at least the plaintext length. Thus we typically focus on the plaintext length as the quantity to  optimize in an encryption scheme.
-The _larger_ $L(n)$ is, the better the scheme, since it means we need a shorter secret key to protect messages of the same length.
+The validity condition implies that for any fixed $k$, the map $m \mapsto E_k(m)$ is one to one (can you see why?) and hence the ciphertext length is always at least the plaintext length. Thus we typically focus on the plaintext length as the quantity to  optimize in an encryption scheme.
+The _larger_ $\ell(n)$ is, the better the scheme, since it means we need a shorter secret key to protect messages of the same length.
 
 
 
@@ -141,17 +141,17 @@ _A note on notation:_ We will always use $i,j,\ell,n$ to denote natural
 numbers. 
 
 The number $n$ will often denote the length of our secret key.
-The length of the key (or another closely related number) is often known as the  _security parameter_ in the literature. Katz-Lindell also uses $n$ to denote this parameter, while Boneh-Shoup and Rosulek use $\lambda$ for it. (Some texts also use the greek lettter $\kappa$ for the same parameter.) 
+The length of the key (or another closely related number) is often known as the  _security parameter_ in the literature. Katz-Lindell also uses $n$ to denote this parameter, while Boneh-Shoup and Rosulek use $\lambda$ for it. (Some texts also use the Greek letter $\kappa$ for the same parameter.) 
 We chose to denote the security parameter by $n$ as to correspond with the standard algorithmic notation for input length (as in $O(n)$ or $O(n^2)$  time algorithms).
 
 We often use   $\ell$ to denote the length of the message, sometimes also known as "block length" since longer
 messages are simply chopped into "blocks" of length $\ell$ and also appropriately padded. 
 
 We will use $k$ to denote the secret key, $m$ to denote the secret plaintext message, and $c$ to denote the encrypted ciphertext.
-Note that $c,m$  and $k$ are not numbers but rather bit strings of lengths $o,\ell$ and $n$
-respectively.  
+Note that $k,m,c$  and $k$ are not numbers but rather bit strings of lengths $n,\ell(n),C(n)$
+respectively.  We will also sometimes use $x$ and $y$ to denote strings, and so sometimes use $x$ as the plaintext and $y$ as the ciphertext.
 
-For simplicity, we denote the space of possible keys as $\{0,1\}^n$ and the space of possible messages as $\{0,1\}^\ell$ for $\ell=L(n)$. Boneh-Shoup uses a more general notation of $\mathcal{K}$ for the space of all possible keys and $\mathcal{M}$ for the space of all possible messages. This does not make much difference since we can represent every discrete object such as a key or message as a binary string. (One difference is that in principle the space of all possible messages could include messages of unbounded length, though in such a case what is done in both theory and practice is to break these up into finite-size blocks and encrypt one block at a time.) 
+For simplicity, we denote the space of possible keys as $\{0,1\}^n$ and the space of possible messages as $\{0,1\}^\ell$ for $\ell=\ell(n)$. Boneh-Shoup uses a more general notation of $\mathcal{K}$ for the space of all possible keys and $\mathcal{M}$ for the space of all possible messages. This does not make much difference since we can represent every discrete object such as a key or message as a binary string. (One difference is that in principle the space of all possible messages could include messages of unbounded length, though in such a case what is done in both theory and practice is to break these up into finite-size blocks and encrypt one block at a time.) 
 :::
 
 
@@ -160,7 +160,7 @@ For simplicity, we denote the space of possible keys as $\{0,1\}^n$ and the spac
 
 [encryptiondef](){.ref}  says nothing about security and does not rule out trivial "encryption" schemes such as the scheme $E_k(m) = m$ that simply outputs the plaintext as is.
 Defining security is tricky, and we'll take it one step at a time, but lets start by pondering what is secret and what is not.
-A priori we are thinking of an attacker Eve that simply sees the ciphertext $y=E_k(x)$ and does not know anything on how it was generated. So, it does not know the details of $E$ and $D$, and certainly does not know the secret key $k$.
+A priori we are thinking of an attacker Eve that simply sees the ciphertext $c=E_k(m)$ and does not know anything on how it was generated. So, it does not know the details of $E$ and $D$, and certainly does not know the secret key $k$.
 However, many of the troubles past cryptosystems went through was caused by them relying on "security through obscurity"--- trusting that the fact their _methods_ are not known to their enemy will protect them from being broken.
 This is a faulty assumption - if you reuse a method again and again (even with a different key each time) then eventually your adversaries will figure out what you are doing.
 And if Alice and Bob meet frequently in a secure location to decide on a new method, they might as well take the opportunity to exchange their secret messages.. 
@@ -171,8 +171,7 @@ These considerations led Auguste Kerckhoffs in 1883 to state the following princ
 
 Why is it OK to assume the key is secret and not the algorithm? Because we can always choose a fresh key.
 But of course that won't help us much if our key is  "1234" or "passw0rd!".
-In fact, if you use _any_ deterministic algorithm
-to choose the key then eventually your adversary will figure this out.
+In fact, if you use _any_ deterministic algorithm to choose the key then eventually your adversary will figure this out.
 Therefore for security we must choose the key at _random_ and can restate Kerckhoffs's principle as follows:
 
 
@@ -214,7 +213,7 @@ if some entities recorded that communication they could break it also retroactiv
 See [XKCD's take](http://www.xkcd.com/424/) on that incident.
 
 
-![XKCD Cartoon: Random number generator](../figure/random_number.png){#tmplabelfig}
+![XKCD Cartoon: Random number generator](../figure/random_number.png){#tmplabelfig .margin}
 
 
 In 2012 two separate teams of researchers scanned a large number of RSA keys on the web and found out that about 4 percent of them are easy to break.
@@ -271,18 +270,17 @@ One way to answer question 2 is to try to think of both examples of objects that
 
 
 You might wonder if [securefirstattemptdef](){.ref} is not _too strong_.
-After all how are we going ever to prove that Eve cannot recover the secret key no matter what she does? Edgar Allan Poe would say that there can always be a method that we overlooked. However, in fact this definition is too _weak_! Consider the following encryption: the secret key $k$ is chosen at random in $\{0,1\}^n$ but our encryption scheme simply ignores it and lets $E_k(x)=x$ and $D_k(y)=y$. This is a valid encryption, but of course completely insecure as we are simply outputting the plaintext in the clear.
-Yet, no matter what Eve does, if she only sees $c$ and not $k$, there is no way she can guess the true value of $k$ with probability better
-than $2^{-n}$, since it was chosen completely at random and she gets no information about it.
+After all how are we going ever to prove that Eve cannot recover the secret key no matter what she does? Edgar Allan Poe would say that there can always be a method that we overlooked. However, in fact this definition is too _weak_! Consider the following encryption: the secret key $k$ is chosen at random in $\{0,1\}^n$ but our encryption scheme simply ignores it and lets $E_k(m)=m$ and $D_k(c)=c$. This is a valid encryption since  $D_k(E_k(m))=m$, but is of course completely insecure as we are simply outputting the plaintext in the clear.
+Yet, no matter what Eve does, if she only sees $c$ and not $k$, there is no way she can guess the true value of $k$ with probability better than $2^{-n}$, since it was chosen completely at random and she gets no information about it.
 Formally, one can prove the following result:
 
 > # {.lemma #trivialsec}
-Let $(E,D)$ be the encryption scheme above. For every function $Eve:\{0,1\}^\ell\rightarrow \{0,1\}^n$ and for every $x\in \{0,1\}^\ell$, the probability that
-$Eve(E_k(x))=k$ is exactly $2^{-n}$.
+Let $(E,D)$ be the encryption scheme above. For every function $Eve:\{0,1\}^\ell\rightarrow \{0,1\}^n$ and for every $m\in \{0,1\}^\ell$, the probability that
+$Eve(E_k(m))=k$ is exactly $2^{-n}$.
 
 
 > # {.proof data-ref="trivialsec"}
-This follows because $E_k(x)=x$ and hence $Eve(E_k(x))=Eve(x)$ which is some fixed value $k'\in\{0,1\}^n$ that is independent
+This follows because $E_k(m)=m$ and hence $Eve(E_k(m))=Eve(m)$ which is some fixed value $k'\in\{0,1\}^n$ that is independent
 of $k$. Hence the probability that $k=k'$ is $2^{-n}$. QED
 
 The math behind the above argument is very simple, yet I urge you to read and re-read the last two paragraphs until you are sure that
@@ -297,22 +295,22 @@ One obvious objection is that we don't care about hiding the key- it is the _mes
 This suggests the next attempt:
 
 > # {.definition title="Security of encryption: second attempt" #securesecondattemptdef}
-An encryption scheme $(E,D)$  is _$n$-secure_ if for every message $x$ no matter what method Eve employs, the
-probability that she can recover $x$ from the ciphertext $y=E_k(x)$ is at most $2^{-n}$.
+An encryption scheme $(E,D)$  is _$n$-secure_ if for every message $m$ no matter what method Eve employs, the
+probability that she can recover $m$ from the ciphertext $c=E_k(m)$ is at most $2^{-n}$.
 
 Now this seems like it captures our intended meaning. But remember that we are being anal, and truly insist that the definition holds
-as stated, namely that for every plaintext message $x$ and every function $Eve:\{0,1\}^L\rightarrow\{0,1\}^\ell$, the probability over the choice of $k$
-that $Eve(E_k(x))=x$ is at most $2^{-n}$. But now we see that this is clearly impossible. After all, this is supposed to work for
-_every_ message $x$ and _every_ function $Eve$, but clearly if $x$ is the all-zeroes message $0^\ell$ and $Eve$ is the function that ignores its input
-and simply outputs $0^\ell$, then it will hold that $Eve(E_k(x))=x$ with probability one.
+as stated, namely that for every plaintext message $m$ and every function $Eve:\{0,1\}^C\rightarrow\{0,1\}^\ell$, the probability over the choice of $k$
+that $Eve(E_k(m))=m$ is at most $2^{-n}$. But now we see that this is clearly impossible. After all, this is supposed to work for
+_every_ message $m$ and _every_ function $Eve$, but clearly if $m$ is the all-zeroes message $0^\ell$ and $Eve$ is the function that ignores its input
+and simply outputs $0^\ell$, then it will hold that $Eve(E_k(m))=m$ with probability one.
 
 So, if before the definition was too weak, the new definition is too strong and is impossible to achieve.
 The problem is that of course we could guess a fixed message with probability one, so perhaps we could try to consider a definition with a _random_ message. That is:
 
 > # {.definition title="Security of encryption: third attempt" #securethirdattemptdef}
-An encyption scheme $(E,D)$  is _$n$-secure_ if no matter what method Eve employs, if $x$ is chosen at random
-from $\{0,1\}^\ell$, the probability that she can recover $x$ from the ciphertext
-$c=E_k(x)$ is at most $2^{-n}$.
+An encyption scheme $(E,D)$  is _$n$-secure_ if no matter what method Eve employs, if $m$ is chosen at random
+from $\{0,1\}^\ell$, the probability that she can recover $m$ from the ciphertext
+$c=E_k(m)$ is at most $2^{-n}$.
 
 This weakened definition can in fact be achieved, but we have again weakened it too much.
 Consider an encryption that hides the last $\ell/2$ bits of the
@@ -341,9 +339,9 @@ This can be formalized as follows:
 
 ::: {.definition title="Perfect secrecy" #perfectsecrecydef}
 An encryption scheme $(E,D)$ is _perfectly secret_ if there for every set $M\subseteq\{0,1\}^\ell$ of plaintexts,
-and for every strategy used by Eve, if we choose at random $x\in M$ and a
-random key $k\in\{0,1\}^n$, then the probability that Eve guesses $x$ after
-seeing $E_k(x)$ is at most $1/|M|$.
+and for every strategy used by Eve, if we choose at random $m\in M$ and a
+random key $k\in\{0,1\}^n$, then the probability that Eve guesses $m$ after
+seeing $E_k(m)$ is at most $1/|M|$.
 :::
 
 In particular, if we encrypt either "Yes" or "No" with probability $1/2$, then Eve won't be able to guess which one it is with probability better than half.
@@ -351,7 +349,7 @@ In fact, that turns out to be the heart of the matter:
 
 
 ::: {.theorem title="Two to many theorem" #twotomanythm}
-An encryption scheme $(E,D)$ is perfectly secret if and only if for every two distinct plaintexts $\{x_0,x_1\} \subseteq \{0,1\}^\ell$ and every strategy used by Eve, if we choose at random $b\in\{0,1\}$ and a random key $k\in\{0,1\}^n$, then the probability that Eve guesses $x_b$ after seeing $E_k(x_b)$ is at most $1/2$.
+An encryption scheme $(E,D)$ is perfectly secret if and only if for every two distinct plaintexts $\{m_0,m_1\} \subseteq \{0,1\}^\ell$ and every strategy used by Eve, if we choose at random $b\in\{0,1\}$ and a random key $k\in\{0,1\}^n$, then the probability that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2$.
 :::
 
 
@@ -364,28 +362,28 @@ to guess (based on the ciphertext) a plaintext chosen from $M$ with probability 
 there is also some set $M'$ of size two and a strategy $Eve'$ for Eve to guess a plaintext
 chosen from $M'$ with probability larger than $1/2$.
 
-Let's fix the message $x_0$ to be the all zeroes message and pick $x_1$ at random in $M$.
-Under our assumption, it holds that for random key $k$ and message $x_1\in M$,
-$$\Pr_{k \leftarrow_R \{0,1\}^n, x_1 \leftarrow_R M}[Eve(E_k(x_1))=x_1]  > 1/|M|\;.$$
-On the other hand, for every choice of $k$, $x'= Eve(E_k(x_0))$ is a fixed string independent on the choice of $x_1$, and so if we pick $x_1$ at random in $M$, then the probability that $x_1=x'$ is at most $1/|M|$, or in other words 
+Let's fix the message $m_0$ to be the all zeroes message and pick $m_1$ at random in $M$.
+Under our assumption, it holds that for random key $k$ and message $m_1\in M$,
+$$\Pr_{k \leftarrow_R \{0,1\}^n, m_1 \leftarrow_R M}[Eve(E_k(m_1))=m_1]  > 1/|M|\;.$$
+On the other hand, for every choice of $k$, $m'= Eve(E_k(m_0))$ is a fixed string independent on the choice of $x_1$, and so if we pick $m_1$ at random in $M$, then the probability that $m_1=m'$ is at most $1/|M|$, or in other words 
 
-$$\Pr_{k \leftarrow_R \{0,1\}^n, x_1 \leftarrow_R M}[Eve(E_k(x_0))=x_1]  \leq  1/|M|\;. \label{eqhitcipher}$$
+$$\Pr_{k \leftarrow_R \{0,1\}^n, m_1 \leftarrow_R M}[Eve(E_k(m_0))=m_1]  \leq  1/|M|\;. \label{eqhitcipher}$$
 
 We can also write [eqhitcipher](){.eqref} as 
 $$
-\E_{x_1 \leftarrow_R \{0,1\}^n} \Pr[ Eve(E_k(x_0))=x_1] \leq 1/|M| 
+\E_{m_1 \leftarrow_R \{0,1\}^n} \Pr[ Eve(E_k(m_0))=m_1] \leq 1/|M| 
 $$
 and so in particular, due to linearity of expectation, there _exists_
-some $x_1$ satisfying
-$$ \Pr[Eve(E_k(x_1))=x_1]   > \Pr[Eve(E_k(x_0))=x_1] \;.$$
+some $m_1$ satisfying
+$$ \Pr[Eve(E_k(m_1))=m_1]   > \Pr[Eve(E_k(m_0))=m_1] \;.$$
 (Can you see why? This is worthwhile stopping and reading again.)
 But this can be turned into an attacker $Eve'$ such that for $b \leftarrow_R \{0,1\}$.
-the probability that $Eve'(E_k(x_b))=x_b$ is larger than $1/2$.
-Indeed, we can define $Eve'(y)$ to output $x_1$ if $Eve(y)=x_1$ and otherwise
-output a random message in $\{ x_0 , x_1 \}$.
-The probability that $Eve'(y)$ equals $x_1$ is higher when $y=E_k(x_1)$ than when $y=E_k(x_0)$, and since
-$Eve'$ outputs either $x_0$ or $x_1$, this means that the probability
-that $Eve'(E_k(x_b))=x_b$ is larger than $1/2$. (Can you see why?)
+the probability that $Eve'(E_k(m_b))=m_b$ is larger than $1/2$.
+Indeed, we can define $Eve'(c)$ to output $m_1$ if $Eve(c)=m_1$ and otherwise
+output a random message in $\{ m_0 , m_1 \}$.
+The probability that $Eve'(y)$ equals $m_1$ is higher when $c=E_k(m_1)$ than when $c=E_k(m_0)$, and since
+$Eve'$ outputs either $m_0$ or $m_1$, this means that the probability
+that $Eve'(E_k(m_b))=m_b$ is larger than $1/2$. (Can you see why?)
 :::
 
 
@@ -394,43 +392,43 @@ that $Eve'(E_k(x_b))=x_b$ is larger than $1/2$. (Can you see why?)
 > # { .pause }
 The proof of [twotomanythm](){.ref} is not trivial, and is worth reading again and making sure you understand it.
 An excellent exercise, which I urge you to pause and do now is to prove the following:
-$(E,D)$ is perfectly secret if for every plaintexts $x,x' \in \{0,1\}^\ell$, the two
-random variables $\{ E_k(x) \}$ and $\{ E_{k'}(x') \}$ (for randomly chosen keys $k$ and $k'$)
+$(E,D)$ is perfectly secret if for every plaintexts $m,m' \in \{0,1\}^\ell$, the two
+random variables $\{ E_k(m) \}$ and $\{ E_{k'}(m') \}$ (for randomly chosen keys $k$ and $k'$)
 have precisely the same distribution.
 
 ::: {.solvedexercise title="Perfect secrecy, equivalent definition" #perfectsecrecyequiv}
-Prove that a valid encryption scheme $(E,D)$ with plaintext length $L(\cdot)$ is perfectly secret if and only if for every $n\in \N$ and plaintexts $x,x' \in \{0,1\}^{L(n)}$, the following two distributions $Y$ and $Y'$ over $\{0,1\}^*$ are identical:
+Prove that a valid encryption scheme $(E,D)$ with plaintext length $\ell(\cdot)$ is perfectly secret if and only if for every $n\in \N$ and plaintexts $x,x' \in \{0,1\}^{\ell(n)}$, the following two distributions $Y$ and $Y'$ over $\{0,1\}^*$ are identical:
 
-* $Y$ is obtained by sampling  $k\sim \{0,1\}^n$ and outputting $E_k(x)$.
+* $Y$ is obtained by sampling  $k\sim \{0,1\}^n$ and outputting $E_k(m)$.
 
-* $Y'$ is obtained by sampling  $k\sim \{0,1\}^n$ and outputting $E_k(x')$.
+* $Y'$ is obtained by sampling  $k\sim \{0,1\}^n$ and outputting $E_k(m')$.
 :::
 
 ::: {.solution data-ref="perfectsecrecyequiv"}
 We only sketch the proof. The condition in the exercise is equivalent to perfect secrecy with $|M|=2$.
-For every $M = \{ x,x' \}$, if $Y$ and $Y'$ are identical then clearly for every $Eve$, $\Pr[ Eve(E_k(x))=1] = \Pr[ Eve(E_k(x'))=1]$ since these correspond applying $Eve$ on the same distribution $Y=Y'$.
+For every $M = \{ m,m' \}$, if $Y$ and $Y'$ are identical then clearly for every $Eve$, $\Pr[ Eve(E_k(m))=1] = \Pr[ Eve(E_k(m'))=1]$ since these correspond applying $Eve$ on the same distribution $Y=Y'$.
 On the other hand, if $Y$ and $Y'$ are not identical then there must exist some ciphertext $c^*$ such that $\Pr[ Y=c^*] > \Pr[ Y'=c^*]$ (or vice versa).
-The adversary that on input $c$ will guess that $c$ is an encryption of $x$ if $c=c^*$ and otherwise will toss a coin will have some advantage over $1/2$ in distinguishing an encryption of $x$ from an encryption of $x'$.
+The adversary that on input $c$ will guess that $c$ is an encryption of $m$ if $c=c^*$ and otherwise will toss a coin will have some advantage over $1/2$ in distinguishing an encryption of $x$ from an encryption of $m'$.
 :::
 
 We summarize the equivalent definitions of perfect secrecy in the following theorem, whose (omitted) proof follows from [twotomanythm](){.ref} and [perfectsecrecyequiv](){.ref} as well as similar proof ideas.
 
 ::: {.theorem title="Perfect secrecy equivalent conditions" #perfectsecrecythm}
-Let $(E,D)$ be a valid encryption scheme with message length $L(n)$. Then the following conditions are equivalent:
+Let $(E,D)$ be a valid encryption scheme with message length $\ell(n)$. Then the following conditions are equivalent:
 
 1. $(E,D)$ is perfectly secret as per [perfectsecrecydef](){.ref}.
 
-2. For every pair of messages $x_0,x_1 \in \{0,1\}^{L(n)}$, the distributions $\{ E_k(x_0) \}_{k \sim \{0,1\}^n}$ and  $\{ E_k(x_1) \}_{k \sim \{0,1\}^n}$ are identical.
+2. For every pair of messages $m_0,m_1 \in \{0,1\}^\ell(n)}$, the distributions $\{ E_k(m_0) \}_{k \sim \{0,1\}^n}$ and  $\{ E_k(m_1) \}_{k \sim \{0,1\}^n}$ are identical.
 
-3. (Two-message security: Eve can't guess which of one of two messages was encrypted with success better than half.) For every function $Eve:\{0,1\}^{C(n)} \rightarrow \{0,1\}^{L(n)}$ and pair of messages $x_0,x_1 \in \{0,1\}^{L(n)}$, 
+3. (Two-message security: Eve can't guess which of one of two messages was encrypted with success better than half.) For every function $Eve:\{0,1\}^{C(n)} \rightarrow \{0,1\}^{\ell(n)}$ and pair of messages $m_0,m_1 \in \{0,1\}^{\ell(n)}$, 
 
-$$\Pr_{b \sim \{0,1\}, k \sim \{0,1\}^n} [ Eve(E_k(x_b))=x_b ] \leq 1/2$$
+$$\Pr_{b \sim \{0,1\}, k \sim \{0,1\}^n} [ Eve(E_k(m_b))=m_b ] \leq 1/2$$
 
-4. (Arbitrary prior security: Eve can't guess which message was encrypted with success better than her prior information.) For every distribution $\mathcal{D}$ over $\{0,1\}^{L(n)}$, and $Eve:\{0,1\}^{C(n)} \rightarrow \{0,1\}^{L(n)}$,
+4. (Arbitrary prior security: Eve can't guess which message was encrypted with success better than her prior information.) For every distribution $\mathcal{D}$ over $\{0,1\}^{\ell(n)}$, and $Eve:\{0,1\}^{C(n)} \rightarrow \{0,1\}^{\ell(n)}$,
 
-$$\Pr_{x \sim \mathcal{D}, k \sim \{0,1\}^n}[ Eve(E_k(x))=x ] \leq max(\mathcal{D})$$
+$$\Pr_{m \sim \mathcal{D}, k \sim \{0,1\}^n}[ Eve(E_k(m))=m ] \leq max(\mathcal{D})$$
 
-where we denote $max(\mathcal{D}) = \max_{x^*\in \{0,1\}^{L(n)}} \Pr_{x \sim \mathcal{D}}[x=x^*]$ to be the largest probability of any element under $\mathcal{D}$. 
+where we denote $max(\mathcal{D}) = \max_{m^*\in \{0,1\}^{\ell(n)}} \Pr_{m \sim \mathcal{D}}[m=m^*]$ to be the largest probability of any element under $\mathcal{D}$. 
 :::
 
 
@@ -441,20 +439,18 @@ where we denote $max(\mathcal{D}) = \max_{x^*\in \{0,1\}^{L(n)}} \Pr_{x \sim \ma
 
 So, perfect secrecy is a natural condition, and does not seem to be too weak for applications, but can it actually
 be achieved? After all, the condition that two different plaintexts are mapped to the same distribution seems somewhat at odds
-with the condition that Bob would succeed in decrypting the ciphertexts and find out if the plaintext was in fact $x$ or $x'$.
+with the condition that Bob would succeed in decrypting the ciphertexts and find out if the plaintext was in fact $m$ or $m'$.
 It turns out the answer is yes! For example, [onetimepadtwofig](){.ref} details a perfectly secret
 encryption for two bits.
 
 
 
-![A perfectly secret encryption scheme for two-bit keys and messages. The blue vertices represent plaintexts and the red vertices represent ciphertexts, each edge mapping a plaintext $x$ to a ciphertext $y=E_k(x)$ is labeled with the corresponding key $k$. Since there are four possible keys, the degree of the graph is four and it is in fact a complete bipartite graph. The encryption scheme is valid in the sense that for every $k\in \{0,1\}^2$, the map $x \mapsto E_k(x)$ is one-to-one, which in other words means that the set of edges labeled with $k$ is a _matching_.](../figure/onetimepadtwobits.png){#onetimepadtwofig .margin  }
+![A perfectly secret encryption scheme for two-bit keys and messages. The blue vertices represent plaintexts and the red vertices represent ciphertexts, each edge mapping a plaintext $m$ to a ciphertext $c=E_k(m)$ is labeled with the corresponding key $k$. Since there are four possible keys, the degree of the graph is four and it is in fact a complete bipartite graph. The encryption scheme is valid in the sense that for every $k\in \{0,1\}^2$, the map $m \mapsto E_k(m)$ is one-to-one, which in other words means that the set of edges labeled with $k$ is a _matching_.](../figure/onetimepadtwobits.png){#onetimepadtwofig  }
 
 
 
 
 
-
-![For any key length $n$, we can visualize an encryption scheme $(E,D)$ as a graph with a  vertex for every one of the $2^{L(n)}$ possible plaintexts and for every one of the ciphertexts in $\{0,1\}^*$ of the form $E_k(x)$ for $k\in \{0,1\}^n$ and $x\in \{0,1\}^{L(n)}$. For every plaintext $x$ and key $k$, we add an edge labeled $k$ between $x$ and $E_k(x)$. By the validity condition, if we pick any fixed key $k$, the map $x \mapsto E_k(x)$ must be one-to-one. The condition of perfect secrecy simply corresponds to requiring that every two    plaintexts $x$ and $x'$ have exactly the same set of neighbors (or multi-set, if there are parallel edges).](../figure/perfectsecrecy.png){#perfectsecfig  .margin}
 
 
 
@@ -462,25 +458,31 @@ In fact, this can be generalized to any number of bits:^[The one-time pad is typ
 
 
 > # {.theorem title="One Time Pad (Vernam 1917,  Shannon 1949)" #onetimepad}
-There is a perfectly secret valid encryption scheme $(E,D)$ with $L(n)=n$.
+There is a perfectly secret valid encryption scheme $(E,D)$ with $\ell(n)=n$.
+
+
+
+![In the _one time pad_ encryption scheme we encrypt a plaintext $m\in \{0,1\}^n$ with a key $k\in \{0,1\}^n$ by the ciphertext $m \oplus k$ where $\oplus$ denotes the bitwise XOR operation.](../figure/onetimepad.png){#onetimepadfig  .margin}
+
 
 > # {.proofidea data-ref="onetimepad"}
 Our scheme is the [one-time pad](https://en.wikipedia.org/wiki/One-time_pad) also known as the "Vernam Cipher", see [onetimepadfig](){.ref}.
-The encryption is exceedingly simple: to encrypt a message $x\in \{0,1\}^n$ with a key $k \in \{0,1\}^n$ we simply output $x \oplus k$ where $\oplus$ is the bitwise XOR operation that outputs the string corresponding to XORing each  coordinate of $x$ and $k$.
+The encryption is exceedingly simple: to encrypt a message $m\in \{0,1\}^n$ with a key $k \in \{0,1\}^n$ we simply output $m \oplus k$ where $\oplus$ is the bitwise XOR operation that outputs the string corresponding to XORing each  coordinate of $m$ and $k$.
 
 ::: {.proof data-ref="onetimepad"}
 For two binary strings $a$ and $b$ of the same length $n$, we define $a \oplus b$ to be the string $c \in \{0,1\}^n$ such that $c_i = a_i + b_i \mod 2$ for every $i\in [n]$.
-The encryption scheme $(E,D)$ is defined as follows: $E_k(x) = x\oplus k$ and $D_k(y)= y \oplus k$.
-By the associative law of addition (which works also modulo two), $D_k(E_k(x))=(x\oplus k) \oplus k = x \oplus (k \oplus k) = x \oplus 0^n = x$,
+The encryption scheme $(E,D)$ is defined as follows: $E_k(m) = m\oplus k$ and $D_k(c)= v \oplus k$.
+By the associative law of addition (which works also modulo two), $D_k(E_k(m))=(m\oplus k) \oplus k = m \oplus (k \oplus k) = m \oplus 0^n = m$,
 using the fact that for every bit $\sigma \in \{0,1\}$, $\sigma + \sigma \mod 2 = 0$ and $\sigma + 0 = \sigma \mod 2$.
 Hence $(E,D)$ form a valid encryption.
 
-To analyze the perfect secrecy property, we claim that for every $x\in \{0,1\}^n$, the distribution $Y_x=E_k(x)$ where $k \sim \{0,1\}^n$ is simply the uniform distribution over $\{0,1\}^n$, and hence in particular the distributions $Y_{x}$ and $Y_{x'}$ are identical for every $x,x' \in \{0,1\}^n$.
-Indeed, for every particular $y\in \{0,1\}^n$, the value $y$ is output by $Y_x$ if and only if $y = x \oplus k$ which holds if and only if $k= x \oplus y$. Since $k$ is chosen uniformly at random in $\{0,1\}^n$, the probability that $k$ happens to equal $x \oplus y$ is exactly $2^{-n}$, which means that every string $y$ is output by $Y_x$ with probability $2^{-n}$.
+To analyze the perfect secrecy property, we claim that for every $m\in \{0,1\}^n$, the distribution $Y_m=E_k(m)$ where $k \sim \{0,1\}^n$ is simply the uniform distribution over $\{0,1\}^n$, and hence in particular the distributions $Y_{m}$ and $Y_{m'}$ are identical for every $m,m' \in \{0,1\}^n$.
+Indeed, for every particular $y\in \{0,1\}^n$, the value $y$ is output by $Y_m$ if and only if $y = m \oplus k$ which holds if and only if $k= m \oplus y$. Since $k$ is chosen uniformly at random in $\{0,1\}^n$, the probability that $k$ happens to equal $m \oplus y$ is exactly $2^{-n}$, which means that every string $y$ is output by $Y_m$ with probability $2^{-n}$.
 :::
 
 
-![In the _one time pad_ encryption scheme we encrypt a plaintext $x\in \{0,1\}^n$ with a key $k\in \{0,1\}^n$ by the ciphertext $x \oplus k$ where $\oplus$ denotes the bitwise XOR operation.](../figure/onetimepad.png){#onetimepadfig  .margin}
+
+![For any key length $n$, we can visualize an encryption scheme $(E,D)$ as a graph with a  vertex for every one of the $2^{\ell(n)}$ possible plaintexts and for every one of the ciphertexts in $\{0,1\}^*$ of the form $E_k(x)$ for $k\in \{0,1\}^n$ and $x\in \{0,1\}^{\ell(n)}$. For every plaintext $x$ and key $k$, we add an edge labeled $k$ between $x$ and $E_k(x)$. By the validity condition, if we pick any fixed key $k$, the map $x \mapsto E_k(x)$ must be one-to-one. The condition of perfect secrecy simply corresponds to requiring that every two    plaintexts $x$ and $x'$ have exactly the same set of neighbors (or multi-set, if there are parallel edges).](../figure/perfectsecrecy.png){#perfectsecfig  }
 
 
 > # { .pause }
@@ -530,29 +532,29 @@ including Julius Rosenberg, Harry Gold, Klaus Fuchs, Alger Hiss, Harry Dexter Wh
 Unfortunately it turns out that that such long keys are _necessary_ for perfect secrecy:
 
 > ### {.theorem title="Perfect secrecy requires long keys" #longkeysthm}
-For every perfectly secret encryption scheme $(E,D)$ the length function $L$ satisfies $L(n) \leq n$.
+For every perfectly secret encryption scheme $(E,D)$ the length function $\ell$ satisfies $\ell(n) \leq n$.
 
 > ### {.proofidea data-ref="longkeysthm"}
 The idea behind the proof is illustrated in [longkeygraphfig](){.ref}. We define a graph between the plaintexts and ciphertexts, where we put an edge between plaintext $x$ and ciphertext $y$ if there is some key $k$ such that  $y=E_k(x)$. The _degree_ of this graph is at most the number of potential keys. The fact that the degree is smaller than the number of plaintexts (and hence of ciphertexts) implies that there would be two plaintexts $x$ and $x'$ with different sets of neighbors, and hence the distribution of a ciphertext corresponding to $x$ (with a random key) will not be identical to the distribution of a ciphertext corresponding to $x'$. 
 
 ::: {.proof data-ref="longkeysthm"}
-Let $E,D$ be a valid encryption scheme with messages of length $L$ and key of length $n<L$.
-We will show that $(E,D)$ is not perfectly secret by providing two plaintexts $x_0,x_1 \in \{0,1\}^L$ such that the distributions $Y_{x_0}$ and $Y_{x_1}$ are not identical, where $Y_x$ is the distribution obtained by picking $k \sim \{0,1\}^n$ and outputting $E_k(x)$.
+Let $E,D$ be a valid encryption scheme with messages of length $\ell$ and key of length $n<\ell$.
+We will show that $(E,D)$ is not perfectly secret by providing two plaintexts $x_0,x_1 \in \{0,1\}^\ell$ such that the distributions $Y_{x_0}$ and $Y_{x_1}$ are not identical, where $Y_x$ is the distribution obtained by picking $k \sim \{0,1\}^n$ and outputting $E_k(x)$.
 
 
-We choose $x_0 = 0^L$.
+We choose $x_0 = 0^\ell$.
 Let $S_0 \subseteq \{0,1\}^*$ be the set of all ciphertexts that have nonzero probability of being output in $Y_{x_0}$. That is, $S_0=\{ y \;|\; \exists_{k\in \{0,1\}^n} y=E_k(x_0) \}$.
 Since there are only $2^n$ keys, we know that $|S_0| \leq 2^n$.
 
 
 We will show the following claim:
 
-__Claim I:__ There exists some $x_1 \in \{0,1\}^L$ and $k\in \{0,1\}^n$ such that $E_k(x_1) \not\in S_0$.
+__Claim I:__ There exists some $x_1 \in \{0,1\}^\ell$ and $k\in \{0,1\}^n$ such that $E_k(x_1) \not\in S_0$.
 
 Claim I implies that the string $E_k(x_1)$ has positive probability of being output by $Y_{x_1}$  and zero probability of being output by $Y_{x_0}$ and hence in particular $Y_{x_0}$ and $Y_{x_1}$ are not identical.
-To prove Claim I, just choose a fixed $k\in \{0,1\}^n$. By the validity condition, the map $x \mapsto E_k(x)$ is a one to one map of $\{0,1\}^L$ to $\{0,1\}^*$ and hence in particular
-the _image_ of this map which is the set $I_k = \{ y \;|\; \exists_{x\in \{0,1\}^L} y=E_k(x) \}$ has size at least (in fact exactly) $2^L$.
-Since $|S_0| \leq 2^n < 2^L$, this means that $|I_k|>|S_0|$ and so in particular there exists some string $y$ in $I_k \setminus S_0$. But by the definition of $I_k$ this means that there is some $x\in \{0,1\}^L$  such that $E_k(x) \not\in S_0$ which concludes the proof of Claim I and hence of  [longkeysthm](){.ref}.
+To prove Claim I, just choose a fixed $k\in \{0,1\}^n$. By the validity condition, the map $x \mapsto E_k(x)$ is a one to one map of $\{0,1\}^\ell$ to $\{0,1\}^*$ and hence in particular
+the _image_ of this map which is the set $I_k = \{ y \;|\; \exists_{x\in \{0,1\}^\ell} y=E_k(x) \}$ has size at least (in fact exactly) $2^\ell$.
+Since $|S_0| \leq 2^n < 2^\ell$, this means that $|I_k|>|S_0|$ and so in particular there exists some string $y$ in $I_k \setminus S_0$. But by the definition of $I_k$ this means that there is some $x\in \{0,1\}^\ell$  such that $E_k(x) \not\in S_0$ which concludes the proof of Claim I and hence of  [longkeysthm](){.ref}.
 :::
 
 
@@ -570,16 +572,16 @@ A similar (though more involved) argument shows that the impossiblity result sho
 
 ### Amplifying success probability
 
-[longkeysthm](){.ref} implies that for every encryption scheme $(E,D)$ with $L(n)>n$, there is a pair of messages $x_0,x_1$ and an attacker $Eve$ that can distinguish between an encryption of $x_0$ and an encryption of $x_1$ with success better than $1/2$. But perhaps Eve's success is only marginally better than half, say $0.50001$? It turns out that's not the case. If  the message is even somewhat larger than the key, the success of Eve can be very close to $1$:
+[longkeysthm](){.ref} implies that for every encryption scheme $(E,D)$ with $\ell(n)>n$, there is a pair of messages $x_0,x_1$ and an attacker $Eve$ that can distinguish between an encryption of $x_0$ and an encryption of $x_1$ with success better than $1/2$. But perhaps Eve's success is only marginally better than half, say $0.50001$? It turns out that's not the case. If  the message is even somewhat larger than the key, the success of Eve can be very close to $1$:
 
 ::: {.theorem title="Short keys imply high probability attack" #longkeyhighprob}
-Let $(E,D)$ be an encryption scheme with $L(n)=n+t$. Then there is a function $Eve$ and pair of messages $x_0,x_1$ such that 
+Let $(E,D)$ be an encryption scheme with $\ell(n)=n+t$. Then there is a function $Eve$ and pair of messages $x_0,x_1$ such that 
 $$\Pr_{k \leftarrow_R \{0,1\}^n, b \leftarrow_R \{0,1\}}[ Eve(E_k(x_b)) = x_b] \geq 1- 2^{-t-1}\;.$$
 :::
 
 
 ::: {.proof data-ref="longkeyhighprob"}
-As in the proof of [longkeysthm](){.ref}, let $L=L(n)$ and let $x_0 = 0^L$ and $S_0 = \{ E_k(x) : x\in \{0,1\}^n \}$ be the set of size at most $2^n$ of all ciphertexts corresponding to $x_0$.
+As in the proof of [longkeysthm](){.ref}, let $\ell=\ell(n)$ and let $x_0 = 0^\ell$ and $S_0 = \{ E_k(x) : x\in \{0,1\}^n \}$ be the set of size at most $2^n$ of all ciphertexts corresponding to $x_0$.
 We claim that
 
 $$\Pr_{k \leftarrow_R \{0,1\}^n , x \in \{0,1\}^\ell}[ E_k(x) \in S_0 ] \leq 2^{-t}\;. \label{eqlongkeyprobproof}$$
