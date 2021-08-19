@@ -5,9 +5,9 @@ If you make a pull request, please also add your name here in the alphabetical o
 * Simon Fischer
 * William Fu
 * Daniel Inge
-* Kevin Liao
 * Yeongil Ko
-* Benjamin Rio
-* Daniel Inge
 * Kevin Liao
+* Jonathan Z. Lu
 * Kunal Marwaha
+* Benjamin Rio
+
