@@ -148,7 +148,7 @@ We often use   $\ell$ to denote the length of the message, sometimes also known 
 messages are simply chopped into "blocks" of length $\ell$ and also appropriately padded. 
 
 We will use $k$ to denote the secret key, $m$ to denote the secret plaintext message, and $c$ to denote the encrypted ciphertext.
-Note that $k,m,c$  and $k$ are not numbers but rather bit strings of lengths $n,\ell(n),C(n)$
+Note that $k,m,c$ are not numbers but rather bit strings of lengths $n,\ell(n),C(n)$
 respectively.  We will also sometimes use $x$ and $y$ to denote strings, and so sometimes use $x$ as the plaintext and $y$ as the ciphertext.
 
 For simplicity, we denote the space of possible keys as $\{0,1\}^n$ and the space of possible messages as $\{0,1\}^\ell$ for $\ell=\ell(n)$. Boneh-Shoup uses a more general notation of $\mathcal{K}$ for the space of all possible keys and $\mathcal{M}$ for the space of all possible messages. This does not make much difference since we can represent every discrete object such as a key or message as a binary string. (One difference is that in principle the space of all possible messages could include messages of unbounded length, though in such a case what is done in both theory and practice is to break these up into finite-size blocks and encrypt one block at a time.) 
@@ -397,7 +397,7 @@ random variables $\{ E_k(m) \}$ and $\{ E_{k'}(m') \}$ (for randomly chosen keys
 have precisely the same distribution.
 
 ::: {.solvedexercise title="Perfect secrecy, equivalent definition" #perfectsecrecyequiv}
-Prove that a valid encryption scheme $(E,D)$ with plaintext length $\ell(\cdot)$ is perfectly secret if and only if for every $n\in \N$ and plaintexts $x,x' \in \{0,1\}^{\ell(n)}$, the following two distributions $Y$ and $Y'$ over $\{0,1\}^*$ are identical:
+Prove that a valid encryption scheme $(E,D)$ with plaintext length $\ell(\cdot)$ is perfectly secret if and only if for every $n\in \N$ and plaintexts $m,m' \in \{0,1\}^{\ell(n)}$, the following two distributions $Y$ and $Y'$ over $\{0,1\}^*$ are identical:
 
 * $Y$ is obtained by sampling  $k\sim \{0,1\}^n$ and outputting $E_k(m)$.
 
@@ -426,9 +426,9 @@ $$\Pr_{b \sim \{0,1\}, k \sim \{0,1\}^n} [ Eve(E_k(m_b))=m_b ] \leq 1/2$$
 
 4. (Arbitrary prior security: Eve can't guess which message was encrypted with success better than her prior information.) For every distribution $\mathcal{D}$ over $\{0,1\}^{\ell(n)}$, and $Eve:\{0,1\}^{C(n)} \rightarrow \{0,1\}^{\ell(n)}$,
 
-$$\Pr_{m \sim \mathcal{D}, k \sim \{0,1\}^n}[ Eve(E_k(m))=m ] \leq max(\mathcal{D})$$
+$$\Pr_{m \sim \mathcal{D}, k \sim \{0,1\}^n}[ Eve(E_k(m))=m ] \leq \max(\mathcal{D})$$
 
-where we denote $max(\mathcal{D}) = \max_{m^*\in \{0,1\}^{\ell(n)}} \Pr_{m \sim \mathcal{D}}[m=m^*]$ to be the largest probability of any element under $\mathcal{D}$. 
+where we denote $\max(\mathcal{D}) = \max_{m^*\in \{0,1\}^{\ell(n)}} \Pr_{m \sim \mathcal{D}}[m=m^*]$ to be the largest probability of any element under $\mathcal{D}$. 
 :::
 
 
@@ -583,13 +583,13 @@ $$\Pr_{k \leftarrow_R \{0,1\}^n, b \leftarrow_R \{0,1\}}[ Eve(E_k(x_b)) = x_b] \
 
 
 ::: {.proof data-ref="longkeyhighprob"}
-As in the proof of [longkeysthm](){.ref}, let $\ell=\ell(n)$ and let $x_0 = 0^\ell$ and $S_0 = \{ E_k(x) : x\in \{0,1\}^n \}$ be the set of size at most $2^n$ of all ciphertexts corresponding to $x_0$.
+As in the proof of [longkeysthm](){.ref}, let $\ell=\ell(n)$ and let $x_0 = 0^\ell$ and $S_0 = \{ E_k(x_0) : k\in \{0,1\}^n \}$ be the set of size at most $2^n$ of all ciphertexts corresponding to $x_0$.
 We claim that
 
 $$\Pr_{k \leftarrow_R \{0,1\}^n , x \in \{0,1\}^\ell}[ E_k(x) \in S_0 ] \leq 2^{-t}\;. \label{eqlongkeyprobproof}$$
 
 We show this by arguing that this bound holds for every fixed $k$, when we take the probability over $x$, and so in particular it holds also for random $k$.
-Indeed, for every fixed $k$, the map $x \mapsto E_k(x)$ is a one-to-one map, and so the distribution of $E_k(x)$ for random $x\in \{0,1\}^n$ is uniform over some set $T_k$ of size $2^{n+t}$.
+Indeed, for every fixed $k$, the map $x \mapsto E_k(x)$ is a one-to-one map, and so the distribution of $E_k(x)$ for random $x\in \{0,1\}^\ell$ is uniform over some set $T_k$ of size $2^{n+t}$.
 For every $k$, the probability over $x$ that $E_k(x) \in S_0$  is equal to 
 $$\tfrac{|T_k \cap S_0|}{|T_k|} \leq \tfrac{|S_0|}{|T_k|} \leq \tfrac{2^n}{2^{n+t}}=2^{-t}$$
 thus proving [eqlongkeyprobproof](){.eqref}.
