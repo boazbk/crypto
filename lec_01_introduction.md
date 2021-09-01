@@ -356,7 +356,7 @@ An encryption scheme $(E,D)$ is perfectly secret if and only if for every two di
 ::: {.proof data-ref="twotomanythm"}
 The "only if" direction is obvious--- this condition is a special case of the perfect secrecy condition for a set $M$ of size $2$.
 
-The "if" direction is trickier. We need to show that if there is
+The "if" direction is trickier. We will use a proof by contradiction. We need to show that if there is
 some set $M$ (of size possibly much larger than $2$) and some strategy for Eve
 to guess (based on the ciphertext) a plaintext chosen from $M$ with probability larger than $1/|M|$, then
 there is also some set $M'$ of size two and a strategy $Eve'$ for Eve to guess a plaintext
@@ -364,19 +364,31 @@ chosen from $M'$ with probability larger than $1/2$.
 
 Let's fix the message $m_0$ to be the all zeroes message and pick $m_1$ at random in $M$.
 Under our assumption, it holds that for random key $k$ and message $m_1\in M$,
-$$\Pr_{k \leftarrow_R \{0,1\}^n, m_1 \leftarrow_R M}[Eve(E_k(m_1))=m_1]  > 1/|M|\;.$$
-On the other hand, for every choice of $k$, $m'= Eve(E_k(m_0))$ is a fixed string independent on the choice of $x_1$, and so if we pick $m_1$ at random in $M$, then the probability that $m_1=m'$ is at most $1/|M|$, or in other words 
+$$\Pr_{k \leftarrow_R \{0,1\}^n, m_1 \leftarrow_R M}[Eve(E_k(m_1))=m_1]  > 1/|M|\;. \label{eqabovetrivialcipher}$$
+On the other hand, for every choice of $k$, $m'= Eve(E_k(m_0))$ is a fixed string independent on the choice of $m_1$, and so if we pick $m_1$ at random in $M$, then the probability that $m_1=m'$ is at most $1/|M|$, or in other words 
 
 $$\Pr_{k \leftarrow_R \{0,1\}^n, m_1 \leftarrow_R M}[Eve(E_k(m_0))=m_1]  \leq  1/|M|\;. \label{eqhitcipher}$$
 
-We can also write [eqhitcipher](){.eqref} as 
+We can also write [{eqabovetrivialcipher}](){.eqref} and [eqhitcipher](){.eqref} as 
 $$
-\E_{m_1 \leftarrow_R \{0,1\}^n} \Pr[ Eve(E_k(m_0))=m_1] \leq 1/|M| 
+\E_{m_1 \leftarrow_R M} \Pr[ Eve(E_k(m_1))=m_1] > 1/|M| 
 $$
-and so in particular, due to linearity of expectation, there _exists_
-some $m_1$ satisfying
+and
+$$
+\E_{m_1 \leftarrow_R M} \Pr[ Eve(E_k(m_0))=m_1] \leq 1/|M| 
+$$
+where these expectations are taken over the choice of $m_1$. 
+Hence by linearity of expectation
+$$
+\E_{m_1 \leftarrow_R M} \left( \Pr[ Eve(E_k(m_1))=m_1] - \Pr[ Eve(E_k(m_0))=m_1]  \right) > 0 \;. \label{eqadvantageciphermonevsmzero}
+$$
+(In words, for random $m_1$, the probability that Eve outputs $m_1$ given an encryption of $m_1$ is higher than the probability that Eve outputs $m_1$ given an encryption of $m_0$.)
+
+
+In particular, by the _averaging argument_ (the argument that if the average of numbers is larger than $\alpha$ then one of the numbers is larger than $\alpha$) there must _exist_ $m_1 \in M$ satisfying
 $$ \Pr[Eve(E_k(m_1))=m_1]   > \Pr[Eve(E_k(m_0))=m_1] \;.$$
 (Can you see why? This is worthwhile stopping and reading again.)
+
 But this can be turned into an attacker $Eve'$ such that for $b \leftarrow_R \{0,1\}$.
 the probability that $Eve'(E_k(m_b))=m_b$ is larger than $1/2$.
 Indeed, we can define $Eve'(c)$ to output $m_1$ if $Eve(c)=m_1$ and otherwise
