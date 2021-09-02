@@ -321,7 +321,7 @@ __Proof of CLAIM 1:__ Let $p_1,\ldots,p_k$ be all the prime numbers between $1$ 
 __Proof of CLAIM 2:__  Consider the integral $I=\int_0^1 x^{(N-1)/2}(1-x)^{(N-1)/2} dx$.
 This is clearly some positive number and so $I>0$.
 On one hand, for every $x$ between zero and one, $x(1-x) \leq 1/4$ and hence $I$ is at most $4^{-(N-1)/2}=2^{-N+1}$.
-On the other hand, the polynomial $x^{N/2}(1-x)^{N/2}$ is some polynomial of degree at most $N-1$ with integer coefficients, and so $I=\sum_{k=1}^{N-1} C_k \int_0^1 x^k dx$ for some integer coefficients $C_1,\ldots,C_{N-1}$.
+On the other hand, the polynomial $x^{(N-1)/2}(1-x)^{(N-1)/2}$ is some polynomial of degree at most $N-1$ with integer coefficients, and so $I=\sum_{k=0}^{N-1} C_k \int_0^1 x^k dx$ for some integer coefficients $C_0,\ldots,C_{N-1}$.
 Since $\int_0^1 x^k = \tfrac{1}{k+1}$, we see that $I$ is a sum of fractions with integer numerators and with denominators that are at most $N$.
 Since all the denominators are at most $N$ and $I>0$, it follows that $I \geq \tfrac{1}{LCM(1,\ldots,N)}$, and so
 $$2^{-N+1} \geq I \geq \tfrac{1}{LCM(1,\ldots,N)}$$
