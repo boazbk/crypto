@@ -30,7 +30,7 @@ from itertools import product # Import an iterator for cartesian products
 #
 # We assume we have access to the function Encrypt(key,ciphertext)
 def Distinguish(ciphertext,plaintext1,plaintext2):
-    for key in product([0,1], repeat = 128): # Iterate over all possible keys of lenght 128
+    for key in product([0,1], repeat = 128): # Iterate over all possible keys of length 128
         if Encrypt(key, plaintext1)==ciphertext:
             return plaintext1
     return plaintext2
@@ -101,7 +101,7 @@ kind of conditions we desired. In particular, let's verify that this definition
 implies the analogous condition to perfect secrecy.
 
 > # {.theorem title="Guessing game for computational secrecy" #twotomanycomp}
-If $(E,D)$ is has $t$ bits of Computational secrecy as per  [compsecconcdef](){.ref} then every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
+If $(E,D)$ has $t$ bits of Computational secrecy as per  [compsecconcdef](){.ref} then every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
 $2^t-(100\ell+100)$ computational steps, if we choose at random $m\in M$ and a
 random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m$ after
 seeing $E_k(m_b)$ is at most $1/|M|+2^{-t+1}$.
@@ -179,7 +179,7 @@ While  in [twotomanycomp](){.ref} the encryption scheme $S$ was the same as $S'$
 However, all  of the  proofs of such statements  will have the same global
 structure--- we will assume towards a contradiction, that there is an efficient
 adversary strategy $Eve$ demonstrating that the scheme $S$ violates the security notion $X$, and build from
-$Eve$ a strategy $Eve'$ demonstrating that $S'$ violates $X$. This is such an
+$Eve$ a strategy $Eve'$ demonstrating that $S'$ violates $X'$. This is such an
 important point that it deserves repeating:
 
 >   _The way you show that if $S'$ is secure then $S$ is secure is by giving
@@ -225,8 +225,8 @@ To a first approximation, there will be only two types of running times we will
 encounter in this course:
 
 -   *Polynomial* running time of the form $d\cdot n^c$ for some constants
-    $d,c>0$ (or $poly(n)=n^{O(1)}$ for short) , which we will consider as
-    *efficient*
+    $d,c>0$ (or $poly(n)=n^{O(1)}$ for short), which we will consider as
+    *efficient*.
 
 -   *Exponential* running time of the form $2^{d\cdot n^{\epsilon}}$ for some
     constants $d,\epsilon >0$ (or $2^{n^{\Omega(1)}}$ for short) which we will
@@ -287,9 +287,9 @@ negligible function $\mu(\cdot)$.
 One more detail that we've so far ignored is what does it mean exactly for a
 function to be computable using at most $T$ operations.
 Fortunately, when we don't really care about the difference between $T$ and, say, $T^2$, then
-essentially every reasonable definition gives the same answer.^[With some caveats that need to be added due to _quantum computers_: we'll get to those later in the course, though they won't change most of our theory.]
-Formally, we can use the notions of Turing machines, Boolean circuits, or straightline programs to define complexity. For concreteness, lets define that a function $F:{\{0,1\}}^n\rightarrow{\{0,1\}}^m$
-has complexity at most $T$ if there is a Boolean circuit that computes $F$ using at most $T$ Boolean gates (say AND/OR/NOT or NAND, or you can choose your favorite universal gate sets.)
+essentially every reasonable definition gives the same answer.^[With some caveats that need to be added due to _quantum computers_: we'll get to those later in the course, though they won't change most of our theory. See also [this discussion in my intro TCS textbook](https://introtcs.org/public/lec_04_code_and_data.html#PECTTsec) and [this presentation of Aaronson](https://www.scottaaronson.com/talks/bernays2.ppt) on the "extended Church Turing thesis". ]
+Formally, we can use the notions of Turing machines, Boolean circuits, or straightline programs to define complexity. For concreteness, let's define that a function $F:{\{0,1\}}^n\rightarrow{\{0,1\}}^m$
+has complexity at most $T$ if there is a Boolean circuit that computes $F$ using at most $T$ Boolean gates (say AND/OR/NOT or NAND; alternatively you can choose your favorite universal gate sets.)
 We will often also consider *probabilistic* functions in which case we allow the circuit a RAND gate that
 outputs a single random bit (though this in general does not give extra power).
 The fact that we only care about asymptotics means you don't really need to
@@ -477,7 +477,7 @@ Thus,
 $$
 \sum_{i=1}^{m-1} \left| \Pr[ Eve(X_i)=1] - \Pr[ Eve(X_{i+1})=1] \right| > (m-1)\epsilon
 $$
-and hence in particular there must exists some $i\in\{1,\ldots,m-1\}$ such that
+and hence in particular there must exist some $i\in\{1,\ldots,m-1\}$ such that
 $$
 \left| \Pr[ Eve(X_i)=1] - \Pr[ Eve(X_{i+1})=1] \right| > \epsilon
 $$
@@ -495,10 +495,10 @@ distribution $(X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell)$. Clearly $H_0 = (X_1,\ldot
 every $i$, $H_i \approx_{T-10\ell n,\epsilon} H_{i+1}$, and the proof will then
 follow from the triangle inequality (can you see why?). Indeed, suppose towards
 the sake of contradiction that there was some $i\in \{0,\ldots,\ell\}$ and some
-$T-10\ell n$-time $Eve's:{\{0,1\}}^{n\ell}\rightarrow{\{0,1\}}$ such that
+$T-10\ell n$-time $Eve':{\{0,1\}}^{n\ell}\rightarrow{\{0,1\}}$ such that
 >
 $$
- \left| {\mathbb{E}}[ Eve'(H_i) ] - {\mathbb{E}}[ Eve(H_{i+1}) ] \right|  > \epsilon\;.
+ \left| {\mathbb{E}}[ Eve'(H_i) ] - {\mathbb{E}}[ Eve'(H_{i+1}) ] \right|  > \epsilon\;.
 $$
 >
 In other words
@@ -520,7 +520,7 @@ $$
 Now $X_i$ and $Y_i$ are simply independent draws from the distributions $X$ and
 $Y$ respectively, and so if we define $Eve(z) =
 Eve'(x_1,\ldots,x_{i-1},z,y_{i+1},\ldots,y_\ell)$ then $Eve$ runs in time at
-most the running time of $Eve$ plus $2\ell n$ and it satisfies
+most the running time of $Eve'$ plus $2\ell n$ and it satisfies
 $$
 \left| {\mathbb{E}}_{X_i} [ Eve(X_i) ] - {\mathbb{E}}_{Y_i} [ Eve(Y_i) ] \right| > \epsilon
 $$
@@ -530,7 +530,7 @@ contradicting the assumption that $X_i \approx_{T,\epsilon} Y_i$.
 
 [^5]: This is the principle that if the average grade in an exam was at least
 $\alpha$ then *someone* must have gotten at least $\alpha$, or in other words
-that if a real-valued random variable $Z$ satisfies ${\mathbb{E}}Z \geq \alpha$
+that if a real-valued random variable $Z$ satisfies ${\mathbb{E}}[Z] \geq \alpha$
 then  $\Pr[Z\geq \alpha]>0$.
 
 
