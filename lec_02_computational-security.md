@@ -614,7 +614,7 @@ This is perhaps our first example of a non trivial cryptographic theorem, and th
 Please make sure you read this proof carefully and follow the argument.
 :::
 
-::: # {.proof data-ref="lengthextendthm"}
+::: {.proof data-ref="lengthextendthm"}
 The construction, depicted in [cipherlengthextensionfig](){.ref}, is actually quite natural and variants of it are used in practice for _stream ciphers_, which are ways to encrypt arbitrarily long messages using a fixed size key.
 The idea is that we use a key $k_0$ of size $n$ to encrypt __(1)__ a fresh key $k_1$ of size $n$ and __(2)__ one bit of the message. Now we can encrypt $k_2$ using $k_1$ and so on and so forth. We now describe the construction and analysis in detail. 
 
