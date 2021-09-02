@@ -161,9 +161,10 @@ __CCA-ROM-ENC Scheme:__
 
 * **Key generation:** We generate keys $(e,d)=G'(1^n)$ for the underlying encryption scheme.
 
-* **Encryption:** To encrypt a message $m\in\{0,1\}^\ell$, we select randomness $r\leftarrow_R\{0,1\}^\ell$ for the underlying encryption algorithm $E'$ and output $E'_e(r;H(m\|r))\|(H'(r) \oplus m)$, where by $E'_e(m';r')$ we denote the result of encrypting $m'$ using the key $e$ and the randomness $r'$ (we assume the scheme takes $n$ bits of randomness as input; otherwise modify the output length of $H$ accordingly).
+* **Encryption:** To encrypt a message $m\in\{0,1\}^\ell$, we select randomness $r\leftarrow_R\{0,1\}^\ell$ for the underlying encryption algorithm $E'$ and output $$E_e(m)= E'_e(r;H(m\|r))\|(H'(r) \oplus m)\;,$$
+where by $E'_e(m';r')$ we denote the result of encrypting the plaintext $m'$ using the key $e$ and the randomness $r'$ (we assume the scheme takes $n$ bits of randomness as input; otherwise modify the output length of $H$ accordingly).
 
-* **Decryption:** To decrypt a ciphertext $c\|y$ first let $r=D_d(c)$, $m=H'(r) \oplus y$ and then check that $c=E_e(m;H(m\|r))$. If  the check fails we output ```error```; otherwise we output $m$.
+* **Decryption:** To decrypt a ciphertext $c\|y$ first let $r=D'_d(c)$, $m=H'(r) \oplus y$ and then check that $c=E'_e(m;H(m\|r))$. If  the check fails we output ```error```; otherwise we output $m$.
 :::
 
 
@@ -180,7 +181,7 @@ Suppose towards a contradiction that there exists an adversary $M$ that wins the
 Our aim is to show that the decryption box would be "useless" to $M$ and hence reduce CCA security to CPA security (which we'll then derive from the CPA security of the underlying scheme).  
 
 Consider the following "box" $\hat{D}$ that will answer decryption queries $c\|y\|z$ of the adversary as follows: \
-* If $z$ was returned before to the adversary as an answer to $H'(m\|r)$ for some $m,r$, and $c=E_e(m\;H(m\|r))$ and $y=m\oplus r$ then return $m$. \
+* If $z$ was returned before to the adversary as an answer to $H'(m\|r)$ for some $m,r$, and $c=E'_e(m\;H(m\|r))$ and $y=m\oplus r$ then return $m$. \
 * Otherwise return ```error```
 
 __Claim:__ The probability that $\hat{D}$ answers a query differently then $D$ is negligible.
