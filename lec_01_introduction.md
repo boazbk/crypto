@@ -418,9 +418,9 @@ Prove that a valid encryption scheme $(E,D)$ with plaintext length $\ell(\cdot)$
 
 ::: {.solution data-ref="perfectsecrecyequiv"}
 We only sketch the proof. The condition in the exercise is equivalent to perfect secrecy with $|M|=2$.
-For every $M = \{ m,m' \}$, if $Y$ and $Y'$ are identical then clearly for every $Eve$, $\Pr[ Eve(E_k(m))=1] = \Pr[ Eve(E_k(m'))=1]$ since these correspond applying $Eve$ on the same distribution $Y=Y'$.
+For every $M = \{ m,m' \}$, if $Y$ and $Y'$ are identical then clearly for every $Eve$ and possible output $y$, $\Pr[ Eve(E_k(m))=y] = \Pr[ Eve(E_k(m'))=y]$ since these correspond applying $Eve$ on the same distribution $Y=Y'$.
 On the other hand, if $Y$ and $Y'$ are not identical then there must exist some ciphertext $c^*$ such that $\Pr[ Y=c^*] > \Pr[ Y'=c^*]$ (or vice versa).
-The adversary that on input $c$ will guess that $c$ is an encryption of $m$ if $c=c^*$ and otherwise will toss a coin will have some advantage over $1/2$ in distinguishing an encryption of $x$ from an encryption of $m'$.
+The adversary that on input $c$ guesses that $c$ is an encryption of $m$ if $c=c^*$ and otherwise tosses a coin will have some advantage over $1/2$ in distinguishing an encryption of $m$ from an encryption of $m'$.
 :::
 
 We summarize the equivalent definitions of perfect secrecy in the following theorem, whose (omitted) proof follows from [twotomanythm](){.ref} and [perfectsecrecyequiv](){.ref} as well as similar proof ideas.
