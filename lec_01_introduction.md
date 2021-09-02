@@ -369,7 +369,7 @@ On the other hand, for every choice of $k$, $m'= Eve(E_k(m_0))$ is a fixed strin
 
 $$\Pr_{k \leftarrow_R \{0,1\}^n, m_1 \leftarrow_R M}[Eve(E_k(m_0))=m_1]  \leq  1/|M|\;. \label{eqhitcipher}$$
 
-We can also write [{eqabovetrivialcipher}](){.eqref} and [eqhitcipher](){.eqref} as 
+We can also write [eqabovetrivialcipher](){.eqref} and [eqhitcipher](){.eqref} as 
 $$
 \E_{m_1 \leftarrow_R M} \Pr[ Eve(E_k(m_1))=m_1] > 1/|M| 
 $$

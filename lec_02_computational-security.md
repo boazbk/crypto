@@ -251,8 +251,10 @@ If $\mu:\N \rightarrow [0,\infty)$ is a function (which we'll often think of as 
 We now make these notions more formal. 
 
 ::: {.definition title="Negligible function" #negligibledef}
-A function $\mu:\mathbb{N} \rightarrow [0,\infty)$ is _negligible_ if for every polynomial $p:\N \rightarrow \N$ there exists $N \in \N$ such that $\mu(n) < \tfrac{1}{p(n)}$ for every $n>N$.^[Negligible functions are sometimes defined with image equalling $[0,1]$ as opposed to the set $[0,\infty)$ of non-negative real numbers, since they are typically used to bound probabilities. However, this does not make much difference since if $\mu$ is negligible then for large enough $n$, $\mu(n)$ will be smaller than one. ]
+A function $\mu:\mathbb{N} \rightarrow [0,\infty)$ is _negligible_ if for every polynomial $p:\N \rightarrow \N$ there exists $N \in \N$ such that $\mu(n) < \tfrac{1}{p(n)}$ for every $n>N$.[^negcomment] 
 :::
+
+[^negcomment]: Negligible functions are sometimes defined with image equalling $[0,1]$ as opposed to the set $[0,\infty)$ of non-negative real numbers, since they are typically used to bound probabilities. However, this does not make much difference since if $\mu$ is negligible then for large enough $n$, $\mu(n)$ will be smaller than one.
 
 The following exercises are good ways to get some comfort with this definition
 
