@@ -485,7 +485,7 @@ The encryption is exceedingly simple: to encrypt a message $m\in \{0,1\}^n$ with
 
 ::: {.proof data-ref="onetimepad"}
 For two binary strings $a$ and $b$ of the same length $n$, we define $a \oplus b$ to be the string $c \in \{0,1\}^n$ such that $c_i = a_i + b_i \mod 2$ for every $i\in [n]$.
-The encryption scheme $(E,D)$ is defined as follows: $E_k(m) = m\oplus k$ and $D_k(c)= v \oplus k$.
+The encryption scheme $(E,D)$ is defined as follows: $E_k(m) = m\oplus k$ and $D_k(c)= c \oplus k$.
 By the associative law of addition (which works also modulo two), $D_k(E_k(m))=(m\oplus k) \oplus k = m \oplus (k \oplus k) = m \oplus 0^n = m$,
 using the fact that for every bit $\sigma \in \{0,1\}$, $\sigma + \sigma \mod 2 = 0$ and $\sigma + 0 = \sigma \mod 2$.
 Hence $(E,D)$ form a valid encryption.
