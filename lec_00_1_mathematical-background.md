@@ -498,7 +498,7 @@ And similarly, we have that
 > ### {.lemma title="Expectation of product of independent random variables" #expprod}
 If $X_0,\ldots,X_{n-1}$ are mutually independent then
 $$
-\E[ \prod_{i=0}^{n-1} X_i ] = \prod_{i=0}^{n-1} \E[X_i] .
+\E[ \wedge_{i=0}^{n-1} X_i ] = \prod_{i=0}^{n-1} \E[X_i] .
 $$
 
 > ### {.lemma title="Functions preserve independence" #indeplem}
