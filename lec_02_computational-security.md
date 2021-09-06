@@ -104,7 +104,7 @@ implies the analogous condition to perfect secrecy.
 If $(E,D)$ has $t$ bits of Computational secrecy as per  [compsecconcdef](){.ref} then every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
 $2^t-(100\ell+100)$ computational steps, if we choose at random $m\in M$ and a
 random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m$ after
-seeing $E_k(m_b)$ is at most $1/|M|+2^{-t+1}$.
+seeing $E_k(m)$ is at most $1/|M|+2^{-t+1}$.
 
 
 
@@ -139,7 +139,7 @@ and
     $$
 
 Then there exist two messages $m_0,m_1$ and an adversary
-$Eve':{\{0,1\}}^0\rightarrow{\{0,1\}}^\ell$ such that $\Pr_{b{\leftarrow_{\tiny R}}{\{0,1\}},k{\leftarrow_{\tiny R}}{\{0,1\}}^n}[Eve'(E_k(m_b))=m_b ] > 1/2$.
+$Eve':{\{0,1\}}^o\rightarrow{\{0,1\}}^\ell$ such that $\Pr_{b{\leftarrow_{\tiny R}}{\{0,1\}},k{\leftarrow_{\tiny R}}{\{0,1\}}^n}[Eve'(E_k(m_b))=m_b ] > 1/2$.
 
 To adapt this proof to the computational setting and complete the proof of the
 current theorem it suffices  to show that:
@@ -242,8 +242,8 @@ One can have intermediate functions such as $n^{\log n}$ though we will generall
 encounter those.
 To make things clean (and to correspond to standard terminology), we will generally "efficient computation" with _polynomial time_ in $n$ where $n$ is either its input length or the key size (the key size and input length  will always be polynomially related, and so this choice won't matter). We want our algorithms (encryption, decryption, etc) to be computable in polynomial time, but to require _super polynomial time_ to break.
 
-__Negligible probabilities_. In cryptography, we care not just about the running time of the adversary but also about their probability of success (which should be as small as possible).
-If $\mu:\N \rightarrow [0,\infty)$ is a function (which we'll often think of as corresponding to the adversary's probability of success or advantage over the trivial probability, as a function of the key size $n$) then we say that $\mu(n)$ is *negligible* if it's smaller than every polynomial.  Our security definitions will have the following form:
+__Negligible probabilities.__ In cryptography, we care not just about the running time of the adversary but also about their probability of success (which should be as small as possible).
+If $\mu:\N \rightarrow [0,\infty)$ is a function (which we'll often think of as corresponding to the adversary's probability of success or advantage over the trivial probability, as a function of the key size $n$) then we say that $\mu(n)$ is *negligible* if it's smaller than every inverse polynomial.  Our security definitions will have the following form:
 
 >_"Scheme $S$ is secure if for every polynomial $p(\cdot)$ and $p(n)$ time adversary $Eve$, there is some negligible function $\mu$ such that the probability that $Eve$ succeeds in the security game for $S$ is at most $trivial + \mu(n)$_"
 
@@ -261,7 +261,7 @@ The following exercises are good ways to get some comfort with this definition
 ::: {.exercise title="Negligible functions properties" #negligible}
 1. Let $\mu:\N \rightarrow [0,\infty)$ be a negligible function. Prove that for every polynomials $p,q:\R \rightarrow \R$ with non-negative coefficients such that $p(0) = 0$, the function $\mu':\N \rightarrow [0,\infty)$ defined as $\mu'(n) = p(\mu(q(n)))$ is negligible. 
 
-2. Let $\mu:\N \rightarrow \R$. Prove that $\mu$ is negligible if and only if for every constant $c$, $\lim_{n \rightarrow \infty} n^c \mu(n) = 0$.
+2. Let $\mu:\N \rightarrow [0,\infty)$. Prove that $\mu$ is negligible if and only if for every constant $c$, $\lim_{n \rightarrow \infty} n^c \mu(n) = 0$.
 :::
 
 
@@ -505,14 +505,14 @@ $(X_1,\ldots,X_\ell) \approx_{T-10\ell n,\ell\epsilon} (Y_1,\ldots,Y_\ell)$.
 
 > # {.proof data-ref="compindrepthm"}
 For every $i\in\{0,\ldots,\ell\}$ we define $H_i$ to be the
-distribution $(X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell)$. Clearly $H_0 = (X_1,\ldots,X_\ell)$ and $H_\ell = (Y_1,\ldots,Y_\ell)$. We will prove that for
-every $i$, $H_i \approx_{T-10\ell n,\epsilon} H_{i+1}$, and the proof will then
+distribution $(X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell)$. Clearly $H_\ell = (X_1,\ldots,X_\ell)$ and $H_0 = (Y_1,\ldots,Y_\ell)$. We will prove that for
+every $i$, $H_{i-1} \approx_{T-10\ell n,\epsilon} H_i$, and the proof will then
 follow from the triangle inequality (can you see why?). Indeed, suppose towards
-the sake of contradiction that there was some $i\in \{0,\ldots,\ell\}$ and some
+the sake of contradiction that there was some $i\in \{1,\ldots,\ell\}$ and some
 $T-10\ell n$-time $Eve':{\{0,1\}}^{n\ell}\rightarrow{\{0,1\}}$ such that
 >
 $$
- \left| {\mathbb{E}}[ Eve'(H_i) ] - {\mathbb{E}}[ Eve'(H_{i+1}) ] \right|  > \epsilon\;.
+ \left| {\mathbb{E}}[ Eve'(H_{i-1}) ] - {\mathbb{E}}[ Eve'(H_i) ] \right|  > \epsilon\;.
 $$
 >
 In other words
