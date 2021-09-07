@@ -6,13 +6,13 @@ chapternum: "3"
 
 
 
-# Pseudorandomness
+# Pseudorandomness[^credit]
 
 
 
 __Reading:__ Katz-Lindell Section 3.3, Boneh-Shoup Chapter 3
 
-Edited and expanded by Richard Xu in Spring 2020.
+[^credit]: Edited and expanded by Richard Xu in Spring 2020.
 
 The nature of randomness has troubled philosophers, scientists, statisticians
 and laypeople for many years.[^abc] Over the years people have given different
@@ -52,9 +52,14 @@ following:
 A function $G:{\{0,1\}}^n\rightarrow{\{0,1\}}^\ell$ is a $(T,\epsilon)$ *pseudorandom generator* if $G(U_n) \approx_{T,\epsilon} U_\ell$ where $U_t$ denotes the uniform distribution on ${\{0,1\}}^t$.
 :::
 
-That is, $G$ is a $(T,\epsilon)$ pseudorandom generators if no circuit of at most $T$ gates can distinguish with bias better than $\epsilon$ between the output of $G$ (on a random input) and a uniformly random string of the same length.
 
-As we did for the case of encryption, we will typically use _asymptotic terms_ to describe cryptographic pseudorandom generator. We say that $G$ is simply a pseudorandom generator if it is 
+That is, $G$ is a $(T,\epsilon)$ pseudorandom generators if no circuit of at most $T$ gates can distinguish with bias better than $\epsilon$ between the output of $G$ (on a random input) and a uniformly random string of the same length.
+Spelling this out fully, this means that for every function $D:\{0,1\}^\ell \rightarrow \{0,1\}$ computable using at most $T$ operations, 
+
+$$$\left| \Pr_{x \sim \{0,1\}^n}[ D(G(x))=1 ] - \Pr_{y \sim \{0,1\}^\ell}[ D(y)=1 \right| < \epsilon\;.$
+
+
+As we did for the case of encryption, we will typically use _asymptotic terms_ to describe cryptographic pseudorandom generator. We say that $G$ is simply a pseudorandom generator if it is efficiently computable and it is 
 $(p(n),1/p(n))$-pseudorandom generator for every polynomial $p(\cdot)$. 
 In other words, we define pseudorandom generators as follows:
 
@@ -64,14 +69,19 @@ We say that $G$ is a _pseudorandom generator_ with length function $\ell:\N \rig
 
 * For every $x\in \{0,1\}^*$, $|G(x)| = \ell(|x|)$.
 
-* For every polynomial $p(\cdot)$ and sufficiently large $n$, the function $G_n$ (the restriction of $G$ to inputs of length $n$) is a $(p(n),\tfrac{1}{p(n)})$ pseudorandom generator.
+* For every polynomial $p(\cdot)$ and sufficiently large $n$, if $D:\{0,1\}^{\ell(n)} \rightarrow \{0,1\}$ is computable by at most $p(n)$ operations, then 
+
+$$\left| \Pr[D(G(U_n))=1] - \Pr[ D(U_\ell)=1] \right| < \tfrac{1}{p(n)} \label{prgdefeq}$$
 :::
 
-Equivalently, $G$ as above is a pseudorandom generator if the two distributions $G(U_n)$ and $U_{\ell(n)}$ are _computationally indistinguishable_.
+Another way to say it, is that a polynomial-time computable function $G$ mapping $n$ bits strings to $\ell(n)>n$ bit strings  is a pseudo-random generator  if the two distributions $G(U_n)$ and $U_{\ell(n)}$ are _computationally indistinguishable_.
 
 > # { .pause }
-This definition (as is often the case in cryptography) is a bit long, so you want to take your time parsing it. In particular you should verify that you understand why the condition [prgdefeq](){.eqref} is the same as saying that for every polynomial $p:\N \rightarrow \N$, if $n$ is sufficiently large, then for every circuit $D$ of at most $T$ gates (or equivalently, for every straightline program $D$ of at most $T$ lines):
-$$\left| \Pr[D(G(U_n))=1] - \Pr[ D(U_\ell)=1] \right| < \tfrac{1}{p(n)} \label{prgdefeq}$$
+This definition (as is often the case in cryptography) is a bit long, but the concept of a pseudorandom generator is central to cryptography, and so you should take your time and make sure you understand it.
+Intuitively, a function $G$ is a pseudorandom generator if __(1)__ it expands its input (mapping $n$ bits to $n+1$ or more) and __(2)__ we cannot distinguish between the output $G(x)$ for $x$ is a short (i.e., $n$ bit long) random string, often known as the _seed_ of the pseudorandom genertor, and a truly random long (i.e., of length $\ell(n)$) string chosen uniformly at random from $\{0,1\}^{\ell(n)}$. 
+
+
+![A function $G:\{0,1\}^n \rightarrow \{0,1\}^{\ell(n)}$ is a _pseuaodrandom generator_ if $G(x)$ for a random short $x \sim \{0,1\}^n$ is computationally indistinguishable from a long truly random $y \sim \{0,1\}^{\ell(n)}$.](../figure/prg_def.png){#prgdeffig}
 
 
 Note that the requirement that $\ell>n$ is crucial to make this notion
@@ -120,10 +130,10 @@ mapping $n$ bits to $t(n)$ bits.
 ![Length extension for pseudorandom generators](../figure/length-extension-prg.jpg){#lengthextendprgfig}
 
 
-> # {.proof data-ref="lengthextendprgthm"}
+::: {.proof data-ref="lengthextendprgthm"}
 The proof of this theorem is very similar to the length extension theorem for
-ciphers, and in fact this theorem can be used to give an alternative proof for the former theorem.
->
+ciphers, and in fact this theorem can be used to give an alternative proof for the former theorem. 
+
 The construction is illustrated in [lengthextendprgfig](){.ref}.
 We are given a pseudorandom generator $G'$ mapping $n$ bits into $n+1$ bits and need to construct a pseudorandom generator $G$ mapping $n$ bits to $t=t(n)$
 bits for some polynomial $t(\cdot)$. The idea is that we maintain a state of $n$ bits, which are originally our input seed[^seed] $s_0$, and at the $i^{th}$ step we use $G'$
@@ -134,23 +144,35 @@ For $i\in\{0,\ldots,t\}$ we define $H_i$ to be the distribution where the first 
 Namely, we choose $s_i$ at random in $\{0,1\}^n$ and continue the computation of $y_{i+1},\ldots,y_t$ from the state $s_i$.
 Clearly $H_0=G(U_n)$ and $H_t=U_t$ and hence by the triangle inequality it suffices to prove that $H_i \approx H_{i+1}$ for all $i\in\{0,\ldots,t-1\}$.
 We illustrate these two hybrids in [lengthextendhybridfig](){.ref}.
->
+
 ![Hybrids $H_i$ and $H_{i+1}$--- dotted boxes refer to values that are chosen independently and uniformly at random](../figure/length-extension-prg-hybrid.jpg){#lengthextendhybridfig}
->
+
 Now suppose otherwise, that there exists some adversary $Eve$ such that $\left| \E[Eve(H_i)] - \E[Eve(H_{i+1})] \right| \geq \epsilon$ for some non-negligible $\epsilon$.
 We will build from $Eve$ an adversary $Eve'$ breaking the security of the pseudorandom generator $G'$ (see [reductionlengthextendfig](){.ref}).
->
+
 ![Building an adversary $Eve'$ for $G'$ from an adversary $Eve$ distinguishing $H_i$ and $H_{i+1}$. The boxes marked with questions marks are those that are random or pseudorandom depending on whether we are in $H_i$ or $H_{i+1}$. Everything inside the dashed red lines is simulated by $Eve'$ that gets as input the $n+1$-bit string $(s_{i+1},y_{i+1})$.](../figure/length-extension-prg-adversary.jpg){#reductionlengthextendfig}
->
+
 On input of string $y$ of length $n+1$, $Eve'$ will interpret $y$ as $(s_{i+1},y_{i+1})$, choose $y_1,\ldots,y_i$ randomly and compute $y_{i+2},\ldots,y_t$ as in our pseudorandom generator's construction. $Eve'$ will then feed $(y_1,\ldots,y_t)$ to $Eve$ and output whatever $Eve$ does. Clearly, $Eve'$ is efficient if $Eve$ is. Moreover, one can see that if
 $y$ was random then $Eve'$ is feeding $Eve$ with an input distributed according to $H_{i+1}$ while if $y$ was of the form $G(s)$ for a random $s$ then $Eve'$ will feed $Eve$
 with an input distributed according to $H_i$. Hence we get that $| \E[ Eve'(G'(U_n))] - \E[Eve'(U_{n+1})] | \geq \epsilon$ contradicting the security of $G'$.
-
+:::
 
 
 [^seed]:Because we use a small input to grow a large pseudorandom string, the input to a pseudorandom generator is often known as its *seed*.
 
-The proof of [lengthextendprgthm](){.ref} is indicative of many practical constructions of pseudorandom generators. Many operating systems keep track of an initial _seed_ of randomness, and supply a system call `rand` that applies a pseudorandom generator $G'$ to the current seed, uses part of the output to update the seed, and returns the remainder to the caller.
+
+::: {.remark title="Pseudorandom generators in practice" #prgpractice}
+The proof of [lengthextendprgthm](){.ref} is indicative of many practical constructions of pseudorandom generators. 
+In many operating systems and programming environments, pseudorandom generators work as follows:
+
+1. Upon initialization, the system obtains an initial _seed_ of randomness $x_0 \in \{0,1\}^n$ (where often $n$ is something like $128$ or $256$).
+
+2. At the $t$-th call to a function such as `rand' to obtain new randomness, the system uses some underlying pseudorandom generator $G':\{0,1\}^n \rightarrow \{0,1\}^{n+m}$ to let $x'\|y = G'(x_{t-1})$, updates $x_t = x'$ and outputs $y$.
+
+There are often some additional complications on how to obtain this seed from some "unpredictable" or "high entropy" observations (which can sometimes include network latency, user typing and mouse patterns, and more), and whether the state of the system is periodically "refreshed" using additional observations.
+:::
+
+
 
 ### Unpredictability: an alternative approach for proving the length extension theorem
 
@@ -160,21 +182,24 @@ The notion that being random is the same as being "unpredictable", as discussed 
 An efficiently computable function $G:\{0,1\}^* \rightarrow \{0,1\}^*$ is *unpredictable* if, for any $n$, $1\le i<\ell(n)$ and polynomially-sized circuit $P$, $$\Pr_{y\leftarrow G(U_n)}[P(y_1,\ldots,y_{i-1}) = y_i] \le \frac12+negl(n).$$ Here, $\ell(n)$ is the length function of $G$ and $y\leftarrow G(U_n)$ denotes that $y$ is a random output of $G$. In other words, no polynomial-sized circuit can predict the next bit of the output of $G$ given the previous bits significantly better than guessing.
 :::
 
-We now show that the condition for a function $G$ to be unpredictable is equivalent to the condition for it to be a secure PRG. The proof is detailed to give you another example of reduction proof.
+We now show that the condition for a function $G$ to be unpredictable is equivalent to the condition for it to be a secure PRG. 
+Please make sure you follow the proof,  because it is an important theorem, and because it is another example of a canonical cryptographic proof.
+
 
 > # {.lemma #unpredequiv}
 Let $G:\{0,1\}^* \rightarrow \{0,1\}^*$ be a function with length function $\ell(n)$, then $G$ is a secure PRG iff it is unpredictable.
 
-> # {.proof data-ref="unpredequiv"}
+::: {.proof data-ref="unpredequiv"}
 For the forward direction, suppose for contradiction that there exists some $i$ and some circuit $P$ can predict $y_i$ given $y_1,\ldots,y_{i-1}$ with probability $p\ge \frac12+\epsilon(n)$ for non-negligible $\epsilon$. Consider the adversary $Eve$ that, given a string $y$, runs the circuit $P$ on $y_1,\ldots,y_{i-1}$, checks if the output is equal to $y_i$ and if so output 1.
->
+
 If $y=G(x)$ for a uniform $x$, then $P$ succeeds with probability $p$. If $y$ is uniformly random, then we can imagine that the bit $y_i$ is generated *after* $P$ finished its calculation. The bit $y_i$ is $0$ or $1$ with equal probability, so $P$ succeeds with probability $\frac12$. Since $Eve$ outputs 1 when $P$ succeeds,$$\left| \Pr[Eve(G(U_n))=1] - \Pr[ Eve(U_\ell)=1] \right|=|p-\frac12|\ge \epsilon(n),$$ a contradiction.
->
+
 For the backward direction, let $G$ be an unpredictable function. Let $H_i$ be the distribution where the first $i$ bits come from $G(U_n)$ while the last $n-i$ bits are all random. Notice that $H_0=U_m$ and $H_n=G(U_n)$, so it suffices to show that $H_{i-1}\cong H_{i}$ for all $i$.
->
+
 Suppose $H_{i-1}\ncong H_{i}$ for some $i$, i.e. there exists some $Eve$ and non-negligible $\epsilon$ such that $$\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Consider the program $P$ that, on input $(y_1,\ldots,y_{i-1})$, picks the bit $\hat y_{i},\ldots, \hat y_n$ uniformly at random. Then, $P$ calls $Eve$ on the generated input. If $Eve$ outputs $1$ then $P$ outputs $\hat y_{i}$, and otherwise it outputs $1-\hat y_{i}$.
->
+
 The string $(y_1,\ldots,y_{i-1}, \hat y_i,\ldots,\hat y_n)$ has the same distribution as $H_{i-1}$. However, conditioned on $\hat y_i=y_i$, the string has distribution equal to $H_{i}$. Let $p$ be the probability that $Eve$ outputs $1$ if $\hat y_i=y_i$ and $q$ be the same probability when $\hat y_i\neq y_i$, then we get $$p-\frac12(p+q)=\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Therefore, the probability $P$ outputs the correct value is equal to $\frac12p+\frac12(1-q)=\frac12+\epsilon(n)2$, a contradiction.
+:::
 
 The definition of unpredictability is useful because many of our candidates for pseudorandom generators appeal to the unpredictability definition in their proofs. For example, the Blum-Blum-Shub generator we will see later in the chapter is proved to be unpredictable if the "quadratic residuosity problem" is hard. It is also nice to know that our intuition at the beginning of the chapter can be formalized.
 
@@ -187,43 +212,43 @@ If the PRG conjecture is true then so is the cipher conjecture.
 
 It turns out that the converse direction is also true, and hence
 these two conjectures are *equivalent*. We will probably not show the
-(quite non-trivial) proof of this fact in this course. (We might show some
-weaker version of this harder direction.)
+(quite non-trivial) proof of this fact in this course. (We might show a
+weaker version though.)
 
 
-> # {.proof data-ref="PRGandcipherthm"}
+::: {.proof data-ref="PRGandcipherthm"}
 Recall that the *one time pad* is a perfectly secure cipher but its only problem was that to encrypt an
 $n+1$ long message it needed an $n+1$ long bit key. Now using a pseudorandom
 generator, we can map an $n$-bit long key into an $n+1$-bit long string that
 looks random enough that we could use it as a key for the one-time pad. That is,
 our cipher will look as follows:
->
+
 $$
 E_k(m) = G(k) \oplus m
 $$
->
+
 and
->
+
 $$
 D_k(c) = G(k) \oplus c
 $$
->
+
 Just like in the one time pad, $D_k(E_k(m)) = G(k) \oplus G(k) \oplus m = m$.
 Moreover, the encryption and decryption algorithms are clearly efficient. We will prove security
 of this encryption by showing the stronger claim that $E_{U_n}(m)\approx U_{n+1}$ for any $m$.
->
+
 Notice that $U_{n+1}=U_{n+1}\oplus m$, as we showed in the security of the one-time pad.
 Suppose that for some non-negligible $\epsilon=\epsilon(n)>0$ there is an efficient adversary $Eve'$ such
 that
->
+
 $$
 \left| {\mathbb{E}}[ Eve'(G(U_n)\oplus m)] - {\mathbb{E}}[ Eve'(U_{n+1}\oplus m) ] \right| \geq \epsilon.
 $$
->
+
 Then the adversary $Eve$ defined as $Eve(y) = Eve'(y\oplus m)$ would be also efficient. Furthermore, if $y$
 is pseudorandom then $Eve(y)=Eve'(G(U_n)\oplus m)$ and if $y$ is uniformly random then $Eve'(U_{n+1}\oplus m)$.
 Then, $Eve$ can distinguish the two distributions with advantage $\epsilon$, a contradiction.
-
+:::
 
 If the PRG outputs $t(n)$ bits instead of $n+1$ then we automatically
 get an encryption scheme with $t(n)$ long message length. In fact, in practice
@@ -237,15 +262,16 @@ pseudorandom generator itself as well as for the encryption scheme that is
 obtained by combining it with the one-time pad.
 
 
-> # {.remark title="Using pseudorandom generators for coin tossing over the phone" #cointossingphonerm}
+::: {.remark title="Using pseudorandom generators for coin tossing over the phone" #cointossingphonerm}
 The following is a cute application of pseudorandom generators. Alice and Bob want to toss a fair coin over the phone. They use a pseudorandom generator $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$.
->
+
 * Alice will send $z\leftarrow_R\{0,1\}^{3n}$ to Bob \
 * Bob picks $s\leftarrow_R\{0,1\}^n$ and with probability $1/2$ sends $G(s)$ (case I) and with probability $1/2$ sends $G(s)\oplus z$ (case II).\
 * Alice then picks a random $b\leftarrow_R\{0,1\}$ and sends it to Bob. \
 * Bob reveals what he sent in the previous stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$.
->
+
 It can be shown that (assuming the protocol is completed) the output is a random coin, which neither Alice or Bob can control or predict with more than negligible advantage over half. (Trying to formalize this and prove it is an excellent exercise.)
+:::
 
 
 ## What do pseudorandom generators actually look like?
