@@ -565,7 +565,7 @@ For a warm-up, let's show the easier fact that we can transform an encryption su
 > # {.theorem title="Security of repetition" #secrepthm}
 Suppose that $(E',D')$ is a
 computationally secret encryption scheme with $n$ bit keys and $n+1$ bit
-messages. Then the scheme $(E,D)$ where $E_{k_1,\ldots,k_t}(m_1,\ldots,m_t)= (E'_{k_1}(m_1),\ldots, E'_{k_T}(m_t))$
+messages. Then the scheme $(E,D)$ where $E_{k_1,\ldots,k_t}(m_1,\ldots,m_t)= (E'_{k_1}(m_1),\ldots, E'_{k_t}(m_t))$
 and $D_{k_1,\ldots,k_t}(c_1,\ldots,c_t)= (D'_{k_1}(c_1),\ldots, D'_{k_t}(c_t))$ is a computationally secret scheme with
 $tn$ bit keys and $t(n+1)$ bit messages.
 
@@ -575,7 +575,7 @@ sometimes wrong, so it's important to prove this formally. Luckily, this is a
 fairly straightforward implication of the fact that computational
 indisinguishability is preserved under many samples. That is, by the security of
 $(E',D')$ we know that for every two messages $m,m' \in {\{0,1\}}^{n+1}$,
-$E_k(m) \approx E_k(m')$ where $k$ is chosen from the distribution $U_n$.
+$E'_k(m) \approx E'_k(m')$ where $k$ is chosen from the distribution $U_n$.
 Therefore by the indistinguishability of many samples lemma, for every two
 tuples $m_1,\ldots,m_t \in {\{0,1\}}^{n+1}$ and $m'_1,\ldots,m'_t\in {\{0,1\}}^{n+1}$,
 >
@@ -677,18 +677,18 @@ repetition scheme we analyzed above. Thus by the triangle inequality we can
 conclude that $E_{U_n}(m) \approx E_{U_n}(m')$ as we desired.
 
 **Proof of claim:** We prove the claim by the hybrid method. For $j\in
-\{0,\ldots, \ell\}$, let $H_j$ be the distribution of ciphertexts where in the
+\{0,\ldots, t\}$, let $H_j$ be the distribution of ciphertexts where in the
 first $j$ blocks we act like $\hat{E}$ and in the last $t-j$ blocks we act like
 $E$. That is, we choose $k_0,\ldots,k_t,k'_1,\ldots,k'_t$ independently at
 random from $U_n$ and the $i^{th}$ block of $H_j$ is equal to
 $E'_{k_{i-1}}(k_i,m_i)$ if $i>j$ and is equal to $E'_{k_{i-1}}(k'_i,m_i)$ if
 $i\leq j$. Clearly, $H_t = \hat{E}_{U_n}(m)$ and $H_0 = E_{U_n}(m)$ and so it
-suffices to prove that for every $j$, $H_j \approx H_{j+1}$. Indeed, let $j \in \{0,\ldots,\ell\}$
+suffices to prove that for every $j$, $H_{j-1} \approx H_j$. Indeed, let $j \in \{1,\ldots,t\}$
 and suppose towards the sake of contradiction that there
 exists an efficient $Eve'$ such that
 
 $$
-\left| {\mathbb{E}}[ Eve'(H_j)] - {\mathbb{E}}[ Eve'(H_{j+1})]\right|\geq \epsilon \;\;(*)
+\left| {\mathbb{E}}[ Eve'(H_{j-1})] - {\mathbb{E}}[ Eve'(H_j)]\right|\geq \epsilon \;\;(*)
 $$
 
 where $\epsilon = \epsilon(n)$ is noticeable. By the averaging principle, there
@@ -696,11 +696,11 @@ exists some fixed choice for
 $k'_1,\ldots,k'_t,k_0,\ldots,k_{j-2},k_j,\ldots,k_t$ such that $(*)$ still
 holds. Note that in this case the only randomness is the choice of
 $k_{j-1}{\leftarrow_{\tiny R}}U_n$ and moreover the first $j-1$ blocks and the last
-$t-j$ blocks of $H_j$ and $H_{j+1}$ would be identical and we can denote them by
+$t-j$ blocks of $H_{j-1}$ and $H_j$ would be identical and we can denote them by
 $\alpha$ and $\beta$ respectively and hence write $(*)$ as
 
 $$
-\left| {\mathbb{E}}_{k_{j-1}}[ Eve'(\alpha,E'_{k_{j-1}}(k_{j},m_j),\beta) - Eve'(\alpha,E'_{k_{j-1}}(k'_j,m_j),\beta) ] \right| \geq \epsilon \;\;(**)
+\left| {\mathbb{E}}_{k_{j-1}}[ Eve'(\alpha,E'_{k_{j-1}}(k_j,m_j),\beta) - Eve'(\alpha,E'_{k_{j-1}}(k'_j,m_j),\beta) ] \right| \geq \epsilon \;\;(**)
 $$
 
 But now consider the adversary $Eve$ that is defined as $Eve(c) =
