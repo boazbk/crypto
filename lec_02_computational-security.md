@@ -104,7 +104,7 @@ implies the analogous condition to perfect secrecy.
 If $(E,D)$ has $t$ bits of Computational secrecy as per  [compsecconcdef](){.ref} then every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
 $2^t-(100\ell+100)$ computational steps, if we choose at random $m\in M$ and a
 random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m$ after
-seeing $E_k(m_b)$ is at most $1/|M|+2^{-t+1}$.
+seeing $E_k(m)$ is at most $1/|M|+2^{-t+1}$.
 
 
 
@@ -139,7 +139,7 @@ and
     $$
 
 Then there exist two messages $m_0,m_1$ and an adversary
-$Eve':{\{0,1\}}^0\rightarrow{\{0,1\}}^\ell$ such that $\Pr_{b{\leftarrow_{\tiny R}}{\{0,1\}},k{\leftarrow_{\tiny R}}{\{0,1\}}^n}[Eve'(E_k(m_b))=m_b ] > 1/2$.
+$Eve':{\{0,1\}}^o\rightarrow{\{0,1\}}^\ell$ such that $\Pr_{b{\leftarrow_{\tiny R}}{\{0,1\}},k{\leftarrow_{\tiny R}}{\{0,1\}}^n}[Eve'(E_k(m_b))=m_b ] > 1/2$.
 
 To adapt this proof to the computational setting and complete the proof of the
 current theorem it suffices  to show that:
@@ -242,8 +242,8 @@ One can have intermediate functions such as $n^{\log n}$ though we will generall
 encounter those.
 To make things clean (and to correspond to standard terminology), we will generally "efficient computation" with _polynomial time_ in $n$ where $n$ is either its input length or the key size (the key size and input length  will always be polynomially related, and so this choice won't matter). We want our algorithms (encryption, decryption, etc.) to be computable in polynomial time, but to require _super polynomial time_ to break.
 
-__Negligible probabilities.__  In cryptography, we care not just about the running time of the adversary but also about their probability of success (which should be as small as possible).
-If $\mu:\N \rightarrow [0,\infty)$ is a function (which we'll often think of as corresponding to the adversary's probability of success or advantage over the trivial probability, as a function of the key size $n$) then we say that $\mu(n)$ is *negligible* if it's smaller than every polynomial.  Our security definitions will have the following form:
+__Negligible probabilities.__ In cryptography, we care not just about the running time of the adversary but also about their probability of success (which should be as small as possible).
+If $\mu:\N \rightarrow [0,\infty)$ is a function (which we'll often think of as corresponding to the adversary's probability of success or advantage over the trivial probability, as a function of the key size $n$) then we say that $\mu(n)$ is *negligible* if it's smaller than every inverse polynomial.  Our security definitions will have the following form:
 
 >_"Scheme $S$ is secure if for every polynomial $p(\cdot)$ and $p(n)$ time adversary $Eve$, there is some negligible function $\mu$ such that the probability that $Eve$ succeeds in the security game for $S$ is at most $trivial + \mu(n)$_"
 
@@ -261,7 +261,7 @@ The following exercise provides a  good way to get some comfort with this defini
 ::: {.exercise title="Negligible functions properties" #negligible}
 1. Let $\mu:\N \rightarrow [0,\infty)$ be a negligible function. Prove that for every polynomials $p,q:\R \rightarrow \R$ with non-negative coefficients such that $p(0) = 0$, the function $\mu':\N \rightarrow [0,\infty)$ defined as $\mu'(n) = p(\mu(q(n)))$ is negligible. 
 
-2. Let $\mu:\N \rightarrow \R$. Prove that $\mu$ is negligible if and only if for every constant $c$, $\lim_{n \rightarrow \infty} n^c \mu(n) = 0$.
+2. Let $\mu:\N \rightarrow [0,\infty)$. Prove that $\mu$ is negligible if and only if for every constant $c$, $\lim_{n \rightarrow \infty} n^c \mu(n) = 0$.
 :::
 
 
@@ -505,14 +505,14 @@ $(X_1,\ldots,X_\ell) \approx_{T-10\ell n,\ell\epsilon} (Y_1,\ldots,Y_\ell)$.
 
 > # {.proof data-ref="compindrepthm"}
 For every $i\in\{0,\ldots,\ell\}$ we define $H_i$ to be the
-distribution $(X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell)$. Clearly $H_0 = (X_1,\ldots,X_\ell)$ and $H_\ell = (Y_1,\ldots,Y_\ell)$. We will prove that for
-every $i$, $H_i \approx_{T-10\ell n,\epsilon} H_{i+1}$, and the proof will then
+distribution $(X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell)$. Clearly $H_\ell = (X_1,\ldots,X_\ell)$ and $H_0 = (Y_1,\ldots,Y_\ell)$. We will prove that for
+every $i$, $H_{i-1} \approx_{T-10\ell n,\epsilon} H_i$, and the proof will then
 follow from the triangle inequality (can you see why?). Indeed, suppose towards
-the sake of contradiction that there was some $i\in \{0,\ldots,\ell\}$ and some
+the sake of contradiction that there was some $i\in \{1,\ldots,\ell\}$ and some
 $T-10\ell n$-time $Eve':{\{0,1\}}^{n\ell}\rightarrow{\{0,1\}}$ such that
 >
 $$
- \left| {\mathbb{E}}[ Eve'(H_i) ] - {\mathbb{E}}[ Eve'(H_{i+1}) ] \right|  > \epsilon\;.
+ \left| {\mathbb{E}}[ Eve'(H_{i-1}) ] - {\mathbb{E}}[ Eve'(H_i) ] \right|  > \epsilon\;.
 $$
 >
 In other words
@@ -565,7 +565,7 @@ For a warm-up, let's show the easier fact that we can transform an encryption su
 > # {.theorem title="Security of repetition" #secrepthm}
 Suppose that $(E',D')$ is a
 computationally secret encryption scheme with $n$ bit keys and $n+1$ bit
-messages. Then the scheme $(E,D)$ where $E_{k_1,\ldots,k_t}(m_1,\ldots,m_t)= (E'_{k_1}(m_1),\ldots, E'_{k_T}(m_t))$
+messages. Then the scheme $(E,D)$ where $E_{k_1,\ldots,k_t}(m_1,\ldots,m_t)= (E'_{k_1}(m_1),\ldots, E'_{k_t}(m_t))$
 and $D_{k_1,\ldots,k_t}(c_1,\ldots,c_t)= (D'_{k_1}(c_1),\ldots, D'_{k_t}(c_t))$ is a computationally secret scheme with
 $tn$ bit keys and $t(n+1)$ bit messages.
 
@@ -575,7 +575,7 @@ sometimes wrong, so it's important to prove this formally. Luckily, this is a
 fairly straightforward implication of the fact that computational
 indisinguishability is preserved under many samples. That is, by the security of
 $(E',D')$ we know that for every two messages $m,m' \in {\{0,1\}}^{n+1}$,
-$E_k(m) \approx E_k(m')$ where $k$ is chosen from the distribution $U_n$.
+$E'_k(m) \approx E'_k(m')$ where $k$ is chosen from the distribution $U_n$.
 Therefore by the indistinguishability of many samples lemma, for every two
 tuples $m_1,\ldots,m_t \in {\{0,1\}}^{n+1}$ and $m'_1,\ldots,m'_t\in {\{0,1\}}^{n+1}$,
 >
@@ -677,18 +677,18 @@ repetition scheme we analyzed above. Thus by the triangle inequality we can
 conclude that $E_{U_n}(m) \approx E_{U_n}(m')$ as we desired.
 
 **Proof of claim:** We prove the claim by the hybrid method. For $j\in
-\{0,\ldots, \ell\}$, let $H_j$ be the distribution of ciphertexts where in the
+\{0,\ldots, t\}$, let $H_j$ be the distribution of ciphertexts where in the
 first $j$ blocks we act like $\hat{E}$ and in the last $t-j$ blocks we act like
 $E$. That is, we choose $k_0,\ldots,k_t,k'_1,\ldots,k'_t$ independently at
 random from $U_n$ and the $i^{th}$ block of $H_j$ is equal to
 $E'_{k_{i-1}}(k_i,m_i)$ if $i>j$ and is equal to $E'_{k_{i-1}}(k'_i,m_i)$ if
 $i\leq j$. Clearly, $H_t = \hat{E}_{U_n}(m)$ and $H_0 = E_{U_n}(m)$ and so it
-suffices to prove that for every $j$, $H_j \approx H_{j+1}$. Indeed, let $j \in \{0,\ldots,\ell\}$
+suffices to prove that for every $j$, $H_{j-1} \approx H_j$. Indeed, let $j \in \{1,\ldots,t\}$
 and suppose towards the sake of contradiction that there
 exists an efficient $Eve'$ such that
 
 $$
-\left| {\mathbb{E}}[ Eve'(H_j)] - {\mathbb{E}}[ Eve'(H_{j+1})]\right|\geq \epsilon \;\;(*)
+\left| {\mathbb{E}}[ Eve'(H_{j-1})] - {\mathbb{E}}[ Eve'(H_j)]\right|\geq \epsilon \;\;(*)
 $$
 
 where $\epsilon = \epsilon(n)$ is noticeable. By the averaging principle, there
@@ -696,11 +696,11 @@ exists some fixed choice for
 $k'_1,\ldots,k'_t,k_0,\ldots,k_{j-2},k_j,\ldots,k_t$ such that $(*)$ still
 holds. Note that in this case the only randomness is the choice of
 $k_{j-1}{\leftarrow_{\tiny R}}U_n$ and moreover the first $j-1$ blocks and the last
-$t-j$ blocks of $H_j$ and $H_{j+1}$ would be identical and we can denote them by
+$t-j$ blocks of $H_{j-1}$ and $H_j$ would be identical and we can denote them by
 $\alpha$ and $\beta$ respectively and hence write $(*)$ as
 
 $$
-\left| {\mathbb{E}}_{k_{j-1}}[ Eve'(\alpha,E'_{k_{j-1}}(k_{j},m_j),\beta) - Eve'(\alpha,E'_{k_{j-1}}(k'_j,m_j),\beta) ] \right| \geq \epsilon \;\;(**)
+\left| {\mathbb{E}}_{k_{j-1}}[ Eve'(\alpha,E'_{k_{j-1}}(k_j,m_j),\beta) - Eve'(\alpha,E'_{k_{j-1}}(k'_j,m_j),\beta) ] \right| \geq \epsilon \;\;(**)
 $$
 
 But now consider the adversary $Eve$ that is defined as $Eve(c) =
@@ -723,10 +723,10 @@ For concreteness sake let us give a precise definition of what it means for a fu
 
 * If you have taken any course on computational complexity (such as Harvard CS 121), then this is the model of Boolean circuits, except that we also allow randomization.
 
-* If you have not taken such a course, you might simple take it on faith that it is possible to model what it means for an algorithm to be able to map an input $x$ into an output $f(x)$ using $T$ "elementary operations".
+* If you have not taken such a course, you might simply take it on faith that it is possible to model what it means for an algorithm to be able to map an input $x$ into an output $f(x)$ using $T$ "elementary operations".
 
 
-In both cases you might want to skip this appendix and only return to it if you find something confusing..
+In both cases you might want to skip this appendix and only return to it if you find something confusing.
 
 The model we use is a Boolean circuit that also has a $RAND$ gate that outputs a random bit. 
 We could use as the basic set of gates the standard $AND$, $OR$ and $NOT$ but for simplicity we use the one-element set $NAND$. 
