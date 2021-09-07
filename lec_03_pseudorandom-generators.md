@@ -6,11 +6,11 @@ chapternum: "3"
 
 
 
-# Pseudorandomness[^credit]
+# Pseudorandomness
 
 
 
-__Reading:__ Katz-Lindell Section 3.3, Boneh-Shoup Chapter 3
+__Reading:__ Katz-Lindell Section 3.3, Boneh-Shoup Chapter 3[^credit]
 
 [^credit]: Edited and expanded by Richard Xu in Spring 2020.
 
