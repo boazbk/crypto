@@ -723,10 +723,10 @@ For concreteness sake let us give a precise definition of what it means for a fu
 
 * If you have taken any course on computational complexity (such as Harvard CS 121), then this is the model of Boolean circuits, except that we also allow randomization.
 
-* If you have not taken such a course, you might simple take it on faith that it is possible to model what it means for an algorithm to be able to map an input $x$ into an output $f(x)$ using $T$ "elementary operations".
+* If you have not taken such a course, you might simply take it on faith that it is possible to model what it means for an algorithm to be able to map an input $x$ into an output $f(x)$ using $T$ "elementary operations".
 
 
-In both cases you might want to skip this appendix and only return to it if you find something confusing..
+In both cases you might want to skip this appendix and only return to it if you find something confusing.
 
 The model we use is a Boolean circuit that also has a $RAND$ gate that outputs a random bit. 
 We could use as the basic set of gates the standard $AND$, $OR$ and $NOT$ but for simplicity we use the one-element set $NAND$. 
