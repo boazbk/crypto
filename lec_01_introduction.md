@@ -253,7 +253,7 @@ Here is an attempt at such a definition:
 
 
 > # {.definition title="Security of encryption: first attempt" #securefirstattemptdef}
-An encyption scheme $(E,D)$ is
+An enrcyption scheme $(E,D)$ is
 _$n$-secure_ if no matter what method Eve employs, the probability that she
 can recover the true key $k$ from the ciphertext $c$ is at most $2^{-n}$.
 
@@ -308,7 +308,7 @@ So, if before the definition was too weak, the new definition is too strong and 
 The problem is that of course we could guess a fixed message with probability one, so perhaps we could try to consider a definition with a _random_ message. That is:
 
 > # {.definition title="Security of encryption: third attempt" #securethirdattemptdef}
-An encyption scheme $(E,D)$  is _$n$-secure_ if no matter what method Eve employs, if $m$ is chosen at random
+An enrcyption scheme $(E,D)$  is _$n$-secure_ if no matter what method Eve employs, if $m$ is chosen at random
 from $\{0,1\}^\ell$, the probability that she can recover $m$ from the ciphertext
 $c=E_k(m)$ is at most $2^{-n}$.
 
