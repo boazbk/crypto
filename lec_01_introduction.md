@@ -381,7 +381,7 @@ But this can be turned into an attacker $Eve'$ such that for $b \leftarrow_R \{0
 the probability that $Eve'(E_k(m_b))=m_b$ is larger than $1/2$.
 Indeed, we can define $Eve'(c)$ to output $m_1$ if $Eve(c)=m_1$ and otherwise
 output a random message in $\{ m_0 , m_1 \}$.
-The probability that $Eve'(y)$ equals $m_1$ is higher when $c=E_k(m_1)$ than when $c=E_k(m_0)$, and since
+The probability that $Eve'(c)$ equals $m_1$ is higher when $c=E_k(m_1)$ than when $c=E_k(m_0)$, and since
 $Eve'$ outputs either $m_0$ or $m_1$, this means that the probability
 that $Eve'(E_k(m_b))=m_b$ is larger than $1/2$. (Can you see why?)
 :::
