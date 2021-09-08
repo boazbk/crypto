@@ -22,19 +22,23 @@ scheme that uses, say, a $128$ bit key, with a $129$ bit message:
 
 ```python
 from itertools import product # Import an iterator for cartesian products
+from random import choice # choose random element of list
 
 # Gets ciphertext as input and two potential plaintexts
-# Positive return value means first is more likely,
-# negative means second is more likely,
-# 0 means both have same likelihood.
-#
+# Returns most likely plaintext 
 # We assume we have access to the function Encrypt(key,ciphertext)
 def Distinguish(ciphertext,plaintext1,plaintext2):
     for key in product([0,1], repeat = 128): # Iterate over all possible keys of length 128
         if Encrypt(key, plaintext1)==ciphertext:
             return plaintext1
-    return plaintext2
+        if Encrypt(key, plaintext2)==ciphertext:
+            return plaintext2
+    return choice([plaintext1,plaintext2])
 ```
+
+The program `Distinguish` will break any $128$-bit key and $129$-bit message encryption `Encrypt', in the sense that there exist  a pair of messages
+$m_0,m_1$ such that `Distinguish'$(E_k(m_b),m_0,m_1)=m_b$ with probability at least $0.75$ over $k \leftarrow_R \{0,1\}^n$ and $b \leftarrow_R \{0,1\}$.
+
 
 Now, generating, distributing, and protecting huge keys causes immense
 logistical problems, which is why almost all encryption schemes used in practice
