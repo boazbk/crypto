@@ -475,7 +475,7 @@ As we did with computational secrecy, we can also define an asymptotic definitio
 Let $m:\N \rightarrow \N$ be some function and let $\{ X_n \}_{n\in \N}$ and $\{ Y_n \}_{n\in \N}$ be two sequences of 
 distributions such that $X_n$ and $Y_n$ are distributions over $\{0,1\}^{m(n)}$.
 
-We say that $\{ X_n \}_{n\in \N} and $\{ Y_n \}_{n\in\N}$ are _computationally indistinguishable_, denoted by $\{ X_n \}_{n\in\N} \approx \{ Y_n \}_{n\in\N}$, if for every polynomial $p:\N \rightarrow \N$ and sufficiently large $n$,
+We say that $\{ X_n \}_{n\in \N}$ and $\{ Y_n \}_{n\in\N}$ are _computationally indistinguishable_, denoted by $\{ X_n \}_{n\in\N} \approx \{ Y_n \}_{n\in\N}$, if for every polynomial $p:\N \rightarrow \N$ and sufficiently large $n$,
 $X_n \approx_{p(n), 1/p(n)} Y_n$.
 :::
 
