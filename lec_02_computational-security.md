@@ -414,17 +414,16 @@ indistinguishable* more broadly:
 Let $X$ and $Y$ be two
 distributions over ${\{0,1\}}^m$. We say that $X$ and $Y$ are
 $(T,\epsilon)$*-computationally indistinguishable*, denoted by $X
-\approx_{T,\epsilon} Y$, if for every function $Eve$ computable with at most $T$
+\approx_{T,\epsilon} Y$, if for every function $D:\{0,1\}^m \rightarrow \{0,1\}$ computable with at most $T$
 operations,
 
 $$
-| \Pr[ Eve(X) = 1 ] - \Pr[ Eve(Y) = 1 ] | \leq \epsilon \;.
+| \Pr[ D(X) = 1 ] - \Pr[ D(Y) = 1 ] | \leq \epsilon \;.
 $$
 :::
 
 ::: {.solvedexercise title="Computational Indistinguishability game" #compindex}
-Prove that for every $X,Y$ and $T,\epsilon$ as above $X \approx_{T,\epsilon} Y$ if and only if for every $\leq T$-operation computable $Eve$, the probability that $Eve$ wins in
-the following game is at most $1/2 + \epsilon/2$:
+Prove that for every $X,Y$ and $T,\epsilon$ as above $X \approx_{T,\epsilon} Y$ if and only if for every $\leq T$-operation computable $Eve$, the probability that $Eve$ wins in the following game is at most $1/2 + \epsilon/2$:
 
 1. We pick $b \leftarrow_R \{0,1\}$.
 
