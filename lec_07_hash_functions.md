@@ -9,7 +9,7 @@ chapternum: "7"
 
 
 We have seen pseudorandom generators, functions and permutations, as well as Message Authentication codes, CPA and CCA secure
-encryptions. This week we will talk about cryptographic hash functions and some of their magical properties. We motivate this by the _Bitcoin_
+encryptions. This week, we will talk about cryptographic hash functions and some of their magical properties. We motivate this by the _Bitcoin_
 cryptocurrency. As usual our discussion will be highly abstract and idealized, and any resemblance to real cryptocurrencies, living or dead,
 is purely coincidental.
 
