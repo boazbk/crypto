@@ -24,13 +24,11 @@ scheme that uses, say, a $128$ bit key, with a $129$ bit message:
 from itertools import product # Import an iterator for cartesian products
 
 # Gets ciphertext as input and two potential plaintexts
-# Positive return value means first is more likely,
-# negative means second is more likely,
-# 0 means both have same likelihood.
+# Returns the correct plaintext, assuming the two are the only possibilities.
 #
 # We assume we have access to the function Encrypt(key,ciphertext)
 def Distinguish(ciphertext,plaintext1,plaintext2):
-    for key in product([0,1], repeat = 128): # Iterate over all possible keys of lenght 128
+    for key in product([0,1], repeat = 128): # Iterate over all possible keys of length 128
         if Encrypt(key, plaintext1)==ciphertext:
             return plaintext1
     return plaintext2
@@ -157,7 +155,7 @@ As the world's most annoying saying goes, doing this is an excellent exercise fo
 
 The second item  is obtained by looking at the definition of $Eve'$ from that proof. On input $c$, $Eve'$
 computed $m=Eve(c)$ (which costs $T$ operations), checked if $m=m_0$
-(which costs, say, at most $5\ell$ operations), and then outputted either $1$ or a
+(which costs, say, at most $100\ell$ operations), and then outputted either $1$ or a
 random bit (which is a constant, say at most $100$ operations).
 :::
 
@@ -186,7 +184,7 @@ important point that it deserves repeating:
 >   a transformation from an adversary that breaks $S$ into an adversary that
 >   breaks $S'$_
 
-For computational secrecy, we will always want that $Eve'$ will be efficient if
+For computational secrecy, we will always want $Eve'$ to be efficient if
 $Eve$ is, and that will usually be the case because $Eve'$ will simply use $Eve$
 as a black box, which it will not invoke too many times, and addition will use
 some polynomial time preprocessing and postprocessing. The more challenging
@@ -201,7 +199,7 @@ parts of such proofs are typically:
 
 ![We show that the security of $S'$ implies the security of $S$ by transforming an adversary $Eve$ breaking $S$ into an adversary $Eve'$ breaking $S'$.](../figure/reduction.jpg){ #reductiongenfig .margin  }
 
-Note that, just like in the context of NP completeness or uncomputability reductions, security reductions work _backwards_.
+Note that, just like in the context of NP-completeness or uncomputability reductions, security reductions work _backwards_.
 That is, we construct the scheme $S$ based on the scheme $S'$, but then prove that we can transform an algorithm breaking $S$ into an algorithm breaking $S'$.
 Just like in computational complexity, it can sometimes be hard to keep track of the direction of the reduction.
 In fact, cryptographic reductions can be even subtler, since they involve an interplay of several entities (for example, sender, receiver, and adversary) and probabilistic choices (e.g., over the message to be sent and the key).
@@ -495,7 +493,7 @@ distribution $(X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell)$. Clearly $H_0 = (X_1,\ldot
 every $i$, $H_i \approx_{T-10\ell n,\epsilon} H_{i+1}$, and the proof will then
 follow from the triangle inequality (can you see why?). Indeed, suppose towards
 the sake of contradiction that there was some $i\in \{0,\ldots,\ell\}$ and some
-$T-10\ell n$-time $Eve's:{\{0,1\}}^{n\ell}\rightarrow{\{0,1\}}$ such that
+$T-10\ell n$ time $Eve's:{\{0,1\}}^{n\ell}\rightarrow{\{0,1\}}$ such that
 >
 $$
  \left| {\mathbb{E}}[ Eve'(H_i) ] - {\mathbb{E}}[ Eve(H_{i+1}) ] \right|  > \epsilon\;.
@@ -545,13 +543,13 @@ cryptography, and so it is important to get comfortable with it.
 ## The Length Extension Theorem
 
 We now turn to show the _length extension theorem_, stating that if we have an encryption for $n+1$-length messages with $n$-length keys, then we can obtain an encryption with $p(n)$-length messages for every polynomial $p(n)$.
-For a warm-up, let's show the easier fact that we can transform an encryption such as above, into one that has keys of length $tn$ and messages of length $t(n+1)$ for every integer $t$:
+For a warm-up, let's show the easier fact that we can transform an encryption such as the above, into one that has keys of length $tn$ and messages of length $t(n+1)$ for every integer $t$:
 
 
 > # {.theorem title="Security of repetition" #secrepthm}
 Suppose that $(E',D')$ is a
 computationally secret encryption scheme with $n$ bit keys and $n+1$ bit
-messages. Then the scheme $(E,D)$ where $E_{k_1,\ldots,k_t}(m_1,\ldots,m_t)= (E'_{k_1}(m_1),\ldots, E'_{k_T}(m_t))$
+messages. Then the scheme $(E,D)$ where $E_{k_1,\ldots,k_t}(m_1,\ldots,m_t)= (E'_{k_1}(m_1),\ldots, E'_{k_t}(m_t))$
 and $D_{k_1,\ldots,k_t}(c_1,\ldots,c_t)= (D'_{k_1}(c_1),\ldots, D'_{k_t}(c_t))$ is a computationally secret scheme with
 $tn$ bit keys and $t(n+1)$ bit messages.
 
@@ -574,7 +572,7 @@ condition that $(E,D)$ is computationally secret.
 
 We can now prove  the full length extension theorem. Before doing so, we will need to generalize the notion of an encryption scheme to allow a _randomized encryption scheme_.
 That is, we will consider encryption schemes where the encryption algorithm can "toss coins" in its computation.
-There is a crucial difference between key material and such "as hoc" randomness.
+There is a crucial difference between key material and such "ad hoc" randomness.
 Keys need to be not only chosen at random, but also shared in advance between the sender and receiver, and stored securely throughout their lifetime.
 The "coin tosses" used by a randomized encryption scheme are generated "on the fly" and are not known to the receiver, nor do they need to be stored long term by the sender.
 So, allowing such randomized encryption does not make a difference for most applications of encryption schemes.
@@ -640,10 +638,10 @@ $$
 Note that $\hat{E}$ is not a valid encryption scheme since it's not at all clear
 there is a decryption algorithm for it. It is just an hypothetical tool we use
 for the proof.
-Since both $E$ and $\hat{E}$ are randomized encryption schemes (with $E$ using $(t-1)n$ bits of randomness for the ephemeral keys $k_1,\ldots,k_{t-1}$ and $\hat{E}$ using $(2t-1)n$ bits of randomness for the ephemeral keys $k_1,\ldots,k_t,k'_2,\ldots,k'_t$), we can also write
+Since both $E$ and $\hat{E}$ are randomized encryption schemes (with $E$ using $(t-1)n$ bits of randomness for the ephemeral keys $k_1,\ldots,k_{t-1}$ and $\hat{E}$ using $(2t-1)n$ bits of randomness for the ephemeral keys $k_1,\ldots,k_{t-1}, k'_1,k'_2,\ldots,k'_t$), we can also write
 [lengthextendclaimeq](){.eqref} as
 $$
-E_{U_n}(m; U'_{tn}) \approx \hat{E}_{U_n}(m; U'_{(2t-1)n})  
+E_{U_n}(m; U'_{(t-1)n}) \approx \hat{E}_{U_n}(m; U'_{(2t-1)n})  
 $$
 where we use $U'_\ell$ to denote a random variable that is chosen uniformly at random from $\{0,1\}^\ell$ and independently from the choice of $U_n$ (which is chosen uniformly at random from $\{0,1\}^n$).
 >
@@ -678,7 +676,7 @@ $t-j$ blocks of $H_j$ and $H_{j+1}$ would be identical and we can denote them by
 $\alpha$ and $\beta$ respectively and hence write $(*)$ as
 >
 $$
-\left| {\mathbb{E}}_{k_{j-1}}[ Eve'(\alpha,E'_{k_{j-1}}(k_{j},m_j),\beta) - Eve'(\alpha,E'_{k_{j-1}}(k'_j,m_j),\beta) ] \right| \geq \epsilon \;\;(**)
+\left| {\mathbb{E}}_{k_{j-1}}[ Eve'(\alpha,E'_{k_{j-1}}(k_{j},m_j),\beta) - Eve'(\alpha,E'_{k_{j-1}}(k'_j,m_j),\beta) ] \right| \geq \epsilon \;\;(**).
 $$
 >
 But now consider the adversary $Eve$ that is defined as $Eve(c) =
@@ -690,7 +688,7 @@ contradicting the security of $(E',D')$. This concludes the proof of the claim a
 
 
 [^7]: The astute reader might note that the key $k_t$ is actually not used
-anywhere in the encryption nor decryption and hence we could encrypt $n$ more
+anywhere in the encryption or decryption and hence we could encrypt $n$ more
 bits of the message instead in this final round. We used the current description
 for the sake of symmetry and simplicity of exposition.
 
@@ -701,10 +699,10 @@ For concreteness sake let us give a precise definition of what it means for a fu
 
 * If you have taken any course on computational complexity (such as Harvard CS 121), then this is the model of Boolean circuits, except that we also allow randomization.
 
-* If you have not taken such a course, you might simple take it on faith that it is possible to model what it means for an algorithm to be able to map an input $x$ into an output $f(x)$ using $T$ "elementary operations".
+* If you have not taken such a course, you might simply take it on faith that it is possible to model what it means for an algorithm to be able to map an input $x$ into an output $f(x)$ using $T$ "elementary operations".
 
 
-In both cases you might want to skip this appendix and only return to it if you find something confusing..
+In both cases you might want to skip this appendix and only return to it if you find something confusing.
 
 The model we use is a Boolean circuit that also has a $RAND$ gate that outputs a random bit. 
 We could use as the basic set of gates the standard $AND$, $OR$ and $NOT$ but for simplicity we use the one-element set $NAND$. 
