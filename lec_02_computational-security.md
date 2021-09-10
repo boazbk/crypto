@@ -244,7 +244,7 @@ Hence in this course, whenever you hear the term "super polynomial", you can equ
 These are not all the theoretically possible running times.
 One can have intermediate functions such as $n^{\log n}$ though we will generally not
 encounter those.
-To make things clean (and to correspond to standard terminology), we will generally "efficient computation" with _polynomial time_ in $n$ where $n$ is either its input length or the key size (the key size and input length  will always be polynomially related, and so this choice won't matter). We want our algorithms (encryption, decryption, etc.) to be computable in polynomial time, but to require _super polynomial time_ to break.
+To make things clean (and to correspond to standard terminology), we will generally associate "efficient computation" with _polynomial time_ in $n$ where $n$ is either its input length or the key size (the key size and input length  will always be polynomially related, and so this choice won't matter). We want our algorithms (encryption, decryption, etc.) to be computable in polynomial time, but to require _super polynomial time_ to break.
 
 __Negligible probabilities.__ In cryptography, we care not just about the running time of the adversary but also about their probability of success (which should be as small as possible).
 If $\mu:\N \rightarrow [0,\infty)$ is a function (which we'll often think of as corresponding to the adversary's probability of success or advantage over the trivial probability, as a function of the key size $n$) then we say that $\mu(n)$ is *negligible* if it's smaller than the inverse of every (positive) polynomial.  Our security definitions will have the following form:
