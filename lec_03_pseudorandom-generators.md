@@ -78,7 +78,7 @@ Another way to say it, is that a polynomial-time computable function $G$ mapping
 
 > # { .pause }
 This definition (as is often the case in cryptography) is a bit long, but the concept of a pseudorandom generator is central to cryptography, and so you should take your time and make sure you understand it.
-Intuitively, a function $G$ is a pseudorandom generator if __(1)__ it expands its input (mapping $n$ bits to $n+1$ or more) and __(2)__ we cannot distinguish between the output $G(x)$ for $x$ is a short (i.e., $n$ bit long) random string, often known as the _seed_ of the pseudorandom genertor, and a truly random long (i.e., of length $\ell(n)$) string chosen uniformly at random from $\{0,1\}^{\ell(n)}$. 
+Intuitively, a function $G$ is a pseudorandom generator if __(1)__ it expands its input (mapping $n$ bits to $n+1$ or more) and __(2)__ we cannot distinguish between the output $G(x)$ for $x$ is a short (i.e., $n$ bit long) random string, often known as the _seed_ of the pseudorandom generator, and a truly random long (i.e., of length $\ell(n)$) string chosen uniformly at random from $\{0,1\}^{\ell(n)}$. 
 
 
 ![A function $G:\{0,1\}^n \rightarrow \{0,1\}^{\ell(n)}$ is a _pseuaodrandom generator_ if $G(x)$ for a random short $x \leftarrow_R \{0,1\}^n$ is computationally indistinguishable from a long truly random $y \leftarrow_R \{0,1\}^{\ell(n)}$.](../figure/prg_def.png){#prgdeffig}
