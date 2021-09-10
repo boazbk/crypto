@@ -56,7 +56,7 @@ A function $G:{\{0,1\}}^n\rightarrow{\{0,1\}}^\ell$ is a $(T,\epsilon)$ *pseudor
 That is, $G$ is a $(T,\epsilon)$ pseudorandom generators if no circuit of at most $T$ gates can distinguish with bias better than $\epsilon$ between the output of $G$ (on a random input) and a uniformly random string of the same length.
 Spelling this out fully, this means that for every function $D:\{0,1\}^\ell \rightarrow \{0,1\}$ computable using at most $T$ operations, 
 
-$$\left| \Pr_{x \leftarrow_R \{0,1\}^n}[ D(G(x))=1 ] - \Pr_{y \leftarrow_R \{0,1\}^\ell}[ D(y)=1 \right| < \epsilon\;.$$
+$$\left| \Pr_{x \leftarrow_R \{0,1\}^n}[ D(G(x))=1 ] - \Pr_{y \leftarrow_R \{0,1\}^\ell}[ D(y)=1 ] \right| < \epsilon\;.$$
 
 
 As we did for the case of encryption, we will typically use _asymptotic terms_ to describe cryptographic pseudorandom generator. We say that $G$ is simply a pseudorandom generator if it is efficiently computable and it is 
