@@ -794,6 +794,7 @@ For concreteness sake let us give a precise definition of what it means for a fu
 * If you have not taken such a course, you might simply take it on faith that it is possible to model what it means for an algorithm to be able to map an input $x$ into an output $f(x)$ using $T$ "elementary operations".
 
 
+
 In both cases you might want to skip this appendix and only return to it if you find something confusing.
 
 The model we use is a Boolean circuit that also has a $RAND$ gate that outputs a random bit. 
