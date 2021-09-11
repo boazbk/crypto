@@ -105,7 +105,7 @@ See also [this interview with Sir Harry Hinsley](http://www.cix.co.uk/~klockston
 
 ## Defining encryptions
 
-Many of the troubles that cryptosystem designers faced over history (and still face!) can be attributed to not properly defining or understanding what are the goals they want to achieve in the first place.
+Many of the troubles that cryptosystem designers faced over history (and still face!) can be attributed to not properly defining or understanding what the goals they want to achieve are in the first place.
 We now turn to actually defining what is an encryption scheme. Clearly we can encode every message as a string of bits, i.e., an element of $\{0,1\}^\ell$ for
 some $\ell$. Similarly, we can encode the _key_ as a string of bits as well, i.e., an element of $\{0,1\}^n$ for some $n$. Thus, we can think of an encryption scheme as composed of two functions. The _encryption function_ $E$ maps a secret key $k \in \{0,1\}^n$ and a message (known also as _plaintext_) $m\in \{0,1\}^\ell$ into a _ciphertext_ $c \in \{0,1\}^L$ for some $L$. We write this as $c = E_k(m)$.
 The _decryption function_ $D$ does the reverse operation, mapping the secret key $k$ and the ciphertext $c$ back into the plaintext message $m$, which we write as $m = D_k(c)$.
@@ -159,11 +159,11 @@ For simplicity, we denote the space of possible keys as $\{0,1\}^n$ and the spac
 
 
 [encryptiondef](){.ref} says nothing about security and does not rule out trivial "encryption" schemes such as the scheme $E_k(m) = m$ that simply outputs the plaintext as is.
-Defining security is tricky, and we'll take it one step at a time, but lets start by pondering what is secret and what is not.
+Defining security is tricky, and we'll take it one step at a time, but let's start by pondering what is secret and what is not.
 A priori we are thinking of an attacker Eve that simply sees the ciphertext $c=E_k(m)$ and does not know anything on how it was generated. So, it does not know the details of $E$ and $D$, and certainly does not know the secret key $k$.
-However, many of the troubles past cryptosystems went through was caused by them relying on "security through obscurity"--- trusting that the fact their _methods_ are not known to their enemy will protect them from being broken.
+However, many of the troubles past cryptosystems went through were caused by them relying on "security through obscurity"--- trusting that the fact their _methods_ are not known to their enemy will protect them from being broken.
 This is a faulty assumption - if you reuse a method again and again (even with a different key each time) then eventually your adversaries will figure out what you are doing.
-And if Alice and Bob meet frequently in a secure location to decide on a new method, they might as well take the opportunity to exchange their secret messages..
+And if Alice and Bob meet frequently in a secure location to decide on a new method, they might as well take the opportunity to exchange their secret messages...
 
 These considerations led Auguste Kerckhoffs in 1883 to state the following principle:
 
@@ -217,11 +217,11 @@ See [XKCD's take](http://www.xkcd.com/424/) on that incident.
 
 
 In 2012 two separate teams of researchers scanned a large number of RSA keys on the web and found out that about 4 percent of them are easy to break.
-The main issue were devices such as routers, internet-connected printers and such. These devices sometimes run variants of Linux- a desktop operating system- but without a hard drive, mouse or keyboard, they don't have access to many of the entropy sources that desktop have. Coupled with some good old fashioned ignorance of cryptography and software bugs, this led to many keys that are downright trivial
+The main issue were devices such as routers, internet-connected printers and such. These devices sometimes run variants of Linux- a desktop operating system- but without a hard drive, mouse or keyboard, they don't have access to many of the entropy sources that desktops have. Coupled with some good old fashioned ignorance of cryptography and software bugs, this led to many keys that are downright trivial
 to break, see [this blog post](https://freedom-to-tinker.com/blog/nadiah/new-research-theres-no-need-panic-over-factorable-keys-just-mind-your-ps-and-qs/) and [this web page](https://factorable.net/) for more details.
 
-After the entropy is collected and then "purified" or "extracted" to a uniformly random string that is, say, a few hundred bits long, we often need to "expand" it into a longer string that is also uniform (or at least looks like that for all practical purposes). We will discuss how to go about that in the next lecture. This step has its weaknesses too and in particular the Snowden documents, combined with observations of Shumow and Ferguson, strongly suggest that the NSA has deliberately inserted a _trapdoor_ in one of the pseudorandom generators published by the National Institute of Standards and Technologies (NIST).
-Fortunately, this generator wasn't widely adapted but apparently the NSA did pay 10 million dollars to RSA security so the latter would make this generator their default option in their products.
+After the entropy is collected and then "purified" or "extracted" to a uniformly random string that is, say, a few hundred bits long, we often need to "expand" it into a longer string that is also uniform (or at least looks like that for all practical purposes). We will discuss how to go about that in the next lecture. This step has its weaknesses too, and in particular the Snowden documents, combined with observations of Shumow and Ferguson, strongly suggest that the NSA has deliberately inserted a _trapdoor_ in one of the pseudorandom generators published by the National Institute of Standards and Technologies (NIST).
+Fortunately, this generator wasn't widely adopted, but apparently the NSA did pay 10 million dollars to RSA security so the latter would make this generator their default option in their products.
 
 
 ## Defining the secrecy requirement.
@@ -260,7 +260,7 @@ can recover the true key $k$ from the ciphertext $c$ is at most $2^{-n}$.
 ::: { .pause }
 When you see a mathematical definition that attempts to model some real-life phenomenon such as security, you should pause and ask yourself:
 
-1. Do I understand mathematically what is the definition stating? \
+1. Do I understand mathematically what the definition is stating? \
 
 2. Is it a reasonable way to capture the real life phenomenon we are discussing?
 
@@ -270,7 +270,7 @@ One way to answer question 2 is to try to think of both examples of objects that
 
 
 You might wonder if [securefirstattemptdef](){.ref} is not _too strong_.
-After all how are we going ever to prove that Eve cannot recover the secret key no matter what she does? Edgar Allan Poe would say that there can always be a method that we overlooked. However, in fact this definition is too _weak_! Consider the following encryption: the secret key $k$ is chosen at random in $\{0,1\}^n$ but our encryption scheme simply ignores it and lets $E_k(m)=m$ and $D_k(c)=c$. This is a valid encryption since $D_k(E_k(m))=m$, but is of course completely insecure as we are simply outputting the plaintext in the clear.
+After all how are we going to ever prove that Eve cannot recover the secret key no matter what she does? Edgar Allan Poe would say that there can always be a method that we overlooked. However, in fact this definition is too _weak_! Consider the following encryption: the secret key $k$ is chosen at random in $\{0,1\}^n$ but our encryption scheme simply ignores it and lets $E_k(m)=m$ and $D_k(c)=c$. This is a valid encryption since $D_k(E_k(m))=m$, but is of course completely insecure as we are simply outputting the plaintext in the clear.
 Yet, no matter what Eve does, if she only sees $c$ and not $k$, there is no way she can guess the true value of $k$ with probability better than $2^{-n}$, since it was chosen completely at random and she gets no information about it.
 Formally, one can prove the following result:
 
@@ -466,7 +466,7 @@ encryption for two bits.
 
 
 
-In fact, this can be generalized to any number of bits:^[The one-time pad is typically credited to Gilbert Vernam of Bell and Joseph Mauborgne of the U.S. Army Signal Corps, but Steve Bellovin discovered an earlier inventor [Frank Miller](http://www.cs.columbia.edu/~CS4HS/talks/FrankMillerOneTimePad.pdf) who published a description of the one-time pad in 1882. However, it is unclear if Miller realized the fact that security of this system can be mathematically proven, and so theorem below should probably be still be credited to Vernam and Mauborgne.]
+In fact, this can be generalized to any number of bits:^[The one-time pad is typically credited to Gilbert Vernam of Bell and Joseph Mauborgne of the U.S. Army Signal Corps, but Steve Bellovin discovered an earlier inventor [Frank Miller](http://www.cs.columbia.edu/~CS4HS/talks/FrankMillerOneTimePad.pdf) who published a description of the one-time pad in 1882. However, it is unclear if Miller realized the fact that security of this system can be mathematically proven, and so the theorem below should probably be still be credited to Vernam and Mauborgne.]
 
 
 > # {.theorem title="One Time Pad (Vernam 1917, Shannon 1949)" #onetimepad}
@@ -629,11 +629,11 @@ Much of this text is shared with [my Introduction to Theoretical Computer Scienc
 Shannon's manuscript was written in 1945 but was classified, and a partial version was only published in 1949. Still it has revolutionized cryptography, and is the forerunner to much of what followed.
 
 The Venona project's history is described in [this document](http://nsarchive.gwu.edu/NSAEBB/NSAEBB278/01.PDF).
-Aside from Grabeel and Zubko, credit to the discovery that the Soviets were reusing keys is shared by Lt. Richard Hallock, Carrie Berry, Frank Lewis, and Lt. Karl Elmquist, and there are others that have made important contribution to this project. See pages 27 and 28 in the document.
+Aside from Grabeel and Zubko, credit to the discovery that the Soviets were reusing keys is shared by Lt. Richard Hallock, Carrie Berry, Frank Lewis, and Lt. Karl Elmquist, and there are others that have made important contributions to this project. See pages 27 and 28 in the document.
 
 
 In a [1955 letter to the NSA](https://www.nsa.gov/news-features/declassified-documents/nash-letters/assets/files/nash_letters1.pdf) that only recently came forward, John Nash proposed an "unbreakable" encryption scheme.
-He wrote _"I hope my handwriting, etc. do not give the impression I am just a crank or circle-squarer.... The significance of this conjecture [that certain encryption schemes are exponentially secure against key recovery attacks] .. is that it is quite feasible to design ciphers that are effectively unbreakable. "_.
+He wrote _"I hope my handwriting, etc. do not give the impression I am just a crank or circle-squarer... The significance of this conjecture [that certain encryption schemes are exponentially secure against key recovery attacks] .. is that it is quite feasible to design ciphers that are effectively unbreakable."_
 John Nash made seminal contributions in mathematics and game theory, and was awarded both the Abel Prize in mathematics and the Nobel Memorial Prize in Economic Sciences.
 However, he has struggled with mental illness throughout his life. His biography, [A Beautiful Mind](https://en.wikipedia.org/wiki/A_Beautiful_Mind_(book)) was made into a popular movie.
 It is natural to compare Nash's 1955 letter to the NSA to the 1956 letter by [Kurt Gödel to John von Neumann](https://www.cs.cmu.edu/~aada/courses/15251s15/www/notes/godel-letter.pdf).
