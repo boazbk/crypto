@@ -25,7 +25,7 @@ from itertools import product # Import an iterator for cartesian products
 from random import choice # choose random element of list
 
 # Gets ciphertext as input and two potential plaintexts
-# Returns most likely plaintext 
+# Returns most likely plaintext
 # We assume we have access to the function Encrypt(key,ciphertext)
 def Distinguish(ciphertext,plaintext1,plaintext2):
     for key in product([0,1], repeat = 128): # Iterate over all possible keys of length 128
@@ -115,7 +115,7 @@ seeing $E_k(m)$ is at most $1/|M|+2^{-t+1}$.
 Before proving this theorem note that it gives us a pretty strong guarantee. In
 the exercises we will strengthen it even further showing that no matter what
 prior information Eve had on the message before, she will never get any
-non-negligible new information on it.^[The latter property is known as "semantic security", see also section 3.2.2 of Katz Lindell on "semantic security" and Section 2 of Boneh-Shoup "computational ciphers and semantic security".] 
+non-negligible new information on it.^[The latter property is known as "semantic security", see also section 3.2.2 of Katz Lindell on "semantic security" and Section 2 of Boneh-Shoup "computational ciphers and semantic security".]
 One way to phrase it is that if the sender  used a $256$-bit secure encryption to encrypt a message, then your
 chances of getting to learn any additional information about it before the
 universe collapses are more or less the same as the chances that a fairy will
@@ -157,7 +157,7 @@ This will imply that if $Eve$ ran in polynomial time and had polynomial advantag
 The first item  can be shown by simply doing the same proof more carefully,
 keeping track how the advantage over $\tfrac{1}{|M|}$ for $Eve$ translates into
 an advantage over $\tfrac{1}{2}$ for $Eve'$.
-As the world's most annoying saying goes, doing this is an excellent exercise for the reader. 
+As the world's most annoying saying goes, doing this is an excellent exercise for the reader.
 
 The second item  is obtained by looking at the definition of $Eve'$ from that proof. On input $c$, $Eve'$
 computed $m=Eve(c)$ (which costs $T$ operations), checked if $m=m_0$
@@ -219,7 +219,7 @@ In practice we would usually like to ensure that when we use a smallish security
 
 - The *honest parties* (the parties running the encryption and decryption algorithms) are extremely efficient, something like 100-1000 cycles per byte of data processed. In theory terms we would want them be using an $O(n)$ or at worst $O(n^2)$ time algorithms with not-too-big hidden constants.
 
-- We want to protect against *adversaries* (the parties trying to break the encryption) that  have much vaster computational capabilities. A typical modern encryption is built so that using standard key sizes it can  withstand the combined computational powers of all computers on earth for several decades. In theory terms we would want the time to break the scheme to be $2^{\Omega(n)}$ (or if not, at least  $2^{\Omega(\sqrt{n})}$ or $2^{\Omega(n^{1/3})}$) with not too small hidden constants. 
+- We want to protect against *adversaries* (the parties trying to break the encryption) that  have much vaster computational capabilities. A typical modern encryption is built so that using standard key sizes it can  withstand the combined computational powers of all computers on earth for several decades. In theory terms we would want the time to break the scheme to be $2^{\Omega(n)}$ (or if not, at least  $2^{\Omega(\sqrt{n})}$ or $2^{\Omega(n^{1/3})}$) with not too small hidden constants.
 
 
 
@@ -252,10 +252,10 @@ If $\mu:\N \rightarrow [0,\infty)$ is a function (which we'll often think of as 
 >_"Scheme $S$ is secure if for every polynomial $p(\cdot)$ and $p(n)$ time adversary $Eve$, there is some negligible function $\mu$ such that the probability that $Eve$ succeeds in the security game for $S$ is at most $trivial + \mu(n)$_"
 
 
-We now make these notions more formal. 
+We now make these notions more formal.
 
 ::: {.definition title="Negligible function" #negligibledef}
-A function $\mu:\mathbb{N} \rightarrow [0,\infty)$ is _negligible_ if for every polynomial $p:\N \rightarrow \N$ there exists $N \in \N$ such that $\mu(n) < \tfrac{1}{p(n)}$ for every $n>N$.[^negcomment] 
+A function $\mu:\mathbb{N} \rightarrow [0,\infty)$ is _negligible_ if for every polynomial $p:\N \rightarrow \N$ there exists $N \in \N$ such that $\mu(n) < \tfrac{1}{p(n)}$ for every $n>N$.[^negcomment]
 :::
 
 [^negcomment]: Negligible functions are sometimes defined with image equalling $[0,1]$ as opposed to the set $[0,\infty)$ of non-negative real numbers, since they are typically used to bound probabilities. However, this does not make much difference since if $\mu$ is negligible then for large enough $n$, $\mu(n)$ will be smaller than one.
@@ -263,7 +263,7 @@ A function $\mu:\mathbb{N} \rightarrow [0,\infty)$ is _negligible_ if for every 
 The following exercise provides a  good way to get some comfort with this definition:
 
 ::: {.exercise title="Negligible functions properties" #negligible}
-1. Let $\mu:\N \rightarrow [0,\infty)$ be a negligible function. Prove that for every polynomials $p,q:\R \rightarrow \R$ with non-negative coefficients such that $p(0) = 0$, the function $\mu':\N \rightarrow [0,\infty)$ defined as $\mu'(n) = p(\mu(q(n)))$ is negligible. 
+1. Let $\mu:\N \rightarrow [0,\infty)$ be a negligible function. Prove that for every polynomials $p,q:\R \rightarrow \R$ with non-negative coefficients such that $p(0) = 0$, the function $\mu':\N \rightarrow [0,\infty)$ defined as $\mu'(n) = p(\mu(q(n)))$ is negligible.
 
 2. Let $\mu:\N \rightarrow [0,\infty)$. Prove that $\mu$ is negligible if and only if for every constant $c$, $\lim_{n \rightarrow \infty} n^c \mu(n) = 0$.
 :::
@@ -272,13 +272,13 @@ The following exercise provides a  good way to get some comfort with this defini
 ::: {.remark title="Asymptotic analysis" #asymptotic}
 The above definitions could be confusing if you haven't encountered asymptotic analysis before. Reading the beginning of Chapter 3 (pages 43-51) in the KL book, as well as the mathematical background lecture in my [intro to TCS notes](http://www.introtcs.org/public/index.html) can be extremely useful. As a rule of thumb, if every time you see the word "polynomial" you imagine the function $n^{10}$ and every time you see the word "negligible" you imagine the function $2^{-\sqrt{n}}$ then you will get the right intuition.
 
-What you need to remember is that negligible is much smaller than any inverse polynomial, while polynomials are closed under multiplication, and so we have the "equations" 
+What you need to remember is that negligible is much smaller than any inverse polynomial, while polynomials are closed under multiplication, and so we have the "equations"
 
-$$negligible\times polynomial = negligible$$ 
+$$negligible\times polynomial = negligible$$
 
-and 
+and
 
-$$polynomial \times polynomial = polynomial$$ 
+$$polynomial \times polynomial = polynomial$$
 
 As mentioned, in practice people really want to get as close as possible to $n$ bits of security with an $n$ bit key, but  we would be happy as long as the security grows with the key, so when we say a scheme is "secure" you can think of it having $\sqrt{n}$ bits of security (though any function growing faster than $\log n$ would be fine as well).
 :::
@@ -298,7 +298,7 @@ random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability
 that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2+\mu(n)$ for some
 negligible function $\mu(\cdot)$.
 
-### Counting number of operations. { #countoperation } 
+### Counting number of operations. { #countoperation }
 
 One more detail that we've so far ignored is what does it mean exactly for a
 function to be computable using at most $T$ operations.
@@ -333,7 +333,7 @@ Later on in the course, both our cryptographic schemes and the adversaries will 
 We are now ready to make our first conjecture:
 
 >**The Cipher Conjecture:**[^2] There exists a computationally secret encryption
-scheme $(E,D)$ (where $E,D$ are efficient) with length function $\ell(n)=n+1$. 
+scheme $(E,D)$ (where $E,D$ are efficient) with length function $\ell(n)=n+1$.
 
 [^2]: As will be the case for other conjectures we talk about, the name "The
 Cipher Conjecture" is not a standard name, but rather one we'll use in this
@@ -451,14 +451,14 @@ $$
 \tfrac{1}{2}p_X + \tfrac{1}{2} - \tfrac{1}{2}p_Y = \tfrac{1}{2} + \tfrac{1}{2}(p_X-p_Y)
 $$
 
-We see that $Eve$ wins the game with success $1/2 + \epsilon/2$ if and only if 
+We see that $Eve$ wins the game with success $1/2 + \epsilon/2$ if and only if
 $$
 \Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  = \epsilon \;.
 $$
 Since $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1] \leq \left| \Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1] \right|$, this already shows that if $X$ and $Y$ are $(T,\epsilon)$-indistinguishable then $Eve$ will win
 the game with probability at most $\epsilon/2$.
 
-For the other direction, assume that $X$ and $Y$ are _not_ computationally indistinguishable and let $Eve$ be a $T$ time operation function such that 
+For the other direction, assume that $X$ and $Y$ are _not_ computationally indistinguishable and let $Eve$ be a $T$ time operation function such that
 $$
 \left| \Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \right| \geq \epsilon \;.
 $$
@@ -475,7 +475,7 @@ As we did with computational secrecy, we can also define an asymptotic definitio
 
 
 ::: {.definition title="Computational indistt" #compindefasymp}
-Let $m:\N \rightarrow \N$ be some function and let $\{ X_n \}_{n\in \N}$ and $\{ Y_n \}_{n\in \N}$ be two sequences of 
+Let $m:\N \rightarrow \N$ be some function and let $\{ X_n \}_{n\in \N}$ and $\{ Y_n \}_{n\in \N}$ be two sequences of
 distributions such that $X_n$ and $Y_n$ are distributions over $\{0,1\}^{m(n)}$.
 
 We say that $\{ X_n \}_{n\in \N}$ and $\{ Y_n \}_{n\in\N}$ are _computationally indistinguishable_, denoted by $\{ X_n \}_{n\in\N} \approx \{ Y_n \}_{n\in\N}$, if for every polynomial $p:\N \rightarrow \N$ and sufficiently large $n$,
@@ -684,7 +684,7 @@ Please make sure you read this proof carefully and follow the argument.
 
 ::: {.proof data-ref="lengthextendthm"}
 The construction, depicted in [cipherlengthextensionfig](){.ref}, is actually quite natural and variants of it are used in practice for _stream ciphers_, which are ways to encrypt arbitrarily long messages using a fixed size key.
-The idea is that we use a key $k_0$ of size $n$ to encrypt __(1)__ a fresh key $k_1$ of size $n$ and __(2)__ one bit of the message. Now we can encrypt $k_2$ using $k_1$ and so on and so forth. We now describe the construction and analysis in detail. 
+The idea is that we use a key $k_0$ of size $n$ to encrypt __(1)__ a fresh key $k_1$ of size $n$ and __(2)__ one bit of the message. Now we can encrypt $k_2$ using $k_1$ and so on and so forth. We now describe the construction and analysis in detail.
 
 Let $t=t(n)$. We are given a cipher $E'$ which can encrypt $n+1$-bit
 long messages with an $n$-bit long key and we need to encrypt a $t$-bit long
@@ -733,7 +733,7 @@ for the proof.
 Since both $E$ and $\hat{E}$ are randomized encryption schemes (with $E$ using $(t-1)n$ bits of randomness for the ephemeral keys $k_1,\ldots,k_{t-1}$ and $\hat{E}$ using $(2t-1)n$ bits of randomness for the ephemeral keys $k_1,\ldots,k_t,k'_2,\ldots,k'_t$), we can also write
 [lengthextendclaimeq](){.eqref} as
 $$
-E_{U_n}(m; U'_{tn}) \approx \hat{E}_{U_n}(m; U'_{(2t-1)n})  
+E_{U_n}(m; U'_{tn}) \approx \hat{E}_{U_n}(m; U'_{(2t-1)n})
 $$
 where we use $U'_\ell$ to denote a random variable that is chosen uniformly at random from $\{0,1\}^\ell$ and independently from the choice of $U_n$ (which is chosen uniformly at random from $\{0,1\}^n$).
 
@@ -797,17 +797,17 @@ For concreteness sake let us give a precise definition of what it means for a fu
 
 In both cases you might want to skip this appendix and only return to it if you find something confusing.
 
-The model we use is a Boolean circuit that also has a $RAND$ gate that outputs a random bit. 
-We could use as the basic set of gates the standard $AND$, $OR$ and $NOT$ but for simplicity we use the one-element set $NAND$. 
+The model we use is a Boolean circuit that also has a $RAND$ gate that outputs a random bit.
+We could use as the basic set of gates the standard $AND$, $OR$ and $NOT$ but for simplicity we use the one-element set $NAND$.
 We represent the circuit as a straightline program, but this is of course just a matter of convenience.
 As shown (for example) in the  [CS 121 textbook](http://introtcs.org),  these two representations are identical.
 
 ::: {.definition title="Probabilistic straightline program" #randprogdef}
 A _probabilistic straightline program_ consists of a sequence of lines, each one of them one of the following forms:
 
-* `foo = NAND(bar, baz)` where `foo`,`bar`,`baz` are variable identifiers. 
+* `foo = NAND(bar, baz)` where `foo`,`bar`,`baz` are variable identifiers.
 
-* `foo = RAND()`  where `foo` is a variable identifier. 
+* `foo = RAND()`  where `foo` is a variable identifier.
 
 :::
 
