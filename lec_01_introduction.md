@@ -66,7 +66,7 @@ Nevertheless, Charles Babbage cracked the Vigenère cipher in 1854 (though he di
 In 1863 Friedrich Kasiski broke the cipher and published the result.
 The idea is that once you guess the length of the cipher, you can reduce the task to breaking a simple substitution cipher which can be done via frequency
 analysis (can you see why?).
-Confederate generals used Vigenère regularly during the civil war, and their messages were routinely cryptanalzed by Union officers.
+Confederate generals used Vigenère regularly during the civil war, and their messages were routinely cryptanalyzed by Union officers.
 
 ![Confederate Cipher Disk for implementing the Vigenère cipher](../figure/confederate_cipher_disk.jpg){#tmplabelfig .margin}
 
@@ -204,7 +204,7 @@ if the probability that an attacker can guess $X$ is at most $2^{-k}$. People th
 (close to) uniformly at random. All of this process, and especially understanding the amount of information an attacker may have on the entropy sources, is a bit of a dark art and indeed a number of attacks on cryptographic
 systems were actually enabled by weak generation of randomness. Here are a few examples.
 
-One of the first attacks was on the SSL implementation of Netscape (_the_ browser at the time). Netscape used the following "unpredicatable" information--- the time of day and a process ID both of which turned out to be quite
+One of the first attacks was on the SSL implementation of Netscape (_the_ browser at the time). Netscape used the following "unpredictable" information--- the time of day and a process ID both of which turned out to be quite
 predictable (who knew attackers have clocks too?). Netscape tried to protect its security through "security through obscurity" by not releasing the source code for their pseudorandom generator, but it was reverse engineered by [Ian Goldberg and David Wagner](https://www.cs.berkeley.edu/~daw/papers/ddj-netscape.html) (Ph.D students at the time) who demonstrated this attack.
 
 In 2006 a programmer removed a line of code from the procedure to generate entropy in OpenSSL package distributed by Debian since it caused a warning in some automatic verification code. As a result for two years (until this was
@@ -253,7 +253,7 @@ Here is an attempt at such a definition:
 
 
 > # {.definition title="Security of encryption: first attempt" #securefirstattemptdef}
-An enrcyption scheme $(E,D)$ is
+An encryption scheme $(E,D)$ is
 _$n$-secure_ if no matter what method Eve employs, the probability that she
 can recover the true key $k$ from the ciphertext $c$ is at most $2^{-n}$.
 
@@ -308,7 +308,7 @@ So, if before the definition was too weak, the new definition is too strong and 
 The problem is that of course we could guess a fixed message with probability one, so perhaps we could try to consider a definition with a _random_ message. That is:
 
 > # {.definition title="Security of encryption: third attempt" #securethirdattemptdef}
-An enrcyption scheme $(E,D)$ is _$n$-secure_ if no matter what method Eve employs, if $m$ is chosen at random
+An encryption scheme $(E,D)$ is _$n$-secure_ if no matter what method Eve employs, if $m$ is chosen at random
 from $\{0,1\}^\ell$, the probability that she can recover $m$ from the ciphertext
 $c=E_k(m)$ is at most $2^{-n}$.
 
@@ -330,7 +330,7 @@ So far all of our attempts at definitions oscillated between being too strong
 (and hence impossible) or too weak (and hence not guaranteeing actual
 security).
 The key insight of Shannon was that in a secure encryption scheme
-the ciphtertext should not reveal _any additional information_ about the
+the ciphertext should not reveal _any additional information_ about the
 plaintext. So, if for example it was a priori possible for Eve to guess the
 plaintext with some probability $1/k$ (e.g., because there were only $k$
 possibilities for it) then she should not be able to guess it with higher
@@ -529,7 +529,7 @@ The Soviets have used the one-time pad for their confidential communication sinc
 In fact, even before Shannon's work, the U.S. intelligence already knew in 1941 that the one-time pad is in principle "unbreakable" (see page 32 in the [Venona document](http://nsarchive.gwu.edu/NSAEBB/NSAEBB278/01.PDF)).
 However, it turned out that the hassle of manufacturing so many keys for all the communication took its toll on the Soviets and they ended up reusing the same keys
 for more than one message. They did try to use them for completely different receivers in the (false) hope that this wouldn't be detected.
-The [Venona Project](https://en.wikipedia.org/wiki/Venona_project) of the U.S. Army was founded in February 1943 by Gene Grabeel (see [genegrabeelfig](){.ref}), a former home economics teacher from Madison Heights, Virgnia and Lt. Leonard Zubko.
+The [Venona Project](https://en.wikipedia.org/wiki/Venona_project) of the U.S. Army was founded in February 1943 by Gene Grabeel (see [genegrabeelfig](){.ref}), a former home economics teacher from Madison Heights, Virginia and Lt. Leonard Zubko.
 In October 1943, they had their breakthrough when it was discovered that the Russians were reusing their keys.
 In the 37 years of its existence, the project has resulted in a treasure chest of intelligence, exposing hundreds of KGB agents and Russian spies in the U.S. and other countries,
 including Julius Rosenberg, Harry Gold, Klaus Fuchs, Alger Hiss, Harry Dexter White and many others.
@@ -581,7 +581,7 @@ processes as well. It turns out that none of those matter.
 For the former, note that a probabilistic process can be thought of as a _distribution_ over functions, in the sense that we have a collection of functions $f_1,...,f_N$ mapping $\{0,1\}^o$ to $\{0,1\}^\ell$, and some probabilities $p_1,\ldots,p_N$ (non-negative numbers summing to $1$), so we now think of Eve as selecting the function $f_i$ with probability $p_i$.
 But if none of those functions can give an advantage better than $1/2$, then neither can this collection (this is related to the _averaging principle_ in probability).
 
-A similar (though more involved) argument shows that the impossiblity result showing that the key must be at least as long as the message still holds even if the encryption and decryption algorithms are allowed to be probabilistic processes as well (working this out is a great exercise).
+A similar (though more involved) argument shows that the impossibility result showing that the key must be at least as long as the message still holds even if the encryption and decryption algorithms are allowed to be probabilistic processes as well (working this out is a great exercise).
 :::
 
 ### Amplifying success probability
