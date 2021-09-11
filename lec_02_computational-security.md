@@ -84,7 +84,7 @@ __Note:__ It is important to keep track of  what  is known and unknown to the ad
 Before reading further, you might want to stop and think if you can _prove_ that there is no, say, encryption scheme with $\sqrt{n}$ bits of computational security satisfying [firstcompdef](){.ref} with $\ell = n+1$ and where the time to compute the encryption is polynomial.
 
 
-The reason [firstcompdef](){.ref} can't be achieved that if the message is even one bit
+The reason [firstcompdef](){.ref} can't be achieved is that if the message is even one bit
 longer than the key, we can always have a very efficient procedure
 that achieves success probability of about $1/2 + 2^{-n-1}$ by guessing the key.  This is because we can replace the loop in the Python program `Distinguish` by choosing the key at random. Since we have some small chance of guessing correctly, we will get a small advantage over half.
 
