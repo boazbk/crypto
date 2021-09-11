@@ -57,7 +57,7 @@ Trusting in superficial security measures (such as using "inscrutable" symbols) 
 
 
 The [Vigenère cipher](https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher) is named after Blaise de Vigenère who described it in a book in 1586 (though it was invented earlier by Bellaso).
-The idea is to use a collection of substitution cyphers - if there are $n$ different ciphers then the first letter of the plaintext is encoded with the first cipher, the second with the second cipher,
+The idea is to use a collection of substitution ciphers - if there are $n$ different ciphers then the first letter of the plaintext is encoded with the first cipher, the second with the second cipher,
 the $n^{th}$ with the $n^{th}$ cipher, and then the $n+1^{st}$ letter is again encoded with the first cipher.
 The key is usually a word or a phrase of $n$ letters, and the $i^{th}$ substitution cipher is obtained by shifting each letter $k_i$ positions in the alphabet.
 This "flattens" the frequencies and makes it much harder to do frequency analysis, which is why this cipher was considered "unbreakable" for 300+ years and got the nickname
@@ -108,7 +108,7 @@ See also [this interview with Sir Harry Hinsley](http://www.cix.co.uk/~klockston
 Many of the troubles that cryptosystem designers faced over history (and still face!) can be attributed to not properly defining or understanding what are the goals they want to achieve in the first place.
 We now turn to actually defining what is an encryption scheme. Clearly we can encode every message as a string of bits, i.e., an element of $\{0,1\}^\ell$ for
 some $\ell$. Similarly, we can encode the _key_ as a string of bits as well, i.e., an element of $\{0,1\}^n$ for some $n$. Thus, we can think of an encryption scheme as composed of two functions. The _encryption function_ $E$ maps a secret key $k \in \{0,1\}^n$ and a message (known also as _plaintext_) $m\in \{0,1\}^\ell$ into a _ciphertext_ $c \in \{0,1\}^L$ for some $L$. We write this as $c = E_k(m)$.
-The _decryption function_ $D$ does the reverse operation, mapping the secret key $k$ and the cyphertext $c$ back into the plaintext message $m$, which we write as $m = D_k(c)$.
+The _decryption function_ $D$ does the reverse operation, mapping the secret key $k$ and the ciphertext $c$ back into the plaintext message $m$, which we write as $m = D_k(c)$.
 The basic equation is that if we use the same key for encryption and decryption, then we should get the same message back.
 That is, for every $k \in \{0,1\}^n$ and $m\in \{0,1\}^\ell$,
 
