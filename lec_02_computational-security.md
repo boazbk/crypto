@@ -26,7 +26,7 @@ from random import choice # choose random element of list
 
 # Gets ciphertext as input and two potential plaintexts
 # Returns most likely plaintext
-# We assume we have access to the function Encrypt(key,ciphertext)
+# We assume we have access to the function Encrypt(key,plaintext)
 def Distinguish(ciphertext,plaintext1,plaintext2):
     for key in product([0,1], repeat = 128): # Iterate over all possible keys of length 128
         if Encrypt(key, plaintext1)==ciphertext:
