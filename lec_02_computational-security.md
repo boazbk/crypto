@@ -36,8 +36,8 @@ def Distinguish(ciphertext,plaintext1,plaintext2):
     return choice([plaintext1,plaintext2])
 ```
 
-The program `Distinguish` will break any $128$-bit key and $129$-bit message encryption `Encrypt', in the sense that there exist  a pair of messages
-$m_0,m_1$ such that `Distinguish'$(E_k(m_b),m_0,m_1)=m_b$ with probability at least $0.75$ over $k \leftarrow_R \{0,1\}^n$ and $b \leftarrow_R \{0,1\}$.
+The program `Distinguish` will break any $128$-bit key and $129$-bit message encryption `Encrypt`, in the sense that there exist  a pair of messages
+$m_0,m_1$ such that `Distinguish`$(E_k(m_b),m_0,m_1)=m_b$ with probability at least $0.75$ over $k \leftarrow_R \{0,1\}^n$ and $b \leftarrow_R \{0,1\}$.
 
 
 Now, generating, distributing, and protecting huge keys causes immense
