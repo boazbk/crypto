@@ -30,7 +30,7 @@ the second toss will have the same result as the first one with about a 51% chan
 (Though [see also this experiment](https://www.stat.berkeley.edu/~aldous/Real-World/coin_tosses.html).)
 It is conceivable that at some point someone would discover some function $F$
 that, given the first 100 coin tosses by any given person, can predict the value of the
-101$^{th}$.[^def]
+101$^{st}$.[^def]
 
 In all these examples, the physics underlying the event, whether it's the
 planets' movement, the weather, or coin tosses, did not change but only
