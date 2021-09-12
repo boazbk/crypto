@@ -246,7 +246,7 @@ $$
 $$
 
 Then the adversary $Eve$ defined as $Eve(y) = Eve'(y\oplus m)$ would be also efficient. Furthermore, if $y$
-is pseudorandom then $Eve(y)=Eve'(G(U_n)\oplus m)$ and if $y$ is uniformly random then $Eve'(U_{n+1}\oplus m)$.
+is pseudorandom then $Eve(y)=Eve'(G(U_n)\oplus m)$ and if $y$ is uniformly random then $Eve(y)=Eve'(U_{n+1}\oplus m)$.
 Then, $Eve$ can distinguish the two distributions with advantage $\epsilon$, a contradiction.
 :::
 
