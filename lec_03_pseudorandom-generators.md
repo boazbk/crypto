@@ -266,9 +266,10 @@ obtained by combining it with the one-time pad.
 The following is a cute application of pseudorandom generators. Alice and Bob want to toss a fair coin over the phone. They use a pseudorandom generator $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$.
 
 * Alice will send $z\leftarrow_R\{0,1\}^{3n}$ to Bob \
-* Bob picks $s\leftarrow_R\{0,1\}^n$ and with probability $1/2$ sends $G(s)$ (case I) and with probability $1/2$ sends $G(s)\oplus z$ (case II).\
-* Alice then picks a random $b\leftarrow_R\{0,1\}$ and sends it to Bob. \
-* Bob reveals what he sent in the previous stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$.
+* Bob picks $s\leftarrow_R\{0,1\}^n$ and $b \leftarrow_R \{0,1\}$. If $b=0$ then Bob sends $y=G(s)$ and if $b=1$ he sends  $y=G(s)\oplus z$. In other words, $y = G(s) \oplus b\cdot z$ where $b\cdot z$ is the vector $(b\cdot z_1,\ldots, b\cdot z_{3n})$.
+* Alice then picks a random $b'\leftarrow_R\{0,1\}$ and sends it to Bob. \
+* Bob sends to Alice the string $s$ and $b$. Alice verifies that indeed $y= G(s) \oplus b \cdot z$.  Otherwise Alice aborts.
+* The output of the protocol is $b \oplus b'$.
 
 It can be shown that (assuming the protocol is completed) the output is a random coin, which neither Alice or Bob can control or predict with more than negligible advantage over half. (Trying to formalize this and prove it is an excellent exercise.)
 :::
