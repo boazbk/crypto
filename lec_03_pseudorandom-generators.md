@@ -496,19 +496,35 @@ The ciphers Salsa and ChaCha, designed by Dan Bernstein, have a similar design t
 
 [^fn]:I typically do not include references in these lecture notes, and leave them to the texts, but I make here an exception because Itsik Mantin was a close friend of mine in grad school.
 
-## Case Study 3: B.B.S.
+###  Case Study 3: Blum, Blum and Shub
+
 B.B.S., which stands for the authors Blum, Blum and Shub, is a simple generator constructed from a potentially hard problem in number theory.
 
-Let $n=pq$, where $p,q$ are primes. Then, the set $Q_n$ of *quadratic residues modulo $n$* is the set $$Q_n=\{x^2\mid \gcd(x,n)=1\}.$$ The definition extends the concept of "perfect squares" when we are working with standard integers. Notice that each number in $Q_n$ has at least one square root. We will see later in the course that if $n=pq$ then these numbers will have $4$ square roots.
+Let $N=P\cdot Q$, where $P,Q$ are primes. (We will generally use $P,Q$ of size roughly $n$, where $n$ is our security parameter, and so use capital letters to emphasize that the magnitude of these numbers is exponential in the security parameter.)
 
-The B.B.S. generator chooses $n=pq$, where $p,q$ are prime and $p,q\equiv 3\pmod{4}$. The second condition guarantees that for each $y\in Q_n$, exactly one of its square roots fall in $Q_n$. It also maintains an initial state $x\in\{0,1\}^n$, initialized to the seed.
+We define $QR_N$ to be the set of  *quadratic residues modulo $N$*, which are the numbers that have a modular square root.
+Formally,  
+
+$$QR_N=\{X^2 \mod N \mid \gcd(X,N )=1\}.$$ 
+
+This definition extends the concept of "perfect squares" when we are working with standard integers. Notice that each number in $Y \in QR_N$ has at least one square root (number $X$ such that $Y = X^2 \mod N$). 
+We will see later in the course that if $N = P\cdot Q$ for primes $P,Q$ then each  $Y\in QR_N$ has exactly $4$ square roots.
+The B.B.S. generator chooses $N=P\cdot Q$, where $P,Q$ are prime and $P,Q\equiv 3\pmod{4}$. The second condition guarantees that for each $Y\in QR_N$, exactly one of its square roots fall in $QR_N$, and hence the map 
+$X \mapsto X^2 \mod N$ is one-to-one and onto map from $QR_N$ to itself.  
+It is defined as follows:
+
 
 ```python
-def BBS(x):
-    return (x * x % n, x % 2)
+def BBS(X):
+    return (X * X % N, N % 2)
 ```
 
-In other words, it calculates the least significant bit of $x$ and squares its internal state. The security of this generator is based on the *quadratic residuosity problem*, which asks, given a number $x$, whether $x\in Q_n$. The number theory required takes a while to develop. However, it is interesting and I recommend the reader to search up this particular generator.
+In other words,  on input $X$, $BBS(X)$ outputs $X^2 \mod N$ and the least significant bit of $X$. 
+We can think of $BBS$ as a map $BBS:QR_N \rightarrow QR_N \times \{0,1\}$ and so it maps a domain into a larger domain.
+We can also extend it to output $t$ additional bits, by repeatedly squaring the input, letting $X_0 = X$, $X_{i+1} = X_i^2 \mod N$, for $i=0,\ldots,{t-1}$, and outputting $X_t$ together with the least significant bits of $X_0,\ldots,X_{t-1}$.
+It turns out that assuming that there is no polynomial-time algorithm (where "polynomial-time" means polynomial in the _number of bits_ to represent $N$, i.e., polynomial in $\log N$)  to factor randomly chosen integers $N=P\cdot Q$, for every $t$ that is polynomial in the number of bits in $N$, the output of the $t$-step $BBS$ generator will be computationally indistinguishable from $U_{QR_N} \times U_t$ where $U_{QR_N}$ denotes the uniform distribution over $QR_N$.
+
+The number theory required to show takes a while to develop. However, it is interesting and I recommend the reader to search up this particular generator, see for example [this survey by Junod](https://www.cs.miami.edu/home/burt/learning/Csc609.062/docs/bbs.pdf).
 
 ## Non-constructive existence of pseudorandom generators
 

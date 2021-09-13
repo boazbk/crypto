@@ -150,6 +150,7 @@ messages are simply chopped into "blocks" of length $\ell$ and also appropriatel
 We will use $k$ to denote the secret key, $m$ to denote the secret plaintext message, and $c$ to denote the encrypted ciphertext.
 Note that $k,m,c$ are not numbers but rather bit strings of lengths $n,\ell(n),C(n)$
 respectively. We will also sometimes use $x$ and $y$ to denote strings, and so sometimes use $x$ as the plaintext and $y$ as the ciphertext.
+In general, while we try to reserve variable names for particular purposes, cryptography uses so many concepts that it would sometimes need to "reuse" the same letter for different purposes.
 
 For simplicity, we denote the space of possible keys as $\{0,1\}^n$ and the space of possible messages as $\{0,1\}^\ell$ for $\ell=\ell(n)$. Boneh-Shoup uses a more general notation of $\mathcal{K}$ for the space of all possible keys and $\mathcal{M}$ for the space of all possible messages. This does not make much difference since we can represent every discrete object such as a key or message as a binary string. (One difference is that in principle the space of all possible messages could include messages of unbounded length, though in such a case what is done in both theory and practice is to break these up into finite-size blocks and encrypt one block at a time.)
 :::
