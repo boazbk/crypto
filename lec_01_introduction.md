@@ -411,9 +411,9 @@ have precisely the same distribution.
 ::: {.solvedexercise title="Perfect secrecy, equivalent definition" #perfectsecrecyequiv}
 Prove that a valid encryption scheme $(E,D)$ with plaintext length $\ell(\cdot)$ is perfectly secret if and only if for every $n\in \N$ and plaintexts $m,m' \in \{0,1\}^{\ell(n)}$, the following two distributions $Y$ and $Y'$ over $\{0,1\}^*$ are identical:
 
-* $Y$ is obtained by sampling  $k\sim \{0,1\}^n$ and outputting $E_k(m)$.
+* $Y$ is obtained by sampling  $k\leftarrow_R \{0,1\}^n$ and outputting $E_k(m)$.
 
-* $Y'$ is obtained by sampling  $k\sim \{0,1\}^n$ and outputting $E_k(m')$.
+* $Y'$ is obtained by sampling  $k\leftarrow_R \{0,1\}^n$ and outputting $E_k(m')$.
 :::
 
 ::: {.solution data-ref="perfectsecrecyequiv"}
@@ -430,17 +430,17 @@ Let $(E,D)$ be a valid encryption scheme with message length $\ell(n)$. Then the
 
 1. $(E,D)$ is perfectly secret as per [perfectsecrecydef](){.ref}.
 
-2. For every pair of messages $m_0,m_1 \in \{0,1\}^{\ell(n)}$, the distributions $\{ E_k(m_0) \}_{k \sim \{0,1\}^n}$ and  $\{ E_k(m_1) \}_{k \sim \{0,1\}^n}$ are identical.
+2. For every pair of messages $m_0,m_1 \in \{0,1\}^{\ell(n)}$, the distributions $\{ E_k(m_0) \}_{k \leftarrow_R \{0,1\}^n}$ and  $\{ E_k(m_1) \}_{k \leftarrow_R \{0,1\}^n}$ are identical.
 
 3. (Two-message security: Eve can't guess which of one of two messages was encrypted with success better than half.) For every function $Eve:\{0,1\}^{C(n)} \rightarrow \{0,1\}^{\ell(n)}$ and pair of messages $m_0,m_1 \in \{0,1\}^{\ell(n)}$, 
 
-$$\Pr_{b \sim \{0,1\}, k \sim \{0,1\}^n} [ Eve(E_k(m_b))=m_b ] \leq 1/2$$
+$$\Pr_{b \leftarrow_R \{0,1\}, k \leftarrow_R \{0,1\}^n} [ Eve(E_k(m_b))=m_b ] \leq 1/2$$
 
 4. (Arbitrary prior security: Eve can't guess which message was encrypted with success better than her prior information.) For every distribution $\mathcal{D}$ over $\{0,1\}^{\ell(n)}$, and $Eve:\{0,1\}^{C(n)} \rightarrow \{0,1\}^{\ell(n)}$,
 
-$$\Pr_{m \sim \mathcal{D}, k \sim \{0,1\}^n}[ Eve(E_k(m))=m ] \leq \max(\mathcal{D})$$
+$$\Pr_{m \leftarrow_R \mathcal{D}, k \leftarrow_R \{0,1\}^n}[ Eve(E_k(m))=m ] \leq \max(\mathcal{D})$$
 
-where we denote $\max(\mathcal{D}) = \max_{m^*\in \{0,1\}^{\ell(n)}} \Pr_{m \sim \mathcal{D}}[m=m^*]$ to be the largest probability of any element under $\mathcal{D}$. 
+where we denote $\max(\mathcal{D}) = \max_{m^*\in \{0,1\}^{\ell(n)}} \Pr_{m \leftarrow_R \mathcal{D}}[m=m^*]$ to be the largest probability of any element under $\mathcal{D}$. 
 :::
 
 
@@ -490,7 +490,7 @@ By the associative law of addition (which works also modulo two), $D_k(E_k(m))=(
 using the fact that for every bit $\sigma \in \{0,1\}$, $\sigma + \sigma \mod 2 = 0$ and $\sigma + 0 = \sigma \mod 2$.
 Hence $(E,D)$ form a valid encryption.
 
-To analyze the perfect secrecy property, we claim that for every $m\in \{0,1\}^n$, the distribution $Y_m=E_k(m)$ where $k \sim \{0,1\}^n$ is simply the uniform distribution over $\{0,1\}^n$, and hence in particular the distributions $Y_{m}$ and $Y_{m'}$ are identical for every $m,m' \in \{0,1\}^n$.
+To analyze the perfect secrecy property, we claim that for every $m\in \{0,1\}^n$, the distribution $Y_m=E_k(m)$ where $k \leftarrow_R \{0,1\}^n$ is simply the uniform distribution over $\{0,1\}^n$, and hence in particular the distributions $Y_{m}$ and $Y_{m'}$ are identical for every $m,m' \in \{0,1\}^n$.
 Indeed, for every particular $y\in \{0,1\}^n$, the value $y$ is output by $Y_m$ if and only if $y = m \oplus k$ which holds if and only if $k= m \oplus y$. Since $k$ is chosen uniformly at random in $\{0,1\}^n$, the probability that $k$ happens to equal $m \oplus y$ is exactly $2^{-n}$, which means that every string $y$ is output by $Y_m$ with probability $2^{-n}$.
 :::
 
@@ -553,7 +553,7 @@ The idea behind the proof is illustrated in [longkeygraphfig](){.ref}. We define
 
 ::: {.proof data-ref="longkeysthm"}
 Let $E,D$ be a valid encryption scheme with messages of length $\ell$ and key of length $n<\ell$.
-We will show that $(E,D)$ is not perfectly secret by providing two plaintexts $x_0,x_1 \in \{0,1\}^\ell$ such that the distributions $Y_{x_0}$ and $Y_{x_1}$ are not identical, where $Y_x$ is the distribution obtained by picking $k \sim \{0,1\}^n$ and outputting $E_k(x)$.
+We will show that $(E,D)$ is not perfectly secret by providing two plaintexts $x_0,x_1 \in \{0,1\}^\ell$ such that the distributions $Y_{x_0}$ and $Y_{x_1}$ are not identical, where $Y_x$ is the distribution obtained by picking $k \leftarrow_R \{0,1\}^n$ and outputting $E_k(x)$.
 
 
 We choose $x_0 = 0^\ell$.

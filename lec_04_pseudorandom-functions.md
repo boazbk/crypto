@@ -9,6 +9,7 @@ chapternum: "4"
 
 # Pseudorandom functions
 
+__Reading:__ [Rosulek Chapter 6](https://web.engr.oregonstate.edu/~rosulekm/crypto/chap6.pdf) has a good description of pseudorandom functions. Katz-Lindell cover pseudorandom functions in a different order than us. The topics of this lecture and the next ones are covered in KL sections 3.4-3.5 (PRFs and CPA security), 4.1-4.3 (MACs), and 8.5 (construction of PRFs from PRG).
 
 In the last lecture we saw the notion of _pseudorandom generators_, and introduced the __PRG conjecture__, which stated that there exists a pseudorandom
 generator mapping $n$ bits to $n+1$ bits. We have seen the _length extension_ theorem, which states that given such a pseudorandom generator, there exists a generator mapping $n$ bits to $m$ bits for an arbitrarily large polynomial $m(n)$. But can we extend it even further? Say, to $2^n$ bits?
@@ -17,16 +18,17 @@ Does this question even make sense? And why would we want to do that? This is th
 At a first look, the notion of extending the output length of a pseudorandom generator to $2^n$ bits seems nonsensical.
 After all, we want our generator to be _efficient_ and just writing down the output will take exponential time. However, there is a way around this conundrum.
 While we can't efficiently write down the full output, we can require that it would be possible, given an index $i\in \{0,\ldots,2^n-1\}$, to compute the $i^{th}$
-bit of the output in polynomial time.^[In this course we will often index strings and numbers starting from zero rather than one, and so typically index the coordinates of a string $y\in \{0,1\}^N$ as $0,\ldots,N-1$ rather than $1,\ldots,N$. But we will not be religious about it and occasionally "lapse" into one-based indexing. In almost all cases, this makes no difference.]
+bit of the output in polynomial time.^[We will often identify the strings of length $n$ with the numbers between $0$ and $2^{n-1}$, and switch freely between the two representations, and hence can think of $i$ also as a string in $\{0,1\}^n$. We will also switch between indexing strings starting from $0$ and starting from $1$ based on convenience.]
 That is, we require that the function $i \mapsto G(s)_i$ is efficiently computable and (by security of the pseudorandom generator)
 indistinguishable from a function that maps each index $i$ to an independent random bit in $\{0,1\}$. This is the notion of a _pseudorandom function generator_ which is a bit subtle to define and construct, but turns out to have a great many applications in cryptography.
 
 
-> # {.definition title="Pseudorandom Function Generator" #prfdef}
-An efficiently computable function $F$ taking two inputs $s\in\{0,1\}^n$ and $i\in \{0,\ldots,2^n-1\}$ and outputting a single
+::: {.definition title="Pseudorandom Function Generator" #prfdef}
+An efficiently computable function $F$ taking two inputs $s\in\{0,1\}^*$ and $i \in \{0,\ldots,2^{|s|}-1\}$  and outputting a single
 bit $F(s,i)$ is a _pseudorandom function (PRF) generator_ if for every polynomial time adversary $A$ outputting a single bit and polynomial $p(n)$, if $n$ is large enough then:
->
+
 $$ \left| \E_{s\in\{0,1\}^n}[ A^{F(s,\cdot)}(1^n)] - \E_{H \leftarrow_R [2^n]\rightarrow\{0,1\}}[A^H(1^n)] \right| < 1/p(n) \;.$$
+:::
 
 Some notes on notation are in order. The input $1^n$ is simply a string of $n$ ones, and it is a typical cryptography convention to assume that such an input
 is always given to the adversary. This is simply because by "polynomial time adversary" we really mean polynomial in $n$ (which is our key size or security parameter)^[This also allows us to be consistent with the notion of "polynomial in the size of the input."].
@@ -35,14 +37,15 @@ maps $i$ to $F(s,i)$. That is, $A$ can choose an index $i$, query the box and ge
 a polynomial number of queries.
 The notation $H \leftarrow_R [2^n] \rightarrow \{0,1\}$ means that $H$ is  a completely random function that maps every index $i$ to an independent and random different bit.
 
-> # {.remark title="Completely Random Functions" #randfuncs}
+::: {.remark title="Completely Random Functions" #randfuncs}
 This notion of a randomly chosen function can be difficult to wrap your mind around. Try to imagine a table of all of the strings in $\{0, 1\}^n$. We now go to each possible input, randomly generate a bit to be its output, and write down the result in the table. When we're done, we have a length $2^n$ lookup table that maps each input to an output that was generated uniformly at random and independently of all other outputs. This lookup table is now our random function $H$.
->
+
 In practice it's too cumbersome to actually generate all $2^n$ bits, and sometimes in theory it's convenient to think of each output as generated only after a query is made. This leads to adopting the _lazy evaluation model_. In the lazy evaluation model, we imagine that a lazy person is sitting in a room with the same lookup table as before, but with all entries blank. If someone makes some query $H(s)$, the lazy person checks if the entry for $s$ in the lookup table is blank. If so, the lazy evaluator generates a random bit, writes down the result for $s$, and returns it. Otherwise, if an output has already been generated for $s$ previously (because $s$ has been queried before), the lazy evaluator simply returns this value. Can you see why this model is more convenient in some ways?
->
+
 One last way to think about how a completely random function is determined is to first observe that there exist a total of $2^{2^n}$ functions from $\{0, 1\}^n$ to $\{0, 1\}$ (can you see why? It may be easier to think of them as functions from $[2^n]$ to $\{0, 1\}$). We choose one of them uniformly at random to be $H$, and it's still the case that for any given input $s$ the result $H(s)$ is $0$ or $1$ with equal probability independent of any other input.
->
+
 Regardless of which model we use to think about generating $H$, after we've chosen $H$ and put it in a black box, the behavior of $H$ is in some sense "deterministic" because given the same query it will always return the same result. However, before we ever make any given query $s$ we can only guess $H(s)$ correctly with probability $\tfrac{1}{2}$, because without previously observing $H(s)$ it is effectively random and undecided to us (just like in the lazy evaluator model).
+:::
 
 > # { .pause }
 Now would be a fantastic time to stop and think deeply about the three constructions in the remark above, and in particular why they are all equivalent. If you don't feel like thinking then at the very least you should make a mental note to come back later if you're confused, because this idea will be very useful down the road.
@@ -51,9 +54,26 @@ Now would be a fantastic time to stop and think deeply about the three construct
 Thus, the notation $A^H$ in the PRF definition means $A$ has access to a completely random black box that returns a random bit for any new query made, and on previously seen queries returns the same bit as before.
 Finally one last note: below we will identify the set $[2^n] = \{0,\ldots,2^n-1\}$ with the set $\{0,1\}^n$ (there is a one to one mapping between those sets using the binary representation), and so we will treat $i$ interchangeably as a number in $[2^n]$ or a string in $\{0,1\}^n$.
 
-Informally, if $F$ is a pseudorandom function generator, then if we choose a random string $s$ and consider the function $f_s$ defined by $f_s(i) = F(s,i)$,
+__Ensembles of PRFs.__ 
+If $F$ is a pseudorandom function generator, then if we choose a random string $s$ and consider the function $f_s$ defined by $f_s(i) = F(s,i)$,
 no efficient algorithm can distinguish between black box access to $f_s(\cdot)$ and black box access to a completely random function (see [prfmodelfig](){.ref}). Notably, black box access implies that a priori the adversary does not know which function it's querying. From the adversary's point of view, they query some oracle $O$ (which behind the scenes is either $f_s(\cdot)$ or $H$), and must decide if $O = f_s(\cdot)$ or $O = H$.
-Thus often instead of talking about a pseudorandom function generator we will refer to a _pseudorandom function collection_ $\{ f_s \}$ where by that we mean the map $F(s,i)=f_s(i)$ is a pseudorandom function generator.
+Thus often instead of talking about a pseudorandom function generator we will refer to a _pseudorandom function ensemble_ $\{ f_s \}_{s\in \{0,1\}^*}$.
+Formally, this is defined as follows:
+
+::: {.definition title="PRF ensembles" #prfensemnledef}
+Let $\{ f_s \}_{s\in \{0,1\}^*}$ be an ensemble of functions such that for every $s\in \{0,1\}^*$,  $f_s:\{0,1\}^{|s|} \rightarrow \{0,1\}$.
+We say that $\{ f_s \}$ is a _pseudorandom function ensemble_ if the function $F$ that on input $s\in \{0,1\}^*$ and $i \in \{0,\ldots,2^{|s|}-1\}$ outputs $f_s(i)$ is a PRF.
+:::
+
+Note that the condition of [prfensemnledef](){.ref} corresponds to requiring that for every polynomial $p$ and $p(n)$-time adversary $A$, if $n$ is large enough then
+
+$$ \left| \E_{s\in\{0,1\}^n}[ A^{f_s(\cdot)}(1^n)] - \E_{h \leftarrow_R \mathcal{F}_{n,1} }[A^h(1^n)] \right| < 1/p(n)$$
+where $\mathcal{F}_{n,1}$ is the set of all functions mapping $\{0,1\}^n$ to $\{0,1\}$ (i.e., the set $\{0,1\}^n \rightarrow \{0,1\}$).
+
+::: { .pause }
+It is worth while to pause and make sure you understand why [prfensemnledef](){.ref} and [prfdef](){.ref} give different ways to talk about the same object.
+:::
+
 
 ![In a pseudorandom function, an adversary cannot tell whether they are given a black box that computes the function $i \mapsto F(s,i)$ for some secret $s$ that was chosen at random and fixed, or whether the black box computes a completely random function that tosses a fresh random coin whenever it's given a new input $i$.](../figure/pseudorandom_function.jpg){#prfmodelfig width="50%" }
 
@@ -146,11 +166,33 @@ The proof of Claim 1 is not hard but it is somewhat subtle, so it's good to go o
 >
 Now that we have Claim 1, the proof of the theorem follows as outlined above. We build an adversary $A$ to the pseudorandom function generator from $M$ by having $A$ simulate "inside its belly" all the parties Alice, Bob and Mallory and output $1$ if Mallory succeeds in impersonating. Since we assumed $\epsilon$ is non-negligible and $T$ is polynomial, we can assume that $(8\ell T)/2^n < \epsilon/2$ and hence by Claim 1, if the black box is a random function, then we are in the `PRF-Login*` setting and Mallory's success will be at most $2^{-\ell}+\epsilon/2$. If the black box is $f_s(\cdot)$, then we get exactly the `PRF-Login` setting and hence under our assumption the success will be at least $2^{-\ell}+\epsilon$. We conclude that the difference in probability of $A$ outputting $1$ between the random and pseudorandom case is at least $\epsilon/2$ thus contradicting the security of the pseudorandom function generator.
 
-> # {.remark title="Increasing output length of PRFs" #outputincprfrem}
+### Modifying input and output lengths of PRFs
+
+
 In the course of constructing this one-time-password scheme from a PRF, we have actually proven a general statement that
 is useful on its own: that we can transform standard PRF which is a collection $\{ f_s \}$ of functions
-mapping $\{0,1\}^n$ to $\{0,1\}$, into a PRF where the functions have a longer output $\ell$ (see the problem set for a formal statement of this result)
+mapping $\{0,1\}^n$ to $\{0,1\}$, into a PRF where the functions have a longer output $\ell$. 
+Specifically, we can make the following definition:
+
+::: {.definition title="PRF ensemble (varying inputs and outputs)" #prfensembledinputdef}
+Let $\ell_{\text{in}},\ell_{\text{out}}:\N \rightarrow \N$. An ensemble of functions $\{ f_s \}_{s\in \{0,1\}^*}$ is a _PRF ensemble with input length $\ell_{\text{in}}$ and output length $\ell_{\text{out}}$_ if:
+
+1. For every $n\in\N$ and $\{0,1\}^N$, $f_s:\{0,1\}^{\ell_{\text{in}}} \rightarrow \{0,1\}^{\ell_{\text{out}}}$.
+
+2. For every polynomial $p$ and $p(n)$-time adversary $A$, if $n$ is large enough then
+
+$$ \left| \E_{s\in\{0,1\}^n}[ A^{f_s(\cdot)}(1^n)] - \E_{h \leftarrow_R \{0,1\}^{\ell_{\text{in}}} \rightarrow \{0,1\}^{\ell_{\text{out}}} }[A^h(1^n)] \right| < 1/p(n) \;.$$
+:::
+
+Standard PRFs as we defined in [prfensemnledef](){.ref} correspond to generalized PRFs where $\ell_{\text{in}}(n)=n$ and $\ell_{\text{out}}(n)=1$ for all $n\in\N$.
+It is a good exercise (which we will leave to the reader) to prove the following theorem:
+
+> ### {.theorem title="PRF length extension" #PRFlengthextensionthm}
+Suppose that PRFs exist. Then for every constant $c$ and polynomial-time computable functions $\ell_{\text{in}},\ell_{\text{out}}:\N \rightarrow \N$ with $\ell_{\text{in}}(n), \ell_{\text{out}}(n) \leq n^c$, there exist a 
+PRF ensemble with input length $\ell_{\text{in}}$ and output length $\ell_{\text{out}}$.
+
 Thus from now on whenever we are given a PRF, we will allow ourselves to assume that it has any output size that is convenient for us.
+
 
 
 
@@ -214,8 +256,8 @@ We now show how pseudorandom function generators yield message authentication co
 > # {.theorem title="MAC Theorem" #MACfromPRFthm}
 Under the PRF Conjecture, there exists a secure MAC.
 
-> # {.proof data-ref="MACfromPRFthm"}
-Let $F(\cdot,\cdot)$ be a secure pseudorandom function generator with $n/2$ bits output (as mentioned in [outputincprfrem](){.ref}, such PRF's can be constructed from one bit output PRF's).
+::: {.proof data-ref="MACfromPRFthm"}
+Let $F(\cdot,\cdot)$ be a secure pseudorandom function generator with $n/2$ bits output (which we can obtain using [PRFlengthextensionthm](){.ref}).
 We define $S_k(m) = F(k,m)$ and $V_k(m,\tau)$ to output $1$ iff $F_k(m)=\tau$.
 Suppose towards the sake of contradiction that there exists an adversary $A$ breaks the security of this construction of a MAC. That is, $A$ queries $S_k(\cdot)$
 $poly(n)$ many times and with probability $1/p(n)$ for some polynomial $p$ outputs $(m',\tau')$ that she did _not_ ask for such that $F(k,m')=\tau'$.
@@ -223,17 +265,17 @@ $poly(n)$ many times and with probability $1/p(n)$ for some polynomial $p$ outpu
 We use $A$ to construct an adversary $A'$ that can distinguish between oracle access to a PRF and a random function by simulating the MAC security game inside $A'$. Every time $A$ requests the signature of some message $m$, $A'$ returns $O(m)$. When $A$ returns $(m', \tau')$ at the end of the $MAC$ game, $A'$ returns $1$ if $O(m') = \tau'$, and $0$ otherwise. If $O(\cdot) = H(\cdot)$ for some completely random function $H(\cdot)$, then the value $H(m')$ would be completely
 random in $\{0,1\}^{n/2}$ and independent of all prior queries. Hence the probability that this value would equal $\tau'$ is at most $2^{-n/2}$. If instead $O(\cdot) = F_k(\cdot)$, then by the fact that $A$ wins the MAC security game with probability $1/p(n)$, the adversary $A'$ will output $1$ with probability $1/p(n)$. That means that such an adversary $A'$ can distinguish between an oracle to $F_k(\cdot)$ and an oracle
 to a random function $H$, which gives us a contradiction.
+:::
 
 
-
-## Input length extension for MACs and PRFs
+## Arbitrary input length extension for MACs and PRFs
 
 So far we required the message to be signed $m$ to be no longer than the key $k$ (i.e., both $n$ bits long). However, it is not hard to see that this requirement is not really needed. If our message is longer, we can divide it into blocks $m_1,\ldots,m_t$
 and sign each message $(i,m_i)$ individually. The disadvantage here is that the size of the tag (i.e., MAC output) will grow with the
 size of the message. However, even this is not really needed. Because the tag has length $n/2$ for length $n$ messages, we can sign the _tags_ $\tau_1,\ldots,\tau_t$
 and only output those. The verifier can repeat this computation to  verify this. We can continue this way and so get tags of $O(n)$ length for arbitrarily
 long messages.
-Hence in the future, whenever we need to, we will assume that our PRFs and MACs can get inputs in $\{0,1\}^*$ --- i.e., arbitrarily length strings.
+Hence in the future, whenever we need to, we can assume that our PRFs and MACs can get inputs in $\{0,1\}^*$ --- i.e., arbitrarily length strings.
 
 We note that this issue of length extension is actually quite a thorny and important one in practice. The above approach is not the most efficient way to
 achieve this, and there are several more practical variants in the literature (see Boneh-Shoup Sections 6.4-6.8). Also, one needs to be very

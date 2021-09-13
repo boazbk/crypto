@@ -22,19 +22,23 @@ scheme that uses, say, a $128$ bit key, with a $129$ bit message:
 
 ```python
 from itertools import product # Import an iterator for cartesian products
+from random import choice # choose random element of list
 
 # Gets ciphertext as input and two potential plaintexts
-# Positive return value means first is more likely,
-# negative means second is more likely,
-# 0 means both have same likelihood.
-#
+# Returns most likely plaintext 
 # We assume we have access to the function Encrypt(key,ciphertext)
 def Distinguish(ciphertext,plaintext1,plaintext2):
     for key in product([0,1], repeat = 128): # Iterate over all possible keys of length 128
         if Encrypt(key, plaintext1)==ciphertext:
             return plaintext1
-    return plaintext2
+        if Encrypt(key, plaintext2)==ciphertext:
+            return plaintext2
+    return choice([plaintext1,plaintext2])
 ```
+
+The program `Distinguish` will break any $128$-bit key and $129$-bit message encryption `Encrypt', in the sense that there exist  a pair of messages
+$m_0,m_1$ such that `Distinguish'$(E_k(m_b),m_0,m_1)=m_b$ with probability at least $0.75$ over $k \leftarrow_R \{0,1\}^n$ and $b \leftarrow_R \{0,1\}$.
+
 
 Now, generating, distributing, and protecting huge keys causes immense
 logistical problems, which is why almost all encryption schemes used in practice
@@ -101,7 +105,7 @@ kind of conditions we desired. In particular, let's verify that this definition
 implies the analogous condition to perfect secrecy.
 
 > # {.theorem title="Guessing game for computational secrecy" #twotomanycomp}
-If $(E,D)$ has $t$ bits of Computational secrecy as per  [compsecconcdef](){.ref} then every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
+If $(E,D)$ has $t$ bits of Computational secrecy as per  [compsecconcdef](){.ref} then for every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
 $2^t-(100\ell+100)$ computational steps, if we choose at random $m\in M$ and a
 random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m$ after
 seeing $E_k(m)$ is at most $1/|M|+2^{-t+1}$.
@@ -240,10 +244,10 @@ Hence in this course, whenever you hear the term "super polynomial", you can equ
 These are not all the theoretically possible running times.
 One can have intermediate functions such as $n^{\log n}$ though we will generally not
 encounter those.
-To make things clean (and to correspond to standard terminology), we will generally "efficient computation" with _polynomial time_ in $n$ where $n$ is either its input length or the key size (the key size and input length  will always be polynomially related, and so this choice won't matter). We want our algorithms (encryption, decryption, etc.) to be computable in polynomial time, but to require _super polynomial time_ to break.
+To make things clean (and to correspond to standard terminology), we will generally associate "efficient computation" with _polynomial time_ in $n$ where $n$ is either its input length or the key size (the key size and input length  will always be polynomially related, and so this choice won't matter). We want our algorithms (encryption, decryption, etc.) to be computable in polynomial time, but to require _super polynomial time_ to break.
 
 __Negligible probabilities.__ In cryptography, we care not just about the running time of the adversary but also about their probability of success (which should be as small as possible).
-If $\mu:\N \rightarrow [0,\infty)$ is a function (which we'll often think of as corresponding to the adversary's probability of success or advantage over the trivial probability, as a function of the key size $n$) then we say that $\mu(n)$ is *negligible* if it's smaller than every inverse polynomial.  Our security definitions will have the following form:
+If $\mu:\N \rightarrow [0,\infty)$ is a function (which we'll often think of as corresponding to the adversary's probability of success or advantage over the trivial probability, as a function of the key size $n$) then we say that $\mu(n)$ is *negligible* if it's smaller than the inverse of every (positive) polynomial.  Our security definitions will have the following form:
 
 >_"Scheme $S$ is secure if for every polynomial $p(\cdot)$ and $p(n)$ time adversary $Eve$, there is some negligible function $\mu$ such that the probability that $Eve$ succeeds in the security game for $S$ is at most $trivial + \mu(n)$_"
 
@@ -329,8 +333,7 @@ Later on in the course, both our cryptographic schemes and the adversaries will 
 We are now ready to make our first conjecture:
 
 >**The Cipher Conjecture:**[^2] There exists a computationally secret encryption
-scheme $(E,D)$ (where $E,D$ are efficient) with a key of size $n$ for messages
-of size $n+1$.
+scheme $(E,D)$ (where $E,D$ are efficient) with length function $\ell(n)=n+1$. 
 
 [^2]: As will be the case for other conjectures we talk about, the name "The
 Cipher Conjecture" is not a standard name, but rather one we'll use in this
@@ -407,35 +410,97 @@ consider this question of when two distributions are *computationally
 indistinguishable* more broadly:
 
 
-::: {.definition title="Computational Indistinguishability" #compindef}
+::: {.definition title="Computational Indistinguishability (concrete definition)" #compindef}
 Let $X$ and $Y$ be two
-distributions over ${\{0,1\}}^o$. We say that $X$ and $Y$ are
+distributions over ${\{0,1\}}^m$. We say that $X$ and $Y$ are
 $(T,\epsilon)$*-computationally indistinguishable*, denoted by $X
-\approx_{T,\epsilon} Y$, if for every function $Eve$ computable with at most $T$
+\approx_{T,\epsilon} Y$, if for every function $D:\{0,1\}^m \rightarrow \{0,1\}$ computable with at most $T$
 operations,
 
 $$
-| \Pr[ Eve(X) = 1 ] - \Pr[ Eve(Y) = 1 ] | \leq \epsilon \;.
+| \Pr[ D(X) = 1 ] - \Pr[ D(Y) = 1 ] | \leq \epsilon \;.
+$$
+:::
+
+::: {.solvedexercise title="Computational Indistinguishability game" #compindex}
+Prove that for every $X,Y$ and $T,\epsilon$ as above $X \approx_{T,\epsilon} Y$ if and only if for every $\leq T$-operation computable $Eve$, the probability that $Eve$ wins in the following game is at most $1/2 + \epsilon/2$:
+
+1. We pick $b \leftarrow_R \{0,1\}$.
+
+2. If $b=0$, we let $w \leftarrow_R X$. If $b=1$, we let $w \leftarrow_R Y$.
+
+3. We give $Eve$ the input $w$, and $Eve$ outputs $b' \in \{0,1\}$.
+
+4. $Eve$ _wins_ if $b=b'$.
+:::
+
+::: { .pause }
+Working out this exercise on your own is a great way to get comfort with computational indistinguishability, which is a fundamental notion.
+:::
+
+::: {.solution data-ref="compindex"}
+For every function $Eve:\{0,1\}^m \rightarrow \{0,1\}$, let $p_X = \Pr[ Eve(X)=1]$ and $p_Y = \Pr[Eve(Y)=1]$.
+
+Then the probability that $Eve$ wins the game is:
+
+$$\Pr[ b=0] p_X + \Pr[b=1](1-p_Y)$$
+
+and since $\Pr[b=0]=\Pr[b=1]=1/2$ this is
+
+$$
+\tfrac{1}{2}p_X + \tfrac{1}{2} - \tfrac{1}{2}p_Y = \tfrac{1}{2} + \tfrac{1}{2}(p_X-p_Y)
 $$
 
-We say that $X$ and $Y$ over $\{0,1\}^o$ are simply *computationally indistinguishable*, denoted
-by $X\approx Y$, if they are $(T,\epsilon)$ indistinguishable for every
-polynomial $T(o)$ and inverse polynomial $\epsilon(o)$.
+We see that $Eve$ wins the game with success $1/2 + \epsilon/2$ if and only if 
+$$
+\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  = \epsilon \;.
+$$
+Since $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1] \leq \left| \Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1] \right|$, this already shows that if $X$ and $Y$ are $(T,\epsilon)$-indistinguishable then $Eve$ will win
+the game with probability at most $\epsilon/2$.
+
+For the other direction, assume that $X$ and $Y$ are _not_ computationally indistinguishable and let $Eve$ be a $T$ time operation function such that 
+$$
+\left| \Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \right| \geq \epsilon \;.
+$$
+Then by definition of absolute value, there are two options. Either  $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \geq \epsilon$ in which case $Eve$ wins the game with probability at least $1/2 + \epsilon/2$.
+Otherwise $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \leq -\epsilon$, in which case the function $Eve'(w)=1-Eve(w)$ (which is just as easy to compute[^nitpicknegation]) wins the game with probability at least $1/2 + \epsilon/2$.
+
+
+[^nitpicknegation]: Above we assume that the class of "functions computable in at most $T$ operations" is closed under negation, in the sense that if $F$ is in this class, then $1-F$ is also. For standard Boolean circuits, this can be done if we don't count negation gates (which can change the total circuit size by at most a factor of two), or we can allow for $Eve'$ to require a constant additional number of operations, in which case the exercise is still essentially true but is slightly more cumbersome to state.
 :::
 
 
-__Notes:__
 
-1. The asymptotic version of [compindef](){.ref}, where we say $X$ and $Y$ are simply computationally indistinguishable, implicitly assumes that $X$ and $Y$ are actually
-*parameterized* by some number $n$ (that is polynomially related to $o$) so for
-every polynomial $T(o)$ and inverse polynomial $\epsilon(o)$ we can take $n$ to
-be large enough so that $X$ and $Y$ will be $(T,\epsilon)$ indistinguishable. In
-all the cases we will consider, the choice of the parameter $n$ (which is
-usually the length of the key) will be clear from the context.
+As we did with computational secrecy, we can also define an asymptotic definition of computational indistinguishability.
 
-2. The expression $\Pr[ Eve(X)=1]$ can also be written as
-${\mathbb{E}}[Eve(X)]$ (since we can assume that whenever $Eve(x)$ does not
-output $1$ it outputs zero). This notation will be sometimes useful.
+
+::: {.definition title="Computational indistt" #compindefasymp}
+Let $m:\N \rightarrow \N$ be some function and let $\{ X_n \}_{n\in \N}$ and $\{ Y_n \}_{n\in \N}$ be two sequences of 
+distributions such that $X_n$ and $Y_n$ are distributions over $\{0,1\}^{m(n)}$.
+
+We say that $\{ X_n \}_{n\in \N}$ and $\{ Y_n \}_{n\in\N}$ are _computationally indistinguishable_, denoted by $\{ X_n \}_{n\in\N} \approx \{ Y_n \}_{n\in\N}$, if for every polynomial $p:\N \rightarrow \N$ and sufficiently large $n$,
+$X_n \approx_{p(n), 1/p(n)} Y_n$.
+:::
+
+Solving the following asymptotic analog of [compindex](){.ref} is a good way to get comfort with the asymptotic definition of computational indistinguishability:
+
+::: {.exercise title="Computational Indistinguishability game (asymptotic)" #asymgame}
+Let $\{ X_n \}_{n\in \N},\{Y_n\}_{n\in \N}$ and $m:\N \rightarrow \N$ be as above. Then $\{ X_n \}_{n\in\N} \approx \{ Y_n \}_{n\in\N}$ if and only if for every polynomial-time $Eve$, there is some negligible function $\mu$ such that $Eve$ wins the following game with probability at most $1/2 + \mu(n)$:
+
+1. We pick $b \leftarrow_R \{0,1\}$.
+
+2. If $b=0$, we let $w \leftarrow_R X_n$. If $b=1$, we let $w \leftarrow_R Y_n$.
+
+3. We give $Eve$ the input $w$, and $Eve$ outputs $b' \in \{0,1\}$.
+
+4. $Eve$ _wins_ if $b=b'$.
+:::
+
+
+__Dropping the index $n$.__ Since the index $n$ of our distributions would often be clear from context (indeed in most cases it will be the length of the key), we will sometimes drop it from our notation.
+So if $X$ and $Y$ are two random variables that depend on some index $n$, we will say that $X$ is computationally indistinguishable from $Y$ (denoted as $X \approx Y$) when the sequences  $\{ X_n \}_{n\in \N}$ and $\{ Y_n \}_{n\in\N}$ are computationally indistinguishable.
+
+
 
 We can use computational indistinguishability to phrase the definition of
 Computational secrecy more succinctly:
@@ -444,7 +509,7 @@ Computational secrecy more succinctly:
 Let $(E,D)$ be a valid
 encryption scheme. Then $(E,D)$ is computationally secret if and only if for
 every two messages $m_0,m_1 \in \{0,1\}^\ell$,
-$$ \{ E_k(m_0) \}  \approx \{ E_k(m_1) \}  $$
+$$ \{ E_k(m_0) \}_{n\in \N}  \approx \{ E_k(m_1) \}_{n\in\N}$$
 where each of these two distributions is obtained by sampling a random
 $k{\leftarrow_{\tiny R}}{\{0,1\}}^n$.
 
@@ -473,8 +538,8 @@ lengths of the other two edges $\overline{x,y}$ and $\overline{y,z}$.
 
 
 > # {.theorem title="Triangle Inequality for Computational Indistinguishability" #triangleeqthm}
-Suppose $\{ X_1 \} \approx_{T,\epsilon} \{ X_2 \} \approx_{T,\epsilon} \cdots \approx_{T,\epsilon} \{ X_m \}$.
-Then $\{ X_1 \} \approx_{T, (m-1)\epsilon} \{ X_m \}$.
+Suppose $X_1 \approx_{T,\epsilon} X_2  \approx_{T,\epsilon} \cdots \approx_{T,\epsilon}  X_m$.
+Then $X_1 \approx_{T, (m-1)\epsilon} X_m$.
 
 > # {.proof data-ref="triangleeqthm"}
 Suppose that there exists a $T$ time $Eve$ such that
@@ -503,29 +568,29 @@ Suppose that $X_1,\ldots,X_\ell,Y_1,\ldots,Y_\ell$ are distributions over
 ${\{0,1\}}^n$ such that $X_i \approx_{T,\epsilon} Y_i$. Then
 $(X_1,\ldots,X_\ell) \approx_{T-10\ell n,\ell\epsilon} (Y_1,\ldots,Y_\ell)$.
 
-> # {.proof data-ref="compindrepthm"}
+::: {.proof data-ref="compindrepthm"}
 For every $i\in\{0,\ldots,\ell\}$ we define $H_i$ to be the
 distribution $(X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell)$. Clearly $H_\ell = (X_1,\ldots,X_\ell)$ and $H_0 = (Y_1,\ldots,Y_\ell)$. We will prove that for
 every $i$, $H_{i-1} \approx_{T-10\ell n,\epsilon} H_i$, and the proof will then
 follow from the triangle inequality (can you see why?). Indeed, suppose towards
 the sake of contradiction that there was some $i\in \{1,\ldots,\ell\}$ and some
 $T-10\ell n$-time $Eve':{\{0,1\}}^{n\ell}\rightarrow{\{0,1\}}$ such that
->
+
 $$
  \left| {\mathbb{E}}[ Eve'(H_{i-1}) ] - {\mathbb{E}}[ Eve'(H_i) ] \right|  > \epsilon\;.
 $$
->
+
 In other words
 $$
  \left| {\mathbb{E}}_{X_1,\ldots,X_{i-1},Y_i,\ldots,Y_\ell}[ Eve'(X_1,\ldots,X_{i-1},Y_i,\ldots,Y_\ell) ] - {\mathbb{E}}_{X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell}[ Eve'(X_1,\ldots,X_i,Y_{i+1},\ldots,Y_\ell) ]   \right|  > \epsilon\;.
 $$
->
+
 By linearity of expectation we can write the difference of these two
 expectations as
 $$
  {\mathbb{E}}_{X_1,\ldots,X_{i-1},X_i,Y_i,Y_{i+1},\ldots,Y_\ell}\left[ Eve'(X_1,\ldots,X_{i-1},Y_i,Y_{i+1},\ldots,Y_\ell) -  Eve'(X_1,\ldots,X_{i-1},X_i,Y_{i+1},\ldots,Y_\ell) \right]
 $$
->
+
 By the *averaging principle*[^5] this means that there exist some values
 $x_1,\ldots,x_{i-1},y_{i+1},\ldots,y_\ell$ such that
 $$
@@ -534,11 +599,14 @@ $$
 Now $X_i$ and $Y_i$ are simply independent draws from the distributions $X$ and
 $Y$ respectively, and so if we define $Eve(z) =
 Eve'(x_1,\ldots,x_{i-1},z,y_{i+1},\ldots,y_\ell)$ then $Eve$ runs in time at
-most the running time of $Eve'$ plus $2\ell n$ and it satisfies
+most the running time of $Eve'$ plus $10\ell n$[^hardwiringcost] and it satisfies
 $$
 \left| {\mathbb{E}}_{X_i} [ Eve(X_i) ] - {\mathbb{E}}_{Y_i} [ Eve(Y_i) ] \right| > \epsilon
 $$
 contradicting the assumption that $X_i \approx_{T,\epsilon} Y_i$.
+
+[^hardwiringcost]: The cost $10 \ell n$ is for the operations of feeding the "hardwired" strings $x_1,\ldots,x_{i-1}$, $y_{i+1},\ldots,y_\ell$ into $Eve'$. These take up at most $\ell n$ bits, and depending on the computational model, storing and feeding them into $Eve'$ may take $c\ell n$ steps for some small constant $c<10$. In the future, we will usually ignore such minor details and simply say that if $Eve'$ runs in polynomial time then so will $Eve$.
+:::
 
 
 
@@ -724,6 +792,7 @@ For concreteness sake let us give a precise definition of what it means for a fu
 * If you have taken any course on computational complexity (such as Harvard CS 121), then this is the model of Boolean circuits, except that we also allow randomization.
 
 * If you have not taken such a course, you might simply take it on faith that it is possible to model what it means for an algorithm to be able to map an input $x$ into an output $f(x)$ using $T$ "elementary operations".
+
 
 
 In both cases you might want to skip this appendix and only return to it if you find something confusing.
