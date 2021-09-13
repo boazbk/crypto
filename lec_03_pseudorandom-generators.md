@@ -265,13 +265,19 @@ obtained by combining it with the one-time pad.
 ::: {.remark title="Using pseudorandom generators for coin tossing over the phone" #cointossingphonerm}
 The following is a cute application of pseudorandom generators. Alice and Bob want to toss a fair coin over the phone. They use a pseudorandom generator $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$.
 
-* Alice will send $z\leftarrow_R\{0,1\}^{3n}$ to Bob \
-* Bob picks $s\leftarrow_R\{0,1\}^n$ and $b \leftarrow_R \{0,1\}$. If $b=0$ then Bob sends $y=G(s)$ and if $b=1$ he sends  $y=G(s)\oplus z$. In other words, $y = G(s) \oplus b\cdot z$ where $b\cdot z$ is the vector $(b\cdot z_1,\ldots, b\cdot z_{3n})$.
-* Alice then picks a random $b'\leftarrow_R\{0,1\}$ and sends it to Bob. \
-* Bob sends to Alice the string $s$ and $b$. Alice verifies that indeed $y= G(s) \oplus b \cdot z$.  Otherwise Alice aborts.
-* The output of the protocol is $b \oplus b'$.
+1. Alice will send $z\leftarrow_R\{0,1\}^{3n}$ to Bob \
+2. Bob picks $s\leftarrow_R\{0,1\}^n$ and $b \leftarrow_R \{0,1\}$. If $b=0$ then Bob sends $y=G(s)$ and if $b=1$ he sends  $y=G(s)\oplus z$. In other words, $y = G(s) \oplus b\cdot z$ where $b\cdot z$ is the vector $(b\cdot z_1,\ldots, b\cdot z_{3n})$.
+3. Alice then picks a random $b'\leftarrow_R\{0,1\}$ and sends it to Bob. \
+4. Bob sends to Alice the string $s$ and $b$. Alice verifies that indeed $y= G(s) \oplus b \cdot z$.  Otherwise Alice aborts.
+5. The output of the protocol is $b \oplus b'$.
 
-It can be shown that (assuming the protocol is completed) the output is a random coin, which neither Alice or Bob can control or predict with more than negligible advantage over half. (Trying to formalize this and prove it is an excellent exercise.)
+It can be shown that (assuming the protocol is completed) the output is a random coin, which neither Alice or Bob can control or predict with more than negligible advantage over half. 
+Trying to formalize this and prove it is an excellent exercise.
+Two main components in the proofs are:
+
+* With probability $1-negl(n)$ over $z \leftarrow_R \{0,1\}^{3n}$, the sets $S_0 = \{ G(x) | x\in \{0,1\}^n \}$ and $S_1 = \{ G(x) \oplus z | x\in \{0,1\}^n \}$ will be disjoint. Hence by choosing $z$ at random, Alice can ensure that Bob is _committed_ to the choice of $b$ after sending $y$.
+
+* For every $z$, both the distribution $G(U_n)$ and $G(U_n)\oplus z$ are pseudorandom. This can be shown to imply that no matter what string $z$ Alice chooses, she cannot predict $b$ from the string $y$ sent by Bob with probability better than $1/2 + negl(n)$. Hence her choice of $b'$ will be essentially independent of $b$.
 :::
 
 
