@@ -53,10 +53,10 @@ A function $G:{\{0,1\}}^n\rightarrow{\{0,1\}}^\ell$ is a $(T,\epsilon)$ *pseudor
 :::
 
 
-That is, $G$ is a $(T,\epsilon)$ pseudorandom generators if no circuit of at most $T$ gates can distinguish with bias better than $\epsilon$ between the output of $G$ (on a random input) and a uniformly random string of the same length.
+That is, $G$ is a $(T,\epsilon)$ pseudorandom generator if no circuit of at most $T$ gates can distinguish with bias better than $\epsilon$ between the output of $G$ (on a random input) and a uniformly random string of the same length.
 Spelling this out fully, this means that for every function $D:\{0,1\}^\ell \rightarrow \{0,1\}$ computable using at most $T$ operations, 
 
-$$$\left| \Pr_{x \sim \{0,1\}^n}[ D(G(x))=1 ] - \Pr_{y \sim \{0,1\}^\ell}[ D(y)=1 \right| < \epsilon\;.$
+$$\left| \Pr_{x \sim \{0,1\}^n}[ D(G(x))=1 ] - \Pr_{y \sim \{0,1\}^\ell}[ D(y)=1 \right| < \epsilon\;.$$
 
 
 As we did for the case of encryption, we will typically use _asymptotic terms_ to describe cryptographic pseudorandom generator. We say that $G$ is simply a pseudorandom generator if it is efficiently computable and it is 
@@ -78,7 +78,7 @@ Another way to say it, is that a polynomial-time computable function $G$ mapping
 
 > # { .pause }
 This definition (as is often the case in cryptography) is a bit long, but the concept of a pseudorandom generator is central to cryptography, and so you should take your time and make sure you understand it.
-Intuitively, a function $G$ is a pseudorandom generator if __(1)__ it expands its input (mapping $n$ bits to $n+1$ or more) and __(2)__ we cannot distinguish between the output $G(x)$ for $x$ is a short (i.e., $n$ bit long) random string, often known as the _seed_ of the pseudorandom genertor, and a truly random long (i.e., of length $\ell(n)$) string chosen uniformly at random from $\{0,1\}^{\ell(n)}$. 
+Intuitively, a function $G$ is a pseudorandom generator if __(1)__ it expands its input (mapping $n$ bits to $n+1$ or more) and __(2)__ we cannot distinguish between the output $G(x)$ for $x$ a short (i.e., $n$ bit long) random string, often known as the _seed_ of the pseudorandom generator, and a truly random long (i.e., of length $\ell(n)$) string chosen uniformly at random from $\{0,1\}^{\ell(n)}$.
 
 
 ![A function $G:\{0,1\}^n \rightarrow \{0,1\}^{\ell(n)}$ is a _pseuaodrandom generator_ if $G(x)$ for a random short $x \sim \{0,1\}^n$ is computationally indistinguishable from a long truly random $y \sim \{0,1\}^{\ell(n)}$.](../figure/prg_def.png){#prgdeffig}
@@ -194,11 +194,11 @@ For the forward direction, suppose for contradiction that there exists some $i$ 
 
 If $y=G(x)$ for a uniform $x$, then $P$ succeeds with probability $p$. If $y$ is uniformly random, then we can imagine that the bit $y_i$ is generated *after* $P$ finished its calculation. The bit $y_i$ is $0$ or $1$ with equal probability, so $P$ succeeds with probability $\frac12$. Since $Eve$ outputs 1 when $P$ succeeds,$$\left| \Pr[Eve(G(U_n))=1] - \Pr[ Eve(U_\ell)=1] \right|=|p-\frac12|\ge \epsilon(n),$$ a contradiction.
 
-For the backward direction, let $G$ be an unpredictable function. Let $H_i$ be the distribution where the first $i$ bits come from $G(U_n)$ while the last $n-i$ bits are all random. Notice that $H_0=U_m$ and $H_n=G(U_n)$, so it suffices to show that $H_{i-1}\cong H_{i}$ for all $i$.
+For the backward direction, let $G$ be an unpredictable function. Let $H_i$ be the distribution where the first $i$ bits come from $G(U_n)$ while the last $\ell-i$ bits are all random. Notice that $H_0=U_\ell$ and $H_\ell=G(U_n)$, so it suffices to show that $H_{i-1} \approx H_{i}$ for all $i$.
 
-Suppose $H_{i-1}\ncong H_{i}$ for some $i$, i.e. there exists some $Eve$ and non-negligible $\epsilon$ such that $$\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Consider the program $P$ that, on input $(y_1,\ldots,y_{i-1})$, picks the bit $\hat y_{i},\ldots, \hat y_n$ uniformly at random. Then, $P$ calls $Eve$ on the generated input. If $Eve$ outputs $1$ then $P$ outputs $\hat y_{i}$, and otherwise it outputs $1-\hat y_{i}$.
+Suppose $H_{i-1} \not\approx H_{i}$ for some $i$, i.e. there exists some $Eve$ and non-negligible $\epsilon$ such that $$\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Consider the program $P$ that, on input $(y_1,\ldots,y_{i-1})$, picks the bits $\hat y_{i},\ldots, \hat y_\ell$ uniformly at random. Then, $P$ calls $Eve$ on the generated input. If $Eve$ outputs $1$ then $P$ outputs $\hat y_{i}$, and otherwise it outputs $1-\hat y_{i}$.
 
-The string $(y_1,\ldots,y_{i-1}, \hat y_i,\ldots,\hat y_n)$ has the same distribution as $H_{i-1}$. However, conditioned on $\hat y_i=y_i$, the string has distribution equal to $H_{i}$. Let $p$ be the probability that $Eve$ outputs $1$ if $\hat y_i=y_i$ and $q$ be the same probability when $\hat y_i\neq y_i$, then we get $$p-\frac12(p+q)=\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Therefore, the probability $P$ outputs the correct value is equal to $\frac12p+\frac12(1-q)=\frac12+\epsilon(n)2$, a contradiction.
+The string $(y_1,\ldots,y_{i-1}, \hat y_i,\ldots,\hat y_\ell)$ has the same distribution as $H_{i-1}$. However, conditioned on $\hat y_i=y_i$, the string has distribution equal to $H_{i}$. Let $p$ be the probability that $Eve$ outputs $1$ if $\hat y_i=y_i$ and $q$ be the same probability when $\hat y_i\neq y_i$, then we get $$p-\frac12(p+q)=\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Therefore, the probability $P$ outputs the correct value is equal to $\frac12p+\frac12(1-q)=\frac12+\epsilon(n)$, a contradiction.
 :::
 
 The definition of unpredictability is useful because many of our candidates for pseudorandom generators appeal to the unpredictability definition in their proofs. For example, the Blum-Blum-Shub generator we will see later in the chapter is proved to be unpredictable if the "quadratic residuosity problem" is hard. It is also nice to know that our intuition at the beginning of the chapter can be formalized.
@@ -499,7 +499,7 @@ The ciphers Salsa and ChaCha, designed by Dan Bernstein, have a similar design t
 ## Case Study 3: B.B.S.
 B.B.S., which stands for the authors Blum, Blum and Shub, is a simple generator constructed from a potentially hard problem in number theory.
 
-Let $n=pq$, where $p,q$ are primes. Then, the set $Q_n$ of *quadratic residues modulo $n$* is the set $$Q_n=\{x^2\mid \gcd(x,N)=1\}.$$ The definition extends the concept of "perfect squares" when we are working with standard integers. Notice that each number in $Q_n$ has at least one square root. We will see later in the course that if $n=pq$ then these numbers will have $4$ square roots.
+Let $n=pq$, where $p,q$ are primes. Then, the set $Q_n$ of *quadratic residues modulo $n$* is the set $$Q_n=\{x^2\mid \gcd(x,n)=1\}.$$ The definition extends the concept of "perfect squares" when we are working with standard integers. Notice that each number in $Q_n$ has at least one square root. We will see later in the course that if $n=pq$ then these numbers will have $4$ square roots.
 
 The B.B.S. generator chooses $n=pq$, where $p,q$ are prime and $p,q\equiv 3\pmod{4}$. The second condition guarantees that for each $y\in Q_n$, exactly one of its square roots fall in $Q_n$. It also maintains an initial state $x\in\{0,1\}^n$, initialized to the seed.
 
@@ -539,7 +539,7 @@ __Claim I:__ For every fixed NAND program / Boolean circuit $P$, if we pick $G:\
 >
 Before proving Claim I, let us see why it implies [prgexist](){.ref}.
 We can identify a function $G:\{0,1\}^\ell \rightarrow \{0,1\}^m$ with its "truth table" or simply the list of evaluations on all its possible $2^\ell$ inputs. Since each output is an $m$ bit string,
-we can also think of $G$ as a string in $\{0,1\}^{m\cdot 2^\ell}$. We define $\mathcal{G}^m_\ell$ to be the set of all functions from $\{0,1\}^\ell$ to $\{0,1\}^\ell$. As discussed above we can identify $\mathcal{F}_\ell^m$ with $\{0,1\}^{m\cdot 2^\ell}$ and choosing a random function $G \sim \mathcal{F}_\ell^m$ corresponds to choosing a random $m\cdot 2^\ell$-long bit string.
+we can also think of $G$ as a string in $\{0,1\}^{m\cdot 2^\ell}$. We define $\mathcal{F}^m_\ell$ to be the set of all functions from $\{0,1\}^\ell$ to $\{0,1\}^m$. As discussed above we can identify $\mathcal{F}_\ell^m$ with $\{0,1\}^{m\cdot 2^\ell}$ and choosing a random function $G \sim \mathcal{F}_\ell^m$ corresponds to choosing a random $m\cdot 2^\ell$-long bit string.
 >
 For every NAND program / Boolean circuit $P$ let $B_P$ be the event that, if we choose $G$ at random from $\mathcal{F}_\ell^m$ then [prgdefeq](){.eqref} is violated with respect to the program $P$.
 It is important to understand what is the sample space that the event $B_P$ is defined over, namely this event depends on the choice of $G$ and so $B_P$ is a subset of $\mathcal{F}_\ell^m$. An equivalent way to define the event $B_P$ is that it is the subset of all functions mapping $\{0,1\}^\ell$ to $\{0,1\}^m$ that violate [prgdefeq](){.eqref}, or in other words:
@@ -558,9 +558,9 @@ In particular this means that there _exists_ a single $G^* \in \mathcal{F}_\ell^
 Hence, it suffices to prove Claim I to conclude the proof of [prgexist](){.ref}.
 Choosing a random $G: \{0,1\}^\ell \rightarrow \{0,1\}^m$ amounts to choosing $L=2^\ell$ random strings $y_0,\ldots,y_{L-1} \in \{0,1\}^m$ and letting $G(x)=y_x$ (identifying $\{0,1\}^\ell$ and $[L]$ via the binary representation).
 Hence the claim amounts to showing that for every fixed function $P:\{0,1\}^m \rightarrow \{0,1\}$,
-if $L > 2^{C (\log T + \log \epsilon)}$ (which by setting $C>4$, we can ensure is larger than $10 T^2/\epsilon^2$) then the probability that
+if $L > 2^{C (\log T + \log (1/\epsilon))}$ (which by setting $C>4$, we can ensure is larger than $10 T^2/\epsilon^2$) then the probability that
 $$
-\left| \tfrac{1}{L}\sum_{i=0}^{L-1} P(y_s) - \Pr_{s \sim \{0,1\}^m}[P(s)=1] \right| > \epsilon \label{prgdefeqchernoff}
+\left| \tfrac{1}{L}\sum_{i=0}^{L-1} P(y_i) - \Pr_{s \sim \{0,1\}^m}[P(s)=1] \right| > \epsilon \label{prgdefeqchernoff}
 $$
 is at most $2^{-T^2}$.
 [{prgdefeqchernoff}](){.eqref} follows directly from the Chernoff bound.
