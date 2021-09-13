@@ -205,7 +205,7 @@ The definition of unpredictability is useful because many of our candidates for 
 
 ## Stream ciphers
 
-We now show a connection between psuedorandom generators and encryption schemes:
+We now show a connection between pseudorandom generators and encryption schemes:
 
 > # {.theorem title="PRG conjecture implies Cipher conjectures" #PRGandcipherthm}
 If the PRG conjecture is true then so is the cipher conjecture.
@@ -308,7 +308,7 @@ You should really pause here and make sure you see why the "counter pseudorandom
 
 ### Attempt 1: The linear checksum / linear feedback shift register (LFSR)
 
-LFSR can be thought of as the "mother" (or maybe more like the sick great-uncle) of all psuedorandom generators.
+LFSR can be thought of as the "mother" (or maybe more like the sick great-uncle) of all pseudorandom generators.
 One of the simplest ways to generate a "randomish" extra digit given an $n$ digit
 number is to use a *checksum* - some linear combination of the digits, with a canonical example being the [cyclic redundancy check](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) or CRC.^[CRC are often used to generate a "control digit" to detect mistypes of credit card or social security card number. This has very different goals than its use for pseudorandom generators, though there are some common intuitions behind the two usages.]
 This motivates the notion of a *linear feedback shift register generator* (LFSR): if the current state is $s\in\{0,1\}^n$ then the output is $f(s)$ where $f$ is a linear function (modulo 2) and the new state is obtained by right shifting the previous state and putting $f(s)$ at the leftmost location.
