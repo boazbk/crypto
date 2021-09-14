@@ -69,7 +69,7 @@ than $T$ operations" and just say that there is a way to formally do so. We will
 and more generally that it has $t$ bits of security if it can't be broken using less than $2^t$
 operations.
 Given the perfect secrecy definition we saw last time, a natural attempt for defining
-Computational secrecy would be the following:
+computational secrecy would be the following:
 
 
 > # {.definition title="Computational secrecy (first attempt)" #firstcompdef}
@@ -105,7 +105,7 @@ kind of conditions we desired. In particular, let's verify that this definition
 implies the analogous condition to perfect secrecy.
 
 > # {.theorem title="Guessing game for computational secrecy" #twotomanycomp}
-If $(E,D)$ has $t$ bits of Computational secrecy as per  [compsecconcdef](){.ref} then for every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
+If $(E,D)$ has $t$ bits of computational secrecy as per  [compsecconcdef](){.ref} then for every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
 $2^t-(100\ell+100)$ computational steps, if we choose at random $m\in M$ and a
 random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m$ after
 seeing $E_k(m)$ is at most $1/|M|+2^{-t+1}$.
@@ -503,7 +503,7 @@ So if $X$ and $Y$ are two random variables that depend on some index $n$, we wil
 
 
 We can use computational indistinguishability to phrase the definition of
-Computational secrecy more succinctly:
+computational secrecy more succinctly:
 
 > # {.theorem title="Computational Indistinguishability phrasing of security" #compindsecthm}
 Let $(E,D)$ be a valid
@@ -513,7 +513,7 @@ $$ \{ E_k(m_0) \}_{n\in \N}  \approx \{ E_k(m_1) \}_{n\in\N}$$
 where each of these two distributions is obtained by sampling a random
 $k{\leftarrow_{\tiny R}}{\{0,1\}}^n$.
 
-Working out the proof is an excellent way to make sure you understand both the definition of Computational secrecy and computational indistinguishability, and hence we leave it as an exercise.
+Working out the proof is an excellent way to make sure you understand both the definition of computational secrecy and computational indistinguishability, and hence we leave it as an exercise.
 
 One intuition for computational indistinguishability is that it is related to some
 notion of *distance*.
