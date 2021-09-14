@@ -30,7 +30,7 @@ the second toss will have the same result as the first one with about a 51% chan
 (Though [see also this experiment](https://www.stat.berkeley.edu/~aldous/Real-World/coin_tosses.html).)
 It is conceivable that at some point someone would discover some function $F$
 that, given the first 100 coin tosses by any given person, can predict the value of the
-101$^{th}$.[^def]
+101$^{st}$.[^def]
 
 In all these examples, the physics underlying the event, whether it's the
 planets' movement, the weather, or coin tosses, did not change but only
@@ -53,7 +53,7 @@ A function $G:{\{0,1\}}^n\rightarrow{\{0,1\}}^\ell$ is a $(T,\epsilon)$ *pseudor
 :::
 
 
-That is, $G$ is a $(T,\epsilon)$ pseudorandom generators if no circuit of at most $T$ gates can distinguish with bias better than $\epsilon$ between the output of $G$ (on a random input) and a uniformly random string of the same length.
+That is, $G$ is a $(T,\epsilon)$ pseudorandom generator if no circuit of at most $T$ gates can distinguish with bias better than $\epsilon$ between the output of $G$ (on a random input) and a uniformly random string of the same length.
 Spelling this out fully, this means that for every function $D:\{0,1\}^\ell \rightarrow \{0,1\}$ computable using at most $T$ operations, 
 
 $$\left| \Pr_{x \leftarrow_R \{0,1\}^n}[ D(G(x))=1 ] - \Pr_{y \leftarrow_R \{0,1\}^\ell}[ D(y)=1 ] \right| < \epsilon\;.$$
@@ -78,7 +78,7 @@ Another way to say it, is that a polynomial-time computable function $G$ mapping
 
 > # { .pause }
 This definition (as is often the case in cryptography) is a bit long, but the concept of a pseudorandom generator is central to cryptography, and so you should take your time and make sure you understand it.
-Intuitively, a function $G$ is a pseudorandom generator if __(1)__ it expands its input (mapping $n$ bits to $n+1$ or more) and __(2)__ we cannot distinguish between the output $G(x)$ for $x$ is a short (i.e., $n$ bit long) random string, often known as the _seed_ of the pseudorandom generator, and a truly random long (i.e., of length $\ell(n)$) string chosen uniformly at random from $\{0,1\}^{\ell(n)}$. 
+Intuitively, a function $G$ is a pseudorandom generator if __(1)__ it expands its input (mapping $n$ bits to $n+1$ or more) and __(2)__ we cannot distinguish between the output $G(x)$ for $x$ a short (i.e., $n$ bit long) random string, often known as the _seed_ of the pseudorandom generator, and a truly random long (i.e., of length $\ell(n)$) string chosen uniformly at random from $\{0,1\}^{\ell(n)}$.
 
 
 ![A function $G:\{0,1\}^n \rightarrow \{0,1\}^{\ell(n)}$ is a _pseuaodrandom generator_ if $G(x)$ for a random short $x \leftarrow_R \{0,1\}^n$ is computationally indistinguishable from a long truly random $y \leftarrow_R \{0,1\}^{\ell(n)}$.](../figure/prg_def.png){#prgdeffig}
@@ -140,19 +140,19 @@ bits for some polynomial $t(\cdot)$. The idea is that we maintain a state of $n$
 to map $s_{i-1}$ to the $n+1$-long bit string $(s_i,y_i)$, output $y_i$ and keep $s_i$ as our new state.
 To prove the security of this construction
 we need to show that the distribution $G(U_n) = (y_1,\ldots,y_t)$ is computationally indistinguishable from the uniform distribution $U_t$. As usual, we will use the hybrid argument.
-For $i\in\{0,\ldots,t\}$ we define $H_i$ to be the distribution where the first $i$ bits chosen at uniform, whereas the last $t-i$ bits are computed as above.
+For $i\in\{0,\ldots,t\}$ we define $H_i$ to be the distribution where the first $i$ bits chosen uniformly at random, whereas the last $t-i$ bits are computed as above.
 Namely, we choose $s_i$ at random in $\{0,1\}^n$ and continue the computation of $y_{i+1},\ldots,y_t$ from the state $s_i$.
 Clearly $H_0=G(U_n)$ and $H_t=U_t$ and hence by the triangle inequality it suffices to prove that $H_i \approx H_{i+1}$ for all $i\in\{0,\ldots,t-1\}$.
 We illustrate these two hybrids in [lengthextendhybridfig](){.ref}.
 
 ![Hybrids $H_i$ and $H_{i+1}$--- dotted boxes refer to values that are chosen independently and uniformly at random](../figure/length-extension-prg-hybrid.jpg){#lengthextendhybridfig}
 
-Now suppose otherwise, that there exists some adversary $Eve$ such that $\left| \E[Eve(H_i)] - \E[Eve(H_{i+1})] \right| \geq \epsilon$ for some non-negligible $\epsilon$.
-We will build from $Eve$ an adversary $Eve'$ breaking the security of the pseudorandom generator $G'$ (see [reductionlengthextendfig](){.ref}).
+Now suppose otherwise that there exists some adversary $Eve$ such that $\left| \E[Eve(H_i)] - \E[Eve(H_{i+1})] \right| \geq \epsilon$ for some non-negligible $\epsilon$.
+From $Eve$, we will an adversary $Eve'$ breaking the security of the pseudorandom generator $G'$ (see [reductionlengthextendfig](){.ref}).
 
 ![Building an adversary $Eve'$ for $G'$ from an adversary $Eve$ distinguishing $H_i$ and $H_{i+1}$. The boxes marked with questions marks are those that are random or pseudorandom depending on whether we are in $H_i$ or $H_{i+1}$. Everything inside the dashed red lines is simulated by $Eve'$ that gets as input the $n+1$-bit string $(s_{i+1},y_{i+1})$.](../figure/length-extension-prg-adversary.jpg){#reductionlengthextendfig}
 
-On input of string $y$ of length $n+1$, $Eve'$ will interpret $y$ as $(s_{i+1},y_{i+1})$, choose $y_1,\ldots,y_i$ randomly and compute $y_{i+2},\ldots,y_t$ as in our pseudorandom generator's construction. $Eve'$ will then feed $(y_1,\ldots,y_t)$ to $Eve$ and output whatever $Eve$ does. Clearly, $Eve'$ is efficient if $Eve$ is. Moreover, one can see that if
+On input a string $y$ of length $n+1$, $Eve'$ will interpret $y$ as $(s_{i+1},y_{i+1})$ where $s_{i+1} \in \{0,1\}^n$. She then chooses $y_1,\ldots,y_i$ randomly and compute $y_{i+2},\ldots,y_t$ as in our pseudorandom generator's construction. $Eve'$ will then feed $(y_1,\ldots,y_t)$ to $Eve$ and output whatever $Eve$ does. Clearly, $Eve'$ is efficient if $Eve$ is. Moreover, one can see that if
 $y$ was random then $Eve'$ is feeding $Eve$ with an input distributed according to $H_{i+1}$ while if $y$ was of the form $G(s)$ for a random $s$ then $Eve'$ will feed $Eve$
 with an input distributed according to $H_i$. Hence we get that $| \E[ Eve'(G'(U_n))] - \E[Eve'(U_{n+1})] | \geq \epsilon$ contradicting the security of $G'$.
 :::
@@ -194,18 +194,18 @@ For the forward direction, suppose for contradiction that there exists some $i$ 
 
 If $y=G(x)$ for a uniform $x$, then $P$ succeeds with probability $p$. If $y$ is uniformly random, then we can imagine that the bit $y_i$ is generated *after* $P$ finished its calculation. The bit $y_i$ is $0$ or $1$ with equal probability, so $P$ succeeds with probability $\frac12$. Since $Eve$ outputs 1 when $P$ succeeds,$$\left| \Pr[Eve(G(U_n))=1] - \Pr[ Eve(U_\ell)=1] \right|=|p-\frac12|\ge \epsilon(n),$$ a contradiction.
 
-For the backward direction, let $G$ be an unpredictable function. Let $H_i$ be the distribution where the first $i$ bits come from $G(U_n)$ while the last $n-i$ bits are all random. Notice that $H_0=U_m$ and $H_n=G(U_n)$, so it suffices to show that $H_{i-1}\cong H_{i}$ for all $i$.
+For the backward direction, let $G$ be an unpredictable function. Let $H_i$ be the distribution where the first $i$ bits come from $G(U_n)$ while the last $\ell-i$ bits are all random. Notice that $H_0=U_\ell$ and $H_\ell=G(U_n)$, so it suffices to show that $H_{i-1} \approx H_{i}$ for all $i$.
 
-Suppose $H_{i-1}\ncong H_{i}$ for some $i$, i.e. there exists some $Eve$ and non-negligible $\epsilon$ such that $$\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Consider the program $P$ that, on input $(y_1,\ldots,y_{i-1})$, picks the bit $\hat y_{i},\ldots, \hat y_n$ uniformly at random. Then, $P$ calls $Eve$ on the generated input. If $Eve$ outputs $1$ then $P$ outputs $\hat y_{i}$, and otherwise it outputs $1-\hat y_{i}$.
+Suppose $H_{i-1} \not\approx H_{i}$ for some $i$, i.e. there exists some $Eve$ and non-negligible $\epsilon$ such that $$\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Consider the program $P$ that, on input $(y_1,\ldots,y_{i-1})$, picks the bits $\hat y_{i},\ldots, \hat y_\ell$ uniformly at random. Then, $P$ calls $Eve$ on the generated input. If $Eve$ outputs $1$ then $P$ outputs $\hat y_{i}$, and otherwise it outputs $1-\hat y_{i}$.
 
-The string $(y_1,\ldots,y_{i-1}, \hat y_i,\ldots,\hat y_n)$ has the same distribution as $H_{i-1}$. However, conditioned on $\hat y_i=y_i$, the string has distribution equal to $H_{i}$. Let $p$ be the probability that $Eve$ outputs $1$ if $\hat y_i=y_i$ and $q$ be the same probability when $\hat y_i\neq y_i$, then we get $$p-\frac12(p+q)=\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Therefore, the probability $P$ outputs the correct value is equal to $\frac12p+\frac12(1-q)=\frac12+\epsilon(n)2$, a contradiction.
+The string $(y_1,\ldots,y_{i-1}, \hat y_i,\ldots,\hat y_\ell)$ has the same distribution as $H_{i-1}$. However, conditioned on $\hat y_i=y_i$, the string has distribution equal to $H_{i}$. Let $p$ be the probability that $Eve$ outputs $1$ if $\hat y_i=y_i$ and $q$ be the same probability when $\hat y_i\neq y_i$, then we get $$p-\frac12(p+q)=\Pr[Eve(H_{i})=1]-\Pr[Eve(H_{i-1})=1]>\epsilon(n).$$ Therefore, the probability $P$ outputs the correct value is equal to $\frac12p+\frac12(1-q)=\frac12+\epsilon(n)$, a contradiction.
 :::
 
 The definition of unpredictability is useful because many of our candidates for pseudorandom generators appeal to the unpredictability definition in their proofs. For example, the Blum-Blum-Shub generator we will see later in the chapter is proved to be unpredictable if the "quadratic residuosity problem" is hard. It is also nice to know that our intuition at the beginning of the chapter can be formalized.
 
 ## Stream ciphers
 
-We now show a connection between psuedorandom generators and encryption schemes:
+We now show a connection between pseudorandom generators and encryption schemes:
 
 > # {.theorem title="PRG conjecture implies Cipher conjectures" #PRGandcipherthm}
 If the PRG conjecture is true then so is the cipher conjecture.
@@ -246,7 +246,7 @@ $$
 $$
 
 Then the adversary $Eve$ defined as $Eve(y) = Eve'(y\oplus m)$ would be also efficient. Furthermore, if $y$
-is pseudorandom then $Eve(y)=Eve'(G(U_n)\oplus m)$ and if $y$ is uniformly random then $Eve'(U_{n+1}\oplus m)$.
+is pseudorandom then $Eve(y)=Eve'(G(U_n)\oplus m)$ and if $y$ is uniformly random then $Eve(y)=Eve'(U_{n+1}\oplus m)$.
 Then, $Eve$ can distinguish the two distributions with advantage $\epsilon$, a contradiction.
 :::
 
@@ -265,12 +265,19 @@ obtained by combining it with the one-time pad.
 ::: {.remark title="Using pseudorandom generators for coin tossing over the phone" #cointossingphonerm}
 The following is a cute application of pseudorandom generators. Alice and Bob want to toss a fair coin over the phone. They use a pseudorandom generator $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$.
 
-* Alice will send $z\leftarrow_R\{0,1\}^{3n}$ to Bob \
-* Bob picks $s\leftarrow_R\{0,1\}^n$ and with probability $1/2$ sends $G(s)$ (case I) and with probability $1/2$ sends $G(s)\oplus z$ (case II).\
-* Alice then picks a random $b\leftarrow_R\{0,1\}$ and sends it to Bob. \
-* Bob reveals what he sent in the previous stage and if it was case I, their output is $b$, and if it was case II, their output is $1-b$.
+1. Alice will send $z\leftarrow_R\{0,1\}^{3n}$ to Bob \
+2. Bob picks $s\leftarrow_R\{0,1\}^n$ and $b \leftarrow_R \{0,1\}$. If $b=0$ then Bob sends $y=G(s)$ and if $b=1$ he sends  $y=G(s)\oplus z$. In other words, $y = G(s) \oplus b\cdot z$ where $b\cdot z$ is the vector $(b\cdot z_1,\ldots, b\cdot z_{3n})$.
+3. Alice then picks a random $b'\leftarrow_R\{0,1\}$ and sends it to Bob. \
+4. Bob sends to Alice the string $s$ and $b$. Alice verifies that indeed $y= G(s) \oplus b \cdot z$.  Otherwise Alice aborts.
+5. The output of the protocol is $b \oplus b'$.
 
-It can be shown that (assuming the protocol is completed) the output is a random coin, which neither Alice or Bob can control or predict with more than negligible advantage over half. (Trying to formalize this and prove it is an excellent exercise.)
+It can be shown that (assuming the protocol is completed) the output is a random coin, which neither Alice or Bob can control or predict with more than negligible advantage over half. 
+Trying to formalize this and prove it is an excellent exercise.
+Two main components in the proofs are:
+
+* With probability $1-negl(n)$ over $z \leftarrow_R \{0,1\}^{3n}$, the sets $S_0 = \{ G(x) | x\in \{0,1\}^n \}$ and $S_1 = \{ G(x) \oplus z | x\in \{0,1\}^n \}$ will be disjoint. Hence by choosing $z$ at random, Alice can ensure that Bob is _committed_ to the choice of $b$ after sending $y$.
+
+* For every $z$, both the distribution $G(U_n)$ and $G(U_n)\oplus z$ are pseudorandom. This can be shown to imply that no matter what string $z$ Alice chooses, she cannot predict $b$ from the string $y$ sent by Bob with probability better than $1/2 + negl(n)$. Hence her choice of $b'$ will be essentially independent of $b$.
 :::
 
 
@@ -308,7 +315,7 @@ You should really pause here and make sure you see why the "counter pseudorandom
 
 ### Attempt 1: The linear checksum / linear feedback shift register (LFSR)
 
-LFSR can be thought of as the "mother" (or maybe more like the sick great-uncle) of all psuedorandom generators.
+LFSR can be thought of as the "mother" (or maybe more like the sick great-uncle) of all pseudorandom generators.
 One of the simplest ways to generate a "randomish" extra digit given an $n$ digit
 number is to use a *checksum* - some linear combination of the digits, with a canonical example being the [cyclic redundancy check](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) or CRC.^[CRC are often used to generate a "control digit" to detect mistypes of credit card or social security card number. This has very different goals than its use for pseudorandom generators, though there are some common intuitions behind the two usages.]
 This motivates the notion of a *linear feedback shift register generator* (LFSR): if the current state is $s\in\{0,1\}^n$ then the output is $f(s)$ where $f$ is a linear function (modulo 2) and the new state is obtained by right shifting the previous state and putting $f(s)$ at the leftmost location.
@@ -496,19 +503,35 @@ The ciphers Salsa and ChaCha, designed by Dan Bernstein, have a similar design t
 
 [^fn]:I typically do not include references in these lecture notes, and leave them to the texts, but I make here an exception because Itsik Mantin was a close friend of mine in grad school.
 
-## Case Study 3: B.B.S.
+###  Case Study 3: Blum, Blum and Shub
+
 B.B.S., which stands for the authors Blum, Blum and Shub, is a simple generator constructed from a potentially hard problem in number theory.
 
-Let $n=pq$, where $p,q$ are primes. Then, the set $Q_n$ of *quadratic residues modulo $n$* is the set $$Q_n=\{x^2\mid \gcd(x,N)=1\}.$$ The definition extends the concept of "perfect squares" when we are working with standard integers. Notice that each number in $Q_n$ has at least one square root. We will see later in the course that if $n=pq$ then these numbers will have $4$ square roots.
+Let $N=P\cdot Q$, where $P,Q$ are primes. (We will generally use $P,Q$ of size roughly $n$, where $n$ is our security parameter, and so use capital letters to emphasize that the magnitude of these numbers is exponential in the security parameter.)
 
-The B.B.S. generator chooses $n=pq$, where $p,q$ are prime and $p,q\equiv 3\pmod{4}$. The second condition guarantees that for each $y\in Q_n$, exactly one of its square roots fall in $Q_n$. It also maintains an initial state $x\in\{0,1\}^n$, initialized to the seed.
+We define $QR_N$ to be the set of  *quadratic residues modulo $N$*, which are the numbers that have a modular square root.
+Formally,  
+
+$$QR_N=\{X^2 \mod N \mid \gcd(X,N )=1\}.$$ 
+
+This definition extends the concept of "perfect squares" when we are working with standard integers. Notice that each number in $Y \in QR_N$ has at least one square root (number $X$ such that $Y = X^2 \mod N$). 
+We will see later in the course that if $N = P\cdot Q$ for primes $P,Q$ then each  $Y\in QR_N$ has exactly $4$ square roots.
+The B.B.S. generator chooses $N=P\cdot Q$, where $P,Q$ are prime and $P,Q\equiv 3\pmod{4}$. The second condition guarantees that for each $Y\in QR_N$, exactly one of its square roots fall in $QR_N$, and hence the map 
+$X \mapsto X^2 \mod N$ is one-to-one and onto map from $QR_N$ to itself.  
+It is defined as follows:
+
 
 ```python
-def BBS(x):
-    return (x * x % n, x % 2)
+def BBS(X):
+    return (X * X % N, N % 2)
 ```
 
-In other words, it calculates the least significant bit of $x$ and squares its internal state. The security of this generator is based on the *quadratic residuosity problem*, which asks, given a number $x$, whether $x\in Q_n$. The number theory required takes a while to develop. However, it is interesting and I recommend the reader to search up this particular generator.
+In other words,  on input $X$, $BBS(X)$ outputs $X^2 \mod N$ and the least significant bit of $X$. 
+We can think of $BBS$ as a map $BBS:QR_N \rightarrow QR_N \times \{0,1\}$ and so it maps a domain into a larger domain.
+We can also extend it to output $t$ additional bits, by repeatedly squaring the input, letting $X_0 = X$, $X_{i+1} = X_i^2 \mod N$, for $i=0,\ldots,{t-1}$, and outputting $X_t$ together with the least significant bits of $X_0,\ldots,X_{t-1}$.
+It turns out that assuming that there is no polynomial-time algorithm (where "polynomial-time" means polynomial in the _number of bits_ to represent $N$, i.e., polynomial in $\log N$)  to factor randomly chosen integers $N=P\cdot Q$, for every $t$ that is polynomial in the number of bits in $N$, the output of the $t$-step $BBS$ generator will be computationally indistinguishable from $U_{QR_N} \times U_t$ where $U_{QR_N}$ denotes the uniform distribution over $QR_N$.
+
+The number theory required to show takes a while to develop. However, it is interesting and I recommend the reader to search up this particular generator, see for example [this survey by Junod](https://www.cs.miami.edu/home/burt/learning/Csc609.062/docs/bbs.pdf).
 
 ## Non-constructive existence of pseudorandom generators
 
@@ -539,7 +562,7 @@ __Claim I:__ For every fixed NAND program / Boolean circuit $P$, if we pick $G:\
 >
 Before proving Claim I, let us see why it implies [prgexist](){.ref}.
 We can identify a function $G:\{0,1\}^\ell \rightarrow \{0,1\}^m$ with its "truth table" or simply the list of evaluations on all its possible $2^\ell$ inputs. Since each output is an $m$ bit string,
-we can also think of $G$ as a string in $\{0,1\}^{m\cdot 2^\ell}$. We define $\mathcal{G}^m_\ell$ to be the set of all functions from $\{0,1\}^\ell$ to $\{0,1\}^\ell$. As discussed above we can identify $\mathcal{F}_\ell^m$ with $\{0,1\}^{m\cdot 2^\ell}$ and choosing a random function $G \leftarrow_R \mathcal{F}_\ell^m$ corresponds to choosing a random $m\cdot 2^\ell$-long bit string.
+we can also think of $G$ as a string in $\{0,1\}^{m\cdot 2^\ell}$. We define $\mathcal{F}^m_\ell$ to be the set of all functions from $\{0,1\}^\ell$ to $\{0,1\}^m$. As discussed above we can identify $\mathcal{F}_\ell^m$ with $\{0,1\}^{m\cdot 2^\ell}$ and choosing a random function $G \sim \mathcal{F}_\ell^m$ corresponds to choosing a random $m\cdot 2^\ell$-long bit string.
 >
 For every NAND program / Boolean circuit $P$ let $B_P$ be the event that, if we choose $G$ at random from $\mathcal{F}_\ell^m$ then [prgdefeq](){.eqref} is violated with respect to the program $P$.
 It is important to understand what is the sample space that the event $B_P$ is defined over, namely this event depends on the choice of $G$ and so $B_P$ is a subset of $\mathcal{F}_\ell^m$. An equivalent way to define the event $B_P$ is that it is the subset of all functions mapping $\{0,1\}^\ell$ to $\{0,1\}^m$ that violate [prgdefeq](){.eqref}, or in other words:
@@ -558,9 +581,9 @@ In particular this means that there _exists_ a single $G^* \in \mathcal{F}_\ell^
 Hence, it suffices to prove Claim I to conclude the proof of [prgexist](){.ref}.
 Choosing a random $G: \{0,1\}^\ell \rightarrow \{0,1\}^m$ amounts to choosing $L=2^\ell$ random strings $y_0,\ldots,y_{L-1} \in \{0,1\}^m$ and letting $G(x)=y_x$ (identifying $\{0,1\}^\ell$ and $[L]$ via the binary representation).
 Hence the claim amounts to showing that for every fixed function $P:\{0,1\}^m \rightarrow \{0,1\}$,
-if $L > 2^{C (\log T + \log \epsilon)}$ (which by setting $C>4$, we can ensure is larger than $10 T^2/\epsilon^2$) then the probability that
+if $L > 2^{C (\log T + \log (1/\epsilon))}$ (which by setting $C>4$, we can ensure is larger than $10 T^2/\epsilon^2$) then the probability that
 $$
-\left| \tfrac{1}{L}\sum_{i=0}^{L-1} P(y_s) - \Pr_{s \leftarrow_R \{0,1\}^m}[P(s)=1] \right| > \epsilon \label{prgdefeqchernoff}
+\left| \tfrac{1}{L}\sum_{i=0}^{L-1} P(y_i) - \Pr_{s \leftarrow_R \{0,1\}^m}[P(s)=1] \right| > \epsilon \label{prgdefeqchernoff}
 $$
 is at most $2^{-T^2}$.
 [{prgdefeqchernoff}](){.eqref} follows directly from the Chernoff bound.
