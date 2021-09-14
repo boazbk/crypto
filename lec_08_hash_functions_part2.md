@@ -39,7 +39,7 @@ The set $D$ is known to the attacker, but she has no information on the particul
 Much of the challenge for using passwords securely relies on the distinction between _offline_ and _online_ attacks.
 If each guess for a password requires interacting _online_ with a server, as is the case when typing a PIN number in the ATM, then even a weak password (such as a 4 digit PIN that at best provides $13$ bits of entropy) can
 yield meaningful security guarantees, as typically an alarm would be raised after five or so failed attempts.  
-However, if the adversary has the ability to check _offline_ whether a password is correct then the number of guesses they can try can be as high as the number of computing cycles at their disposal, which can easily run into the billions and so break passwords of $30$ or more  bits of entropy.
+However, if the adversary has the ability to check _offline_ whether a password is correct then the number of guesses they can try can be as high as the number of computing cycles at their disposal, which can easily run into the billions and so break passwords of $30$ or more bits of entropy.
 (This is an issue we'll return to after we learn about _public key cryptography_ when we'll talk about _password authenticated key exchange_.)
 
 Consider a password manager application.
@@ -55,7 +55,7 @@ Stop and think why this would _not_ be a good idea.
 In particular think of an example of a secure encryption $(E,D)$  and a distribution $P$ over $\{0,1\}^n$ of entropy at least $n/2$ such that if the key $k$ is chosen at random from $P$ then the encryption will be completely insecure.
 
 
-A classical approach is to simply use a cryptographic  hash function $H:\{0,1\}^*\rightarrow\{0,1\}^n$, and let $k_{master} = H(p_{master})$.
+A classical approach is to simply use a cryptographic hash function $H:\{0,1\}^*\rightarrow\{0,1\}^n$, and let $k_{master} = H(p_{master})$.
 If think of $H$ as a random oracle and $p_{master}$ as chosen randomly from $D$, then as long as an attacker makes $\ll |D|$ queries to the oracle,
 they are unlikely to make the query $p_{master}$ and hence the value $k_{master}$ will be completely random from their point of view.
 
@@ -93,7 +93,7 @@ until we get a single block $y\in\{0,1\}^n$. (Assume here $t$ is a power of two 
 
 Alice who sends $x$ to the cloud Bob will keep the short block $y$.
 Whenever Alice queries the value $i$ she will ask for a _certificate_ that $x_i$ is indeed the right value.
-This certificate will consists of the block that contains $i$, as well as all of the $2\log t$ blocks that were  used in the hash from this block to the root.
+This certificate will consists of the block that contains $i$, as well as all of the $2\log t$ blocks that were used in the hash from this block to the root.
 The security of this scheme follows from the following simple theorem:
 
 > # {.theorem title="Merkle Tree security" #merkletreefig}
@@ -108,14 +108,14 @@ an input $z$ in the path from $x$ and a distinct input $z'$ in $\pi$ that hash t
 
 ## Proofs of Retrievability
 
-The above provides a way to ensure Alice that the value retrieved from a cloud storage is correct, but how can Alice be sure that the cloud server still stores the values that she  _did not_ ask about?
+The above provides a way to ensure Alice that the value retrieved from a cloud storage is correct, but how can Alice be sure that the cloud server still stores the values that she _did not_ ask about?
 
-A priori, you might think that she  obviously can't.
-If Bob is lazy, or short on storage, he could decide to  store only some small fraction of $x$ that he thinks Alice is more likely to query for. As long as Bob wasn't unlucky and Alice doesn't ask these queries, then it seems Bob could get away with this.
+A priori, you might think that she obviously can't.
+If Bob is lazy, or short on storage, he could decide to store only some small fraction of $x$ that he thinks Alice is more likely to query for. As long as Bob wasn't unlucky and Alice doesn't ask these queries, then it seems Bob could get away with this.
 In a _proof of retrievability_, first proposed by Juels and Kalisky in 2007, Alice would be able to get convinced that Bob does in fact store her data.
 
 First, note that Alice can guarantee that Bob stores at least 99 percent of her data, by periodically asking him to provide answers (with proofs!)
-of the value of $x$ at  100 or so random locations.
+of the value of $x$ at 100 or so random locations.
 The idea is that if bob dropped more than 1 percent of the bits, then he'd be very likely to be caught "red handed" and get a question from Alice about a location he did not retain.
 
 Now, if we used some redundancy to store $x$ such as the RAID format, where it is composed of some small number $c$ parts and we can recover any bit of the original data as long as at most one of the parts were lost, then we might hope that even if 1\% of $x$ _was_ in fact lost by Bob, we could still recover the whole string.
@@ -135,7 +135,7 @@ The approach used in practice is known as "harvesting entropy".
 The idea is that we make great many measurements $x_1,\ldots,x_m$ of events that are considered
 "unpredictable" to some extent, including mouse movements, hard-disk and network latency, sources of noise etc...  and accumulate them in an entropy "pool"
 which would simply be some memory array.
-When we estimate that we have accumulated more than $128$ bits of randomness, then we  hash this array into a $128$ bit string which we'll use as a seed for a pseudorandom generator (see [entropyextfig](){.ref}).[^pool]
+When we estimate that we have accumulated more than $128$ bits of randomness, then we hash this array into a $128$ bit string which we'll use as a seed for a pseudorandom generator (see [entropyextfig](){.ref}).[^pool]
 Because entropy needs to be measured _from the point of view of the attacker_, this "entropy estimation" routine is a bit of a "black art" and there isn't a very principled way to perform it.
 In practice people try to be very conservative (e.g., assume that there is only one bit of entropy for 64 bits of measurements or so) and hope for the best,
 which often works but sometimes also [spectacularly fails](https://factorable.net/paper.html), especially in embedded systems that do not have access to many of these sources.
@@ -144,7 +144,7 @@ which often works but sometimes also [spectacularly fails](https://factorable.ne
 
 [^pool]: The reason that people use entropy "pools" rather than simply adding the entropy to the generator's state as it comes along is that the latter alternative might be insecure. Suppose that initial state of the generator was known to the adversary and now the entropy is "trickling in" one bit at a time while we continuously use the generator to produce outputs that can be observed by the adversary. Every time a new bit of entropy is added, the adversary now has uncertainty between two potential states of the generator, but once an output is produced this eliminates this uncertainty. In contrast, if we wait until we accumulate, say, 128 bits of entropy, then now the adversary will have $2^{128}$ possible state options to consider, and it could be computationally infeasible to cull them using further observation.
 
-How do hash functions figure into this? The idea is that if an input $x$ has  $n$ bits of entropy then $h(x)$ would still have the same bits of entropy, as long as its
+How do hash functions figure into this? The idea is that if an input $x$ has $n$ bits of entropy then $h(x)$ would still have the same bits of entropy, as long as its
 output is larger than $n$. In practice people use the notion of "entropy" in a rather loose sense, but we will try to be more precise below.
 
 The _entropy_ of a distribution $D$ is meant to capture the amount of "uncertainty" you have over the distribution. The canonical example is when $D$ is the uniform
@@ -167,7 +167,7 @@ $H_{Shannon}(X,Y)=n$ (since $X$ is completely determined $Y$ and hence $(X,Y)$ i
 $H_{Shannon}(X) = n - \E[Y|X] =  n - \sum_{i=1}^m p_i k_i = n -  \sum_{i=1}^m p_i \log(2^n p_i)$
 since $p_i = k_i/2^n$. Since $\log(2^n p_i) = n + \log(p_i)$ we see that this means that
 $$
-H_{Shannon}(X) =  n - \sum_i p_i \cdot n  - \sum_i p_i \log(p_i) = - \sum_i p_i \log (p_i)
+H_{Shannon}(X) =  n - \sum_i p_i \cdot n - \sum_i p_i \log(p_i) = - \sum_i p_i \log (p_i)
 $$
 using the fact that $\sum_i p_i = 1$.
 
@@ -181,7 +181,7 @@ We can now formally define the notion of an extractor:
 A function $h:\{0,1\}^{\ell+n}\rightarrow\{0,1\}^n$ is a _randomness extractor_ ("extractor" for short) if for every distribution $X$ over $\{0,1\}^\ell$ with min entropy at least $2n$, if we pick
 $s$ to be a random "salt", the distribution $h(X)$ is computationally indistinguishable from the uniform distribution.[^params]
 
-[^infty]:  The notation $H_{\infty}(\cdot)$ for  min entropy comes from the fact that one can define a [_family_](https://goo.gl/HvVgu1) of entropy like functions, containing a function for every non-negative number $p$ based on the $p$-norm of the probability distribution. That is, the Rényi  entropy of order $p$ is defined as $H_p(X)=(1-p)^{-1}-\log(\sum_x \Pr[X=x]^p)$. The min entropy can be thought of as the limit of $H_p$ when $p$ tends to infinity while the Shannon entropy is the limit as $p$ tends to $1$. The entropy $H_2(\cdot)$ is related to the _collision probability_ of $X$ and is often used as well. The min entropy is the smallest among all the entropies and hence it is the most _conservative_ (and so appropriate for usage in cryptography). For _flat sources_, which are uniform over a certain subset, all entropies coincide.
+[^infty]:  The notation $H_{\infty}(\cdot)$ for min entropy comes from the fact that one can define a [_family_](https://goo.gl/HvVgu1) of entropy like functions, containing a function for every non-negative number $p$ based on the $p$-norm of the probability distribution. That is, the Rényi entropy of order $p$ is defined as $H_p(X)=(1-p)^{-1}-\log(\sum_x \Pr[X=x]^p)$. The min entropy can be thought of as the limit of $H_p$ when $p$ tends to infinity while the Shannon entropy is the limit as $p$ tends to $1$. The entropy $H_2(\cdot)$ is related to the _collision probability_ of $X$ and is often used as well. The min entropy is the smallest among all the entropies and hence it is the most _conservative_ (and so appropriate for usage in cryptography). For _flat sources_, which are uniform over a certain subset, all entropies coincide.
 
 [^params]: The pseudorandomness literature studies the notion of extractors much more generally and consider all possible variations for parameters such as the entropy requirement, the salt (more commonly known as seed) size, the distance from uniformity, and more. The type of notion we consider here is known in that literature as a "strong seeded extractor". See [Vadhan's monograph](https://goo.gl/XHQjTB) for an in-depth treatment of this topic.
 
@@ -223,7 +223,7 @@ cryptographic hash function for this purpose.
 
 A cryptographic tool such as encryption is clearly insecure if the adversary learns the private key,  and similarly the output of a pseudorandom generator is insecure if the adversary learns the seed.
 So, it might seem as if it's "game over" once this happens. However, there is still some hope.
-For example, if the adversary  learns it at time $t$ but didn't know it before then, then one could hope that she does not learn the information that was exchanged up to time $t-1$.
+For example, if the adversary learns it at time $t$ but didn't know it before then, then one could hope that she does not learn the information that was exchanged up to time $t-1$.
 This property is known as "forward secrecy". It had recently gained interest as means to protect against powerful "attackers" such as the NSA that may record the communication transcripts in the hope of deciphering them in some future after it had learned the secret key.
 In the context of pseudorandom generators, one could hope for both forward and backward secrecy.
 Forward secrecy means that the state of the generator is updated at every point in time in a way that learning the state at time $t$ does not help in recovering past state, and "backward secrecy" means that we can recover from the adversary knowing our internal state by updating the generator with fresh entropy.

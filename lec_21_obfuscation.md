@@ -12,9 +12,9 @@ chapternum: "22"
 
 Let us stop and think of the notions we have seen in cryptography. We have seen that under reasonable computational assumptions (such as LWE) we can achieve the following:
 
-* CPA secure _private key encryption_ and _Message Authentication codes_ (which can be combined to get CCA security or authenticated encryption)- this means that two parties that share a key can have virtual secure channel between them. An adversary cannot get _any additional information_ beyond whatever is her prior knowledge given an encryption of a  message sent from Alice to Bob. Even if Moreover, she cannot modify this message by even a single bit. It's lucky we only discovered these results from the 1970's onwards--- if the Germans have used such an encryption instead of ENIGMA in World War II there's no telling how many more lives would have been lost.
+* CPA secure _private key encryption_ and _Message Authentication codes_ (which can be combined to get CCA security or authenticated encryption)- this means that two parties that share a key can have virtual secure channel between them. An adversary cannot get _any additional information_ beyond whatever is her prior knowledge given an encryption of a message sent from Alice to Bob. Even if Moreover, she cannot modify this message by even a single bit. It's lucky we only discovered these results from the 1970's onwards--- if the Germans have used such an encryption instead of ENIGMA in World War II there's no telling how many more lives would have been lost.
 
-* _Public key encryption_ and _digital signatures_ that enable Alice and Bob to set up such a virtually secure channel without _sharing a prior key_. This enables our "information economy" and protects virtually every financial transaction over the web. Moreover, it is the crucial mechanism for supplying "over the air" software updates which smart devices whether its  phones, cars, thermostats or anything else. Some had predicted that this invention will change the nature of our form of government to [crypto anarchy](http://www.activism.net/cypherpunk/crypto-anarchy.html) and while this may be hyperbole, governments everywhere are [worried](https://www.fbi.gov/about-us/otd/going-dark-issue) about this invention.   
+* _Public key encryption_ and _digital signatures_ that enable Alice and Bob to set up such a virtually secure channel without _sharing a prior key_. This enables our "information economy" and protects virtually every financial transaction over the web. Moreover, it is the crucial mechanism for supplying "over the air" software updates which smart devices whether its phones, cars, thermostats or anything else. Some had predicted that this invention will change the nature of our form of government to [crypto anarchy](http://www.activism.net/cypherpunk/crypto-anarchy.html) and while this may be hyperbole, governments everywhere are [worried](https://www.fbi.gov/about-us/otd/going-dark-issue) about this invention.   
 
 * _Hash functions_ and _pseudorandom function_ enable us to create authentication tokens for deriving one-time passwords out of shared keys, or deriving long keys from short passwords. They are also useful as a tool in _password based key exchange_, which enables two parties to communicate securely (with fairly good but not overwhelming probability)  when they share a 6 digit PIN, even if the adversary can easily afford much much more than $10^6$ computational cycles.  
 
@@ -22,9 +22,9 @@ Let us stop and think of the notions we have seen in cryptography. We have seen 
 
 * _Zero knowledge proofs_ can be used to prove a statement is true without revealing _why_ its true. In particular since you can use zero knowledge proofs to prove that you posses X bitcoins without giving any information about their identity, they have been used to obtain [fully anonymous electronic currency](http://zerocash-project.org/).
 
-* _Multiparty secure computation_ are a fully general tool that enable Alice and Bob (and Charlie, David, Elana, Fran,.. ) to perform any computation on their private inputs, whether it is to compute the result of a vote, a  second-price auction, privacy-preserving data mining, perform a cryptographic operation in a distributed manner (without any party ever learning the secret key) or simply play poker online without needing to trust any central server.
+* _Multiparty secure computation_ are a fully general tool that enable Alice and Bob (and Charlie, David, Elana, Fran,.. ) to perform any computation on their private inputs, whether it is to compute the result of a vote, a second-price auction, privacy-preserving data mining, perform a cryptographic operation in a distributed manner (without any party ever learning the secret key) or simply play poker online without needing to trust any central server.
 
-(BTW all of the above points are notions that you should be familiar and be able to explain  what are their security guarantees if you ever need to use them, for example, in the unlikely event that you ever find yourself needing to take a cryptography final exam...)
+(BTW all of the above points are notions that you should be familiar and be able to explain what are their security guarantees if you ever need to use them, for example, in the unlikely event that you ever find yourself needing to take a cryptography final exam...)
 
 While clearly there are issues of efficiency, is there anything more in terms of _functionality_ we could ask for?
 Given all these riches, can we be even more greedy?
@@ -32,9 +32,9 @@ Given all these riches, can we be even more greedy?
 It turns out that the answer is _yes_.
 Here are some scenarios that are still not covered by the above tools:
 
-## Witness  encryption
+## Witness encryption
 
-Suppose that you have uncovered a  conspiracy that involves very powerful people, and you are afraid that something bad might happen to you.
+Suppose that you have uncovered a conspiracy that involves very powerful people, and you are afraid that something bad might happen to you.
 You would like an "insurance policy" in the form of writing down everything you know and making sure it is published in the case of your untimely death, but are afraid these powerful people could find and attack any trusted agent.
 Ideally you would to publish an encrypted form of your manuscript far and wide, and make sure the decryption key is automatically revealed if anything happens to you, but how could you do that?
 A _UA-secure encryption_ (which stands for secure against an [Underwood](https://goo.gl/8ms4wP)) attack) gives an ability to create an encryption $c$ of a message $m$ that is CPA secure but such that there is an algorithm $D$ such that on input $c$ and any string $w$ which is a (digitally signed) New York Times obituary for Janine Skorsky will output $m$.
@@ -47,11 +47,11 @@ For example, you could encrypt a message to future members of humanity, that can
 
 ## Deniable encryption
 
-Here is another scenario that is seemingly not  covered by our current tools.
-Suppose that Alice uses a public key system $(G,E,D)$ to encrypt a message $m$ by computing $c=E_e(m,r)$ and sending  $c$  to Bob that will compute $m=D_d(c)$.
+Here is another scenario that is seemingly not covered by our current tools.
+Suppose that Alice uses a public key system $(G,E,D)$ to encrypt a message $m$ by computing $c=E_e(m,r)$ and sending $c$  to Bob that will compute $m=D_d(c)$.
 The ciphertext is intercepted by Bob's archenemy Freddie Baskerville Ignatius (or FBI for short) who has the means to force Alice to reveal the message and as proof reveal the randomness used in encryption as well.
 Could Alice find, for any choice of $m'$, some string $r'$ that is pseudorandom and still $c$ equals $E_e(m',r')$?
-An encryption scheme with this property is called  _deniable _, since we Alice can deny she sent $m$ and claim she sent $m'$ instead.[^pumpkin]
+An encryption scheme with this property is called _deniable _, since we Alice can deny she sent $m$ and claim she sent $m'$ instead.[^pumpkin]
 
 [^pumpkin]: One could also think of a deniable witness encryption, and so if Janine in the scenario above is forced to open the ciphertexts she sent by reveal the randomness used to create them, she can credibly claim that she didn't encrypt her knowledge of the conspiracy, but merely wanted to make sure that her family secret recipe for pumpkin pie is not lost when she passes away.
 
@@ -107,7 +107,7 @@ Could we come up for a regular expression $R$ with a program $P$ such that $P(x)
 All these applications and more could in principle be solved by a single general tool known as _virtual black-box (VBB) secure software obfuscation_.
 In fact, such an obfuscation is a general tool that can also be directly used to yield public key encryption, fully homomorphic encryption, zero knowledge proofs, secure function evaluation, and many more applications.
 
-We will now give  the definition of VBB secure obfuscation and prove the central result about it, which is unfortunately that secure VBB obfuscators do not exist.
+We will now give the definition of VBB secure obfuscation and prove the central result about it, which is unfortunately that secure VBB obfuscators do not exist.
 We will then talk about the relaxed notion of _indistinguishablity obfuscators_ (IO) - this object turns out to be good enough for many of the above applications and whether it exists is one of the most exciting open questions in cryptography at the moment.
 We will survey some of the research on this front.
 
@@ -118,7 +118,7 @@ That is OK, since later we will require additional properties such as the follow
 
 > # {.definition title="VBB secure obfuscation" #vbbobfdeg}
 A compiler $\mathcal{O}$ is a _virtual black box (VBB) secure obfuscator_  if it satisfies the following property:
-for every  efficient adversary $A$ mapping $\{0,1\}^*$ to $\{0,1\}$, there  exists an efficient simulator $S$ such  that for every circuit $C$ the following random variables are computationally indistinguishable:
+for every efficient adversary $A$ mapping $\{0,1\}^*$ to $\{0,1\}$, there exists an efficient simulator $S$ such that for every circuit $C$ the following random variables are computationally indistinguishable:
 >
 * $A(\mathcal{O}(C))$
 >
@@ -196,7 +196,7 @@ In which case if we let $C'$ be the output of $S$ and let $\beta' = C'(\alpha)$,
 
 The adversary in the proof of [strongvbblem](){.ref} does not seem very impressive.
 After all, it merely printed out its input.
-Indeed, the definition of strong VBB security might simply be an overkill, and  "plain" VBB is enough for almost all applications.
+Indeed, the definition of strong VBB security might simply be an overkill, and "plain" VBB is enough for almost all applications.
 However, as mentioned above, plain VBB is impossible to achieve as well.
 We'll prove a slightly weaker version of [obfimpthm](){.ref}:
 
@@ -224,7 +224,7 @@ We claim that for every simulator $S$, there exist some tuple $(d,e,c,\alpha,\be
 >
 $$\left| \Pr[ D(A(\mathcal{O}(F_{d,e,c,\alpha,\beta,\gamma})))=1] - \Pr[ S^{F_{d,e,c,\alpha,\beta,\gamma}}(1^{|F_{d,e,c,\alpha,\beta,\gamma}|}) ] \right| \geq 0.1$$
 >
-Indeed, the distinguisher $D$ will depend on $\gamma$ and on input a bit $b$ will  simply output $1$ iff $b=\gamma_1$.
+Indeed, the distinguisher $D$ will depend on $\gamma$ and on input a bit $b$ will simply output $1$ iff $b=\gamma_1$.
 Clearly, if $(d,e)$ are keys of the FHE and $c=E_e(\alpha)$ then no matter what circuit $C'$ the obfuscator $\mathcal{O}$ outputs on input $F_{d,e,c,\alpha,\beta,\gamma}$,
 the adversary $A$ will output $\gamma_1$ on $C'$ and hence $D$ will output $1$ with probability one on $A$'s output.
 

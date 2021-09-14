@@ -30,11 +30,11 @@ By the definition above we can see that to evaluate $f_s(i)$ we need to evaluate
 >
 I've mentioned before that the first step of writing a proof is convincing yourself that the statement is true, but there is actually an often more important zeroth step which is understanding what the statement actually _means_. In this case what we need to prove is the following:
 >
-Given an  adversary $A$ that can distinguish in time $T$ a black box for $f_s(\cdot)$ from a black-box for a random function with advantage $\epsilon$, we need to come up with an adversary $D$ that can distinguish in time $poly(T)$ an input of the form $G(s)$ (where $s$ is random in $\{0,1\}^n$) from an input of the form $y$ where $y$ is random in $\{0,1\}^{2n}$ with bias at least $\epsilon/poly(T)$.
+Given an adversary $A$ that can distinguish in time $T$ a black box for $f_s(\cdot)$ from a black-box for a random function with advantage $\epsilon$, we need to come up with an adversary $D$ that can distinguish in time $poly(T)$ an input of the form $G(s)$ (where $s$ is random in $\{0,1\}^n$) from an input of the form $y$ where $y$ is random in $\{0,1\}^{2n}$ with bias at least $\epsilon/poly(T)$.
 >
-![In the  "lazy evaluation" implementation of the black box to the adversary, we label every node in the tree only when we need it. Subsequent traversals do not reevaluate the PRG, leading to reuse of the intermediate seeds. Thus for example, two sibling leaves will correspond to a single call to $G(x)$, where $x$ is their parent's label, but with the left child receiving the first $n$ bits and the right child receiving the second $n$ bits of $G(x)$. In this figure check marks correspond to nodes that have been labeled and question marks to nodes that are still unlabeled.](../figure/Lazy_PRF_from_PRG.jpg){#lazyevalprffig  .margin }
+![In the "lazy evaluation" implementation of the black box to the adversary, we label every node in the tree only when we need it. Subsequent traversals do not reevaluate the PRG, leading to reuse of the intermediate seeds. Thus for example, two sibling leaves will correspond to a single call to $G(x)$, where $x$ is their parent's label, but with the left child receiving the first $n$ bits and the right child receiving the second $n$ bits of $G(x)$. In this figure check marks correspond to nodes that have been labeled and question marks to nodes that are still unlabeled.](../figure/Lazy_PRF_from_PRG.jpg){#lazyevalprffig .margin }
 >
-Let us consider the  "lazy evaluation" implementation  of the black box for $A$ illustrated in [lazyevalprffig](){.ref}.
+Let us consider the "lazy evaluation" implementation of the black box for $A$ illustrated in [lazyevalprffig](){.ref}.
 That is, at every point in time there are nodes in the full binary tree that are labeled and nodes which we haven't yet labeled. When $A$ makes a query $i$, this query corresponds to the path $i_1\ldots i_n$ in the tree. We look at the lowest (furthest away from the root) node $v$ on this path which has been labeled by some value $y$, and then we continue labelling the path from $v$ downwards until we reach $i$.
 In other words, we label the two children of $v$ by $G_0(y)$ and $G_1(y)$, and then if the path $i$ involves the first child then we label its children by $G_0(G_0(y))$ and $G_1(G_0(y))$, and so on and so forth (see [oracleevaltreefig](){.ref}). Note that because $G_{0}(y)$ and $G_{1}(y)$ correspond to a single call to $G$, regardless of whether the traversals continues left or right (i.e. whether the current level corresponds to a value 0 or 1 in $i$) we label both children at the same time.
 >
@@ -42,7 +42,7 @@ In other words, we label the two children of $v$ by $G_0(y)$ and $G_1(y)$, and t
 >
 A moment's thought shows that this is just another (arguably cumbersome) way to describe the oracle that simply computes the map $i\mapsto f_s(i)$. And so the experiment of running $A$ with this oracle produces precisely the same result as running $A$ with access to $f_s(\cdot)$. Note that since $A$ has running time at most $T$, the number of times our oracle will need to label an internal node is at most $T' \leq 2nT$ (since we label at most $2n$ nodes for every query $i$).
 >
-We now define the following $T'$ hybrids: in the $j^{th}$ hybrid, we run this experiment but in  the first $j$ times the oracle needs to label internal nodes, then instead of labelling the $b^{th}$ child of $v$ by $G_b(y)$ (where $y$ is the label of $v$), the oracle simply labels it by a random string in $\{0,1\}^n$.
+We now define the following $T'$ hybrids: in the $j^{th}$ hybrid, we run this experiment but in the first $j$ times the oracle needs to label internal nodes, then instead of labelling the $b^{th}$ child of $v$ by $G_b(y)$ (where $y$ is the label of $v$), the oracle simply labels it by a random string in $\{0,1\}^n$.
 >
 ![In the $j^{th}$ hybrid all lables up to the first $j$ layers of the tree are drawn uniformly at random from $U_{n}$. All subsequent children's labels are produced in the usual way by seeding $G$ with the label of the parent and assigning the first $n$ bits ($G_{0}$) to the left child and the last $n$ bits ($G_{1}$) to the right child. For example, for some node $v^{L}_{j-1}$ at the $j^{th}$ level, we generate pseudorandom string $G(v^{L}_{j-1})$ and label the left child $v^{L}_{j} = G_{0}(v^{L}_{j-1})$ and the right child $v^{R}_{j} = G_{1}(v^{L}_{j-1})$. Note that the labeling scheme for this diagram is different from that in the previous figures. This is simply for easy of exposition, we could still index our nodes via the path reaching them from the root.](../figure/hybrid_j_thm_5-1.jpg){#hybridj width=80% }
 >
@@ -63,7 +63,7 @@ This proof is ultimately not very hard but is rather confusing. I urge you to al
 
 > # {.remark title="PRF's in practice" #prfpracticerem}
 While this construction reassures us that we can rely on the existence of pseudorandom functions even on days where we remember to take our meds, this is not the construction people use when they need a PRF in practice because it is still somewhat inefficient, making $n$ calls to the underlying pseudorandom generators.
-There are constructions (e.g., HMAC) based on hash functions that require stronger assumptions but can use as few as two calls to the  underlying function.
+There are constructions (e.g., HMAC) based on hash functions that require stronger assumptions but can use as few as two calls to the underlying function.
 We will cover these constructions when we talk about hash functions and the random oracle model.
 One can also obtain practical constructions of PRFs from _block ciphers_, which we'll see later in this lecture.
 
@@ -81,14 +81,14 @@ Try to think what kind of security guarantees are _not_ provided by the notion o
 Our current definition requires talks about encrypting a _single_ message, but this is not how we use encryption in the real world. Typically, Alice and Bob (or Amazon and Boaz) setup a shared key and then engage in many back and forth messages between one another.
 At first, we might think that this issue of a single long message vs. many short ones is merely a technicality.
 After all, if Alice wants to send a sequence of messages $(m_1,m_2,\ldots,m_t)$ to Bob, she can simply treat them as a single long message.
-Moreover, the way that _stream ciphers_ work, Alice can compute the encryption for the first few bits of the message  she decides what will be the next bits and so she can send the encryption of $m_1$ to Bob and later the encryption of $m_2$.
+Moreover, the way that _stream ciphers_ work, Alice can compute the encryption for the first few bits of the message she decides what will be the next bits and so she can send the encryption of $m_1$ to Bob and later the encryption of $m_2$.
 There is some truth to this sentiment, but there are issues with using stream ciphers for multiple messages.
 For Alice and Bob to encrypt messages in this way, they must maintain a _synchronized shared state_. If the message $m_1$ was dropped by the network, then Bob would not be able to decrypt correctly the encryption of $m_2$.  
 
 There is another way in which treating many messages as a single tuple is unsatisfactory.
 In real life, Eve might be able to have some impact on _what_ messages Alice encrypts.
 For example, the Katz-Lindell book describes several instances in World War II where Allied forces made particular military maneuver for the sole purpose of causing the axis forces to send encryptions of messages of the Allies' choosing.
-To consider a  more modern example, today Google uses encryption for all of its search traffic including (for the most part) the _ads_ that are displayed on the page.
+To consider a more modern example, today Google uses encryption for all of its search traffic including (for the most part) the _ads_ that are displayed on the page.
 But this means that an attacker, by paying Google, can cause it to encrypt arbitrary text of their choosing.
 This kind of attack, where Eve _chooses_ the message she wants to be encrypted is called a _chosen plaintext attack_.
 You might think that we are already covering this with our current definition that requires security _for every_  pair of messages and so in particular this pair could chosen by Eve. However, in the case of multiple messages, we would want to allow Eve to be able to choose $m_2$ _after_ she saw the encryption of $m_1$.
@@ -113,21 +113,21 @@ An encryption scheme $(E,D)$ is _secure against chosen plaintext attack (CPA sec
 
 [cpasecuredef](){.ref} is illustrated in [cpasecgamefig](){.ref}.
 Our previous notion of computational secrecy (i.e., [compsecdef](){.ref}) corresponds to the case that we skip Steps 3 and 5 above.
-Since Steps 3 and 5 only give the adversary more power (and hence is only more likely to win), CPA security ([cpasecuredef](){.ref}) is _stronger_ than computational secrecy  ([compsecdef](){.ref}), in the sense that every CPA secure encryption $(E,D)$ is also computationally secure.
+Since Steps 3 and 5 only give the adversary more power (and hence is only more likely to win), CPA security ([cpasecuredef](){.ref}) is _stronger_ than computational secrecy ([compsecdef](){.ref}), in the sense that every CPA secure encryption $(E,D)$ is also computationally secure.
 It turns out that CPA security is _strictly stronger_, in the sense that without modification, our stream ciphers cannot be CPA secure. In fact, we have a stronger, and intially somewhat surprising theorem:
 
 > # {.theorem title="CPA security requires randomization" #CPAsecrandomthm}
 There is no CPA secure $(E,D)$ where $E$ is _deterministic_.
 
 > # {.proof data-ref="CPAsecrandomthm"}
-The proof is very simple: Eve will only use a single round of interacting with $E$ where she will ask for the encryption $c_1$ of $0^\ell$. In the second  round, Eve will choose $m_0=0^{\ell}$ and $m_1=1^{\ell}$, and get $c^*=E_k(m_b)$ she wil then output $0$ if and only if $c^*=c_1$.
+The proof is very simple: Eve will only use a single round of interacting with $E$ where she will ask for the encryption $c_1$ of $0^\ell$. In the second round, Eve will choose $m_0=0^{\ell}$ and $m_1=1^{\ell}$, and get $c^*=E_k(m_b)$ she wil then output $0$ if and only if $c^*=c_1$.
 
 
 ![Insecurity of deterministic encryption](../figure/code_talkers.png){#xkcdnavajotwofig  .margin }
 
 This proof is so simple that you might think it shows a problem with the definition, but it is actually a real problem with security.
 If you encrypt many messages and some of them repeat themselves, it is possible to get significant information by seeing the repetition pattern (que the XKCD cartoon again, see [xkcdnavajotwofig](){.ref}).
-To avoid this issue we need to use a  _randomized_  (or _probabilistic_) encryption, such that if we encrypt the same message twice we _won't_ see two copies of the same ciphertext.[^high-ent]
+To avoid this issue we need to use a _randomized_  (or _probabilistic_) encryption, such that if we encrypt the same message twice we _won't_ see two copies of the same ciphertext.[^high-ent]
 But how do we do that?
 Here pseudorandom functions come to the rescue:
 
@@ -140,13 +140,13 @@ Suppose that $\{ f_s \}$ is a PRF collection where $f_s:\{0,1\}^n\rightarrow\{0,
 > # {.proof data-ref="cpafromprfthm"}
 I leave to you to verify that $D_s(E_s(m))=m$. We need to show the CPA security property. As is usual in PRF-based constructions, we first show that this scheme will be secure if $f_s$ was an actually random function, and then use that to derive security.
 >
-Consider the game above when played with a completely random function and let $r_i$ be the random string chosen by $E$ in the $i^{th}$ round and $r^*$ the  string chosen in the last round. We start with the following simple but crucial claim:
+Consider the game above when played with a completely random function and let $r_i$ be the random string chosen by $E$ in the $i^{th}$ round and $r^*$ the string chosen in the last round. We start with the following simple but crucial claim:
 >
 __Claim:__ The probability that $r^*=r_i$ for some $i$ is at most $T/2^n$.
 >
 __Proof of claim:__ For any particular $i$, since $r^*$ is chosen independently of $r_i$, the probability that $r^*=r_i$ is $2^{-n}$. Hence the claim follows from the union bound. QED
 >
-Given this claim we know that with probability $1-T/2^n$ (which is $1-negl(n)$), the string $r^*$ is distinct from any string that was chosen before. This means that by the lazy evaluation principle, if $f_s(\cdot)$ is a completely random function then the value $f_s(r^*)$ can be thought of as being chosen at random in the final round independently of anything that happened before. But then $f_s(r^*)\oplus m_b$ amounts to simply using the one-time pad to encrypt $m_b$. That is, the distributions $f_s(r^*)\oplus m_0$ and $f_s(r^*)\oplus m_1$ (where we think of $r^*,m_0,m_1$ as fixed  and the randomness comes from the choice of the random function $f_s(\cdot)$) are both equal to the uniform distribution $U_n$ over $\{0,1\}^n$ and hence Eve gets absolutely no information about $b$.
+Given this claim we know that with probability $1-T/2^n$ (which is $1-negl(n)$), the string $r^*$ is distinct from any string that was chosen before. This means that by the lazy evaluation principle, if $f_s(\cdot)$ is a completely random function then the value $f_s(r^*)$ can be thought of as being chosen at random in the final round independently of anything that happened before. But then $f_s(r^*)\oplus m_b$ amounts to simply using the one-time pad to encrypt $m_b$. That is, the distributions $f_s(r^*)\oplus m_0$ and $f_s(r^*)\oplus m_1$ (where we think of $r^*,m_0,m_1$ as fixed and the randomness comes from the choice of the random function $f_s(\cdot)$) are both equal to the uniform distribution $U_n$ over $\{0,1\}^n$ and hence Eve gets absolutely no information about $b$.
 >
 This shows that if $f_s(\cdot)$ was a random function then Eve would win the game with probability at most $1/2$. Now if we have some efficient Eve that wins the game with probability at least $1/2+\epsilon$ then we can build an adversary $A$ for the PRF that will run this entire game with black box access to $f_s(\cdot)$ and will output $1$ if and only if Eve wins. By the argument above, there would be a difference of at least $\epsilon$ in the probability it outputs $1$ when $f_s(\cdot)$ is random vs when it is pseudorandom, hence contradicting the security property of the PRF.
 
@@ -162,7 +162,7 @@ Let $\ell:\N \rightarrow \N$ be some function that is polynomially bounded (i.e.
 2. Every function $f_s$ is a permutation of $\{0,1\}^\ell$ (i.e., a one to one and onto map). \
 3. There is an efficient algorithm that on input $s,y$ returns $f_s^{-1}(y)$.
 >
-The parameter $n$ is known as the _key length_ of the pseudorandom permutation collection and the parameter  $\ell=\ell(n)$ is known as the  _input length_ or _block length_. Often, $\ell=n$ and so in most cases you can safely ignore this distinction.
+The parameter $n$ is known as the _key length_ of the pseudorandom permutation collection and the parameter $\ell=\ell(n)$ is known as the _input length_ or _block length_. Often, $\ell=n$ and so in most cases you can safely ignore this distinction.
 
 > # { .pause }
 At first look [PRPdef](){.ref} might seem not to make sense, since on one hand it requires the map $x \mapsto f_s(x)$ to be a permutation, but on the other hand it can be shown that with high probability a random map $H:\{0,1\}^\ell \rightarrow \{0,1\}^\ell$ will _not_ be a permutation.
@@ -205,7 +205,7 @@ For more details regarding this proof, see Section 4.5 in Boneh Shoup or Section
 > # {.remark title="How many Feistel rounds?" #feistelrounds}
 The construction in the proof of [PRPfromPRF](){.ref} constructed a PRP $p$ by performing $3$ rounds of the Feistel transformation with a known PRF $f$. It is an interesting exercise to try to show that doing just $1$ or $2$ rounds of the Feistel transformation _does not_ suffice to achieve a PRP. _Hint: consider an adversary that makes queries of the form $(x_1, x_2)$ where $x_2$ is held fixed and $x_1$ is varied._
 
-The more common name for a pseudorandom permutation is _block cipher_ (though typically block ciphers are expected to meet additional security properties on top of being PRPs). The constructions for block ciphers used in practice  don't follow the construction of [PRPfromPRF](){.ref} (though they use some of the ideas) but have a more  ad-hoc  nature.
+The more common name for a pseudorandom permutation is _block cipher_ (though typically block ciphers are expected to meet additional security properties on top of being PRPs). The constructions for block ciphers used in practice don't follow the construction of [PRPfromPRF](){.ref} (though they use some of the ideas) but have a more ad-hoc nature.
 
 One of the first modern block ciphers was the [Data Encryption Standard (DES)](https://goo.gl/XiCvjs) constructed by IBM in the 1970's.
 It is a fairly good cipher- to this day, as far as we know, it provides a pretty good number of security bits compared to its key.
@@ -217,8 +217,8 @@ Between 1997 and 2001, the U.S. national institute of standards (NIST) ran a com
 The actual construction of AES (or DES for that matter) is not extremely illuminating, but let us say a few words about the general principle behind many block ciphers.
 They are typically constructed by repeating one after the other a number of very simple permutations (see [blockcipherfig](){.ref}).
 Each such iteration is called a _round_.
-If there are $t$ rounds, then the key $k$ is typically expanded into a longer string, which we think of as a  $t$ tuple of strings  $(k_1,\ldots,k_t)$ via some pseudorandom generator known as the _key scheduling algorithm_.
-The $i$-th string in the tuple is known as the _round key_ and is used  in the $i^{th}$ round.
+If there are $t$ rounds, then the key $k$ is typically expanded into a longer string, which we think of as a $t$ tuple of strings $(k_1,\ldots,k_t)$ via some pseudorandom generator known as the _key scheduling algorithm_.
+The $i$-th string in the tuple is known as the _round key_ and is used in the $i^{th}$ round.
 Each round is typically composed of several components: there is a "key mixing component" that performs some simple permutation based on the key (often as simply as XOR'ing the key), there is a "mixing component" that mixes the bits of the block so that bits that were initially nearby don't stay close to one another, and then there is some non-linear component (often obtained by applying some simple non-linear functions known as "S boxes" to each small block of the input) that ensures that the overall cipher will not be an affine function.
 Each one of these operations is an easily reversible operations, and hence decrypting the cipher simply involves running the rounds backwards.
 
@@ -234,7 +234,7 @@ The most natural approach would be that to encrypt a message $m$, we simply use 
 
 
 
-![In the Electronic Codebook  (ECB) mode every message is encrypted deterministically and independently](../figure/ecb-mode.jpg){#ecbonefig  .margin }
+![In the Electronic Codebook (ECB) mode, every message is encrypted deterministically and independently](../figure/ecb-mode.jpg){#ecbonefig  .margin }
 
 ![An encryption of the Linux penguin (left image) using ECB mode (middle image) vs CBC mode (right image). The ECB encryption is insecure as it reveals much structure about the original image. Image taken from Wikipedia.](../figure/ECB_prob.jpg){#ecbtwofig  .margin }
 
@@ -253,7 +253,7 @@ In the _output feedback (OFB) mode_ we first encrypt the all zero string using C
 Perhaps the simplest mode of operation is _counter (CTR) mode_ where we convert a block cipher to a stream cipher by using the stream $p_s(IV),p_s(IV+1),p_s(IV+2),\ldots$ where $IV$ is a random string in $\{0,1\}^n$ which we identify with $[2^n]$ (and perform addition modulo $2^n$). That is, to encrypt a message $m = (m_1, \ldots, m_t)$, we choose $IV$ at random, and output $(IV, c_1, \ldots, c_t)$, where $c_i = p_s(IV + i) \oplus m_i$ for $1 \le i \le t$. Decryption is performed similarly. For a modern block cipher, CTR mode is no less secure than CBC or OFB, and in fact offers several advantages. For example, CTR mode can easily encrypt and decrypt blocks in parallel, unlike CBC mode. In addition, CTR mode only needs to evaluate $p_s$ once to decrypt any single block of the ciphertext, unlike OFB mode.
 
 A fairly comprehensive study of the different modes of block ciphers is in [this document by Rogaway](http://web.cs.ucdavis.edu/~rogaway/papers/modes.pdf).
-His conclusion is that if we simply consider CPA security (as opposed to the stronger notions  of _chosen ciphertext security_ we'll see in the next lecture) then counter mode is the best choice, but CBC, OFB and CFB are widely implemented due to legacy reasons.
+His conclusion is that if we simply consider CPA security (as opposed to the stronger notions of _chosen ciphertext security_ we'll see in the next lecture) then counter mode is the best choice, but CBC, OFB and CFB are widely implemented due to legacy reasons.
 ECB should not be used (except as a building block as part of a construction achieving stronger security).
 
 ## Optional, Aside: Broadcast Encryption

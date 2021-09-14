@@ -12,7 +12,7 @@ In this lecture we will show an encryption scheme (due to Gentry, Sahai and Wate
 That is, this lecture is devoted to proving[^caveat] the following theorem:
 
 
-[^caveat]: This theorem as stated was proven by Brakerski and Vaikuntanathan (ITCS 2014) building a line of work initiated by  Gentry's original STOC 2009 work. We will actually prove a weaker version of this theorem, due to Brakerski and Vaikuntanathan (FOCS 2011), which assumes a quantitative strengthening of LWE. However, we will not follow the proof of Brakerski and Vaikuntanathan but rather a scheme of Gentry, Sahai and Waters (CRYPTO 2013).  Also note that, as noted in the previous lecture, all of these results require the extra assumption of _circular security_ on top of LWE to achieve a non-leveled fully homomorphic encryption scheme.
+[^caveat]: This theorem as stated was proven by Brakerski and Vaikuntanathan (ITCS 2014) building a line of work initiated by Gentry's original STOC 2009 work. We will actually prove a weaker version of this theorem, due to Brakerski and Vaikuntanathan (FOCS 2011), which assumes a quantitative strengthening of LWE. However, we will not follow the proof of Brakerski and Vaikuntanathan but rather a scheme of Gentry, Sahai and Waters (CRYPTO 2013).  Also note that, as noted in the previous lecture, all of these results require the extra assumption of _circular security_ on top of LWE to achieve a non-leveled fully homomorphic encryption scheme.
 
 
 > # {.theorem title="FHE from LWE" #LWEFHEthm}
@@ -50,13 +50,13 @@ With [Depththm](){.ref}, the rest is to verify that the function $d \mapsto D_d(
 
 
 
-In the linear homomorphic scheme we saw in the last lecture, every  ciphertext was a vector $c\in\Z_q^n$ such that $\langle c,s \rangle$  equals (up to scaling by $\floor{\tfrac{q}{2}}$)  the plaintext bit.
+In the linear homomorphic scheme we saw in the last lecture, every ciphertext was a vector $c\in\Z_q^n$ such that $\langle c,s \rangle$  equals (up to scaling by $\floor{\tfrac{q}{2}}$)  the plaintext bit.
 We saw that adding two ciphertexts modulo $q$ corresponded to XOR'ing (i.e., adding modulo $2$) the corresponding two plaintexts.
 That is, if we define $c \oplus c'$ as $c+c' \pmod{q}$ then performing the $\oplus$ operation on the ciphertexts corresponds to adding modulo $2$ the plaintexts.
 
 
 However, to get to a fully, or even partially, homomorphic scheme, we need to find a way to perform the NAND operation on the two plaintexts.
-The challenge is that it seems that to do that we need to find a way to evaluate  _multiplications_: find a way to define some operation $\otimes$ on ciphertexts that corresponds to multiplying the plaintexts.
+The challenge is that it seems that to do that we need to find a way to evaluate _multiplications_: find a way to define some operation $\otimes$ on ciphertexts that corresponds to multiplying the plaintexts.
 Alas,  a priori, there doesn't seem to be a natural way to _multiply_ two vectors.
 
 The GSW approach to handle this is to move from vectors to _matrices_.
@@ -67,14 +67,14 @@ That is, the encryption of a bit $b$  is a matrix $C$ such that the secret key i
 
 > # { .pause }
 You should make sure you understand the _types_ of all the identifiers we refer to.
-In particular, above   $C$ is an $n\times n$ _matrix_ with entries in $\Z_q$, $s$ is a _vector_ in $\Z_q^n$, and $b$ is a _scalar_ (i.e., just a number) in $\{0,1\}$.
+In particular, above $C$ is an $n\times n$ _matrix_ with entries in $\Z_q$, $s$ is a _vector_ in $\Z_q^n$, and $b$ is a _scalar_ (i.e., just a number) in $\{0,1\}$.
 See [naivegswfig](){.ref} for a visual representation of the ciphertexts in this "naive" encryption scheme.
 Keeping track of the dimensions of all objects will become only more important in the rest of this lecture.
 
 ![In the "naive" version of the GSW encryption, to encrypt a bit $b$ we output an $n\times n$ matrix $C$ such that $Cs=bs$ where $s \in \Z_q^n$ is the secret key. In this scheme we can transform encryptions $C,C'$ of $b,b'$ respectively to an encryption $C''$ of $NAND(b,b')$ by letting $C'' = I-CC'$.](../figure/naivegsw.png){#naivegswfig  .margin}
 
 Given $C$ and $s$ we can recover $b$ by just checking if $Cs=s$ or $Cs=0^n$.
-The scheme  allows homomorphic evaluation of both addition (modulo $q$) and multiplication, since if $Cs = bs$ and $C's=b's$ then we can define
+The scheme allows homomorphic evaluation of both addition (modulo $q$) and multiplication, since if $Cs = bs$ and $C's=b's$ then we can define
 $C \oplus C' = C + C'$ (where on the righthand side, addition is simply done in $\Z_q$) and $C\otimes C' = CC'$ (where again this refers to matrix multiplication in $\Z_q$).
 
 
@@ -85,8 +85,8 @@ $$CC's = C(b's) = bb's$$
 where all these equalities are in $\Z_q$.
 
 Addition modulo $q$ is not the same as XOR, but given these multiplication and addition operations, we can implement the NAND operation as well.
-Specifically, for every  $b,b' \in \{0,1\}$,  $b \; NAND \; b' = 1-bb'$.
-Hence we can take  a ciphertext $C$ encrypting $b$ and a ciphertext $C'$ encrypting $b'$ and transform these two ciphertexts to the ciphertext
+Specifically, for every $b,b' \in \{0,1\}$,  $b \; NAND \; b' = 1-bb'$.
+Hence we can take a ciphertext $C$ encrypting $b$ and a ciphertext $C'$ encrypting $b'$ and transform these two ciphertexts to the ciphertext
 $C''=(I-CC')$ that encrypts $b\; NAND \; b'$ (where $I$ is the identity matrix).
 Thus in a world without Gaussian elimination it is not hard to get a fully homomorphic encryption.
 
@@ -94,11 +94,11 @@ Thus in a world without Gaussian elimination it is not hard to get a fully homom
 We have not shown how to _generate_ a ciphertext without knowledge of $s$, and hence strictly speaking we only showed in this world how to get a _private key_ fully homomorphic encryption.
 Our "real world" scheme will be a full fledged _public key_ FHE.
 However we note that private key homomorphic encryption is already very interesting and in fact sufficient for many of the "cloud computing" applications.
-Moreover,  [Rothblum](http://eccc.hpi-web.de/report/2010/146/)  gave a generic transformation from a  _private key_ homomorphic encryption to a _public key_ homomorphic encryption.
+Moreover,  [Rothblum](http://eccc.hpi-web.de/report/2010/146/)  gave a generic transformation from a _private key_ homomorphic encryption to a _public key_ homomorphic encryption.
 
 ## Real world partially homomorphic encryption
 
-We now discuss how we can obtain an encryption in  the real world where, as much as we'd like to ignore it, there are people who walk among us (not to mention some computer programs) that  actually know how to invert matrices.
+We now discuss how we can obtain an encryption in the real world where, as much as we'd like to ignore it, there are people who walk among us (not to mention some computer programs) that actually know how to invert matrices.
 As usual, the idea is to "fool Gaussian elimination with noise" but we will see that we have to be much more careful about "noise management", otherwise even for the party holding the secret key the noise will overwhelm the signal.[^chaos]
 
 [^chaos]: For this reason, Craig Gentry called his highly recommended survey on fully homomorphic encryption and other advanced constructions [computing on the edge of chaos](https://eprint.iacr.org/2014/610).
@@ -108,7 +108,7 @@ The main idea is that we can expect the following problem to be hard for a rando
 This yields a natural candidate for an encryption scheme where we encrypt $b$ by a matrix $C$ satisfying $Cs = bs + e$ where $e$ is a "short" vector.[^short]
 
 
-[^short]: We deliberately leave some flexibility  in the definition of "short". While initially "short" might mean that $|e_i|<\sqrt{q}$ for every $i$, decryption will succeed as long as long as $|e_i|$ is, say, at most $q/100$.
+[^short]: We deliberately leave some flexibility in the definition of "short". While initially "short" might mean that $|e_i|<\sqrt{q}$ for every $i$, decryption will succeed as long as long as $|e_i|$ is, say, at most $q/100$.
 
 We can now try to check what adding and multiplying two matrices does to the noise.
 If $Cs = bs+e$ and $C's=b's+e'$ then
@@ -122,7 +122,7 @@ I recommend you pause here and check for yourself whether it will be the case th
 
 
 We would have loved to say that we can define as above $C\oplus C' = C+C' (\mod\; q)$ and $C\otimes C' = CC' (\mod \; q)$.
-For this we would need that  $(C+C')s$ equals $(b+b')s$ plus a "short" vector and $CC's$ equals $bb's$ plus a "short" vector.
+For this we would need that $(C+C')s$ equals $(b+b')s$ plus a "short" vector and $CC's$ equals $bb's$ plus a "short" vector.
 The former statement indeed holds.
 Looking at [eqhommult](){.eqref} we see that $(C+C')s$ equals $(b+b')s$ up to the "noise" vector $e+e'$, and if $e,e'$ are "short" then $e+e'$ is not too long either.
 That is, if $|e_i|<\delta q$ and $|e'_i|<\delta q$ for every $i$ then $|e_i+e'_i|<2\delta q$.
@@ -137,7 +137,7 @@ and so multiplying $e'$ by $C$ takes us "beyond the edge of chaos".
 
 ## Noise management via encoding
 
-The problem we had above is  that the entries of $C$ are elements in $\Z_q$ that can be very large, while we would have loved them to be small numbers such as $0$ or $1$.
+The problem we had above is that the entries of $C$ are elements in $\Z_q$ that can be very large, while we would have loved them to be small numbers such as $0$ or $1$.
 At this point one could say
 
 >_"If only there was some way to encode numbers between $0$ and $q-1$ using only $0$'s and $1$'s"_
@@ -145,15 +145,15 @@ At this point one could say
 
 
 
-If you think about it hard enough, it  turns out that there is something known as the "binary basis" that allows us to encode a number $x\in\Z_q$ as a vector $\hat{x}\in\{0,1\}^{\log q}$.[^ceil]
+If you think about it hard enough, it turns out that there is something known as the "binary basis" that allows us to encode a number $x\in\Z_q$ as a vector $\hat{x}\in\{0,1\}^{\log q}$.[^ceil]
 What's even more surprising is that this seemingly trivial trick turns out to be immensely useful.
 We will define the _binary encoding_ of a vector or matrix $x$ over $\Z_q$ by $\hat{x}$.
-That is, $\hat{x}$ is obtained by replacing every coordinate  $x_i$ with $\log q$ coordinates $x_{i,0},\ldots,x_{i,\log q-1}$ such that
+That is, $\hat{x}$ is obtained by replacing every coordinate $x_i$ with $\log q$ coordinates $x_{i,0},\ldots,x_{i,\log q-1}$ such that
 
 $$x_i = \sum_{j=0}^{\log q-1}2^j x_{i,j} \;. \label{eqbinaryencoding}$$
 
-Specifically, if $s\in \Z_q^n$, then we denote by $\hat{s}$ the $n\log q$-dimensional vector  with entries in $\{0,1\}$, such that each $\log q$-sized block of $\hat{s}$ encodes a coordinate of $s$.
-Similarly, if $C$ is an $m\times n$ matrix, then we denote by $\hat{C}$ the $m\times n\log q$ matrix with entries in $\{0,1\}$ that corresponds to encoding every $n$-dimensional row of $C$ by an  $n\log q$-dimensional row  where each $\log q$-sized block corresponds to a single entry.
+Specifically, if $s\in \Z_q^n$, then we denote by $\hat{s}$ the $n\log q$-dimensional vector with entries in $\{0,1\}$, such that each $\log q$-sized block of $\hat{s}$ encodes a coordinate of $s$.
+Similarly, if $C$ is an $m\times n$ matrix, then we denote by $\hat{C}$ the $m\times n\log q$ matrix with entries in $\{0,1\}$ that corresponds to encoding every $n$-dimensional row of $C$ by an $n\log q$-dimensional row where each $\log q$-sized block corresponds to a single entry.
 (We still think of the entries of these vectors and matrices as elements of $\Z_q$ and so all calculations are still done modulo $q$.)
 
 While encoding in the binary basis is not a linear operation, the _decoding_ operation is linear as one can see in [eqbinaryencoding](){.eqref}.
@@ -188,7 +188,7 @@ If we keep track of the parameters in the above analysis, we can see that
 
 $$C \overline{\wedge} C' = (I - C \otimes C')$$
 
-then if $C$ encrypts $b$ and $C'$ encrypts $b'$ with noise vectors $e,e'$ satisfying $\max |e_i| \leq \mu$ and $\max |e'_i| \leq \mu'$ then  $C \overline{\wedge} C'$ encrypts $b \; NAND\; b'$ up to a vector of maximum magnitude at most $O(\mu + n\log q \mu')$, which is definitely smaller than $n^3\cdot \max\{\eta,\eta,\}$ for $q=2^{\sqrt{n}}$.
+then if $C$ encrypts $b$ and $C'$ encrypts $b'$ with noise vectors $e,e'$ satisfying $\max |e_i| \leq \mu$ and $\max |e'_i| \leq \mu'$ then $C \overline{\wedge} C'$ encrypts $b \; NAND\; b'$ up to a vector of maximum magnitude at most $O(\mu + n\log q \mu')$, which is definitely smaller than $n^3\cdot \max\{\eta,\eta,\}$ for $q=2^{\sqrt{n}}$.
 
 
 ## Putting it all together
@@ -202,13 +202,13 @@ It is not hard to show that we can relax our assumption to $q(n)$-LWE $q(n)=2^{p
 >__FHEENC:__
 >
 * **Key generation:**  As in the scheme of last lecture the secret key is $s\in\Z_s^n$ and the public key is a generator $G_s$ such that samples from $G_s(1^n)$ are indistinguishable from independent random samples from $\Z_q^n$ but if $c$ is output by $G_s$ then $|\langle c,s \rangle|<\sqrt{q}$, where the inner product (as all other computations) is done modulo $q$ and for every $x\in\Z_q=\{0,\ldots,q-1\}$ we define $|x|=\min \{ x, q-x \}$.
-As before, we can assume that $s_1 = \floor{q/2}$ which implies that  $(Q^\top s)_1$ is also $\floor{q/2}$ since (as can be verified by direct inspection) the first row of $Q^\top$ is $(1,0,\ldots,0)$. 
+As before, we can assume that $s_1 = \floor{q/2}$ which implies that $(Q^\top s)_1$ is also $\floor{q/2}$ since (as can be verified by direct inspection) the first row of $Q^\top$ is $(1,0,\ldots,0)$. 
 >
 * **Encryption:** To encrypt $b\in\{0,1\}$, let $d_1,\ldots,d_{n\log q} \leftarrow_R G_s(1^n)$ output $C=\widehat{(bQ^\top +D)}$ where $D$ is the matrix whose rows are $d_1,\ldots,d_{n\log q}$ generated from $G_s$. (See [fheencfig](){.ref})
 >
 * **Decryption:** To decrypt the ciphertext $C$, we output $0$ if $|(CQ^\top s)_1|<0.1q$ and output $1$ if $0.6q>|(CQ^\top s)_1|>0.4q$, see [fhedecfig](){.ref}. (It doesn't matter what we output on other cases.)
 >
-* **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \overline{\wedge} C'$ (sometimes also denoted as $NANDEVAL(C,C')$) to equal  $I- \widehat{(CQ^\top)}C'$, where $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
+* **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \overline{\wedge} C'$ (sometimes also denoted as $NANDEVAL(C,C')$) to equal $I- \widehat{(CQ^\top)}C'$, where $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
 
  \
 
@@ -271,18 +271,18 @@ Using the fact that $\hat{M}Q^\top = M$ for every matrix $M$, we get that
 $$Cv = (bQ^\top + D) s = bv+  Ds$$
 but by construction $|(Ds)_i| \leq \sqrt{q}$ for every $i$.
 
-[fhecorrectlem](){.ref} implies correctness of decryption since by construction we ensured that $(Q^\top s)_1 \in (0.499q,0.5001q)$ and hence we get that if $b=0$ then  $|(Cv)_1|=o(q)$ and if $b=1$ then $0.499q-o(q) \leq |(C_v)_1|  \leq 0.501q + o(q)$.
+[fhecorrectlem](){.ref} implies correctness of decryption since by construction we ensured that $(Q^\top s)_1 \in (0.499q,0.5001q)$ and hence we get that if $b=0$ then $|(Cv)_1|=o(q)$ and if $b=1$ then $0.499q-o(q) \leq |(C_v)_1|  \leq 0.501q + o(q)$.
 
 
 ### CPA Security
 
 To show CPA security we need to show that an encryption of $0$ is indistinguishable from an encryption of $1$.
 However, by the security of the trapdoor generator, an encryption of $b$ computed according to our algorithm will be indistinguishable from an encryption of $b$ obtained when the matrix $D$ is a random $(n\log q)\times n$ matrix.
-Now in this case the encryption is obtained by applying the $\hat{\cdot}$ operation to $bQ^\top +D$ but if $D$ is uniformly random then for every choice of $b$, $bQ^\top + D$ is uniformly random (since a fixed matrix plus a random matrix  yields a random matrix) and hence the matrix $bQ^\top + D$ (and so also the matrix $\widehat{bQ^\top+D}$) contains no information about $b$.
+Now in this case the encryption is obtained by applying the $\hat{\cdot}$ operation to $bQ^\top +D$ but if $D$ is uniformly random then for every choice of $b$, $bQ^\top + D$ is uniformly random (since a fixed matrix plus a random matrix yields a random matrix) and hence the matrix $bQ^\top + D$ (and so also the matrix $\widehat{bQ^\top+D}$) contains no information about $b$.
 This completes the proof of CPA security (can you see why?).
 
 
-If we want to plug in this scheme in the bootstrapping theorem, then we will also assume that it  is _circular secure_.
+If we want to plug in this scheme in the bootstrapping theorem, then we will also assume that it is _circular secure_.
 It seems a reasonable assumption though unfortuantely at the moment we do not know how to derive it from LWE.
 (If we don't want to make this assumption we can still obtained a _leveled_ fully homomorphic encryption as discussed in the previous lecture.)
 
@@ -303,7 +303,7 @@ As we've seen,
 $$\widehat{CQ^\top}C'v = \widehat{CQ^\top}(b'v+e') = b'\widehat{CQ^\top}Q^\top s + \widehat{CQ^\top}e' = b'(Cv)+ \widehat{CQ^\top}e' = bb'v + b'e+ \widehat{CQ^\top}e'$$
 But since $\widehat{CQ^\top}$ is a $0/1$ matrix with every row of length $n\log q$, for every $i$  $(\widehat{CQ^\top}e')_i \leq (n\log q)\max_j |e_j|$.
 We see that the noise vector in the product has magnitude at most $\mu(C)+n\log q \mu(C')$.
-Adding the identity for the NAND operation adds at most $\mu(C)+\mu(C')$ to the noise, and so the total noise magnitude is  bounded by the righthand side of [eqnoisebound](){.eqref}.
+Adding the identity for the NAND operation adds at most $\mu(C)+\mu(C')$ to the noise, and so the total noise magnitude is bounded by the righthand side of [eqnoisebound](){.eqref}.
 
 
 ### Shallow decryption circuit
@@ -343,14 +343,14 @@ Let us now show this more formally:
 
 > # {.lemma #decdepthlem}
 For every $c\in\Z_q^m$ there exists some function $f:\{0,1\}^m\rightarrow\{0,1\}$ such that: \
-1. For every $\hat{s}\in \{0,1\}^n$ such that  $|\langle \hat{s} \rangle,c|<0.1q$, $f(\hat{s})=0$ \
+1. For every $\hat{s}\in \{0,1\}^n$ such that $|\langle \hat{s} \rangle,c|<0.1q$, $f(\hat{s})=0$ \
 2. For every $\hat{s}\in \{0,1\}^n$ such that $0.4q<|\langle \hat{s} \rangle,c|<0.6q$, $f(\hat{s})=1$ \
 3. There is a circuit computing $f$ of depth at most $100(\log m)^3$.
 
 > # {.proof data-ref="decdepthlem"}
 For every number $x\in\Z_q$, write $\tilde{x}$ to be the number that is obtained by writing $x$ in the binary basis and setting all digits except the $10\log m$ most significant ones to zero.  
 Note that $\tilde{x} \leq x \leq \tilde{x} + q/m^{10}$.
-We define $f(\hat{s})$ to equal $1$ if $|\sum \hat{s}_i \tilde{c}_i  (\mod \tilde{q})| \geq 0.3\tilde{q}$ and to equal $0$ otherwise (where as usual the absolute value of $x$ modulo $\tilde{q}$ is the minimum of $x$ and $\tilde{q}-x$.)
+We define $f(\hat{s})$ to equal $1$ if $|\sum \hat{s}_i \tilde{c}_i (\mod \tilde{q})| \geq 0.3\tilde{q}$ and to equal $0$ otherwise (where as usual the absolute value of $x$ modulo $\tilde{q}$ is the minimum of $x$ and $\tilde{q}-x$.)
 Note that all numbers involved have zeroes in all but the $10\log m$ most significant digits and so these less significant digits can be ignored.
 Hence we can add any pair of such numbers modulo $\tilde{q}$ in depth $O(\log m)^2$ using the standard elementary school algorithm to add two $\ell$-digit numbers in $O(\ell^2)$ steps.
 Now we can add the $m$ numbers by adding pairs, and then adding up the results, and this way in a binary tree of depth $\log m$ to get a total depth of $O(\log m)^3$.
@@ -385,7 +385,7 @@ Besides, it is also proved that the precision loss of the decrypted evaluation r
 This scheme offers an efficient homomorphic encryption setting for many practical data science and machine learning applications which does not require precise values, but approximate ones. You may check existing open source libraries, such as [MS SEAL](https://www.microsoft.com/en-us/research/project/microsoft-seal/) and [HEAAN](https://github.com/snucrypto/HEAAN), of this scheme as well as many practical applications including [logistic regression](https://eprint.iacr.org/2018/254.pdf) in the literature.
 
 
-### Bandwidth efficient fully homomorphic encryption  [GH](https://eprint.iacr.org/2019/733.pdf)
+### Bandwidth efficient fully homomorphic encryption [GH](https://eprint.iacr.org/2019/733.pdf)
 
 When we define homomorphic encryption in [partialhomdef](){.ref}, we only consider a class of single-output functions $\mathcal{F}$. Now we want to extend the difinition to multiple-output function and consider how bandwidth-efficient the fully homomorphic encryption can be. More specifically, if we want to guarantee that the result of decryption is (or contains) $f(x_1,\ldots,x_\ell)$, what will be the minimal possible length of the ciphertext? Let us first define the compressible fully homomorphic encryption scheme.
 
@@ -409,7 +409,7 @@ For any $\epsilon>0$, there exists a compressive fully homomorphic encryption sc
  
 ### Using fully homomorphic encryption to achieve private information retrieval.
 
-Private information retrieval (PIR) allows the client to retrive the $i$-th entry of  a database which has totally $n$ entries without letting the server know $i$. We only consider the single-server case here. Obviously, a trivial solution is that the server sends the entire database to the client. 
+Private information retrieval (PIR) allows the client to retrive the $i$-th entry of a database which has totally $n$ entries without letting the server know $i$. We only consider the single-server case here. Obviously, a trivial solution is that the server sends the entire database to the client. 
 
 One simple case of PIR is that each entry is a bit, for which the trivial solution above has the communication complexity being $n$. [Kushilevitz and Ostrovsky 1997](https://web.cs.ucla.edu/~rafail/PUBLIC/34.pdf) reduced the the complexity to be smaller than $O(n^\epsilon)$ for any $\epsilon>0$. After that, another work ([Cachin et al. 1999](https://people.csail.mit.edu/silvio/Selected%20Scientific%20Papers/Private%20Information%20Retrieval/Computationally%20Private%20Information%20Retrieval%20with%20Polylogarithmic%20Communication.pdf)) further reduced the complexity to $polylog(n)$. More discussion about PIR and related FHE techniques can be found in [Ostrovsky and Skeith 2007](https://eprint.iacr.org/2007/059.pdf), [Yi et al. 2013](https://ieeexplore.ieee.org/document/6189348) and references therein.
 

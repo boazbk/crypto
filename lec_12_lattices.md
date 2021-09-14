@@ -26,7 +26,7 @@ McEliece's system has so far not been broken.
 
 
 In a 1996 breakthrough, Ajtai showed a _private key_ scheme based on integer lattices that had a very curious property- its security could be based on the assumption that certain problems were only hard in the _worst case_, and moreover variants of these problems were known to be NP hard.
-This re-ignited the  hope that we could perhaps realize the old dream of basing crypto on the mere assumption that $P\neq NP$.
+This re-ignited the hope that we could perhaps realize the old dream of basing crypto on the mere assumption that $P\neq NP$.
 Alas, we now understand that there are fundamental barriers to this approach.
 
 Nevertheless, Ajtai's work attracted significant interest, and within a year both Ajtai and Dwork, as well as Goldreich, Goldwasser and Halevi came up with lattice based constructions for _public key_ encryption (the former based also on _worst case_ assumptions).
@@ -52,23 +52,23 @@ I highly recommend [Chris Peikert's Survey](https://web.eecs.umich.edu/~cpeikert
 
 ### Quick linear algebra recap
 
-A _field_ $\mathbb{F}$ is a set that supports the operations $+,\cdot$ and contains the numbers $0$ and $1$ (more formally the additive identity and multiplicative identity) with the usual properties that the real numbers have. (That is associative, commutative, and distributive law, the fact that for every  $x \in \mathbb{F}$ there is an element $-x$ such that $x + (-x) = 0$ and that if $x \neq 0$ there is an element $x^{-1}$ such that $x \cdot x^{-1} = 1$.) 
-Apart from the real numbers, the main field we  will be interested in this section is the field $\Z_q$ of the numbers $\{0,1,\ldots,q-1\}$ with addition and multiplication done modulo $q$, where $q$ is a prime number.^[While this won't be of interest for us in this chapter, one can also define finite fields whose size is a _prime power_ of the form $q^k$ where $q$ is a prime and $k$ is an integer; this is sometimes useful and in particular fields of size $2^k$ are sometimes used in practice. In such fields we usually think of the elements as _vector_ $v \in (\Z_q)^k$ with addition done component-wise but multiplication is not defined component-wise (since otherwise a vector with a single coordinate zero would not have an inverse) but in a different way, via interpreting these vectors as coefficients of a degree $k-1$ polynomial.]
+A _field_ $\mathbb{F}$ is a set that supports the operations $+,\cdot$ and contains the numbers $0$ and $1$ (more formally the additive identity and multiplicative identity) with the usual properties that the real numbers have. (That is associative, commutative, and distributive law, the fact that for every $x \in \mathbb{F}$ there is an element $-x$ such that $x + (-x) = 0$ and that if $x \neq 0$ there is an element $x^{-1}$ such that $x \cdot x^{-1} = 1$.) 
+Apart from the real numbers, the main field we will be interested in this section is the field $\Z_q$ of the numbers $\{0,1,\ldots,q-1\}$ with addition and multiplication done modulo $q$, where $q$ is a prime number.^[While this won't be of interest for us in this chapter, one can also define finite fields whose size is a _prime power_ of the form $q^k$ where $q$ is a prime and $k$ is an integer; this is sometimes useful and in particular fields of size $2^k$ are sometimes used in practice. In such fields we usually think of the elements as _vector_ $v \in (\Z_q)^k$ with addition done component-wise but multiplication is not defined component-wise (since otherwise a vector with a single coordinate zero would not have an inverse) but in a different way, via interpreting these vectors as coefficients of a degree $k-1$ polynomial.]
 
 You should be comfortable with the following notions:
 
-* A vector $v \in \mathbb{F}^n$ and a _matrix_ $M \in \mathbb{F}^{m \times n}$. An $m\times n$ matrix  has $m$ rows and $n$ columns. We think of vectors as _column vectors_ and so we can think of a vector $v \in \mathbb{F}^n$ as an $n\times 1$ matrix.  We write the $i$-the coordinate of $v$ as $v_i$ and the $(i,j)$-th coordinate of $M$ as $M_{i,j}$ (i.e. the coordinate in the $i$-th row and the $j$-th column.) We often write a vector $v$ as $(v_1,\ldots,v_n)$ but we still mean that it's a column vector unless we say otherwise.
+* A vector $v \in \mathbb{F}^n$ and a _matrix_ $M \in \mathbb{F}^{m \times n}$. An $m\times n$ matrix has $m$ rows and $n$ columns. We think of vectors as _column vectors_ and so we can think of a vector $v \in \mathbb{F}^n$ as an $n\times 1$ matrix.  We write the $i$-the coordinate of $v$ as $v_i$ and the $(i,j)$-th coordinate of $M$ as $M_{i,j}$ (i.e. the coordinate in the $i$-th row and the $j$-th column.) We often write a vector $v$ as $(v_1,\ldots,v_n)$ but we still mean that it's a column vector unless we say otherwise.
 
-* If $\alpha \in \mathbb{F}$ is a _scalar_ (i.e., a number) and $v \in \mathbb{F}^n$ is a vector then  $\alpha v$ is the vector $(\alpha v_1 ,\ldots, \alpha v_n)$. If $u,v$ are $n$ dimensional vectors then $u+v$ is the vector $(u_1+v_1,\ldots,u_n+v_n)$.
+* If $\alpha \in \mathbb{F}$ is a _scalar_ (i.e., a number) and $v \in \mathbb{F}^n$ is a vector then $\alpha v$ is the vector $(\alpha v_1 ,\ldots, \alpha v_n)$. If $u,v$ are $n$ dimensional vectors then $u+v$ is the vector $(u_1+v_1,\ldots,u_n+v_n)$.
 
 
-* A _linear subspace_ $V \subseteq \mathbb{F}^n$ is a non-empty set of vectors  such that for every vectors $u,v \in V$ and $\alpha,\beta \in \mathbb{F}$, $\alpha u + \beta v  \in V$. In particular this means that  $V$ contains the all zero vector $0^n$ (can you see why?). A subset $A \subseteq V$ is _linearly independent_ if there is no collection  $a_1,\ldots,a_k \in A$  and scalars $\alpha_1,\ldots,\alpha_k$ such that $\sum \alpha_i a_i = 0^n$. It is known (and not hard to prove) that if $A$ is linearly independent then $|A| \leq n$.  It is known that for every such linear subspace there is a linearly independent set $B = \{ b_1,\ldots,b_d \}$ of vectors, with $d \leq n$, such that for every $u \in V$ there exist $\alpha_1,\ldots,\alpha_d$ such that $v = \sum \alpha_i b_i$. Such a set is known as a _basis_ for $V$. A subspace $V$ has many bases, but all of them have the same size $d$ which is known as the _dimension_ of $V$. An _affine subspace_ is a set $U$ of the form $\{ u_0 + v : v\in V \}$ where $V$ is a linear subspace. We can also write $U$ as $u_0 + V$. We denote the dimension of $U$ as the dimension of $V$ in such a case.
+* A _linear subspace_ $V \subseteq \mathbb{F}^n$ is a non-empty set of vectors such that for every vectors $u,v \in V$ and $\alpha,\beta \in \mathbb{F}$, $\alpha u + \beta v \in V$. In particular this means that $V$ contains the all zero vector $0^n$ (can you see why?). A subset $A \subseteq V$ is _linearly independent_ if there is no collection $a_1,\ldots,a_k \in A$  and scalars $\alpha_1,\ldots,\alpha_k$ such that $\sum \alpha_i a_i = 0^n$. It is known (and not hard to prove) that if $A$ is linearly independent then $|A| \leq n$.  It is known that for every such linear subspace there is a linearly independent set $B = \{ b_1,\ldots,b_d \}$ of vectors, with $d \leq n$, such that for every $u \in V$ there exist $\alpha_1,\ldots,\alpha_d$ such that $v = \sum \alpha_i b_i$. Such a set is known as a _basis_ for $V$. A subspace $V$ has many bases, but all of them have the same size $d$ which is known as the _dimension_ of $V$. An _affine subspace_ is a set $U$ of the form $\{ u_0 + v : v\in V \}$ where $V$ is a linear subspace. We can also write $U$ as $u_0 + V$. We denote the dimension of $U$ as the dimension of $V$ in such a case.
 
 
 
 * The inner product (also known as "dot product")  $\langle u,v \rangle$ between two vectors of the same dimension $n$ that is defined as $\sum u_i v_i$ (addition done in the field $\mathbb{F}$).^[There is a much more general notion of inner product typically defined, and in particular over fields such as the complex numbers we would define the inner product as $\sum \overline{u}_i v_i$ where for $a\in \mathbb{C}$, $\overline{a}$ denotes the _complex conjugate_ of $a$. However, we stick to the simple case above for this chapter.]
 
-* The _matrix product_ $AB$ of an $m \times k$ and a $k\times n$ matrix, that results in an $m\times n$ matrix. If we think of the rows of $A$ as the vectors $A_1,\ldots,A_m \in \mathbb{F}^k$ and the columns of $B$ as $B_1,\ldots,B_n$, then the $(i,j)$-th coordinate of $AB$  is $\langle A_i , B_j \rangle$. Matrix product is associative and satisfies the distributive law but is _not commutative_: there are  pairs of square matrices $A,B$ such that $AB \neq BA$.
+* The _matrix product_ $AB$ of an $m \times k$ and a $k\times n$ matrix, that results in an $m\times n$ matrix. If we think of the rows of $A$ as the vectors $A_1,\ldots,A_m \in \mathbb{F}^k$ and the columns of $B$ as $B_1,\ldots,B_n$, then the $(i,j)$-th coordinate of $AB$  is $\langle A_i , B_j \rangle$. Matrix product is associative and satisfies the distributive law but is _not commutative_: there are pairs of square matrices $A,B$ such that $AB \neq BA$.
 
 * The _transpose_ of an $n\times m$ matrix $A$  is the $m\times n$ matrix $A^\top$ such that $(A^\top)_{i,j} = A_{j,i}$.
 
@@ -119,7 +119,7 @@ If you have a CPA secure public key encryption scheme for single bit messages th
 Can you see why?
 
 
-If $a_1,\ldots,a_m$ are the rows of $A$, we can think of the public key as the set  of equations $\langle a_1,x \rangle=y_1,\ldots, \langle a_m,x \rangle=y_m$ in the unknown variables $x$.
+If $a_1,\ldots,a_m$ are the rows of $A$, we can think of the public key as the set of equations $\langle a_1,x \rangle=y_1,\ldots, \langle a_m,x \rangle=y_m$ in the unknown variables $x$.
 The idea is that to encrypt the value $0$ we will generate a new _correct_ equation on $x$, while to encrypt the value $1$ we will generate an _incorrect_ equation.
 To decrypt a ciphertext $(a,\sigma)\in \Z_q^{n+1}$, we think of it as an equation of the form $\langle a,x \rangle=\sigma$ and output $1$ if and only if the equation is correct.
 
@@ -168,8 +168,8 @@ Think of $m=n$ for simplicity.
 Given equations $Ax=y$ in the unknown variables $x$, the goal of Gaussian elimination is to transform them into the equations $Ix = y'$ where $I$ is the identity matrix (and hence the solution is simply $x=y'$).
 Recall how we do it: by rearranging and scaling, we can assume that the top left corner of $A$ is equal to $1$, and then we add the first equation to the other equations (scaled appropriately) to zero out the first entry in all the other rows of $A$ (i.e., make the first column of $A$ equal to $(1,0,\ldots,0)$) and continue onwards to the second column and so on and so forth.
 
-Now, suppose that the equations were _noisy_, in the sense that we added to $y$ a vector $e\in\Z_q^m$ such that $|e_i|<\delta q$ for every $i$.^[Over $\Z_q$, we can think of $q-1$ also as the number $-1$, and so on. Thus if $a\in\Z_q$, we define $|a|$ to be the minimum of $a$ and $q-a$. This ensures the absolute value satisfies the natural property of  $|a|=|-a|$.]
-Even ignoring the effect of the scaling step, simply adding the first equation to the rest of the equations would typically tend to increase the  relative error of equations $2,\ldots,m$  from $\approx \delta$ to $\approx 2\delta$.
+Now, suppose that the equations were _noisy_, in the sense that we added to $y$ a vector $e\in\Z_q^m$ such that $|e_i|<\delta q$ for every $i$.^[Over $\Z_q$, we can think of $q-1$ also as the number $-1$, and so on. Thus if $a\in\Z_q$, we define $|a|$ to be the minimum of $a$ and $q-a$. This ensures the absolute value satisfies the natural property of $|a|=|-a|$.]
+Even ignoring the effect of the scaling step, simply adding the first equation to the rest of the equations would typically tend to increase the relative error of equations $2,\ldots,m$  from $\approx \delta$ to $\approx 2\delta$.
 Now, when we repeat the process, we increase the error of equations $3,\ldots,m$ from $\approx 2\delta$ to $\approx 4\delta$, and we see that by the time we're done dealing with about $n/2$ variables, the remaining equations have error level roughly $2^{n/2}\delta$.
 So, unless $\delta$ was truly tiny (and $q$ truly big, in which case the difference between working in $\Z_q$ and simply working with integers or rationals disappears), the resulting equations have the form $Ix = y' + e'$ where $e'$ is so big that we get no information on $x$.
 
@@ -188,11 +188,11 @@ The _LWE conjecture_ (without any parameters) is that there is some absolute con
 
 [^noise]: One can think of $e$ as chosen by simply letting every coordinate be chosen at random in $\{ -\delta q, -\delta q + 1 , \ldots, +\delta q \}$. For technical reasons, we sometimes consider other distributions and in particular the _discrete Gaussian_ distribution which is obtained by letting every coordinate of $e$ be an independent Gaussian random variable with standard deviation $\delta q$, conditioned on it being an integer. (A closely related distribution is obtained by picking such a Gaussian random variable and then rounding it to the nearest integer.)
 
-[^superpoly]: People sometimes also consider variants where both $p(n)$ and $q(n)$ can  be as large as exponential.
+[^superpoly]: People sometimes also consider variants where both $p(n)$ and $q(n)$ can be as large as exponential.
 
 It is important to note the order of quantifiers in the learning with error conjecture.
 If we want to handle a noise of low enough magnitude (say $\delta(n) = 1/n^2$) then we need to choose the modulos $q$ to be large enough (for example it is believed that $q > n^4$ will be good enough for this case) and then the adversary can choose $m(n)$ to be as big a polynomial as they like, and of course run in time which is an arbitrary polynomial in $n$.
-Therefore we can think of such an adversary $R$ as getting access to a "magic box" that they can use $m=poly(n)$ number of times to get  "noisy equations on $x$" of the form $(a_i,y_i)$ with $a_i\in \Z_q^n$, $y_i \in \Z_q$ where $y_i = \langle a_i, x \rangle + e_i$).
+Therefore we can think of such an adversary $R$ as getting access to a "magic box" that they can use $m=poly(n)$ number of times to get "noisy equations on $x$" of the form $(a_i,y_i)$ with $a_i\in \Z_q^n$, $y_i \in \Z_q$ where $y_i = \langle a_i, x \rangle + e_i$).
 
 
 
@@ -200,7 +200,7 @@ Therefore we can think of such an adversary $R$ as getting access to a "magic bo
 
 It turns out that if the LWE is hard, then it is even hard to distinguish between random equations and nearly correct ones:
 
-![The search to decision reduction ([LWEsearchtodecthm](){.ref}) implies that under the LWE conjecture,  for every $m=poly(n)$, if we choose and fix a random $m\times n$ matrix $A$ over $\Z_q$, the distribution $Ax+e$ is indistinguishable from a random vector in $\Z_q^m$, where    $x$ is  a random vector in $\Z_q^n$ and $e$ is a random "short" vector in $\Z_q^m$. The two distributions are indistinguishable even to an adversary that knows $A$.](../figure/lwevecindist.png){#figid  .margin}
+![The search to decision reduction ([LWEsearchtodecthm](){.ref}) implies that under the LWE conjecture,  for every $m=poly(n)$, if we choose and fix a random $m\times n$ matrix $A$ over $\Z_q$, the distribution $Ax+e$ is indistinguishable from a random vector in $\Z_q^m$, where $x$ is a random vector in $\Z_q^n$ and $e$ is a random "short" vector in $\Z_q^m$. The two distributions are indistinguishable even to an adversary that knows $A$.](../figure/lwevecindist.png){#figid  .margin}
 
 
 ::: {.theorem title="Search to decision reduction for LWE" #LWEsearchtodecthm}
@@ -214,7 +214,7 @@ indistinguishable:
 
 ::: {.proof data-ref="LWEsearchtodecthm"}
 Suppose that we had a decisional adversary $D$ that succeeds in distinguishing the two distributions above with bias $\epsilon$.
-For example, suppose that $D$ outputs $1$ with probability $p+\epsilon$ on inputs from the first distribution, and outputs  $1$ with probability $p$
+For example, suppose that $D$ outputs $1$ with probability $p+\epsilon$ on inputs from the first distribution, and outputs $1$ with probability $p$
 on inputs from the second distribution.
 
 We will show how we can use this to obtain a polynomial-time algorithm $S$ that on input $m$ noisy equations on $x$ and a value $a\in\ Z_q$, will learn with high probability whether or not the first coordinate of $x$ equals $a$.
@@ -286,7 +286,7 @@ We now prove security of the LWE based encryption:
 If the LWE conjecture is true then LWEENC is CPA secure.
 
 
-For a public key encryption scheme with messages that are just bits, CPA security  means that an encryption of $0$ is indistinguishable from an encryption of $1$, even given the public key.
+For a public key encryption scheme with messages that are just bits, CPA security means that an encryption of $0$ is indistinguishable from an encryption of $1$, even given the public key.
 Thus [LWEENCthm](){.ref}  will follow from the following lemma:
 
 
@@ -294,14 +294,14 @@ Thus [LWEENCthm](){.ref}  will follow from the following lemma:
 Let $q,m,\delta$ be set as in LWEENC.
 Then, assuming the LWE conjecture, the following distributions are computationally indistinguishable:
 
-*  $D$: The distribution over four-tuples of the form  $(A,y,w^\top A,\langle w,y \rangle)$  where $A$ is uniform in $\Z_q^{m\times n}$, $x$ is uniform in $\Z_q^n$, $e \in Z_q$ is chosen with $e_i \in \{-\delta q,\ldots,+\delta q\}$, $y=Ax+e$, and $w$ is uniform in $\{0,1\}^m$.
+*  $D$: The distribution over four-tuples of the form $(A,y,w^\top A,\langle w,y \rangle)$  where $A$ is uniform in $\Z_q^{m\times n}$, $x$ is uniform in $\Z_q^n$, $e \in Z_q$ is chosen with $e_i \in \{-\delta q,\ldots,+\delta q\}$, $y=Ax+e$, and $w$ is uniform in $\{0,1\}^m$.
 
-* $\overline{D}$: The distribution over four-tuples $(A,y',a,\sigma)$ where  all entries are uniform: $A$ is uniform in $\Z_q^{m\times n}$, $y'$ is uniform in $\Z_q^m$, $a$ is uniform in $\Z_q^n$ and $\sigma$ is uniform in $\Z_q$.
+* $\overline{D}$: The distribution over four-tuples $(A,y',a,\sigma)$ where all entries are uniform: $A$ is uniform in $\Z_q^{m\times n}$, $y'$ is uniform in $\Z_q^m$, $a$ is uniform in $\Z_q^n$ and $\sigma$ is uniform in $\Z_q$.
 :::
 
 
 > # { .pause }
-You should stop here and verify that __(i)__ You understand the statement of [LWEENClem](){.ref} and __(ii)__ you understand why this lemma  implies [LWEENCthm](){.ref}.
+You should stop here and verify that __(i)__ You understand the statement of [LWEENClem](){.ref} and __(ii)__ you understand why this lemma implies [LWEENCthm](){.ref}.
 The idea is that [LWEENClem](){.ref} shows that the concatenation of the public key and encryption of $0$ is indistinguishable from something that is completely random.
 You can then use it to show that the concatenation of the public key and encryption of $1$ is indistinguishable from the same thing, and then finish using the hybrid argument.
 
@@ -312,20 +312,20 @@ Define $D$ to be the distribution $(A,y,w^\top A,\langle w,y \rangle)$ as in the
 Define $D'$ to be the distribution $(A,y',w^\top A, \langle w,y' \rangle)$ where $y'$ is chosen uniformly in $\Z_q^m$.
 
 We claim that $D'$ is computationally indistinguishable from $D$ under the LWE conjecture.
-Indeed by [LWEsearchtodecthm](){.ref} (search to  decision reduction) this conjecture implies that the distribution $X$ over pairs   $(A,y)$ with $y=Ax+e$  is indistinguishable from the distribution $X'$ over pairs $(A,y')$ where $y'$ is uniform.
-But if there was some polynomial-time algorithm $T$ distinguishing $D$ from $D'$ then we can design a randomized  polynomial-time algorithm $T'$ distinguishing $X$ from $X'$ with the same advantage by setting $T'(A,y)=T(A,y,w^\top A,\langle w,y \rangle)$ for random $w \leftarrow_R \{0,1\}^m$.
+Indeed by [LWEsearchtodecthm](){.ref} (search to decision reduction) this conjecture implies that the distribution $X$ over pairs $(A,y)$ with $y=Ax+e$  is indistinguishable from the distribution $X'$ over pairs $(A,y')$ where $y'$ is uniform.
+But if there was some polynomial-time algorithm $T$ distinguishing $D$ from $D'$ then we can design a randomized polynomial-time algorithm $T'$ distinguishing $X$ from $X'$ with the same advantage by setting $T'(A,y)=T(A,y,w^\top A,\langle w,y \rangle)$ for random $w \leftarrow_R \{0,1\}^m$.
 
-We will finish the proof by showing that  the distribution $D'$ is _statistically indistinguishable_ (i.e., has negligible total variation distance) from $\overline{D}$.
+We will finish the proof by showing that the distribution $D'$ is _statistically indistinguishable_ (i.e., has negligible total variation distance) from $\overline{D}$.
 This follows from the following claim:
 
-**CLAIM**: Suppose that $m > 100 n \log q$. If $A'$ is a random $m\times n+1$ matrix in $\Z_q^m$, then with probability at least $1-2^{-n}$ over the choice of $A'$, the distribution $Z_{A'}$ over $\Z_q^{n+1}$ which is obtained by choosing $w$ at random in $\{0,1\}^m$ and outputting $w^\top A'$ has at most $2^{-n}$ statistical distance from the uniform distribution over  $\Z_q^{n+1}$.
+**CLAIM**: Suppose that $m > 100 n \log q$. If $A'$ is a random $m\times n+1$ matrix in $\Z_q^m$, then with probability at least $1-2^{-n}$ over the choice of $A'$, the distribution $Z_{A'}$ over $\Z_q^{n+1}$ which is obtained by choosing $w$ at random in $\{0,1\}^m$ and outputting $w^\top A'$ has at most $2^{-n}$ statistical distance from the uniform distribution over $\Z_q^{n+1}$.
 
 Note that the randomness used for the distribution $Z_{A'}$ is only obtained by the choice of $w$, and *not* by the choice of $A'$ that is fixed.
-(This passes a basic "sanity check" since $w$ has $m$ random bits, while the uniform distribution over $\Z_q^n$ requires $n \log q \ll m$ random bits, and hence  $Z_{A'}$ at least has a "fighting chance" in being statistically close to it.)
+(This passes a basic "sanity check" since $w$ has $m$ random bits, while the uniform distribution over $\Z_q^n$ requires $n \log q \ll m$ random bits, and hence $Z_{A'}$ at least has a "fighting chance" in being statistically close to it.)
 Another way to state the same claim is that the pair $(A',w^\top A')$ is statistically indistinguishable from the uniform distribution $(A',z)$ where $z$ is a vector chosen independently at random from $\Z_q^{n+1}$.
 
-The claim completes the proof of the theorem, since letting $A'$ be the matrix $(A|y)$ and $z=(a,\sigma)$, we see that the distribution $D'$, as the form $(A',z)$ where $A'$ is a uniformly random  $m\times (n+1)$ matrix and $z$ is sampled from $Z_{A'}$ (i.e., $z=w^\top A'$ where $w$ is uniformly chosen in $\{0,1\}^m$).
-Hence this means that  the statistical distance of $D'$ from $\overline{D}$ (where all elements are uniform) is $O(2^{-n})$.
+The claim completes the proof of the theorem, since letting $A'$ be the matrix $(A|y)$ and $z=(a,\sigma)$, we see that the distribution $D'$, as the form $(A',z)$ where $A'$ is a uniformly random $m\times (n+1)$ matrix and $z$ is sampled from $Z_{A'}$ (i.e., $z=w^\top A'$ where $w$ is uniformly chosen in $\{0,1\}^m$).
+Hence this means that the statistical distance of $D'$ from $\overline{D}$ (where all elements are uniform) is $O(2^{-n})$.
 (Please make sure you understand this reasoning!)
 
 The proof of this claim relies on the [leftover hash lemma](https://goo.gl/KXpccP).
@@ -370,15 +370,15 @@ $$\begin{aligned}\Delta((H(W),H),(V,H))&\le\frac{\sqrt{|\mathcal{H}|\cdot|\mathc
 
 
 > # { .pause }
-The proof of [LWEENCthm](){.ref} is quite subtle and requires some re-reading and  thought.
+The proof of [LWEENCthm](){.ref} is quite subtle and requires some re-reading and thought.
 To read more about this, you can look at the survey of Oded Regev, ["On the Learning with Error Problem"](http://www.cims.nyu.edu/~regev/papers/lwesurvey.pdf) Sections 3 and 4.
 
 ## But what are lattices?
 
 You can think of a lattice as a discrete version of a subspace.
 A lattice $L$ is simply a discrete subset of $\mathbb{R}^n$ such that if $u,v\in L$ and $a,b$ are integers then $au+bv\in L$.^[By discrete we mean that points in $L$ are isolated. One formal way to define it is that there is some $\epsilon>0$ such that every distinct $u,v \in L$ are of distance at least $\epsilon$ from one another.]
-A lattice is given by a basis  which simply a matrix $B$ such that every vector $u\in L$ is obtained as $u=Bx$ for some vector of integers $x$.
-It can be shown that we can  assume without loss of generality that $B$ is full dimensional and hence it's an $n$ by $n$ invertible matrix.
+A lattice is given by a basis which simply a matrix $B$ such that every vector $u\in L$ is obtained as $u=Bx$ for some vector of integers $x$.
+It can be shown that we can assume without loss of generality that $B$ is full dimensional and hence it's an $n$ by $n$ invertible matrix.
 Note that given a basis $B$ we can generate vectors in $L$, as well as test whether a vector $v$ is in $L$ by testing if $B^{-1}v$ is an integer vector.
 There can be many different bases for the same lattice, and some of them are easier to work with than others (see [latticebasesfig](){.ref}).
 
@@ -394,7 +394,7 @@ Some classical computational questions on lattices are:
 
 In particular, if $V$ is a linear subspace of $\Z_q^n$, we can think of it also as a lattice $\hat{V}$ of $\mathbb{R}^n$ where we simply say that
 that a vector $\hat{u}$ is in $\hat{V}$ if all of $\hat{u}$'s coordinates are integers and if we let $u_i = \hat{u}_i \pmod{q}$ then $u\in V$.
-The learning with error task of recovering $x$ from $Ax+e$ can then be thought of as an instance of the  bounded distance decoding problem for $\hat{V}$.
+The learning with error task of recovering $x$ from $Ax+e$ can then be thought of as an instance of the bounded distance decoding problem for $\hat{V}$.
 
 A natural algorithm to try to solve the _closest vector_ and _bounded distance decoding_ problems is that to take the vector $u$, express it in the basis $B$ by computing $w = B^{-1}u$, and then round all the coordinates of $w$ to obtain an integer vector $\tilde{w}$ and let $v=B\tilde{w}$ be a vector in the lattice.
 If we have an extremely good basis $L$ for the lattice then $v$ may indeed be the closest vector in the lattice,  but in other more "skewed" bases it can be extremely far from it.
@@ -408,7 +408,7 @@ Schemes using _ideal lattices_ are an attempt to get more practical variants. Th
 One common variant is the following: we fix some polynomial $p$ over $\Z_q$ with degree $n$ and then treat vectors in $\Z_q^n$ as the coefficients of $n-1$ degree polynomials and always work modulo this polynomial $p()$.
 (By this I mean that for every polynomial $t$ of degree at least $n$ we write $t$ as $ps+r$ where $p$ is the polynomial above, $s$ is some polynomial and $r$ is the "remainder" polynomial of degree $<n$;
 then $t \pmod{p} = r$.)
-Now for every fixed polynomial $t$, the operation $A_t$ which is defined as  $s \mapsto ts \pmod{p}$ is a linear operation mapping polynomials of degree at most $n-1$ to polynomials of degree at most $n-1$, or put another way, it is a linear map over $\Z_q^n$.
+Now for every fixed polynomial $t$, the operation $A_t$ which is defined as $s \mapsto ts \pmod{p}$ is a linear operation mapping polynomials of degree at most $n-1$ to polynomials of degree at most $n-1$, or put another way, it is a linear map over $\Z_q^n$.
 However, the map $A_d$ can be described using the $n$ coefficients of $t$ as opposed to the $n^2$ description of a matrix.
 It also turns out that by using the Fast Fourier Transform we can evaluate this operation in roughly $n$ steps as opposed to $n^2$.
 The ideal lattice based cryptosystem use matrices of this form to save on key size and computation time.

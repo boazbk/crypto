@@ -22,13 +22,13 @@ However, I think a better definition would be:
 >_Cryptography is about replacing trust with mathematics._
 
 After all, the reason we work so hard in cryptography is because a lack of trust.
-We wouldn't need encryption if Alice and Bob could be guaranteed that their communication, despite going through wireless and wired networks controlled and snooped upon by a plethora of entities, would be as reliable as if it has been hand delivered by a  letter-carrier as reliable as [Patti Whitcomb](http://old.iolaregister.com/Local%20News/Stories/Weatherwontstopcarriers.html), as opposed to the nosy Eve who might look in the messages, or the malicious Mallory, who might tamper with them.
-We wouldn't need zero knowledge proofs  if Vladimir could simply say "trust me Barack, this is an authentic nuke".
+We wouldn't need encryption if Alice and Bob could be guaranteed that their communication, despite going through wireless and wired networks controlled and snooped upon by a plethora of entities, would be as reliable as if it has been hand delivered by a letter-carrier as reliable as [Patti Whitcomb](http://old.iolaregister.com/Local%20News/Stories/Weatherwontstopcarriers.html), as opposed to the nosy Eve who might look in the messages, or the malicious Mallory, who might tamper with them.
+We wouldn't need zero knowledge proofs if Vladimir could simply say "trust me Barack, this is an authentic nuke".
 We wouldn't need electronic signatures if we could trust that all software updates are designed to make our devices safer and not, to pick a random example, to turn our phones into surveillance devices.
 
-Unfortunately, the  world we live in is not as ideal, and we need these cryptographic tools.
+Unfortunately, the world we live in is not as ideal, and we need these cryptographic tools.
 But what is the limit of what we can achieve?
-Are  these examples of encryption, authentication, zero knowledge etc. isolated cases of good fortune, or are they special cases of a more general theory of what is possible in cryptography?
+Are these examples of encryption, authentication, zero knowledge etc. isolated cases of good fortune, or are they special cases of a more general theory of what is possible in cryptography?
 It turns out that the latter is the case and there is in fact an extremely general formulation that (in some sense) captures all of the above and much more.
 This notion is called _multiparty secure computation_ or sometimes _secure function evaluation_ and is the topic of this lecture.
 We will show (a relaxed version of) what I like to call "the fundamental theorem of cryptography", namely that under natural computational conjectures (and in particular the LWE conjecture, as well as the RSA or Factoring assumptions) essentially every cryptographic task can be achieved.
@@ -39,7 +39,7 @@ But before we can even state the result, we need to talk about how can we even d
 ## Ideal vs. Real Model Security.
 
 The key notion is that cryptography aims to replace _trust_.
-Therefore, we imagine an _ideal world_ where there is some universally trusted party  (cryptographer Silvio Micali likes to denote by Jimmy Carter, but feel free to swap in your own favorite trustworthy personality) that communicates with all participants of the protocol or interaction, including potentially the adversary.
+Therefore, we imagine an _ideal world_ where there is some universally trusted party (cryptographer Silvio Micali likes to denote by Jimmy Carter, but feel free to swap in your own favorite trustworthy personality) that communicates with all participants of the protocol or interaction, including potentially the adversary.
 We define security by stating that whatever the adversary can achieve in our real world, could have also been achieved in the ideal world.
 
 For example, for obtaining secure communication, Alice will send her message to the trusted party, who will then convey it to Bob.
@@ -68,7 +68,7 @@ This is what makes the notion of _secure multiparty computation_ so exciting.
 ## Formally defining secure multiparty computation
 
 We now turn to formal definitions. As we discuss below, there are many variants of secure multiparty computation, and we pick one simple version below.
-A _$k$-party protocol_ is  a set of efficiently computable $k$ prescribed interactive strategies for all $k$ parties.[^numberk]
+A _$k$-party protocol_ is a set of efficiently computable $k$ prescribed interactive strategies for all $k$ parties.[^numberk]
 We assume the existence of an authenticated and private point to point channel between every pair of parties (this can be implemented using signatures and encryptions).[^broadcast]
 A _$k$ party functionality_  is a probabilistic process $F$ mapping $k$ inputs in $\{0,1\}^n$ into $k$ outputs in $\{0,1\}^n$.[^lengths]
 
@@ -84,13 +84,13 @@ A _$k$ party functionality_  is a probabilistic process $F$ mapping $k$ inputs i
 Here is one attempt of a definition that is clean but a bit too strong, which nevertheless captures much of the spirit of secure multiparty computation:
 
 > # {.definition title="MPC without aborts" #mpcnoaborts}
-Let $F$ be a $k$-party functionality.  A _secure protocol for $F$_ is a protocol for $k$ parties satisfying that for every $T\subseteq [k]$ and every efficient adversary $A$,  there exists an efficient "ideal adversary" (i.e., efficient interactive algorithm)  $S$ such that  for every set of inputs $\{ x_i \}_{i\in [k]\setminus T}$ the following two distributions are computationally indistinguishable:
+Let $F$ be a $k$-party functionality.  A _secure protocol for $F$_ is a protocol for $k$ parties satisfying that for every $T\subseteq [k]$ and every efficient adversary $A$,  there exists an efficient "ideal adversary" (i.e., efficient interactive algorithm)  $S$ such that for every set of inputs $\{ x_i \}_{i\in [k]\setminus T}$ the following two distributions are computationally indistinguishable:
 >
 * The tuple $(y_1,\ldots,y_k)$ of outputs of all the parties (both controlled and not controlled by the adversary) in an execution of the protocol where $A$ controls the parties in $T$ and the inputs of the parties not in $T$ are given by $\{ x_i \}_{i\in [k]\setminus T}$.
 >
 * The tuple $(y_1,\ldots,y_k)$ that is computed using the following process:
 >
-   a. We let $\{ x_i \}_{i \in T}$ be chosen by $S$, and compute  $(y'_1,\ldots,y'_k)=F(x_1,\ldots,x_k)$.
+   a. We let $\{ x_i \}_{i \in T}$ be chosen by $S$, and compute $(y'_1,\ldots,y'_k)=F(x_1,\ldots,x_k)$.
 >
    b. For every $i\in [k]$, if $i\not\in T$ (i.e., party $i$ is "honest") then $y_i=y'_i$ and otherwise, we let $S$ choose $y_i$.
 
@@ -103,7 +103,7 @@ Note that in particular if $T=\emptyset$ (and hence there is no adversary) then 
 ### Allowing for aborts
 
 The definition above is a little too strong, in the following sense.
-Consider the case that $k=2$ where there are two parties Alice  (Party $1$) and Bob (Party $2$) that wish to compute some output $F(x_1,x_2)$.
+Consider the case that $k=2$ where there are two parties Alice (Party $1$) and Bob (Party $2$) that wish to compute some output $F(x_1,x_2)$.
 If Bob is controlled by the adversary then he clearly can simply abort the protocol and prevent Alice from computing $y_1$.
 Thus, in this case in the actual execution of the protocol the output $y_1$ will be some error message (which we denote by $\bot$).
 But we did not allow this possiblity for the idealized adversary $S$: if $1\not\in S$ then it must be the case that the output $y_1$ is equal to $y'_1$ for some $(y'_1,y'_2)=F(x_1,x_2)$.  
@@ -117,13 +117,13 @@ This motivates the following, slightly more messy definition, that allows for th
 
 
 > # {.definition title="MPC with aborts" #MPCdef}
-Let $F$ be a $k$-party functionality.  A _secure protocol for $F$_ is a protocol for $k$ parties satisfying that for every $T\subseteq [k]$ and every efficient adversary $A$,  there exists an efficient "ideal adversary" (i.e., efficient interactive algorithm)  $S$ such that for  every set of inputs $\{ x_i \}_{i\in [k]\setminus T}$ the following two distributions are computationally indistinguishable:
+Let $F$ be a $k$-party functionality.  A _secure protocol for $F$_ is a protocol for $k$ parties satisfying that for every $T\subseteq [k]$ and every efficient adversary $A$,  there exists an efficient "ideal adversary" (i.e., efficient interactive algorithm)  $S$ such that for every set of inputs $\{ x_i \}_{i\in [k]\setminus T}$ the following two distributions are computationally indistinguishable:
 >
 * The tuple $(y_1,\ldots,y_k)$ of outputs of all the parties (both controlled and not controlled by the adversary) in an execution of the protocol where $A$ controls the parties in $T$ and the inputs of the parties not in $T$ are given by $\{ x_i \}_{i\in [k]\setminus T}$ we denote by $y_i = \top$ if the $i^{th}$ party aborted the protocol.
 >
 * The tuple $(y_1,\ldots,y_k)$ that is computed using the following process:
 >
-   a. We let $\{ x_i \}_{i \in T}$ be chosen by $S$, and compute  $(y'_1,\ldots,y'_k)=F(x_1,\ldots,x_k)$.
+   a. We let $\{ x_i \}_{i \in T}$ be chosen by $S$, and compute $(y'_1,\ldots,y'_k)=F(x_1,\ldots,x_k)$.
 >
    b. For $i=1,\ldots,k$ do the following: ask $S$ if it wishes to abort at this stage, and if it doesn't then the $i^{th}$ party learns $y'_i$. If the adversary did abort then we exit the loop at this stage and the parties $i+1,\ldots,k$ (regardless if they are honest or malicious) do not learn the corresponding outputs.
 >
@@ -146,7 +146,7 @@ Here are some good exercises to make sure you follow the definition:
 It is an excellent idea for you to pause here and try to work out at least informally these exercises.
 
 
-[^public-inputs]: Our treatment of the input graph $H$ is  an instance of a general case. While the definition of a functionality only talks about private inputs, it's very easy to include public inputs as well. If we want to include some public input $Z$ we can simply have $Z$ concatenated to all the private inputs (and the functionality check that they are all the same, otherwise outputting ```error``` or some similar result).
+[^public-inputs]: Our treatment of the input graph $H$ is an instance of a general case. While the definition of a functionality only talks about private inputs, it's very easy to include public inputs as well. If we want to include some public input $Z$ we can simply have $Z$ concatenated to all the private inputs (and the functionality check that they are all the same, otherwise outputting ```error``` or some similar result).
 
 
 Amazingly, we can obtain such a protocol for _every_ functionality:
@@ -156,31 +156,31 @@ Amazingly, we can obtain such a protocol for _every_ functionality:
 Under reasonable assumptions[^assumptions] for every polynomial-time computable $k$-functionality $F$ there is a polynomial-time protocol that computes it securely.
 
 
-[^assumptions]: Originally this was shown under the assumption of trapdoor permutations (which can be derived from the Factoring or RSA  conjectures) but it is known today under a variety of other assumptions, including in particular the LWE conjecture.
+[^assumptions]: Originally this was shown under the assumption of trapdoor permutations (which can be derived from the Factoring or RSA conjectures) but it is known today under a variety of other assumptions, including in particular the LWE conjecture.
 
-[MPCthm](){.ref} was originally proven by Yao in 1982 for the special case of two party functionalities, and then proved for the general case by  Goldreich, Micali,  and Wigderson in 1987.
+[MPCthm](){.ref} was originally proven by Yao in 1982 for the special case of two party functionalities, and then proved for the general case by Goldreich, Micali,  and Wigderson in 1987.
 As discussed below, many variants of this theorem has been shown, and this line of research is still ongoing.
 
 
 ### Some comments:
 
-There is in fact not a single theorem but rather many variants of this fundamental theorem obtained by great many people, depending on the different security properties desired, as well as the  different cryptographic and setup assumptions. Some of the issues studied in the literature include the following:
+There is in fact not a single theorem but rather many variants of this fundamental theorem obtained by great many people, depending on the different security properties desired, as well as the different cryptographic and setup assumptions. Some of the issues studied in the literature include the following:
 
 
 
 * __Fairness, guaranteed output delivery:__ The definition above does not attempt to protect against "denial of service" attacks, in the sense that the adversary is allowed, even in the ideal case, to prevent the honest parties from receiving their outputs.  
-As mentioned above, without honest majority this is essential for simlar reasons to the  issue we discussed in [our lecture on bitcoin](http://www.boazbarak.org/cs127/chap07_hash_functions.pdf)  why achieving consensus is hard if there isn't a honest majority.
+As mentioned above, without honest majority this is essential for simlar reasons to the issue we discussed in [our lecture on bitcoin](http://www.boazbarak.org/cs127/chap07_hash_functions.pdf)  why achieving consensus is hard if there isn't a honest majority.
 When there is an honest majority, we can achieve the property of _guaranteed output delivery_, which offers protection against such "denial of service" attacks.
 Even when there is no guaranteed output delivery, we might want the property of _fairness_, whereas we guarantee that if the honest parties don't get the output then neither does the adversary.
-There has been extensive study of fairness and there are protocols achieving  variants on it under various computational and setup assumptions.
+There has been extensive study of fairness and there are protocols achieving variants on it under various computational and setup assumptions.
 
-* __Network models:__  The current definition assumes we have a set of $k$ parties with known identities with pairwise secure (confidential and authenticated) channels between them. Other network models studies  include  broadcast channel, non-private networks, and even [no authentication](https://eprint.iacr.org/2007/464)).
+* __Network models:__  The current definition assumes we have a set of $k$ parties with known identities with pairwise secure (confidential and authenticated) channels between them. Other network models studies include broadcast channel, non-private networks, and even [no authentication](https://eprint.iacr.org/2007/464)).
 
-* __Setup assumptions:__ The definition does not assume a trusted third party, but people have studied  different setup assumptions including a public key infrastructure, common reference string, and more.
+* __Setup assumptions:__ The definition does not assume a trusted third party, but people have studied different setup assumptions including a public key infrastructure, common reference string, and more.
 
-* __Adversarial power:__ It turns out that under certain condition, it can be possible to obtain secure multiparty computation with respect to adversaries that have unbounded computational power (so called "information theoretic security"). People have also studies different variants of adversaries including "honest but curious" or "passive adversaries", as well as "covert" adversaries that only deviate from the protocol if they won't be caught. Other settings studied limit the  adversary's ability to control parties (e.g., honest majority, smaller fraction of parties or particular patterns of control, adaptive vs static corruption).  
+* __Adversarial power:__ It turns out that under certain condition, it can be possible to obtain secure multiparty computation with respect to adversaries that have unbounded computational power (so called "information theoretic security"). People have also studies different variants of adversaries including "honest but curious" or "passive adversaries", as well as "covert" adversaries that only deviate from the protocol if they won't be caught. Other settings studied limit the adversary's ability to control parties (e.g., honest majority, smaller fraction of parties or particular patterns of control, adaptive vs static corruption).  
 
-* __Concurrent compositions:__  The definition displayed above are for _standalone execution_ which is known not to automatically imply security with respect to _concurrent composition_, where many copies of the same protocol (or different protocols) could be executed simultaneously. This opens up all sorts of new attacks.[^grandmasters]  See  [Yehuda Lindell's thesis](http://u.cs.biu.ac.il/~lindell/thesis.html) (or  [this  updated version](http://u.cs.biu.ac.il/~lindell/LNCSmonograph.html)) for more. A very general notion known as "UC security" (which stands for "Universally  Composable" or maybe "Ultimate Chuck") has been proposed to achieve security in these settings, though at a price of additional setup assumptions, see [here](http://www.cs.tau.ac.il/~canetti/materials/ICALP08.pdf) and [here](http://eprint.iacr.org/2007/475).
+* __Concurrent compositions:__  The definition displayed above are for _standalone execution_ which is known not to automatically imply security with respect to _concurrent composition_, where many copies of the same protocol (or different protocols) could be executed simultaneously. This opens up all sorts of new attacks.[^grandmasters]  See [Yehuda Lindell's thesis](http://u.cs.biu.ac.il/~lindell/thesis.html) (or [this updated version](http://u.cs.biu.ac.il/~lindell/LNCSmonograph.html)) for more. A very general notion known as "UC security" (which stands for "Universally Composable" or maybe "Ultimate Chuck") has been proposed to achieve security in these settings, though at a price of additional setup assumptions, see [here](http://www.cs.tau.ac.il/~canetti/materials/ICALP08.pdf) and [here](http://eprint.iacr.org/2007/475).
 
 * __Communication:__ The communication cost for [MPCthm](){.ref} can be proportional to the size of the circuit that computes $F$. This can be a very steep cost, especially when computing over large amounts of data. It turns out that we can sometimes avoid this cost using fully homomorphic encryption or other techniques.
 
@@ -211,12 +211,12 @@ Here is how we could obtain such a protocol using secure multiparty computation:
 
 * The private input of bidder $i$ is the value $x_i$ that it wants to bid as well as the secret key $s_i$ that corresponds to their public key.
 
-* The functionality only provides an output to the auctioneer, which would be the identity $i$ of the winning bidder as well as a valid signature on this bidder transferring $x$ bitcoins to the key $v_1$ of the auctioneer, where $x$ is the value of the  second largest valid bid (i.e., $x$ equals to the second largest $x_j$ such that $s_j$ is indeed the private key corresponding to $v_j$.)
+* The functionality only provides an output to the auctioneer, which would be the identity $i$ of the winning bidder as well as a valid signature on this bidder transferring $x$ bitcoins to the key $v_1$ of the auctioneer, where $x$ is the value of the second largest valid bid (i.e., $x$ equals to the second largest $x_j$ such that $s_j$ is indeed the private key corresponding to $v_j$.)
 
 
 [^bitcoin]: As we discussed before, bitcoin doesn't have the notion of accounts but rather what we mean by that for each one of the public keys, the public ledger contains a sufficiently large amount of bitcoins that have been transferred to these keys (in the sense that whomever can sign w.r.t. these keys can transfer the corresponding coins).
 
-It's worthwhile to think about what a secure  protocol for this functionality accomplishes. For example:
+It's worthwhile to think about what a secure protocol for this functionality accomplishes. For example:
 
 * The fact that in the ideal model the adversary needs to choose its queries independently means that the adversary cannot get any information about the honest parties' bids before deciding on its bid.
 
@@ -237,7 +237,7 @@ For example, there might be several reasons why we would want to "split" a secre
 * On the other side, a company might wish to split its own key between several servers residing in different countries, to ensure not one of them is completely under one jurisdiction. Or it might do such splitting for technical reasons, so that if there is a break in into a single site, the key is not compromised.
 
 There are several other such examples.
-One problem with this approach is that splitting a cryptographic key is not the same  as cutting a 100 dollar bill in half.
+One problem with this approach is that splitting a cryptographic key is not the same as cutting a 100 dollar bill in half.
 If you simply give half of the bits to each party, you could significantly harm security. (For example, it is possible to recover the full RSA key [from only $27\%$ of its bits](http://eprint.iacr.org/2008/510.pdf)).
 
 Here is a better approach, known as [secret sharing](https://en.wikipedia.org/wiki/Secret_sharing):
@@ -248,7 +248,7 @@ shows that this holds for _every_ set of $k-1$ parties:
 
 > # {.lemma #secretsharinglem}
 For every $s\in\{0,1\}^n$, and set $T\subseteq [k]$ of size $k-1$, we get exactly the same distribution over $(s_1,\ldots,s_k)$ as above if
-we choose $s_i$ for $i\in T$ at random and set $s_t = s \oplus_{i\in T} s_i$ where  $t = [k]\setminus T$.
+we choose $s_i$ for $i\in T$ at random and set $s_t = s \oplus_{i\in T} s_i$ where $t = [k]\setminus T$.
 
 We leave the proof of [secretsharinglem](){.ref} as an exercise.
 
@@ -281,7 +281,7 @@ We will focus on the case of _two parties_. The same ideas extend to $k>2$ parti
 We start from the second stage. Giving a reduction transforming a protocol in the "honest but curious" setting into a protocol secure in the malicious setting. That is, we will prove the following theorem:
 
 > ### {.theorem title="Honest-but-curious to malicious security compiler" #hbctomalthm}
-There is a polynomial-time "compiler" $C$ such that for every for every $k$ party protocol $(P_1,\ldots,P_k)$ (where all $P_i$'s are polynomial-time computable potentially randomized strategies), if we let  $(\tilde{P}_1,\ldots,\tilde{P}_k) = C(P_1,\ldots,P_k)$  will be a $k$-tuple polynomial-time computable strategies and moreover if $(P_1,\ldots,P_k)$ was a protocol for computing some (potentially randomized) functionality $F$ secure with respect to honest-but-curious adversaries, then $(\tilde{P}_1,\ldots,\tilde{P}_k)$ is a protocol for computing the same $F$ secure with respect to _malicious_ adversaries.
+There is a polynomial-time "compiler" $C$ such that for every for every $k$ party protocol $(P_1,\ldots,P_k)$ (where all $P_i$'s are polynomial-time computable potentially randomized strategies), if we let $(\tilde{P}_1,\ldots,\tilde{P}_k) = C(P_1,\ldots,P_k)$  will be a $k$-tuple polynomial-time computable strategies and moreover if $(P_1,\ldots,P_k)$ was a protocol for computing some (potentially randomized) functionality $F$ secure with respect to honest-but-curious adversaries, then $(\tilde{P}_1,\ldots,\tilde{P}_k)$ is a protocol for computing the same $F$ secure with respect to _malicious_ adversaries.
 
 The remainder of this section is devoted to the proof of [hbctomalthm](){.ref}. 
 For ease of notation we will focus on the $k=2$ case, where there are only two parties ("Alice" and "Bob") although these techniques generalize to arbitrary number of parties $k$.
@@ -315,7 +315,7 @@ Did you stop and think?
 
 The problem is that at every step Alice proves that there exists _some_ input $x_1$ that can explain her message but she doesn't prove that it's _the same input for all messages_.
 If Alice was being truly honest, she should have picked her input once and use it throughout the protocol, and she could not compute the first message according to the input $x_1$ and then the third message according to some input $x'_1 \neq x_1$.
-Of course we can't have Alice reveal the input, as this would violate  security.
+Of course we can't have Alice reveal the input, as this would violate security.
 The solution is for Alice to _commit_ in advance to the input.
 We have seen commitments before, but let us now formally define the notion:
 
@@ -349,12 +349,12 @@ We can now describe the transformation ensuring the protocol is secure against a
      * If the proof is rejected then Bob aborts the protocol.
 
 
-[^randomness]: Note that even though we assumed that in the original honest-but-curious protocol Alice used a deterministic strategy, we will transform the protocol into one in which  Alice uses a randomized strategy in both the commitment and zero knowledge phases.
+[^randomness]: Note that even though we assumed that in the original honest-but-curious protocol Alice used a deterministic strategy, we will transform the protocol into one in which Alice uses a randomized strategy in both the commitment and zero knowledge phases.
 
 
 We will not prove security but will only sketch it here, see [Section 7.3.2 in Goldreich's survey](http://www.nowpublishers.com/article/Details/TCS-001) for a more detailed proof:
 
-* To argue that we maintain security for _Alice_ we use the zero knowledge property: we claim that Bob could not learn anything from the zero knowledge proofs precisely because he could have simulated them by himself. We also use the hiding property of the commitment scheme. To prove security formally we \ need to  show that whatever Bob learns in the modified protocol, he could have learned in the original protocol as well. We do this by _simulating_ Bob by replacing the commitment scheme with commitment to some random junk instead of $x_1$ and the zero knowledge proofs with their simulated version. The proof of security requires a hybrid argument, and is again a good exercise to try to do it on your own.
+* To argue that we maintain security for _Alice_ we use the zero knowledge property: we claim that Bob could not learn anything from the zero knowledge proofs precisely because he could have simulated them by himself. We also use the hiding property of the commitment scheme. To prove security formally we \ need to show that whatever Bob learns in the modified protocol, he could have learned in the original protocol as well. We do this by _simulating_ Bob by replacing the commitment scheme with commitment to some random junk instead of $x_1$ and the zero knowledge proofs with their simulated version. The proof of security requires a hybrid argument, and is again a good exercise to try to do it on your own.
 
 * To argue that we maintain security for _Bob_ we use the binding property of the commitment scheme as well as the soundness property of the zero knowledge system. Once again for the formal proof we need to show that we could transform any potentially malicious strategy for Alice in the modified protocol into an "honest but curious" strategy in the original protocol (also allowing Alice the ability to abort the protocol). It turns out that to do so, it is not enough that the zero knowledge system is sound but we need a stronger property known as a _proof of knowledge_. We will not define it formally, but roughly speaking it means we can transform any prover strategy that convinces the verifier that a statement is true with non-negligible probability into an algorithm that outputs the underlying secret (i.e., $x_1$ and $r_com$ in our case).  This is crucial in order to trasnform Alice's potentially malicious strategy into an honest but curious strategy.
 
@@ -364,7 +364,7 @@ We can repeat this transformation for Bob (or Charlie, David, etc.. in the $k>2$
 
 ### Handling probabilistic strategies:
 
-So far we assumed that the original strategy of  Alice in the honest but curious is deterministic but of course we need to consider probabilistic strategies as well.
+So far we assumed that the original strategy of Alice in the honest but curious is deterministic but of course we need to consider probabilistic strategies as well.
 One approach could be to simply think of Alice's random tape $r$ as part of her secret input $x_1$.
 However, while in the honest but curious setting Alice is still entitled to freely choose her own input $x_1$, she is not entitled to choose the random tape as she wishes but is supposed to follow the instructions of the protocol and choose it uniformly at random.
 Hence we need to use a _coin tossing protocol_ to choose the randomness, or more accurately what's known as a "coin tossing in the well" protocol where Alice and Bob engage in a coin tossing protocol at the end of which they generate some random coins $r$ that only Alice knows but Bob is still guaranteed that they are random.
@@ -382,4 +382,4 @@ It can be shown that if we use this coin tossing protocol at the beginning and t
 
 
 The notion of multiparty secure computation - defining it and achieving it - is quite subtle and I do urge you to read some of the other references listed above as well.
-In particular, the slides and videos from the [Bar Ilan winter school on secure computation and efficiency](https://cyber.biu.ac.il/event/the-1st-biu-winter-school/), as well as the ones from the  [winter school on advances in practical multiparty computation](https://cyber.biu.ac.il/event/the-5th-biu-winter-school/) are  great sources for this and related materials.
+In particular, the slides and videos from the [Bar Ilan winter school on secure computation and efficiency](https://cyber.biu.ac.il/event/the-1st-biu-winter-school/), as well as the ones from the [winter school on advances in practical multiparty computation](https://cyber.biu.ac.il/event/the-5th-biu-winter-school/) are great sources for this and related materials.
