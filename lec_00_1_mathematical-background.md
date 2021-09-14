@@ -11,8 +11,6 @@ This is a brief review of some mathematical tools, and especially probability
 theory, that we will use in this course.
 See also the [mathematical background](http://www.introtcs.org/public/lec_00_1_math_background.html) and [probability](http://www.introtcs.org/public/lec_15_probability.html) lectures in my [Notes on Introduction to Theoretical Computer Science](http://www.introtcs.org/), which share much of the following text.
 
-
-
 At Harvard, much of this material (and more) is taught in Stat 110 "Introduction
 to Probability", CS20 "Discrete Mathematics", and AM107 "Graph Theory and
 Combinatorics". Some good sources for this material are the lecture notes by
@@ -26,30 +24,25 @@ For an excellent popular discussion of some of the mathematical concepts we'll t
 see the book _"How Not to Be Wrong"_ by Jordan Ellenberg.
 
 Although knowledge of algorithms is not strictly necessary, it would be quite
-useful. Students who did not take an algorithms class such as CS 124 might want to look at one of the books
+useful. Students who did not take an algorithms class such as CS 124 might want to look at
 (1) Corman, Leiserson, Rivest and Smith, (2) Dasgupte, Papadimitriou and
 Vaziarni, or (3) Kleinberg and Tardos. We do not require prior knowledge of
 complexity or computability but some basic familiarity could be useful.
-Students who did not take a theory of computation class such as  CS 121
-might want to look at my lecture notes or the  first 2 chapters of my book with Arora.
-
+Students who did not take a theory of computation class such as CS 121
+might want to look at my lecture notes or the first 2 chapters of my book with Arora.
 
 
 ## A quick overview of mathematical prerequisites
-
 
 The main notions we will use in this course are the following:
 
 * __Proofs:__ First and foremost, this course will involve a heavy dose of formal mathematical reasoning, which includes mathematical _definitions_, _statements_, and _proofs_.
 
-* __Sets and functions:__   We will assume familiarity with basic notions of sets and operations on sets such as union (denoted $\cup$), intersection (denoted $\cap$), and set substraction
+* __Sets and functions:__   We will assume familiarity with basic notions of sets and operations on sets such as union (denoted $\cup$), intersection (denoted $\cap$), and set subtraction
 (denoted $\setminus$). We denote by $|A|$ the size of the set $A$. We also assume familiarity with functions, and notions such as one-to-one (injective) functions and onto (surjective) functions. If $f$ is a function from a set $A$ to a set $B$, we denote this by $f:A\rightarrow B$. If $f$ is one-to-one then this implies that $|A| \leq |B|$. If $f$ is onto then $|A| \geq |B|$. If $f$ is a permutation/bijection (e.g., one-to-one *and* onto) then this implies that $|A|=|B|$.
-
-
 
 * __Big Oh notation:__ If $f,g$ are two functions from ${\mathbb{N}}$ to ${\mathbb{N}}$, then (1) $f = O(g)$ if there exists a
 constant $c$ such that $f(n) \leq c\cdot g(n)$ for every sufficiently large $n$, (2) $f = \Omega(g)$ if $g=O(f)$, (3) $f = \Theta(g)$ is $f=O(g)$ and $g=O(f)$, (4) $f = o(g)$ if for every $\epsilon>0$, $f(n) \leq \epsilon \cdot g(n)$ for every sufficiently large $n$, and (5) $f = \omega(g)$ if $g = o(f)$. To emphasize the input parameter, we often write $f(n) = O(g(n))$ instead of $f = O(g)$, and use similar notation for $o,\Omega,\omega,\Theta$.  While this is only an imprecise heuristic, when you see a statement of the form $f(n)=O(g(n))$ you can often replace it in your mind by the statement $f(n) \leq 1000g(n)$ while the statement $f(n) = \Omega(g(n))$ can often be thought of as $f(n)\geq 0.001g(n)$ .
-
 
 * __Logical operations:__ The operations AND, OR, and NOT ($\wedge,\vee,\neg$) and the quantifiers "exists" and "forall" ($\exists$,$\forall$).
 
@@ -57,31 +50,15 @@ constant $c$ such that $f(n) \leq c\cdot g(n)$ for every sufficiently large $n$,
 
 * __Graphs:__ Undirected and directed graphs, connectivity, paths, and cycles.
 
-
 * __Basic combinatorics:__ Notions such as $\binom{n}{k}$ (the number of $k$-sized subset of a set of size $n$).
 
+* __Discrete probability:__ We will extensively use _probability theory_, and specifically probability over _finite_ samples spaces such as tossing $n$ coins, including notions such as _random variables_, _expectation_, and _concentration_.
 
-* __Discrete probability:__ We will extensively use _probability theory_, and specifically probability over _finite_ samples spaces such as tossing $n$ coins, including notions such as _random variables_, _expectation_, and _concentration_.  
-
-
-* __Modular arithmetic:__ We will use [modular arithmetic](https://en.wikipedia.org/wiki/Modular_arithmetic) (i.e., addition and multiplication modulo some number $m$), and in particular talk about operations on vectors and matrices whose elements are taken modulo $m$. If $n$ is an integer, then we denote by $a \pmod{n}$ the remainder of $a$ when divided by $n$. $a\pmod{n}$ is the number $r\in\{0,\ldots,n-1\}$ such that $a = kn+r$ for some integer $k$. It will be very useful that $a\pmod{n} + b \pmod{n} = (a+b) \pmod{n}$ and $a\pmod{n} \cdot b \pmod{n} = (a\cdot b) \pmod{n}$ and so modular arithmetic inherits all of the rules (associativity, commutativity etc..) of integer arithmetic. If $a,b$ are positive integers then $gcd(a,b)$ is the largest integer that divides both $a$ and $b$. It is known that for every $a,b$ there exist (not necessarily positive) integers $x,y$ such that $ax + by = gcd(a,b)$ (it's a good exercise to prove this on your own). In particular, if $gcd(a,n)=1$ then there exists a *modular inverse* for $a$ which is a number $b$ such that $ab = 1 \pmod{n}$. We sometimes write $b$ as $a^{-1} \pmod{n}$.
+* __Modular arithmetic:__ We will use [modular arithmetic](https://en.wikipedia.org/wiki/Modular_arithmetic) (i.e., addition and multiplication modulo some number $m$), and in particular talk about operations on vectors and matrices whose elements are taken modulo $m$. If $n$ is an integer, then we denote by $a \pmod{n}$ the remainder of $a$ when divided by $n$. $a\pmod{n}$ is the number $r\in\{0,\ldots,n-1\}$ such that $a = kn+r$ for some integer $k$. It will be very useful that $a\pmod{n} + b \pmod{n} = (a+b) \pmod{n}$ and $a\pmod{n} \cdot b \pmod{n} = (a\cdot b) \pmod{n}$ and so modular arithmetic inherits all the rules (associativity, commutativity etc..) of integer arithmetic. If $a,b$ are positive integers then $gcd(a,b)$ is the largest integer that divides both $a$ and $b$. It is known that for every $a,b$ there exist (not necessarily positive) integers $x,y$ such that $ax + by = gcd(a,b)$ (it's a good exercise to prove this on your own). In particular, if $gcd(a,n)=1$ then there exists a *modular inverse* for $a$ which is a number $b$ such that $ab = 1 \pmod{n}$. We sometimes write $b$ as $a^{-1} \pmod{n}$.
 
 * __Group theory, linear algebra:__ In later parts of the course we will need the notions of matrices, vectors, matrix multiplication and inverse, determinant, eigenvalues, and eigenvectors. These can be picked up in any basic text on linear algebra. In some parts we might also use some basic facts of group theory (finite groups only, and mostly only commutative ones). These also can be picked up as we go along, and a prior course on group theory is not necessary.
 
-
-
-
 * __Discrete probability:__  _Probability theory_, and specifically probability over _finite_ samples spaces such as tossing $n$ coins is a crucial part of cryptography, since (as we'll see) there is no  secrecy without randomness.
-
-
-
-
-
- 
-
-
-
-
 
 
 ## Mathematical Proofs
@@ -145,7 +122,7 @@ of this fact. At first, it might seem obvious--- since there are infinitely many
 natural numbers, and every one of them can be factored into primes, there must
 be infinitely many primes, right?
 
-Wrong. Since we can compose a prime many times with itself, a finite number of
+Wrong. Since we can multiply a prime many times with itself, a finite number of
 primes can generate infinitely many numbers. Indeed the single prime $3$
 generates the infinite set of all numbers of the form $3^n$. So, what we really
 need to show is that for every finite set of primes $\{ p_1,\ldots,p_k\}$, there
@@ -153,7 +130,7 @@ exists a number $n$ that has a prime factor outside this set.
 
 Now we need to start playing around. Suppose that we had just two primes $p$ and
 $q$. How would we find a number $n$ that is not generated by $p$ and $q$? If you
-try to draw things on the number line, you would see that there is always some
+try to draw things on the number line, you will see that there is always some
 *gap* between multiples of $p$ and $q$ in the sense that they are never
 consecutive. It is possible to prove that (in fact, it's not a bad exercise) but
 this observation already suggests a guess for what would be a number that is
@@ -213,17 +190,15 @@ we only need fairly basic notions of probability theory and in particular only
 probability over finite sample spaces. If you have a good understanding of what
 happens when we toss $k$ random coins, then you know most of the probability
 you'll need.
+
 The discussion below is not meant to  replace a course on probability theory, and if you have not seen this material before, I highly recommend you look at additional resources to get up to speed.^[Harvard's [STAT 110](http://projects.iq.harvard.edu/stat110/home) class (whose lectures are available on [youtube](http://projects.iq.harvard.edu/stat110/youtube) ) is a highly recommended introduction to probability. See also these [lecture notes](http://www.boazbarak.org/cs121/LLM_probability.pdf) from MIT's "Mathematics for Computer Science" course ,as well as notes 12-17 of Berkeley's [CS 70](https://www.eecs70.org/).]
-
-
-
 
 The nature of randomness and probability is a topic of great philosophical, scientific and mathematical depth.
 Is there actual randomness in the world, or does it proceed in a deterministic clockwork fashion from some initial conditions set at the beginning of time?
 Does probability refer to our uncertainty of beliefs, or to the frequency of occurrences in repeated experiments?
 How can we define probability over infinite sets?
 
-These are all important questions that have been studied and debated by scientists, mathematicians, statisticians and philosophers.
+These are all important questions that have been studied and debated by scientists, mathematicians, statisticians, and philosophers.
 Fortunately, we will not need to deal directly with these questions here.
 We will be mostly interested in the setting of tossing $n$ random, unbiased and independent coins.
 Below we define the basic probabilistic objects of _events_ and _random variables_ when restricted to this setting.
@@ -259,7 +234,7 @@ We split the set $\{0,1\}^n$ into four disjoint sets $E_0,E_1,O_0,O_1$, where fo
 Since $E_0$ is obtained by simply extending  $n-1$-length string with even number of ones by the digit $0$, the size of $E_0$ is simply the number of such $n-1$-length strings which by the induction hypothesis is $2^{n-1}/2 = 2^{n-2}$.
 The same reasoning applies for $E_1$, $O_0$, and $O_1$.
 Hence each one of the  four sets $E_0,E_1,O_0,O_1$ is of size $2^{n-2}$.
-Since $x\in \{0,1\}^n$ has an even number of ones if and only if $x \in E_0 \cup O_1$ (i.e., either the first $n-1$ coordinates sum up to an even number and the final coordinate is $0$ or the first $n-1$ coordinates sum up to an odd number and the final coordinate is $1$), we get that the probability that $x$ satisfies this property is 
+Since $x\in \{0,1\}^n$ has an even number of ones if and only if $x \in E_0 \cup O_1$ (i.e., either the first $n-1$ coordinates sum up to an even number and the final coordinate is $0$ or the first $n-1$ coordinates sum up to an odd number and the final coordinate is $1$), we get that the probability that $x$ satisfies this property is
 $$
 \tfrac{|E_0\cup O_1|}{2^n} = \frac{2^{n-2}+2^{n-2}}{2^n} = \frac{1}{2} \;,
 $$
@@ -753,11 +728,11 @@ where $\binom{n}{k}$ is the binomial coefficient $\tfrac{n!}{k!(n-k)!}$ which is
 
 
 ::: {.exercise title="Poor man's Chernoff" #poorchernoff}
-[chernoffstirlingex](){.ref} establishes the Chernoff bound for the case that  $X_0,\ldots,X_{n-1}$ are i.i.d variables over $\{0,1\}$ with expectation $1/2$. 
+[chernoffstirlingex](){.ref} establishes the Chernoff bound for the case that  $X_0,\ldots,X_{n-1}$ are i.i.d variables over $\{0,1\}$ with expectation $1/2$.
 In this exercise we use a slightly different method (bounding the _moments_ of the random variables) to establish a version of Chernoff
 where the random variables range over $[0,1]$ and their expectation is some number $p \in [0,1]$ that may be different than $1/2$.
 Let $X_0,\ldots,X_{n-1}$ be i.i.d random variables with $\E X_i = p$ and $\Pr [ 0 \leq X_i \leq 1 ]=1$.
-Define $Y_i = X_i - p$.  
+Define $Y_i = X_i - p$.
 
 1. Prove that for every $j_0,\ldots,j_{n-1} \in \N$, if there exists one $i$ such that $j_i$ is odd then $\E [\prod_{i=0}^{n-1} Y_i^{j_i}] = 0$. \
 
@@ -771,12 +746,12 @@ Define $Y_i = X_i - p$.
 ::: {.exercise title="Lower bound for distinguishing coins" #lowerboundcoins}
 The Chernoff bound can be used to show that if you were given a coin of bias at least $\epsilon$, you should only need $O(1/\epsilon^2)$  samples to be able to reject the "null hypothesis" that the coin is completely unbiased with extremely high confidence. In the following somewhat more challenging question, we try to show a converse to this, proving that distinguishing between a fair every coin and a coin that outputs "heads" with probability $1/2 + \epsilon$ requires at least $\Omega(1/\epsilon^2)$ samples.
 
-Let $P$ be the uniform distribution over ${\{0,1\}}^n$ and $Q$ be the $1/2+\epsilon$-biased distribution corresponding to tossing $n$ coins in which each one has a probability of $1/2+\epsilon$ of equalling $1$ and probability $1/2-\epsilon$ of equalling $0$. Namely the probability of
+Let $P$ be the uniform distribution over ${\{0,1\}}^n$ and $Q$ be the $1/2+\epsilon$-biased distribution corresponding to tossing $n$ coins in which each one has a probability of $1/2+\epsilon$ of equaling $1$ and probability $1/2-\epsilon$ of equaling $0$. Namely the probability of
 $x\in{\{0,1\}}^n$ according to $Q$ is equal to $\prod_{i=1}^n (1/2 - \epsilon + 2\epsilon x_i)$.
 
 1.  Prove that for every threshold $\theta$ between $0$ and $n$, if $n < 1/(100\epsilon)^2$ then the probabilities that $\sum x_i \leq \theta$ under $P$ and $Q$ respectively differ by at most $0.1$. Therefore, one cannot use the test whether the number of heads is above or below some threshold to reliably distinguish between these two possibilities unless the number of samples $n$ of the coins is at least some constant times $1/\epsilon^2$.
 
-2.  Prove that for *every* function $F$ mapping ${\{0,1\}}^n$ to ${\{0,1\}}$, if $n < 1/(100\epsilon)^2$ then the probabilities that $F(x)=1$ under $P$ and $Q$ respectively differ by at most $0.1$. Therefore, if the number of samples is smaller than a constant times $1/\epsilon^2$ then there is simply *no test* that can reliably distinguish between these two possiblities.
+2.  Prove that for *every* function $F$ mapping ${\{0,1\}}^n$ to ${\{0,1\}}$, if $n < 1/(100\epsilon)^2$ then the probabilities that $F(x)=1$ under $P$ and $Q$ respectively differ by at most $0.1$. Therefore, if the number of samples is smaller than a constant times $1/\epsilon^2$ then there is simply *no test* that can reliably distinguish between these two possibilities.
 :::
 
 
