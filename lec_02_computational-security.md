@@ -435,7 +435,7 @@ Prove that for every $X,Y$ and $T,\epsilon$ as above $X \approx_{T,\epsilon} Y$ 
 :::
 
 ::: { .pause }
-Working out this exercise on your own is a great way to get comfort with computational indistinguishability, which is a fundamental notion.
+Working out this exercise on your own is a great way to get comfortable with computational indistinguishability, which is a fundamental notion.
 :::
 
 ::: {.solution data-ref="compindex"}
@@ -482,7 +482,7 @@ We say that $\{ X_n \}_{n\in \N}$ and $\{ Y_n \}_{n\in\N}$ are _computationally 
 $X_n \approx_{p(n), 1/p(n)} Y_n$.
 :::
 
-Solving the following asymptotic analog of [compindex](){.ref} is a good way to get comfort with the asymptotic definition of computational indistinguishability:
+Solving the following asymptotic analog of [compindex](){.ref} is a good way to get comfortable with the asymptotic definition of computational indistinguishability:
 
 ::: {.exercise title="Computational Indistinguishability game (asymptotic)" #asymgame}
 Let $\{ X_n \}_{n\in \N},\{Y_n\}_{n\in \N}$ and $m:\N \rightarrow \N$ be as above. Then $\{ X_n \}_{n\in\N} \approx \{ Y_n \}_{n\in\N}$ if and only if for every polynomial-time $Eve$, there is some negligible function $\mu$ such that $Eve$ wins the following game with probability at most $1/2 + \mu(n)$:
