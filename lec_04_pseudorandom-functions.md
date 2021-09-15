@@ -222,7 +222,7 @@ and a tag $\tau$, and produces a bit $b\in\{0,1\}$. We say that $(S,V)$ is a _Me
 * For every polynomial-time adversary $A$ and polynomial $p(n)$, it is with less than $1/p(n)$  probability over the choice of $k\leftarrow_R\{0,1\}^n$
 that $A^{S_k(\cdot)}(1^n)=(m',\tau')$ such that $m'$ is _not_ one of the messages $A$ queries and $V_k(m',\tau')=1$.[^mesdifferent]
 
-[^mesdifferent]: Clearly if the adversary outputs a pair $(m,\tau)$ that it did query from its oracle then that pair will pass verification. This suggests the possibility of a _replay_ attack whereby Mallory resends to Bob a message that Alice sent him in the past.  As above, once can thwart this by insisting the every message $m$ begins with a fresh nonce or a value derived from the current time.
+[^mesdifferent]: Clearly if the adversary outputs a pair $(m,\tau)$ that it did query from its oracle then that pair will pass verification. This suggests the possibility of a _replay_ attack whereby Mallory resends to Bob a message that Alice sent him in the past.  As above, one can thwart this by insisting the every message $m$ begins with a fresh nonce or a value derived from the current time.
 
 If Alice and Bob share the key $k$, then to send a message $m$ to Bob, Alice will simply send over the pair $(m,\tau)$ where $\tau = S_k(m)$.
 If Bob receives a message $(m',\tau')$, then he will accept $m'$ if and only if $V_k(m',\tau')=1$. Mallory now observes $t$ rounds of communication
