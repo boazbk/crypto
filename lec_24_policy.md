@@ -20,7 +20,7 @@ On one hand, cryptography is likely not to bring about the "crypto anarchy" regi
 For example, more than the growth of bitcoin, we are seeing a turn away from cash into credit cards and other forms of much more traceable and _less_ anonymous forms of payments (interestingly, these forms of payments are often enabled by cryptography).
 On the other hand, despite the fears raised by government agencies of "going dark" there are powerful commercial incentives to collect vast amounts of data and store them at search-warrant friendly servers.
 Clearly technology is shifting the landscape of relationships among individuals, as well as between individuals and large organizations and governments.
-Cryptography is an important component in these technologies but not the only one, and more than that, the ways technologies end up _used_ often has more to  do with social and commercial factors than with the technologies themselves.
+Cryptography is an important component in these technologies but not the only one, and more than that, the ways technologies end up _used_ often has more to do with social and commercial factors than with the technologies themselves.
 
 All that said, significant changes often pose non trivial dangers, and it is important to have an informed and reasoned discussion of the ways cryptography can help or harm the general and private good.
 
@@ -30,7 +30,7 @@ Some questions that are worth considering are:
 
 * Is privacy a basic good in its own right? Or a necessary condition for the freedom of expression, and peaceful assembly and association?
 
-* Are we less or more secure today than in the past? In what ways did the balance between government and individuals shift in the last few decades? Do  governments have more or less data and tools for monitoring individuals at their disposal? Do individuals and non-governmental groups have more or less ability to inflict harm (and hence need to be protected against)?
+* Are we less or more secure today than in the past? In what ways did the balance between government and individuals shift in the last few decades? Do governments have more or less data and tools for monitoring individuals at their disposal? Do individuals and non-governmental groups have more or less ability to inflict harm (and hence need to be protected against)?
 
 * Do we have more or less privacy today than in the past? Do cryptography regulation play a big part in that?
 
@@ -78,7 +78,7 @@ The processor will only allow ten attempts at guessing the passcode before erasi
 The FBI wanted Apple's help in creating a digitally signed software update that essentially run a brute force search over the $10^6$ passcodes and output the key $k$.
 The software update could be restricted to run only on that particular iPhone.
 Eventually, the FBI managed to extract the information out of the iPhone without Apple's help. The method they used is unknown, but it may be possible to physically extract the $uid$ from the processor.
-It might also be possible to  prevent erasure of the memory by disconnecting it from the processor, or rewriting it after erasure.
+It might also be possible to prevent erasure of the memory by disconnecting it from the processor, or rewriting it after erasure.
 Would such cases change your position on this question?
 
 Some questions that one could ask:
@@ -103,12 +103,12 @@ Would such cases change your view of the above questions?
 ### Juniper backdoor case and the OPM break-in
 
 We've also mentioned the case of the [Juniper backdoor case](http://www.wired.com/2015/12/juniper-networks-hidden-backdoors-show-the-risk-of-government-backdoors/).
-This was a  break in to the  firewalls of Juniper networks by an unknown party that  was crucially enabled by backdoor allegedly inserted by the NSA into the Dual EC pseudorandom generator.
-(see also   [here](https://rpw.sh/blog/2015/12/21/the-backdoored-backdoor/)  and [here](http://blog.cryptographyengineering.com/2015/12/on-juniper-backdoor.html) for more).
+This was a break in to the firewalls of Juniper networks by an unknown party that was crucially enabled by backdoor allegedly inserted by the NSA into the Dual EC pseudorandom generator.
+(see also [here](https://rpw.sh/blog/2015/12/21/the-backdoored-backdoor/)  and [here](http://blog.cryptographyengineering.com/2015/12/on-juniper-backdoor.html) for more).
 
 Because of the nature of this break in, whomever is responsible for it could have decrypted much of the traffic without leaving any traces, and so we don't know the damage caused, but such hacks can have much more significant consequences than forcing people to change their credit card numbers.
 When the [federal office of personell management was hacked](https://www.lawfareblog.com/why-opm-hack-far-worse-you-imagine) sensitive information about millions of people who have gone through the security clearance was extracted.
 This includes fingerprints, extensive personal information from interviews and polygraph sessions, and much more.
 Such information can help then gain access to more information, whether it's using the fingerprint to unlock a phone or using the extensive knowledge of social connections, habits and interests to launch very targeted attacks to extract information from particular individuals.
 
-Here one could ask if stronger cryptography, and in particular cryptographic tools that would have enabled an individual to control access to his  or her own data, would have helped prevent such attacks.
+Here one could ask if stronger cryptography, and in particular cryptographic tools that would have enabled an individual to control access to his or her own data, would have helped prevent such attacks.

@@ -11,27 +11,27 @@ chapternum: "16"
 In today's era of "cloud computing", much of individuals' and businesses' data is stored and computed on by third parties such as Google, Microsoft, Apple, Amazon,  Facebook, Dropbox and many others.
 Classically, cryptography provided solutions to protecting [data in motion](https://www.schneier.com/blog/archives/2010/06/data_at_rest_vs.html) from point A to point B.
 But these are not always sufficient to protect [data at rest](https://en.wikipedia.org/wiki/Data_at_rest) and particularly [data in use](https://en.wikipedia.org/wiki/Data_in_use).
-For example, suppose that  _Alice_ has some data $x \in \{0,1\}^n$ (in modern applications $x$ would well be terabytes in length or larger) that she wishes to store with the cloud service _Bob_, but is afraid that Bob will be hacked, subpoenaed or simply does not completely trust Bob.
+For example, suppose that _Alice_ has some data $x \in \{0,1\}^n$ (in modern applications $x$ would well be terabytes in length or larger) that she wishes to store with the cloud service _Bob_, but is afraid that Bob will be hacked, subpoenaed or simply does not completely trust Bob.
 
 Encryption does not seem to immediately solve the problem.
 Alice could store at Bob an _encrypted_ version of the data and keep the secret key for herself.
-But then  she would be at a loss if she wanted to do with the data anything more than retrieving particular blocks of it.
+But then she would be at a loss if she wanted to do with the data anything more than retrieving particular blocks of it.
 If she wanted to outsource computation to Bob as well, and compute $f(x)$ for some function $f$, then she would need to share the secret key with Bob, thus defeating the purpose of encrypting the data in the first place.
 
-For example, after the computing systems of Office of Personell Management (OPM) were [discovered to be hacked](https://www.lawfareblog.com/why-opm-hack-far-worse-you-imagine) in June of 2015, revealing sensitive information, including fingerprints and all data gathered during security clearance checks of up to 18 million people, DHS assistant secretary for cybersecurity and communications Andy Ozment [said](http://www.federaltimes.com/story/government/omr/opm-cyber-report/2015/06/19/opm-breach-encryption/28985237/) that encryption wouldn't have helped preventing it since  "if an adversary has the credentials of a user on the network, then they can access data even if it's encrypted, just as the users on the network have to access data".
+For example, after the computing systems of Office of Personell Management (OPM) were [discovered to be hacked](https://www.lawfareblog.com/why-opm-hack-far-worse-you-imagine) in June of 2015, revealing sensitive information, including fingerprints and all data gathered during security clearance checks of up to 18 million people, DHS assistant secretary for cybersecurity and communications Andy Ozment [said](http://www.federaltimes.com/story/government/omr/opm-cyber-report/2015/06/19/opm-breach-encryption/28985237/) that encryption wouldn't have helped preventing it since "if an adversary has the credentials of a user on the network, then they can access data even if it's encrypted, just as the users on the network have to access data".
 So, can we encrypt data in a way that still allows some access and computing on it?
 
 Already in 1978, [Rivest, Adleman and Dertouzos](http://luca-giuzzi.unibs.it/corsi/Support/papers-cryptography/RAD78.pdf) considered this problem of a business that wishes to use a "commercial [time-sharing](https://en.wikipedia.org/wiki/Time-sharing) service" to store some sensitive data.
 They envisioned a potential solution for this task which they called a privacy homomorphism.
-This notion later became known as _fully homomorphic encryption (FHE)_ which is an encryption  that allows a party (such as the cloud provider) that _does not know the secret key_ to modify a ciphertext $c$ encrypting $x$ to a ciphertext $c'$ encrypting $f(x)$ for every efficiently computable $f()$.
-In particular in our scenario above (see  [fhefig](){.ref}), such a scheme will allow Bob, given an encryption of $x$, to compute the encryption of $f(x)$ and send this ciphertext to Alice without ever getting the secret key and so without ever learning anything about $x$ (or $f(x)$ for that matter).
+This notion later became known as _fully homomorphic encryption (FHE)_ which is an encryption that allows a party (such as the cloud provider) that _does not know the secret key_ to modify a ciphertext $c$ encrypting $x$ to a ciphertext $c'$ encrypting $f(x)$ for every efficiently computable $f()$.
+In particular in our scenario above (see [fhefig](){.ref}), such a scheme will allow Bob, given an encryption of $x$, to compute the encryption of $f(x)$ and send this ciphertext to Alice without ever getting the secret key and so without ever learning anything about $x$ (or $f(x)$ for that matter).
 
 
 ![A fully homomorphic encryption can be used to store data on the cloud in encrypted form, but still have the cloud provider be able to evaluate functions on the data in encrypted form (without ever learning either the inputs or the outputs of the function they evaluate).](../figure/fhedescription.png){#fhefig  .margin}
 
-Unlike the case of a trapdoor function, where it only took a year for  Diffie and Hellman's challenge to be answered by RSA, in the case of fully homomorphic encryption for more than 30 years cryptographers had no constructions achieving this goal.
+Unlike the case of a trapdoor function, where it only took a year for Diffie and Hellman's challenge to be answered by RSA, in the case of fully homomorphic encryption for more than 30 years cryptographers had no constructions achieving this goal.
 In fact, some people suspected that there is something inherently incompatible between the security of an encryption scheme and the ability of a user to perform all these operations on ciphertexts.
-Stanford cryptographer Dan Boneh used to joke to incoming graduate students that he will immediately sign the thesis of anyone who  came up with a fully homomorphic encryption.
+Stanford cryptographer Dan Boneh used to joke to incoming graduate students that he will immediately sign the thesis of anyone who came up with a fully homomorphic encryption.
 But he never expected that he will actually encounter such a thesis, until in 2009, Boneh's student Craig Gentry released a [paper](https://crypto.stanford.edu/craig/) doing just that.
 Gentry's paper shook the world of cryptography, and instigated a flurry of research results making his scheme more efficient, reducing the assumptions it relied on, extending and applying it, and much more.
 In particular,  Brakerski and Vaikuntanathan managed to obtain a fully homomorphic encryption scheme based only on the _Learning with Error (LWE)_ assumption we have seen before.
@@ -39,7 +39,7 @@ In particular,  Brakerski and Vaikuntanathan managed to obtain a fully homomorph
 
 Although there is an [open source library](http://shaih.github.io/HElib/), as well as [other](https://www.dcsec.uni-hannover.de/fileadmin/ful/mitarbeiter/brenner/wahc14_RC.pdf)
 [implementations](https://eprint.iacr.org/2014/816), there is still much work to be done in order to turn FHE from theory to practice.
-For a comparable level of security, the  encryption and decryption operations of a fully homomorphic encryption scheme are several orders of magnitude  slower than a conventional public key system, and (depending on its complexity) homomorphically evaluating a circuit can be significantly more taxing.
+For a comparable level of security, the encryption and decryption operations of a fully homomorphic encryption scheme are several orders of magnitude slower than a conventional public key system, and (depending on its complexity) homomorphically evaluating a circuit can be significantly more taxing.
 However, this is a fast evolving field, and already since 2009 significant optimizations have been discovered that reduced the computational and storage overhead by many orders of magnitudes.
 As in public key encryption, one would imagine that for larger data one would use a "hybrid" approach of combining FHE with symmetric encryption, though one might need to come up with tailor-made symmetric encryption schemes that can be efficiently evaluated.^[In [2012](https://eprint.iacr.org/2012/099.pdf) the state of art on homomorphically evaluating AES was about six orders of magnitude slower than non-homomorphic AES computation. I don't know what's the current record.]
 
@@ -55,7 +55,7 @@ To take the distance between theory and practice in perspective, it might be use
 In the early 1990's researchers (motivated initially by zero knowledge proofs) came up with the notion of [probabilistically checkable proofs (PCP's)](http://madhu.seas.harvard.edu/papers/2009/pcpcacm.pdf) which could yield in principle extremely succinct ways to check correctness of computation.
 >
 Probabilistically checkable proofs can be thought of as "souped up" versions of NP completeness reductions and like these reductions, have been mostly used for _negative_ results, especially since the initial proofs were extremely complicated and also included enormous hidden constants.
-However, with time people have slowly understood these better and made them more efficient (e.g., see [this survey](http://m.cacm.acm.org/magazines/2015/2/182636-verifying-computations-without-reexecuting-them/fulltext)) and it has now reached the point where these results, are  [nearly practical](http://cacm.acm.org/magazines/2016/2/197429-pinocchio/abstract) (see also [this](https://eprint.iacr.org/2016/646)) and in fact these ideas underly at least one [startup](http://z.cash).
+However, with time people have slowly understood these better and made them more efficient (e.g., see [this survey](http://m.cacm.acm.org/magazines/2015/2/182636-verifying-computations-without-reexecuting-them/fulltext)) and it has now reached the point where these results, are [nearly practical](http://cacm.acm.org/magazines/2016/2/197429-pinocchio/abstract) (see also [this](https://eprint.iacr.org/2016/646)) and in fact these ideas underly at least one [startup](http://z.cash).
 Overall,  constructions for verifying computation have improved by at least 20 orders of magnitude over the last two decades. (We will talk about some of these constructions later in this course.)
 If progress on fully homomorphic encryption follows a similar trajectory, then we can expect the road to practical utility to be very long, but there is hope that it's not a "bridge to nowhere".
 
@@ -64,7 +64,7 @@ If progress on fully homomorphic encryption follows a similar trajectory, then w
 Since large scale fully homomorphic encryption is still impractical, people have been trying to achieve at least weaker security goals using certain assumptions.
 In particular Intel chips have so called ["Secure enclaves"](https://goo.gl/HW4pPU) which one can think of as a somewhat tamper-protected region of the processor that is supposed to be out of reach for the outside world.
 The idea is that a cloud provider client would treat this enclave as a trusted party that it can communicate with through the cloud provider.
-The client can store their data on the cloud encrypted with some key $k$, and then set up a secure channel with the enclave using  an authenticated key exchange protocol, and send $k$ over.
+The client can store their data on the cloud encrypted with some key $k$, and then set up a secure channel with the enclave using an authenticated key exchange protocol, and send $k$ over.
 Then, when the client sends over a function $f$ to the cloud provider, the latter party can simulate FHE by asking the enclave to compute the encryption of $f(x)$ given the encryption of $x$.
 In this solution ultimately the private key does reside on the cloud provider's computers, and the client has to trust the security of the enclave.
 In practice, this could provide reasonable security against remote hackers, but (unlike FHE) probably not against sophisticated attackers (e.g., governments) that have physical access to the server.
@@ -73,7 +73,7 @@ In practice, this could provide reasonable security against remote hackers, but 
 ## Defining fully homomorphic encryption
 
 We start by defining _partially homomorphic_ encryption.
-We  focus on encryption for single bits.  This is without loss of generality for CPA security (CCA security is anyway ruled out for homomorphic encryption- can you see why?), though there are more efficient constructions that encrypt several bits at a time.
+We focus on encryption for single bits.  This is without loss of generality for CPA security (CCA security is anyway ruled out for homomorphic encryption- can you see why?), though there are more efficient constructions that encrypt several bits at a time.
 
 ::: {.definition title="Partially Homomorphic Encryption" #partialhomdef}
 Let $\mathcal{F} = \cup \mathcal{F}_\ell$ be a class of functions where every $f\in\mathcal{F}_\ell$ maps $\{0,1\}^\ell$ to $\{0,1\}$.  
@@ -90,11 +90,11 @@ An _$\mathcal{F}$-homomorphic public key encryption scheme_ is a CPA secure publ
 > # { .pause }
 Please stop and verify you understand the definition.
 In particular you should understand why some bound on the length of the output of $EVAL$ is needed to rule out trivial constructions that are the analogous of the cloud provider sending over to Alice the entire encrypted database every time she wants to evaluate a function of it.
-By artificially increasing the randomness for the key generation algorithm, this is equivalent to  requiring that  $|c| \leq p(n)$  for some fixed polynomial $p(\cdot)$ that does not grow with $\ell$ or $|f|$.
+By artificially increasing the randomness for the key generation algorithm, this is equivalent to requiring that $|c| \leq p(n)$  for some fixed polynomial $p(\cdot)$ that does not grow with $\ell$ or $|f|$.
 You should also understand the distinction between ciphertexts that are the output of the encryption algorithm on the plaintext $b$, and ciphertexts that decrypt to $b$, see [evalciphertextfig](){.ref}.
 
 
-![In a valid encryption scheme $E$, the set of ciphertexts $c$ such that $D_d(c)=b$ is a superset of the set of ciphertexts $c$ such that $c=E_e(b;r)$ for some  $r \in \{0,1\}^{t}$ where $t$ is the number of random bits used by the encryption algorithm. Our definition of partially homomorphic encryption scheme requires that for every $f:\{0,1\}^\ell \rightarrow \{0,1\}$ in our family and $x\in \{0,1\}^\ell$, if $c_i \in  E_e(x_i;\{0,1\}^t)$ for $i=1..\ell$ then $EVAL(f,c_1,\ldots,c_\ell)$ is in the superset $\{ c \;|\; D_d(c)=f(x) \}$ of $E_e(f(x);\{0,1\}^t)$. For example if we apply $EVAL$ to the $OR$ function and ciphertexts $c,c'$ that were obtained as encryptions of $1$ and $0$ respectively, then the output is a ciphertext $c''$ that would be decrypted to $OR(1,0)=1$, even if $c''$ is not in the smaller set of possible outputs of the encryption algorithm on $1$. This distinction between the smaller and larger set is the reason why we cannot automatically apply the $EVAL$ function to ciphertexts that are obtained from the outputs of previous $EVAL$ operations.](../figure/evalciphertexts.png){#evalciphertextfig  .margin}
+![In a valid encryption scheme $E$, the set of ciphertexts $c$ such that $D_d(c)=b$ is a superset of the set of ciphertexts $c$ such that $c=E_e(b;r)$ for some $r \in \{0,1\}^{t}$ where $t$ is the number of random bits used by the encryption algorithm. Our definition of partially homomorphic encryption scheme requires that for every $f:\{0,1\}^\ell \rightarrow \{0,1\}$ in our family and $x\in \{0,1\}^\ell$, if $c_i \in E_e(x_i;\{0,1\}^t)$ for $i=1..\ell$ then $EVAL(f,c_1,\ldots,c_\ell)$ is in the superset $\{ c \;|\; D_d(c)=f(x) \}$ of $E_e(f(x);\{0,1\}^t)$. For example if we apply $EVAL$ to the $OR$ function and ciphertexts $c,c'$ that were obtained as encryptions of $1$ and $0$ respectively, then the output is a ciphertext $c''$ that would be decrypted to $OR(1,0)=1$, even if $c''$ is not in the smaller set of possible outputs of the encryption algorithm on $1$. This distinction between the smaller and larger set is the reason why we cannot automatically apply the $EVAL$ function to ciphertexts that are obtained from the outputs of previous $EVAL$ operations.](../figure/evalciphertexts.png){#evalciphertextfig  .margin}
 
 
 
@@ -110,7 +110,7 @@ Curiously the protocol involves "doubly encrypting" the input, and homomorphical
 
 * __Assumptions:__ We assume that all functions $f$ that the client will be interested in can be described by a string of length $n$.
 
-* __Preprocessing:__ The client generates a pair of keys $(e,d)$. In the initial stage the client computes the encrypted database $\overline{c}=E_e(x)$ and sends $\overline{c},e,e'$ to the server. It also computes $c^* = E_e(f^*)$ for some function $f^*$ as well as  $C^{**}=EVAL_{e}(eval,c^*\|\overline{c})$  for some function $f^*$ and keeps $c^*,c^{**}$ for herself, where $eval(f,x)=f(x)$ is the circuit evaluation function.
+* __Preprocessing:__ The client generates a pair of keys $(e,d)$. In the initial stage the client computes the encrypted database $\overline{c}=E_e(x)$ and sends $\overline{c},e,e'$ to the server. It also computes $c^* = E_e(f^*)$ for some function $f^*$ as well as $C^{**}=EVAL_{e}(eval,c^*\|\overline{c})$  for some function $f^*$ and keeps $c^*,c^{**}$ for herself, where $eval(f,x)=f(x)$ is the circuit evaluation function.
 
 
 * __Client query:__ To ask for an evaluation of $f$, the client generates a new random FHE keypair $(e',d')$, chooses $b \leftarrow_R \{0,1\}$ and lets $c_b = E_{e'}(E_e(f))$ and $c_{1-b}=E_{e'}(c^*)$. It sends the triple $e',c_0,c_1$ to the server.
@@ -126,7 +126,7 @@ The probability of detection can be amplified to $1-negl(n)$ using appropriate r
 
 ## Example: An XOR homomorphic encryption
 
-It turns out that Regev's LWE-based encryption LWEENC we  saw  before is homomorphic with respect to the class of linear (mod 2) functions.
+It turns out that Regev's LWE-based encryption LWEENC we saw before is homomorphic with respect to the class of linear (mod 2) functions.
 Let us recall the LWE assumption and the encryption scheme based on it.
 
 ::: {.definition title="LWE (simplified decision variant)" #LWEdef}
@@ -169,7 +169,7 @@ __LWE-ENC' encryption:__
 
 
 
-The decryption algorithm recovers the original plaintext since   $\langle c,s \rangle= w^\top A s + s_1 b$ and $|w^\top A s| \leq m\sqrt{q} \ll q$.
+The decryption algorithm recovers the original plaintext since $\langle c,s \rangle= w^\top A s + s_1 b$ and $|w^\top A s| \leq m\sqrt{q} \ll q$.
 It turns out that this scheme is homomorphic with respect to the class of _linear functions_ modulo $2$. Specifically we make the following claim:
 
 
@@ -185,13 +185,13 @@ Note that if $q$ is _super polynomial_  in $n$ then $\ell$ can be an arbitrarily
 > # {.proof data-ref="parityhomlem"}
 The proof is quite simple. $EVAL$ will simply add the ciphertexts as vectors in $\Z_q$.
 If $c = \sum c_i$ then
-$$\langle c,s \rangle = \sum b_i \floor{\tfrac{q}{2}}  +  \xi \mod  q$$
-where  $\xi \in \Z_q$ is a "noise term" such that   $|\xi| \leq \ell m \sqrt{q} \ll q$.
+$$\langle c,s \rangle = \sum b_i \floor{\tfrac{q}{2}}  +  \xi \mod q$$
+where $\xi \in \Z_q$ is a "noise term" such that $|\xi| \leq \ell m \sqrt{q} \ll q$.
 Since $|\floor{\tfrac{q}{2}}-  \tfrac{q}{2}|<1$, adding at most $\ell$ terms of this difference adds at most $\ell$, and so we can also write
-$$\langle c,s \rangle = \floor{ \sum b_i \tfrac{q}{2} }  +  \xi' \mod  q$$
+$$\langle c,s \rangle = \floor{ \sum b_i \tfrac{q}{2} }  +  \xi' \mod q$$
 for $|\xi'| \leq \ell m \sqrt{q} + \ell \ll q$.
 If $\sum b_i$ is even then $\sum b_i \tfrac{q}{2}$ is an integer multiple of $q$ and hence in this case $|\langle c,s \rangle| \ll q$.
-If $\sum b_i$ is odd  $\floor{\sum b_i \tfrac{q}{2}} = \floor{q/2} \mod q$ and so in this case $|\langle c,s \rangle| = q/2 \pm o(q) > q/10$.
+If $\sum b_i$ is odd $\floor{\sum b_i \tfrac{q}{2}} = \floor{q/2} \mod q$ and so in this case $|\langle c,s \rangle| = q/2 \pm o(q) > q/10$.
 
 Several other encryption schemes are also homomorphic with respect to linear functions. Even before Gentry's construction there were constructions of encryption schemes that are homomorphic with respect to somewhat larger classes (e.g., quadratic functions by Boneh, Goh and Nissim) but not significantly so.
 
@@ -212,7 +212,7 @@ In the particular instantiation above we obtain $G_s$ by sampling the matrix $A$
 ![In a _trapdoor generator_, we have two ways to generate randomized algorithms. That is, we have some algorithms $GEN$ and $GEN'$ such that $GEN$ outputs a pair $(G_s,s)$ and $GEN'$ outputs $G'$ with $G_s,G'$ being themselves algorithms (e.g., randomized circuits). The conditions we require are that __(1)__ the descriptions of the circuits $G_s$ and $G'$ (considering them as distributions over strings) are computationally indistinguishable and __(2)__ the distribution $G'(1^n)$ is _statistically indistinguishable_ from the uniform distribution , __(3)__ there is an efficient algorithm that given the secret "trapdoor" $s$ can distinguish the output of $G_s$ from the uniform distribution. In particular __(1)__,__(2)__, and __(3)__ together imply that it is _not_ feasible to exract $s$ from the description of $G_s$.](../figure/trapdoorprg.png){#TDPgenfig  .margin}
 
 
-Note that this trapdoor generator satisfies the following stronger property: we can generate an alternative generator $G'$ such that the description of $G'$ is indistinguishable from the description of $G_s$ but such that $G'$ actually does produce   (up to exponentially small statistical error)  the uniform distribution over $\Z_q^n$.
+Note that this trapdoor generator satisfies the following stronger property: we can generate an alternative generator $G'$ such that the description of $G'$ is indistinguishable from the description of $G_s$ but such that $G'$ actually does produce (up to exponentially small statistical error)  the uniform distribution over $\Z_q^n$.
 We can define trapdoor generators formally as follows
 
 ::: {.definition title="Trapdoor generators" #tdpgendef}
@@ -243,7 +243,7 @@ In the above we use the notion of a "trapdoor" in the pseudorandom generator as 
 
 You'd think that this generator is long dead but it turns out to be the "gift that keeps on giving".
 In December of 2015, Juniper systems [announced](http://www.wired.com/2015/12/juniper-networks-hidden-backdoors-show-the-risk-of-government-backdoors/) that they have discovered a malicious code in their system, dating back to at least 2012 (possibly [2008](https://goo.gl/X6pAXV)), that would allow an attacker to surreptitiously decrypt all VPN traffic through their firewalls.
-The issue is that Juniper has been using the  Dual EC DRBG and someone has managed to replace the constant they were using with another one, one that they presumably knew the trapdoor for (see [here](https://rpw.sh/blog/2015/12/21/the-backdoored-backdoor/)  and [here](http://blog.cryptographyengineering.com/2015/12/on-juniper-backdoor.html) for more; of course unless you know to check for this, it's very hard by looking at the code to see that one arbitrary looking constant has been replaced by another).
+The issue is that Juniper has been using the Dual EC DRBG and someone has managed to replace the constant they were using with another one, one that they presumably knew the trapdoor for (see [here](https://rpw.sh/blog/2015/12/21/the-backdoored-backdoor/)  and [here](http://blog.cryptographyengineering.com/2015/12/on-juniper-backdoor.html) for more; of course unless you know to check for this, it's very hard by looking at the code to see that one arbitrary looking constant has been replaced by another).
 Apparently, even though this is very surprising to many people in law enforcement and government, inserting back doors into cryptographic primitives might end up making them less secure.
 :::
 
@@ -291,14 +291,14 @@ We now show the bootstrapping theorem:
 
 
 > # {.theorem title="Bootstrapping Theorem, Gentry 2009" #bootstrapthm}
-Suppose that $(G,E,D)$ is a CPA circular[^circular] secure partially homomorphic encryption scheme  for the family $\mathcal{F}$ and suppose that for every pair of ciphertexts $c,c'$  the map $d \mapsto D_d(c) \;NAND\; D_d(c')$ is in $\mathcal{F}$. Then $(G,E,D)$ can be turned a fully homomorphic encryption scheme.
+Suppose that $(G,E,D)$ is a CPA circular[^circular] secure partially homomorphic encryption scheme for the family $\mathcal{F}$ and suppose that for every pair of ciphertexts $c,c'$  the map $d \mapsto D_d(c) \;NAND\; D_d(c')$ is in $\mathcal{F}$. Then $(G,E,D)$ can be turned a fully homomorphic encryption scheme.
 
 
 [^circular]: You can ignore the condition of circular security in a first read - we will discuss it later.
 
 ### Radioactive legos analogy
 
-![To  build a castle from radioactive Lego bricks, which can be kept safe in a special ziploc bag for 10 seconds, we can: 1) Place the bricks in a bag, and place the bag inside an outer bag. 2) Manipulate the inner bag through the outer bag to remove the bricks from it in 9 seconds, and spend 1 second putting one brick in place 3) Now the outer bag has 9 seconds of life left, and we can put it inside a new bag and repeat the process.](../figure/fheziplocbag.png){#ziplocbagfig  .margin}
+![To build a castle from radioactive Lego bricks, which can be kept safe in a special ziploc bag for 10 seconds, we can: 1) Place the bricks in a bag, and place the bag inside an outer bag. 2) Manipulate the inner bag through the outer bag to remove the bricks from it in 9 seconds, and spend 1 second putting one brick in place 3) Now the outer bag has 9 seconds of life left, and we can put it inside a new bag and repeat the process.](../figure/fheziplocbag.png){#ziplocbagfig  .margin}
 
 
 Here is one analogy for bootstrapping, inspired by Gentry's [survey](https://crypto.stanford.edu/craig/easy-fhe.pdf).
@@ -312,7 +312,7 @@ We then continue this process by putting the $i+1^{st}$ bag inside the $i+2^{nd}
 
 ### Proving the bootstrapping theorem
 
-We now turn to the formal proof of  [bootstrapthm](){.ref}
+We now turn to the formal proof of [bootstrapthm](){.ref}
 
 > # {.proof data-ref="bootstrapthm"}
 The idea behind the proof is simple but ingenious.
@@ -339,7 +339,7 @@ Thus indeed we map _any_ pair of ciphertexts $c,c'$ that decrypt to $b,b'$ into 
 This is all that we needed to prove.
 
 
-[^leveled]: Without this assumption we can still obtained a form of FHE known as a _leveled_ FHE where the size of the public key grows with the [depth](https://en.wikipedia.org/wiki/Circuit_complexity) of the circuit to be evaluated. We can do this by having $\ell$ public keys where $\ell$ is the depth we want to evaluate, and encrypt the private key of the $i^{th}$ key with the $i+1^{st}$ public key.  However, since circular security seems quite  likely to hold, we ignore this extra complication in the rest of the discussion.
+[^leveled]: Without this assumption we can still obtained a form of FHE known as a _leveled_ FHE where the size of the public key grows with the [depth](https://en.wikipedia.org/wiki/Circuit_complexity) of the circuit to be evaluated. We can do this by having $\ell$ public keys where $\ell$ is the depth we want to evaluate, and encrypt the private key of the $i^{th}$ key with the $i+1^{st}$ public key.  However, since circular security seems quite likely to hold, we ignore this extra complication in the rest of the discussion.
 
 
 > # { .pause }

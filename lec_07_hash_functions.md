@@ -23,7 +23,7 @@ Rather we have a collection of anonymous and autonomous parties that somehow nee
 
 ### The Currency Problem
 
-Before talking about cryptocurrencies, let's talk about currencies in general.^[I am not an economist by any stretch of the imagination, so please take the discussion below with a huge grain of salt. I  would appreciate any comments on it.]
+Before talking about cryptocurrencies, let's talk about currencies in general.^[I am not an economist by any stretch of the imagination, so please take the discussion below with a huge grain of salt. I would appreciate any comments on it.]
 At an abstract level, a _currency_ requires two components:
 
 * A scarce resource.
@@ -33,7 +33,7 @@ At an abstract level, a _currency_ requires two components:
 Some currencies are/were based on [commodity money](https://goo.gl/K7awAW). The scarce resource was some commodity having intrinsic value, such as gold or silver, or even salt or tea, and ownership based on physical possession.
 However, for various financial and political reasons, some societies shifted to [representative money](https://goo.gl/K6c4qP), where the currency is not the commodity itself but rather a certificate that provides the right to the commodity.
 Representative money requires trust in some central authority that would respect the certificate.
-The next step in the evolution of currencies was  [fiat money](https://en.wikipedia.org/wiki/Fiat_money), which is a currency (like today's dollar, ever since the U.S. moved off the [gold standard](https://goo.gl/SPN5BS)) that does not correspond to any commodity, but rather only relies on trust in a central authority.
+The next step in the evolution of currencies was [fiat money](https://en.wikipedia.org/wiki/Fiat_money), which is a currency (like today's dollar, ever since the U.S. moved off the [gold standard](https://goo.gl/SPN5BS)) that does not correspond to any commodity, but rather only relies on trust in a central authority.
 (Another example is the Roman coins, which though originally made of silver, have underdone a continous process of [debasement](https://goo.gl/ZDkGzL) until they contained less than two percent of it.)
 One advantage (sometimes disadvantage) of a fiat currency is that it allows for more flexible monetary policy on parts of the central authority.
 
@@ -70,10 +70,10 @@ Each coin has a unique identifier, and a current _owner_ .[^Satoshi]
 Transactions in the system have either the form of "mint coin with identifier $ID$ and owner $P$" or "transfer the coin $ID$ from $P$ to $Q$".
 All of these transactions are recorded in a public _ledger_.
 
-[^Satoshi]: This is  one of the places where we simplify and deviate from the actual Bitcoin system. In the actual Bitcoin system, the atomic unit is known as a _Satoshi_ and one Bitcoin (abbreviated BTC) is $10^8$ Satoshis. For reasons of efficiency, there is no individual identifier per Satoshi and transactions can involve transfer and creation of multiple Satoshis. However, conceptually we can think of atomic coins each of which has a unique identifier.
+[^Satoshi]: This is one of the places where we simplify and deviate from the actual Bitcoin system. In the actual Bitcoin system, the atomic unit is known as a _Satoshi_ and one Bitcoin (abbreviated BTC) is $10^8$ Satoshis. For reasons of efficiency, there is no individual identifier per Satoshi and transactions can involve transfer and creation of multiple Satoshis. However, conceptually we can think of atomic coins each of which has a unique identifier.
 
 Since there are no user accounts in Bitcoin, the "entities" $P$ and $Q$ are not identifiers of any physical person.
-Rather  $P$ and $Q$ are  "computational puzzles".
+Rather $P$ and $Q$ are "computational puzzles".
 A _computational puzzle_ can be thought of as a string $\alpha$ that specifies some "problem" such that it's easy to verify whether some other string $\beta$ is a "solution" for $\alpha$, but it is hard to find such a solution on your own.
 (Students with complexity background will recognize here the class **NP**.)
 So when we say "transfer the coin $ID$ from $P$ to $Q$" we mean that whomever holds a solution for the puzzle $Q$ is now the owner of the coin $ID$ (and to verify the authenticity of this transfer, you provide a solution to the puzzle $P$.)
@@ -95,16 +95,16 @@ generator.
 The real Bitcoin system typically uses puzzles based on _digital signatures_, a concept we will learn about later in this course, but you can simply think of $P$ as specifying some abstract puzzle and every person that can solve $P$ can construct transactions with the coins owned by $P$.[^signatures]
 Unfortunately, this means if you _lose_ the solution to the puzzle then you have no access to the coin. More alarmingly, if someone steals the solution from you, then you have no recourse or way to get your coin back. People have managed to [lose millions of dollars](http://readwrite.com/2014/01/13/what-happens-to-lost-Bitcoins) in this way.
 
-[^signatures]: There are reasons why Bitcoin uses digital signatures and not these puzzles. The main issue is that we want to bind the puzzle not just to the coin but also to the particular transaction, so that if you know the solution to the puzzle $P$ corresponding to the coin $ID$ and want to use that to transfer it to $Q$, it won't be possible for someone to take your  solution and use that to transfer the coin to $Q'$ before your transaction is added to the public ledger. We will come back to this issue after we learn about digital signatures. As a quick preview, in Bitcoin the puzzle is as follows: whoever can produce a digital signature with the private key corresponding to the public key $P$ can claim these coins.
+[^signatures]: There are reasons why Bitcoin uses digital signatures and not these puzzles. The main issue is that we want to bind the puzzle not just to the coin but also to the particular transaction, so that if you know the solution to the puzzle $P$ corresponding to the coin $ID$ and want to use that to transfer it to $Q$, it won't be possible for someone to take your solution and use that to transfer the coin to $Q'$ before your transaction is added to the public ledger. We will come back to this issue after we learn about digital signatures. As a quick preview, in Bitcoin the puzzle is as follows: whoever can produce a digital signature with the private key corresponding to the public key $P$ can claim these coins.
 
 ## The Bitcoin Ledger
 
 The main idea behind Bitcoin is that there is a public _ledger_ that contains an ordered list of all the transactions that were ever performed and are considered as valid in the system. Given such a ledger, it is easy to answer the question of who owns any particular coin.
 The main problem is how does a collection of anonymous parties without any central authority agree on this ledger? This is an instance of the _consensus_ problem in
-distributed computing. This seems quite scary, as there are very strong negative results known for this problem; for example the famous [Fischer, Lynch  Patterson (FLP) result](http://the-paper-trail.org/blog/a-brief-tour-of-flp-impossibility/) showed that if there is even one party that has a _benign_ failure (i.e., it halts and stop responding) then it is impossible to guarantee consensus **in a completely asynchronous network**. Things are better if we assume some degree of partial synchrony (i.e., a global clock and some bounds on the latency of messages) as well as that a majority or supermajority of the parties behave correctly.
+distributed computing. This seems quite scary, as there are very strong negative results known for this problem; for example the famous [Fischer, Lynch, Patterson (FLP) result](http://the-paper-trail.org/blog/a-brief-tour-of-flp-impossibility/) showed that if there is even one party that has a _benign_ failure (i.e., it halts and stop responding) then it is impossible to guarantee consensus **in a completely asynchronous network**. Things are better if we assume some degree of partial synchrony (i.e., a global clock and some bounds on the latency of messages) as well as that a majority or supermajority of the parties behave correctly.
 
 The partial synchrony assumption is typically approximately maintained on the Internet, but the honest majority assumption seems quite suspicious.
-What does it mean a "majority of parties" in an anonymous network where a single person can create multiple "entities" and cause them to behave arbitrarily maliciously (known as "byzantine" faults in distributed parlance)? Also, why would we assume that even one party would behave honestly- if there is no central authority and it is profitable  to cheat then they everyone would cheat, wouldn't they?
+What does it mean a "majority of parties" in an anonymous network where a single person can create multiple "entities" and cause them to behave arbitrarily maliciously (known as "byzantine" faults in distributed parlance)? Also, why would we assume that even one party would behave honestly- if there is no central authority and it is profitable to cheat then they everyone would cheat, wouldn't they?
 
 ![The Bitcoin ledger consists of an ordered list of transactions. At any given point in time there might be several "forks" that continue the ledger, and different parties do not necessarily have to agree on them. However, the Bitcoin architecture is designed to ensure that the parties corresponding to a majority of the computing power will reach consensus on a single ledger. ](../figure/Bitcoin_ledger.jpg){#ledgerfig width=80% }
 
@@ -126,19 +126,19 @@ If there is a trusted server holding the key, then sure, finding such an input $
 If we give $k$ to a party Alice, then can we guarantee that she can't find a "shortcut" to find such an input without running $2^\ell$ queries?  The answer, in general, is __no__.
 
 > # { .pause }
-Indeed, it is an excellent exercise to prove that  (under the PRF conjecture) that there exists a PRF $\{ f_k \}$ mapping $n$ bits to $n$ bits and an efficient algorithm $A$ such that
+Indeed, it is an excellent exercise to prove that (under the PRF conjecture) that there exists a PRF $\{ f_k \}$ mapping $n$ bits to $n$ bits and an efficient algorithm $A$ such that
 $A(k)=x$ such that $f_k(x)=0^\ell$.
 
 However, suppose that $\{ f_k \}$ was somehow a "super-strong PRF" that would behave like a random function _even to a party that holds the key_.
 In this case, we can imagine that making a query to $f_k$ corresponds to tossing $\ell$ independent random coins, and it would not be feasible to obtain $x$ such that $f_k(x)=0^\ell$ using much less than $2^\ell$ cycles.
-Thus presenting such  an input $x$ can serve as a "proof of work" that you've spent $2^\ell$ cycles or so.
+Thus presenting such an input $x$ can serve as a "proof of work" that you've spent $2^\ell$ cycles or so.
 By adjusting $\ell$ we can obtain a proof of spending $T$ cycles for a value $T$ of our choice.
-Now if things would go as usual in this course then I would state a result  like the following:
+Now if things would go as usual in this course then I would state a result like the following:
 
 >__Theorem:__ Under the PRG conjecture, there exist super strong PRF.
 
 Where again, the "super strong PRF" behaves like a truly random function _even
-to a party that holds the key_. Unfortunately such a  result is _not_ known to
+to a party that holds the key_. Unfortunately such a result is _not_ known to
 be true, and for a very good reason. Most natural ways to define "super strong
 PRF" will result in properties that can be shown to be _impossible to achieve_.
 Nevertheless, the intuition behind it still seems useful and so we have the
@@ -149,13 +149,13 @@ following heuristic:
 We don't have a good characterization as to what makes a protocol "natural" and we do have fairly strong counterexamples to this heuristic (though they are arguably "unnatural"). That said, it still seems useful as a way to get intuition for security, and in particular to analyze Bitcoin (and many other practical protocols) we do need to assume it, at least given current knowledge.
 
 > # {.remark title="Important caveat on the random oracle model" #romcaveatrem}
-The random oracle heuristic is very different from all the  conjectures we considered before. It is __not__ a formal conjecture since we don't have any good way to define "natural" and we do have examples of protocols that are secure when all parties have access to a random function but are __insecure__ whenever we  replace this random function by __any__ efficiently computable function (see the homework exercises).
+The random oracle heuristic is very different from all the conjectures we considered before. It is __not__ a formal conjecture since we don't have any good way to define "natural" and we do have examples of protocols that are secure when all parties have access to a random function but are __insecure__ whenever we replace this random function by __any__ efficiently computable function (see the homework exercises).
 
 
 
-_Under the random oracle model_, we can now specify the "proof of work" protocol for Bitcoin. Given some identifier $ID\in\{0,1\}^n$, an integer $T \ll 2^n$, and a hash function $H:\{0,1\}^{2n}\rightarrow\{0,1\}^n$, the proof of work corresponding to $ID$ and $T$ will be some $x\in\{0,1\}^*$ such that  the first $\lceil \log T \rceil$ bits of $H(ID\| x)$ are zero.[^number]
+_Under the random oracle model_, we can now specify the "proof of work" protocol for Bitcoin. Given some identifier $ID\in\{0,1\}^n$, an integer $T \ll 2^n$, and a hash function $H:\{0,1\}^{2n}\rightarrow\{0,1\}^n$, the proof of work corresponding to $ID$ and $T$ will be some $x\in\{0,1\}^*$ such that the first $\lceil \log T \rceil$ bits of $H(ID\| x)$ are zero.[^number]
 
-[^number]: The actual Bitcoin protocol is slightly more general, where the proof is some $x$ such that $H(ID\|x)$, when interpreted as a number in $[2^n]$, is at most $T$. There are also other issues about how exactly $x$ is placed and $ID$ is computed from past history  that we ignore here.
+[^number]: The actual Bitcoin protocol is slightly more general, where the proof is some $x$ such that $H(ID\|x)$, when interpreted as a number in $[2^n]$, is at most $T$. There are also other issues about how exactly $x$ is placed and $ID$ is computed from past history that we ignore here.
 
 ### From Proof of Work to Consensus on Ledger
 
@@ -200,22 +200,22 @@ would be necessarily shorter. (See [ledgerfig](){.ref}.)
 
 Thus one can hope that the consensus ledger will continue to grow. (This is a
 rather hand-wavy and imprecise argument, see [this
-paper](https://eprint.iacr.org/2015/261) for a more in depth analysis; this  is
-also related to the phenomenon  known as [preferential
+paper](https://eprint.iacr.org/2015/261) for a more in depth analysis; this is
+also related to the phenomenon known as [preferential
 attachment](https://en.wikipedia.org/wiki/Preferential_attachment).)
 
-  __Cost to mine, mining pools:__ Generally, if you know that completing a $T$-cycle  proof will get you a single coin, then making a single query (which will succeed with probability $1/T$) is akin to buying a lottery ticket that costs you a single cycle and has probability $1/T$ to win a single coin. One difference over the actual lottery is that there is also some probability that you're working on the wrong fork of the ledger, but this incentivizes people to avoid this as much as possible. Another, perhaps even more major difference, is that things are setup so that this is a _profitable_ enterprise and the cost of a cycle is smaller than the value of $1/T$ coins. Just like in the lottery, people can and do gather in groups (known as "mining pools")  where they  pool together all their computing resources, and then split the award if they win it. Joining a pool doesn't change your expectation of winning but reduces the _variance_. In the extreme case, if everyone is in the same pool, then for every cycle you spend you get exactly $1/T$ coins. The way these pools work in practice is that someone that spent $C$ cycles looking for an output with all zeroes, only has probability $C/T$ of getting it, but is very likely to get an output that begins with $\log C$ zeroes. This output can serve as their own "proof of work" that they spent $C$ cycles and they can send it to the pool management so they get an appropriate share of the reward.
+  __Cost to mine, mining pools:__ Generally, if you know that completing a $T$-cycle proof will get you a single coin, then making a single query (which will succeed with probability $1/T$) is akin to buying a lottery ticket that costs you a single cycle and has probability $1/T$ to win a single coin. One difference over the actual lottery is that there is also some probability that you're working on the wrong fork of the ledger, but this incentivizes people to avoid this as much as possible. Another, perhaps even more major difference, is that things are setup so that this is a _profitable_ enterprise and the cost of a cycle is smaller than the value of $1/T$ coins. Just like in the lottery, people can and do gather in groups (known as "mining pools")  where they pool together all their computing resources, and then split the award if they win it. Joining a pool doesn't change your expectation of winning but reduces the _variance_. In the extreme case, if everyone is in the same pool, then for every cycle you spend you get exactly $1/T$ coins. The way these pools work in practice is that someone that spent $C$ cycles looking for an output with all zeroes, only has probability $C/T$ of getting it, but is very likely to get an output that begins with $\log C$ zeroes. This output can serve as their own "proof of work" that they spent $C$ cycles and they can send it to the pool management so they get an appropriate share of the reward.
 
 
 
->__The real Bitcoin:__ There are several aspects in which the protocol described above differs from the real Bitcoin protocol. Some of them were already discussed above:  Bitcoin typically uses digital signatures for puzzles (though it has a more general scripting language to specify them), and transactions involve a number of Satoshis (and the user interface typically displays currency is in units of BTC which are $10^8$ Satoshis). The  Bitcoin protocol also has a formula designed to factor in the decrease in dollar cost per cycle so that Bitcoins become more expensive to mine with time. There is also a fee mechanism apart from the mining to incentivize parties to add to the ledger. (The issue of incentives in Bitcoin is quite subtle and not fully resolved, and it is possible that parties' behavior will change with time.) The ledger does not grow by a single transaction at a time but rather by a _block_ of transactions, and there is also some timing synchronization mechanism (which is needed, as per the consensus impossibility results). There are other differences as well; see the [Bonneau et al paper](https://eprint.iacr.org/2015/261) as well as the [Tschorsch and Scheuermann survey](https://eprint.iacr.org/2015/464) for more.
+>__The real Bitcoin:__ There are several aspects in which the protocol described above differs from the real Bitcoin protocol. Some of them were already discussed above:  Bitcoin typically uses digital signatures for puzzles (though it has a more general scripting language to specify them), and transactions involve a number of Satoshis (and the user interface typically displays currency is in units of BTC which are $10^8$ Satoshis). The Bitcoin protocol also has a formula designed to factor in the decrease in dollar cost per cycle so that Bitcoins become more expensive to mine with time. There is also a fee mechanism apart from the mining to incentivize parties to add to the ledger. (The issue of incentives in Bitcoin is quite subtle and not fully resolved, and it is possible that parties' behavior will change with time.) The ledger does not grow by a single transaction at a time but rather by a _block_ of transactions, and there is also some timing synchronization mechanism (which is needed, as per the consensus impossibility results). There are other differences as well; see the [Bonneau et al paper](https://eprint.iacr.org/2015/261) as well as the [Tschorsch and Scheuermann survey](https://eprint.iacr.org/2015/464) for more.
 
 ## Collision Resistance Hash Functions and Creating Short "Unique" Identifiers
 
 Another issue we "swept under the carpet" is how do we come up with these unique identifiers per transaction.
 We want each transaction $t_i$ to be _bound_ to the ledger state $(t_1,\ldots,t_{i-1})$, and so the ID of $t_i$ should contain also the ID's all the prior transactions.
 But yet we want this ID to be only $n$ bits long.
-Ideally, we could solve this if we had  a  _one to one_ mapping $H$ from $\{0,1\}^N$ to $\{0,1\}^n$ for some very large $N\gg n$.
+Ideally, we could solve this if we had a _one to one_ mapping $H$ from $\{0,1\}^N$ to $\{0,1\}^n$ for some very large $N\gg n$.
 Then the ID corresponding to the task of appending $t_i$ to $(t_1,\ldots,t_{i-1})$ would simply be $H(t_1\|\cdots\|t_i)$.
 The only problem is that this is of course clearly impossible- $2^N$ is _much_ bigger than $2^n$ and there is no one to one map from a large set to a smaller set.
 Luckily we are in the magical world of crypto where the impossible is routine and the unimaginable is occasional.
@@ -245,7 +245,7 @@ A collection $\{ h_k \}$ of functions where $h_k:\{0,1\}^*\rightarrow\{0,1\}^n$ 
 if the map $(k,x)\mapsto h_k(x)$ is efficiently computable and for every efficient adversary $A$, the probability over $k$ that $A(k)=(x,x')$ such that $x\neq x'$ and $h_k(x)=h_k(x')$ is
 negligible.[^birthday]
 
-[^birthday]: Note that the other side of the birthday bound shows that you can always find a collision  in $h_k$ using roughly $2^{n/2}$ queries.  For this reason we typically need to double  the output length of hash functions compared to the key size of other cryptographic primitives  (e.g., $256$ bits as opposed to $128$ bits).
+[^birthday]: Note that the other side of the birthday bound shows that you can always find a collision in $h_k$ using roughly $2^{n/2}$ queries.  For this reason we typically need to double the output length of hash functions compared to the key size of other cryptographic primitives (e.g., $256$ bits as opposed to $128$ bits).
 
 Once more we do _not_ know a theorem saying that under the PRG conjecture there exists a collision resistant hash function collection, even though this property is considered as one of the desiderata
 for cryptographic hash functions.
@@ -255,7 +255,7 @@ Furthermore if we consider the weaker notion of security under a _second preimag
 
 > # {.remark title="CRH vs PRF" #crhvsprfrem}
 A collection $\{ h_k \}$ of collision resistant hash functions is an incomparable object to a collection $\{ f_s \}$ of pseudorandom functions with the same input and output lengths.
-On one hand, the condition of being collision-resistant does not imply that $h_k$ is indistinguishable from random.  For example, it is possible to construct a valid collision resistant hash function where  the first output bit always equals zero (and hence is easily distinguishable from a random function).
+On one hand, the condition of being collision-resistant does not imply that $h_k$ is indistinguishable from random.  For example, it is possible to construct a valid collision resistant hash function where the first output bit always equals zero (and hence is easily distinguishable from a random function).
 On the other hand,  unlike [prfdef](){.ref}, the adversary of [crhdef](){.ref} is not merely given a "black box" to compute the hash function, but rather the key to the hash function.
 This is a much stronger attack model, and so a PRF does not have to be collision resistant.
 (Constructing a PRF that is not collision resistant is a nice and recommended exercise.)
@@ -271,14 +271,14 @@ While we discussed hash functions as _keyed_ collections, in practice people oft
 Practical constructions of cryptographic hash functions start with a basic block which is known as a _compression function_ $h:\{0,1\}^{2n}\rightarrow\{0,1\}^n$. The function $H:\{0,1\}^*\rightarrow\{0,1\}^n$ is defined as
 $H(m_1,\ldots,m_t)=h(h(h(m_1,IV),m_2),\cdots,m_t)$
 when the message is composed of $t$ blocks (and we can pad it otherwise).
-See  [merkledamgardfig](){.ref}.
+See [merkledamgardfig](){.ref}.
 This construction is known as the Merkle-Damgard construction and we know that it does preserve collision resistance:
 
 ![The Merkle-Damgard construction converts a compression function $h:\{0,1\}^{2n}\rightarrow\{0,1\}^n$ into a hash function that maps strings of arbitrary length into $\{0,1\}^n$. The transformation preserves collision resistance but does not yield a PRF even if $h$ was pseudorandom. Hence for many applications it should not be used directly but rather composed with a transformation such as HMAC.](../figure/merke-damgard.jpg){#merkledamgardfig width=80% }
 
 
 > # {.theorem title="Merkle-Damgard preserves collision resistance" #merkledamgardcrhthm}
-Let $H$ be constructed from $h$ as above. Then given  two messages $m \neq m' \in \{0,1\}^{tn}$ such that $H(m)=H(m')$ we can efficiently find two messages $x \neq x' \in \{0,1\}^{2n}$ such that $h(x)=h(x')$.
+Let $H$ be constructed from $h$ as above. Then given two messages $m \neq m' \in \{0,1\}^{tn}$ such that $H(m)=H(m')$ we can efficiently find two messages $x \neq x' \in \{0,1\}^{2n}$ such that $h(x)=h(x')$.
 
 
 > # {.proof data-ref="merkledamgardcrhthm"}
@@ -333,7 +333,7 @@ In 2017, a [full SHA-1 collision was found](https://goo.gl/jdqUX9).
 Today SHA-1  is considered insecure and SHA-256 is recommended.
 
 Given the weaknesses in MD-5 and SHA-1 , NIST started in 2006 a competition for a new hashing standard, based on functions that seem sufficiently different from the MD5/SHA-0/SHA-1 family.
-(SHA-256 is unbroken but it seems too  close for comfort to those other systems.)
+(SHA-256 is unbroken but it seems too close for comfort to those other systems.)
 The hash function Keccak was selected as the new standard [SHA-3](https://goo.gl/Bx1bu2) in August of 2015.
 
 ### The NSA and Hash Functions
@@ -351,9 +351,9 @@ It used an MD5 collision to achieve its goals.
 Such a collision was known in the open literature since 2008, but Flame used a different variant that was unknown in the literature.
 For this reason it is suspected that it was designed by a western intelligence agency.
 
-Another insight into NSA's thoughts can be found in  pages 12-19 of NSA's internal [Cryptolog magazine](https://www.nsa.gov/public_info/_files/cryptologs/cryptolog_126.pdf) which has been recently declassified; one can find there a rather  entertaining and opinionated (or obnoxious, depending on your point of view) review of the CRYPTO 1992 conference. In page 14 the author remarks that certain weaknesses of MD5 demonstrated in the conference are unlikely to be extended to the full version, which suggests that the NSA (or at least the author) was not aware of the MD5 collisions at the time.
+Another insight into NSA's thoughts can be found in pages 12-19 of NSA's internal [Cryptolog magazine](https://www.nsa.gov/public_info/_files/cryptologs/cryptolog_126.pdf) which has been recently declassified; one can find there a rather entertaining and opinionated (or obnoxious, depending on your point of view) review of the CRYPTO 1992 conference. In page 14 the author remarks that certain weaknesses of MD5 demonstrated in the conference are unlikely to be extended to the full version, which suggests that the NSA (or at least the author) was not aware of the MD5 collisions at the time.
 
 
 ### Cryptographic vs Non-Cryptographic Hash Functions
 
-Hash functions are of course also widely used for _non-cryptographic_ applications such as building hash tables and load balancing. For these applications people often use _linear_ hash functions known as _cyclic redundancy codes (CRC)_.  Note however that even in those seemingly non-cryptographic applications, an adversary might cause significant slowdown to the system if he can generate many collisions. This can and [has](http://arstechnica.com/business/2011/12/huge-portions-of-web-vulnerable-to-hashing-denial-of-service-attack/) been used to  obtain denial of service attacks. As a rule of thumb, if the inputs to your system might be generated by someone who does not have your best interests at heart, you're better off using a cryptographic hash function.
+Hash functions are of course also widely used for _non-cryptographic_ applications such as building hash tables and load balancing. For these applications people often use _linear_ hash functions known as _cyclic redundancy codes (CRC)_.  Note however that even in those seemingly non-cryptographic applications, an adversary might cause significant slowdown to the system if he can generate many collisions. This can and [has](http://arstechnica.com/business/2011/12/huge-portions-of-web-vulnerable-to-hashing-denial-of-service-attack/) been used to obtain denial of service attacks. As a rule of thumb, if the inputs to your system might be generated by someone who does not have your best interests at heart, you're better off using a cryptographic hash function.

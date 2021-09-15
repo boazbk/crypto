@@ -24,7 +24,7 @@ The set $\Z^*_m$ is an abelian group with the multiplication operation, and henc
 $a^{|\Z^*_m|}=1$ for every $a\in \Z^*_m$. In the case that $m$ is prime, this result is known as "Fermat's Little Theorem" and is typically stated as $a^{p-1}=1 \pmod{p}$ for every $a\neq 0$.
 
 > # {.remark title="Note on $n$ bits vs a number $n$" #smallvsbigrem}
-One aspect that is often confusing in number-theoretic based cryptography, is that one needs to always keep track whether we are talking about "big" numbers or "small" numbers. In many cases in crypto, we use $n$ to talk about our key size or security parameter, in which case we think of $n$ as a "small" number of size $100-1000$ or so. However, when we work with $\Z^*_m$ we often think of $m$ as a  "big" number having about $100-1000$ _digits_; that is $m$ would be roughly $2^{100}$ to $2^{1000}$ or so. I will try to reserve the notation $n$ for "small" numbers but may sometimes forget to do so, and other descriptions of RSA etc.. often use $n$ for "big" numbers.
+One aspect that is often confusing in number-theoretic based cryptography, is that one needs to always keep track whether we are talking about "big" numbers or "small" numbers. In many cases in crypto, we use $n$ to talk about our key size or security parameter, in which case we think of $n$ as a "small" number of size $100-1000$ or so. However, when we work with $\Z^*_m$ we often think of $m$ as a "big" number having about $100-1000$ _digits_; that is $m$ would be roughly $2^{100}$ to $2^{1000}$ or so. I will try to reserve the notation $n$ for "small" numbers but may sometimes forget to do so, and other descriptions of RSA etc.. often use $n$ for "big" numbers.
 It is important that whenever you see a number $x$, you make sure you have a sense whether it is a "small" number (in which case $poly(x)$ time is considered efficient) or whether it is a "large" number (in which case only $poly(log(x))$ time would be considered efficient).
 
 
@@ -32,7 +32,7 @@ It is important that whenever you see a number $x$, you make sure you have a sen
 In much of this course we use $m$ to denote a string which is our plaintext message to be encrypted or authenticated.
 In the context of integer factoring, it is convenient to use $m=pq$ as the composite number that is to be factored.
 To keep things interesting (or more honestly, because I keep running out of letters) in this lecture we will have both usages of $m$ (though hopefully not in the same theorem or definition!). When we talk about factoring, RSA, and Rabin, then we will use $m$ as the composite number, while in the context of the abstract trapdoor-permutation based encryption and signatures we will use $m$ for the message.
-When you see an instance of $m$, make sure you understand what  is its usage.
+When you see an instance of $m$, make sure you understand what is its usage.
 
 
 ### Primaliy testing
@@ -44,11 +44,11 @@ We now discuss how we can test for primality.
 > # {.theorem title="Primality Testing" #primalitytesting}
 There is an $poly(n)$-time algorithm to test whether a given $n$-bit number is prime or composite.
 
-[primalitytesting](){.ref} was first shown in 1970's by Solovay, Strassen, Miller and Rabin via a _probabilistic_ algorithm (that can make a mistake with probability exponentially small in the number of coins it uses), and in a 2002 breakthrough  Agrawal, Kayal, and Saxena gave a _deterministic_ polynomial time algorithm for the same problem.
+[primalitytesting](){.ref} was first shown in 1970's by Solovay, Strassen, Miller and Rabin via a _probabilistic_ algorithm (that can make a mistake with probability exponentially small in the number of coins it uses), and in a 2002 breakthrough, Agrawal, Kayal, and Saxena gave a _deterministic_ polynomial time algorithm for the same problem.
 
 > # {.lemma #pseudoprimelem}
 There is a probabilistic polynomial time algorithm $A$ that on input a number $m$,
-if $m$ is prime $A$ outputs ```YES``` with probability $1$ and if $A$ is not even a "pseudoprime" it  outputs ```NO``` with probability at least $1/2$.
+if $m$ is prime $A$ outputs ```YES``` with probability $1$ and if $A$ is not even a "pseudoprime" it outputs ```NO``` with probability at least $1/2$.
 (The definition of "pseudo-prime" will be clarified in the proof below.)
 
 
@@ -65,13 +65,13 @@ that $|S| < |\Z^*_n|/2$ and so with probability at least $1/2$ the algorithm wil
 [pseudoprimelem](){.ref} its own might not seem very meaningful since it's not clear how many pseudoprimes are there.
 However, it turns out these pseudoprimes, also known as "Carmichael numbers", are much less prevalent than the primes, specifically, there are about
 $N/2^{-\Theta(\log N/\log\log N)}$ pseudoprimes between $1$ and $N$.
-If we choose a random number $m \in [2^n]$ and output it if and only if the algorithm of [pseudoprimelem](){.ref} algorithm outputs  ```YES``` (otherwise resampling), then the probability we make a mistake and output a pseudoprime is equal to the ratio of the set of pseudoprimes in $[2^n]$ to the set of primes in $[2^n]$. Since there are $\Omega(2^n/n)$ primes in $[2^n]$, this ratio is
+If we choose a random number $m \in [2^n]$ and output it if and only if the algorithm of [pseudoprimelem](){.ref} algorithm outputs ```YES``` (otherwise resampling), then the probability we make a mistake and output a pseudoprime is equal to the ratio of the set of pseudoprimes in $[2^n]$ to the set of primes in $[2^n]$. Since there are $\Omega(2^n/n)$ primes in $[2^n]$, this ratio is
 $\tfrac{n}{2^{-\Omega(n/\log n)}}$ which is a negligible quantity.
 Moreover, as mentioned above, there are better algorithms that succeed for _all_ numbers.
 
 
 In contrast to _testing_ if a number is prime or composite, there is no known efficient algorithm to actually _find_ the factorization of a composite number.
-The  best known algorithms run in time roughly $2^{\tilde{O}(n^{1/3})}$ where $n$ is the number of bits.
+The best known algorithms run in time roughly $2^{\tilde{O}(n^{1/3})}$ where $n$ is the number of bits.
 
 
 ### Fields
@@ -82,10 +82,10 @@ One property of a field is the following:
 > # {.theorem title="Fundamental Theorem of Algebra, mod $p$ version" #bezout}
 If $f$ is a nonzero polynomial of degree $d$ over $\Z_p$ then there are at most $d$ distinct inputs $x$ such that $f(x)=0$.
 
-(If you're curious why, you can see that the task of, given $x_1,\ldots,x_{d+1}$ finding the coefficients for a polynomial vanishing on the $x_i$'s amounts to solving a linear system in $d+1$ variables  with $d+1$ equations that are independent due to the non-singularity of the Vandermonde matrix.)
+(If you're curious why, you can see that the task of, given $x_1,\ldots,x_{d+1}$ finding the coefficients for a polynomial vanishing on the $x_i$'s amounts to solving a linear system in $d+1$ variables with $d+1$ equations that are independent due to the non-singularity of the Vandermonde matrix.)
 
 In particular every $x \in \Z_p$ has at most two _square roots_ (numbers $s$ such that $s^2 = x \mod p$).
-In fact, just like over the reals, every $x\in\Z_p$ either has no square roots or  exactly two square roots of the form $\pm s$.
+In fact, just like over the reals, every $x\in\Z_p$ either has no square roots or exactly two square roots of the form $\pm s$.
 
 We can efficiently find square roots modulo a prime. In fact, the following result is known:
 
@@ -93,7 +93,7 @@ We can efficiently find square roots modulo a prime. In fact, the following resu
 > # {.theorem title="Finding roots" #rootfindingthm}
 There is a probabilistic $poly(\log p,d)$ time algorithm to find the roots of a degree $d$ polynomial over $\Z_p$.
 
-This is a special case of the problem of factoring polynomials over finite fields, shown in 1967 by  Berlekamp and on which much other work has been done; see Chapter 20 in [Shoup](http://www.shoup.net/ntb/)).
+This is a special case of the problem of factoring polynomials over finite fields, shown in 1967 by Berlekamp and on which much other work has been done; see Chapter 20 in [Shoup](http://www.shoup.net/ntb/)).
 
 
 ### Chinese remainder theorem
@@ -124,7 +124,7 @@ In particular, extracting square roots is as hard as finding out the factors:
 
 
 > # {.theorem title="Square root extraction implies factoring" #squarerootfactthm}
-Suppose  and there is an efficient algorithm $A$ such that for every $m\in \N$ and $a\in \Z^*_m$, $A(m,a^2 \pmod {m})=b$ such that $a^2 = b^2 \pmod{m}$.
+Suppose and there is an efficient algorithm $A$ such that for every $m\in \N$ and $a\in \Z^*_m$, $A(m,a^2 \pmod {m})=b$ such that $a^2 = b^2 \pmod{m}$.
 Then, there is an efficient algorithm to recover $p,q$ from $m$.
 
 
@@ -156,7 +156,7 @@ $f_{m,e}:\Z^*_m\rightarrow\Z^*_m$ such that $RSA_{m,e}(x) = x^e \pmod{m}$.
 Given a number $m=pq$, the _Rabin function_ w.r.t. $m$, is the map $Rabin_m:\Z^*_m\rightarrow \Z^*_m$ such that $Rabin_m(x)=x^2 \pmod{m}$.
 
 Note that both maps can be computed in polynomial time.
-Using the Chinese Remainder Theorem and [rootfindingthm](){.ref}, we know that both functions can be _inverted_ efficiently if we know the factorization.^[Using  [rootfindingthm](){.ref}  to invert the function requires  $e$ to be not too large. However, as we will see below it turns out that using the factorization we can invert the RSA function for every $e$. Also, in practice people often use a small value for $e$ (sometimes as small as $e=3$) for reasons of efficiency.]  
+Using the Chinese Remainder Theorem and [rootfindingthm](){.ref}, we know that both functions can be _inverted_ efficiently if we know the factorization.^[Using [rootfindingthm](){.ref}  to invert the function requires $e$ to be not too large. However, as we will see below it turns out that using the factorization we can invert the RSA function for every $e$. Also, in practice people often use a small value for $e$ (sometimes as small as $e=3$) for reasons of efficiency.]  
 However [rootfindingthm](){.ref} is a much too big of a Hammer to invert the RSA and Rabin functions, and there are direct and simple inversion algorithms (see homework exercises).
 By [squarerootfactthm](){.ref}, inverting the Rabin function amounts to factoring $m$.
 No such result is known for the RSA function, but there is no better algorithm known to attack it than proceeding via factorization of $m$.
@@ -173,13 +173,13 @@ But this means that $e$ has to be a multiple of the _order_ of $xx'^{-1}$ and $y
 But since the order always divides the group size, this implies that $e$ has to have non-trivial gcd with either $|Z^*_p|$ or $|\Z^*_q|$ and hence with $(p-1)(q-1)$.
 
 > # {.remark title="Plain/Textbook RSA" #plainrsarem}
-The RSA trapdoor function is known also as "plain" or "textbook" RSA encryption. This is because initially Diffie and Hellman (and following them, RSA) thought of an encryption scheme as a deterministic procedure and so considered simply encrypting a message $x$ by applying  $ESA_{m,e}(x)$.
+The RSA trapdoor function is known also as "plain" or "textbook" RSA encryption. This is because initially Diffie and Hellman (and following them, RSA) thought of an encryption scheme as a deterministic procedure and so considered simply encrypting a message $x$ by applying $ESA_{m,e}(x)$.
 Today however we know that it is insecure to use a trapdoor function directly as an encryption scheme without adding some randomization.
 
 
 ### Abstraction: trapdoor permutations
 
-We can abstract away the particular construction of the RSA and Rabin functions to talk about a general  _trapdoor permutation family_.
+We can abstract away the particular construction of the RSA and Rabin functions to talk about a general _trapdoor permutation family_.
 We make the following definition
 
 > # {.definition title="Trapdoor permutation" #TDPdef}
@@ -197,7 +197,7 @@ A _trapdoor permutation family (TDP)_  is a family of functions $\{ p_k \}$ such
 
 
 > # {.remark title="Domain of permutations" #permutationsovergroups}
-The RSA function is not a permutation over the set of strings but rather over $\Z^*_m$ for some $m=pq$. However, if we find primes $p,q$ in the interval $[2^{n/2}(1-negl(n)),2^{n/2}]$, then $m$ will be in the interval $[2^n(1-negl(n)),2^n]$ and hence $\Z^*_m$ (which has size $pq - p - q +1 = 2^n(1-negl(n))$) can be thought of as essentially identical to $\{0,1\}^n$, since we will always pick elements from $\{0,1\}^n$ at random and hence they will be in $\Z^*_m$ with probability $1-negl(n)$. It is widely believed that for every sufficiently large $n$ there is a prime in the interval $[2^n-poly(n),2^n]$ (this follows from  the _Extended Reimann Hypothesis_) and Baker, Harman and Pintz _proved_ that there is a prime in the interval $[2^n-2^{0.6n},2^n]$.[^padding]
+The RSA function is not a permutation over the set of strings but rather over $\Z^*_m$ for some $m=pq$. However, if we find primes $p,q$ in the interval $[2^{n/2}(1-negl(n)),2^{n/2}]$, then $m$ will be in the interval $[2^n(1-negl(n)),2^n]$ and hence $\Z^*_m$ (which has size $pq - p - q +1 = 2^n(1-negl(n))$) can be thought of as essentially identical to $\{0,1\}^n$, since we will always pick elements from $\{0,1\}^n$ at random and hence they will be in $\Z^*_m$ with probability $1-negl(n)$. It is widely believed that for every sufficiently large $n$ there is a prime in the interval $[2^n-poly(n),2^n]$ (this follows from the _Extended Reimann Hypothesis_) and Baker, Harman and Pintz _proved_ that there is a prime in the interval $[2^n-2^{0.6n},2^n]$.[^padding]
 
 [^padding]: Another, more minor issue is that the description of the key might not have the same length as $\log m$; I defined them to be the same for simplicity of notation, and this can be ensured via some padding and concatenation tricks.
 
@@ -224,7 +224,7 @@ Please verify that you understand why TDPENC is a _valid_ encryption scheme, in 
 If $\{ p_k \}$ is a secure TDP and $H$ is a random oracle then TDPENC is a CPA secure public key encryption scheme.
 
 > # {.proof data-ref="TDPpkcthm"}
-Suppose, towards the sake of contradiction, that there is a polynomial-size adversary $A$ that succeeds in the  CPA game of TDPENC (with access to a random oracle $H$) with non-negligible advantage $\epsilon$ over half.
+Suppose, towards the sake of contradiction, that there is a polynomial-size adversary $A$ that succeeds in the CPA game of TDPENC (with access to a random oracle $H$) with non-negligible advantage $\epsilon$ over half.
 We will use $A$ to design an algorithm $I$ that inverts the trapdoor permutation.
 >
 Recall that the CPA game works as follows:
@@ -247,12 +247,12 @@ __PROOF:__ Suppose otherwise. We will prove the claim using the "forgetful gnome
 By the "lazy evaluation" paradigm, we can imagine that queries to $H$ are answered by a "faithful gnome" that whenever presented with a new query $x$, chooses a uniform and independent value $w \leftarrow_R \{0,1\}^\ell$ as a response, and then records that $H(x)=w$ to use that as answers for future queries.
 >
 Now consider the experiment where in the challenge part we use a "forgetful gnome" that answers $H(x^*)$ by a uniform and independent string $w^* \leftarrow_R \{0,1\}^\ell$ and _does not_ record the answer for future queries.
-In the "forgetful experiment", the second component of the ciphertext $z^* = w^* \oplus m_{b^*}$ is distributed uniformly in $\{0,1\}^\ell$ and independently  from all other random choices, regardless of whether $b^*=0$ or $b^*=1$.
+In the "forgetful experiment", the second component of the ciphertext $z^* = w^* \oplus m_{b^*}$ is distributed uniformly in $\{0,1\}^\ell$ and independently from all other random choices, regardless of whether $b^*=0$ or $b^*=1$.
 Hence in this "forgetful experiment" the adversary gets no information about $b^*$ and its probability of winning is at most $1/2$.
 But the forgetful experiment is identical to the actual experiment if the value $x^*$ is only queried to $H$ once.
 Apart from the query of $x^*$ by the challenger, all other queries to $H$ are made by the adversary.
 Under our assumption, the adversary makes the query $x^*$ with probability at most $\epsilon$, and conditioned on this not happening the two experiments are identical.
-Since the probability of winning in the forgetful experiment is at most $1/2$, the probability of winning in the overall experiment is less than $1/2+\epsilon$, thus yielding a contradiction and establishing the claim. (These kind of  analyses on sample spaces can be confusing; See [TDPENCgnomefig](){.ref} for a graphical illustration of this argument.)
+Since the probability of winning in the forgetful experiment is at most $1/2$, the probability of winning in the overall experiment is less than $1/2+\epsilon$, thus yielding a contradiction and establishing the claim. (These kind of analyses on sample spaces can be confusing; See [TDPENCgnomefig](){.ref} for a graphical illustration of this argument.)
 >
 Given the claim, we can now construct our inverter algorithm $I$ as follows:
 >
@@ -260,7 +260,7 @@ Given the claim, we can now construct our inverter algorithm $I$ as follows:
 >
 * The inverter simulates the adversary in a CPA attack, answering all its queries to the oracle $H$ by random values if they are new or the previously supplied answers if they were asked before. Whenever the adversary makes a query $x$ to $H$, $I$ checks if $p_h(x)=y^*$ and if so halts and outputs $x$.
 >
-* When the time comes to produce the challenge, the inverter $I$ chooses $z^*$ at random and  provides the adversary with $(y^*,z^*)$ where $z^* = w^* \oplus m_{b^*}$.^[It would have been equivalent to answer the adversary with a uniformly chosen $z^*$ in $\{0,1\}^\ell$, can you see why?]
+* When the time comes to produce the challenge, the inverter $I$ chooses $z^*$ at random and provides the adversary with $(y^*,z^*)$ where $z^* = w^* \oplus m_{b^*}$.^[It would have been equivalent to answer the adversary with a uniformly chosen $z^*$ in $\{0,1\}^\ell$, can you see why?]
 >
 * The inverter continues the simulation again halting an outputting $x$ if the adversary makes the query $x$ such that $p_k(x)=y^*$ to $H$.
 >
@@ -302,7 +302,7 @@ Suppose towards the sake of contradiction that there is a polynomial-sized adver
 We will construct an inverter $I$ for the trapdoor permutation collection that succeeds with non-negligible probability as well.
 >
 Recall that in a chosen message attack the adversary makes $T$ queries $m_1,\ldots,m_T$ to its signing box which are interspersed with $T'$ queries $m'_1,\ldots,m'_{T'}$ to the random oracle $H$.
-We can assume without loss of generality (by modifying the adversary and at most doubling the number of queries) that the adversary always queries the message $m_i$ to the random oracle _before_ it queries it to the signing box, though it can also make additional queries to the random oracle (and hence in particular  $T' \geq T$).
+We can assume without loss of generality (by modifying the adversary and at most doubling the number of queries) that the adversary always queries the message $m_i$ to the random oracle _before_ it queries it to the signing box, though it can also make additional queries to the random oracle (and hence in particular $T' \geq T$).
 At the end of the attack the adversary outputs with probability $\epsilon$ a pair $(x^*,m^*)$ such that $m^*$ was not queried to the signing box and $p_k(x^*)=H(m^*)$.
 >
 Our inverter $I$ works as follows:
@@ -318,7 +318,7 @@ Our inverter $I$ works as follows:
 * At the end of the game, the adversary outputs $(m^*,x^*)$. If $p_k(x^*)=y^*$ then $I$ outputs $x^*$.
 >
 We claim that, conditioned on the probability $\geq \epsilon/T'$ event that the adversary is successful and the final message $m^*$ is the one queried in step $t^*$, we provide a perfect simulation of the actual game.
-Indeed, while in an actual game, the value $y=H(m)$ will be chosen independently at random in $\{0,1\}^n$, this is equivalent to choosing  $x \leftarrow_R \{0,1\}^n$ and letting $y=p_k(x)$.
+Indeed, while in an actual game, the value $y=H(m)$ will be chosen independently at random in $\{0,1\}^n$, this is equivalent to choosing $x \leftarrow_R \{0,1\}^n$ and letting $y=p_k(x)$.
 After all, a permutation applied to the uniform distribution is uniform.
 >
 Therefore with probability at least $\epsilon/T'$ the inverter $I$ will output $x^*$ such that $p_k(x^*)=y^*$ hence succeeding in the inverter.

@@ -46,7 +46,7 @@ Some of these constructions can be quite efficient.
 In particular the system [CryptDB](https://css.csail.mit.edu/cryptdb/) developed by Popa et al uses these kinds of encryptions to automatically turn a SQL database into one that works on encrypted data and still supports the required queries.
 However, the issue of how dangerous the "leakage" can be is somewhat subtle. See this [paper](http://cryptoonline.com/wp-content/uploads/2013/03/edb.pdf) and [blog post](https://outsourcedbits.org/2015/09/07/attacking-encrypted-database-systems/) claiming weaknesses in practical use cases for CryptDB, as well as this [response](https://css.csail.mit.edu/cryptdb/response.html) by the CryptDB authors.
 
-While the constructions of  IBE and functional encryption often use maps such as $x \mapsto g^x$ as subroutines, they offer a stronger control over the leakage in the sense that, in the absence of publishing a (restricted) decryption key, we always get at least CPA security.
+While the constructions of IBE and functional encryption often use maps such as $x \mapsto g^x$ as subroutines, they offer a stronger control over the leakage in the sense that, in the absence of publishing a (restricted) decryption key, we always get at least CPA security.
 
 ## How to get IBE from pairing based assumptions.
 
@@ -57,8 +57,8 @@ But can we do more?
 In particular, can we compute _quadratic_ functions?
 This is an issue, as even computing the map $g^x,g^y \mapsto g^{xy}$ is exactly the Diffie Hellman problem that is considered hard in many of the groups we are interested in.
 
-_Pairing based cryptography_ begins with the observation that in some elliptic curve groups we can use a map  based on the so called Weil or Tate pairings.
-The idea is that we have an efficiently computable isomorphism  from a group $\mathbb{G}_1$ to a group $\mathbb{G}_2$ mapping $g$ to $\hat{g}$
+_Pairing based cryptography_ begins with the observation that in some elliptic curve groups we can use a map based on the so called Weil or Tate pairings.
+The idea is that we have an efficiently computable isomorphism from a group $\mathbb{G}_1$ to a group $\mathbb{G}_2$ mapping $g$ to $\hat{g}$
 such that we can efficiently map the elements $g^x$ and $g^y$ to the element $\varphi(g^x,g^y)=\hat{g}^{xy}$.
 This in particular means that given $g^{x_1},\ldots,g^{x_k}$ we can compute $\hat{g}^{Q(x_1,\ldots,x_k)}$  for every quadratic $Q$.
 Note that we cannot repeat this to compute, say, degree $4$ functions in the exponent,  since we don't know how to invert the map $\varphi$.
@@ -68,10 +68,10 @@ That is, while we can compute a quadratic in the exponent, we can't compute a cu
 
 We now show an IBE construction due to Boneh and Franklin[^history] how we can obtain from the pairing diffie hellman assumption an identity based encryption:
 
-[^history]: The construction we show was first published in the  CRYPTO 2001 conference. The Weil and Tate pairings were used before for cryptographic attacks, but were used  for a positive cryptographic result by Antoine Joux in his 2000 paper getting a three-party Diffie Hellman protocol and then Boneh and Franklin used this to obtain an identity based encryption scheme, answering an open question of Shamir. At approximately the same time as these papers, Sakai, Ohgishi and Kasahara presented a paper in the SCIS 2000 conference in Japan showing an identity-based key exchange protocol from pairing. Also [Clifford Cocks](https://en.wikipedia.org/wiki/Clifford_Cocks) (who as we mentioned above in the 1970's invented the RSA scheme at GCHQ before R,S, and A did), also came up in 2001 with a different identity-based encryption scheme using the quadratic residuosity assumption.
+[^history]: The construction we show was first published in the CRYPTO 2001 conference. The Weil and Tate pairings were used before for cryptographic attacks, but were used for a positive cryptographic result by Antoine Joux in his 2000 paper getting a three-party Diffie Hellman protocol and then Boneh and Franklin used this to obtain an identity based encryption scheme, answering an open question of Shamir. At approximately the same time as these papers, Sakai, Ohgishi and Kasahara presented a paper in the SCIS 2000 conference in Japan showing an identity-based key exchange protocol from pairing. Also [Clifford Cocks](https://en.wikipedia.org/wiki/Clifford_Cocks) (who as we mentioned above in the 1970's invented the RSA scheme at GCHQ before R,S, and A did), also came up in 2001 with a different identity-based encryption scheme using the quadratic residuosity assumption.
 
 
-* __Master key generation:__ We generate $\mathbb{G}_1,\mathbb{G}_2,g$ as above, choose $a$ at random in $\{0,\ldots,|\mathbb{G}|-1\}$. The  master private key is $a$ and the master public key is $\mathbb{G}_1,\mathbb{G}_2,g,h=g^a$. We let $H:\{0,1\}^*\rightarrow\mathbb{G}_1$ and $H':\mathbb{G}_2\mapsto\{0,1\}^\ell$ be two hash functions modeled as random oracles.
+* __Master key generation:__ We generate $\mathbb{G}_1,\mathbb{G}_2,g$ as above, choose $a$ at random in $\{0,\ldots,|\mathbb{G}|-1\}$. The master private key is $a$ and the master public key is $\mathbb{G}_1,\mathbb{G}_2,g,h=g^a$. We let $H:\{0,1\}^*\rightarrow\mathbb{G}_1$ and $H':\mathbb{G}_2\mapsto\{0,1\}^\ell$ be two hash functions modeled as random oracles.
 
 * __Key distribution:__  Given an arbitrary string $id\in\{0,1\}^*$, we generate the decryption key corresponding to $id$, as $d_{id} = H(id)^a$.
 
@@ -147,7 +147,7 @@ Intuitively, since the numbers are random, that would be the only way to come up
 The first candidate construction for a multilinear map was given by [Garg, Gentry and Halevi](https://eprint.iacr.org/2012/610).
 It is based on computational questions on lattices and so (perhaps not surprisingly) it involves significant complications due to _noise_.
 At a very high level, the idea is to use a fully homomorphic encryption scheme that can evaluate polynomials up to some degree $d$, but release a "hobbled decryption key" that contains just enough information to provide what's known as a _zero test_: check if an encryption is equal to zero.
-Because of the homomorphic properties, that means that we can check given  encryptions of $x_1,\ldots,x_n$ and some degree $d$ polynomial $P$, whether $P(x_1,\ldots,x_d)=0$.
+Because of the homomorphic properties, that means that we can check given encryptions of $x_1,\ldots,x_n$ and some degree $d$ polynomial $P$, whether $P(x_1,\ldots,x_d)=0$.
 Moreover, the notion of security this and similar construction satisfy is rather subtle and indeed not fully understood.
 Constructions of indistinguishability obfuscators are built based on this idea, but are significantly more involved than the construction of a witness encryption.
 One central tool they use is the observation that FHE reduces the task of obfuscation to essentially obfuscating a decryption circuit, which can often be rather shallow.
