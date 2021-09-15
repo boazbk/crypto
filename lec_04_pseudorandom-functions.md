@@ -98,7 +98,7 @@ Specifically for the identity proving case, we think of the following scenario. 
 as authentic or reject as an impersonation attempt. Mallory's goal is to fool Bob into accepting her as Alice.
 
 The most basic way to try to solve the login problem is by simply using a _password_. That is, if we assume that Alice and Bob can share a key, we can treat this key as some secret password $p$ that was selected at random from $\{0,1\}^n$ (and hence can only be guessed with probability $2^{-n}$). Why doesn't Alice simply send $p$ to Bob to prove to him her identity?
-A moment's thought shows that this would be a very bad idea. Since Mallory is controlling the communication line, she would learn $p$ after the first identification attempt and could then easily impersonate Alice in future interactions. However, we seem to have just the tool to protect the secrecy of $p$--- _encryption_.  Suppose that Alice and Bob share a secret key $k$ and an additional secret password $p$. Wouldn't a simple way to solve the login problem be for Alice to send to Bob an encryption of the password $p$? After all, the security of the encryption should guarantee that Mallory can't learn $p$, right?
+A moment's thought shows that this would be a very bad idea. Since Mallory is controlling the communication line, she would learn $p$ after the first identification attempt and could then easily impersonate Alice in future interactions. However, we seem to have just the tool to protect the secrecy of $p$--- _encryption_.  Suppose that Alice and Bob share a secret key $k$ and an additional secret password $p$. Wouldn't a simple way to solve the login problem be for Alice to send Bob an encryption of the password $p$? After all, the security of the encryption should guarantee that Mallory can't learn $p$, right?
 
 > # { .pause }
 This would be a good time to stop reading and try to think for yourself whether using a secure encryption to encrypt $p$ would guarantee security for the login problem. (No really, stop and think about it.)
@@ -107,7 +107,7 @@ The problem is that Mallory does not have to learn the password $p$ in order to 
 
 ### How do pseudorandom functions help in the login problem?
 
-The idea is that they create what's known as a _one time password_. Alice and Bob will share an index $s\in\{0,1\}^n$ for the pseudorandom function generator $\{ f_s \}$. When Alice wants to prove to Bob her identity, Bob will choose a random $i\leftarrow_R\{0,1\}^n$, and send $i$ to Alice, and then Alice will send $f_s(i),f_s(i+1),\ldots,f_s(i+\ell-1)$ to Bob where $\ell$ is some parameter (you can think of $\ell=n$ for simplicity). Bob will check that indeed $y=f_s(i)$ and if so accept the session as authentic.
+The idea is that they create what's known as a _one time password_. Alice and Bob will share an index $s\in\{0,1\}^n$ for the pseudorandom function generator $\{ f_s \}$. When Alice wants to prove her identity to Bob, Bob will choose a random $i\leftarrow_R\{0,1\}^n$, send $i$ to Alice, and then Alice will send $f_s(i),f_s(i+1),\ldots,f_s(i+\ell-1)$ to Bob where $\ell$ is some parameter (you can think of $\ell=n$ for simplicity). Bob will check that indeed $y=f_s(i)$ and if so accept the session as authentic.
 
 The formal protocol is as follows:
 
@@ -126,7 +126,7 @@ Also the parameter $\ell$ is sometimes chosen to be deliberately short so that i
 
 ![The Google Authenticator app is one popular example of a one-time password scheme using pseudorandom functions. Another example is RSA's SecurID token.](../figure/google-authenticator.jpg){#tmplabelfig  .margin}
 
-_Why is this secure?_ The key to understanding schemes using pseudorandom functions is to imagine what would happen if instead of a _pseudo_ random function, $f_s$ would be an _actual_ random function.
+_Why is this secure?_ The key to understanding schemes using pseudorandom functions is to imagine what would happen if $f_s$ was be an _actual_ random function instead of a _pseudo_ random function.
 In a truly random function, every one of the values $f_s(0),\ldots,f_s(2^n-1)$ is chosen independently and uniformly at random from $\{0,1\}$.
 One useful way to imagine this is using the concept of "lazy evaluation".
 We can think of $f_S$ as determined by tossing $2^n$ different coins for the values $f(0),\ldots,f(2^n-1)$. Now consider the case where we don't actually toss the $i^{th}$ coin until we need it.
@@ -160,7 +160,7 @@ We claim that the probability that there exists some $j\in\{1,\ldots,2T\}$ such 
 $|i-i_j|<2\ell$ then it means in particular that all the
 queries to $H(\cdot)$ made by either Alice or Bob during the first $T$ iterations are disjoint from
 the interval $\{ i,i+1,\ldots,i+\ell-1 \}$.
-Since $H(\cdot)$ is a completely random function, the values $H(i),\ldots,H(i+\ell-1)$ are chosen uniformly and independently from all the rest of the values of this function. Since Mallory's message $y$ to Bob in the $T+1^{st}$ iteration depends only on what she observed in the past, the values $H(i),\ldots,H(i+\ell-1)$ are _independent_ from $y$, and hence under this condition that there is no overlap between this interval and  prior queries, the probability that they equal $y$ is $2^{-\ell}$. QED (Claim 1).
+Since $H(\cdot)$ is a completely random function, the values $H(i),\ldots,H(i+\ell-1)$ are chosen uniformly and independently from all the rest of the values of this function. Since Mallory's message $y$ to Bob in the $T+1^{st}$ iteration depends only on what she observed in the past, the values $H(i),\ldots,H(i+\ell-1)$ are _independent_ from $y$, and hence under the condition that there is no overlap between this interval and  prior queries, the probability that they equal $y$ is $2^{-\ell}$. QED (Claim 1).
 >
 The proof of Claim 1 is not hard but it is somewhat subtle, so it's good to go over it again and make sure you understand it.
 >
