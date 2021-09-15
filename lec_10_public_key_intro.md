@@ -381,11 +381,11 @@ A triple of algorithms $(G,S,V)$ is a chosen-message-attack secure _digital sign
    3. The adversary _wins_ if they output a pair $(m^*,\sigma^*)$ such that $m^*$ was _not_ queried before to the signing algorithm and $V_v(m^*,\sigma^*)=1$.
 
 
-> # {.remark title="Strong unforgability" #strongunforgabilitysigrem}
+> # {.remark title="Strong unforgeability" #strongunforgabilitysigrem}
 Just like for MACs (see [MACdef](){.ref}), our definition of security for digital signatures with respect to a chosen message attack does not preclude the ability of the adversary to produce a new signature for the same message that it has seen a signature of.
-Just like in MACs, people sometimes consider the notion of _strong unforgability_ which requires that it would not be possible for the adversary to produce a new message-signature pair (even if the message itself was queried before).
+Just like in MACs, people sometimes consider the notion of _strong unforgeability_ which requires that it would not be possible for the adversary to produce a new message-signature pair (even if the message itself was queried before).
 Some signature schemes (such as the full domain hash and the DSA scheme) satisfy this stronger notion while others do not.
-However, just like MACs, it is possible to transform any signature with standard security into a signature that satisfies this stronger unforgability condition.
+However, just like MACs, it is possible to transform any signature with standard security into a signature that satisfies this stronger unforgeability condition.
 
 
 
@@ -505,12 +505,12 @@ However, it is known how to obtain schemes that do not rely on this heuristic, a
 
 ## Putting everything together - security in practice.
 
-Let us discuss briefly how public key cryptography is used to secure web trafic through the SSL/TLS protocol that we all use when we use ```https://``` URLs.
+Let us discuss briefly how public key cryptography is used to secure web traffic through the SSL/TLS protocol that we all use when we use ```https://``` URLs.
 The security this achieve is quite amazing. No matter what wired or wireless network you are using, no matter what country you are in, as long as your device (e.g., phone/laptop/etc..) and the server you are talking to (e.g., Google, Amazon, Microsoft etc.) is functioning properly, you can communicate securely without any party in the middle able to either learn or modify the contents of your interaction.[^steg]
 
 [^steg]: They are able to know that such an interaction took place and the amount of bits exchanged. Preventing these kind of attacks is more subtle and approaches for solutions are known as _steganography_ and _anonymous routing_.
 
-In the web setting, therre are _servers_ who have public keys, and _users_ who generally don't have such keys. Ideally, as a user, you should already know the public keys of all the entities you communicate with e.g., ```amazon.com```, ```google.com```, etc. However, how are you going to learn those public keys?
+In the web setting, there are _servers_ who have public keys, and _users_ who generally don't have such keys. Ideally, as a user, you should already know the public keys of all the entities you communicate with e.g., ```amazon.com```, ```google.com```, etc. However, how are you going to learn those public keys?
 The traditional answer was that because they are _public_ these keys are much easier to communicate and the servers could even post them as ads on the _New York Times_. Of course these days everyone reads the _Times_ through ```nytimes.com``` and so this seems like a chicken-and-egg type of problem.
 
 The solution goes back again to the quote of Archimedes of "Give me a fulcrum, and I shall move the world". The idea is that trust can be _transitive_. Suppose you have a Mac. Then you have already trusted Apple with quite a bit of your personal information, and so you might be fine if this Mac came pre-installed with the Apple public key which you trust to be authentic. Now, suppose that you want to communicate with ```Amazon.com```. Now, _you_ might not know the correct public key for Amazon, but _Apple_ surely does. So Apple can supply Amazon with a signed message to the effect of
@@ -570,7 +570,7 @@ Below are optional group theory related exercises and proofs meant to help gain 
 
 * For example, the integers (i.e. infinitely many elements) where the operation is addition is a commutative group: if $a,b,c$ are integers, then $a+b = b+a$ (commutativity), $(a+b)+c = a+(b+c)$ (associativity), $a+0 = a$ (so $0$ is the identity element here; we typically think of the identity as $1$, especially when the group operation is multiplication), and $a+(-a) = 0$ (i.e. for any integer, we are allowed to think of its additive inverse, which is also an integer).
 
-* A non-commutative group (or a non-abelian group) is a group such that $\exists a,b \in \mathbb{G}$ but $a * b \neq b * a$ (where $*$ is the group operation). One example (of an infinite, non commutative group) is the set of $2 \times 2$ matrices (over the real numbers) which are invertible, and the operation is matrix multiplication. The identity element is the traditional identity matrix, and each matrix has an inverse (and the product of two invertible matrices is still invertible), and matrix multiplication satisfies associativity. However, matrix multiplication here need not satisfy commutativity.
+* A non-commutative group (or a non-abelian group) is a group such that $\exists a,b \in \mathbb{G}$ but $a * b \neq b * a$ (where $*$ is the group operation). One example (of an infinite, non-commutative group) is the set of $2 \times 2$ matrices (over the real numbers) which are invertible, and the operation is matrix multiplication. The identity element is the traditional identity matrix, and each matrix has an inverse (and the product of two invertible matrices is still invertible), and matrix multiplication satisfies associativity. However, matrix multiplication here need not satisfy commutativity.
 
 In this class, we restrict ourselves to finite commutative groups to avoid complications with infinite group orders and annoyances with non-commutative operations. For the problems below, assume that a "group" is really a "finite commutative group".
 
@@ -611,7 +611,7 @@ $2$ is not a generator because $2^3 \mod 7 = 8 \mod 7 = 1$, so the set $\{2,2^2,
 $3$ will be a generator because $3^2 \mod 7 = 9 \mod 7 = 2 \mod 7$, $3^3 \mod 7 = 2*3 \mod 7 = 6 \mod 7$, $3^3 \mod 7 = 18 \mod 7 = 4 \mod 7$, $3^4 = 12 \mod 7 = 5$, $3^5 \mod 7 = 15 \mod 7 = 1$, so $\{3,3^2,3^3,3^4,3^5,3^6,3^7 \} = \{3,2,6,4,5,1\}$, which are all of the elements.
 $4$ is not a generator because $4^3 \mod 7  = 64 \mod 7 = 1 \mod 7$, so just like $2$, we won't get every element.
 $5$ is a generator because $5^2 \mod 6 = 4, 5^3 \mod 7 = 20 \mod 7 = 6, 5^4 \mod 7 = 30 \mod 7 = 2, 5^5 \mod 7 = 10 \mod 7 = 3, 5^6 \mod 7 = 15 \mod 7 = 1$, so just like $3$, $5$ is a generator.
-$6$ is not a generator becaue $6^2 \mod 7= 1 \mod 7$, so just like $2$, the set $\{6,6^2,6^3,\cdots\}$ cannot contain all elements (it will just have $1$ and $6$).
+$6$ is not a generator because $6^2 \mod 7= 1 \mod 7$, so just like $2$, the set $\{6,6^2,6^3,\cdots\}$ cannot contain all elements (it will just have $1$ and $6$).
 :::
 
 
@@ -632,7 +632,7 @@ Suppose we have some (finite, commutative) group $\mathbb{G}$. Prove that the in
 :::
 
 ::: {.solution data-ref="groupex4"}
-Suppose that $a \in \mathbb{G}$ and that $b,c \in \mathbb{G}$ such that $ab = 1$ and $ac = 1$. Then we know that $ab = ac$, and then we can apply $a^{-1}$ to both sides (we are guarunteed that $a$ has SOME inverse $a^{-1}$ in the group), and so we have $a^{-1}ab = a^{-1}ac$, but we know that $a^{-1}a = 1$ (and we can use associativity of a group), so $(1)b = (1)c$ so $b = c$. QED.
+Suppose that $a \in \mathbb{G}$ and that $b,c \in \mathbb{G}$ such that $ab = 1$ and $ac = 1$. Then we know that $ab = ac$, and then we can apply $a^{-1}$ to both sides (we are guaranteed that $a$ has SOME inverse $a^{-1}$ in the group), and so we have $a^{-1}ab = a^{-1}ac$, but we know that $a^{-1}a = 1$ (and we can use associativity of a group), so $(1)b = (1)c$ so $b = c$. QED.
 :::
 
 
@@ -669,7 +669,7 @@ Under the assumptions stated above, prove that there is an efficient way to chec
 :::
 
 ::: {.solution data-ref="quadresidueex2"}
-Suppose that we recieve some element $g \in \mathbb{G}$. We want to know if there exists some $g' \in \mathbb{G}$ such that $g = (g')^2$ (this is equivalent to $g$ being in $\mathbb{H}$). To do so, compute $g^{|\mathbb{G}|/2}$. I claim that $g^{|\mathbb{G}|/2}=1$ if and only if $g \in \mathbb{H}$.
+Suppose that we receive some element $g \in \mathbb{G}$. We want to know if there exists some $g' \in \mathbb{G}$ such that $g = (g')^2$ (this is equivalent to $g$ being in $\mathbb{H}$). To do so, compute $g^{|\mathbb{G}|/2}$. I claim that $g^{|\mathbb{G}|/2}=1$ if and only if $g \in \mathbb{H}$.
 
 (Proving the if): If $g \in \mathbb{H}$, then $g=(g')^2$ for some $g' \in \mathbb{G}$. We then have that $g^{|\mathbb{G}|/2} = ((g')^2)^{|\mathbb{G}|/2} = (g')^{|\mathbb{G}|}$. But from our assumption, an element raised to the order of the group is $1$, so $(g')^{|\mathbb{G}|} = 1$, so $g^{|\mathbb{G}|/2} = 1$. As a result, if $g \in \mathbb{H}$, then $g^{|\mathbb{G}|/2} = 1$.
 
