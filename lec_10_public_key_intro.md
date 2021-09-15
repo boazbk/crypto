@@ -172,7 +172,7 @@ The kind of results we know have the following form:
 
 >__Theorem:__ If problem $X$ is hard, then there exists a CPA-secure public key encryption.
 
-Where $X$ is some problem that people have tried to solve and couldn't.
+Here, $X$ is some problem that people have tried to solve and couldn't.
 Thus, we have various _candidates_ for public key encryption, and we fervently hope that at least one of them is actually secure.
 The [dirty little secret](https://eprint.iacr.org/2017/365.pdf) of cryptography is that we actually don't have that many candidates.
 We really have only two well studied families.[^other]
@@ -200,9 +200,9 @@ However, we can compute this in $poly((\log a) \cdot n)$ time using the _repeate
 
 The _discrete logarithm_ problem is the problem of computing, given $g,h \in \Z_p$, a number $a$ such that $g^a=h$.
 If such a solution $a$ exists then there is always also a solution of size at most $p$ (can you see why?) and so the solution can be represented using $n$ bits.
-However, currently the best-known algorithm for computing the discrete logarithm runs in time roughly $2^{n^{1/3}}$, which currently becomes prohibitively expensive when $p$ is a prime of length about $2048$ bits.[^constantsdlog]
+However, currently the best-known algorithm for computing the discrete logarithm runs in time roughly $2^{n^{1/3}}$, which is currently prohibitively expensive when $p$ is a prime of length about $2048$ bits.[^constantsdlog]
 
-[^constantsdlog]: The running time of the best known algorithms for computing the discrete logarithm modulo $n$ bit primes is $2^{f(n)2^{n^{1/3}}}$, where $f(n)$ is a function that depends polylogarithmically on $n$. If $f(n)$ would equal $1$, then we'd need numbers of $128^3 \approx 2\cdot 10^6$ bits to get $128$ bits of security, but because $f(n)$ is larger than one, the current [estimates](https://goo.gl/ntszsg) are that we need to let $n=3072$ bit key to get $128$ bits of of security. Still the existence of such a non-trivial algorithm means that we need much larger keys than those used for private key systems to get the same level of security. In particular, to double the estimated security to $256$ bits, NIST recommends that we multiply the RSA keysize five-fold to $15,360$. (The same document also says that SHA-256 gives $256$ bits of security as a pseudorandom generator but only $128$ bits when used to hash documents for digital signatures; can you see why?)
+[^constantsdlog]: The running time of the best known algorithms for computing the discrete logarithm modulo $n$ bit primes is $2^{f(n)2^{n^{1/3}}}$, where $f(n)$ is a function that depends polylogarithmically on $n$. If $f(n)$ would equal $1$, then we'd need numbers of $128^3 \approx 2\cdot 10^6$ bits to get $128$ bits of security, but because $f(n)$ is larger than one, the current [estimates](https://goo.gl/ntszsg) are that we need to let $n=3072$ bit key to get $128$ bits of of security. Still, the existence of such a non-trivial algorithm means that we need much larger keys than those used for private key systems to get the same level of security. In particular, to double the estimated security to $256$ bits, NIST recommends that we multiply the RSA keysize five-fold to $15,360$. (The same document also says that SHA-256 gives $256$ bits of security as a pseudorandom generator but only $128$ bits when used to hash documents for digital signatures; can you see why?)
 
 
 John Gill suggested to Diffie and Hellman that modular exponentiation can be a good source for the kind of "easy-to-compute but hard-to-invert" functions they were looking for. Diffie and Hellman based a public key encryption scheme as follows:
@@ -230,7 +230,7 @@ Unfortunately, no such result is known in the other direction. However in the ra
 
 
 
->__Computational Diffie-Hellman Assumption:__ Let $\mathbb{G}$ be a group elements of which can be described in $n$ bits, with an associative and commutative multiplication operation that can be computed in $poly(n)$ time.  The _Computational Diffie-Hellman (CDH)_ assumption holds with respect to the group $\mathbb{G}$ if for every generator (see below) $g$ of $\mathbb{G}$ and efficient algorithm $A$, the probability that on input $g,g^a,g^b$, $A$ outputs the element $g^{ab}$ is negligible as a function of $n$.^[Formally, since it is an asymptotic statement, the CDH assumption needs to be defined with a _sequence of groups_. However, to make notation simpler we will ignore this issue, and use it only for groups (such as the numbers modulo some $n$ bit primes) where we can easily increase the "security parameter" $n$.]
+>__Computational Diffie-Hellman Assumption:__ Let $\mathbb{G}$ be a group whose elements can be described in $n$ bits, with an associative and commutative multiplication operation that can be computed in $poly(n)$ time.  The _Computational Diffie-Hellman (CDH)_ assumption holds with respect to the group $\mathbb{G}$ if for every generator (see below) $g$ of $\mathbb{G}$ and efficient algorithm $A$, the probability that on input $g,g^a,g^b$, $A$ outputs the element $g^{ab}$ is negligible as a function of $n$.^[Formally, since it is an asymptotic statement, the CDH assumption needs to be defined with a _sequence of groups_. However, to make notation simpler we will ignore this issue, and use it only for groups (such as the numbers modulo some $n$ bit primes) where we can easily increase the "security parameter" $n$.]
 
 In particular we can make the following conjecture:
 
