@@ -36,11 +36,11 @@ We merely sketch how one reduces the factoring and discrete logarithm problems t
 
 * For __factoring__, let us restrict to the case $m=pq$ for distinct $p,q$. Recall that we showed that finding the size $(p-1)(q-1)=m-p-q+1$ of the group $\Z^*_m$ is sufficient to recover $p$ and $q$. One can show that if we pick a few random $x$'s in $\Z^*_m$ and compute their order, the least common multiplier of these orders is likely to be the group size.
 
-* For **discrete log** in a group $\mathbb{G}$, if we get $X=g^x$ and need to recover $x$, we can compute the order of various elements of the form $X^ag^b$. The order of such an element is a number $c$ satisfying   $c(xa+b) = 0 \pmod{|\mathbb{G}|}$. Again, with a few random examples we will get a non trivial example (where $c \neq 0 \pmod{|\mathbb{G}|}$ ) and be able to recover the unknown $x$.
+* For **discrete log** in a group $\mathbb{G}$, if we get $X=g^x$ and need to recover $x$, we can compute the order of various elements of the form $X^ag^b$. The order of such an element is a number $c$ satisfying $c(xa+b) = 0 \pmod{|\mathbb{G}|}$. Again, with a few random examples we will get a non trivial example (where $c \neq 0 \pmod{|\mathbb{G}|}$ ) and be able to recover the unknown $x$.
 
 ## Finding periods of a function: Simon's Algorithm
 
-Let $\mathbb{H}$ be some Abelian group with a  group operation that we'll denote by $\oplus$, and $f$ be some function mapping $\mathbb{H}$ to an arbitrary set (which we can encode as $\{0,1\}^*$).
+Let $\mathbb{H}$ be some Abelian group with a group operation that we'll denote by $\oplus$, and $f$ be some function mapping $\mathbb{H}$ to an arbitrary set (which we can encode as $\{0,1\}^*$).
 We say that $f$ has _period $h^*$_ for some $h^*\in\mathbb{H}$ if for every $x,y \in \mathbb{H}$, $f(x)=f(y)$ if and only if $y = x \oplus kh^*$ for some integer $k$.
 Note that if $\mathbb{G}$ is some Abelian group, then if we define $\mathbb{H}=\Z_{|\mathbb{G}|}$, for every element $g\in \mathbb{G}$, the map $f(a)=g^a$ is a periodic map over $\mathbb{H}$ with period the order of $g$.
 So, finding the order of an item reduces to the question of finding the period of a function.
@@ -69,7 +69,7 @@ a quantum polynomial-time algorithm that outputs a random $h\in \{0,1\}^n$ such 
 Note that given $O(n)$ such samples, we can recover $h^*$ with high probability by solving the corresponding linear equations.
 
 > # {.proof data-ref="simonsthm"}
-Let $HAD$ be the $2\times 2$ unitary  matrix corresponding to the  one qubit operation $|0\rangle \mapsto \tfrac{1}{\sqrt{2}}(|0\rangle+|1\rangle)$ and
+Let $HAD$ be the $2\times 2$ unitary matrix corresponding to the one qubit operation $|0\rangle \mapsto \tfrac{1}{\sqrt{2}}(|0\rangle+|1\rangle)$ and
 $|1\rangle \mapsto \tfrac{1}{\sqrt{2}}(|0\rangle-|1\rangle)$  or $|a\rangle\mapsto \tfrac{1}{\sqrt{2}}(|0\rangle+(-1)^a|1\rangle)$.
 Given the state $|0^{n+m\rangle}$ we can apply this map to each one of the first $n$ qubits to get the state
 $2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle|0^m\rangle$
@@ -84,7 +84,7 @@ So, if $\langle y,h^* \rangle=0 \pmod{2}$, we get that $(-1)^{\langle x,y \rangl
 Therefore, if measure the state we will get a pair $(y,z)$ such that $\langle y,h^* \rangle=0 \pmod{2}$. QED
 
 Simon's algorithm seems to really use the special bit-wise structure of the group $\{0,1\}^n$, so one could wonder if it has any relevance for the group $\Z^*_m$ for some exponentially large $m$.
-It turns out that the same insights that underlie the well known  Fast Fourier Transform (FFT) algorithm can be used to essentially follow the same strategy for this group as well.
+It turns out that the same insights that underlie the well known Fast Fourier Transform (FFT) algorithm can be used to essentially follow the same strategy for this group as well.
 
 
 ## From Simon to Shor
@@ -101,7 +101,7 @@ For every $\ell$ and $a\in\Z^*_\ell$, there is a quantum $poly(log \ell)$ algori
 
 
 The idea is similar to Simon's algorithm.  We consider the map $x \mapsto a^x (\mod \ell)$ which is a periodic map over $\Z_m$ where $m=|\Z^*_\ell|$ with period being the order of $a$.  
-To find the period of this map we will now  need to perform a _Quantum Fourier Transform (QFT)_ over the group $\Z_m$ instead of $\{0,1\}^n$.
+To find the period of this map we will now need to perform a _Quantum Fourier Transform (QFT)_ over the group $\Z_m$ instead of $\{0,1\}^n$.
 This is a quantum algorithm that takes a register from some arbitrary
 state $f \in \mathbb{C}^{m}$ into a state whose vector is the Fourier transform
 $\hat{f}$ of $f$. The QFT takes only $O(\log^2 m)$ elementary steps and
@@ -125,7 +125,7 @@ vector $\hat{f}$ where the $x^{th}$ coordinate of $\hat{f}$ is defined as[^8]
 
 $\hat{f}(x) = \tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m} f(x)\omega^{xy}$
 
-where $\omega  = e^{2\pi i/m}$.
+where $\omega = e^{2\pi i/m}$.
 
 The Fourier transform is simply a representation of $f$ in the *Fourier basis* $\{  \chi_x \}_{x \in \Z_m}$, where $\chi_x$ is the
 vector/function whose $y^{th}$ coordinate is
@@ -227,7 +227,7 @@ We now describe the algorithm and the state, neglecting normalizing factors.
 
 4. Apply Hadmard gate $H$ to least significant qubit.  (state: $(FT_{m/2}f_{even})(|0\rangle+|1\rangle)$ $+$ $(W FT_{m/2}f_{odd})(|0\rangle-|1\rangle) =$ $(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd})|0\rangle + (FT_{m/2}f_{even}-W FT_{m/2}f_{odd})|1\rangle$)
 
-5. Move LSB to the most significant position         (state: $|0\rangle(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd}) + |1\rangle(FT_{m/2}f_{even}- W FT_{m/2}f_{odd}) = \hat{f}$)
+5. Move LSB to the most significant position. (state: $|0\rangle(FT_{m/2}f_{even}+ W FT_{m/2}f_{odd}) + |1\rangle(FT_{m/2}f_{even}- W FT_{m/2}f_{odd}) = \hat{f}$)
 
 
 The transformation $W$ on $m-1$ qubits can be defined by $|x\rangle \mapsto \omega^x = \omega^{\sum_{i=0}^{m-2} 2^ix_i}$ (where $x_i$ is
@@ -252,7 +252,7 @@ on input $A,N$ (represented in binary) finds the smallest $r$ such that $A^r=1 \
 Let $t=\ceil{5\log (A+N)}$. Our register will consist of
 $t+polylog(N)$ qubits. Note that the function $x
 \mapsto A^x \pmod{N}$ can be computed in $polylog(N)$ time and so we will assume that we can
-compute the map $|x\rangle|y\rangle \mapsto |x\rangle|y\oplus (A^x \pmod{N\rangle)}$ (where we identify a number $X \in \{ 0,\ldots,N-1\}$ with its representation as  a binary
+compute the map $|x\rangle|y\rangle \mapsto |x\rangle|y\oplus (A^x \pmod{N\rangle)}$ (where we identify a number $X \in \{ 0,\ldots,N-1\}$ with its representation as a binary
 string of length $\log N$).[^9] Now we describe the order-finding
 algorithm. It uses a tool of elementary number theory called *continued fractions* which allows us to approximate (using a classical algorithm)
 an arbitrary real number $\alpha$ with a rational number $p/q$ where
@@ -293,7 +293,7 @@ To prove the claim, we compute for every $x \in \Z_m$ the absolute value
 of $|x\rangle$’s coefficient before the measurement. Up to some
 normalization factor this is
 
-$\left|  \sum_{\ell=0}^{c-1} \omega^{(x_0+\ell r)x} \right| = \left| \omega^{x_0c'c} \right| \left| \sum_{\ell=0}^{c-1} \omega^{r\ell x} \right| = 1 \cdot  \left| \sum_{\ell=0}^{c-1} \omega^{r\ell x} \right| \;.$
+$\left|  \sum_{\ell=0}^{c-1} \omega^{(x_0+\ell r)x} \right| = \left| \omega^{x_0c'c} \right| \left| \sum_{\ell=0}^{c-1} \omega^{r\ell x} \right| = 1 \cdot \left| \sum_{\ell=0}^{c-1} \omega^{r\ell x} \right| \;.$
 
 If $c$ does not divide $x$ then
 $\omega^r$ is a $c^{th}$ root of unity, so
@@ -363,7 +363,7 @@ $\sin \alpha \sim \alpha$ for small angles $\alpha$), the coefficient of
 $x$ is at least
 $\tfrac{\sqrt{r}}{4M}\ceil{m/r} \geq \tfrac{1}{8\sqrt{r}}$
 
-This completes the proof  of  [orderdinfindrestatethm](){.ref}.
+This completes the proof of [orderdinfindrestatethm](){.ref}.
 
 
 <!--
@@ -486,7 +486,7 @@ $\Bigl|\tfrac{p_n}{q_n} - \alpha\Bigl| < \tfrac{1}{q_nq_{n+1}}  (*)$
 that $\tfrac{p_n}{q_n}$ is the *closest* rational number to $\alpha$
 with denominator at most $q_n$. It also means that if $\alpha$ is
 extremely close to a rational number, say,
-$\left|\alpha  - \tfrac{a}{b} \right| < \tfrac{1}{4b^4}$ for some coprime $a,b$ then we can find $a,b$ by
+$\left|\alpha - \tfrac{a}{b} \right| < \tfrac{1}{4b^4}$ for some coprime $a,b$ then we can find $a,b$ by
 iterating the continued fraction algorithm for $polylog(b)$ steps.
 Indeed, let $q_n$ be the first denominator such that $q_{n+1} \geq b$.
 If $q_{n+1} > 2b^2$ then $(*)$ implies that
@@ -506,7 +506,7 @@ computed in $polylog(q_n)$ time.
 
 ### Quantum cryptography
 
-There is another way in which quantum mechanics interacts with cryptography. These "spooky actions at a distance" have been suggested by Weisner and Bennet-Brassard as a way in which parties can create a secret shared key over an insecure channel. On one hand, this concept does not require as much control as general-purpose quantum computing, and so it has in fact been [demonstrated physically](https://en.wikipedia.org/wiki/Quantum_key_distribution#Quantum_Key_Distribution_Networks). On the other hand, unlike transmitting standard digital information, this "insecure channel" cannot be an arbitrary media such as wifi etc.. but rather one needs fiber optics, lasers, etc.. Unlike quantum computers, where we only need one of those to break RSA, to actually use key exchange at scale we need to setup these type of networks, and so it is unclear if this approach will ever dominate the solution of Alice sending to Bob a Brink's truck with the shared secret key. People have proposed some other ways to use the interesting properties of quantum  mechanics for cryptographic purposes including [quantum money](https://en.wikipedia.org/wiki/Quantum_money) and [quantum software protection](http://www.scottaaronson.com/papers/noclone-ccc.pdf).
+There is another way in which quantum mechanics interacts with cryptography. These "spooky actions at a distance" have been suggested by Weisner and Bennet-Brassard as a way in which parties can create a secret shared key over an insecure channel. On one hand, this concept does not require as much control as general-purpose quantum computing, and so it has in fact been [demonstrated physically](https://en.wikipedia.org/wiki/Quantum_key_distribution#Quantum_Key_Distribution_Networks). On the other hand, unlike transmitting standard digital information, this "insecure channel" cannot be an arbitrary media such as wifi etc.. but rather one needs fiber optics, lasers, etc.. Unlike quantum computers, where we only need one of those to break RSA, to actually use key exchange at scale we need to setup these type of networks, and so it is unclear if this approach will ever dominate the solution of Alice sending to Bob a Brink's truck with the shared secret key. People have proposed some other ways to use the interesting properties of quantum mechanics for cryptographic purposes including [quantum money](https://en.wikipedia.org/wiki/Quantum_money) and [quantum software protection](http://www.scottaaronson.com/papers/noclone-ccc.pdf).
 
 
 
@@ -518,7 +518,7 @@ There is another way in which quantum mechanics interacts with cryptography. The
 
 [^4]: Some quantum computing texts use $\sum_{x\in[M]}\overline{\vec{u}}_x\vec{v}_x$ instead.
 
-[^5]: This matrix is known as the *Walsh-Hadamard* error correcting code. (Though it is usually described  as a $0/1$ matrix over $GF(2)$ rather than $\pm 1$ matrix over $\mathbb{C}$.
+[^5]: This matrix is known as the *Walsh-Hadamard* error correcting code. (Though it is usually described as a $0/1$ matrix over $GF(2)$ rather than $\pm 1$ matrix over $\mathbb{C}$.
 
 [^6]: The constant three is arbitrary in the sense that replacing it with every constant greater or equal to two would lead to an equivalently powerful model.
 
@@ -530,4 +530,4 @@ There is another way in which quantum mechanics interacts with cryptography. The
 
 [^10]: Aside: This isn’t quite correct; the cardinality of $Z_N^*$ is not a power of $2$ so it is not immediately obvious how to construct a quantum register whose only possible configurations correspond to elements of $Z_N^*$. However, if we use the nearest power of $2$, everything we are about to do will still be approximately correct. There are also other fixes to this problem.
 
-[^11]: There is a slight inaccuracy here, since we are blurring the distinction between measuring $\lambda$ and $\theta$. For example, when $\theta$ is very close to $1/2$, then $e^{2\pi \iota \theta} \approx -1$. So the complex number $1 + \lambda$ is close $0$ and the phase bit almost always comes up $1$. Now we cannot tell whether the binary expansion of $\theta$ is more like $0.1000x$ or $0.0111x$, both of which are close to $1/2$. But then the estimation of the $1$st and $2$nd bits allows us to infer    which of these two cases occurs, and hence the value of the first bit. Thus the correct estimation procedure involves looking at estimated values of each pair of successive bits.
+[^11]: There is a slight inaccuracy here, since we are blurring the distinction between measuring $\lambda$ and $\theta$. For example, when $\theta$ is very close to $1/2$, then $e^{2\pi \iota \theta} \approx -1$. So the complex number $1 + \lambda$ is close $0$ and the phase bit almost always comes up $1$. Now we cannot tell whether the binary expansion of $\theta$ is more like $0.1000x$ or $0.0111x$, both of which are close to $1/2$. But then the estimation of the $1$st and $2$nd bits allows us to infer which of these two cases occurs, and hence the value of the first bit. Thus the correct estimation procedure involves looking at estimated values of each pair of successive bits.

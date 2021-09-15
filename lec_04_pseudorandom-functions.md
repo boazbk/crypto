@@ -35,7 +35,7 @@ is always given to the adversary. This is simply because by "polynomial time adv
 The notation $A^{F(s,\cdot)}$ means that $A$ has _black box_ (also known as _oracle_) access to the function that
 maps $i$ to $F(s,i)$. That is, $A$ can choose an index $i$, query the box and get $F(s,i)$, then choose a new index $i'$, query the box to get $F(s,i')$, and so on for
 a polynomial number of queries.
-The notation $H \leftarrow_R [2^n] \rightarrow \{0,1\}$ means that $H$ is  a completely random function that maps every index $i$ to an independent and random different bit.
+The notation $H \leftarrow_R [2^n] \rightarrow \{0,1\}$ means that $H$ is a completely random function that maps every index $i$ to an independent and random different bit.
 
 ::: {.remark title="Completely Random Functions" #randfuncs}
 This notion of a randomly chosen function can be difficult to wrap your mind around. Try to imagine a table of all of the strings in $\{0, 1\}^n$. We now go to each possible input, randomly generate a bit to be its output, and write down the result in the table. When we're done, we have a length $2^n$ lookup table that maps each input to an output that was generated uniformly at random and independently of all other outputs. This lookup table is now our random function $H$.
@@ -62,7 +62,7 @@ Formally, this is defined as follows:
 
 ::: {.definition title="PRF ensembles" #prfensemnledef}
 Let $\{ f_s \}_{s\in \{0,1\}^*}$ be an ensemble of functions such that for every $s\in \{0,1\}^*$,  $f_s:\{0,1\}^{|s|} \rightarrow \{0,1\}$.
-We say that $\{ f_s \}$ is a _pseudorandom function ensemble_ if the function $F$ that on input $s\in \{0,1\}^*$ and $i \in \{0,\ldots,2^{|s|}-1\}$ outputs $f_s(i)$ is a PRF.
+We say that $\{ f_s \}$ is a _pseudorandom function ensemble_ if the function $F$ that on input $s\in \{0,1\}^*$ and $i \in \{0,\ldots,2^{|s|}-1\}$ outputs $f_s(i)$ is a PRF generator.
 :::
 
 Note that the condition of [prfensemnledef](){.ref} corresponds to requiring that for every polynomial $p$ and $p(n)$-time adversary $A$, if $n$ is large enough then
@@ -87,7 +87,7 @@ But before we see the proof of [prffromprgthmone](){.ref}, let us see why pseudo
 
 ## One time passwords (e.g. Google Authenticator, RSA ID, etc.)
 
-Until now we have talked about the task of _encryption_, or protecting the  _secrecy_ of messages. But the task of _authentication_, or protecting the
+Until now we have talked about the task of _encryption_, or protecting the _secrecy_ of messages. But the task of _authentication_, or protecting the
 _integrity_ of messages is no less important. For example, consider the case that you receive a software update for your PC, phone, car, pacemaker, etc.
 over an open channel such as an unencrypted Wi-Fi connection. The contents of that update are not secret, but it is of crucial importance that it was unchanged from the message sent out by the company and that no malicious
 attacker had modified the code. Similarly, when you log into your bank, you might be much more
@@ -98,7 +98,7 @@ Specifically for the identity proving case, we think of the following scenario. 
 as authentic or reject as an impersonation attempt. Mallory's goal is to fool Bob into accepting her as Alice.
 
 The most basic way to try to solve the login problem is by simply using a _password_. That is, if we assume that Alice and Bob can share a key, we can treat this key as some secret password $p$ that was selected at random from $\{0,1\}^n$ (and hence can only be guessed with probability $2^{-n}$). Why doesn't Alice simply send $p$ to Bob to prove to him her identity?
-A moment's thought shows that this would be a very bad idea. Since Mallory is controlling the communication line, she would learn $p$ after the first identification attempt and could then easily impersonate Alice in future interactions. However, we seem to have just the tool to protect the secrecy of $p$--- _encryption_.  Suppose that Alice and Bob share a secret key $k$ and an additional secret password $p$. Wouldn't a simple way to solve the login problem be for Alice to send to Bob an encryption of the password $p$? After all, the security of the encryption should guarantee that Mallory can't learn $p$, right?
+A moment's thought shows that this would be a very bad idea. Since Mallory is controlling the communication line, she would learn $p$ after the first identification attempt and could then easily impersonate Alice in future interactions. However, we seem to have just the tool to protect the secrecy of $p$--- _encryption_.  Suppose that Alice and Bob share a secret key $k$ and an additional secret password $p$. Wouldn't a simple way to solve the login problem be for Alice to send Bob an encryption of the password $p$? After all, the security of the encryption should guarantee that Mallory can't learn $p$, right?
 
 > # { .pause }
 This would be a good time to stop reading and try to think for yourself whether using a secure encryption to encrypt $p$ would guarantee security for the login problem. (No really, stop and think about it.)
@@ -107,7 +107,7 @@ The problem is that Mallory does not have to learn the password $p$ in order to 
 
 ### How do pseudorandom functions help in the login problem?
 
-The idea is that they create what's known as a _one time password_. Alice and Bob will share an index $s\in\{0,1\}^n$ for the pseudorandom function generator $\{ f_s \}$. When Alice wants to prove to Bob her identity, Bob will choose a random $i\leftarrow_R\{0,1\}^n$, and send $i$ to Alice, and then Alice will send $f_s(i),f_s(i+1),\ldots,f_s(i+\ell-1)$ to Bob where $\ell$ is some parameter (you can think of $\ell=n$ for simplicity). Bob will check that indeed $y=f_s(i)$ and if so accept the session as authentic.
+The idea is that they create what's known as a _one time password_. Alice and Bob will share an index $s\in\{0,1\}^n$ for the pseudorandom function generator $\{ f_s \}$. When Alice wants to prove her identity to Bob, Bob will choose a random $i\leftarrow_R\{0,1\}^n$, send $i$ to Alice, and then Alice will send $f_s(i),f_s(i+1),\ldots,f_s(i+\ell-1)$ to Bob where $\ell$ is some parameter (you can think of $\ell=n$ for simplicity). Bob will check that indeed $y=f_s(i)$ and if so accept the session as authentic.
 
 The formal protocol is as follows:
 
@@ -126,12 +126,12 @@ Also the parameter $\ell$ is sometimes chosen to be deliberately short so that i
 
 ![The Google Authenticator app is one popular example of a one-time password scheme using pseudorandom functions. Another example is RSA's SecurID token.](../figure/google-authenticator.jpg){#tmplabelfig  .margin}
 
-_Why is this secure?_ The key to understanding schemes using pseudorandom functions is to imagine what would happen if instead of a _pseudo_ random function, $f_s$ would be an _actual_ random function.
+_Why is this secure?_ The key to understanding schemes using pseudorandom functions is to imagine what would happen if $f_s$ was be an _actual_ random function instead of a _pseudo_ random function.
 In a truly random function, every one of the values $f_s(0),\ldots,f_s(2^n-1)$ is chosen independently and uniformly at random from $\{0,1\}$.
 One useful way to imagine this is using the concept of "lazy evaluation".
 We can think of $f_S$ as determined by tossing $2^n$ different coins for the values $f(0),\ldots,f(2^n-1)$. Now consider the case where we don't actually toss the $i^{th}$ coin until we need it.
-The  crucial point is that if we have queried the function in $T\ll 2^n$ places, then when Bob chooses a random $i\in[2^n]$ it is _extremely unlikely_ that any one of the set $\{i,i+1,\ldots,i+\ell-1\}$ will be one of those locations that we previously queried.
-Thus, if the function was truly random,  Mallory has  _no information_ on the value of the function in these coordinates, and would be able to predict (or rather, guess) it in all these locations with probability at most $2^{-\ell}$.
+The crucial point is that if we have queried the function in $T\ll 2^n$ places, then when Bob chooses a random $i\in[2^n]$ it is _extremely unlikely_ that any one of the set $\{i,i+1,\ldots,i+\ell-1\}$ will be one of those locations that we previously queried.
+Thus, if the function was truly random,  Mallory has _no information_ on the value of the function in these coordinates, and would be able to predict (or rather, guess) it in all these locations with probability at most $2^{-\ell}$.
 
 
 > # { .pause }
@@ -148,11 +148,11 @@ This proof, as so many others in this course, uses an argument via contradiction
 We assume, towards the sake of contradiction, that there exists an adversary $M$ (for Mallory) that can break the identification scheme `PRF-Login` with probability $2^{-\ell}+\epsilon$ after $T$ interactions. We then construct an attacker $A$ that can distinguish access to $\{ f_s \}$ from access to a random function in $poly(T)$ time and with bias at least $\epsilon/2$.
 >
 How do we construct this adversary $A$? The idea is as follows. First, we prove that if we ran the protocol `PRF-Login` using an _actual random_ function, then $M$ would not be able to succeed in impersonating with probability better than $2^{-\ell}+negligible$. Therefore, if $M$ does do better, then we can use that to distinguish $f_s$ from a random function.
-The adversary $A$ gets some black box $O(\cdot)$ (for _oracle_) and will use it while internally simulating all the parties--- Alice, Bob and Mallory (using $M$) in the $T+1$ interactions of the `PRF-Login` protocol. Whenever any of the parties needs to evaluate $f_s(i)$, $A$ will forward $i$ to its black box $O(\cdot)$ and return the value $O(i)$. It will then output $1$ if an only if $M$ succeeds in impersonation in this internal simulation. The argument above showed that if $O(\cdot)$ is a truly random function, then the probability that $A$ outputs $1$ is at most $2^{-\ell}+negligible$ (and so in particular less than $2^{-\ell}+\epsilon/2$). On the other hand, if $O(\cdot)$ is the function $i \mapsto f_s(i)$ for some fixed and random $s$, then this probability is at least $2^{-\ell}+\epsilon$. Thus $A$ will distinguish between the two cases with bias at least $\epsilon/2$.  We now turn to the formal proof:
+The adversary $A$ gets some black box $O(\cdot)$ (for _oracle_) and will use it while internally simulating all the parties--- Alice, Bob and Mallory (using $M$) in the $T+1$ interactions of the `PRF-Login` protocol. Whenever any of the parties needs to evaluate $f_s(i)$, $A$ will forward $i$ to its black box $O(\cdot)$ and return the value $O(i)$. It will then output $1$ if and only if $M$ succeeds in impersonation in this internal simulation. The argument above showed that if $O(\cdot)$ is a truly random function, then the probability that $A$ outputs $1$ is at most $2^{-\ell}+negligible$ (and so in particular less than $2^{-\ell}+\epsilon/2$). On the other hand, if $O(\cdot)$ is the function $i \mapsto f_s(i)$ for some fixed and random $s$, then this probability is at least $2^{-\ell}+\epsilon$. Thus $A$ will distinguish between the two cases with bias at least $\epsilon/2$.  We now turn to the formal proof:
 >
 __Claim 1:__ Let `PRF-Login*` be the hypothetical variant of the protocol `PRF-Login` where Alice and Bob share a completely random function $H:[2^n]\rightarrow\{0,1\}$. Then, no matter what Mallory does, the probability she can impersonate Alice after observing $T$ interactions is at most $2^{-\ell}+(8\ell T)/2^n$.
 >
-(If  `PRF-Login*` is easier to prove secure than  `PRF-Login`, you might wonder why we bother with `PRF-Login` in the first place and not simply use `PRF-Login*`. The reason is that specifying a random function $H$ requires specifying $2^n$ bits, and so that would be a _huge_ shared key. So `PRF-Login*` is not a protocol we can actually run but rather a hypothetical "mental experiment" that helps us in arguing about the security of `PRF-Login`.)
+(If `PRF-Login*` is easier to prove secure than `PRF-Login`, you might wonder why we bother with `PRF-Login` in the first place and not simply use `PRF-Login*`. The reason is that specifying a random function $H$ requires specifying $2^n$ bits, and so that would be a _huge_ shared key. So `PRF-Login*` is not a protocol we can actually run but rather a hypothetical "mental experiment" that helps us in arguing about the security of `PRF-Login`.)
 >
 __Proof of Claim 1:__ Let $i_1,\ldots,i_{2T}$ be the nonces chosen by Bob and recieved by Alice in the first $T$ iterations.
 That is, $i_1$ is the nonce chosen by Bob in the first iteration while $i_2$ is the nonce that Alice received in the first iteration (if Mallory doesn't modify it then $i_1=i_2$). Similarly, $i_3$ is the nonce chosen by Bob in the second iteration while $i_4$ is the nonce received by Alice and so on and so forth. Let $i$ be the nonce chosen in the $T+1^{st}$ iteration in which Mallory tries to impersonate Alice.
@@ -160,7 +160,7 @@ We claim that the probability that there exists some $j\in\{1,\ldots,2T\}$ such 
 $|i-i_j|<2\ell$ then it means in particular that all the
 queries to $H(\cdot)$ made by either Alice or Bob during the first $T$ iterations are disjoint from
 the interval $\{ i,i+1,\ldots,i+\ell-1 \}$.
-Since $H(\cdot)$ is a completely random function, the values $H(i),\ldots,H(i+\ell-1)$ are chosen uniformly and independently from all the rest of the values of this function. Since Mallory's message $y$ to Bob in the $T+1^{st}$ iteration depends only on what she observed in the past, the values $H(i),\ldots,H(i+\ell-1)$ are _independent_ from $y$, and hence under this condition that there is no overlap between this interval and  prior queries, the probability that they equal $y$ is $2^{-\ell}$. QED (Claim 1).
+Since $H(\cdot)$ is a completely random function, the values $H(i),\ldots,H(i+\ell-1)$ are chosen uniformly and independently from all the rest of the values of this function. Since Mallory's message $y$ to Bob in the $T+1^{st}$ iteration depends only on what she observed in the past, the values $H(i),\ldots,H(i+\ell-1)$ are _independent_ from $y$, and hence under the condition that there is no overlap between this interval and  prior queries, the probability that they equal $y$ is $2^{-\ell}$. QED (Claim 1).
 >
 The proof of Claim 1 is not hard but it is somewhat subtle, so it's good to go over it again and make sure you understand it.
 >
@@ -177,7 +177,7 @@ Specifically, we can make the following definition:
 ::: {.definition title="PRF ensemble (varying inputs and outputs)" #prfensembledinputdef}
 Let $\ell_{\text{in}},\ell_{\text{out}}:\N \rightarrow \N$. An ensemble of functions $\{ f_s \}_{s\in \{0,1\}^*}$ is a _PRF ensemble with input length $\ell_{\text{in}}$ and output length $\ell_{\text{out}}$_ if:
 
-1. For every $n\in\N$ and $\{0,1\}^N$, $f_s:\{0,1\}^{\ell_{\text{in}}} \rightarrow \{0,1\}^{\ell_{\text{out}}}$.
+1. For every $n\in\N$ and $s \in \{0,1\}^n$, $f_s:\{0,1\}^{\ell_{\text{in}}} \rightarrow \{0,1\}^{\ell_{\text{out}}}$.
 
 2. For every polynomial $p$ and $p(n)$-time adversary $A$, if $n$ is large enough then
 
@@ -191,7 +191,7 @@ It is a good exercise (which we will leave to the reader) to prove the following
 Suppose that PRFs exist. Then for every constant $c$ and polynomial-time computable functions $\ell_{\text{in}},\ell_{\text{out}}:\N \rightarrow \N$ with $\ell_{\text{in}}(n), \ell_{\text{out}}(n) \leq n^c$, there exist a 
 PRF ensemble with input length $\ell_{\text{in}}$ and output length $\ell_{\text{out}}$.
 
-Thus from now on whenever we are given a PRF, we will allow ourselves to assume that it has any output size that is convenient for us.
+Thus from now on whenever we are given a PRF, we will allow ourselves to assume that it has any polynomial output size that is convenient for us.
 
 
 
@@ -201,8 +201,8 @@ Thus from now on whenever we are given a PRF, we will allow ourselves to assume 
 One time passwords are a tool allowing you to prove your _identity_ to, say, your email server. But even after you did so, how can the server trust that future communication comes from you and not from some attacker that can interfere with the communication channel between you and the server (so called "man in the middle" attack)? Similarly, one time passwords may allow a software company to prove their identity before they send you a software update, but how do you know that an attacker does not change some bits of this software update on route between their servers and your device?
 
 This is where _Message Authentication Codes (MACs)_ come into play- their role is to authenticate not only the _identity_ of the parties but also their _communication_.
-Once again we have  __Alice__ and __Bob__, and the adversary __Mallory__ who can actively modify messages (in contrast to the passive eavesdropper Eve).
-Similar to the case to encryption, Alice has a _message_  $m$ she wants to send to Bob, but now we are not concerned with   Mallory _learning_ the contents of the message.
+Once again we have __Alice__ and __Bob__, and the adversary __Mallory__ who can actively modify messages (in contrast to the passive eavesdropper Eve).
+Similar to the case to encryption, Alice has a _message_  $m$ she wants to send to Bob, but now we are not concerned with Mallory _learning_ the contents of the message.
 Rather, we want to make sure that Bob gets precisely the message $m$ sent by Alice.
 Actually this is too much to ask for, since Mallory can always decide to block all communication, but we can ask that either Bob gets precisely $m$ or he detects failure and accepts no message at all.
 Since we are in the _private key_ setting, we assume that Alice and Bob share a key $k$ that is unknown to Mallory.
@@ -214,7 +214,7 @@ In fact, to make our notion of security more robust, we will even allow Mallory 
 The resulting formal definition is below:
 
 > # {.definition title="Message Authentication Codes (MAC)" #MACdef}
-Let $(S,V)$ (for _sign_ and _verify_) be a  pair of efficiently computable algorithms
+Let $(S,V)$ (for _sign_ and _verify_) be a pair of efficiently computable algorithms
 where $S$ takes as input a key $k$ and a message $m$, and produces a tag $\tau \in \{0,1\}^*$, while $V$ takes as input a key $k$, a message $m$,
 and a tag $\tau$, and produces a bit $b\in\{0,1\}$. We say that $(S,V)$ is a _Message Authentication Code (MAC)_ if:
 >
@@ -222,7 +222,7 @@ and a tag $\tau$, and produces a bit $b\in\{0,1\}$. We say that $(S,V)$ is a _Me
 * For every polynomial-time adversary $A$ and polynomial $p(n)$, it is with less than $1/p(n)$  probability over the choice of $k\leftarrow_R\{0,1\}^n$
 that $A^{S_k(\cdot)}(1^n)=(m',\tau')$ such that $m'$ is _not_ one of the messages $A$ queries and $V_k(m',\tau')=1$.[^mesdifferent]
 
-[^mesdifferent]: Clearly if the adversary outputs a pair $(m,\tau)$ that it did query from its oracle then that pair will pass verification. This suggests the possibility of a _replay_ attack whereby Mallory resends to Bob a message that Alice sent him in the past.  As above, once can thwart this by insisting the every message $m$ begins with a fresh nonce or a value derived from the current time.
+[^mesdifferent]: Clearly if the adversary outputs a pair $(m,\tau)$ that it did query from its oracle then that pair will pass verification. This suggests the possibility of a _replay_ attack whereby Mallory resends to Bob a message that Alice sent him in the past.  As above, one can thwart this by insisting the every message $m$ begins with a fresh nonce or a value derived from the current time.
 
 If Alice and Bob share the key $k$, then to send a message $m$ to Bob, Alice will simply send over the pair $(m,\tau)$ where $\tau = S_k(m)$.
 If Bob receives a message $(m',\tau')$, then he will accept $m'$ if and only if $V_k(m',\tau')=1$. Mallory now observes $t$ rounds of communication
@@ -258,12 +258,12 @@ Under the PRF Conjecture, there exists a secure MAC.
 
 ::: {.proof data-ref="MACfromPRFthm"}
 Let $F(\cdot,\cdot)$ be a secure pseudorandom function generator with $n/2$ bits output (which we can obtain using [PRFlengthextensionthm](){.ref}).
-We define $S_k(m) = F(k,m)$ and $V_k(m,\tau)$ to output $1$ iff $F_k(m)=\tau$.
+We define $S_k(m) = F(k,m)$ and $V_k(m,\tau)$ to output $1$ iff $F(k,m)=\tau$.
 Suppose towards the sake of contradiction that there exists an adversary $A$ breaks the security of this construction of a MAC. That is, $A$ queries $S_k(\cdot)$
 $poly(n)$ many times and with probability $1/p(n)$ for some polynomial $p$ outputs $(m',\tau')$ that she did _not_ ask for such that $F(k,m')=\tau'$.
 
 We use $A$ to construct an adversary $A'$ that can distinguish between oracle access to a PRF and a random function by simulating the MAC security game inside $A'$. Every time $A$ requests the signature of some message $m$, $A'$ returns $O(m)$. When $A$ returns $(m', \tau')$ at the end of the $MAC$ game, $A'$ returns $1$ if $O(m') = \tau'$, and $0$ otherwise. If $O(\cdot) = H(\cdot)$ for some completely random function $H(\cdot)$, then the value $H(m')$ would be completely
-random in $\{0,1\}^{n/2}$ and independent of all prior queries. Hence the probability that this value would equal $\tau'$ is at most $2^{-n/2}$. If instead $O(\cdot) = F_k(\cdot)$, then by the fact that $A$ wins the MAC security game with probability $1/p(n)$, the adversary $A'$ will output $1$ with probability $1/p(n)$. That means that such an adversary $A'$ can distinguish between an oracle to $F_k(\cdot)$ and an oracle
+random in $\{0,1\}^{n/2}$ and independent of all prior queries. Hence the probability that this value would equal $\tau'$ is at most $2^{-n/2}$. If instead $O(\cdot) = F(k,\cdot)$, then by the fact that $A$ wins the MAC security game with probability $1/p(n)$, the adversary $A'$ will output $1$ with probability $1/p(n)$. That means that such an adversary $A'$ can distinguish between an oracle to $F(k,\cdot)$ and an oracle
 to a random function $H$, which gives us a contradiction.
 :::
 
@@ -273,7 +273,7 @@ to a random function $H$, which gives us a contradiction.
 So far we required the message to be signed $m$ to be no longer than the key $k$ (i.e., both $n$ bits long). However, it is not hard to see that this requirement is not really needed. If our message is longer, we can divide it into blocks $m_1,\ldots,m_t$
 and sign each message $(i,m_i)$ individually. The disadvantage here is that the size of the tag (i.e., MAC output) will grow with the
 size of the message. However, even this is not really needed. Because the tag has length $n/2$ for length $n$ messages, we can sign the _tags_ $\tau_1,\ldots,\tau_t$
-and only output those. The verifier can repeat this computation to  verify this. We can continue this way and so get tags of $O(n)$ length for arbitrarily
+and only output those. The verifier can repeat this computation to verify this. We can continue this way and so get tags of $O(n)$ length for arbitrarily
 long messages.
 Hence in the future, whenever we need to, we can assume that our PRFs and MACs can get inputs in $\{0,1\}^*$ --- i.e., arbitrarily length strings.
 
@@ -295,10 +295,10 @@ These are arguments which come up with a property $EASY$ of a Boolean function $
 
 * Checking whether $EASY$ holds can be done in time polynomial _in the truth table size of $f$_. That is, in $2^{O(n)}$ time.
 
-A priori these technical conditions  might not seem very "natural" but it turns out that many approaches for proving circuit lower bounds (for restricted families of circuits) have this form.
+A priori these technical conditions might not seem very "natural" but it turns out that many approaches for proving circuit lower bounds (for restricted families of circuits) have this form.
 The idea is that such approaches find a "non generic" property of easily computable function, such as finding some interesting correlations between the some input bits and the output.
 These are correlations that are unlikely to occur in random functions.
-The lower bound typically follows by exhibiting a  function $f_0$ that does not have this property, and then using that to derive that $f_0$ cannot be efficiently computed by this particular restricted family of circuits.
+The lower bound typically follows by exhibiting a function $f_0$ that does not have this property, and then using that to derive that $f_0$ cannot be efficiently computed by this particular restricted family of circuits.
 
 The existence of strong enough pseudorandom functions can be shown to contradict the existence of such a property $EASY$, since a pseudorandom function can be computed by a polynomial sized circuit, but it cannot be distinguished from a random function.
 While a priori a pseudorandom function is only secure for polynomial time distinguishers, under certain assumptions it might be possible to create a pseudorandom function with a seed of size, say, $n^5$, that would be secure with respect to adversaries running in time $2^{O(n^2)}$.

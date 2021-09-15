@@ -36,7 +36,7 @@ def Distinguish(ciphertext,plaintext1,plaintext2):
     return choice([plaintext1,plaintext2])
 ```
 
-The program `Distinguish` will break any $128$-bit key and $129$-bit message encryption `Encrypt`, in the sense that there exist  a pair of messages
+The program `Distinguish` will break any $128$-bit key and $129$-bit message encryption `Encrypt`, in the sense that there exist a pair of messages
 $m_0,m_1$ such that `Distinguish`$($`Encrypt`$(k,m_b),m_0,m_1)=m_b$ with probability at least $0.75$ over $k \leftarrow_R \{0,1\}^n$ and $b \leftarrow_R \{0,1\}$.
 
 
@@ -76,7 +76,7 @@ computational secrecy would be the following:
 An encryption scheme $(E,D)$ has _$t$ bits of computational secrecy_
 if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$ computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2$.
 
-__Note:__ It is important to keep track of  what  is known and unknown to the adversary Eve. The adversary knows the set $\{ m_0,m_1 \}$ of potential messages, and the ciphertext $y=E_k(m_b)$. The only things she doesn't know are whether $b=0$ or $b=1$, and the value of the secret key $k$. In particular, because $m_0$ and $m_1$ are known to Eve, it does not matter whether we define Eve's goal in this "security game" as outputting $m_b$ or as outputting $b$.
+__Note:__ It is important to keep track of what is known and unknown to the adversary Eve. The adversary knows the set $\{ m_0,m_1 \}$ of potential messages, and the ciphertext $y=E_k(m_b)$. The only things she doesn't know are whether $b=0$ or $b=1$, and the value of the secret key $k$. In particular, because $m_0$ and $m_1$ are known to Eve, it does not matter whether we define Eve's goal in this "security game" as outputting $m_b$ or as outputting $b$.
 
 [firstcompdef](){.ref} seems very natural, but is in fact _impossible_ to achieve if the key is shorter than the message.
 
@@ -89,15 +89,15 @@ longer than the key, we can always have a very efficient procedure
 that achieves success probability of about $1/2 + 2^{-n-1}$ by guessing the key.  This is because we can replace the loop in the Python program `Distinguish` by choosing the key at random. Since we have some small chance of guessing correctly, we will get a small advantage over half.
 
 
-Of course an advantage of  $2^{-256}$ in guessing the message is not really something we would worry about.
+Of course an advantage of $2^{-256}$ in guessing the message is not really something we would worry about.
 For example, since the earth is about 5 billion years old, we can estimate the chance that an asteroid of the magnitude that caused the dinosaurs' extinction will hit us this very second to be about $2^{-60}$.
-Hence we want to relax the notion of computational security so it would not  consider guessing with such a tiny advantage as a "true break" of the scheme.
-The resulting  definition is the following:
+Hence we want to relax the notion of computational security so it would not consider guessing with such a tiny advantage as a "true break" of the scheme.
+The resulting definition is the following:
 
 > # {.definition title="Computational secrecy (concrete)" #compsecconcdef}
 An encryption scheme $(E,D)$ has _$t$ bits of computational secrecy[^sec_bits]_  if for every two distinct plaintexts $\{m_0,m_1\} \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most $2^t$ computational steps, if we choose at random $b\in{\{0,1\}}$ and a random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m_b$ after seeing $E_k(m_b)$ is at most $1/2+2^{-t}$.
 
-[^sec_bits]: Another version of  "$t$ bits of security" is that a scheme has $t$ bits of security if for every $t_1+t_2 \leq t$, an attacker running in $2^{t_1}$ time can't get success probability advantage more than $2^{-t_2}$. However these two definitions only differ from one another by at most a factor of two. This may be important for practical applications (where the difference between $64$ and $32$ bits of security could be crucial) but won't matter for our concerns.
+[^sec_bits]: Another version of "$t$ bits of security" is that a scheme has $t$ bits of security if for every $t_1+t_2 \leq t$, an attacker running in $2^{t_1}$ time can't get success probability advantage more than $2^{-t_2}$. However these two definitions only differ from one another by at most a factor of two. This may be important for practical applications (where the difference between $64$ and $32$ bits of security could be crucial) but won't matter for our concerns.
 
 
 Having learned our lesson, let's try to see that this strategy does give us the
@@ -105,7 +105,7 @@ kind of conditions we desired. In particular, let's verify that this definition
 implies the analogous condition to perfect secrecy.
 
 > # {.theorem title="Guessing game for computational secrecy" #twotomanycomp}
-If $(E,D)$ has $t$ bits of computational secrecy as per  [compsecconcdef](){.ref} then for every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
+If $(E,D)$ has $t$ bits of computational secrecy as per [compsecconcdef](){.ref} then for every subset $M \subseteq {\{0,1\}}^\ell$ and every strategy of Eve using at most
 $2^t-(100\ell+100)$ computational steps, if we choose at random $m\in M$ and a
 random key $k\in{\{0,1\}}^n$, then the probability that Eve guesses $m$ after
 seeing $E_k(m)$ is at most $1/|M|+2^{-t+1}$.
@@ -116,7 +116,7 @@ Before proving this theorem note that it gives us a pretty strong guarantee. In
 the exercises we will strengthen it even further showing that no matter what
 prior information Eve had on the message before, she will never get any
 non-negligible new information on it.^[The latter property is known as "semantic security", see also section 3.2.2 of Katz Lindell on "semantic security" and Section 2 of Boneh-Shoup "computational ciphers and semantic security".]
-One way to phrase it is that if the sender  used a $256$-bit secure encryption to encrypt a message, then your
+One way to phrase it is that if the sender used a $256$-bit secure encryption to encrypt a message, then your
 chances of getting to learn any additional information about it before the
 universe collapses are more or less the same as the chances that a fairy will
 materialize and whisper it in your ear.
@@ -130,7 +130,7 @@ Before reading the proof, try to again review the proof of [twotomanythm](){.ref
 The proof is rather similar to the equivalence of guessing one of two
 messages vs. one of many messages for perfect secrecy (i.e., [twotomanythm](){.ref}). However, in the
 computational context we need to be careful in keeping track of Eve's running time.
-In the  proof of [twotomanythm](){.ref} we showed that if there exists:
+In the proof of [twotomanythm](){.ref} we showed that if there exists:
 
 -   A subset $M\subseteq {\{0,1\}}^\ell$ of messages
 
@@ -146,20 +146,20 @@ Then there exist two messages $m_0,m_1$ and an adversary
 $Eve':{\{0,1\}}^o\rightarrow{\{0,1\}}^\ell$ such that $\Pr_{b{\leftarrow_{\tiny R}}{\{0,1\}},k{\leftarrow_{\tiny R}}{\{0,1\}}^n}[Eve'(E_k(m_b))=m_b ] > 1/2$.
 
 To adapt this proof to the computational setting and complete the proof of the
-current theorem it suffices  to show that:
+current theorem it suffices to show that:
 
 -   If the probability of $Eve$ succeeding was $\tfrac{1}{|M|} + \epsilon$ then the probability of $Eve'$ succeeding is at least $\tfrac{1}{2} + \epsilon/2$.
 
 -   If $Eve$ can be computed in $T$ operations, then $Eve'$ can be computed in $T + 100\ell + 100$ operations.
 
-This will imply that if $Eve$ ran in polynomial time and had polynomial advantage over $1/|M|$ in guessing a  plaintext chosen from $M$, then $Eve'$ would run in polynomial time and have polynomial advantage over $1/2$ in guessing a plaintext chosen from $\{ m_0,m_1\}$.
+This will imply that if $Eve$ ran in polynomial time and had polynomial advantage over $1/|M|$ in guessing a plaintext chosen from $M$, then $Eve'$ would run in polynomial time and have polynomial advantage over $1/2$ in guessing a plaintext chosen from $\{ m_0,m_1\}$.
 
-The first item  can be shown by simply doing the same proof more carefully,
+The first item can be shown by simply doing the same proof more carefully,
 keeping track how the advantage over $\tfrac{1}{|M|}$ for $Eve$ translates into
 an advantage over $\tfrac{1}{2}$ for $Eve'$.
 As the world's most annoying saying goes, doing this is an excellent exercise for the reader.
 
-The second item  is obtained by looking at the definition of $Eve'$ from that proof. On input $c$, $Eve'$
+The second item is obtained by looking at the definition of $Eve'$ from that proof. On input $c$, $Eve'$
 computed $m=Eve(c)$ (which costs $T$ operations), checked if $m=m_0$
 (which costs, say, at most $5\ell$ operations), and then outputted either $1$ or a
 random bit (which is a constant, say at most $100$ operations).
@@ -179,8 +179,8 @@ In the context of [twotomanycomp](){.ref}, $X'$ was "having $t$ bits of security
 between encryptions of two ciphertexts) and $X$ was the more general notion of
 hardness of getting a non-trivial advantage over guessing for an encryption of a
 random $m\in M$.
-While  in [twotomanycomp](){.ref} the encryption scheme $S$ was the same as $S'$, this  need not always be the case.
-However, all  of the  proofs of such statements  will have the same global
+While in [twotomanycomp](){.ref} the encryption scheme $S$ was the same as $S'$, this need not always be the case.
+However, all of the proofs of such statements will have the same global
 structure--- we will assume towards a contradiction, that there is an efficient
 adversary strategy $Eve$ demonstrating that the scheme $S$ violates the security notion $X$, and build from
 $Eve$ a strategy $Eve'$ demonstrating that $S'$ violates $X'$. This is such an
@@ -219,7 +219,7 @@ In practice we would usually like to ensure that when we use a smallish security
 
 - The *honest parties* (the parties running the encryption and decryption algorithms) are extremely efficient, something like 100-1000 cycles per byte of data processed. In theory terms we would want them be using an $O(n)$ or at worst $O(n^2)$ time algorithms with not-too-big hidden constants.
 
-- We want to protect against *adversaries* (the parties trying to break the encryption) that  have much vaster computational capabilities. A typical modern encryption is built so that using standard key sizes it can  withstand the combined computational powers of all computers on earth for several decades. In theory terms we would want the time to break the scheme to be $2^{\Omega(n)}$ (or if not, at least  $2^{\Omega(\sqrt{n})}$ or $2^{\Omega(n^{1/3})}$) with not too small hidden constants.
+- We want to protect against *adversaries* (the parties trying to break the encryption) that have much vaster computational capabilities. A typical modern encryption is built so that using standard key sizes it can withstand the combined computational powers of all computers on earth for several decades. In theory terms we would want the time to break the scheme to be $2^{\Omega(n)}$ (or if not, at least $2^{\Omega(\sqrt{n})}$ or $2^{\Omega(n^{1/3})}$) with not too small hidden constants.
 
 
 
@@ -239,12 +239,12 @@ encounter in this course:
 Another way to say it is that in this course, if a scheme has any security at all, it will have at least $n^{\epsilon}$ bits of security where $n$ is the length of the key and $\epsilon>0$ is some absolute constant such as $\epsilon=1/3$.
 Hence in this course, whenever you hear the term "super polynomial", you can equate it in your mind with "exponential" and you won't be far off the truth.
 
-[^1]: Some texts reserve the term *exponential* to functions of the form  $2^{\epsilon n}$ for some $\epsilon > 0$ and call a function such as, say, $2^{\sqrt{n}}$ *subexponential* . However, we will generally not make this    distinction in this course.
+[^1]: Some texts reserve the term *exponential* to functions of the form $2^{\epsilon n}$ for some $\epsilon > 0$ and call a function such as, say, $2^{\sqrt{n}}$ *subexponential* . However, we will generally not make this distinction in this course.
 
 These are not all the theoretically possible running times.
 One can have intermediate functions such as $n^{\log n}$ though we will generally not
 encounter those.
-To make things clean (and to correspond to standard terminology), we will generally associate "efficient computation" with _polynomial time_ in $n$ where $n$ is either its input length or the key size (the key size and input length  will always be polynomially related, and so this choice won't matter). We want our algorithms (encryption, decryption, etc.) to be computable in polynomial time, but to require _super polynomial time_ to break.
+To make things clean (and to correspond to standard terminology), we will generally associate "efficient computation" with _polynomial time_ in $n$ where $n$ is either its input length or the key size (the key size and input length will always be polynomially related, and so this choice won't matter). We want our algorithms (encryption, decryption, etc.) to be computable in polynomial time, but to require _super polynomial time_ to break.
 
 __Negligible probabilities.__ In cryptography, we care not just about the running time of the adversary but also about their probability of success (which should be as small as possible).
 If $\mu:\N \rightarrow [0,\infty)$ is a function (which we'll often think of as corresponding to the adversary's probability of success or advantage over the trivial probability, as a function of the key size $n$) then we say that $\mu(n)$ is *negligible* if it's smaller than the inverse of every (positive) polynomial.  Our security definitions will have the following form:
@@ -260,7 +260,7 @@ A function $\mu:\mathbb{N} \rightarrow [0,\infty)$ is _negligible_ if for every 
 
 [^negcomment]: Negligible functions are sometimes defined with image equalling $[0,1]$ as opposed to the set $[0,\infty)$ of non-negative real numbers, since they are typically used to bound probabilities. However, this does not make much difference since if $\mu$ is negligible then for large enough $n$, $\mu(n)$ will be smaller than one.
 
-The following exercise provides a  good way to get some comfort with this definition:
+The following exercise provides a good way to get some comfort with this definition:
 
 ::: {.exercise title="Negligible functions properties" #negligible}
 1. Let $\mu:\N \rightarrow [0,\infty)$ be a negligible function. Prove that for every polynomials $p,q:\R \rightarrow \R$ with non-negative coefficients such that $p(0) = 0$, the function $\mu':\N \rightarrow [0,\infty)$ defined as $\mu'(n) = p(\mu(q(n)))$ is negligible.
@@ -280,7 +280,7 @@ and
 
 $$polynomial \times polynomial = polynomial$$
 
-As mentioned, in practice people really want to get as close as possible to $n$ bits of security with an $n$ bit key, but  we would be happy as long as the security grows with the key, so when we say a scheme is "secure" you can think of it having $\sqrt{n}$ bits of security (though any function growing faster than $\log n$ would be fine as well).
+As mentioned, in practice people really want to get as close as possible to $n$ bits of security with an $n$ bit key, but we would be happy as long as the security grows with the key, so when we say a scheme is "secure" you can think of it having $\sqrt{n}$ bits of security (though any function growing faster than $\log n$ would be fine as well).
 :::
 
 From now on, we will require all of our encryption schemes to be *efficient*
@@ -318,7 +318,7 @@ __Uniform vs non-uniform models.__ While many computational texts focus on model
 
 2. Circuits allow the notion of "hardwiring" whereby if we can compute a certain function $F:\{0,1\}^{n+s} \rightarrow \{0,1\}^m$ using a circuit of $T$ gates and have a string $w \in \{0,1\}^s$ then we can compute the function $x \mapsto F(xw)$ using $T$ gates as well. This is useful in many cryptograhic proofs.
 
-One can build  the theory of cryptography using Turing machines as well,  but it is more cumbersome.
+One can build the theory of cryptography using Turing machines as well,  but it is more cumbersome.
 
 
 ::: {.remark title="Computing beyond functions" #computebeyondfunctions}
@@ -364,9 +364,9 @@ how to *prove* this, and so have to settle for accepting the cipher conjecture
 as essentially an axiom, though we will see later in this course that we can
 show it follows from some seemingly weaker conjectures.
 
-There are several reasons to believe the cipher conjecture. We now  briefly mention some of them:
+There are several reasons to believe the cipher conjecture. We now briefly mention some of them:
 
-- _Intuition:_ If the cipher conjecture is false then it means that for _every_ possible cipher we can make the exponential time attack described above become efficient. It seems  "too good to be true" in a similar way that the assumption that P=NP seems too good to be true.
+- _Intuition:_ If the cipher conjecture is false then it means that for _every_ possible cipher we can make the exponential time attack described above become efficient. It seems "too good to be true" in a similar way that the assumption that P=NP seems too good to be true.
 
 - _Concrete candidates:_ As we will see in the next lecture, there are several concrete candidate ciphers using keys shorter than messages for which despite _tons_ of effort, no one knows how to break them. Some of them are widely used and hence governments and other benign or not so benign organizations have every reason to invest huge resources in trying to break them. Despite that as far as we know (and we know a little more after Edward Snowden's revelations) there is no significant break known for the most popular ciphers. Moreover, there are other ciphers that can be based on canonical mathematical problems such as factoring large integers or decoding random linear codes that are immensely interesting in their own right, independently of their cryptographic applications.
 
@@ -379,7 +379,7 @@ There are several reasons to believe the cipher conjecture. We now  briefly ment
 
 Every perfectly secure encryption scheme is clearly also
 computationally secret, and so if we required a message of size $n$ instead
-$n+1$, then the  conjecture would have been trivially satisfied by the one-time pad.
+$n+1$, then the conjecture would have been trivially satisfied by the one-time pad.
 However, having a message longer than
 the key by just a single bit does not seem that impressive.
 Sure, if we used such a scheme with $128$-bit long keys, our communication will be smaller by a
@@ -462,7 +462,7 @@ For the other direction, assume that $X$ and $Y$ are _not_ computationally indis
 $$
 \left| \Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \right| \geq \epsilon \;.
 $$
-Then by definition of absolute value, there are two options. Either  $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \geq \epsilon$ in which case $Eve$ wins the game with probability at least $1/2 + \epsilon/2$.
+Then by definition of absolute value, there are two options. Either $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \geq \epsilon$ in which case $Eve$ wins the game with probability at least $1/2 + \epsilon/2$.
 Otherwise $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \leq -\epsilon$, in which case the function $Eve'(w)=1-Eve(w)$ (which is just as easy to compute[^nitpicknegation]) wins the game with probability at least $1/2 + \epsilon/2$.
 :::
 
@@ -498,7 +498,7 @@ Let $\{ X_n \}_{n\in \N},\{Y_n\}_{n\in \N}$ and $m:\N \rightarrow \N$ be as abov
 
 
 __Dropping the index $n$.__ Since the index $n$ of our distributions would often be clear from context (indeed in most cases it will be the length of the key), we will sometimes drop it from our notation.
-So if $X$ and $Y$ are two random variables that depend on some index $n$, we will say that $X$ is computationally indistinguishable from $Y$ (denoted as $X \approx Y$) when the sequences  $\{ X_n \}_{n\in \N}$ and $\{ Y_n \}_{n\in\N}$ are computationally indistinguishable.
+So if $X$ and $Y$ are two random variables that depend on some index $n$, we will say that $X$ is computationally indistinguishable from $Y$ (denoted as $X \approx Y$) when the sequences $\{ X_n \}_{n\in \N}$ and $\{ Y_n \}_{n\in\N}$ are computationally indistinguishable.
 
 
 
@@ -544,7 +544,7 @@ Then $X_1 \approx_{T, (m-1)\epsilon} X_m$.
 > # {.proof data-ref="triangleeqthm"}
 Suppose that there exists a $T$ time $Eve$ such that
 $$
-|\Pr[ Eve(X_1)=1] - \Pr[ Eve(X_m)=1]| > (m-1)\epsilon  \;.
+|\Pr[ Eve(X_1)=1] - \Pr[ Eve(X_m)=1]| > (m-1)\epsilon \;.
 $$
 >
 Write
@@ -613,7 +613,7 @@ contradicting the assumption that $X_i \approx_{T,\epsilon} Y_i$.
 [^5]: This is the principle that if the average grade in an exam was at least
 $\alpha$ then *someone* must have gotten at least $\alpha$, or in other words
 that if a real-valued random variable $Z$ satisfies ${\mathbb{E}}[Z] \geq \alpha$
-then  $\Pr[Z\geq \alpha]>0$.
+then $\Pr[Z\geq \alpha]>0$.
 
 
 > # {.remark title="The hybrid argument" #hybridrem}
@@ -654,7 +654,7 @@ $$
 for random $k_1,\ldots,k_t$ chosen independently from $U_n$ which is exactly the
 condition that $(E,D)$ is computationally secret.
 
-__Randomized encryption scheme.__ We can now prove  the full length extension theorem. Before doing so, we will need to generalize the notion of an encryption scheme to allow a _randomized encryption scheme_.
+__Randomized encryption scheme.__ We can now prove the full length extension theorem. Before doing so, we will need to generalize the notion of an encryption scheme to allow a _randomized encryption scheme_.
 That is, we will consider encryption schemes where the encryption algorithm can "toss coins" in its computation.
 There is a crucial difference between key material and such "as hoc" (sometimes also known as "ephemeral") randomness.
 Keys need to be not only chosen at random, but also shared in advance between the sender and receiver, and stored securely throughout their lifetime.
@@ -800,7 +800,7 @@ In both cases you might want to skip this appendix and only return to it if you 
 The model we use is a Boolean circuit that also has a $RAND$ gate that outputs a random bit.
 We could use as the basic set of gates the standard $AND$, $OR$ and $NOT$ but for simplicity we use the one-element set $NAND$.
 We represent the circuit as a straightline program, but this is of course just a matter of convenience.
-As shown (for example) in the  [CS 121 textbook](http://introtcs.org),  these two representations are identical.
+As shown (for example) in the [CS 121 textbook](http://introtcs.org),  these two representations are identical.
 
 ::: {.definition title="Probabilistic straightline program" #randprogdef}
 A _probabilistic straightline program_ consists of a sequence of lines, each one of them one of the following forms:
@@ -812,12 +812,12 @@ A _probabilistic straightline program_ consists of a sequence of lines, each one
 :::
 
 Given a program $\pi$, we say that its _size_ is the number of lines it contains. Variables of the form `X[`$i$`]` or `Y[`$j$`]`  are considered input and output variables respectively.
-If the input variables range from $0$ to $n-1$ and the output variables range from $0$ to $m-1$ then the program computes the  probabilistic process that maps $\{0,1\}^n$ to $\{0,1\}^m$ in the natural way.
+If the input variables range from $0$ to $n-1$ and the output variables range from $0$ to $m-1$ then the program computes the probabilistic process that maps $\{0,1\}^n$ to $\{0,1\}^m$ in the natural way.
 If $F$ is a (probabilistic or deterministic)  map of $\{0,1\}^n$ to $\{0,1\}^m$, the _complexity_ of $F$ is the size of the smallest program $P$ that computes it.
 
 If you haven't taken a class such as CS121 before, you might wonder how such a simple model captures complicated programs that use loops, conditionals, and more complex data types than simply a bit in $\{0,1\}$, not to mention some special purpose crypto-breaking devices that might involve tailor-made hardware. It turns out that it does (for the same reason we can compile complicated programming languages to run on silicon chips with a very limited instruction set). In fact, as far as we know, this model can capture even computations that happen in nature, whether it's in a bee colony or the human brain (which contains about $10^{10}$ neurons, so should in principle be simulatable by a program that has up to a few order of magnitudes of the same number of lines). Crucially, for cryptography, we care about such programs not because we want to actually run them, but because we want to argue about their _non existence_.  If we have a process that cannot be computed by a straightline program of length shorter than $2^{128}>10^{38}$ then it seems safe to say that a computer the size of the human brain (or even all the human and nonhuman brains on this planet) will not be able to perform it either.
 
-__Advanced note: non uniformity.__  The computational model we use in this class is [_non uniform_](https://introtcs.org/public/lec_11_running_time.html#nonuniformcompsec)  (corresponding to Boolean circuits) as opposed to _uniform_ (corresponding to Turing machines). If this distinction doesn't mean anything to you, you can ignore it as it won't play a significant role in what we do next. It basically means that we do allow our programs to have hardwired constants of $poly(n)$ bits where $n$ is the input/key length. In fact, to be precise, we will hold ourselves to a higher standard than our adversary, in the sense that we require our algorithms to be efficient in the stronger sense of being computable in uniform probabilistic polynomial time (for  some fixed polynomial, often $O(n)$ or $O(n^2$)), while the adversary is allowed to use non uniformity.
+__Advanced note: non uniformity.__  The computational model we use in this class is [_non uniform_](https://introtcs.org/public/lec_11_running_time.html#nonuniformcompsec)  (corresponding to Boolean circuits) as opposed to _uniform_ (corresponding to Turing machines). If this distinction doesn't mean anything to you, you can ignore it as it won't play a significant role in what we do next. It basically means that we do allow our programs to have hardwired constants of $poly(n)$ bits where $n$ is the input/key length. In fact, to be precise, we will hold ourselves to a higher standard than our adversary, in the sense that we require our algorithms to be efficient in the stronger sense of being computable in uniform probabilistic polynomial time (for some fixed polynomial, often $O(n)$ or $O(n^2$)), while the adversary is allowed to use non uniformity.
 
 
-__Quantum computing.__ An interesting potential exception to this principle that every natural process should be simulatable by a straightline program of comparable complexity are processes where the quantum mechanical notions of _interference_ and _entanglement_ play a significant role. We will talk about this notion of _quantum computing_ towards the end of the course, though note that much of what we say does not really change when we add quantum into the picture. As discussed in [the CS 121 text](https://introtcs.org/public/lec_26_quantum_computing.html), we can still capture these processes by straightline programs (that now have somewhat more complex form), and so most of what we'll do just carries over in the same way to the quantum realm as long as we are fine with conjecturing the strong form of the cipher conjecture, namely that the cipher is  infeasible to break even for quantum computers. All current evidence points toward this  strong form being true as well. The field of constructing encryption schemes that are potentially secure against quantum computers is known as [post quantum cryptography](https://en.wikipedia.org/wiki/Post-quantum_cryptography) and we will return to this later in the course.
+__Quantum computing.__ An interesting potential exception to this principle that every natural process should be simulatable by a straightline program of comparable complexity are processes where the quantum mechanical notions of _interference_ and _entanglement_ play a significant role. We will talk about this notion of _quantum computing_ towards the end of the course, though note that much of what we say does not really change when we add quantum into the picture. As discussed in [the CS 121 text](https://introtcs.org/public/lec_26_quantum_computing.html), we can still capture these processes by straightline programs (that now have somewhat more complex form), and so most of what we'll do just carries over in the same way to the quantum realm as long as we are fine with conjecturing the strong form of the cipher conjecture, namely that the cipher is infeasible to break even for quantum computers. All current evidence points toward this strong form being true as well. The field of constructing encryption schemes that are potentially secure against quantum computers is known as [post quantum cryptography](https://en.wikipedia.org/wiki/Post-quantum_cryptography) and we will return to this later in the course.

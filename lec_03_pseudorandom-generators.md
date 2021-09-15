@@ -74,7 +74,7 @@ We say that $G$ is a _pseudorandom generator_ with length function $\ell:\N \rig
 $$\left| \Pr[D(G(U_n))=1] - \Pr[ D(U_\ell)=1] \right| < \tfrac{1}{p(n)} \label{prgdefeq}$$
 :::
 
-Another way to say it, is that a polynomial-time computable function $G$ mapping $n$ bits strings to $\ell(n)>n$ bit strings  is a pseudo-random generator  if the two distributions $G(U_n)$ and $U_{\ell(n)}$ are _computationally indistinguishable_.
+Another way to say it, is that a polynomial-time computable function $G$ mapping $n$ bits strings to $\ell(n)>n$ bit strings is a pseudo-random generator if the two distributions $G(U_n)$ and $U_{\ell(n)}$ are _computationally indistinguishable_.
 
 > # { .pause }
 This definition (as is often the case in cryptography) is a bit long, but the concept of a pseudorandom generator is central to cryptography, and so you should take your time and make sure you understand it.
@@ -266,7 +266,7 @@ obtained by combining it with the one-time pad.
 The following is a cute application of pseudorandom generators. Alice and Bob want to toss a fair coin over the phone. They use a pseudorandom generator $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$.
 
 1. Alice will send $z\leftarrow_R\{0,1\}^{3n}$ to Bob \
-2. Bob picks $s\leftarrow_R\{0,1\}^n$ and $b \leftarrow_R \{0,1\}$. If $b=0$ then Bob sends $y=G(s)$ and if $b=1$ he sends  $y=G(s)\oplus z$. In other words, $y = G(s) \oplus b\cdot z$ where $b\cdot z$ is the vector $(b\cdot z_1,\ldots, b\cdot z_{3n})$.
+2. Bob picks $s\leftarrow_R\{0,1\}^n$ and $b \leftarrow_R \{0,1\}$. If $b=0$ then Bob sends $y=G(s)$ and if $b=1$ he sends $y=G(s)\oplus z$. In other words, $y = G(s) \oplus b\cdot z$ where $b\cdot z$ is the vector $(b\cdot z_1,\ldots, b\cdot z_{3n})$.
 3. Alice then picks a random $b'\leftarrow_R\{0,1\}$ and sends it to Bob. \
 4. Bob sends to Alice the string $s$ and $b$. Alice verifies that indeed $y= G(s) \oplus b \cdot z$.  Otherwise Alice aborts.
 5. The output of the protocol is $b \oplus b'$.
@@ -509,13 +509,13 @@ B.B.S., which stands for the authors Blum, Blum and Shub, is a simple generator 
 
 Let $N=P\cdot Q$, where $P,Q$ are primes. (We will generally use $P,Q$ of size roughly $n$, where $n$ is our security parameter, and so use capital letters to emphasize that the magnitude of these numbers is exponential in the security parameter.)
 
-We define $QR_N$ to be the set of  *quadratic residues modulo $N$*, which are the numbers that have a modular square root.
+We define $QR_N$ to be the set of *quadratic residues modulo $N$*, which are the numbers that have a modular square root.
 Formally,  
 
 $$QR_N=\{X^2 \mod N \mid \gcd(X,N )=1\}.$$ 
 
 This definition extends the concept of "perfect squares" when we are working with standard integers. Notice that each number in $Y \in QR_N$ has at least one square root (number $X$ such that $Y = X^2 \mod N$). 
-We will see later in the course that if $N = P\cdot Q$ for primes $P,Q$ then each  $Y\in QR_N$ has exactly $4$ square roots.
+We will see later in the course that if $N = P\cdot Q$ for primes $P,Q$ then each $Y\in QR_N$ has exactly $4$ square roots.
 The B.B.S. generator chooses $N=P\cdot Q$, where $P,Q$ are prime and $P,Q\equiv 3\pmod{4}$. The second condition guarantees that for each $Y\in QR_N$, exactly one of its square roots fall in $QR_N$, and hence the map 
 $X \mapsto X^2 \mod N$ is one-to-one and onto map from $QR_N$ to itself.  
 It is defined as follows:

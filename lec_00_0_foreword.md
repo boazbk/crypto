@@ -13,7 +13,7 @@ chapternum: "p"
 >   resolve."* Edgar Allan Poe, 1841
 
 Cryptography - the art or science of "secret writing" - has been around for
-several millenia, and for almost all of that time Edgar Allan Poe's quote above
+several millenia. For almost all that time, Edgar Allan Poe's quote above
 held true. Indeed, the history of cryptography is littered with the figurative
 corpses of cryptosystems believed secure and then broken, and sometimes with the
 actual corpses of those who have mistakenly placed their faith in these
@@ -21,11 +21,11 @@ cryptosystems. Yet, something changed in the last few decades. New cryptosystems
 have been found that have not been broken despite being subjected to immense
 efforts involving both human ingenuity and computational power on a scale that
 completely dwarves the "crypto breakers" of Poe's time. Even more amazingly,
-these cryptosystem are not only seemingly unbreakable, but they also achieve
+these cryptosystems are not only seemingly unbreakable, but they also achieve
 this under much harsher conditions. Not only do today's attackers have more
 computational power but they also have more data to work with. In Poe's age, an
 attacker would be lucky if they got access to more than a few ciphertexts with
-known plaintexts. These days attackers might have massive amounts of data-
+known plaintexts. These days attackers might have massive amounts of data -
 terabytes or more - at their disposal. In fact, with *public key* encryption,
 an attacker can generate as many ciphertexts as they wish.
 
@@ -57,8 +57,8 @@ encryption*, a notion that Brian Hayes called "one of the most amazing magic
 tricks in all of computer science", and *indistinguishability obfuscators* which
 are even more amazing. To achieve this, our focus will be on *ideas* rather than
 *implementations* and so we will present cryptographic notions in their
-pedagogically simplest form-- the one that best illustrates the underlying
-concepts-- rather than the one that is most efficient, widely deployed, or
+pedagogically simplest form -- the one that best illustrates the underlying
+concepts -- rather than the one that is most efficient, widely deployed, or
 conforms to Internet standards. We will discuss some examples of practical
 systems and attacks, but only when these serve to illustrate a conceptual point.
 
@@ -69,7 +69,7 @@ Depending on time, I plan to cover the following notions:
     1.  **How do we define security for encryption?** Arguably the most
         important step in breaking out of the "build-break-tweak" cycle that
         Poe's quote described has been the idea that we can have a
-        *mathematically precise definition* of security, rather than relying on
+        *mathematically precise* definition of security, rather than relying on
         fuzzy notions, that allow us only to determine with certainty that a
         system is *broken* but never have a chance of *proving* that a system is
         *secure* .
@@ -92,13 +92,13 @@ Depending on time, I plan to cover the following notions:
         are the working horse of crypto.
 
     3.  **Authentication and active attacks:** *Authentication* turns out to be
-        as crucial, if not more, to security than *secrecy* and often a
+        as crucial, if not more so, to security than *secrecy* and often a
         precondition to the latter. We'll talk about notions such as Message
         Authentication Codes and Chosen-Ciphertext-Attack secure encryption, as
         well as real-world examples why these notions are necessary.
 
     4.  **Hash functions and the "Random Oracle Model":** Hash functions are
-        used all over in crypto, including for verifying integrity, entropy
+        used everwhere in crypto, including for verifying integrity, entropy
         distillation, and many other cases.
 
     5.  **Building pseudorandom generators from one-way permutations (optional):**
@@ -114,14 +114,14 @@ Depending on time, I plan to cover the following notions:
     2.  **Constructing public key encryption: Factoring, discrete log, and
         lattice based systems:** We'll discuss several variants for constructing
         public key systems, including those that are widely deployed such as
-        RSA, Diffie-Hellman, and the elliptic curve variants, as well as some
+        RSA, Diffie-Hellman, and the elliptic curve variants. We'll also discuss some
         variants of *lattice based cryptosystems* that have the advantage of not
-        being broken by quantum computers, as well as being more versatile. The
-        former is the reason why the NSA has advised people to transition to
-        lattice-based cryptosystems in the not too far future.
+        being broken by quantum computers and being more versatile. The
+        former's weakness to quantum computers is the reason why the NSA has advised
+        people to transition to lattice-based cryptosystems in the not too far future.
 
     3.  **Signature schemes:** These are the public key versions of
-        authentication though interestingly are easier to construct in some
+        authentication, though interestingly they are easier to construct in some
         sense than the latter.
 
     4.  **Active attacks for encryption:** Chosen ciphertext attacks for public
@@ -134,7 +134,7 @@ Depending on time, I plan to cover the following notions:
     2.  **Multiparty secure computation:** An amazing construction that enables
         applications such as playing poker over the net without trusting the
         server, privacy preserving data mining, electronic auctions without a
-        trusted auctioneer, electronic elections without a trusted central
+        trusted auctioneer, and electronic elections without a trusted central
         authority.
 
     3.  **Zero knowledge proofs:** Prove a statement without revealing the
@@ -151,14 +151,16 @@ Depending on time, I plan to cover the following notions:
         for particular tasks as opposed to general (and often inefficient)
         feasibility proofs.
 
-    7. **Cryptocurrencies:** Hash chains and Merkle trees, proofs of work, achieving consensus on a ledger  via "majority of cycles", smart contracts, achieving anonymity via zero knowledge proofs.
+    7. **Cryptocurrencies:** Hash chains and Merkle trees, proofs of work, achieving
+    consensus on a ledger via "majority of cycles", smart contracts, achieving anonymity
+    via zero knowledge proofs.
 
 ### Prerequisites
 
 The main prerequisite is the ability to read, write (and even enjoy!)
 mathematical proofs. In addition, familiarity with algorithms, basic probability
 theory and basic linear algebra will be helpful. We'll only use fairly basic
-concepts from all these areas: e.g. Oh-notation- e.g. $O(n)$ running time- from
+concepts from all these areas: e.g. Oh-notation- e.g. $O(n)$ running time - from
 algorithms, notions such as events, random variables, expectation, from
 probability theory, and notions such as matrices, vectors, and eigenvectors.
 Mathematically mature students should be able to pick up the needed notions on
@@ -191,8 +193,8 @@ reasons include:
     often tend to be proofs by contradiction and involve several twists of logic
     that take some getting used to.
 
--   As we'll see in this course, even *defining* security is a highly non
-    trivial task. Security definitions often get subtle and require quite a lot
+-   As we'll see in this course, even *defining* security is a highly non-trivial
+    task. Security definitions often get subtle and require quite a lot
     of creativity. For example, the way we model in general a statement such as
     "An attacker Eve does not get more information from observing a system above
     what she knew a-priori" is that we posit a "hypothetical alter ego" of Eve
@@ -212,7 +214,7 @@ content. There are many areas of science where we achieve goals once considered
 to be science fiction. But cryptography is an area where current achievements
 are so fantastic that in the thousands of years of secret writing people did not
 even dare *imagine* them. Moreover, cryptography may be hard because it forces
-you to think differently, but it is also rewarding because it teaches you to
+you to think differently, but it is also rewarding because it *teaches* you to
 think differently. And once you pass this initial hurdle, and develop a
 "cryptographer's mind", you might find that this point of view is useful in
 areas that seem to have nothing to do with crypto.

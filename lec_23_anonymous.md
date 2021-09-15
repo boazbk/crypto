@@ -12,7 +12,7 @@ Encryption is meant to protect the contents of communication, but sometimes the 
 If a whistleblower wants to leak some information to the New York Times, the mere fact that she sent an email would reveal her identity.
 There are two main concepts aimed at achieving anonymity:
 
-* _Anonymous routing_ is about ensuring that Alice and  Bob can communicate without that fact being revealed.
+* _Anonymous routing_ is about ensuring that Alice and Bob can communicate without that fact being revealed.
 
 * _Steganography_ is about having Alice and Bob hiding an encrypted communication in the context of an seemingly innocuous conversation.
 
