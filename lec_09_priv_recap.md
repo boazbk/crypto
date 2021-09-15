@@ -54,6 +54,6 @@ This proof has been considerably simplified and quantitatively improved in works
 
 ### Attacks on private key cryptosystems
 
-Another topic we did not discuss in depth   is attacks on private key cryptosystems.
+Another topic we did not discuss in depth is attacks on private key cryptosystems.
 These attacks often work by "opening the black box" and looking at the internal operation of block ciphers or hash functions.
 One then often assigns variables to various internal registers, and then we look to finding collections of inputs that would satisfy some non-trivial relation between those variables. This is a rather vague description, but you can read KL Section 6.2.6 on _linear_ and _differential_ cryptanalysis for more information. See also [this course of Adi Shamir](http://www.cs.tau.ac.il/~tromer/SKC2006/). There is also the fascinating area of _side channel_ attacks on both public and private key crypto.

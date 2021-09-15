@@ -23,7 +23,7 @@ But among all those thinking of public key cryptography, probably the people who
 But they didn't stop there. They realized that protecting the _integrity_ of communication is no less important than protecting its _secrecy_. Thus, they imagined that Alice could "run encryption in reverse" in order to certify or _sign_ messages. That is, given some message $m$, Alice would send the value $x=p_k^{-1}(h(m))$ (for a hash function $h$) as a way to certify that she endorses $m$, and every person who knows $k$ could verify this by checking that $p_k(x)=h(m)$.
 
 However, Diffie and Hellman were in a position not unlike physicists who predicted that a certain particle should exist but had no experimental verification. Luckily they [met Ralph Merkle](http://cr.yp.to/bib/1988/diffie.pdf), and his ideas about a probabilistic _key exchange protocol_, together with a suggestion from their Stanford colleague [John Gill](https://profiles.stanford.edu/john-gill), inspired them to come up with what today is known as the _Diffie-Hellman Key Exchange_ (which, unbeknownst to them, was found two years earlier at GCHQ by Malcolm Williamson). They published their paper ["New Directions in Cryptography"](https://www-ee.stanford.edu/~hellman/publications/24.pdf) in 1976, and it is considered to have brought about the birth of modern cryptography. However, they still didn't find their elusive trapdoor function.
-This was done the next year by Rivest, Shamir and Adleman who came up with the RSA trapdoor function, which through the framework of Diffie and Hellman yielded not just encryption but also signatures (this was essentially the same function  discovered earlier by Clifford Cocks at GCHQ, though as far as I can tell Cocks, Ellis and Williamson did not realize the application to digital signatures).
+This was done the next year by Rivest, Shamir and Adleman who came up with the RSA trapdoor function, which through the framework of Diffie and Hellman yielded not just encryption but also signatures (this was essentially the same function discovered earlier by Clifford Cocks at GCHQ, though as far as I can tell Cocks, Ellis and Williamson did not realize the application to digital signatures).
 From this point on began a flurry of advances in cryptography which hasn't really died down till this day.
 
 
@@ -32,7 +32,7 @@ From this point on began a flurry of advances in cryptography which hasn't reall
 
 Before we embark on the wonderful journey to _public key_ cryptography, let's briefly look back and see what we learned about _private key cryptography_.
 This material is mostly covered in Chapters 1 to 9 of the Katz Lindell (KL) book and Part I (Chapters 1-9) of the Boneh Shoup (BS) book.
-Now would be a good time for you to read the corresponding proofs in one or both of  these books. It is often helpful to see the same proof presented in a slightly different way.
+Now would be a good time for you to read the corresponding proofs in one or both of these books. It is often helpful to see the same proof presented in a slightly different way.
 Below is a review of some of the various reductions we saw in class, with pointers to the corresponding sections in these books.
 
 
@@ -74,7 +74,7 @@ This proof has been considerably simplified and quantitatively improved in works
 
 
 > # {.remark title="Attacks on private key cryptosystems" #privkeyattacks}
-Another topic we did not discuss in depth   is attacks on private key cryptosystems.
+Another topic we did not discuss in depth is attacks on private key cryptosystems.
 These attacks often work by "opening the black box" and looking at the internal operation of block ciphers or hash functions.
 One then often assigns variables to various internal registers, and then we look to finding collections of inputs that would satisfy some non-trivial relation between those variables. This is a rather vague description, but you can read KL Section 6.2.6 on _linear_ and _differential_ cryptanalysis and BS Sections 3.7-3.9 and 4.3 for more information. See also [this course of Adi Shamir](http://www.cs.tau.ac.il/~tromer/SKC2006/). There is also the fascinating area of _side channel_ attacks on both public and private key crypto.
 
@@ -92,7 +92,7 @@ We now discuss how we define security for public key encryption. As mentioned ab
 it took quite a while for cryptographers to arrive at the "right" definition,
 but in the interest of time we will skip ahead to what by now is the standard basic notion (see also [PKCfig](){.ref}):
 
-![In a public key encryption, the receiver Bob generates a _pair_ of keys $(e,d)$, The _encryption key_ $e$ is used for encryption, and the _decryption key_ is used for decryption. We call it a public key system since the security of the scheme does not rely on the adversary Eve not knowing the encryption key. Hence Bob can publicize the key $e$  to a great many potential receivers, and still ensure confidentiality of the messages he receives.](../figure/pkenccartoon.png){#PKCfig  .margin}
+![In a public key encryption, the receiver Bob generates a _pair_ of keys $(e,d)$, The _encryption key_ $e$ is used for encryption, and the _decryption key_ is used for decryption. We call it a public key system since the security of the scheme does not rely on the adversary Eve not knowing the encryption key. Hence Bob can publicize the key $e$  to a great many potential receivers, and still ensure confidentiality of the messages he receives.](../figure/pkenccartoon.png){#PKCfig .margin}
 
 > # {.definition title="Public key encryption" #pubkeydef}
 A triple of efficient algorithms $(G,E,D)$ is a _public key encryption scheme_ if it satisfies
@@ -124,7 +124,7 @@ Why would someone imagine that such a magical object could exist?
 The writing of both James Ellis as well as Diffie and Hellman suggests that their thought process was roughly as follows.
 You imagine a "magic black box" $B$ such that if all parties have access to $B$ then we could get a public key encryption scheme.
 Now if public key encryption was impossible it would mean that for every possible program $P$ that computes the functionality of $B$, if we distribute the code of $P$ to all parties, then we don't get a secure encryption scheme. That means that _no matter what program $P$ the adversary gets_, she will always be able to get some information out of that code that helps break the encryption, even though she wouldn't have been able to break it if $P$ was a black box.
-Now, intuitively understanding arbitrary code is a very hard problem, so Diffie and Hellman imagined that it might be possible to take this ideal  $B$ and compile it to some sufficiently low level assembly language so that it would behave as a "virtual black box".
+Now, intuitively understanding arbitrary code is a very hard problem, so Diffie and Hellman imagined that it might be possible to take this ideal $B$ and compile it to some sufficiently low level assembly language so that it would behave as a "virtual black box".
 In particular, if you took, say, the encoding procedure $m \mapsto p_k(m)$ of a block cipher with a particular key $k$ and ran it through an optimizing compiler, you might hope that while it would be possible to perform this map using the resulting executable, it will be hard to extract $k$ from it. Hence, you could treat this code as a "public key".
 This suggests the following approach for getting an encryption scheme:
 
@@ -154,7 +154,7 @@ We will not formally define obfuscators yet, but on an intuitive level it would 
 
 Let me stress again that there is no known construction of obfuscators achieving something similar to this definition.
 In fact, the most natural formalization of this definition is _impossible_ to achieve (as we might see later in this course).
-Only very recently (exciting!) progress was finally made towards  obfuscators-like  notions strong enough to achieve these and other applications, and there are some significant caveats (see [my survey on this topic](https://eprint.iacr.org/2016/210)).
+Only very recently (exciting!) progress was finally made towards obfuscators-like notions strong enough to achieve these and other applications, and there are some significant caveats (see [my survey on this topic](https://eprint.iacr.org/2016/210)).
 
 However, when trying to stretch your imagination to consider the amazing possibilities that could be achieved in cryptography, it is not a bad heuristic to first ask yourself what could be possible if only everyone involved had access to a magic black box.
 It certainly worked well for Diffie and Hellman.
@@ -195,14 +195,14 @@ We will think of numbers $p$ that are of magnitude roughly $2^n$, so they can be
 We can clearly multiply and add such numbers modulo $p$ in $poly(n)$ time.
 If $g\in \Z_p$ and $a$ is any natural number, we can define $g^a$ to be simply $g\cdot g \cdots g$ ($a$ times).
 A priori one might think that it would take $a\cdot poly(n)$ time to compute $g^a$, which might be exponential if $a$ itself is roughly $2^n$.
-However, we can compute this in $poly((\log a) \cdot n)$ time using the _repeated squaring trick_. The idea is that if $a=2^{\ell}$, then we can compute $g^a$ in $\ell$ by squaring $g$ $\ell$ times, and a general $a$ can  be decomposed into powers of two using the binary representation.
+However, we can compute this in $poly((\log a) \cdot n)$ time using the _repeated squaring trick_. The idea is that if $a=2^{\ell}$, then we can compute $g^a$ in $\ell$ by squaring $g$ $\ell$ times, and a general $a$ can be decomposed into powers of two using the binary representation.
 
 
 The _discrete logarithm_ problem is the problem of computing, given $g,h \in \Z_p$, a number $a$ such that $g^a=h$.
 If such a solution $a$ exists then there is always also a solution of size at most $p$ (can you see why?) and so the solution can be represented using $n$ bits.
 However, currently the best-known algorithm for computing the discrete logarithm runs in time roughly $2^{n^{1/3}}$, which currently becomes prohibitively expensive when $p$ is a prime of length about $2048$ bits.[^constantsdlog]
 
-[^constantsdlog]: The running time of the best known algorithms for computing the discrete logarithm modulo $n$ bit primes is $2^{f(n)2^{n^{1/3}}}$, where $f(n)$ is a function that depends polylogarithmically on $n$. If $f(n)$ would equal $1$, then we'd need numbers  of $128^3 \approx 2\cdot 10^6$ bits to get $128$ bits of security, but because $f(n)$ is larger than one, the current [estimates](https://goo.gl/ntszsg) are that we  need to let $n=3072$ bit key to get $128$ bits of of security. Still  the existence of such a non-trivial algorithm means that we need much larger keys than those used for private key systems to get the same level of security. In particular, to double the estimated security to $256$ bits, NIST recommends that we multiply the RSA keysize five-fold to $15,360$. (The same document also says that SHA-256 gives $256$ bits of security as a pseudorandom generator but only $128$ bits when used to hash documents for digital signatures; can you see why?)
+[^constantsdlog]: The running time of the best known algorithms for computing the discrete logarithm modulo $n$ bit primes is $2^{f(n)2^{n^{1/3}}}$, where $f(n)$ is a function that depends polylogarithmically on $n$. If $f(n)$ would equal $1$, then we'd need numbers of $128^3 \approx 2\cdot 10^6$ bits to get $128$ bits of security, but because $f(n)$ is larger than one, the current [estimates](https://goo.gl/ntszsg) are that we need to let $n=3072$ bit key to get $128$ bits of of security. Still the existence of such a non-trivial algorithm means that we need much larger keys than those used for private key systems to get the same level of security. In particular, to double the estimated security to $256$ bits, NIST recommends that we multiply the RSA keysize five-fold to $15,360$. (The same document also says that SHA-256 gives $256$ bits of security as a pseudorandom generator but only $128$ bits when used to hash documents for digital signatures; can you see why?)
 
 
 John Gill suggested to Diffie and Hellman that modular exponentiation can be a good source for the kind of "easy-to-compute but hard-to-invert" functions they were looking for. Diffie and Hellman based a public key encryption scheme as follows:
@@ -235,9 +235,9 @@ Unfortunately, no such result is known in the other direction. However in the ra
 In particular we can make the following conjecture:
 
 
->__Computational Diffie-Hellman Conjecture for mod prime groups:__ For a random $n$-bit  prime and random $g \in \mathbb{Z}_p$, the CDH  holds  with respect to the group $\mathbb{G} = \{ g^a \mod p \;| a\in \mathbb{Z} \}$.
+>__Computational Diffie-Hellman Conjecture for mod prime groups:__ For a random $n$-bit prime and random $g \in \mathbb{Z}_p$, the CDH holds with respect to the group $\mathbb{G} = \{ g^a \mod p \;| a\in \mathbb{Z} \}$.
 >
-That is, for every polynomial $q:\N \rightarrow \N$, if $n$ is large enough, then with probability at least $1-1/q(n)$ over the choice of a uniform prime $p\in [2^n]$ and $g\in \Z_p$, for every circuit $A$ of size at most  $q(n)$, the probability that $A(g,p,g^a,g^b)$ outputs $h$ such that $g^{ab} = h \mod p$ is at most $1/q(n)$ where the probability is taken over $a,b$ chosen at random in $\Z_p$.^[In practice people often take $g$ to be a generator of a group significantly smaller in size than $p$, which enables $a,b$ to be smaller numbers and hence multiplication to be more efficient. We ignore this optimization in our discussions.]
+That is, for every polynomial $q:\N \rightarrow \N$, if $n$ is large enough, then with probability at least $1-1/q(n)$ over the choice of a uniform prime $p\in [2^n]$ and $g\in \Z_p$, for every circuit $A$ of size at most $q(n)$, the probability that $A(g,p,g^a,g^b)$ outputs $h$ such that $g^{ab} = h \mod p$ is at most $1/q(n)$ where the probability is taken over $a,b$ chosen at random in $\Z_p$.^[In practice people often take $g$ to be a generator of a group significantly smaller in size than $p$, which enables $a,b$ to be smaller numbers and hence multiplication to be more efficient. We ignore this optimization in our discussions.]
 
 > # { .pause }
 Please take your time to re-read the following conjecture until you are sure you understand what it means. Victor Shoup's excellent and online available book [A Computational Introduction to Number Theory and Algebra](http://www.shoup.net/ntb/) has an in depth treatment of groups, generators, and the discrete log and Diffie-Hellman problem. See also Chapters 10.4 and 10.5 in the Boneh-Shoup book, and Chapters 8.3 and 11.4 in the Katz-Lindell book. There are also solved group theory exercises at the end of this chapter.
@@ -277,7 +277,7 @@ Together these imply that $H_0 \approx H_3$ which yields the CPA security of the
 
 
 > # {.remark title="Elliptic curve cryptography" #curverem}
-As mentioned, the Diffie-Hellman systems can be run with many variants of Abelian groups. Of course, for some of those groups the discrete logarithm problem might be easy, and so they would be inappropriate to use for this system. One variant that has been proposed is [elliptic curve cryptography](https://en.wikipedia.org/wiki/Elliptic_curve_cryptography). This is a group consisting of points of the form $(x,y,z)\in \Z_p^3$ that satisfy a certain  equation, and multiplication can be defined according in a certain way. The main advantage of elliptic curve cryptography is that the best known algorithms run in time $2^{\approx n}$ as opposed to $2^{\approx n^{1/3}}$, which allows for much shorter keys. Unfortunately, elliptic curve cryptography is just as susceptible to quantum algorithms as the discrete logarithm problem over $\Z_p$.
+As mentioned, the Diffie-Hellman systems can be run with many variants of Abelian groups. Of course, for some of those groups the discrete logarithm problem might be easy, and so they would be inappropriate to use for this system. One variant that has been proposed is [elliptic curve cryptography](https://en.wikipedia.org/wiki/Elliptic_curve_cryptography). This is a group consisting of points of the form $(x,y,z)\in \Z_p^3$ that satisfy a certain equation, and multiplication can be defined according in a certain way. The main advantage of elliptic curve cryptography is that the best known algorithms run in time $2^{\approx n}$ as opposed to $2^{\approx n^{1/3}}$, which allows for much shorter keys. Unfortunately, elliptic curve cryptography is just as susceptible to quantum algorithms as the discrete logarithm problem over $\Z_p$.
 
 
 > # {.remark title="Encryption vs Key Exchange and El Gamal" #DHKErem}
@@ -337,7 +337,7 @@ If you haven't seen group theory, it might be useful for you to do a quick revie
 Shoup's [excellent book](http://www.shoup.net/ntb/) contains everything we need to know (and much more than that).
 What you need to remember is the following:
 
-* A  _finite commutative group_ $\mathbb{G}$ is a finite set together with a multiplication operation that satisfies $a\cdot b = b\cdot a$ and $(a\cdot b)\cdot c = (a\cdot b)\cdot c)$.
+* A _finite commutative group_ $\mathbb{G}$ is a finite set together with a multiplication operation that satisfies $a\cdot b = b\cdot a$ and $(a\cdot b)\cdot c = (a\cdot b)\cdot c)$.
 
 * $\mathbb{G}$ has a special element known as $1$, where $g1=1g=g$ for every $g\in\mathbb{G}$ and for every $g\in \mathbb{G}$ there exists an element $g^{-1}\in \mathbb{G}$ such that $gg^{-1}=1$.
 
@@ -354,7 +354,7 @@ The following basic facts are all not too hard to prove and would be useful exer
 
 
 
-When using a group $\mathbb{G}$ for the Diffie-Hellman protocol, we want the property that  $g$ is a _generator_ of the group, which also means that the map $a \mapsto g^a$ is a one-to-one mapping from $\{0,\ldots,|\mathbb{G}|-1\}$ to $\mathbb{G}$.
+When using a group $\mathbb{G}$ for the Diffie-Hellman protocol, we want the property that $g$ is a _generator_ of the group, which also means that the map $a \mapsto g^a$ is a one-to-one mapping from $\{0,\ldots,|\mathbb{G}|-1\}$ to $\mathbb{G}$.
 This can be efficiently tested if we know the order of the group and its factorization, since it will occur if and only if $g^a \neq 1$ for every $a<|\mathbb{G}|$ (can you see why this holds?) and we know that if $g^a=1$ then $a$ must divide $\mathbb{G}$ (and this?).   
 It is not hard to show that a random element $g\in \mathbb{G}$ will be a generator with non-trivial probability (for similar reasons that a random number is prime with non-trivial probability). Hence, an approach to getting such a generator is to simply choose $g$ at random and test that $g^a \neq 1$ for all of the fewer than $\log |\mathbb{G}|$ numbers that are obtained by taking $|\mathbb{G}|/q$ where $q$ is a factor of $|\mathbb{G}|$.
 
@@ -417,7 +417,7 @@ which would prove that Alice truly knew the secret key.
 
 __DSA Signatures:__ The DSA signature algorithm works as follows: (See also Section 12.5.2 in the KL book)
 
-* _Key generation:_ Pick generator $g$ for $\mathbb{G}$ and $a\in \{0,\ldots,|\mathbb{G}|-1\}$ and let $h=g^a$. Pick $H:\{0,1\}^\ell\rightarrow\mathbb{G}$ and $F:\mathbb{G}\rightarrow\mathbb{G}$ to be some  functions that can be thought of as "hash functions".[^hashDSA] The public key is $(g,h)$  (as well as the functions $H,F$) and secret key is $a$. \
+* _Key generation:_ Pick generator $g$ for $\mathbb{G}$ and $a\in \{0,\ldots,|\mathbb{G}|-1\}$ and let $h=g^a$. Pick $H:\{0,1\}^\ell\rightarrow\mathbb{G}$ and $F:\mathbb{G}\rightarrow\mathbb{G}$ to be some functions that can be thought of as "hash functions".[^hashDSA] The public key is $(g,h)$  (as well as the functions $H,F$) and secret key is $a$. \
 * _Signature:_ To sign a message $m$ with the key $a$, pick $b$ at random, and let $f=g^b$, and then let $\sigma = b^{-1}[H(m)+a\cdot F(f)]$, where all computation is done modulo $|\mathbb{G}|$. The signature is $(f,\sigma)$. \
 * _Verification:_ To verify a signature $(f,\sigma)$ on a message $m$, check that $s\neq 0$ and $f^\sigma=g^{H(m)}h^{F(f)}$.
 
@@ -479,7 +479,7 @@ If Case II happens, then we split it into two cases as well.
 __Case IIa__ is that this happens and $F(f^*)$ is queried _before_ $H(m^*)$ is queried, and __Case IIb__ is that this happens and $F(f^*)$ is queried after $H(m^*)$ is queried.
 >
 We start by considering the setting that __Case IIa__ happens with non-negligible probability $\epsilon$.
-By the averaging argument there are some $t'< t  \in \{1,\ldots,T\}$ such that with probability at least $\epsilon/T^2$,  $f^*$ is queried by the adversary at the $t'$-th query and $m^*$ is queried by the adversary at its $t$-th query.
+By the averaging argument there are some $t'< t \in \{1,\ldots,T\}$ such that with probability at least $\epsilon/T^2$,  $f^*$ is queried by the adversary at the $t'$-th query and $m^*$ is queried by the adversary at its $t$-th query.
 We run the $CMA'$ experiment _twice_, using the same randomness up until the $t-1$-th query and independent randomness from then onwards.
 With probability at least $(\epsilon/T^2)^2$, both experiments will result in a successful forge, and since $f^*$ was queried before at stage $t'<t$, we get the following equations
 $$H_1(m^*)+aF(f^*) = b\sigma$$
@@ -513,7 +513,7 @@ The security this achieve is quite amazing. No matter what wired or wireless net
 In the web setting, therre are _servers_ who have public keys, and _users_ who generally don't have such keys. Ideally, as a user, you should already know the public keys of all the entities you communicate with e.g., ```amazon.com```, ```google.com```, etc. However, how are you going to learn those public keys?
 The traditional answer was that because they are _public_ these keys are much easier to communicate and the servers could even post them as ads on the _New York Times_. Of course these days everyone reads the _Times_ through ```nytimes.com``` and so this seems like a chicken-and-egg type of problem.
 
-The solution goes back again to the quote of Archimedes of "Give me a fulcrum, and I shall move the world". The  idea is that trust can be _transitive_. Suppose you have a Mac. Then you have already trusted Apple with quite a bit of your personal information, and so you might be fine if this Mac came pre-installed with the Apple public key which you trust to be authentic. Now, suppose that you want to communicate with ```Amazon.com```. Now, _you_ might not know the correct public key for Amazon, but _Apple_ surely does. So Apple can supply Amazon with a signed message to the effect of
+The solution goes back again to the quote of Archimedes of "Give me a fulcrum, and I shall move the world". The idea is that trust can be _transitive_. Suppose you have a Mac. Then you have already trusted Apple with quite a bit of your personal information, and so you might be fine if this Mac came pre-installed with the Apple public key which you trust to be authentic. Now, suppose that you want to communicate with ```Amazon.com```. Now, _you_ might not know the correct public key for Amazon, but _Apple_ surely does. So Apple can supply Amazon with a signed message to the effect of
 
 >_"I Apple certify that the public key of Amazon.com is ```30 82 01 0a 02 82 01 01 00 94 9f 2e fd 07 63 33 53 b1 be e5 d4 21 9d 86 43 70 0e b5 7c 45 bb ab d1 ff 1f b1 48 7b a3 4f be c7 9d 0f 5c 0b f1 dc 13 15 b0 10 e3 e3 b6 21 0b 40 b0 a3 ca af cc bf 69 fb 99 b8 7b 22 32 bc 1b 17 72 5b e5 e5 77 2b bd 65 d0 03 00 10 e7 09 04 e5 f2 f5 36 e3 1b 0a 09 fd 4e 1b 5a 1e d7 da 3c 20 18 93 92 e3 a1 bd 0d 03 7c b6 4f 3a a4 e5 e5 ed 19 97 f1 dc ec 9e 9f 0a 5e 2c ae f1 3a e5 5a d4 ca f6 06 cf 24 37 34 d6 fa c4 4c 7e 0e 12 08 a5 c9 dc cd a0 84 89 35 1b ca c6 9e 3c 65 04 32 36 c7 21 07 f4 55 32 75 62 a6 b3 d6 ba e4 63 dc 01 3a 09 18 f5 c7 49 bc 36 37 52 60 23 c2 10 82 7a 60 ec 9d 21 a6 b4 da 44 d7 52 ac c4 2e 3d fe 89 93 d1 ba 7e dc 25 55 46 50 56 3e e0 f0 8e c3 0a aa 68 70 af ec 90 25 2b 56 f6 fb f7 49 15 60 50 c8 b4 c4 78 7a 6b 97 ec cd 27 2e 88 98 92 db 02 03 01 00 01```"_
 
@@ -524,7 +524,7 @@ Using certificates, we can assume that Bob the user has the public verification 
 Now Alice can send Bob also a public _encryption_ key $e$, which is authenticated by $v$ and hence guaranteed to be correct.[^PFS]
 Once Bob knows Alice's public key they are in business- he can use that to send an encryption of some private key $k$, which they can then use for all the rest of their communication.
 
-[^PFS]: If this key is _ephemeral_- generated on the spot for this interaction and deleted afterward- then this has the benefit of ensuring the _forward secrecy_ property that even if some entity that is in the habit of recording all communication later finds out Alice's private verification key, then it still will not be able to decrypt the information. In applied crypto circles this property is somewhat misnamed as "perfect forward secrecy" and associated with the Diffie-Hellman key exchange (or its elliptic curves variants), since in those protocols there is not much additional overhead for implementing it (see [this blog post](http://vincent.bernat.im/en/blog/2011-ssl-perfect-forward-secrecy.html)). The importance of forward security was emphasized by the discovery of the [Heartbleed](http://heartbleed.com/) vulnerability (see [this paper](https://jhalderm.com/pub/papers/heartbleed-imc14.pdf)) that allowed via a buffer-overflow attack in OpenSSL to learn the private  key of the server.
+[^PFS]: If this key is _ephemeral_- generated on the spot for this interaction and deleted afterward- then this has the benefit of ensuring the _forward secrecy_ property that even if some entity that is in the habit of recording all communication later finds out Alice's private verification key, then it still will not be able to decrypt the information. In applied crypto circles this property is somewhat misnamed as "perfect forward secrecy" and associated with the Diffie-Hellman key exchange (or its elliptic curves variants), since in those protocols there is not much additional overhead for implementing it (see [this blog post](http://vincent.bernat.im/en/blog/2011-ssl-perfect-forward-secrecy.html)). The importance of forward security was emphasized by the discovery of the [Heartbleed](http://heartbleed.com/) vulnerability (see [this paper](https://jhalderm.com/pub/papers/heartbleed-imc14.pdf)) that allowed via a buffer-overflow attack in OpenSSL to learn the private key of the server.
 
 This is, at a very high level, the SSL/TLS protocol, but there are many details inside it including the exact security notions needed from the encryption, how the two parties negotiate _which_ cryptographic algorithm to use, and more. All these issues can and have been used for attacks on this protocol. For two recent discussions see [this blog post](http://blog.cryptographyengineering.com/2013/12/how-does-nsa-break-ssl.html) and [this website](https://weakdh.org/).
 
@@ -580,7 +580,7 @@ Here are five more important groups used in cryptography other than $\mathbb{Z}_
 * The quadratic residues of $\mathbb{Z}_p^{\*}$: $Q_p=\{a^2:a\in \mathbb{Z}_p^{\*}\}$ with operation multiplication mod $p$
 * $\mathbb{Z}_n^{\*}$, where $n=p\cdot q$ (product of two primes)
 * The quadratic residues of $\mathbb{Z}_n^{\*}$:: $Q_n=\{a^2:a\in \mathbb{Z}_n^{*}\}$, where $n=p\cdot q$
-* Elliptic curve groups  
+* Elliptic curve groups 
 
 For more familiarity with group definitions, you could verify that the first 4 groups satisfy the group axioms. For cryptography, two operations need be efficient for elements $a,b$ in group $\mathbb{G}$:
 * Exponentiation: $a,b\mapsto a^b$. This is done efficiently using repeated squaring, i.e. generate all the squares up to $2^k$ and then use the binary representation. 
@@ -654,7 +654,7 @@ Suppose that $\mathbb{G}$ is some (finite, commutative) group, and $\mathbb{H}$ 
 :::
 
 ::: {.solution data-ref="quadresidueex1"}
-To be a subgroup, we need to make sure that $\mathbb{H}$ is a group in its own right (in particular, that it contains the identity, that it contains inverses, and that it is closed under multiplication; associativity and commutativity follow because we are within a larger set  $\mathbb{G}$ which satisfies associativity and commutativity).
+To be a subgroup, we need to make sure that $\mathbb{H}$ is a group in its own right (in particular, that it contains the identity, that it contains inverses, and that it is closed under multiplication; associativity and commutativity follow because we are within a larger set $\mathbb{G}$ which satisfies associativity and commutativity).
 _Identity_ Well, $1^2 = 1$, so $1 \in \mathbb{H}$, so $\mathbb{H}$ has the identity element. 
 _Inverses_ If $h \in \mathbb{H}$, then $g^2 = h$ for some $g \in \mathbb{G}$, but $g$ has an inverse in $\mathbb{G}$, and we can look at $g^2(g^{-1})^2 = (gg^{-1})^2 = 1^2 = 1$ (where I used commutativity and associativity, as well as the definition of the inverse). It is clear that $(g^{-1})^2 \in \mathbb{H}$ because there exists an element in $\mathbb{G}$ (specifically, $g^{-1}$) whose square is $(g^{-1})^2$. Therefore $h$ has an inverse in $\mathbb{H}$, where if $h=g^2$, then $h^{-1} = (g^{-1})^2$.
 _Closure under operation_ If $h_1,h_2 \in \mathbb{H}$, then there exist $g_1,g_2 \in \mathbb{G}$ where $h_1 = (g_1)^2, h_2 = (g_2)^2$. So $h_1h_2 = (g_1)^2(g_2)^2 = (g_1g_2)^2$, so $h_1h_2 \in \mathbb{H}$. 

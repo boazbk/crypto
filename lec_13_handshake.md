@@ -14,7 +14,7 @@ Our tools for achieving this goal are:
 
 * Public key (aka asymmetric) encryption schemes.
 
-* Public key  (aka asymmetric) digital signatures schemes.
+* Public key (aka asymmetric) digital signatures schemes.
 
 * Private key (aka symmetric) encryption schemes - block ciphers and stream ciphers.
 
@@ -29,7 +29,7 @@ and CCA (chosen ciphertext attacks), for hash functions we talk about collision-
 
 As we learn more and more cryptography we see more and more adjectives, every notion seems to have modifiers such as "non-malleable", "leakage-resilient", "identity based", "concurrently secure", "adaptive", "non-interactive", etc.. etc... .
 Indeed, this motivated a parody web page of an [automatic crypto paper title generator](https://cseweb.ucsd.edu/~mihir/crypto-topic-generator.html).
-Unlike algorithms, where typically there are  straightforward _quantitative_ tradeoffs (e.g., faster is better), in cryptography there are many _qualitative_ ways protocols can vary based on the assumptions they operate under and the notions of security they provide.
+Unlike algorithms, where typically there are straightforward _quantitative_ tradeoffs (e.g., faster is better), in cryptography there are many _qualitative_ ways protocols can vary based on the assumptions they operate under and the notions of security they provide.
 
 In particular, the following issues arise when considering the task of securely transmitting information between two parties Alice and Bob:
 
@@ -45,7 +45,7 @@ In particular, the following issues arise when considering the task of securely 
 ## Basic Key Exchange protocol
 
 The basic primitive for secure communication is a _key exchange_ protocol, whose goal is to have Alice and Bob share a common random secret key $k\in\{0,1\}^n$.
-Once this is done, they can use a CCA secure / authenticated  private-key encryption to communicate with confidentiality and integrity.
+Once this is done, they can use a CCA secure / authenticated private-key encryption to communicate with confidentiality and integrity.
 
 The canonical example of a basic key exchange protocol is the _Diffie Hellman_ protocol.
 It uses as public parameters a group $\mathbb{G}$ with generator $g$, and then follows the following steps:
@@ -78,11 +78,11 @@ The notion of authentication used depends on what we can assume on the setup ass
 A standard assumption is that Alice has some public keys but Bob doesn't.
 (This is the case when Alice is a website and Bob is a user.)
 However, one needs to take care in how to use this assumption.
-Indeed, the standard protocol for securing the web: the [transport Layer Security (TLS) protocol](https://goo.gl/md9Bsa) (and its predecessor SSL) has gone through six revisions (including a name change from SSL to TLS) largely  because of security concerns.
+Indeed, the standard protocol for securing the web: the [transport Layer Security (TLS) protocol](https://goo.gl/md9Bsa) (and its predecessor SSL) has gone through six revisions (including a name change from SSL to TLS) largely because of security concerns.
 We now illustrate one of those attacks.
 
 
-### Bleichenbacher's attack on RSA PKCS V1.5 and  SSL V3.0
+### Bleichenbacher's attack on RSA PKCS V1.5 and SSL V3.0
 
 If you have a public key, a natural approach is to take the encryption-based protocol and simply skip the first step since Bob already knows the public
 key $e$ of Alice.
@@ -100,7 +100,7 @@ While the designers of SSL V3.0 might not have thought of it that way, this amou
 It turned out that one can use such an oracle to invert the RSA function.
 For a result of a similar flavor, see the (1/2 page) proof of Theorem 11.31 (page 418) in KL, where they show that an oracle that given $y$ outputs the least significant bit of $y^d \pmod{m}$ allows to invert the RSA function.[^hardcore]
 
-[^hardcore]: The first attack of this flavor was given in the  1982 paper of Goldwasser, Micali, and Tong. Interestingly, this notion of "hardcore bits" has been used for both practical _attacks_ against cryptosystems as well as theoretical (and sometimes practical) _constructions_ of other cryptosystems.
+[^hardcore]: The first attack of this flavor was given in the 1982 paper of Goldwasser, Micali, and Tong. Interestingly, this notion of "hardcore bits" has been used for both practical _attacks_ against cryptosystems as well as theoretical (and sometimes practical) _constructions_ of other cryptosystems.
 
 For this reason, new versions of the SSL used a different variant of RSA known as PKCS $\sharp$1 V2.0 which satisfies (under assumptions) _chosen ciphertext security (CCA)_ and in particular such oracles cannot be used to break the encryption. (Nonetheless,  there are still some implementation issues that allowed to perform some attacks, see the note in KL page 425 on Manfer's attack.)
 
@@ -113,13 +113,13 @@ It is defined in the same way as it was in the private key setting:
 A public key encryption scheme $(G,E,D)$ is _chosen ciphertext attack (CCA) secure_ if every
 efficient Mallory wins in the following game with probability at most $1/2+ negl(n)$:
 >
-* The keys $(e,d)$ are generated via $G(1^n)$, and Mallory  gets the public encryption key $e$ and $1^n$.
+* The keys $(e,d)$ are generated via $G(1^n)$, and Mallory gets the public encryption key $e$ and $1^n$.
 >
 * For $poly(n)$ rounds, Mallory gets access to the function $c \mapsto D_d(c)$. (She doesn't need access to $m \mapsto E_e(m)$ since she already knows $e$.)
 >
 * Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\{0,1\}$, and Mallory gets $c^* = E_e(m_b)$. (Note that she of course does _not_ get the randomness used to generate this challenge encryption.)
 >
-* Mallory now gets another $poly(n)$ rounds of access to the function  $c \mapsto D_d(c)$ except that she is not allowed to query $c^*$.
+* Mallory now gets another $poly(n)$ rounds of access to the function $c \mapsto D_d(c)$ except that she is not allowed to query $c^*$.
 >
 * Mallory outputs $b'$ and _wins_ if $b'=b$.
 
@@ -147,9 +147,9 @@ For more on this, please see [Victor Shoup's survey](http://www.shoup.net/papers
 
 ## CCA secure public key encryption in the Random Oracle Model
 
-We now show how to convert any CPA-secure public key encryption scheme to a CCA-secure scheme in the random oracle model (this construction is taken from Fujisaki and  Okamoto, CRYPTO 99).
+We now show how to convert any CPA-secure public key encryption scheme to a CCA-secure scheme in the random oracle model (this construction is taken from Fujisaki and Okamoto, CRYPTO 99).
 In the homework, you will see a somewhat simpler direct construction of a CCA secure scheme from a _trapdoor permutation_, a variant of which
-is known  as OAEP (which has better ciphertext expansion) has been standardized as PKCS $\sharp$1 V2.0 and is used in several protocols.
+is known as OAEP (which has better ciphertext expansion) has been standardized as PKCS $\sharp$1 V2.0 and is used in several protocols.
 The advantage of a generic construction is that it can be instantiated not just with the RSA and Rabin schemes, but also directly with Diffie-Hellman and Lattice based schemes
 (though there are direct and more efficient variants for these as well).
 
@@ -164,14 +164,14 @@ __CCA-ROM-ENC Scheme:__
 * **Encryption:** To encrypt a message $m\in\{0,1\}^\ell$, we select randomness $r\leftarrow_R\{0,1\}^\ell$ for the underlying encryption algorithm $E'$ and output $$E_e(m)= E'_e(r;H(m\|r))\|(H'(r) \oplus m)\;,$$
 where by $E'_e(m';r')$ we denote the result of encrypting the plaintext $m'$ using the key $e$ and the randomness $r'$ (we assume the scheme takes $n$ bits of randomness as input; otherwise modify the output length of $H$ accordingly).
 
-* **Decryption:** To decrypt a ciphertext $c\|y$ first let $r=D'_d(c)$, $m=H'(r) \oplus y$ and then check that $c=E'_e(m;H(m\|r))$. If  the check fails we output ```error```; otherwise we output $m$.
+* **Decryption:** To decrypt a ciphertext $c\|y$ first let $r=D'_d(c)$, $m=H'(r) \oplus y$ and then check that $c=E'_e(m;H(m\|r))$. If the check fails we output ```error```; otherwise we output $m$.
 :::
 
 
 [^oracles]: Recall that it's easy to obtain two independent random oracles $H,H'$ from a single oracle $H''$, for example by letting $H(x)=H''(0\|x)$ and $H'(x)=H''(1\|x)$.
 
 > # {.theorem title="CCA security from random oracles" #CCAPKCthm}
-The above CCA-ROM-ENC scheme  is CCA secure.
+The above CCA-ROM-ENC scheme is CCA secure.
 
 ::: {.proof data-ref="CCAPKCthm"}
 __Note:__ The proof here refers to the original scheme in the notes (which was not secure) - should be updated by the scribes to the correct proof as presented in lecture.
@@ -186,8 +186,8 @@ Consider the following "box" $\hat{D}$ that will answer decryption queries $c\|y
 
 __Claim:__ The probability that $\hat{D}$ answers a query differently then $D$ is negligible.
 
-__Proof of claim:__ If  $D$ gives a non ```error``` response to a query $c\|y\|z$ then it must be that $z=H'(m\|r)$ for some $m,r$ such that  $y = r\oplus m$ and $c=E_e(r;H(m\|r))$, in which case $D$ will return $m$. The only way that $\hat{D}$ will answer this question differently is if $z=H'(m\|r)$ but the query $m\|r$ hasn't been asked before by the adversary.
-Here there are two options. If this query has never been asked before at all, then  by the lazy evaluation principle in this case we can think of $H'(m\|r)$ as being independently chosen at this point, and the probability it happens to equal $z$ will be $2^{-n}$.
+__Proof of claim:__ If $D$ gives a non ```error``` response to a query $c\|y\|z$ then it must be that $z=H'(m\|r)$ for some $m,r$ such that $y = r\oplus m$ and $c=E_e(r;H(m\|r))$, in which case $D$ will return $m$. The only way that $\hat{D}$ will answer this question differently is if $z=H'(m\|r)$ but the query $m\|r$ hasn't been asked before by the adversary.
+Here there are two options. If this query has never been asked before at all, then by the lazy evaluation principle in this case we can think of $H'(m\|r)$ as being independently chosen at this point, and the probability it happens to equal $z$ will be $2^{-n}$.
 If this query was asked by someone apart from the adversary then it could only have been asked by the encryption oracle while producing the challenge ciphertext $c^*\|y^*\|z^*$, but since the adversary is not allowed to ask this precise ciphertext, then it must be a ciphertext of the form $c\|y\|z^*$ where $(c,y) \neq (c^*,y^*)$ and such a ciphertext would get an ```error``` response from both oracles. __QED (claim)__
 
 Note that we can assume without loss of generality that if $m^*$ is the challenge message and $r^*$ is the randomness chosen in this challenge, the adversary never asks the query $m^*\|r^*$ to the its $H$ or $H'$ oracles, since we can modify it so that before making a query $m\|r$, it will first check if $E_e(m\;r)=c^*$ where $c^*\|y^*\|z^*$ is the challenge ciphertext, and if so use this to win the game.
@@ -200,7 +200,7 @@ So, if the adversary wins the CCA game, then it wins the _CPA game_ for the encr
 ### Defining secure authenticated key exchange
 
 The basic goal of secure communication is to set up a _secure channel_ between two parties Alice and Bob.
-We want to do so over an open network, where  messages between Alice and Bob might be read, modified, deleted, or added  by the adversary.
+We want to do so over an open network, where messages between Alice and Bob might be read, modified, deleted, or added by the adversary.
 Moreover, we want Alice and Bob to be sure that they are talking to one another rather than other parties.
 This raises the question of what is identity and how is it verified.
 Ultimately, if we want to use identities, then we need to trust some authority that decides which party has which identity.

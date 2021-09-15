@@ -35,7 +35,7 @@ is always given to the adversary. This is simply because by "polynomial time adv
 The notation $A^{F(s,\cdot)}$ means that $A$ has _black box_ (also known as _oracle_) access to the function that
 maps $i$ to $F(s,i)$. That is, $A$ can choose an index $i$, query the box and get $F(s,i)$, then choose a new index $i'$, query the box to get $F(s,i')$, and so on for
 a polynomial number of queries.
-The notation $H \leftarrow_R [2^n] \rightarrow \{0,1\}$ means that $H$ is  a completely random function that maps every index $i$ to an independent and random different bit.
+The notation $H \leftarrow_R [2^n] \rightarrow \{0,1\}$ means that $H$ is a completely random function that maps every index $i$ to an independent and random different bit.
 
 ::: {.remark title="Completely Random Functions" #randfuncs}
 This notion of a randomly chosen function can be difficult to wrap your mind around. Try to imagine a table of all of the strings in $\{0, 1\}^n$. We now go to each possible input, randomly generate a bit to be its output, and write down the result in the table. When we're done, we have a length $2^n$ lookup table that maps each input to an output that was generated uniformly at random and independently of all other outputs. This lookup table is now our random function $H$.
@@ -87,7 +87,7 @@ But before we see the proof of [prffromprgthmone](){.ref}, let us see why pseudo
 
 ## One time passwords (e.g. Google Authenticator, RSA ID, etc.)
 
-Until now we have talked about the task of _encryption_, or protecting the  _secrecy_ of messages. But the task of _authentication_, or protecting the
+Until now we have talked about the task of _encryption_, or protecting the _secrecy_ of messages. But the task of _authentication_, or protecting the
 _integrity_ of messages is no less important. For example, consider the case that you receive a software update for your PC, phone, car, pacemaker, etc.
 over an open channel such as an unencrypted Wi-Fi connection. The contents of that update are not secret, but it is of crucial importance that it was unchanged from the message sent out by the company and that no malicious
 attacker had modified the code. Similarly, when you log into your bank, you might be much more
@@ -130,8 +130,8 @@ _Why is this secure?_ The key to understanding schemes using pseudorandom functi
 In a truly random function, every one of the values $f_s(0),\ldots,f_s(2^n-1)$ is chosen independently and uniformly at random from $\{0,1\}$.
 One useful way to imagine this is using the concept of "lazy evaluation".
 We can think of $f_S$ as determined by tossing $2^n$ different coins for the values $f(0),\ldots,f(2^n-1)$. Now consider the case where we don't actually toss the $i^{th}$ coin until we need it.
-The  crucial point is that if we have queried the function in $T\ll 2^n$ places, then when Bob chooses a random $i\in[2^n]$ it is _extremely unlikely_ that any one of the set $\{i,i+1,\ldots,i+\ell-1\}$ will be one of those locations that we previously queried.
-Thus, if the function was truly random,  Mallory has  _no information_ on the value of the function in these coordinates, and would be able to predict (or rather, guess) it in all these locations with probability at most $2^{-\ell}$.
+The crucial point is that if we have queried the function in $T\ll 2^n$ places, then when Bob chooses a random $i\in[2^n]$ it is _extremely unlikely_ that any one of the set $\{i,i+1,\ldots,i+\ell-1\}$ will be one of those locations that we previously queried.
+Thus, if the function was truly random,  Mallory has _no information_ on the value of the function in these coordinates, and would be able to predict (or rather, guess) it in all these locations with probability at most $2^{-\ell}$.
 
 
 > # { .pause }
@@ -152,7 +152,7 @@ The adversary $A$ gets some black box $O(\cdot)$ (for _oracle_) and will use it 
 >
 __Claim 1:__ Let `PRF-Login*` be the hypothetical variant of the protocol `PRF-Login` where Alice and Bob share a completely random function $H:[2^n]\rightarrow\{0,1\}$. Then, no matter what Mallory does, the probability she can impersonate Alice after observing $T$ interactions is at most $2^{-\ell}+(8\ell T)/2^n$.
 >
-(If  `PRF-Login*` is easier to prove secure than  `PRF-Login`, you might wonder why we bother with `PRF-Login` in the first place and not simply use `PRF-Login*`. The reason is that specifying a random function $H$ requires specifying $2^n$ bits, and so that would be a _huge_ shared key. So `PRF-Login*` is not a protocol we can actually run but rather a hypothetical "mental experiment" that helps us in arguing about the security of `PRF-Login`.)
+(If `PRF-Login*` is easier to prove secure than `PRF-Login`, you might wonder why we bother with `PRF-Login` in the first place and not simply use `PRF-Login*`. The reason is that specifying a random function $H$ requires specifying $2^n$ bits, and so that would be a _huge_ shared key. So `PRF-Login*` is not a protocol we can actually run but rather a hypothetical "mental experiment" that helps us in arguing about the security of `PRF-Login`.)
 >
 __Proof of Claim 1:__ Let $i_1,\ldots,i_{2T}$ be the nonces chosen by Bob and recieved by Alice in the first $T$ iterations.
 That is, $i_1$ is the nonce chosen by Bob in the first iteration while $i_2$ is the nonce that Alice received in the first iteration (if Mallory doesn't modify it then $i_1=i_2$). Similarly, $i_3$ is the nonce chosen by Bob in the second iteration while $i_4$ is the nonce received by Alice and so on and so forth. Let $i$ be the nonce chosen in the $T+1^{st}$ iteration in which Mallory tries to impersonate Alice.
@@ -201,8 +201,8 @@ Thus from now on whenever we are given a PRF, we will allow ourselves to assume 
 One time passwords are a tool allowing you to prove your _identity_ to, say, your email server. But even after you did so, how can the server trust that future communication comes from you and not from some attacker that can interfere with the communication channel between you and the server (so called "man in the middle" attack)? Similarly, one time passwords may allow a software company to prove their identity before they send you a software update, but how do you know that an attacker does not change some bits of this software update on route between their servers and your device?
 
 This is where _Message Authentication Codes (MACs)_ come into play- their role is to authenticate not only the _identity_ of the parties but also their _communication_.
-Once again we have  __Alice__ and __Bob__, and the adversary __Mallory__ who can actively modify messages (in contrast to the passive eavesdropper Eve).
-Similar to the case to encryption, Alice has a _message_  $m$ she wants to send to Bob, but now we are not concerned with   Mallory _learning_ the contents of the message.
+Once again we have __Alice__ and __Bob__, and the adversary __Mallory__ who can actively modify messages (in contrast to the passive eavesdropper Eve).
+Similar to the case to encryption, Alice has a _message_  $m$ she wants to send to Bob, but now we are not concerned with Mallory _learning_ the contents of the message.
 Rather, we want to make sure that Bob gets precisely the message $m$ sent by Alice.
 Actually this is too much to ask for, since Mallory can always decide to block all communication, but we can ask that either Bob gets precisely $m$ or he detects failure and accepts no message at all.
 Since we are in the _private key_ setting, we assume that Alice and Bob share a key $k$ that is unknown to Mallory.
@@ -214,7 +214,7 @@ In fact, to make our notion of security more robust, we will even allow Mallory 
 The resulting formal definition is below:
 
 > # {.definition title="Message Authentication Codes (MAC)" #MACdef}
-Let $(S,V)$ (for _sign_ and _verify_) be a  pair of efficiently computable algorithms
+Let $(S,V)$ (for _sign_ and _verify_) be a pair of efficiently computable algorithms
 where $S$ takes as input a key $k$ and a message $m$, and produces a tag $\tau \in \{0,1\}^*$, while $V$ takes as input a key $k$, a message $m$,
 and a tag $\tau$, and produces a bit $b\in\{0,1\}$. We say that $(S,V)$ is a _Message Authentication Code (MAC)_ if:
 >
@@ -273,7 +273,7 @@ to a random function $H$, which gives us a contradiction.
 So far we required the message to be signed $m$ to be no longer than the key $k$ (i.e., both $n$ bits long). However, it is not hard to see that this requirement is not really needed. If our message is longer, we can divide it into blocks $m_1,\ldots,m_t$
 and sign each message $(i,m_i)$ individually. The disadvantage here is that the size of the tag (i.e., MAC output) will grow with the
 size of the message. However, even this is not really needed. Because the tag has length $n/2$ for length $n$ messages, we can sign the _tags_ $\tau_1,\ldots,\tau_t$
-and only output those. The verifier can repeat this computation to  verify this. We can continue this way and so get tags of $O(n)$ length for arbitrarily
+and only output those. The verifier can repeat this computation to verify this. We can continue this way and so get tags of $O(n)$ length for arbitrarily
 long messages.
 Hence in the future, whenever we need to, we can assume that our PRFs and MACs can get inputs in $\{0,1\}^*$ --- i.e., arbitrarily length strings.
 
@@ -295,10 +295,10 @@ These are arguments which come up with a property $EASY$ of a Boolean function $
 
 * Checking whether $EASY$ holds can be done in time polynomial _in the truth table size of $f$_. That is, in $2^{O(n)}$ time.
 
-A priori these technical conditions  might not seem very "natural" but it turns out that many approaches for proving circuit lower bounds (for restricted families of circuits) have this form.
+A priori these technical conditions might not seem very "natural" but it turns out that many approaches for proving circuit lower bounds (for restricted families of circuits) have this form.
 The idea is that such approaches find a "non generic" property of easily computable function, such as finding some interesting correlations between the some input bits and the output.
 These are correlations that are unlikely to occur in random functions.
-The lower bound typically follows by exhibiting a  function $f_0$ that does not have this property, and then using that to derive that $f_0$ cannot be efficiently computed by this particular restricted family of circuits.
+The lower bound typically follows by exhibiting a function $f_0$ that does not have this property, and then using that to derive that $f_0$ cannot be efficiently computed by this particular restricted family of circuits.
 
 The existence of strong enough pseudorandom functions can be shown to contradict the existence of such a property $EASY$, since a pseudorandom function can be computed by a polynomial sized circuit, but it cannot be distinguished from a random function.
 While a priori a pseudorandom function is only secure for polynomial time distinguishers, under certain assumptions it might be possible to create a pseudorandom function with a seed of size, say, $n^5$, that would be secure with respect to adversaries running in time $2^{O(n^2)}$.

@@ -23,13 +23,13 @@ Before proving the theorem it might be worthwhile to recall what is actually the
 The definition significantly simplifies here since we don't have to deal with the possibility of aborts.
 
 > # {.definition title="Two party honest-but-curious secure computation" #twopartympcdef}
-Let $F$ be (possibly probabilistic) map of $\{0,1\}^n\times \{0,1\}^n$ to $\{0,1\}^n\times\{0,1\}^n$.    A _secure protocol for $F$_ is a two party protocol such for every party $t\in \{1,2\}$, there exists an efficient "ideal adversary" (i.e., efficient interactive algorithm)  $S$ such that  for every pair of inputs $(x_1,x_2)$ the following two distributions are computationally indistinguishable:
+Let $F$ be (possibly probabilistic) map of $\{0,1\}^n\times \{0,1\}^n$ to $\{0,1\}^n\times\{0,1\}^n$.    A _secure protocol for $F$_ is a two party protocol such for every party $t\in \{1,2\}$, there exists an efficient "ideal adversary" (i.e., efficient interactive algorithm)  $S$ such that for every pair of inputs $(x_1,x_2)$ the following two distributions are computationally indistinguishable:
 >
 * The tuple $(y_1,y_2,v)$ obtained by running the protocol on inputs $x_1,x_2$, and letting $y_1,y_2$ be the outputs of the two parties and $v$ be the _view_ (all internal randomness, inputs, and messages received) of party $t$.
 >
 * The tuple $(y_1,y_2,v)$ that is computed by letting $(y_1,y_2)=F(x_1,x_2)$ and $v=S(x_t,y_t)$.
 >
-That is, $S$, which only gets the input $x_t$ and output $y_t$, can simulate all the information that an  honest-but-curious adversary controlling party $t$ will view.
+That is, $S$, which only gets the input $x_t$ and output $y_t$, can simulate all the information that an honest-but-curious adversary controlling party $t$ will view.
 
 
 ## Constructing 2 party honest but curious computation from fully homomorphic encryption
@@ -68,7 +68,7 @@ __Proof:__ Bob only receives a single message in this protocol of the form $(e,c
 The simulator $S$ will generate $(e,d) \leftarrow_R G(1^n)$ and compute $(e,c)$ where $c=E_e(0^n)$. (As usual $0^n$ denotes the length $n$ string consisting of all zeroes.)
 No matter what $x$ is, the output of $S$ is indistinguishable from the message Bob receives by the security of the encryption scheme. QED
 
-(In fact, Claim B holds even against a  _malicious_ strategy of Bob- can you see why?)
+(In fact, Claim B holds even against a _malicious_ strategy of Bob- can you see why?)
 
 We would now hope that we can prove the same regarding Alice's security. That is prove the following:
 
@@ -113,7 +113,7 @@ This is a property that's useful in other contexts where we use FHE.
 Let us now define it:
 
 > # {.definition title="Perfect circuit privacy" #perfectcircprivatedef}
-Let $\mathcal{E}=(G,E,D,EVAL)$ be an FHE. We say that $\mathcal{E}$ satisfies _perfect circuit privacy_ if for every $(e,d)$ output by $G(1^n)$ and every  function $f:\{0,1\}^\ell\rightarrow\{0,1\}$ of $poly(n)$ description size,
+Let $\mathcal{E}=(G,E,D,EVAL)$ be an FHE. We say that $\mathcal{E}$ satisfies _perfect circuit privacy_ if for every $(e,d)$ output by $G(1^n)$ and every function $f:\{0,1\}^\ell\rightarrow\{0,1\}$ of $poly(n)$ description size,
 and every ciphertexts $c_1,\ldots,c_\ell$ and $x_1,\ldots,x_\ell \in \{0,1\}$ such that $c_i$ is output by $E_e(x_i)$, the distribution of $EVAL_e(f,c_1,\ldots,c_\ell)$ is identical to the distribution of $E_e(f(x))$.
 That is, for every $z\in\{0,1\}^*$, the probability that $EVAL_e(f,c_1,\ldots,c_\ell)=z$ is the same as the probability that $E_e(f(x))=z$. We stress that these probabilities are taken only over the coins of the algorithms $EVAL$ and $E$.
 
@@ -129,12 +129,12 @@ $$| \Pr[ A(d,EVAL(f,E_e(x_1),\ldots,E_e(x_\ell)))=1] -  \Pr[ A(d,EVAL(f',E_e(x_1
 Please stop here and try to prove [circprivacylem](){.ref}
 
 The algorithm $A$ above gets the _secret key_ as input, but still cannot distinguish whether the $EVAL$ algorithm used $f$ or $f'$.
-In fact, the expression on the lefthand side of  [eqcircprivacy](){.eqref} is equal to _zero_ when the scheme satisfies perfect circuit privacy.\
+In fact, the expression on the lefthand side of [eqcircprivacy](){.eqref} is equal to _zero_ when the scheme satisfies perfect circuit privacy.\
 However, for our applications bounding it by a negligible function is enough.
 Hence, we can use the relaxed notion of "imperfect" circuit privacy, defined as follows:
 
 > # {.definition title="Statistical circuit privacy" #circprivatedef}
-Let $\mathcal{E}=(G,E,D,EVAL)$ be an FHE. We say that $\mathcal{E}$ satisfies _statistical circuit privacy_ if for every $(e,d)$ output by $G(1^n)$ and every  function $f:\{0,1\}^\ell\rightarrow\{0,1\}$ of $poly(n)$ description size,
+Let $\mathcal{E}=(G,E,D,EVAL)$ be an FHE. We say that $\mathcal{E}$ satisfies _statistical circuit privacy_ if for every $(e,d)$ output by $G(1^n)$ and every function $f:\{0,1\}^\ell\rightarrow\{0,1\}$ of $poly(n)$ description size,
 and every ciphertexts $c_1,\ldots,c_\ell$ and $x_1,\ldots,x_\ell \in \{0,1\}$ such that $c_i$ is output by $E_e(x_i)$, the distribution of $EVAL_e(f,c_1,\ldots,c_\ell)$ is equal up to $negl(n)$ total variation distance to the distribution of $E_e(f(x))$.
 >
 That is,
@@ -143,7 +143,7 @@ $$\sum_{z\in\{0,1\}^*} \left| \Pr[ EVAL_e(f,c_1,\ldots,c_\ell)=z] - \Pr[ E_e(f(x
 where once again, these probabilities are taken only over the coins of the algorithms $EVAL$ and $E$.
 
 
-If you find  [circprivatedef](){.ref} hard to parse, the most important points you need to remember about it are the  following:
+If you find [circprivatedef](){.ref} hard to parse, the most important points you need to remember about it are the following:
 
 * Statistical circuit privacy is as good as perfect circuit privacy for all applications, and so you can imagine the latter notion when using it.
 
@@ -162,12 +162,12 @@ We want to make $EVAL$ probabilistic and lose that information, and we use the f
 
 >_To kill a signal, drown it in lots of noise_
 
-That is, if we manage to add some additional random noise $e'$ that has magnitude  much larger than $e$, then it would essentially "erase" any structure $e$ had. More formally, we will use the following lemma:
+That is, if we manage to add some additional random noise $e'$ that has magnitude much larger than $e$, then it would essentially "erase" any structure $e$ had. More formally, we will use the following lemma:
 
 
 > # {.lemma #noiseandsignallem}
 Let $a\in \Z_q$ and $T\in\mathbb{N}$ be such that $aT<q/2$. If we let $X$ be the distribution obtained by taking $x (\mod q)$ for an integer $x$ chosen at random in $[-T,+T]$ and
-let $X'$ be the distribution obtained by taking  $a+x (\mod q)$ for $x$ chosen in the same way, then
+let $X'$ be the distribution obtained by taking $a+x (\mod q)$ for $x$ chosen in the same way, then
 $$\sum_{y \in \Z_q} \left| \Pr[X=y] - \Pr[X'=y] \right| <|a|/T$$
 
 ![If $a \ll T$ then the uniform distribution over the interval $[-T,+T]$ is statistically close to the uniform distribution over the interval $[-T+a,+T+a]$, since the statistical distance is proportional to the event (which happens with probability $a/T$) that a random sample from one distribution falls inside the symmetric difference of the two intervals.](../figure/statdistintervals.png){#statdistintervalsfig  .margin}
@@ -188,9 +188,9 @@ If two distributions over numbers $X$ and $X'$ satisfy $\Delta(X,X')=\sum_{y\in\
 
 > # { .pause }
 We omit the proof of [productstatisticialdistlem](){.ref} and leave it as an exercise to prove it using the hybrid argument.
-We will actually only use [productstatisticialdistlem](){.ref}  for  distributions above; you can obtain intuition for it by considering the $m=2$ case where we compare the rectangles of the forms $[-T,+T]\times [-T,+T]$ and $[-T+a,+T+a]\times[-T+b,+T+b]$. You can see that their union has size roughly $4T^2$ while their symmetric difference has size roughly $2T\cdot 2a + 2T\cdot 2b$, and so if $|a|,|b| \leq \delta T$ then the symmetric difference is roughly a $2\delta$ fraction of the union.
+We will actually only use [productstatisticialdistlem](){.ref} for distributions above; you can obtain intuition for it by considering the $m=2$ case where we compare the rectangles of the forms $[-T,+T]\times [-T,+T]$ and $[-T+a,+T+a]\times[-T+b,+T+b]$. You can see that their union has size roughly $4T^2$ while their symmetric difference has size roughly $2T\cdot 2a + 2T\cdot 2b$, and so if $|a|,|b| \leq \delta T$ then the symmetric difference is roughly a $2\delta$ fraction of the union.
 
-We will not provide the full details, but together these lemmas show that  $EVAL$ can use bootstrapping to reduce the magnitude of the noise to roughly $2^{n^{0.1}}$ and then add an additional random noise of roughly, say, $2^{n^{0.2}}$ which would make it statistically indistinguishable from the actual encryption.
+We will not provide the full details, but together these lemmas show that $EVAL$ can use bootstrapping to reduce the magnitude of the noise to roughly $2^{n^{0.1}}$ and then add an additional random noise of roughly, say, $2^{n^{0.2}}$ which would make it statistically indistinguishable from the actual encryption.
 Here are some hints on how to make this work: the idea is that in order to "re-randomize" a ciphertext $C$ we need a very noisy encryption of zero and add it to $C$. The normal encryption will use noise of magnitude $2^{n^{0.2}}$ but we will provide an encryption of the secret key with smaller magnitude $2^{n^{0.1}/polylog(n)}$ so we can use bootstrapping to reduce the noise. The main idea that allows to add noise is that at the end of the day, our scheme boils down to LWE instances that have the form $(c,\sigma)$ where $c$ is a random vector in $\Z_q^{n-1}$ and $\sigma = \langle c,s \rangle+a$ where $a \in [-\eta,+\eta]$ is a small noise addition.
 If we take any such input and add to $\sigma$ some $a' \in [-\eta',+\eta']$ then we create the effect of completely re-randomizing the noise. However, completely analyzing this requires non-trivial amount of care and work.
 
@@ -205,9 +205,9 @@ $\sum_{z\in\Z_q^m} \left| \Pr[ Z' = z] - \Pr[ Z'' = z ] \right| < negl(n)$
 
 __Proof:__ For every $z\in\Z_q^m$, if $|z_i| \leg \eta'$ for all $i$ then $\Pr[ Z'=z] = \tfrac{1}{(2\eta'+1)^m}$ and otherwise $\Pr[Z'=z]=0$.
 On the other hand, if $|z_i - e_i| \leq \eta'$ for all $i$ then we get $\Pr[ Z''=z] = \tfrac{1}{(2\eta'+1)^m}$ and otherwise $\Pr[Z''=z]=0$.
-We see that for a vector $z$ to have a different probability under $Z'$ than it has under $Z''$ there must be at least one coordinate $i$ where $|z_i - e_i| \leq \eta'$ and $|z_i|>\eta'$ or vice versa, while all other coordinates must be of magnitude  at most $(\eta+\eta')$.
+We see that for a vector $z$ to have a different probability under $Z'$ than it has under $Z''$ there must be at least one coordinate $i$ where $|z_i - e_i| \leq \eta'$ and $|z_i|>\eta'$ or vice versa, while all other coordinates must be of magnitude at most $(\eta+\eta')$.
 Since $|e_i| \leq \eta$ we get $2\eta$ choices for this coordinate and at most $2(\eta+\eta')$ choices for the others.
-So we get that the number of vectors $z'$ where the probability under $Z'$ differs from the probability under $Z''$ is at most  $m$ (for the choice of coordinate) times
+So we get that the number of vectors $z'$ where the probability under $Z'$ differs from the probability under $Z''$ is at most $m$ (for the choice of coordinate) times
 
 $2\eta \cdot (2(\eta+\eta')+1)^m =  2^{m+1} \eta^m (T+1)^m\eta$
 
@@ -233,7 +233,7 @@ If the LWE conjecture is true then there exists a tuple of polynomial-time rando
 
   - For $b\in \{0,1\}$, $\Pr_{c \sim \mathcal{C}^b} [ D_d(c) = b ]=1$. That is, $\mathcal{C}^b$ is distributed over ciphertexts that decrypt to $b$. 
 
-  - For every ciphertext $c \in \{0,1\}^n$ in the image of either $E_e(\cdot)$ or $EVAL_e(\cdot)$, if $D_d(c)=b$ then $RERAND_e(c)$ is statistically indistinguishable from $\mathcal{C}^b$. That is, the output of $RERAND_e(c)$ is a ciphertext that decrypts to the same plaintext as $c$, but whose distribution is essentially independent  of $c$.
+  - For every ciphertext $c \in \{0,1\}^n$ in the image of either $E_e(\cdot)$ or $EVAL_e(\cdot)$, if $D_d(c)=b$ then $RERAND_e(c)$ is statistically indistinguishable from $\mathcal{C}^b$. That is, the output of $RERAND_e(c)$ is a ciphertext that decrypts to the same plaintext as $c$, but whose distribution is essentially independent of $c$.
 
 :::
 
@@ -270,7 +270,7 @@ __Protocol 2PC:__ (Using BAN notation)
 
 * __Alice->Bob:__ Alice sends $\{ x \}_A$ to Bob. (We omit from this description the public key of Alice which can be thought of as being concatenated to the ciphertext).
 
-* __Bob->Alice:__ Bob sends $\{ f(x,y) \}_A$ to Alice by running $EVAL_A$ on the ciphertext $\{ x\}_A$ and the map  $x \mapsto F(x,y)$. 
+* __Bob->Alice:__ Bob sends $\{ f(x,y) \}_A$ to Alice by running $EVAL_A$ on the ciphertext $\{ x\}_A$ and the map $x \mapsto F(x,y)$. 
 
 * __Alice's output:__ Alice computes $f(x,y)$
 :::

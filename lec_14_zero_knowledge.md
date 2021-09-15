@@ -18,7 +18,7 @@ Typically a proof that some assertion X is true, also reveals some information a
 When Hercule Poirot proves that Norman Gale killed Madame Giselle he does so by showing _how_ Gale committed the murder by dressing up as a flight attendant and stabbing Madame Gisselle with a poisoned dart.
 Could Hercule convince us beyond a reasonable doubt that Gale did the crime without giving any information on _how_ the crime was committed?
 Can the Russians prove to the U.S. that a sealed box contains an authentic nuclear warhead without revealing anything about its design?
-Can I prove to you that the number $m=385,608,108,395,369,363,400,501,273,594,475,104,405,448,848,047,062,278,473,983$ has a prime factor whose last digit is $7$ without giving you any information about  $m$'s prime factors?
+Can I prove to you that the number $m=385,608,108,395,369,363,400,501,273,594,475,104,405,448,848,047,062,278,473,983$ has a prime factor whose last digit is $7$ without giving you any information about $m$'s prime factors?
 We won't answer the first question, but will show some insights on the latter two.^[In case you are curious, the factors of $m$ are $1,172,192,558,529,627,184,841,954,822,099$ and $328,963,108,995,562,790,517,498,071,717$.]
 
 _Zero knowledge proofs_ are proofs that fully convince that a statement is true without yielding _any additional knowledge_.
@@ -30,7 +30,7 @@ This is the topic of this lecture.
 
 ## Applications for zero knowledge proofs.
 
-Before we  talk about how to achieve zero knowledge, let us discuss some of its potential applications:
+Before we talk about how to achieve zero knowledge, let us discuss some of its potential applications:
 
 
 ### Nuclear disarmament
@@ -40,7 +40,7 @@ Having so many weapons increases the chance of "leakage" of weapons, or of an ac
 This also threatens the delicate balance of the [Non-Proliferation Treaty](https://en.wikipedia.org/wiki/Treaty_on_the_Non-Proliferation_of_Nuclear_Weapons) which at its core is a bargain where non-weapons states agree not to pursue nuclear weapons and the five nuclear weapon states agree to make progress on nuclear disarmament.
 These huge quantities of nuclear weapons are not only dangerous, as they increase the chance of a leak or of an individual failure or rogue commander causing a world catastrophe, but also extremely expensive to maintain.
 
-For all of these reasons, in 2009, U.S. President Obama called to set as a long term goal a "world without nuclear weapons" and in 2012 talked about concretely talking to Russia about reducing  "not only our strategic nuclear warheads, but also tactical weapons and warheads in reserve".
+For all of these reasons, in 2009, U.S. President Obama called to set as a long term goal a "world without nuclear weapons" and in 2012 talked about concretely talking to Russia about reducing "not only our strategic nuclear warheads, but also tactical weapons and warheads in reserve".
 On the other side, Russian President Putin has said already in 2000 that he sees "no obstacles that could hamper future deep cuts of strategic offensive armaments".
 (Though as of 2018, political winds on both sides have shifted away from disarmament and more toward armament.)
 
@@ -68,7 +68,7 @@ One such application (originating from work of Fiat and Shamir) is the use for _
 Here Alice knows a solution $x$ to a puzzle $P$, and proves her identity to Bob by, for example, providing an encryption $c$ of $x$ and proving in zero knowledge that
 $c$ is indeed an encryption of a solution for $P$.[^pok]
 Bob can verify the proof, but because it is zero knowledge, learns nothing about the solution of the puzzle and will not be able to impersonate Alice.
-An alternative approach to such identification protocols is through using _digital signatures_; this connection goes both ways and  zero knowledge proofs have been used by Schnorr and others as a basis for signature schemes.
+An alternative approach to such identification protocols is through using _digital signatures_; this connection goes both ways and zero knowledge proofs have been used by Schnorr and others as a basis for signature schemes.
 
 [^pok]: As we'll see, technically what Alice needs to do in such a scenario is use a _zero knowledge proof of knowledge_ of a solution for $P$.
 
@@ -96,7 +96,7 @@ For example:
 * We can many define other "theories". For example, a theory where the statements are pairs $(x,m)$ such that $x$ is a quadratic residue modulo $m$  and a proof for $x$ is the number $s$ such that $x=s^2 \pmod{m}$, or a theory where the theorems are _Hamiltonian_ graphs $G$ (graphs on $n$ vertices that contain an $n$-long cycle) and the proofs are the description of the cycle.
 
 
-[^encoding]: Integers can be coded as sets in various ways. For example, one can encode $0$ as $\emptyset$ and if $N$ is the set encoding $n$, we can encode $n+1$ using the   $n+1$-element set  $\{ N \} \cup N$.   
+[^encoding]: Integers can be coded as sets in various ways. For example, one can encode $0$ as $\emptyset$ and if $N$ is the set encoding $n$, we can encode $n+1$ using the  $n+1$-element set $\{ N \} \cup N$.   
 
 
 All these proof systems have the property that the verifying algorithm $V$ is _efficient_.
@@ -120,7 +120,7 @@ How would a person _prove_ to another that she is a in fact such a [tetrachromat
 >
 Alice and Bob will repeat the following experiment $n$ times: Alice turns her back and Bob tosses a coin and with probability 1/2 leaves the pieces as they are, and with probability 1/2 switches the right piece with the left piece. Alice needs to guess whether Bob switched the pieces or not.
 >
-If Alice is  successful in all of the $n$ repetitions then Bob will have $1-2^{-n}$ confidence that the pieces are truly different.
+If Alice is successful in all of the $n$ repetitions then Bob will have $1-2^{-n}$ confidence that the pieces are truly different.
 
 
 
@@ -132,20 +132,20 @@ However, here is an interactive proof system to prove statements of the form "$N
 
 * We have two parties: __Alice__ and __Bob__. The __common input__ is $(m,x)$ and Alice wants to convince Bob that $NQR(m,x)=1$. (That is, that $x$ is _not_ a quadratic residue modulo $m$).
 
-* We assume that Alice can compute $NQR(m,w)$ for every $w\in \{0,\ldots,m-1\}$  but Bob is  polynomial time.
+* We assume that Alice can compute $NQR(m,w)$ for every $w\in \{0,\ldots,m-1\}$  but Bob is polynomial time.
 
 * The protocol will work as follows:
 
 1. Bob will pick some random $s\in \Z^*_m$ (e.g., by picking a random number in $\{1,\ldots,m-1\}$  and discard it if it has nontrivial g.c.d. with $m$) and toss a coin $b\in\{0,1\}$. If $b=0$ then Bob will send $s^2 \pmod{m}$ to Alice and otherwise he will send $xs^2 \pmod{m}$ to Alice.
 
-2. Alice will use her ability to compute $NQR(m,\cdot)$ to  respond with $b'=0$ if Bob sent a quadratic residue and with $b'=1$ otherwise.
+2. Alice will use her ability to compute $NQR(m,\cdot)$ to respond with $b'=0$ if Bob sent a quadratic residue and with $b'=1$ otherwise.
 
 3. Bob _accepts_ the proof if $b=b'$.
 
 To see that Bob will indeed accept the proof, note that if $x$ is a non-residue then $xs^2$ will have to be a non-residue as well (since if it had a root $s'$ then $s's^{-1}$ would be a root of $x$). Hence it will always be the case that $b'=b$.
 
 
-Moreover, if $x$ _was_ a quadratic residue of the form $x=s'^2 \pmod{m}$ for some $s'$, then $xs^2=(s's)^2$ is simply a random quadratic residue, which means that in this case Bob's message is distributed the same regardless of whether $b=0$ or $b=1$, and no matter what she does, Alice has  probability at most $1/2$ of guessing $b$.
+Moreover, if $x$ _was_ a quadratic residue of the form $x=s'^2 \pmod{m}$ for some $s'$, then $xs^2=(s's)^2$ is simply a random quadratic residue, which means that in this case Bob's message is distributed the same regardless of whether $b=0$ or $b=1$, and no matter what she does, Alice has probability at most $1/2$ of guessing $b$.
 Hence if Alice is always successful than after $n$ repetitions Bob would have $1-2^{-n}$ confidence that $x$ is indeed a non-residue modulo $m$.
 
 
@@ -173,16 +173,16 @@ A _probabilistic proof for $f$_ (i.e., a proof for statements of the form "$f(x)
 >
 * __Completeness:__ If $f(x)=1$ then on input $x$, if $P$ and $V$ are given input $x$ and interact, then at the end of the interaction $V$ will output ```Accept``` with probability at least $0.9$.
 >
-* __Soundness:__ If If $f(x)=0$ then for any arbitrary (efficient or non efficient) algorithm $P^*$, if $P^*$ and $V$ are  given input $x$  and interact then at the end $V$ will output ```Accept``` with probability at most $0.1$
+* __Soundness:__ If If $f(x)=0$ then for any arbitrary (efficient or non efficient) algorithm $P^*$, if $P^*$ and $V$ are given input $x$  and interact then at the end $V$ will output ```Accept``` with probability at most $0.1$
 
 > # {.remark title="Functions vs languages" #funclangrem}
 In many texts proof systems are defined with respect to _languages_ as opposed to _functions_. That is, instead of talking about a function $f:\{0,1\}^* \rightarrow \{0,1\}$ we talk about a _lanugage_ $L \subseteq \{0,1\}^*$.
 These two viewpoints are completely equivalent via the mapping $f \longleftrightarrow L$ where $L = \{ x \;| f(x) = 1 \}$.
 
 
-Note that we don't necessarily require the prover to be efficient (and indeed, in some cases  it might not be).
+Note that we don't necessarily require the prover to be efficient (and indeed, in some cases it might not be).
 On the other hand, our soundness condition holds even if the prover uses a non efficient strategy.[^arguments]
-We say that a proof system has an _efficient prover_ if there is an NP-type  proof system $\Pi$ for $L$ (that is some efficient algorithm $\Pi$ such that there exists $\pi$ with $\Pi(x,\pi)=1$ iff $x\in L$ and such that $\Pi(x,\pi)=1$ implies that $|\pi|\leq poly(|x|)$), such that the strategy for $P$ can be implemented efficiently given any static proof $\pi$ for $x$ in this system.
+We say that a proof system has an _efficient prover_ if there is an NP-type proof system $\Pi$ for $L$ (that is some efficient algorithm $\Pi$ such that there exists $\pi$ with $\Pi(x,\pi)=1$ iff $x\in L$ and such that $\Pi(x,\pi)=1$ implies that $|\pi|\leq poly(|x|)$), such that the strategy for $P$ can be implemented efficiently given any static proof $\pi$ for $x$ in this system.
 
 
 [^arguments]: People have considered the notion of zero knowledge systems where soundness holds only with respect to efficient provers; these are known as _argument systems_.
@@ -200,7 +200,7 @@ Before we attempt a definition, let us consider an example.
 Going back to the notion of quadratic residuosity, suppose that $x$ and $m$ are public and Alice knows $s$ such that $x=s^2 \pmod{m}$.
 She wants to convince Bob that this is the case.
 However she prefers not to reveal $s$.
-Can  she convince Bob that such an $s$ exist without revealing any information about it? Here is a way to do so:
+Can she convince Bob that such an $s$ exist without revealing any information about it? Here is a way to do so:
 
 
 __Protocol ZK-QR:__ Public input for Alice and Bob: $x,m$; Alice's private input is $s$ such that $x=s^2 \pmod{m}$.
@@ -213,13 +213,13 @@ __Protocol ZK-QR:__ Public input for Alice and Bob: $x,m$; Alice's private input
 
 4. Bob checks that the value $s''$ revealed by Alice is indeed a root of $x'x^{-b}$, if so then it "accepts" the proof.
 
-If $x$ was _not_ a  quadratic residue then no matter how $x'$ was chosen, either $x'$ or $x'x^{-1}$ is _not_ a residue and hence Bob will reject the proof with probability at least $1/2$.
-By repeating this $n$ times, we can reduce the probability of Bob accepting a the proof of a non residue  to $2^{-n}$.
+If $x$ was _not_ a quadratic residue then no matter how $x'$ was chosen, either $x'$ or $x'x^{-1}$ is _not_ a residue and hence Bob will reject the proof with probability at least $1/2$.
+By repeating this $n$ times, we can reduce the probability of Bob accepting a the proof of a non residue to $2^{-n}$.
 
 
 On the other hand, we claim that we didn't really reveal anything about $s$.
 Indeed, if Bob chooses $b=0$, then the two messages $(x',ss')$ he sees can be thought of as a random quadratic residue $x'$ and its root.
-If Bob  chooses $b=1$ then after dividing by $x$ (which he could have done by himself) he still gets a random residue $x''$ and its root $s'$.
+If Bob chooses $b=1$ then after dividing by $x$ (which he could have done by himself) he still gets a random residue $x''$ and its root $s'$.
 In both cases, the distribution of these two messages is completely independent of $s$, and hence intuitively yields no additional information about it beyond whatever Bob knew before.
 
 To define zero knowledge mathematically we follow the following intuition:
@@ -231,7 +231,7 @@ Here is how we formally define this:
 
 > # {.definition title="Zero knowledge proofs" #zkpdef}
 A proof system $(P,V)$ for $f$ is _zero knowledge_ if for every efficient verifier strategy $V^*$
-there exists an efficient probabilistic algorithm  $S^*$ (known as the _simulator_) such that for every $x$ s.t. $f(x)=1$,
+there exists an efficient probabilistic algorithm $S^*$ (known as the _simulator_) such that for every $x$ s.t. $f(x)=1$,
 the following random variables are computationally indistinguishable:
 >
 * The output of $V^*$ after interacting with $P$ on input $x$.
@@ -287,7 +287,7 @@ __Claim 2:__ With probability at least $1/2$, $b'=b$.
 >
 __Claim 3:__ Conditioned on $b=b'$ and the value $x'$ computed in step 2, the value $s''$ computed by $S^*$ is identical to the value that Alice sends when her first message is $X'$ and Bob's response is $b$.
 >
-Together these three  claims imply that in expectation $S^*$ only invokes $V_1$ and $V_2$ a constant number of times (since every time it goes back to step 1 with probability at most $1/2$).
+Together these three claims imply that in expectation $S^*$ only invokes $V_1$ and $V_2$ a constant number of times (since every time it goes back to step 1 with probability at most $1/2$).
 They also imply that the output of $S^*$ is in fact identical to the output of $V^*$ in a true interaction with Alice.
 Thus, we only need to prove the claims, which is actually quite easy:
 >
@@ -354,7 +354,7 @@ It will do so as follows:
 >
 2. If $b'=0$ then $S^*$ computes the second message as Alice does: chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). In contrast, if $b'=1$ then $S^*$ lets $M$ be the all $1'$ matrix. For every $i,j$, $S^*$ chooses a random string $x_{i,j} \in \{0,1\}^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}z$, where $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$ is a pseudorandom generator.
 >
-3. Let $b$ be the output of $V^*$ when given  the input $H$ and the first message $\{ y_{i,j} \}$ computed as above. If $b\neq b'$ then go back to step 0.
+3. Let $b$ be the output of $V^*$ when given the input $H$ and the first message $\{ y_{i,j} \}$ computed as above. If $b\neq b'$ then go back to step 0.
 >
 4. We compute the fourth message of the protocol similarly to how Alice does it: if $b=0$ then it consists of $\pi$ and the strings $\{ x_{i,j} \}$ for all $i,j$; If $b=1$ then we pick a random length-$n$ cycle $C'$  and the message consists of the $n$ strings $x_{C'_1,C'_2}$,$\ldots$,$x_{C'_n,C'_1}$ together with their indices.
 >
@@ -362,7 +362,7 @@ It will do so as follows:
 >
 We prove the output of the simulator is indistinguishable from the output of $V^*$ in an actual interaction by the following claims:
 >
-**Claim 1:** The  message $\{ y_{i,j} \}$ computed by $S^*$ is computationally indistinguishable from the first message computed by Alice.
+**Claim 1:** The message $\{ y_{i,j} \}$ computed by $S^*$ is computationally indistinguishable from the first message computed by Alice.
 >
 **Claim 2:** The probability that $b=b'$ is at least $1/3$.
 >
@@ -392,7 +392,7 @@ This means that for every other NP language $L$, we can use the reduction from $
 
 * The language of tuples $X,e,c_1,\ldots,c_n$ such that $c_i$ is an encryption of a number $x_i$ with $\sum x_i = X$. (This is essentially what we needed in the voting example above).
 
-* For every efficient function $F$, the  language of pairs $x,y$ such that there exists some input $r$ satisfying $y=F(x\|r)$. (This is what we often need in the "protocol compiling" applications to show that a particular output was produced by the correct program $F$ on public input $x$ and private input $r$.)
+* For every efficient function $F$, the language of pairs $x,y$ such that there exists some input $r$ satisfying $y=F(x\|r)$. (This is what we often need in the "protocol compiling" applications to show that a particular output was produced by the correct program $F$ on public input $x$ and private input $r$.)
 
 ![Using a zero knowledge protocol for Hamiltonicity we can obtain a zero knowledge protocol for any language $L$ in NP. For example, if the public input is a SAT formula $\varphi$ and the Prover's secret input is a satisfying assignment $x$ for $\varphi$ then the verifier can run the reduction on $\varphi$ to obtain a graph $H$ and the prover can run the same reduction to obtain from $x$ a Hamiltonian cycle $C$ in $H$. They can then run the ZK-Ham protocol to prove that indeed $H$ is Hamiltonian (and hence the original formula was satisfiable) without revealing any information the verifier could not have obtain on his own.](../figure/zk-ham.jpg){#tmplabelfig width=80% }
 
@@ -401,7 +401,7 @@ This means that for every other NP language $L$, we can use the reduction from $
 While we talked about amplifying zero knowledge proofs by running them $n$ times one _after_ the other, one could also imagine running the $n$ copies _in parallel_.
 It is not trivial that we get the same benefit of reducing the error to $2^{-n}$ but it turns out that we do in the cases we are interested in here.
 Unfortunately, zero knowledge is not necessarily preserved.
-It's an important open problem whether zero knowledge is preserved for the ZK-Ham  protocol mentioned above.  
+It's an important open problem whether zero knowledge is preserved for the ZK-Ham protocol mentioned above.  
 However, Fiat and Shamir showed that in protocols (such as the ones we showed here) where the verifier only sends random bits, then if we replaced this verifier by a _random function_, then both soundness and zero knowledge are preserved.
 This suggests a _non-interactive_ version of these protocols in the random oracle model, and this is indeed widely used.
 Schnorr designed signatures based on this non interactive version.

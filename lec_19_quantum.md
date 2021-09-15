@@ -25,10 +25,10 @@ If we let $p_i$ be the probability that the electron goes through the slit and l
 Similarly, if we close this slit and open a second slit at position $j$ then the new fraction of times the electron hits our detector will be $\beta=p_jq_j$.
 Now if we open both slits then it seems that the fraction should be $\alpha+\beta$ and in particular, "obviously" the probability that the electron hits our detector should only _increase_ if we open a second slit.
 However, this is not what actually happens when we run this experiment.
-It can be that the detector is  hit a _smaller_ number of times when two slits are open than when only a single one hits.
+It can be that the detector is hit a _smaller_ number of times when two slits are open than when only a single one hits.
 It's almost as if the electron checks whether two slits are open, and if they are, it changes the path it takes.
 If we try to "catch the electron in the act" and place a detector right next to each slit so we can count which electron went through which slit then something even more bizarre happened.
-The mere fact that we _measured_ the electron path changes the actual path it takes, and now this "destructive interference" pattern is gone and the detector  will be hit   $\alpha+\beta$ fraction of the time.
+The mere fact that we _measured_ the electron path changes the actual path it takes, and now this "destructive interference" pattern is gone and the detector will be hit $\alpha+\beta$ fraction of the time.
 
 ![The setup of the double slit experiment](../figure/double-slit-setup.PNG){#tmplabelfig  .margin }
 
@@ -64,7 +64,7 @@ One of the strange aspects of the quantum-mechanical picture of the world is tha
 In fact, the natural way to simulate $n$ quantum particles will require a number of steps that is _exponential_ in $n$.
 This is a huge headache for scientists that actually need to do these calculations in practice.
 
-In the 1981, physicist Richard Feynman proposed  to "turn this lemon to lemonade" by making the following almost tautological observation:
+In the 1981, physicist Richard Feynman proposed to "turn this lemon to lemonade" by making the following almost tautological observation:
 
 >_If a physical system cannot be simulated by a computer in $T$ steps, the system can be considered as performing a computation that would take more than $T$ steps_
 
@@ -72,11 +72,11 @@ So, he asked whether one could design a quantum system such that its outcome $y$
 In 1985, David Deutsch formally suggested the notion of a quantum Turing machine, and the model has been since refined in works of Detusch and Josza and Bernstein and Vazirani.
 Such a system is now known as a _quantum computer_.
 
-[^Feynman]: As its title suggests, Feynman's [lecture](https://www.cs.berkeley.edu/~christos/classics/Feynman.pdf) was actually focused on the other side of simulating physics with a computer, but he mentioned that as a "side remark" one could wonder if it's possible to simulate physics with a new kind of computer - a "quantum computer" which would "not [be] a Turing machine, but a machine of a different kind". As far as I know, Feynman did not suggest that such a computer could be useful for computations completely outside the domain of quantum simulation, and in fact he found the question of whether quantum mechanics could be simulated by a classical computer to be  more interesting.
+[^Feynman]: As its title suggests, Feynman's [lecture](https://www.cs.berkeley.edu/~christos/classics/Feynman.pdf) was actually focused on the other side of simulating physics with a computer, but he mentioned that as a "side remark" one could wonder if it's possible to simulate physics with a new kind of computer - a "quantum computer" which would "not [be] a Turing machine, but a machine of a different kind". As far as I know, Feynman did not suggest that such a computer could be useful for computations completely outside the domain of quantum simulation, and in fact he found the question of whether quantum mechanics could be simulated by a classical computer to be more interesting.
 
 
 For a while these hypothetical quantum computers seemed useful for one of two things.
-First, to provide a general-purpose mechanism to  simulate a variety of the real quantum systems that people care about.
+First, to provide a general-purpose mechanism to simulate a variety of the real quantum systems that people care about.
 Second, as a challenge to the theory of computation's approach to model efficient computation by Turing machines, though a challenge that has little bearing to practice, given that this theoretical "extra power" of quantum computer seemed to offer little advantage in the problems people actually want to solve such as combinatorial optimization, machine learning,  data structures, etc..
 
 To a significant extent, this is still true today. We have no real evidence that quantum computers, if built, will offer truly significant[^Grover] advantage in 99 percent of the applications of computing.[^overhead]
@@ -85,15 +85,15 @@ In 1994 Peter Shor showed that quantum computers can solve the integer factoring
 This result has captured the imagination of a great many people, and completely energized research into quantum computing.  
 This is both because the hardness of these particular problems provides the foundations for securing such a huge part of our communications (and these days, our economy), as well as it was a powerful demonstration that quantum computers could turn out to be useful for problems that a-priori seemed to have nothing to do with quantum physics.
 As we'll discuss later, at the moment there are several intensive efforts to construct large scale quantum computers.
-It seems safe to say that, as far as we know, in the next five years or so there will not be a quantum computer large enough to factor, say, a $1024$ bit number, but it is quite possible that some quantum computer will be built that is strong enough to achieve some task that is too inefficient to achieve with a non-quantum or "classical" computer  (or at least requires more resources classically than it would for this computer).
-When and if such a computer is  built that can break reasonable parameters of Diffie Hellman, RSA and elliptic curve cryptography is anybody's guess.
+It seems safe to say that, as far as we know, in the next five years or so there will not be a quantum computer large enough to factor, say, a $1024$ bit number, but it is quite possible that some quantum computer will be built that is strong enough to achieve some task that is too inefficient to achieve with a non-quantum or "classical" computer (or at least requires more resources classically than it would for this computer).
+When and if such a computer is built that can break reasonable parameters of Diffie Hellman, RSA and elliptic curve cryptography is anybody's guess.
 It could also be a "self destroying prophecy" whereby the existence of a small-scale quantum computer would cause everyone to shift away to lattice-based crypto which in turn will diminish the motivation to invest the huge resources needed to build a large scale quantum computer.[^legacy]
 
 [^legacy]: Of course, given that [we're still hearing](http://blog.cryptographyengineering.com/2016/03/attack-of-week-drown.html) of attacks exploiting "export grade" cryptography that was supposed to disappear with 1990's, I imagine that we'll still have products running 1024 bit RSA when everyone has a quantum laptop.
 
 [^overhead]: This "99 percent" is a figure of speech, but not completely so. It seems that for many web servers, the TLS protocol (which based on the current non-lattice based systems would be completely broken by quantum computing) is responsible [for about 1 percent of the CPU usage](https://goo.gl/Gekjrc).  
 
-[^Grover]: I am using the theorist' definition of conflating "significant" with "super-polynomial". As we'll see, Grover's algorithm does offer a very generic _quadratic_ advantage in computation. Whether that quadratic advantage will  ever be good enough to offset in practice the significant overhead in building a quantum computer remains an open question. We also don't have evidence that super-polynomial speedups _can't_ be achieved for some problems outside the Factoring/Dlog or quantum simulation domains, and there is at least [one company](http://www.dwavesys.com/) banking on such speedups actually being feasible.
+[^Grover]: I am using the theorist' definition of conflating "significant" with "super-polynomial". As we'll see, Grover's algorithm does offer a very generic _quadratic_ advantage in computation. Whether that quadratic advantage will ever be good enough to offset in practice the significant overhead in building a quantum computer remains an open question. We also don't have evidence that super-polynomial speedups _can't_ be achieved for some problems outside the Factoring/Dlog or quantum simulation domains, and there is at least [one company](http://www.dwavesys.com/) banking on such speedups actually being feasible.
 
 The above summary might be all that you need to know as a cryptographer, and enough motivation to study lattice-based cryptography as we do in this course.
 However, because quantum computing is such a beautiful and (like cryptography) counter-intuitive concept,
@@ -117,7 +117,7 @@ __Measurement:__ Suppose that we were in the classical probabilistic setting, an
 Thus we can describe the _state_ of the system by the $2^n$-dimensional vector $v$ such that $v_x=2^{-n}$ for all $x$.
 If we _measure_ the system and see what the coins came out, we will get the value $x$ with probability $v_x$.
 Naturally, if we measure the system twice we will get the same result.
-Thus, after we see that the coin is $x$, the new state of the system _collapses_ to a  vector $v$ such that $v_y = 1$ if $y=x$ and $v_y=0$ if $y\neq x$.
+Thus, after we see that the coin is $x$, the new state of the system _collapses_ to a vector $v$ such that $v_y = 1$ if $y=x$ and $v_y=0$ if $y\neq x$.
 In a quantum state, we do the same thing: if we _measure_ a vector $v$ corresponds to turning it with probability $|v_x|^2$ into a vector that has $1$ on coordinate $x$ and zero on all the other coordinates.
 
 
@@ -138,14 +138,14 @@ It is an exercise to prove that lifting preserves stochasticity and unitarity. T
 __Complexity:__ For every stochastic matrix $M$ we can define its _randomized complexity_, denoted as $R(M)$ to be the minimum number $T$ such that $M$ is can be (approximately) obtained by combining $T$ elementary probabilistic gates. To be concrete, we can define $R(M)$ to be the minimum $T$ such that there exists $T$ elementary matrices $M_1,\ldots,M_T$
 such that for every $x$, $\sum_y |M_{y,x}-(M_T\cdots M_1)_{y,x}|<0.1$.
 (It can be shown that $R(M)$ is finite and in fact at most $10^n$ for every $M$; we can do so by writing $M$ as a convex combination of function and writing every function as a composition of functions that map a single string $x$ to $y$, keeping all other inputs intact.)
-We will say that a probabilistic process $M$ mapping distributions on $\{0,1\}^n$ to distributions on $\{0,1\}^n$ is  _efficiently classically computable_ if $R(M) \leq poly(n)$.
+We will say that a probabilistic process $M$ mapping distributions on $\{0,1\}^n$ to distributions on $\{0,1\}^n$ is _efficiently classically computable_ if $R(M) \leq poly(n)$.
 If $M$ is a unitary matrix, then we define the _quantum complexity_ of $M$, denoted as $Q(M)$, to be the minimum number $T$ such that there are quantum gates $M_1,\ldots,M_T$ satisfying that for every $x$, $\sum_y |M_{y,x}-(M_T \cdots M_1)_{y,x}|^2 < 0.1$.  
 We say that $M$ is _efficiently quantumly computable_ if $Q(M)\leq poly(n)$.
 
 
 __Computing functions:__ We have defined what it means for an operator to be probabilistically or quantumly efficiently computable, but we typically are interested in computing some function $f:\{0,1\}^m\rightarrow\{0,1\}^\ell$.
 The idea is that we say that $f$ is efficiently computable if the corresponding operator is efficiently computable, except that we also allow to use extra memory and so to embed $f$ in some $n=poly(m)$.
-We define $f$ to be  _efficiently classically computable_ if there is some $n=poly(m)$ such that the operator $M_g$ is efficiently classically computable where $g:\{0,1\}^n\rightarrow\{0,1\}^n$ is defined such that  $g(x_1,\ldots,x_n)=f(x_1,\ldots,x_m)$.
+We define $f$ to be _efficiently classically computable_ if there is some $n=poly(m)$ such that the operator $M_g$ is efficiently classically computable where $g:\{0,1\}^n\rightarrow\{0,1\}^n$ is defined such that $g(x_1,\ldots,x_n)=f(x_1,\ldots,x_m)$.
 In the quantum case we have a slight twist since the operator $M_g$ is not necessarily a unitary matrix.[^reversible]
 Therefore we say that $f$ is _efficiently quantumly computable_  if there is $n=poly(m)$ such that the operator $M_q$ is efficiently quantumly computable where $g:\{0,1\}^n\rightarrow\{0,1\}^n$ is defined as
 $g(x_1,\ldots,x_n) = x_1\cdots x_m \|( f(x_1\cdots x_m)0^{n-m-\ell}\; \oplus \; x_{m+1}\cdots x_n)$.
@@ -155,14 +155,14 @@ $g(x_1,\ldots,x_n) = x_1\cdots x_m \|( f(x_1\cdots x_m)0^{n-m-\ell}\; \oplus \; 
 **Quantum and classical computation:** The way we defined what it means for a function to be efficiently quantumly computable, it might not be clear that if $f:\{0,1\}^m\rightarrow\{0,1\}^\ell$ is a function that we can compute by a polynomial size Boolean circuit (e.g., combining polynomially many AND, OR and NOT gates) then it is also quantumly efficiently computable.
 The idea is that for every gate $g:\{0,1\}^2\rightarrow\{0,1\}$ we can define an $8\times 8$ unitary matrix $M_h$ where $h:\{0,1\}^3\rightarrow\{0,1\}^3$ has the form $h(a,b,c)=a,b,c\oplus g(a,b)$.
 So, if $f$ has a circuit of $s$ gates, then we can dedicate an extra bit for every one of these gates and then run the corresponding $s$ unitary operations one by one, at the end of which we will get an operator that computes the mapping $x_1,\ldots,x_{m+\ell+s} = x_1\cdots x_m \| x_{m+1}\cdots x_{m+s} \oplus f(x_1,\ldots,x_m)\|g(x_1\ldots x_m)$ where
-the  the $\ell+i^{th}$ bit of $g(x_1,\ldots,x_n)$ is the result of applying the $i^{th}$ gate in the calculation of $f(x_1,\ldots,x_m)$.
+the the $\ell+i^{th}$ bit of $g(x_1,\ldots,x_n)$ is the result of applying the $i^{th}$ gate in the calculation of $f(x_1,\ldots,x_m)$.
 So this is "almost" what we wanted except that we have this "extra junk" that we need to get rid of. The idea is that we now simply run the same computation again which will basically we mean we XOR another copy of $g(x_1,\ldots,x_m)$ to the last $s$ bits, but since $g(x)\oplus g(x) = 0^s$ we get that we compute the map $x \mapsto x_1\cdots x_m \| (f(x_1,\ldots,x_m)0^s \;\oplus\; x_{m+1}\cdots x_{m+\ell+s})$ as desired.
 
 
 **The "obviously exponential" fallacy:**  A priori it might seem "obvious" that quantum computing is exponentially powerful, since to compute a quantum computation on $n$ bits we need to maintain the $2^n$ dimensional state vector and apply $2^n\times 2^n$ matrices to it.
 Indeed popular descriptions of quantum computing (too) often say something along the lines that the difference between quantum and classical computer is that a classic bit can either be zero or one while a qubit can be in both states at once, and so in many qubits a quantum computer can perform exponentially many computations at once.
 Depending on how you interpret this, this description is either false or would apply equally well to _probabilistic computation_.
-However, for probabilistic computation it is a not too hard exercise to  show that if $f:\{0,1\}^m\rightarrow\{0,1\}^n$ is an efficiently computable function then it has a polynomial size circuit of AND, OR and NOT gates.[^circuit]
+However, for probabilistic computation it is a not too hard exercise to show that if $f:\{0,1\}^m\rightarrow\{0,1\}^n$ is an efficiently computable function then it has a polynomial size circuit of AND, OR and NOT gates.[^circuit]
 Moreover, this "obvious" approach for simulating a quantum computation will take not just exponential time but _exponential space_ as well, while it is not hard to show that using a simple recursive formula one can calculate the final quantum state using _polynomial space_ (in physics parlance this is known as "Feynman path integrals").
 So, the exponentially long vector description by itself does not imply that quantum computers are exponentially powerful.
 Indeed, we cannot _prove_ that they are (since in particular we can't prove that _every_ polynomial space calculation can be done in polynomial time, in complexity parlance we don't know how to rule out that $P=PSPACE$), but we do have some problems (integer factoring most prominently) for which they do provide exponential speedup over the currently best _known_ classical (deterministic or probabilistic) algorithms.
@@ -171,7 +171,7 @@ Indeed, we cannot _prove_ that they are (since in particular we can't prove that
 
 
 
-[^circuit]: It is a good exercise to show that if $M$ is a probabilistic process with $R(M) \leq T$ then there exists a probabilistic circuit  of size, say, $100 T n^2$ that approximately computes $M$ in the sense that for every input $x$, $\sum_{y\in\{0,1\}^n} \left| \Pr[C(x)=y] - M_{x,y} \right| < 1/3$.
+[^circuit]: It is a good exercise to show that if $M$ is a probabilistic process with $R(M) \leq T$ then there exists a probabilistic circuit of size, say, $100 T n^2$ that approximately computes $M$ in the sense that for every input $x$, $\sum_{y\in\{0,1\}^n} \left| \Pr[C(x)=y] - M_{x,y} \right| < 1/3$.
 
 
 ### Physically realizing quantum computation
@@ -217,7 +217,7 @@ Quantum states are always unit vectors and so we sometimes omit the normalizatio
 
 There is something weird about quantum mechanics.
 In 1935 [Einstein, Podolsky and Rosen (EPR)](http://plato.stanford.edu/entries/qt-epr/) tried to pinpoint this issue by highlighting a previously unrealized corollary of this theory.
-It was already realized that the fact that quantum measurement collapses the state to a definite aspect yields  the _uncertainty principle_, whereby if you measure a quantum system in one orthogonal basis, you will not know how it would have measured in an incohrent basis to it (such as position vs. momentum).
+It was already realized that the fact that quantum measurement collapses the state to a definite aspect yields the _uncertainty principle_, whereby if you measure a quantum system in one orthogonal basis, you will not know how it would have measured in an incohrent basis to it (such as position vs. momentum).
 What EPR showed was that quantum mechanics results in so called "spooky action at a distance" where if you have a system of two particles then measuring one of them would instantenously effect the state of the other.
 Since this "state" is just a mathematical description,  as far as I know the EPR paper was considered to be a thought experiment showing troubling aspects of quantum mechanics, without bearing on experiment.
 This changed when in 1965 John Bell showed an actual experiment to test the predictions of EPR and hence pit intuitive common sense against the predictions of quantum mechanics.
@@ -232,7 +232,7 @@ You choose a random bit $x\in\{0,1\}$ and your associate chooses a random $y\in\
 We let $a$ be Alice's response and $b$ be Bob's response.
 We say that Alice and Bob win this experiment if $a \oplus b = x \wedge y$.
 
-[^paranoid]: If you are extremely paranoid about Alice and Bob communicating with one another, you can coordinate with your assistant to perform the experiment exactly at the same time, and make sure that the rooms are so that Alice and Bob couldn't communicate to each other in time  the results of the coin even if they do so at the speed of light.
+[^paranoid]: If you are extremely paranoid about Alice and Bob communicating with one another, you can coordinate with your assistant to perform the experiment exactly at the same time, and make sure that the rooms are so that Alice and Bob couldn't communicate to each other in time the results of the coin even if they do so at the speed of light.
 
 
 Now if Alice and Bob are not telepathic, then they need to agree in advance on some strategy.
@@ -256,11 +256,11 @@ An amazing [experimentally verified](http://arxiv.org/abs/1508.05949) fact is th
 
 __Claim:__ There is a strategy for Alice and Bob to succeed in this game with probability at least $0.8$.
 
-__Proof:__ The main  idea is for Alice and Bob to first prepare a 2-qubit quantum system in the state (up to normalization)
+__Proof:__ The main idea is for Alice and Bob to first prepare a 2-qubit quantum system in the state (up to normalization)
 $|00\rangle+|11\rangle$ (this is known as an _EPR pair_).
 Alice takes the first qubit in this system to her room, and Bob takes the qubit to his room.
 Now, when Alice receives $x$ if $x=0$ she does nothing and if $x=1$ she applies the unitary map $R_{\pi/8}$ to her qubit where $R_\theta = \begin{pmatrix} cos \theta & \sin -\theta \\ \sin \theta & \cos \theta \end{pmatrix}$.
-When Bob receives $y$, if $y=0$ he does nothing and if $y=1$ he applies the unitary map $R_{-\pi/8}$ to his  qubit.
+When Bob receives $y$, if $y=0$ he does nothing and if $y=1$ he applies the unitary map $R_{-\pi/8}$ to his qubit.
 Then each one of them measures their qubit and sends this as their response.
 Recall that to win the game Bob and Alice want their outputs to be more likely to differ if $x=y=1$ and to be more likely to agree otherwise.
 
@@ -279,7 +279,7 @@ The overall probability of winning the game is at least $\tfrac{1}{4}\cdot 1 + \
 <!--
 
 Now for every $x,y$, the state of the two qubits before measurement is the $4$ dimensional vector:
-$v_{x,y} = \tfrac{1}{\sqrt{2}}\left[ R_{x\pi/8}|0\rangle \otimes R_{-y\pi/8}|1\rangle \;+\; R_{x\pi/8}|0\rangle \otimes R_{-y\pi/8}|1\rangle  \right] \;(**)$
+$v_{x,y} = \tfrac{1}{\sqrt{2}}\left[ R_{x\pi/8}|0\rangle \otimes R_{-y\pi/8}|1\rangle \;+\; R_{x\pi/8}|0\rangle \otimes R_{-y\pi/8}|1\rangle \right] \;(**)$
 
 If $v \in \mathbb{R}^4$ is the state of the two qubits,[^real] then the probability that we get a particular output $(a,b)$ is simply the dot product squared of $v$ with $|ab\rangle$.
 Since $|1\rangle=R_{\pi/2}|0\rangle$, and $\langle R_\alpha u,R_\beta u \rangle^2 = \cos^2 (\beta-\alpha)$, we get that for every choice of the coins $x,y$ and $a,b$
@@ -308,14 +308,14 @@ The effect of Grover's algorithm on cryptography is fairly mild: one essentially
 But beyond cryptography, if large scale quantum computers end up being built, Grover search and its variants might end up being some of the most useful computational problems they will tackle.
 Grover's theorem is the following:
 
-__Theorem (Grover search , 1996):__  There is a quantum $O(2^{n/2}poly(n))$-time algorithm that given a $poly(n)$-sized  circuit computing a function $f:\{0,1\}^n\rightarrow\{0,1\}$ outputs a string
+__Theorem (Grover search , 1996):__  There is a quantum $O(2^{n/2}poly(n))$-time algorithm that given a $poly(n)$-sized circuit computing a function $f:\{0,1\}^n\rightarrow\{0,1\}$ outputs a string
 $x^*\in\{0,1\}^n$ such that $f(x^*)=1$.
 
 __Proof sketch:__ The proof is not hard but we only sketch it here.
 The general idea can be illustrated in the case that there exists a single $x^*$ satisfying $f(x^*)=1$.
 (There is a classical reduction from the general case to this problem.)
 As in Simon's algorithm, we can efficiently initialize an $n$-qubit system to the uniform state $u = 2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle$ which has $2^{-n/2}$ dot product with $|x^*\rangle$. Of course if we measure $u$, we only have probability $(2^{-n/2})^2 = 2^{-n}$ of obtaining the value $x^*$.
-Our goal would be to use $O(2^{n/2})$ calls to the oracle to transform the  system to a state $v$ with dot product at least some constant $\epsilon>0$ with the state $|x^*\rangle$.
+Our goal would be to use $O(2^{n/2})$ calls to the oracle to transform the system to a state $v$ with dot product at least some constant $\epsilon>0$ with the state $|x^*\rangle$.
 
 It is an exercise to show that using $Had$ gets we can efficiently compute the unitary operator $U$ such that $Uu = u$ and $Uv = -v$ for every $v$ orthogonal to $u$.
 Also, using the circuit for $f$, we can efficiently compute the unitary operator $U^*$ such that $U^*|x\rangle=|x\rangle$ for all $x\neq x^*$ and $U^*|x^*\rangle=-|x^*\rangle$.
@@ -326,7 +326,7 @@ Restricted to this subspace, $U^*$ is a reflection along the axis $x^*_\perp$ an
 
 Now, let $\theta$ be the angle between $u$ and $x^*_\perp$.
 These vectors are very close to each other and so $\theta$ is very small but not zero - it is equal to $\sin^{-1}( 2^{-n/2})$ which is roughly $2^{-n/2}$.
-Now if our state $v$ has  angle $\alpha \geq 0$  with $u$, then as long as $\alpha$ is not too large (say $\alpha<\pi/8$) then this means that $v$ has angle
+Now if our state $v$ has angle $\alpha \geq 0$  with $u$, then as long as $\alpha$ is not too large (say $\alpha<\pi/8$) then this means that $v$ has angle
 $u+\theta$ with $x^*_\perp$.
 That means that $U^*v$ will have angle $-\alpha-\theta$ with $x^*_\perp$ or $-\alpha-2\theta$ with $u$, and hence $UU^*v$ will have angle
 $\alpha+2\theta$ with $u$.
