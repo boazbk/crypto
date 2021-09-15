@@ -62,7 +62,7 @@ Formally, this is defined as follows:
 
 ::: {.definition title="PRF ensembles" #prfensemnledef}
 Let $\{ f_s \}_{s\in \{0,1\}^*}$ be an ensemble of functions such that for every $s\in \{0,1\}^*$,  $f_s:\{0,1\}^{|s|} \rightarrow \{0,1\}$.
-We say that $\{ f_s \}$ is a _pseudorandom function ensemble_ if the function $F$ that on input $s\in \{0,1\}^*$ and $i \in \{0,\ldots,2^{|s|}-1\}$ outputs $f_s(i)$ is a PRF.
+We say that $\{ f_s \}$ is a _pseudorandom function ensemble_ if the function $F$ that on input $s\in \{0,1\}^*$ and $i \in \{0,\ldots,2^{|s|}-1\}$ outputs $f_s(i)$ is a PRF generator.
 :::
 
 Note that the condition of [prfensemnledef](){.ref} corresponds to requiring that for every polynomial $p$ and $p(n)$-time adversary $A$, if $n$ is large enough then
@@ -177,7 +177,7 @@ Specifically, we can make the following definition:
 ::: {.definition title="PRF ensemble (varying inputs and outputs)" #prfensembledinputdef}
 Let $\ell_{\text{in}},\ell_{\text{out}}:\N \rightarrow \N$. An ensemble of functions $\{ f_s \}_{s\in \{0,1\}^*}$ is a _PRF ensemble with input length $\ell_{\text{in}}$ and output length $\ell_{\text{out}}$_ if:
 
-1. For every $n\in\N$ and $\{0,1\}^N$, $f_s:\{0,1\}^{\ell_{\text{in}}} \rightarrow \{0,1\}^{\ell_{\text{out}}}$.
+1. For every $n\in\N$ and $s \in \{0,1\}^n$, $f_s:\{0,1\}^{\ell_{\text{in}}} \rightarrow \{0,1\}^{\ell_{\text{out}}}$.
 
 2. For every polynomial $p$ and $p(n)$-time adversary $A$, if $n$ is large enough then
 
@@ -258,12 +258,12 @@ Under the PRF Conjecture, there exists a secure MAC.
 
 ::: {.proof data-ref="MACfromPRFthm"}
 Let $F(\cdot,\cdot)$ be a secure pseudorandom function generator with $n/2$ bits output (which we can obtain using [PRFlengthextensionthm](){.ref}).
-We define $S_k(m) = F(k,m)$ and $V_k(m,\tau)$ to output $1$ iff $F_k(m)=\tau$.
+We define $S_k(m) = F(k,m)$ and $V_k(m,\tau)$ to output $1$ iff $F(k,m)=\tau$.
 Suppose towards the sake of contradiction that there exists an adversary $A$ breaks the security of this construction of a MAC. That is, $A$ queries $S_k(\cdot)$
 $poly(n)$ many times and with probability $1/p(n)$ for some polynomial $p$ outputs $(m',\tau')$ that she did _not_ ask for such that $F(k,m')=\tau'$.
 
 We use $A$ to construct an adversary $A'$ that can distinguish between oracle access to a PRF and a random function by simulating the MAC security game inside $A'$. Every time $A$ requests the signature of some message $m$, $A'$ returns $O(m)$. When $A$ returns $(m', \tau')$ at the end of the $MAC$ game, $A'$ returns $1$ if $O(m') = \tau'$, and $0$ otherwise. If $O(\cdot) = H(\cdot)$ for some completely random function $H(\cdot)$, then the value $H(m')$ would be completely
-random in $\{0,1\}^{n/2}$ and independent of all prior queries. Hence the probability that this value would equal $\tau'$ is at most $2^{-n/2}$. If instead $O(\cdot) = F_k(\cdot)$, then by the fact that $A$ wins the MAC security game with probability $1/p(n)$, the adversary $A'$ will output $1$ with probability $1/p(n)$. That means that such an adversary $A'$ can distinguish between an oracle to $F_k(\cdot)$ and an oracle
+random in $\{0,1\}^{n/2}$ and independent of all prior queries. Hence the probability that this value would equal $\tau'$ is at most $2^{-n/2}$. If instead $O(\cdot) = F(k,\cdot)$, then by the fact that $A$ wins the MAC security game with probability $1/p(n)$, the adversary $A'$ will output $1$ with probability $1/p(n)$. That means that such an adversary $A'$ can distinguish between an oracle to $F(k,\cdot)$ and an oracle
 to a random function $H$, which gives us a contradiction.
 :::
 
