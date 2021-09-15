@@ -604,9 +604,9 @@ $$
 \left| {\mathbb{E}}_{X_i} [ Eve(X_i) ] - {\mathbb{E}}_{Y_i} [ Eve(Y_i) ] \right| > \epsilon
 $$
 contradicting the assumption that $X_i \approx_{T,\epsilon} Y_i$.
+:::
 
 [^hardwiringcost]: The cost $10 \ell n$ is for the operations of feeding the "hardwired" strings $x_1,\ldots,x_{i-1}$, $y_{i+1},\ldots,y_\ell$ into $Eve'$. These take up at most $\ell n$ bits, and depending on the computational model, storing and feeding them into $Eve'$ may take $c\ell n$ steps for some small constant $c<10$. In the future, we will usually ignore such minor details and simply say that if $Eve'$ runs in polynomial time then so will $Eve$.
-:::
 
 
 
