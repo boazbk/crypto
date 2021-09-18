@@ -82,14 +82,20 @@ Some examples of protocols broken through similar means include [XML encryption]
 
 The point is that often our adversaries can be _active_ and modify the communication between sender and receiver, which in effect gives them access not just to choose _plaintexts_ of their choice to encrypt but even to have some impact on the _ciphertexts_ that are decrypted. This motivates the following notion of security (see also [CCAgamefig](){.ref}):
 
-> # {.definition title="CCA security" #CCAdef}
+::: {.definition title="CCA security" #CCAdef}
 An encryption scheme $(E,D)$ is _chosen ciphertext attack (CCA) secure_ if every
-efficient adversary _Mallory_ wins in the following game with probability at most $1/2+ negl(n)$: \
-* Mallory gets $1^n$ where $n$ is the length of the key \
-* For $poly(n)$ rounds, Mallory gets access to the functions $m \mapsto E_k(m)$ and $c \mapsto D_k(c)$. \
-* Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\{0,1\}$, and Mallory gets $c^* = E_k(m_b)$. \
-* Mallory now gets another $poly(n)$ rounds of access to the functions $m \mapsto E_k(m)$ and $c \mapsto D_k(c)$ except that she is not allowed to query $c^*$ to her second oracle. \
+efficient adversary _Mallory_ wins in the following game with probability at most $1/2+ negl(n)$: 
+
+* Mallory gets $1^n$ where $n$ is the length of the key 
+
+* For $poly(n)$ rounds, Mallory gets access to the functions $m \mapsto E_k(m)$ and $c \mapsto D_k(c)$. 
+
+* Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\{0,1\}$, and Mallory gets $c^* = E_k(m_b)$. 
+
+* Mallory now gets another $poly(n)$ rounds of access to the functions $m \mapsto E_k(m)$ and $c \mapsto D_k(c)$ except that she is not allowed to query $c^*$ to her second oracle. 
+
 * Mallory outputs $b'$ and _wins_ if $b'=b$.
+:::
 
 
 ![The CCA security game.](../figure/cca-game.jpg){#CCAgamefig  .margin }
@@ -118,10 +124,11 @@ In particular [ccaweplem](){.ref} rules out the attack of transforming $c$ that 
 
 
 
-> # {.proof data-ref="ccaweplem"}
+::: {.proof data-ref="ccaweplem"}
 We'll show that such if we had an adversary $M'$ that violates the conclusion of the claim, then there is an adversary $M$ that can win in the CCA game.
->
+
 The proof is simple and relies on the crucial fact that the CCA game allows $M$ to query the decryption box on _any_ ciphertext of her choice, as long as it's not _exactly identical_ to the challenge cipertext $c^*$. In particular, if $M'$ is able to morph an encryption $c$ of $m$ to some encryption $c'$ of some different $m'$ that agrees with $m$ on some set of bits, then $M$ can do the following: in the security game, use $m_0$ to be some random message and $m_1$ to be this plaintext $m$. Then, when receiving $c^*$, apply $M'$ to it to obtain a ciphertext $c'$ (note that if the plaintext differs then the ciphertext must differ also; can you see why?) ask the decryption box to decrypt it and output $1$ if the resulting message agrees with $m$ in the corresponding set of bits (otherwise output a random bit). If $M'$ was successful with probability $\epsilon$, then $M$ would win in the CCA game with probability at least $1/2 + \epsilon/10$ or so.
+:::
 
 > # { .pause }
 The proof above is rather sketchy. However it is not very difficult and proving [ccaweplem](){.ref} on your own is an excellent way to ensure familiarity with the definition of CCA security.
