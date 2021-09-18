@@ -443,25 +443,26 @@ For every function $Eve:\{0,1\}^m \rightarrow \{0,1\}$, let $p_X = \Pr[ Eve(X)=1
 
 Then the probability that $Eve$ wins the game is:
 
-$$\Pr[ b=0] p_X + \Pr[b=1](1-p_Y)$$
+$$\Pr[ b=0](1-p_X) + \Pr[b=1] p_Y$$
 
 and since $\Pr[b=0]=\Pr[b=1]=1/2$ this is
 
 $$
-\tfrac{1}{2}p_X + \tfrac{1}{2} - \tfrac{1}{2}p_Y = \tfrac{1}{2} + \tfrac{1}{2}(p_X-p_Y)
+\tfrac{1}{2} - \tfrac{1}{2}p_X + \tfrac{1}{2}p_Y = \tfrac{1}{2} + \tfrac{1}{2}(p_Y-p_X)
 $$
 
 We see that $Eve$ wins the game with success $1/2 + \epsilon/2$ if and only if
 $$
-\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  = \epsilon \;.
+\Pr[ Eve(Y) = 1 ] - \Pr[Eve(X)=1]  = \epsilon \;.
 $$
-Since $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1] \leq \left| \Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1] \right|$, this already shows that if $X$ and $Y$ are $(T,\epsilon)$-indistinguishable then $Eve$ will win
+Since $\Pr[ Eve(Y) = 1 ] - \Pr[Eve(X)=1] \leq \left| \Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1] \right|$, this already shows that if $X$ and $Y$ are $(T,\epsilon)$-indistinguishable then $Eve$ will win
 the game with probability at most $\epsilon/2$.
 
 For the other direction, assume that $X$ and $Y$ are _not_ computationally indistinguishable and let $Eve$ be a $T$ time operation function such that
 $$
 \left| \Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \right| \geq \epsilon \;.
 $$
+
 Then by definition of absolute value, there are two options. Either $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \geq \epsilon$ in which case $Eve$ wins the game with probability at least $1/2 + \epsilon/2$.
 Otherwise $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \leq -\epsilon$, in which case the function $Eve'(w)=1-Eve(w)$ (which is just as easy to compute[^nitpicknegation]) wins the game with probability at least $1/2 + \epsilon/2$.
 :::
