@@ -9,7 +9,7 @@ chapternum: "10"
 
 People have been dreaming about heavier-than-air flight since at least the days of Leonardo Da Vinci (not to mention Icarus from Greek mythology).
 Jules Verne wrote with rather insightful details about going to the moon in 1865.
-But, as far as I know, in all the thousands of years people have been using secret writing, until about 50 years ago no one had considered the possibility of communicating securely without first exchanging a shared secret key. However, in the late 1960's and early 1970's, several people started to question this "common wisdom".
+But, as far as I know, no one had considered the possibility of communicating securely without first exchanging a shared secret key until about 50 years ago. This is surprising given the thousands of years people have been using secret writing! However, in the late 1960's and early 1970's, several people started to question this "common wisdom".
 
 Perhaps the most surprising of these visionaries was an undergraduate student at Berkeley named Ralph Merkle. In the fall of 1974, he wrote a [project proposal](http://www.merkle.com/1974/) for his computer security course that while "it might seem intuitively obvious that if two people have never had the opportunity to prearrange an encryption method, then they will be unable to communicate securely over an insecure channel... I believe it is false". The project proposal was rejected by his professor as "not good enough". Merkle later submitted a paper to the communication of the ACM, where he apologized for the lack of references since he was unable to find any mention of the problem in the scientific literature, and the only source where he saw the problem even _raised_ was in a science fiction story.
 The paper was rejected with the comment that "Experience shows that it is extremely dangerous to transmit key information in the clear."
@@ -17,12 +17,12 @@ Merkle showed that one can design a protocol where Alice and Bob can use $T$ inv
 
 
 We only found out much later that in the late 1960's, a few years before Merkle, James Ellis of the British Intelligence agency GCHQ was [having similar thoughts](http://cryptome.org/jya/ellisdoc.htm).
-His curiosity was spurred by an old World War II manuscript from Bell labs that suggested the following way that two people could communicate securely over a phone line. Alice would inject noise to the line, Bob would relay his messages, and then Alice would subtract the noise to get the signal. The idea is that an adversary over the line sees only the sum of Alice's and Bob's signals and doesn't know what came from what. This got James Ellis thinking whether it would be possible to achieve something like that digitally. As he later recollected, in 1970 he realized that in principle this should be possible, since he could think of an hypothetical black box $B$ that on input a "handle" $\alpha$ and plaintext $p$ would give a "ciphertext" $c$ and that there would be a secret key $\beta$ corresponding to $\alpha$, such that feeding $\beta$ and $c$ to the box would recover $p$. However, Ellis had no idea how to actually instantiate this box. He and others kept giving this question as a puzzle to bright new recruits until one of them, Clifford Cocks, came up in 1973 with a candidate solution loosely based on the factoring problem; in 1974 another GCHQ recruit, Malcolm Williamson, came up with a solution using modular exponentiation.
+His curiosity was spurred by an old World War II manuscript from Bell labs that suggested the following way that two people could communicate securely over a phone line. Alice would inject noise to the line, Bob would relay his messages, and then Alice would subtract the noise to get the signal. The idea is that an adversary over the line sees only the sum of Alice's and Bob's signals and doesn't know what came from what. This got James Ellis thinking whether it would be possible to achieve something like that digitally. As he later recollected, in 1970 he realized that in principle this should be possible. He could think of an hypothetical black box $B$ that on input a "handle" $\alpha$ and plaintext $p$ would give a "ciphertext" $c$. There would be a secret key $\beta$ corresponding to $\alpha$ such that feeding $\beta$ and $c$ to the box would recover $p$. However, Ellis had no idea how to actually instantiate this box. He and others kept giving this question as a puzzle to bright new recruits until one of them, Clifford Cocks, came up in 1973 with a candidate solution loosely based on the factoring problem; in 1974 another GCHQ recruit, Malcolm Williamson, came up with a solution using modular exponentiation.
 
 But among all those thinking of public key cryptography, probably the people who saw the furthest were two researchers at Stanford, Whit Diffie and Martin Hellman. They realized that with the advent of electronic communication, cryptography would find new applications beyond the military domain of spies and submarines. And they understood that in this new world of many users and point to point communication, cryptography would need to scale up. They envisioned an object which we now call "trapdoor permutation" though they called it "one way trapdoor function" or sometimes simply "public key encryption". This is a collection of permutations $\{ p_k \}$ where $p_k$ is a permutation over (say) $\{0,1\}^{|k|}$, and the map $(x,k)\mapsto p_k(x)$ is efficiently computable _but_ the reverse map $(k,y) \mapsto p_k^{-1}(y)$ is computationally hard. Yet, there is also some secret key $s(k)$ (i.e., the "trapdoor") such that using $s(k)$ it is possible to efficiently compute $p^{-1}_k$. Their idea was that using such a trapdoor permutation, Alice who knows $s(k)$ would be able to publish $k$ on some public file such that everyone who wants to send her a message $x$ could do so by computing $p_k(x)$. (While today we know, due to the work of Goldwasser and Micali, that such a deterministic encryption is not a good idea, at the time Diffie and Hellman had amazing intuitions but didn't really have proper definitions of security.)
 But they didn't stop there. They realized that protecting the _integrity_ of communication is no less important than protecting its _secrecy_. Thus, they imagined that Alice could "run encryption in reverse" in order to certify or _sign_ messages. That is, given some message $m$, Alice would send the value $x=p_k^{-1}(h(m))$ (for a hash function $h$) as a way to certify that she endorses $m$, and every person who knows $k$ could verify this by checking that $p_k(x)=h(m)$.
 
-However, Diffie and Hellman were in a position not unlike physicists who predicted that a certain particle should exist but had no experimental verification. Luckily they [met Ralph Merkle](http://cr.yp.to/bib/1988/diffie.pdf), and his ideas about a probabilistic _key exchange protocol_, together with a suggestion from their Stanford colleague [John Gill](https://profiles.stanford.edu/john-gill), inspired them to come up with what today is known as the _Diffie-Hellman Key Exchange_ (which, unbeknownst to them, was found two years earlier at GCHQ by Malcolm Williamson). They published their paper ["New Directions in Cryptography"](https://www-ee.stanford.edu/~hellman/publications/24.pdf) in 1976, and it is considered to have brought about the birth of modern cryptography. However, they still didn't find their elusive trapdoor function.
+However, Diffie and Hellman were in a position not unlike physicists who predicted that a certain particle should exist but had no experimental verification. Luckily they [met Ralph Merkle](http://cr.yp.to/bib/1988/diffie.pdf). His ideas about a probabilistic _key exchange protocol_, together with a suggestion from their Stanford colleague [John Gill](https://profiles.stanford.edu/john-gill), inspired them to come up with what today is known as the _Diffie-Hellman Key Exchange_ (which, unbeknownst to them, was found two years earlier at GCHQ by Malcolm Williamson). They published their paper ["New Directions in Cryptography"](https://www-ee.stanford.edu/~hellman/publications/24.pdf) in 1976, and it is considered to have brought about the birth of modern cryptography. However, they still didn't find their elusive trapdoor function.
 This was done the next year by Rivest, Shamir and Adleman who came up with the RSA trapdoor function, which through the framework of Diffie and Hellman yielded not just encryption but also signatures (this was essentially the same function discovered earlier by Clifford Cocks at GCHQ, though as far as I can tell Cocks, Ellis and Williamson did not realize the application to digital signatures).
 From this point on began a flurry of advances in cryptography which hasn't really died down till this day.
 
@@ -36,11 +36,10 @@ Now would be a good time for you to read the corresponding proofs in one or both
 Below is a review of some of the various reductions we saw in class, with pointers to the corresponding sections in these books.
 
 
-
 * Pseudorandom generators (PRG) length extension (from $n+1$ output PRG to $poly(n)$ output PRG): KL 7.4.2, BS 3.4.2
 * PRG's to pseudorandom functions (PRF's): KL 7.5, BS 4.6
 * PRF's to Chosen Plaintext Attack (CPA) secure encryption: KL 3.5.2, BS 5.5
-* PRF's to secure Message Authentication Codes (MAC's): KL 4.3,  BS 6.3
+* PRF's to secure Message Authentication Codes (MAC's): KL 4.3, BS 6.3
 * MAC's + CPA secure encryption to chosen ciphertext attack (CCA) secure encryption: BS 4.5.4, BS 9.4
 * Pseudorandom permutation (PRP's) to CPA secure encryption / block cipher modes: KL 3.5.2, KL 3.6.2, BS 4.1, 4.4, 5.4
 * Hash function applications: fingerprinting, Merkle trees, passwords: KL 5.6, BS Chapter 8
@@ -76,14 +75,12 @@ This proof has been considerably simplified and quantitatively improved in works
 > # {.remark title="Attacks on private key cryptosystems" #privkeyattacks}
 Another topic we did not discuss in depth is attacks on private key cryptosystems.
 These attacks often work by "opening the black box" and looking at the internal operation of block ciphers or hash functions.
-One then often assigns variables to various internal registers, and then we look to finding collections of inputs that would satisfy some non-trivial relation between those variables. This is a rather vague description, but you can read KL Section 6.2.6 on _linear_ and _differential_ cryptanalysis and BS Sections 3.7-3.9 and 4.3 for more information. See also [this course of Adi Shamir](http://www.cs.tau.ac.il/~tromer/SKC2006/). There is also the fascinating area of _side channel_ attacks on both public and private key crypto.
+We then assign variables to various internal registers, and look to find collections of inputs that would satisfy some non-trivial relation between those variables. This is a rather vague description, but you can read KL Section 6.2.6 on _linear_ and _differential_ cryptanalysis and BS Sections 3.7-3.9 and 4.3 for more information. See also [this course of Adi Shamir](http://www.cs.tau.ac.il/~tromer/SKC2006/). There is also the fascinating area of _side channel_ attacks on both public and private key crypto.
 
 > # {.remark title="Digital Signatures" #signaturesrem}
 We will discuss in this lecture _Digital signatures_, which are the public key analog of message authentication codes.
 Surprisingly, despite being a "public key" object, it is possible to base digital signatures on one-way functions (this is obtained using ideas of Lamport, Merkle, Goldwasser-Goldreich-Micali, Naor-Yung, and Rompel).
 However these constructions are not very efficient (and this may be inherent), and so in practice people use digital signatures that are built using similar techniques to those used for public key encryption.
-
-
 
 
 ## Public Key Encryptions: Definition
@@ -92,7 +89,7 @@ We now discuss how we define security for public key encryption. As mentioned ab
 it took quite a while for cryptographers to arrive at the "right" definition,
 but in the interest of time we will skip ahead to what by now is the standard basic notion (see also [PKCfig](){.ref}):
 
-![In a public key encryption, the receiver Bob generates a _pair_ of keys $(e,d)$, The _encryption key_ $e$ is used for encryption, and the _decryption key_ is used for decryption. We call it a public key system since the security of the scheme does not rely on the adversary Eve not knowing the encryption key. Hence Bob can publicize the key $e$  to a great many potential receivers, and still ensure confidentiality of the messages he receives.](../figure/pkenccartoon.png){#PKCfig .margin}
+![In a public key encryption, the receiver Bob generates a _pair_ of keys $(e,d)$. The _encryption key_ $e$ is used for encryption, and the _decryption key_ is used for decryption. We call it a public key system since the security of the scheme does not rely on the adversary Eve not knowing the encryption key. Hence, Bob can publicize the key $e$  to a great many potential receivers and still ensure confidentiality of the messages he receives.](../figure/pkenccartoon.png){#PKCfig .margin}
 
 > # {.definition title="Public key encryption" #pubkeydef}
 A triple of efficient algorithms $(G,E,D)$ is a _public key encryption scheme_ if it satisfies
@@ -130,7 +127,7 @@ This suggests the following approach for getting an encryption scheme:
 
 >__"Obfuscation based public key encyption":__
 >
->__Ingredients:__ _(i)_ A pseudorandom permutation collection $\{ p_k \}_{k\in \{0,1\}^*}$ where for every $k\in \{0,1\}^n$, $p_k:\{0,1\}^n \rightarrow \{0,1\}^n$, _(ii)_ An "obfuscating compiler" polynomial-time computable $O:\{0,1\}^* \rightarrow \{0,1\}^*$ such that for every circuit $C$, $O(C)$ is a circuit that computes the same function as $C$
+>__Ingredients:__ _(i)_ A pseudorandom permutation collection $\{ p_k \}_{k\in \{0,1\}^*}$ where for every $k\in \{0,1\}^n$, $p_k:\{0,1\}^n \rightarrow \{0,1\}^n$, _(ii)_ An "obfuscating compiler" polynomial-time computable $O:\{0,1\}^* \rightarrow \{0,1\}^*$ such that for every circuit $C$, $O(C)$ is a circuit that computes the same function as $C$.
 >
 * _Key Generation:_ The private key is $k \leftarrow_R \{0,1\}^n$, the public key is $E=O(C_k)$ where $C_k$ is the circuit that maps $x\in \{0,1\}^n$ to $p_k(x)$.
 >
@@ -172,7 +169,7 @@ The kind of results we know have the following form:
 
 >__Theorem:__ If problem $X$ is hard, then there exists a CPA-secure public key encryption.
 
-Where $X$ is some problem that people have tried to solve and couldn't.
+Here, $X$ is some problem that people have tried to solve and couldn't.
 Thus, we have various _candidates_ for public key encryption, and we fervently hope that at least one of them is actually secure.
 The [dirty little secret](https://eprint.iacr.org/2017/365.pdf) of cryptography is that we actually don't have that many candidates.
 We really have only two well studied families.[^other]
@@ -200,9 +197,9 @@ However, we can compute this in $poly((\log a) \cdot n)$ time using the _repeate
 
 The _discrete logarithm_ problem is the problem of computing, given $g,h \in \Z_p$, a number $a$ such that $g^a=h$.
 If such a solution $a$ exists then there is always also a solution of size at most $p$ (can you see why?) and so the solution can be represented using $n$ bits.
-However, currently the best-known algorithm for computing the discrete logarithm runs in time roughly $2^{n^{1/3}}$, which currently becomes prohibitively expensive when $p$ is a prime of length about $2048$ bits.[^constantsdlog]
+However, currently the best-known algorithm for computing the discrete logarithm runs in time roughly $2^{n^{1/3}}$, which is currently prohibitively expensive when $p$ is a prime of length about $2048$ bits.[^constantsdlog]
 
-[^constantsdlog]: The running time of the best known algorithms for computing the discrete logarithm modulo $n$ bit primes is $2^{f(n)2^{n^{1/3}}}$, where $f(n)$ is a function that depends polylogarithmically on $n$. If $f(n)$ would equal $1$, then we'd need numbers of $128^3 \approx 2\cdot 10^6$ bits to get $128$ bits of security, but because $f(n)$ is larger than one, the current [estimates](https://goo.gl/ntszsg) are that we need to let $n=3072$ bit key to get $128$ bits of of security. Still the existence of such a non-trivial algorithm means that we need much larger keys than those used for private key systems to get the same level of security. In particular, to double the estimated security to $256$ bits, NIST recommends that we multiply the RSA keysize five-fold to $15,360$. (The same document also says that SHA-256 gives $256$ bits of security as a pseudorandom generator but only $128$ bits when used to hash documents for digital signatures; can you see why?)
+[^constantsdlog]: The running time of the best known algorithms for computing the discrete logarithm modulo $n$ bit primes is $2^{f(n)2^{n^{1/3}}}$, where $f(n)$ is a function that depends polylogarithmically on $n$. If $f(n)$ would equal $1$, then we'd need numbers of $128^3 \approx 2\cdot 10^6$ bits to get $128$ bits of security, but because $f(n)$ is larger than one, the current [estimates](https://goo.gl/ntszsg) are that we need to let $n=3072$ bit key to get $128$ bits of of security. Still, the existence of such a non-trivial algorithm means that we need much larger keys than those used for private key systems to get the same level of security. In particular, to double the estimated security to $256$ bits, NIST recommends that we multiply the RSA keysize five-fold to $15,360$. (The same document also says that SHA-256 gives $256$ bits of security as a pseudorandom generator but only $128$ bits when used to hash documents for digital signatures; can you see why?)
 
 
 John Gill suggested to Diffie and Hellman that modular exponentiation can be a good source for the kind of "easy-to-compute but hard-to-invert" functions they were looking for. Diffie and Hellman based a public key encryption scheme as follows:
@@ -230,7 +227,7 @@ Unfortunately, no such result is known in the other direction. However in the ra
 
 
 
->__Computational Diffie-Hellman Assumption:__ Let $\mathbb{G}$ be a group elements of which can be described in $n$ bits, with an associative and commutative multiplication operation that can be computed in $poly(n)$ time.  The _Computational Diffie-Hellman (CDH)_ assumption holds with respect to the group $\mathbb{G}$ if for every generator (see below) $g$ of $\mathbb{G}$ and efficient algorithm $A$, the probability that on input $g,g^a,g^b$, $A$ outputs the element $g^{ab}$ is negligible as a function of $n$.^[Formally, since it is an asymptotic statement, the CDH assumption needs to be defined with a _sequence of groups_. However, to make notation simpler we will ignore this issue, and use it only for groups (such as the numbers modulo some $n$ bit primes) where we can easily increase the "security parameter" $n$.]
+>__Computational Diffie-Hellman Assumption:__ Let $\mathbb{G}$ be a group whose elements can be described in $n$ bits, with an associative and commutative multiplication operation that can be computed in $poly(n)$ time.  The _Computational Diffie-Hellman (CDH)_ assumption holds with respect to the group $\mathbb{G}$ if for every generator (see below) $g$ of $\mathbb{G}$ and efficient algorithm $A$, the probability that on input $g,g^a,g^b$, $A$ outputs the element $g^{ab}$ is negligible as a function of $n$.^[Formally, since it is an asymptotic statement, the CDH assumption needs to be defined with a _sequence of groups_. However, to make notation simpler we will ignore this issue, and use it only for groups (such as the numbers modulo some $n$ bit primes) where we can easily increase the "security parameter" $n$.]
 
 In particular we can make the following conjecture:
 
@@ -381,11 +378,11 @@ A triple of algorithms $(G,S,V)$ is a chosen-message-attack secure _digital sign
    3. The adversary _wins_ if they output a pair $(m^*,\sigma^*)$ such that $m^*$ was _not_ queried before to the signing algorithm and $V_v(m^*,\sigma^*)=1$.
 
 
-> # {.remark title="Strong unforgability" #strongunforgabilitysigrem}
+> # {.remark title="Strong unforgeability" #strongunforgabilitysigrem}
 Just like for MACs (see [MACdef](){.ref}), our definition of security for digital signatures with respect to a chosen message attack does not preclude the ability of the adversary to produce a new signature for the same message that it has seen a signature of.
-Just like in MACs, people sometimes consider the notion of _strong unforgability_ which requires that it would not be possible for the adversary to produce a new message-signature pair (even if the message itself was queried before).
+Just like in MACs, people sometimes consider the notion of _strong unforgeability_ which requires that it would not be possible for the adversary to produce a new message-signature pair (even if the message itself was queried before).
 Some signature schemes (such as the full domain hash and the DSA scheme) satisfy this stronger notion while others do not.
-However, just like MACs, it is possible to transform any signature with standard security into a signature that satisfies this stronger unforgability condition.
+However, just like MACs, it is possible to transform any signature with standard security into a signature that satisfies this stronger unforgeability condition.
 
 
 
@@ -505,12 +502,12 @@ However, it is known how to obtain schemes that do not rely on this heuristic, a
 
 ## Putting everything together - security in practice.
 
-Let us discuss briefly how public key cryptography is used to secure web trafic through the SSL/TLS protocol that we all use when we use ```https://``` URLs.
+Let us discuss briefly how public key cryptography is used to secure web traffic through the SSL/TLS protocol that we all use when we use ```https://``` URLs.
 The security this achieve is quite amazing. No matter what wired or wireless network you are using, no matter what country you are in, as long as your device (e.g., phone/laptop/etc..) and the server you are talking to (e.g., Google, Amazon, Microsoft etc.) is functioning properly, you can communicate securely without any party in the middle able to either learn or modify the contents of your interaction.[^steg]
 
 [^steg]: They are able to know that such an interaction took place and the amount of bits exchanged. Preventing these kind of attacks is more subtle and approaches for solutions are known as _steganography_ and _anonymous routing_.
 
-In the web setting, therre are _servers_ who have public keys, and _users_ who generally don't have such keys. Ideally, as a user, you should already know the public keys of all the entities you communicate with e.g., ```amazon.com```, ```google.com```, etc. However, how are you going to learn those public keys?
+In the web setting, there are _servers_ who have public keys, and _users_ who generally don't have such keys. Ideally, as a user, you should already know the public keys of all the entities you communicate with e.g., ```amazon.com```, ```google.com```, etc. However, how are you going to learn those public keys?
 The traditional answer was that because they are _public_ these keys are much easier to communicate and the servers could even post them as ads on the _New York Times_. Of course these days everyone reads the _Times_ through ```nytimes.com``` and so this seems like a chicken-and-egg type of problem.
 
 The solution goes back again to the quote of Archimedes of "Give me a fulcrum, and I shall move the world". The idea is that trust can be _transitive_. Suppose you have a Mac. Then you have already trusted Apple with quite a bit of your personal information, and so you might be fine if this Mac came pre-installed with the Apple public key which you trust to be authentic. Now, suppose that you want to communicate with ```Amazon.com```. Now, _you_ might not know the correct public key for Amazon, but _Apple_ surely does. So Apple can supply Amazon with a signed message to the effect of
@@ -570,7 +567,7 @@ Below are optional group theory related exercises and proofs meant to help gain 
 
 * For example, the integers (i.e. infinitely many elements) where the operation is addition is a commutative group: if $a,b,c$ are integers, then $a+b = b+a$ (commutativity), $(a+b)+c = a+(b+c)$ (associativity), $a+0 = a$ (so $0$ is the identity element here; we typically think of the identity as $1$, especially when the group operation is multiplication), and $a+(-a) = 0$ (i.e. for any integer, we are allowed to think of its additive inverse, which is also an integer).
 
-* A non-commutative group (or a non-abelian group) is a group such that $\exists a,b \in \mathbb{G}$ but $a * b \neq b * a$ (where $*$ is the group operation). One example (of an infinite, non commutative group) is the set of $2 \times 2$ matrices (over the real numbers) which are invertible, and the operation is matrix multiplication. The identity element is the traditional identity matrix, and each matrix has an inverse (and the product of two invertible matrices is still invertible), and matrix multiplication satisfies associativity. However, matrix multiplication here need not satisfy commutativity.
+* A non-commutative group (or a non-abelian group) is a group such that $\exists a,b \in \mathbb{G}$ but $a * b \neq b * a$ (where $*$ is the group operation). One example (of an infinite, non-commutative group) is the set of $2 \times 2$ matrices (over the real numbers) which are invertible, and the operation is matrix multiplication. The identity element is the traditional identity matrix, and each matrix has an inverse (and the product of two invertible matrices is still invertible), and matrix multiplication satisfies associativity. However, matrix multiplication here need not satisfy commutativity.
 
 In this class, we restrict ourselves to finite commutative groups to avoid complications with infinite group orders and annoyances with non-commutative operations. For the problems below, assume that a "group" is really a "finite commutative group".
 
@@ -611,7 +608,7 @@ $2$ is not a generator because $2^3 \mod 7 = 8 \mod 7 = 1$, so the set $\{2,2^2,
 $3$ will be a generator because $3^2 \mod 7 = 9 \mod 7 = 2 \mod 7$, $3^3 \mod 7 = 2*3 \mod 7 = 6 \mod 7$, $3^3 \mod 7 = 18 \mod 7 = 4 \mod 7$, $3^4 = 12 \mod 7 = 5$, $3^5 \mod 7 = 15 \mod 7 = 1$, so $\{3,3^2,3^3,3^4,3^5,3^6,3^7 \} = \{3,2,6,4,5,1\}$, which are all of the elements.
 $4$ is not a generator because $4^3 \mod 7  = 64 \mod 7 = 1 \mod 7$, so just like $2$, we won't get every element.
 $5$ is a generator because $5^2 \mod 6 = 4, 5^3 \mod 7 = 20 \mod 7 = 6, 5^4 \mod 7 = 30 \mod 7 = 2, 5^5 \mod 7 = 10 \mod 7 = 3, 5^6 \mod 7 = 15 \mod 7 = 1$, so just like $3$, $5$ is a generator.
-$6$ is not a generator becaue $6^2 \mod 7= 1 \mod 7$, so just like $2$, the set $\{6,6^2,6^3,\cdots\}$ cannot contain all elements (it will just have $1$ and $6$).
+$6$ is not a generator because $6^2 \mod 7= 1 \mod 7$, so just like $2$, the set $\{6,6^2,6^3,\cdots\}$ cannot contain all elements (it will just have $1$ and $6$).
 :::
 
 
@@ -632,7 +629,7 @@ Suppose we have some (finite, commutative) group $\mathbb{G}$. Prove that the in
 :::
 
 ::: {.solution data-ref="groupex4"}
-Suppose that $a \in \mathbb{G}$ and that $b,c \in \mathbb{G}$ such that $ab = 1$ and $ac = 1$. Then we know that $ab = ac$, and then we can apply $a^{-1}$ to both sides (we are guarunteed that $a$ has SOME inverse $a^{-1}$ in the group), and so we have $a^{-1}ab = a^{-1}ac$, but we know that $a^{-1}a = 1$ (and we can use associativity of a group), so $(1)b = (1)c$ so $b = c$. QED.
+Suppose that $a \in \mathbb{G}$ and that $b,c \in \mathbb{G}$ such that $ab = 1$ and $ac = 1$. Then we know that $ab = ac$, and then we can apply $a^{-1}$ to both sides (we are guaranteed that $a$ has SOME inverse $a^{-1}$ in the group), and so we have $a^{-1}ab = a^{-1}ac$, but we know that $a^{-1}a = 1$ (and we can use associativity of a group), so $(1)b = (1)c$ so $b = c$. QED.
 :::
 
 
@@ -669,7 +666,7 @@ Under the assumptions stated above, prove that there is an efficient way to chec
 :::
 
 ::: {.solution data-ref="quadresidueex2"}
-Suppose that we recieve some element $g \in \mathbb{G}$. We want to know if there exists some $g' \in \mathbb{G}$ such that $g = (g')^2$ (this is equivalent to $g$ being in $\mathbb{H}$). To do so, compute $g^{|\mathbb{G}|/2}$. I claim that $g^{|\mathbb{G}|/2}=1$ if and only if $g \in \mathbb{H}$.
+Suppose that we receive some element $g \in \mathbb{G}$. We want to know if there exists some $g' \in \mathbb{G}$ such that $g = (g')^2$ (this is equivalent to $g$ being in $\mathbb{H}$). To do so, compute $g^{|\mathbb{G}|/2}$. I claim that $g^{|\mathbb{G}|/2}=1$ if and only if $g \in \mathbb{H}$.
 
 (Proving the if): If $g \in \mathbb{H}$, then $g=(g')^2$ for some $g' \in \mathbb{G}$. We then have that $g^{|\mathbb{G}|/2} = ((g')^2)^{|\mathbb{G}|/2} = (g')^{|\mathbb{G}|}$. But from our assumption, an element raised to the order of the group is $1$, so $(g')^{|\mathbb{G}|} = 1$, so $g^{|\mathbb{G}|/2} = 1$. As a result, if $g \in \mathbb{H}$, then $g^{|\mathbb{G}|/2} = 1$.
 

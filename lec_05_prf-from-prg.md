@@ -311,3 +311,36 @@ Clearly, this simple solution to the broadcast encryption problem has two seriou
 It turns out that we can construct a broadcast encryption scheme with even shorter ciphertexts by considering a _tree of keys_ (see [brdcasttreefig](){.ref}). The root of this tree is labeled $k_{\varnothing}$, its children are $k_0$ and $k_1$, their children are $k_{00}, k_{01}, k_{10}, k_{11}$, and so on. The depth of the tree is $\log_2 m$, and the value of each key in the tree is decided uniformly at random, or by applying a key derivation function to a string $k_{master}$. Each device $i$ receives _all_ the keys on the path from the root to the $i$th leaf. For example, if $m=8$, then device $011$ receives the keys $k_{\varnothing}, k_0, k_{01}, k_{011}$.
 
 To encrypt a message $x$, we carry out the following procedure: initially, when no keys have been revoked, we encrypt $x$ using an ephermal key $\hat k$ (as described above) and encrypt $\hat k$ with a single device key $k_\varnothing$. This is sufficient since all devices have access to $k_\varnothing$. In order to add a hacked device $i$ to the revocation set, we discard all $\log_2 m$ keys belonging to device $i$, which comprise a root-to-leaf path in the tree. Instead of using these keys, we will make sure to encrypt all future $\hat k$'s using the _siblings_ of the vertices along this path. Doing so ensures that (1) device $i$ can no longer decrypt secure content and (2) every device $j \neq i$ can _continue_ to decrypt content using at least one of the keys along the path from the root to the $j$th leaf. With this scheme, the total length of a ciphertext is only $O(n|R| \log_2 m + |x|)$ bits, where $|R|$ is the number of devices revoked so far. When $|R|$ is small, this bound is _much_ better than what we previously achieved without a tree-based construction.
+
+
+## Reading comprehension exercises
+
+I recommend students do the following exercises after reading the lecture. They do not cover all material, but can be a good way to check your understanding.
+
+
+::: {.exercise }
+Let $(E,D)$ be the encryption scheme that we saw in Lecture 2 where $E_k(m)=G(k)\oplus m$ where $G(\cdot)$ is a pseudorandom generator. Is this scheme CPA secure?
+
+a.  No it is never CPA secure.
+b.  It is always CPA secure.
+c. It is sometimes CPA secure and sometimes not, depending on the properties of the PRG $G$
+:::
+
+
+::: {.exercise }
+Consider the proof constructing PRFs from PRGs. Up to an order of magnitude, how many invocations of the underlying pseudorandom generator does the pseudorandom function collection make when queried on an input $i\in \{0,1\}^n$?
+
+a. $n$
+b. $n^2$
+c. $1$
+d. $2^n$
+:::
+
+::: {.exercise }
+In the following we identify a block cipher with a pseudorandom permutation (PRP) collection. Which of these statements is true:
+
+a. Every PRP collection is also a  PRF collection
+b. Every PRF collection is also a PRP collection
+c. If $\{ f_s \}$ is a PRP collection then the encryption scheme $E_s(m)=f_s(m)$ is a CPA secure encryption scheme.
+d. If $\{ f_s \}$ is a PRF collection then the encryption scheme $E_s(m)=f_s(m)$ is a CPA secure encryption scheme.
+:::
