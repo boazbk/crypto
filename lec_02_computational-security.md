@@ -464,10 +464,9 @@ $$
 $$
 
 Then by definition of absolute value, there are two options. Either $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \geq \epsilon$ in which case $Eve$ wins the game with probability at least $1/2 + \epsilon/2$.
-Otherwise $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \leq -\epsilon$, in which case the function $Eve'(w)=1-Eve(w)$ (which is just as easy to compute[^nitpicknegation]) wins the game with probability at least $1/2 + \epsilon/2$.
+Otherwise $\Pr[ Eve(X) = 1 ] - \Pr[Eve(Y)=1]  \leq -\epsilon$, in which case the function $Eve'(w)=1-Eve(w)$ (which is just as easy to compute) wins the game with probability at least $1/2 + \epsilon/2$.
 
-[^nitpicknegation]: Above we assume that the class of "functions computable in at most $T$ operations" is closed under negation, in the sense that if $F$ is in this class, then $1-F$ is also. For standard Boolean circuits, this can be done if we don't count negation gates (which can change the total circuit size by at most a factor of two), or we can allow for $Eve'$ to require a constant additional number of operations, in which case the exercise is still essentially true but is slightly more cumbersome to state.
-
+Note that above we assume that the class of "functions computable in at most $T$ operations" is _closed under negation_, in the sense that if $F$ is in this class, then $1-F$ is also. For standard Boolean circuits, this can be done if we don't count negation gates (which can change the total circuit size by at most a factor of two), or we can allow for $Eve'$ to require a constant additional number of operations, in which case the exercise is still essentially true but is slightly more cumbersome to state.
 :::
 
 
