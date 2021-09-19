@@ -74,7 +74,7 @@ The key observations here are:
 
 2. The label for an internal vertex $v$ is only used once, and that is for generating the labels for its children.
 
-Hence the distribution of $y=G(s)$, for $s$ drawn from $U_n$, is identical to the distribution, $G(v_{j-1}^{L}$, of the $j^{th}$ hybrid, and thus if $A$ had advantage $\epsilon$ in breaking the PRF $\{ f_s \}$ then $D$ will have advantage $\epsilon/T'$ in breaking the PRG $G$ thus obtaining a contradiction.
+Hence the distribution of $y=G(s)$, for $s$ drawn from $U_n$, is identical to the distribution, $G(v_{j-1}^{L})$, of the $j^{th}$ hybrid, and thus if $A$ had advantage $\epsilon$ in breaking the PRF $\{ f_s \}$ then $D$ will have advantage $\epsilon/T'$ in breaking the PRG $G$ thus obtaining a contradiction.
 :::
 
 
