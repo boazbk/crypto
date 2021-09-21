@@ -18,11 +18,11 @@ Let's start by reviewing what we have learned so far:
 
 * To get around this, we need to consider computational considerations.
 A basic object is a _pseudorandom generator_ and we considered the _PRG Conjecture_ which stipulates the existence of an efficiently computable function $G:\{0,1\}^n\rightarrow\{0,1\}^{n+1}$
-such that $G(U_n)\approx U_{n+1}$ (where $U_m$ denotes the uniform distribution on $\{0,1\}^m$ and $\approx$ denotes computational indistinguishability).
+such that $G(U_n)\approx U_{n+1}$ (where $U_m$ denotes the uniform distribution on $\{0,1\}^m$ and $\approx$ denotes computational indistinguishability).^[The PRG conjecture is the name we use in this course. In the literature this is known as the conjecture of the existence of pseudorandom generators, and through the work of  [Håstad, Impagliazzo, Levin and Luby (HILL)](https://www.csc.kth.se/~johanh/prgfromowf.pdf) it is known to be equivalent to the existence of _one way functions, see [Vadhan, Chapter 7](https://people.seas.harvard.edu/~salil/pseudorandomness/).]
 
 * We showed that the PRG conjecture implies a pseudorandom generator of any polynomial output length which in particular via the stream cipher construction implies a computationally secure encryption with plaintext arbitrarily larger than the key. (The only restriction is that the plaintext is of polynomial size which is needed anyway if we want to actually be able to read and write it.)
 
-* We then showed that the PRG conjecture actually implies a stronger object known as a _pseudorandom function (PRF) function collection_: this is a collection $\{ f_s \}$ of functions such that if we choose $s$ at random and fix it, and give an adversary a black box computing $i \mapsto f_s(i)$ then she can't tell the difference between this and a blackbox computing a random function.
+* We then showed that the PRG conjecture actually implies a stronger object known as a _pseudorandom function (PRF) function collection_: this is a collection $\{ f_s \}$ of functions such that if we choose $s$ at random and fix it, and give an adversary a black box computing $i \mapsto f_s(i)$ then she can't tell the difference between this and a blackbox computing a random function.^[This was done by [Goldreich, Goldwasser and Micali](https://www.wisdom.weizmann.ac.il/~oded/X/ggm.pdf).]
 
 * Pseudorandom functions turn out to be useful for _identification protocols_, _message authentication codes_ and this strong notion of security of encryption known as _chosen plaintext attack (CPA) security_ where we are allowed to encrypt _many messages of Eve's choice_ and still require that the next message hides all information except for what Eve already knew before.
 
@@ -38,39 +38,45 @@ Please stop and play an ominous sound track at this point.
 
 
 
-### Example: The Wired Equivalence Protocol (WEP)
+### Example: The Wired Equivalence Privacy (WEP)
 
-The WEP is perhaps one of the most inaccurately named protocols of all times.
-It was invented in 1999 for the purpose of securing Wi-Fi networks so that they would have virtually the same level of security as wired networks, but already early on several
-security flaws were pointed out.
+The Wired Equivalence Privacy (WEP) protocol is perhaps one of the most inaccurately named protocols of all times.
+It was invented in 1999 for the purpose of securing Wi-Fi networks so that they would have virtually the same level of security as wired networks, but already early on several security flaws were pointed out.
 In particular in 2001, Fluhrer,  Mantin, and Shamir showed how the RC4 flaws we mentioned in prior lecture can be used to completely break WEP in less than one minute.
 Yet, the protocol lingered on and for many years after was still the most widely used WiFi encryption protocol as many routers had it as the default option.
 In 2007 the WEP was blamed for a hack stealing 45 million credit card numbers from T.J. Maxx.
-In 2012 (after 11 years of attacks!) it was estimated that it is still used in about a quarter of encrypted wireless networks, and in 2014 it was still the default option on many Verizon home routers. (I don't know of more recent surveys.)
-Here we will talk about a different flaw of WEP that is in fact shared
-by many other protocols, including the first versions of the secure socket layer (SSL) protocol that is used to protect all encrypted web traffic.
+In 2012 (after 11 years of attacks!) it was estimated that it is still used in about a quarter of encrypted wireless networks, and in 2014 it was still the default option on many Verizon home routers. 
+It is still (!) used in some routers, see [wepusage](){.ref}. This is a great example of how hard it is to remove insecure protocols from practical usage (and so how important it is to get these protocls right).
+
+
+![WEP usage over time according to [Wigle.net](https://wigle.net/stats). Despite having documented security issues since 2001 and being officially deprecated since 2004, WEP continued to be the most popular WiFi encryption protocol up to 2012, and at the time of writing, it is still used by a non-trivial number of devices (though see [this stackoverflow answer](https://security.stackexchange.com/a/191076) for more).](../figure/WEP.png){#wepusage}
+
+
+Here we will talk about a different flaw of WEP that is in fact shared by many other protocols, including the first versions of the secure socket layer (SSL) protocol that is used to protect all encrypted web traffic.
 
 To avoid superfluous details we will consider a highly abstract (and somewhat inaccurate) version of WEP that still demonstrates our main point.
 In this protocol Alice (the user) sends to Bob (the access point) an IP packet that she wants routed somewhere on the internet.
 
-Thus we can think of the message Alice sends to Bob as a string $m\in\{0,1\}^\ell$ of the form $m=(m_1,m_2)$ where $m_1$ is the IP address this packet needs to be routed to and $m_2$ is the actual message that needs to be delivered.
+Thus we can think of the message Alice sends to Bob as a string $m\in\{0,1\}^\ell$ of the form $m=m_1\|m_2$ where $m_1$ is the IP address this packet needs to be routed to and $m_2$ is the actual message that needs to be delivered.
 In the WEP protocol, the message that Alice sends to Bob has the form 
-$E_k(m\|CRC(m))$ (where $\|$ denotes concatenation and $CRC(m)$ is some cyclic redundancy code).
+$E_k(m\|CRC(m))$ (where $\|$ denotes concatenation and $CRC(m)$ is some [cyclic redundancy check](https://en.wikipedia.org/wiki/Cyclic_redundancy_check)).
+A $CRC$ is some function mapping $\{0,1\}^n$ to $\{0,1\}^t$ which is meant to enable detection of errors in typing or communication. The idea is that if a message $m$ is mistyped into $m'$, then it is very likely that $CRC(m) \neq CRC(m')$. It is similar to the [checksum digits](https://en.wikipedia.org/wiki/Luhn_algorithm) used in credit card numbers and many other cases. Unlike a message authentication code, a CRC does not have a secret key and is not secure against adversarial perturbations.
+
 The actual encryption WEP used was RC4, but for us it doesn't really matter.
 What does matter is that the encryption has the form $E_k(m') = pad \oplus m'$
 where $pad$ is computed as some function of the key.
 In particular the attack we will describe works even if we use our stronger CPA secure PRF-based scheme where $pad=f_k(r)$ for some random (or counter) $r$ that is sent out separately.
 
 Now the security of the encryption means that an adversary seeing the ciphertext $c=E_k(m\|crc(m))$ will not be able to know $m$, but since this is traveling over the air, the adversary could "spoof" the signal and send a different ciphertext $c'$ to Bob.
-In particular, if the adversary knows the IP address $m_1$ that Alice was using (e.g., for example, the adversary can guess that Alice is probably one of the billions of people that visit the website boazbarak.org on a regular basis) then she can XOR the ciphertext with a string of her choosing and hence convert the ciphertext $c = pad \oplus (m_1,m_2,CRC(m_1,m_2))$ into the ciphertext $c' = c \oplus x$ where $x=(x_1,x_2,x_3)$ is computed so that $x_1 \oplus m_1$ is equal to the adversary's own IP address!
+In particular, if the adversary knows the IP address $m_1$ that Alice was using (e.g., for example, the adversary can guess that Alice is probably one of the billions of people that visit the website boazbarak.org on a regular basis) then she can XOR the ciphertext with a string of her choosing and hence convert the ciphertext $c = pad \oplus (m_1\| m_2 \|CRC(m_1,m_2))$ into the ciphertext $c' = c \oplus x$ where $x (x_1\|x_2\|x_3$ is computed so that $x_1 \oplus m_1$ is equal to the adversary's own IP address!
 
 
 So, the adversary doesn't need to decrypt the message- by spoofing the ciphertext she can ensure that Bob (who is an access point, and whose job is to decrypt and then deliver packets) simply delivers it unencrypted straight into her hands.
 One issue is that Eve modifies $m_1$ then it is unlikely that the CRC code will still check out, and hence Bob would reject the packet.
-However,  [CRC 32](https://goo.gl/5aqEHB) - the CRC algorithm used by WEP - is _linear_ modulo $2$, which means that for every pair of strings $x_1,x_2$, $CRC(m_1\oplus x_1,m_2 \oplus m_2)=CRC(m_1,m_2)\oplus CRC(x_1,x_2)$.
+However,  [CRC 32](https://goo.gl/5aqEHB) - the CRC algorithm used by WEP - is _linear_ modulo $2$, that is $CRC(x \oplus x') = CRC(x)\oplus CRC(x')$. 
 This means that if the original ciphertext $c$ was an encryption of the message
-$m=(m_1,m_2,CRC(m_1,m_2))$ then $c'=c \oplus (x_1,0,CRC(x_1,0))$ will be an encryption of the message $m'=(m_1 \oplus x_1, m_2, CRC(x_1\oplus m_1,m_2))$ (where $0$ denotes a string of zeroes of the same length as $m_2$, and hence $m_2 \oplus 0 = m_2$).
-Therefore by XOR'ing $c$ with $(x_1,0,CRC(x_1,0))$, the adversary Mallory can ensure that Bob will deliver the message $m_2$ to the IP address $m_1 \oplus x_1$ of her choice (see [WEPattackfig](){.ref}).
+$m= m_1 \| m_2 \| CRC(m_1,m_2)$ then $c'=c \oplus (x_1\|0^t\|CRC(x_1\|0^t))$ will be an encryption of the message $m'=(m_1 \oplus x_1) \|m_2 \| CRC( (x_1\oplus m_1) \| m_2)$ (where $0^t$ denotes a string of zeroes of the same length $t$ as $m_2$, and hence $m_2 \oplus 0^t = m_2$).
+Therefore by XOR'ing $c$ with $x_1 \|0^t \| CRC(x_1\|0^t))$, the adversary Mallory can ensure that Bob will deliver the message $m_2$ to the IP address $m_1 \oplus x_1$ of her choice (see [WEPattackfig](){.ref}).
 
 ![The attack on the WEP protocol allowing the adversary Mallory to read encrypted messages even when Alice uses a CPA secure encryption.](../figure/wep-attack.jpg){#WEPattackfig width=90% }
 
@@ -98,7 +104,7 @@ efficient adversary _Mallory_ wins in the following game with probability at mos
 :::
 
 
-![The CCA security game.](../figure/cca-game.jpg){#CCAgamefig  .margin }
+![The CCA security game.](../figure/cca-game.jpg){#CCAgamefig   }
 
 
 
@@ -173,44 +179,49 @@ If you didn't stop before, then you should really stop and think now.
 
 OK, so now that you had a chance to think about this on your own, we will describe one way that works to achieve CCA security from MACs. We will explore other approaches that may or may not work in the exercises.
 
-> # {.theorem title="CCA from CPA and MAC" #CCAfromCPAMACthm}
+::: {.theorem title="CCA from CPA and MAC (encrypt-then-sign)" #CCAfromCPAMACthm}
 Let $(E,D)$ be CPA-secure encryption scheme and $(S,V)$ be a CMA-secure MAC with $n$ bit keys and a canonical verification algorithm.^[By a _canonical verification algorithm_ we mean that $V_k(m,\sigma)=1$ iff $S_k(m)=\sigma$.]
-Then the following encryption $(E',D')$ with keys $2n$ bits is CCA secure: \
-* $E'_{k_1,k_2}(m)$ is obtained by computing $c=E_{k_1}(m)$ , $\sigma = S_{k_2}(c)$ and outputting $(c,\sigma)$. \
+Then the following encryption $(E',D')$ with keys $2n$ bits is CCA secure: 
+
+* $E'_{k_1,k_2}(m)$ is obtained by computing $c=E_{k_1}(m)$ , $\sigma = S_{k_2}(c)$ and outputting $(c,\sigma)$. 
+
 * $D'_{k_1,k_2}(c,\sigma)$ outputs nothing (e.g., an error message) if $V_{k_2}(c,\sigma)\neq 1$, and otherwise outputs $D_{k_1}(c)$.
+:::
 
 
-> # {.proof data-ref="CCAfromCPAMACthm"}
+::: {.proof data-ref="CCAfromCPAMACthm"}
 Suppose, for the sake of contradiction, that there exists an adversary $M'$ that wins the CCA game for the scheme $(E',D')$ with probability
 at least $1/2+\epsilon$. We consider the following two cases:
->
+
 __Case I:__ With probability at least $\epsilon/10$, at some point during the CCA game, $M'$ sends to its decryption box a ciphertext $(c,\sigma)$ that is
 not identical to one of the ciphertexts it previously obtained from its encryption box, and obtains from it a non-error response.
->
+
 __Case II:__ The event above happens with probability smaller than $\epsilon/10$.
->
+
 We will derive a contradiction in either case. In the first case, we will use $M'$ to obtain an adversary that breaks the MAC $(S,V)$, while in the second case, we will use $M'$ to obtain an adversary that breaks the CPA-security of $(E,D)$.
->
+
 Let's start with Case I: When this case holds, we will build an adversary $F$ (for "forger") for the MAC $(S,V)$,  we can assume the adversary $F$ has access to the both signing and verification algorithms as black boxes for some unknown key $k_2$ that is chosen at random and fixed.^[Since we use a MAC with canonical verification, access to the signature algorithm implies access to the verification algorithm.]
 $F$ will choose $k_1$ on its own, and will also choose at random a number $i_0$ from $1$ to $T$, where $T$ is the total number of queries that $M'$ makes to the decryption box. $F$ will run the entire CCA game with $M'$, using $k_1$ and its access to the black boxes to execute the decryption and decryption boxes, all the way until just before $M'$ makes the $i_0^{th}$ query $(c,\sigma)$ to its decryption box. At that point, $F$ will output $(c,\sigma)$.
 We claim that with probability at least $\epsilon/(10T)$, our forger will succeed in the CMA game in the sense that __(i)__ the query $(c,\sigma)$ will pass verification, and __(ii)__ the message $c$ was not previously queried before to the signing oracle.
->
+
 Indeed, because we are in Case I, with probability $\epsilon/10$, in this game _some_ query that $M'$ makes will be one that was not asked before and hence was _not_ queried by $F$ to its signing oracle, and moreover, the returned message is not an error message, and hence the signature passes verification.
 Since $i_0$ is random, with probability $\epsilon/(10T)$ this query will be at the $i_0^{th}$ round.
 Let us assume that this above event $GOOD$ happened in which the $i_0$-th query to the decryption box is a pair $(c,\sigma)$ that both passes verification and the pair $(c,\sigma)$ was not returned before by the encryption oracle.
 Since we pass (canonical) verification, we know that $\sigma=S_{k_2}(c)$, and because all encryption queries return pairs of the form $(c',S_{k_2}(\sigma'))$, this means that no such query returned $c$ as its first element either.
 In other words, when the event $GOOD$ happens the $i_0$-the query contains a pair $(c,\sigma)$ such that $c$ was not queried before to the signature box, but $(c,\sigma)$ passes verification. This is the definition of breaking $(S,V)$ in a chosen message attack, and hence we obtain a contradiction to the CMA security of $(S,V)$.
->
+
 Now for Case II: In this case, we will build an adversary $Eve$ for CPA-game in the original scheme $(E,D)$.  As you might expect, the adversary $Eve$ will choose by herself the key $k_2$ for the MAC scheme, and attempt to play the CCA security game with $M'$.  When $M'$ makes _encryption queries_ this should not be a problem-
 $Eve$ can forward the plaintext $m$ to its encryption oracle to get $c=E_{k_1}(m)$ and then compute $\sigma = S_{k_2}(c)$ since she knows the signing key $k_2$.
->
+
 However, what does $Eve$ do when $M'$ makes _decryption_ queries? That is, suppose that $M'$ sends a query of the form $(c,\sigma)$ to its decryption box. To simulate the algorithm $D'$, $Eve$ will need access to a _decryption box_ for $D$, but she doesn't get such a box in the CPA game (This is a subtle point- please pause here and reflect on it until you are sure you understand it!)
->
+
 To handle this issue $Eve$   will follow the common approach of "winging it and hoping for the best". When $M'$ sends a query of the form $(c,\sigma)$, $Eve$ will first check if it happens to be the case that $(c,\sigma)$ was returned before as an answer to an encryption query $m$. In this case $Eve$ will breathe a sigh of relief and simply return $m$ to $M'$ as the answer. (This is obviously correct: if $(c,\sigma)$ is the encryption of $m$ then $m$ is the decryption of $(c,\sigma)$.) However, if the query $(c,\sigma)$ has not been returned before as an answer, then $Eve$ is in a bit of a pickle. The way out of it is for her to simply return "error" and hope that everything will work out.
 The crucial observation is that because we are in case II things _will_ work out.
 After all, the only way $Eve$ makes a mistake is if she returns an error message
 where the original decryption box would not have done so, but this happens with probability at most $\epsilon/10$. Hence, if $M'$ has success $1/2+\epsilon$ in the CCA game, then even if it's the case that $M'$ always outputs the wrong answer when $Eve$ makes this mistake, we will still get success at least $1/2+0.9\epsilon$.
 Since $\epsilon$ is non negligible, this would contradict the CPA security of $(E,D)$ thereby concluding the proof of the theorem.
+:::
+
 
 > # { .pause }
 This proof is emblematic of a general principle for proving CCA security.
@@ -280,3 +291,51 @@ For example, given a key $k$ and a message $m$ you can create the ciphertext $\{
 However the assumption is that any information that cannot be obtained by such manipulation is unknown.
 
 Translating a proof of security in this algebra to a proof for real world adversaries is highly non trivial. However, to have even a fighting chance, the encryption scheme needs to be as strong as possible, and in particular it turns out that security notions such as CCA play a crucial role.
+
+
+## Reading comprehension exercises
+
+
+I recommend students do the following exercises after reading the lecture. They do not cover all material, but can be a good way to check your understanding.
+
+
+::: {.exercise }
+Let $(E,D)$ be the "canonical" PRF-based CPA secure encryption, where $E_k(m)= (r,f_k(r)\oplus m)$ and  $\{ f_k \}$
+is a PRF collection and $r$ is chosen at random. Is this scheme CCA secure?
+
+a. No it is never CCA secure.
+
+
+b.  It is always CCA secure.
+
+
+c. It is sometimes CCA secure and sometimes not, depending on the properties of the PRF $\{ f_k \}$.
+
+:::
+
+::: {.exercise }
+Suppose that we allow a key to be as long as the message, and so we can use the one time pad.
+Would the one-time pad be:
+
+a. CPA secure
+
+
+b. CCA secure
+
+
+c. Neither CPA nor CCA secure.
+:::
+
+
+::: {.exercise }
+Which of the following statements is true about the proof of [CCAfromCPAMACthm](){.ref}: 
+
+a. Case I corresponds to breaking the MAC and Case II corresponds to breaking the CPA security of the underlying encryption scheme.
+
+
+b. Case I corresponds to breaking the CPA security of the underlying encryption scheme  and Case II corresponds to breaking the MAC.
+
+c. Both cases correspond to both breaking the MAC and encryption scheme
+
+d. If neither Case I nor Case II happens then we obtain an adversary breaking the security of the underlying encryption scheme.
+:::
