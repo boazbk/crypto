@@ -292,6 +292,7 @@ However the assumption is that any information that cannot be obtained by such m
 
 Translating a proof of security in this algebra to a proof for real world adversaries is highly non trivial. However, to have even a fighting chance, the encryption scheme needs to be as strong as possible, and in particular it turns out that security notions such as CCA play a crucial role.
 
+![The [Dolev-Yao](https://en.wikipedia.org/wiki/Dolev%E2%80%93Yao_model)  Algebra of what an adversary or "intruder" knows. Figure taken from [here](https://www.ceeol.com/search/article-detail?id=896120).](../figure/Dolev-Yao-intruder-rules.png){#dolevyaofig}
 
 ## Reading comprehension exercises
 
