@@ -207,8 +207,8 @@ We claim that with probability at least $\epsilon/(10T)$, our forger will succee
 Indeed, because we are in Case I, with probability $\epsilon/10$, in this game _some_ query that $M'$ makes will be one that was not asked before and hence was _not_ queried by $F$ to its signing oracle, and moreover, the returned message is not an error message, and hence the signature passes verification.
 Since $i_0$ is random, with probability $\epsilon/(10T)$ this query will be at the $i_0^{th}$ round.
 Let us assume that this above event $GOOD$ happened in which the $i_0$-th query to the decryption box is a pair $(c,\sigma)$ that both passes verification and the pair $(c,\sigma)$ was not returned before by the encryption oracle.
-Since we pass (canonical) verification, we know that $\sigma=S_{k_2}(c)$, and because all encryption queries return pairs of the form $(c',S_{k_2}(\sigma'))$, this means that no such query returned $c$ as its first element either.
-In other words, when the event $GOOD$ happens the $i_0$-the query contains a pair $(c,\sigma)$ such that $c$ was not queried before to the signature box, but $(c,\sigma)$ passes verification. This is the definition of breaking $(S,V)$ in a chosen message attack, and hence we obtain a contradiction to the CMA security of $(S,V)$.
+Since we pass (canonical) verification, we know that $\sigma=S_{k_2}(c)$, and because all encryption queries return pairs of the form $(c',S_{k_2}(c'))$, this means that no such query returned $c$ as its first element either.
+In other words, when the event $GOOD$ happens the $i_0^{th}$ query contains a pair $(c,\sigma)$ such that $c$ was not queried before to the signature box, but $(c,\sigma)$ passes verification. This is the definition of breaking $(S,V)$ in a chosen message attack, and hence we obtain a contradiction to the CMA security of $(S,V)$.
 
 Now for Case II: In this case, we will build an adversary $Eve$ for CPA-game in the original scheme $(E,D)$.  As you might expect, the adversary $Eve$ will choose by herself the key $k_2$ for the MAC scheme, and attempt to play the CCA security game with $M'$.  When $M'$ makes _encryption queries_ this should not be a problem-
 $Eve$ can forward the plaintext $m$ to its encryption oracle to get $c=E_{k_1}(m)$ and then compute $\sigma = S_{k_2}(c)$ since she knows the signing key $k_2$.
@@ -246,7 +246,7 @@ Our encryption scheme is defined as follow. The key is $(k,h)$ where $k$ is an i
 
 * Choose $IV$ at random in $[2^n]$.
 
-* Let $z_i = E(k,IV+i)$ for $i=1,\ldots,t+1$.
+* Let $z_i = E_k(IV+i)$ for $i=1,\ldots,t+1$.
 
 * Let $c_i = z_i \oplus m_i$.
 
