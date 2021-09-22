@@ -46,7 +46,7 @@ In particular in 2001, Fluhrer,  Mantin, and Shamir showed how the RC4 flaws we 
 Yet, the protocol lingered on and for many years after was still the most widely used WiFi encryption protocol as many routers had it as the default option.
 In 2007 the WEP was blamed for a hack stealing 45 million credit card numbers from T.J. Maxx.
 In 2012 (after 11 years of attacks!) it was estimated that it is still used in about a quarter of encrypted wireless networks, and in 2014 it was still the default option on many Verizon home routers. 
-It is still (!) used in some routers, see [wepusage](){.ref}. This is a great example of how hard it is to remove insecure protocols from practical usage (and so how important it is to get these protocls right).
+It is still (!) used in some routers, see [wepusage](){.ref}. This is a great example of how hard it is to remove insecure protocols from practical usage (and so how important it is to get these protocols right).
 
 
 ![WEP usage over time according to [Wigle.net](https://wigle.net/stats). Despite having documented security issues since 2001 and being officially deprecated since 2004, WEP continued to be the most popular WiFi encryption protocol up to 2012, and at the time of writing, it is still used by a non-trivial number of devices (though see [this stackoverflow answer](https://security.stackexchange.com/a/191076) for more).](../figure/WEP.png){#wepusage}
