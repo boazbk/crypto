@@ -67,8 +67,8 @@ What does matter is that the encryption has the form $E_k(m') = pad \oplus m'$
 where $pad$ is computed as some function of the key.
 In particular the attack we will describe works even if we use our stronger CPA secure PRF-based scheme where $pad=f_k(r)$ for some random (or counter) $r$ that is sent out separately.
 
-Now the security of the encryption means that an adversary seeing the ciphertext $c=E_k(m\|crc(m))$ will not be able to know $m$, but since this is traveling over the air, the adversary could "spoof" the signal and send a different ciphertext $c'$ to Bob.
-In particular, if the adversary knows the IP address $m_1$ that Alice was using (e.g., for example, the adversary can guess that Alice is probably one of the billions of people that visit the website boazbarak.org on a regular basis) then she can XOR the ciphertext with a string of her choosing and hence convert the ciphertext $c = pad \oplus (m_1\| m_2 \|CRC(m_1,m_2))$ into the ciphertext $c' = c \oplus x$ where $x (x_1\|x_2\|x_3$ is computed so that $x_1 \oplus m_1$ is equal to the adversary's own IP address!
+Now the security of the encryption means that an adversary seeing the ciphertext $c=E_k(m\|CRC(m))$ will not be able to know $m$, but since this is traveling over the air, the adversary could "spoof" the signal and send a different ciphertext $c'$ to Bob.
+In particular, if the adversary knows the IP address $m_1$ that Alice was using (e.g., for example, the adversary can guess that Alice is probably one of the billions of people that visit the website boazbarak.org on a regular basis) then she can XOR the ciphertext with a string of her choosing and hence convert the ciphertext $c = pad \oplus (m_1\| m_2 \|CRC(m_1,m_2))$ into the ciphertext $c' = c \oplus x$ where $x = x_1\|x_2\|x_3$ is computed so that $x_1 \oplus m_1$ is equal to the adversary's own IP address!
 
 
 So, the adversary doesn't need to decrypt the message- by spoofing the ciphertext she can ensure that Bob (who is an access point, and whose job is to decrypt and then deliver packets) simply delivers it unencrypted straight into her hands.
@@ -76,7 +76,7 @@ One issue is that Eve modifies $m_1$ then it is unlikely that the CRC code will 
 However,  [CRC 32](https://goo.gl/5aqEHB) - the CRC algorithm used by WEP - is _linear_ modulo $2$, that is $CRC(x \oplus x') = CRC(x)\oplus CRC(x')$. 
 This means that if the original ciphertext $c$ was an encryption of the message
 $m= m_1 \| m_2 \| CRC(m_1,m_2)$ then $c'=c \oplus (x_1\|0^t\|CRC(x_1\|0^t))$ will be an encryption of the message $m'=(m_1 \oplus x_1) \|m_2 \| CRC( (x_1\oplus m_1) \| m_2)$ (where $0^t$ denotes a string of zeroes of the same length $t$ as $m_2$, and hence $m_2 \oplus 0^t = m_2$).
-Therefore by XOR'ing $c$ with $x_1 \|0^t \| CRC(x_1\|0^t))$, the adversary Mallory can ensure that Bob will deliver the message $m_2$ to the IP address $m_1 \oplus x_1$ of her choice (see [WEPattackfig](){.ref}).
+Therefore by XOR'ing $c$ with $x_1 \|0^t \| CRC(x_1\|0^t)$, the adversary Mallory can ensure that Bob will deliver the message $m_2$ to the IP address $m_1 \oplus x_1$ of her choice (see [WEPattackfig](){.ref}).
 
 ![The attack on the WEP protocol allowing the adversary Mallory to read encrypted messages even when Alice uses a CPA secure encryption.](../figure/wep-attack.jpg){#WEPattackfig width=90% }
 
@@ -148,7 +148,7 @@ So, how _do_ we construct such a scheme?
 The WEP attack actually already hints of the crux of CCA security. We want to ensure that Mallory is not able to modify the challenge ciphertext $c^*$
 to some related $c'$.
 Another way to say it is that we need to ensure the _integrity_ of messages to achieve their _confidentiality_ if we want to handle _active_ adversaries that might modify messages on the channel.
-Since in in a great many practical scenarios, an adversary might be able to do so, this is an important message that deserves to be repeated:
+Since in a great many practical scenarios, an adversary might be able to do so, this is an important message that deserves to be repeated:
 
 >_To ensure confidentiality, you need integrity._
 
