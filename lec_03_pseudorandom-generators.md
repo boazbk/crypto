@@ -81,7 +81,7 @@ This definition (as is often the case in cryptography) is a bit long, but the co
 Intuitively, a function $G$ is a pseudorandom generator if __(1)__ it expands its input (mapping $n$ bits to $n+1$ or more) and __(2)__ we cannot distinguish between the output $G(x)$ for $x$ a short (i.e., $n$ bit long) random string, often known as the _seed_ of the pseudorandom generator, and a truly random long (i.e., of length $\ell(n)$) string chosen uniformly at random from $\{0,1\}^{\ell(n)}$.
 
 
-![A function $G:\{0,1\}^n \rightarrow \{0,1\}^{\ell(n)}$ is a _pseuaodrandom generator_ if $G(x)$ for a random short $x \leftarrow_R \{0,1\}^n$ is computationally indistinguishable from a long truly random $y \leftarrow_R \{0,1\}^{\ell(n)}$.](../figure/prg_def.png){#prgdeffig}
+![A function $G:\{0,1\}^n \rightarrow \{0,1\}^{\ell(n)}$ is a _pseudorandom generator_ if $G(x)$ for a random short $x \leftarrow_R \{0,1\}^n$ is computationally indistinguishable from a long truly random $y \leftarrow_R \{0,1\}^{\ell(n)}$.](../figure/prg_def.png){#prgdeffig}
 
 
 Note that the requirement that $\ell>n$ is crucial to make this notion
@@ -148,7 +148,7 @@ We illustrate these two hybrids in [lengthextendhybridfig](){.ref}.
 ![Hybrids $H_i$ and $H_{i+1}$--- dotted boxes refer to values that are chosen independently and uniformly at random](../figure/length-extension-prg-hybrid.jpg){#lengthextendhybridfig}
 
 Now suppose otherwise that there exists some adversary $Eve$ such that $\left| \E[Eve(H_i)] - \E[Eve(H_{i+1})] \right| \geq \epsilon$ for some non-negligible $\epsilon$.
-From $Eve$, we will an adversary $Eve'$ breaking the security of the pseudorandom generator $G'$ (see [reductionlengthextendfig](){.ref}).
+From $Eve$, we will design an adversary $Eve'$ breaking the security of the pseudorandom generator $G'$ (see [reductionlengthextendfig](){.ref}).
 
 ![Building an adversary $Eve'$ for $G'$ from an adversary $Eve$ distinguishing $H_i$ and $H_{i+1}$. The boxes marked with questions marks are those that are random or pseudorandom depending on whether we are in $H_i$ or $H_{i+1}$. Everything inside the dashed red lines is simulated by $Eve'$ that gets as input the $n+1$-bit string $(s_{i+1},y_{i+1})$.](../figure/length-extension-prg-adversary.jpg){#reductionlengthextendfig}
 
