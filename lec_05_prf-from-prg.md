@@ -234,7 +234,7 @@ It is a fairly good cipher- to this day, as far as we know, it provides a pretty
 The trouble is that its key is only $56$ bits long, which is no longer outside the reach of modern computing power.
 (It turns out that subtle variants of DES are far less secure and fall prey to a technique known as [differential cryptanalysis](https://goo.gl/GAvbh8); the IBM designers of DES were aware of this technique but kept it secret at the behest of the NSA.)
 
-Between 1997 and 2001, the U.S. national institute of standards (NIST) ran a competition to replace DES which resulted in the adoption of the block cipher Rijndael as the new [advanced encryption standard (AES)](https://goo.gl/1HnqFb). It has a block size (i.e., input length) of 128 bits and a key size (i.e., seed length) of 128, 196, or 256 bits.
+Between 1997 and 2001, the U.S. National Institute of Standards and Technology (NIST) ran a competition to replace DES which resulted in the adoption of the block cipher Rijndael as the new [advanced encryption standard (AES)](https://goo.gl/1HnqFb). It has a block size (i.e., input length) of 128 bits and a key size (i.e., seed length) of 128, 196, or 256 bits.
 
 The actual construction of AES (or DES for that matter) is not extremely illuminating, but let us say a few words about the general principle behind many block ciphers.
 They are typically constructed by repeating one after the other a number of very simple permutations (see [blockcipherfig](){.ref}).
