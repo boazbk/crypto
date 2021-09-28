@@ -41,7 +41,7 @@ One advantage (sometimes disadvantage) of a fiat currency is that it allows for 
 
 Bitcoin is a fiat currency without a central authority.
 A priori this seems like a contradiction in terms.
-If there is no trusted central authority, how can we ensure a scarce resource?  who settles claims of ownership? and who sets monetary policy?
+If there is no trusted central authority, how can we ensure a scarce resource? Who settles claims of ownership? And who sets monetary policy?
 
 For instance, one problem we are particularly concerned with is the
 _double-spend_ problem. The following scenario is a double-spend:
@@ -82,9 +82,9 @@ More accurately, a transaction involving the coin $ID$ is self-validating if it 
 > # { .pause }
 Please re-read the previous paragraph, to make sure you follow the logic.
 
-One theoretical example of a puzzle is the following: if $\alpha$ is the puzzle,
-an entity can "prove" that they own coins assigned to $\alpha$ if they can
-produce numbers $A,B$ such that $\alpha=A\cdot B$.
+One theoretical example of a puzzle is the following: if $N$ is the puzzle,
+an entity can "prove" that they own coins assigned to $N$ if they can
+produce numbers $A,B$ such that $N=A\cdot B$.
 
 Another more generic example (that you can keep in mind as a potential
 implementation for the puzzles we use here) is: $\alpha$ is some string in
