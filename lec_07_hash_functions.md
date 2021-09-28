@@ -110,7 +110,7 @@ What does it mean a "majority of parties" in an anonymous network where a single
 
 
 Perhaps the main idea behind Bitcoin is that "majority" will correspond to a "majority of computing power", or as the [original Bitcoin paper](https://Bitcoin.org/Bitcoin.pdf) says, "one CPU one vote" (or perhaps more accurately, "one cycle one vote").
-It might not be immediately clear how to implement this, but at least it means that creating fictitious new entities (sometimes known as a [Sybill attack](https://goo.gl/jMZ7Qg) after the movie about multiple-personality disorder) cannot help.
+It might not be immediately clear how to implement this, but at least it means that creating fictitious new entities (sometimes known as a [Sybil attack](https://goo.gl/jMZ7Qg) after the movie about multiple-personality disorder) cannot help.
 To implement it we turn to a cryptographic concept known as "proof of work" which was originally suggested by Dwork and Naor in 1991 as a way to combat mass marketing email.[^spam]
 
 [^spam]: This was a rather visionary paper in that it foresaw this issue before the term "spam" was introduced and indeed when email itself, let alone spam email, was hardly widespread.
