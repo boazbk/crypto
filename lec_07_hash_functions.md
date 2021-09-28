@@ -34,7 +34,7 @@ Some currencies are/were based on [commodity money](https://goo.gl/K7awAW). The 
 However, for various financial and political reasons, some societies shifted to [representative money](https://goo.gl/K6c4qP), where the currency is not the commodity itself but rather a certificate that provides the right to the commodity.
 Representative money requires trust in some central authority that would respect the certificate.
 The next step in the evolution of currencies was [fiat money](https://en.wikipedia.org/wiki/Fiat_money), which is a currency (like today's dollar, ever since the U.S. moved off the [gold standard](https://goo.gl/SPN5BS)) that does not correspond to any commodity, but rather only relies on trust in a central authority.
-(Another example is the Roman coins, which though originally made of silver, have underdone a continous process of [debasement](https://goo.gl/ZDkGzL) until they contained less than two percent of it.)
+(Another example is the Roman coins, which though originally made of silver, underwent a continous process of [debasement](https://goo.gl/ZDkGzL) until they contained less than two percent of it.)
 One advantage (sometimes disadvantage) of a fiat currency is that it allows for more flexible monetary policy on parts of the central authority.
 
 ### Bitcoin Architecture
@@ -104,13 +104,13 @@ The main problem is how does a collection of anonymous parties without any centr
 distributed computing. This seems quite scary, as there are very strong negative results known for this problem; for example the famous [Fischer, Lynch, Patterson (FLP) result](http://the-paper-trail.org/blog/a-brief-tour-of-flp-impossibility/) showed that if there is even one party that has a _benign_ failure (i.e., it halts and stop responding) then it is impossible to guarantee consensus **in a completely asynchronous network**. Things are better if we assume some degree of partial synchrony (i.e., a global clock and some bounds on the latency of messages) as well as that a majority or supermajority of the parties behave correctly.
 
 The partial synchrony assumption is typically approximately maintained on the Internet, but the honest majority assumption seems quite suspicious.
-What does it mean a "majority of parties" in an anonymous network where a single person can create multiple "entities" and cause them to behave arbitrarily maliciously (known as "byzantine" faults in distributed parlance)? Also, why would we assume that even one party would behave honestly- if there is no central authority and it is profitable to cheat then they everyone would cheat, wouldn't they?
+What does it mean a "majority of parties" in an anonymous network where a single person can create multiple "entities" and cause them to behave arbitrarily maliciously (known as "byzantine" faults in distributed parlance)? Also, why would we assume that even one party would behave honestly- if there is no central authority and it is profitable to cheat then everyone would cheat, wouldn't they?
 
 ![The Bitcoin ledger consists of an ordered list of transactions. At any given point in time there might be several "forks" that continue the ledger, and different parties do not necessarily have to agree on them. However, the Bitcoin architecture is designed to ensure that the parties corresponding to a majority of the computing power will reach consensus on a single ledger. ](../figure/Bitcoin_ledger.jpg){#ledgerfig width=80% }
 
 
 Perhaps the main idea behind Bitcoin is that "majority" will correspond to a "majority of computing power", or as the [original Bitcoin paper](https://Bitcoin.org/Bitcoin.pdf) says, "one CPU one vote" (or perhaps more accurately, "one cycle one vote").
-It might not be immediately clear how to implement this, but at least it means that creating fictitious new entities (sometimes known as a [Sybill attack](https://goo.gl/jMZ7Qg) after the movie about multiple-personality disorder) cannot help.
+It might not be immediately clear how to implement this, but at least it means that creating fictitious new entities (sometimes known as a [Sybil attack](https://goo.gl/jMZ7Qg) after the movie about multiple-personality disorder) cannot help.
 To implement it we turn to a cryptographic concept known as "proof of work" which was originally suggested by Dwork and Naor in 1991 as a way to combat mass marketing email.[^spam]
 
 [^spam]: This was a rather visionary paper in that it foresaw this issue before the term "spam" was introduced and indeed when email itself, let alone spam email, was hardly widespread.
@@ -317,22 +317,22 @@ have fallen over the edge.
 
 [^efficient]: For example, the Boneh-Shoup book quotes processing times of up to 255MB/sec on a 1.83 Ghz Intel Core 2 processor, which is more than enough to handle not just Harvard's network but even [Lamar College's](http://www.huffingtonpost.com/2014/06/27/colleges-fastest-internet-speed-infographic_n_5536834.html).
 
-In 1990 Ron Rivest proposed MD4, which was already shown weaknesses in 1991, and a full collision has been found in 1995.
+In 1990 Ron Rivest proposed MD4, which was already showing weaknesses in 1991, and a full collision was found in 1995.
 Even faster attacks have been since found and MD4 is considered completely insecure.
 
 In response to these weaknesses, Rivest designed MD5 in 1991. A weakness was shown for it in 1996 and a full collision was shown in 2004.
 Hence it is now also considered insecure.
 
-In 1993 the National Institute of Standards proposed a standard for a hash function known as the _Secure Hash Algorithm (SHA)_, which has quite a few
+In 1993 the National Institute of Standards proposed a standard for a hash function known as the _Secure Hash Algorithm (SHA)_, which had quite a few
 similarities with the MD4 and MD5 functions.
-This function is known as SHA-0, and the standard was replaced in 1995 with SHA-1 that includes an extra "mixing" (i.e., bit rotation) operation.
-At the time no explanation was given for this change but SHA-0 was later found to be insecure.
+This function was known as SHA-0, and the standard was replaced in 1995 with SHA-1, which includes an extra "mixing" (i.e., bit rotation) operation.
+At the time no explanation was given for this change, but SHA-0 was later found to be insecure.
 In 2002 a variant with longer output, known as SHA-256, was added (as well as some others).
 In 2005, following the MD5 collision, significant weaknesses were shown in SHA-1.
 In 2017, a [full SHA-1 collision was found](https://goo.gl/jdqUX9).
 Today SHA-1  is considered insecure and SHA-256 is recommended.
 
-Given the weaknesses in MD-5 and SHA-1 , NIST started in 2006 a competition for a new hashing standard, based on functions that seem sufficiently different from the MD5/SHA-0/SHA-1 family.
+Given the weaknesses in MD-5 and SHA-1, NIST started a competition in 2006 for a new hashing standard, based on functions that seem sufficiently different from the MD5/SHA-0/SHA-1 family.
 (SHA-256 is unbroken but it seems too close for comfort to those other systems.)
 The hash function Keccak was selected as the new standard [SHA-3](https://goo.gl/Bx1bu2) in August of 2015.
 
@@ -342,16 +342,16 @@ The NSA is the world's largest employer of mathematicians, and is very heavily i
 It seems quite possible that they devote far more resources to analyzing symmetric primitives such as block ciphers and hash functions
 than the open research community.
 Indeed, the history above suggests that the NSA has consistently discovered attacks on hash functions before the cryptographic community (and the same holds for the differential cryptanalysis technique for block ciphers).
-That said, despite the "mythic" powers that are sometimes ascribed to the NSA, this history suggests that they are ahead of the open community but not so much ahead,
+That said, despite the "mythic" powers that are sometimes ascribed to the NSA, this history suggests that they are ahead of the open community, but not so much ahead,
 discovering attacks on hash functions about 5 years or so before they appear in the open literature.
 
 There are a few ways we can get "insider views" to the NSA's thinking.  Some such insights can be obtained from the Snowden documents.
-The [Flame malware](https://en.wikipedia.org/wiki/Flame_(malware)) has been discovered in Iran in 2012 after operating since at least 2010.
+The [Flame malware](https://en.wikipedia.org/wiki/Flame_(malware)) was discovered in Iran in 2012 after operating since at least 2010.
 It used an MD5 collision to achieve its goals.
 Such a collision was known in the open literature since 2008, but Flame used a different variant that was unknown in the literature.
 For this reason it is suspected that it was designed by a western intelligence agency.
 
-Another insight into NSA's thoughts can be found in pages 12-19 of NSA's internal [Cryptolog newsletter](https://cryptome.org/2013/03/cryptologs/cryptolog_126.pdf) which has been recently declassified; one can find there a rather entertaining and opinionated (or obnoxious, depending on your point of view) review of the CRYPTO 1992 conference. In page 14 the author remarks that certain weaknesses of MD5 demonstrated in the conference are unlikely to be extended to the full version, which suggests that the NSA (or at least the author) was not aware of the MD5 collisions at the time. (The [full archive](https://cryptome.org/2013/03/cryptologs/00-cryptolog-index.htm) of the cryptolog newsletter makes for some interesting reading!)
+Another insight into NSA's thoughts can be found in pages 12-19 of NSA's internal [Cryptolog newsletter](https://cryptome.org/2013/03/cryptologs/cryptolog_126.pdf) which was recently declassified; one can find there a rather entertaining and opinionated (or obnoxious, depending on your point of view) review of the CRYPTO 1992 conference. In page 14 the author remarks that certain weaknesses of MD5 demonstrated in the conference are unlikely to be extended to the full version, which suggests that the NSA (or at least the author) was not aware of the MD5 collisions at the time. (The [full archive](https://cryptome.org/2013/03/cryptologs/00-cryptolog-index.htm) of the cryptolog newsletter makes for some interesting reading!)
 
 
 ### Cryptographic vs Non-Cryptographic Hash Functions
