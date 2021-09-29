@@ -18,7 +18,7 @@ We have seen that PRF's (pseudorandom functions) are extremely useful, and we'll
 Suppose that the PRG Conjecture is true, then there exists a secure PRF collection $\{ f_s \}_{s\in\{0,1\}^*}$ such that for every $s\in\{0,1\}^n$, $f_s$ maps $\{0,1\}^n$ to $\{0,1\}^n$.
 
 
-![The construction of a pseudorandom function from a pseudorandom generator can be illustrated by a depth $n$ binary tree. The root is labeled by the seed $s$ and for every internal node $v$ labeled by a strong $x\in\{0,1\}^n$, we use that label $x$ as a seed into the PRG $G$ to label $v$'s two children. In particular, the children of $v$ are labeled with $G_0(x)$ and $G_1(x)$ respectively. The output of the function $f_s$ on input $i$ is the label of the $i^{th}$ leaf counting from left to right. Note that the numbering of leaf $i$ is related to the bitstring representation of $i$ and the path leaf $i$ in the following way: we traverse to leaf $i$ from the root by reading off the $n$ bits of $i$ left to right and descend into the left child of the current node for every 0 we encounter and traverse right for every 1.](../figure/PRF_from_PRG.jpg){#PRFfromPRGfig width=80% }
+![The construction of a pseudorandom function from a pseudorandom generator can be illustrated by a depth $n$ binary tree. The root is labeled by the seed $s$ and for every internal node $v$ labeled by a string $x\in\{0,1\}^n$, we use that label $x$ as a seed into the PRG $G$ to label $v$'s two children. In particular, the children of $v$ are labeled with $G_0(x)$ and $G_1(x)$ respectively. The output of the function $f_s$ on input $i$ is the label of the $i^{th}$ leaf counting from left to right. Note that the numbering of leaf $i$ is related to the bitstring representation of $i$ and the path leaf $i$ in the following way: we traverse to leaf $i$ from the root by reading off the $n$ bits of $i$ left to right and descend into the left child of the current node for every 0 we encounter and traverse right for every 1.](../figure/PRF_from_PRG.jpg){#PRFfromPRGfig width=80% }
 
 
 ::: {.proof data-ref="prfthm"}
@@ -105,11 +105,11 @@ For Alice and Bob to encrypt messages in this way, they must maintain a _synchro
 
 There is another way in which treating many messages as a single tuple is unsatisfactory.
 In real life, Eve might be able to have some impact on _what_ messages Alice encrypts.
-For example, the Katz-Lindell book describes several instances in World War II where Allied forces made particular military maneuver for the sole purpose of causing the axis forces to send encryptions of messages of the Allies' choosing.
+For example, the Katz-Lindell book describes several instances in World War II where Allied forces made particular military maneuver for the sole purpose of causing the Axis forces to send encryptions of messages of the Allies' choosing.
 To consider a more modern example, today Google uses encryption for all of its search traffic including (for the most part) the _ads_ that are displayed on the page.
 But this means that an attacker, by paying Google, can cause it to encrypt arbitrary text of their choosing.
 This kind of attack, where Eve _chooses_ the message she wants to be encrypted is called a _chosen plaintext attack_.
-You might think that we are already covering this with our current definition that requires security _for every_  pair of messages and so in particular this pair could chosen by Eve. However, in the case of multiple messages, we would want to allow Eve to be able to choose $m_2$ _after_ she saw the encryption of $m_1$.
+You might think that we are already covering this with our current definition that requires security _for every_  pair of messages and so in particular this pair could be chosen by Eve. However, in the case of multiple messages, we would want to allow Eve to be able to choose $m_2$ _after_ she saw the encryption of $m_1$.
 
 All that leads us to the following definition, which is a strengthening of our definition of computational security:
 
@@ -140,13 +140,13 @@ It turns out that CPA security is _strictly stronger_, in the sense that without
 There is no CPA secure $(E,D)$ where $E$ is _deterministic_.
 
 > # {.proof data-ref="CPAsecrandomthm"}
-The proof is very simple: Eve will only use a single round of interacting with $E$ where she will ask for the encryption $c_1$ of $0^\ell$. In the second round, Eve will choose $m_0=0^{\ell}$ and $m_1=1^{\ell}$, and get $c^*=E_k(m_b)$ she wil then output $0$ if and only if $c^*=c_1$.
+The proof is very simple: Eve will only use a single round of interacting with $E$ where she will ask for the encryption $c_1$ of $0^\ell$. In the second round, Eve will choose $m_0=0^{\ell}$ and $m_1=1^{\ell}$, and get $c^*=E_k(m_b)$ she will then output $0$ if and only if $c^*=c_1$.
 
 
 ![Insecurity of deterministic encryption](../figure/code_talkers.png){#xkcdnavajotwofig  .margin }
 
 This proof is so simple that you might think it shows a problem with the definition, but it is actually a real problem with security.
-If you encrypt many messages and some of them repeat themselves, it is possible to get significant information by seeing the repetition pattern (que the XKCD cartoon again, see [xkcdnavajotwofig](){.ref}).
+If you encrypt many messages and some of them repeat themselves, it is possible to get significant information by seeing the repetition pattern (cue the XKCD cartoon again, see [xkcdnavajotwofig](){.ref}).
 To avoid this issue we need to use a _randomized_  (or _probabilistic_) encryption, such that if we encrypt the same message twice we _won't_ see two copies of the same ciphertext.[^high-ent]
 But how do we do that?
 Here pseudorandom functions come to the rescue:
