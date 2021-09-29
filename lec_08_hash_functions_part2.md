@@ -27,8 +27,8 @@ If we choose a password at random from some set $D$ then the _entropy_ of the pa
 However, estimating the entropy of real life passwords is rather difficult.
 For example, suppose that I use the winning Massachussets Mega-Lottery numbers as my password.
 A priori, my password consists of $5$ numbers between $1$ till $75$ and so its entropy is $\log_2 (75^5) \approx 31$.
-However, if an attacker _knew_ that I did this, the entropy might be something like $\log(520) \approx 9$ (since there were only 520 such numbers selected in the last 10 years).
-Moreover, if they knew exactly what draw I based my password on, then they would it exactly and hence the entropy (from their point of view) would be zero.
+However, if an attacker _knew_ that I did this, the entropy might be something like $\log_2 (520) \approx 9$ (since there were only 520 such numbers selected in the last 10 years).
+Moreover, if they knew exactly what draw I based my password on, then they would know it exactly and hence the entropy (from their point of view) would be zero.
 This is worthwhile to emphasize:
 
 >_The entropy of a secret is always measured with respect to the attacker's point of view._
@@ -56,7 +56,7 @@ In particular think of an example of a secure encryption $(E,D)$  and a distribu
 
 
 A classical approach is to simply use a cryptographic hash function $H:\{0,1\}^*\rightarrow\{0,1\}^n$, and let $k_{master} = H(p_{master})$.
-If think of $H$ as a random oracle and $p_{master}$ as chosen randomly from $D$, then as long as an attacker makes $\ll |D|$ queries to the oracle,
+If we think of $H$ as a random oracle and $p_{master}$ as chosen randomly from $D$, then as long as an attacker makes $\ll |D|$ queries to the oracle,
 they are unlikely to make the query $p_{master}$ and hence the value $k_{master}$ will be completely random from their point of view.
 
 However, since $|D|$ is not too large, it might not be so hard to perform such $|D|$ queries. For this reason, people typically use a _deliberately slow hash_
@@ -91,7 +91,7 @@ until we get a single block $y\in\{0,1\}^n$. (Assume here $t$ is a power of two 
 ![In the Merkle Tree construction we map a long string $x$ into a block $y\in\{0,1\}^n$ that is a "digest" of the long string $x$. As in a collision resistant hash we can imagine that this map is "one to one" in the sense that it won't be possible to find $x'\neq x$ with the same digest. Moreover, we can efficiently certify that a certain bit of $x$ is equal to some value without sending out all of $x$ but rather the $\log t$ blocks that are on the path between $i$ to the root together with their "siblings" used in the hash function, for a total of at most $2\log t$ blocks.](../figure/merkle-tree.jpg){#merkletreefig width=80% }
 
 
-Alice who sends $x$ to the cloud Bob will keep the short block $y$.
+Alice, who sends $x$ to the cloud Bob, will keep the short block $y$.
 Whenever Alice queries the value $i$ she will ask for a _certificate_ that $x_i$ is indeed the right value.
 This certificate will consists of the block that contains $i$, as well as all of the $2\log t$ blocks that were used in the hash from this block to the root.
 The security of this scheme follows from the following simple theorem:
@@ -116,7 +116,7 @@ In a _proof of retrievability_, first proposed by Juels and Kalisky in 2007, Ali
 
 First, note that Alice can guarantee that Bob stores at least 99 percent of her data, by periodically asking him to provide answers (with proofs!)
 of the value of $x$ at 100 or so random locations.
-The idea is that if bob dropped more than 1 percent of the bits, then he'd be very likely to be caught "red handed" and get a question from Alice about a location he did not retain.
+The idea is that if Bob dropped more than 1 percent of the bits, then he'd be very likely to be caught "red handed" and get a question from Alice about a location he did not retain.
 
 Now, if we used some redundancy to store $x$ such as the RAID format, where it is composed of some small number $c$ parts and we can recover any bit of the original data as long as at most one of the parts were lost, then we might hope that even if 1\% of $x$ _was_ in fact lost by Bob, we could still recover the whole string.
 This is not a fool-proof guarantee since it could possibly be that the data lost by Bob was not confined to a single part.
@@ -163,7 +163,7 @@ on the event that $X=x$.
 If $(p_1,\ldots,p_m)$ is a vector of probabilities summing up to $1$ and let us assume they are rounded so that for every $i$, $p_i = k_i/2^n$ for some integer $k_i$.
 We can then split the set $\{0,1\}^n$ into $m$ disjoint sets $S_1,\ldots,S_m$ where $|S_i|=k_i$, and consider the probability distribution $(X,Y)$ where $Y$ is uniform
 over $\{0,1\}^n$, and $X$ is equal to $i$ whenever $Y\in S_i$. Therefore, by the principles above we know that
-$H_{Shannon}(X,Y)=n$ (since $X$ is completely determined $Y$ and hence $(X,Y)$ is uniform over a set of $2^n$ elements), and $H(Y|X)= \E \log k_i$. Thus the chain rule tells us that
+$H_{Shannon}(X,Y)=n$ (since $X$ is completely determined $Y$ and hence $(X,Y)$ is uniform over a set of $2^n$ elements), and $H(Y|X)= \E[\log k_i]$. Thus the chain rule tells us that
 $H_{Shannon}(X) = n - \E[Y|X] =  n - \sum_{i=1}^m p_i k_i = n -  \sum_{i=1}^m p_i \log(2^n p_i)$
 since $p_i = k_i/2^n$. Since $\log(2^n p_i) = n + \log(p_i)$ we see that this means that
 $$
