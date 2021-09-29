@@ -28,7 +28,7 @@ However, estimating the entropy of real life passwords is rather difficult.
 For example, suppose that I use the winning Massachussets Mega-Lottery numbers as my password.
 A priori, my password consists of $5$ numbers between $1$ till $75$ and so its entropy is $\log_2 (75^5) \approx 31$.
 However, if an attacker _knew_ that I did this, the entropy might be something like $\log(520) \approx 9$ (since there were only 520 such numbers selected in the last 10 years).
-Moreover, if they knew exactly what draw I based my password on, then they would it exactly and hence the entropy (from their point of view) would be zero.
+Moreover, if they knew exactly what draw I based my password on, then they would know it exactly and hence the entropy (from their point of view) would be zero.
 This is worthwhile to emphasize:
 
 >_The entropy of a secret is always measured with respect to the attacker's point of view._
@@ -56,7 +56,7 @@ In particular think of an example of a secure encryption $(E,D)$  and a distribu
 
 
 A classical approach is to simply use a cryptographic hash function $H:\{0,1\}^*\rightarrow\{0,1\}^n$, and let $k_{master} = H(p_{master})$.
-If think of $H$ as a random oracle and $p_{master}$ as chosen randomly from $D$, then as long as an attacker makes $\ll |D|$ queries to the oracle,
+If we think of $H$ as a random oracle and $p_{master}$ as chosen randomly from $D$, then as long as an attacker makes $\ll |D|$ queries to the oracle,
 they are unlikely to make the query $p_{master}$ and hence the value $k_{master}$ will be completely random from their point of view.
 
 However, since $|D|$ is not too large, it might not be so hard to perform such $|D|$ queries. For this reason, people typically use a _deliberately slow hash_
@@ -70,7 +70,7 @@ and the number of iterations is tailored to be the largest one that the honest u
 In fact, typically we will set $k_{master} = H(p_{master}\| r)$ where $r$ is a long random but _public_ string known as a "salt" (see [saltfig](){.ref}).
 Including such a "salt" can be important to foiling an adversary's attempts to amortize the computation costs, see the exercises.
 
-![To obtain a key from a password we will typically use a "slow" hash function to map the password and a unique-to-user public "salt" value to a cryptographic key. Even with such a procedure, the resulting key cannot be consider as secure and unpredictable as a key that was chosen truly at random, especially if we are in a setting where an adversary can launch an _offline_ attack to guess all possibilities.](../figure/hash-password.jpg){#saltfig width=80% }
+![To obtain a key from a password we will typically use a "slow" hash function to map the password and a unique-to-user public "salt" value to a cryptographic key. Even with such a procedure, the resulting key cannot be considered as secure and unpredictable as a key that was chosen truly at random, especially if we are in a setting where an adversary can launch an _offline_ attack to guess all possibilities.](../figure/hash-password.jpg){#saltfig width=80% }
 
 Even when we don't use one password to encrypt others, it is generally considered the best practice to _never_ store a password in the clear but always in this "slow hashed and salted" form, so if the passwords file falls to the hands of an adversary it will be expensive to recover them.
 
@@ -163,8 +163,8 @@ on the event that $X=x$.
 If $(p_1,\ldots,p_m)$ is a vector of probabilities summing up to $1$ and let us assume they are rounded so that for every $i$, $p_i = k_i/2^n$ for some integer $k_i$.
 We can then split the set $\{0,1\}^n$ into $m$ disjoint sets $S_1,\ldots,S_m$ where $|S_i|=k_i$, and consider the probability distribution $(X,Y)$ where $Y$ is uniform
 over $\{0,1\}^n$, and $X$ is equal to $i$ whenever $Y\in S_i$. Therefore, by the principles above we know that
-$H_{Shannon}(X,Y)=n$ (since $X$ is completely determined $Y$ and hence $(X,Y)$ is uniform over a set of $2^n$ elements), and $H(Y|X)= \E \log k_i$. Thus the chain rule tells us that
-$H_{Shannon}(X) = n - \E[Y|X] =  n - \sum_{i=1}^m p_i k_i = n -  \sum_{i=1}^m p_i \log(2^n p_i)$
+$H_{Shannon}(X,Y)=n$ (since $X$ is completely determined by $Y$ and hence $(X,Y)$ is uniform over a set of $2^n$ elements), and $H(Y|X)= \E \log k_i$. Thus the chain rule tells us that
+$H_{Shannon}(X) = H(X,Y) - H(Y|X) =  n - \sum_{i=1}^m p_i \log(k_i) = n - \sum_{i=1}^m p_i \log(2^n p_i)$
 since $p_i = k_i/2^n$. Since $\log(2^n p_i) = n + \log(p_i)$ we see that this means that
 $$
 H_{Shannon}(X) =  n - \sum_i p_i \cdot n - \sum_i p_i \log(p_i) = - \sum_i p_i \log (p_i)
@@ -179,14 +179,14 @@ We can now formally define the notion of an extractor:
 
 > # {.definition title="Randomness extractor" #extractordef}
 A function $h:\{0,1\}^{\ell+n}\rightarrow\{0,1\}^n$ is a _randomness extractor_ ("extractor" for short) if for every distribution $X$ over $\{0,1\}^\ell$ with min entropy at least $2n$, if we pick
-$s$ to be a random "salt", the distribution $h(X)$ is computationally indistinguishable from the uniform distribution.[^params]
+$s$ to be a random "salt", the distribution $h_s(X)$ is computationally indistinguishable from the uniform distribution.[^params]
 
 [^infty]:  The notation $H_{\infty}(\cdot)$ for min entropy comes from the fact that one can define a [_family_](https://goo.gl/HvVgu1) of entropy like functions, containing a function for every non-negative number $p$ based on the $p$-norm of the probability distribution. That is, the Rényi entropy of order $p$ is defined as $H_p(X)=(1-p)^{-1}-\log(\sum_x \Pr[X=x]^p)$. The min entropy can be thought of as the limit of $H_p$ when $p$ tends to infinity while the Shannon entropy is the limit as $p$ tends to $1$. The entropy $H_2(\cdot)$ is related to the _collision probability_ of $X$ and is often used as well. The min entropy is the smallest among all the entropies and hence it is the most _conservative_ (and so appropriate for usage in cryptography). For _flat sources_, which are uniform over a certain subset, all entropies coincide.
 
 [^params]: The pseudorandomness literature studies the notion of extractors much more generally and consider all possible variations for parameters such as the entropy requirement, the salt (more commonly known as seed) size, the distance from uniformity, and more. The type of notion we consider here is known in that literature as a "strong seeded extractor". See [Vadhan's monograph](https://goo.gl/XHQjTB) for an in-depth treatment of this topic.
 
 
-The idea is that we apply the hash function to our measurements in $\{0,1\}^\ell$ then if those measurements had at least $k$ bits of entropy (with some extra "security margin") then the output $h(X)$ will be as good as random. Since the "salt" value $s$ is not secret, it can be chosen once at random and hardwired into the description of the function. (Indeed in practice people often do not explicitly use such a "salt", but the hash function description contain some parameters IV that play a similar role.)
+The idea is that we apply the hash function to our measurements in $\{0,1\}^\ell$ then if those measurements had at least $k$ bits of entropy (with some extra "security margin") then the output $h_s(X)$ will be as good as random. Since the "salt" value $s$ is not secret, it can be chosen once at random and hardwired into the description of the function. (Indeed in practice people often do not explicitly use such a "salt", but the hash function description contain some parameters IV that play a similar role.)
 
 > # {.theorem title="Random function is an extractor" #randomextractorthm}
 Suppose that $h:\{0,1\}^{\ell+n}\rightarrow\{0,1\}^n$ is chosen at random, and $\ell < n^{100}$. Then with high probability $h$ is an extractor.
@@ -196,7 +196,7 @@ Let $h$ be chosen as above, and let $X$ be some distribution over $\{0,1\}^\ell$
 Now, for every $s\in\{0,1\}^n$ let $h_s$ be the function that maps $x\in\{0,1\}^\ell$ to $h(s\|x)$, and let $Y_s = h_s(X)$. We want to prove that $Y_s$ is pseudorandom.
 We will use the following claim:
 >
->__Claim:__ Let $Col(Y_s)$ be the probability that two independent sample from $Y_s$ are identical. Then with probability at least $0.99$, $Col(Y_s) < 2^{-n} + 100\cdot 2^{-2n}$.
+>__Claim:__ Let $Col(Y_s)$ be the probability that two independent samples from $Y_s$ are identical. Then with probability at least $0.99$, $Col(Y_s) < 2^{-n} + 100\cdot 2^{-2n}$.
 >
 >__Proof of claim:__ $\E_s Col(Y_s) =\sum_s 2^{-n} \sum_{x,x'} \Pr[X=x]\Pr[X=x']\sum_{y\in\{0,1\}^n}\Pr[h(s,x)=y]\Pr[h(s,x')=y]$.
 >Let's separate this to the contribution when $x=x'$ and when they differ. The contribution from the first term is $\sum_s 2^{-n}\sum_x \Pr[X=x]^2$ which is
