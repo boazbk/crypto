@@ -1,7 +1,7 @@
 ---
 title: "Public key encryption candidates"
 filename: "lec_11_concrete_pkc"
-chapternum: "11"
+chapternum: "10"
 ---
 
 

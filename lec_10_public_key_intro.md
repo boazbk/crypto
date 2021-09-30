@@ -1,7 +1,7 @@
 ---
 title: "Public key cryptography"
 filename: "lec_10_public_key_intro"
-chapternum: "10"
+chapternum: "9"
 ---
 
 

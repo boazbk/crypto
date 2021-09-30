@@ -1,7 +1,7 @@
 ---
 title: "Multiparty secure computation"
 filename: "lec_17_SFE"
-chapternum: "18"
+chapternum: "16"
 ---
 
 

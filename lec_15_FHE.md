@@ -1,7 +1,7 @@
 ---
 title: "Fully Homomorphic Encryption"
 filename: "lec_15_FHE"
-chapternum: "16"
+chapternum: "14"
 ---
 
 
