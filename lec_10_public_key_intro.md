@@ -20,7 +20,7 @@ The project proposal was rejected by his professor as "not good enough". Merkle 
 The paper was rejected with the comment that _"Experience shows that it is extremely dangerous to transmit key information in the clear."_
 Merkle showed that one can design a protocol where Alice and Bob can use $T$ invocations of a hash function to exchange a key, but an adversary (in the random oracle model, though he of course didn't use this name) would need roughly $T^2$ invocations to break it. He conjectured that it may be possible to obtain such protocols where breaking is _exponentially harder_ than using them but could not think of any concrete way to doing so.
 
-![Ralph Merkle Berkeley CS 224 project proposal for developing public key cryptography](../figure/merkle-proposal.png){#merklefig}
+![Ralph Merkle's Berkeley CS 224 project proposal for developing public key cryptography](../figure/merkle-proposal.png){#merklefig}
 
 We only found out much later that in the late 1960's, a few years before Merkle, James Ellis of the British Intelligence agency GCHQ was [having similar thoughts](http://cryptome.org/jya/ellisdoc.htm).
 His curiosity was spurred by an old World War II manuscript from Bell labs that suggested the following way that two people could communicate securely over a phone line. Alice would inject noise to the line, Bob would relay his messages, and then Alice would subtract the noise to get the signal. The idea is that an adversary over the line sees only the sum of Alice's and Bob's signals and doesn't know what came from what. This got James Ellis thinking whether it would be possible to achieve something like that digitally. As he later recollected, in 1970 he realized that in principle this should be possible. He could think of an hypothetical black box $B$ that on input a "handle" $\alpha$ and plaintext $p$ would give a "ciphertext" $c$. There would be a secret key $\beta$ corresponding to $\alpha$ such that feeding $\beta$ and $c$ to the box would recover $p$. However, Ellis had no idea how to actually instantiate this box. He and others kept giving this question as a puzzle to bright new recruits until one of them, Clifford Cocks, came up in 1973 with a candidate solution loosely based on the factoring problem; in 1974 another GCHQ recruit, Malcolm Williamson, came up with a solution using modular exponentiation.
@@ -152,7 +152,8 @@ Now, intuitively understanding arbitrary code is a very hard problem, so Diffie 
 In particular, if you took, say, the encoding procedure $m \mapsto p_k(m)$ of a block cipher with a particular key $k$ and ran it through an optimizing compiler, you might hope that while it would be possible to perform this map using the resulting executable, it will be hard to extract $k$ from it. Hence, you could treat this code as a "public key".
 This suggests the following approach for getting an encryption scheme:
 
-::: {.quote} __"Obfuscation based public key encryption":__ (Thought experiment - not an actual construction)
+::: {.quote} 
+__"Obfuscation based public key encryption":__ (Thought experiment - not an actual construction)
 
 __Ingredients:__ 
 
