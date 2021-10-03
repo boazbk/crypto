@@ -1,7 +1,7 @@
 ---
 title: "Zero Knowledge proofs"
 filename: "lec_14_zero_knowledge"
-chapternum: "15"
+chapternum: "13"
 ---
 
 

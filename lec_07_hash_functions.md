@@ -1,11 +1,11 @@
 ---
-title: "Hash functions and random oracles"
+title: "Hash Functions, Random Oracles, and Bitcoin"
 filename: "lec_07_hash_functions"
 chapternum: "7"
 ---
 
 
-# Hash Functions and Random Oracles
+# Hash Functions, Random Oracles, and Bitcoin
 
 
 We have seen pseudorandom generators, functions and permutations, as well as Message Authentication codes, CPA and CCA secure

@@ -1,7 +1,7 @@
 ---
 title: "Quantum II: Shor"
 filename: "lec_20_quantum_part2"
-chapternum: "21"
+chapternum: "19"
 ---
 
 

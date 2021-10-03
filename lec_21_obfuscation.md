@@ -1,7 +1,7 @@
 ---
 title: "Software obfuscation"
 filename: "lec_21_obfuscation"
-chapternum: "22"
+chapternum: "20"
 ---
 
 

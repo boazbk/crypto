@@ -1,7 +1,7 @@
 ---
 title: "Quantum computing"
 filename: "lec_19_quantum"
-chapternum: "20"
+chapternum: "18"
 
 ---
 

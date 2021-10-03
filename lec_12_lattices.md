@@ -1,7 +1,7 @@
 ---
 title: "Lattice based cryptography"
 filename: "lec_12_lattices"
-chapternum: "12"
+chapternum: "11"
 ---
 
 

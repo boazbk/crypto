@@ -1,7 +1,7 @@
 ---
 title: "Course recap"
 filename: "lec_25_course_recap"
-chapternum: "26"
+chapternum: "24"
 ---
 
 

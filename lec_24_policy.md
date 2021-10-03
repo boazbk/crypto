@@ -1,7 +1,7 @@
 ---
 title: "Ethical, moral and policy considerations"
 filename: "lec_24_policy"
-chapternum: "25"
+chapternum: "23"
 ---
 
 

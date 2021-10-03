@@ -1,7 +1,7 @@
 ---
 title: "Secure communication over insecure channels"
 filename: "lec_13_handshake"
-chapternum: "14"
+chapternum: "12"
 ---
 
 
