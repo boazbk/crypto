@@ -20,7 +20,7 @@ The project proposal was rejected by his professor as "not good enough". Merkle 
 The paper was rejected with the comment that _"Experience shows that it is extremely dangerous to transmit key information in the clear."_
 Merkle showed that one can design a protocol where Alice and Bob can use $T$ invocations of a hash function to exchange a key, but an adversary (in the random oracle model, though he of course didn't use this name) would need roughly $T^2$ invocations to break it. He conjectured that it may be possible to obtain such protocols where breaking is _exponentially harder_ than using them but could not think of any concrete way to doing so.
 
-![Ralph Merkle's Berkeley CS 224 project proposal for developing public key cryptography](../figure/merkle-proposal.png){#merklefig}
+![Ralph Merkle's Berkeley CS 244 project proposal for developing public key cryptography](../figure/merkle-proposal.png){#merklefig}
 
 We only found out much later that in the late 1960's, a few years before Merkle, James Ellis of the British Intelligence agency GCHQ was [having similar thoughts](http://cryptome.org/jya/ellisdoc.htm).
 His curiosity was spurred by an old World War II manuscript from Bell labs that suggested the following way that two people could communicate securely over a phone line. Alice would inject noise to the line, Bob would relay his messages, and then Alice would subtract the noise to get the signal. The idea is that an adversary over the line sees only the sum of Alice's and Bob's signals and doesn't know what came from what. This got James Ellis thinking whether it would be possible to achieve something like that digitally. As he later recollected, in 1970 he realized that in principle this should be possible. He could think of an hypothetical black box $B$ that on input a "handle" $\alpha$ and plaintext $p$ would give a "ciphertext" $c$. There would be a secret key $\beta$ corresponding to $\alpha$ such that feeding $\beta$ and $c$ to the box would recover $p$. However, Ellis had no idea how to actually instantiate this box. He and others kept giving this question as a puzzle to bright new recruits until one of them, Clifford Cocks, came up in 1973 with a candidate solution loosely based on the factoring problem; in 1974 another GCHQ recruit, Malcolm Williamson, came up with a solution using modular exponentiation.
@@ -268,7 +268,7 @@ In particular we can make the following conjecture:
 >__Computational Diffie-Hellman Conjecture for mod prime groups:__ For a random $n$-bit prime and random $g \in \mathbb{Z}_p$, the CDH holds with respect to the group $\mathbb{G} = \{ g^a \mod p \;| a\in \mathbb{Z} \}$.
 
 
-That is, for every polynomial $q:\N \rightarrow \N$, if $n$ is large enough, then with probability at least $1-1/q(n)$ over the choice of a uniform prime $p\in [2^n]$ and $g\in \Z_p$, for every circuit $A$ of size at most $q(n)$, the probability that $A(g,p,g^a,g^b)$ outputs $h$ such that $g^{ab} = h \mod p$ is at most $1/q(n)$ where the probability is taken over $a,b$ chosen at random in $\Z_p$. (In practice people often take $g$ to be a generator of a group significantly smaller in size than $p$, which enables $a,b$ to be smaller numbers and hence multiplication to be more efficient; We ignore this optimization in our discussions.)
+That is, for every polynomial $q:\N \rightarrow \N$, if $n$ is large enough, then with probability at least $1-1/q(n)$ over the choice of a uniform prime $p\in [2^n]$ and $g\in \Z_p$, for every circuit $A$ of size at most $q(n)$, the probability that $A(g,p,g^a,g^b)$ outputs $h$ such that $g^{ab} = h \mod p$ is at most $1/q(n)$ where the probability is taken over $a,b$ chosen at random in $\Z_p$. (In practice people often take $g$ to be a generator of a group significantly smaller in size than $p$, which enables $a,b$ to be smaller numbers and hence multiplication to be more efficient; we ignore this optimization in our discussions.)
 
 > # { .pause }
 Please take your time to re-read the following conjecture until you are sure you understand what it means. Victor Shoup's excellent and online available book [A Computational Introduction to Number Theory and Algebra](http://www.shoup.net/ntb/) has an in depth treatment of groups, generators, and the discrete log and Diffie-Hellman problem. See also Chapters 10.4 and 10.5 in the Boneh-Shoup book, and Chapters 8.3 and 11.4 in the Katz-Lindell book. There are also solved group theory exercises at the end of this chapter.
@@ -325,7 +325,7 @@ One can get security results for this protocol without a random oracle if we ass
 As mentioned, the Diffie-Hellman systems can be run with many variants of Abelian groups. Of course, for some of those groups the discrete logarithm problem might be easy, and so they would be inappropriate to use for this system. One variant that has been proposed is [elliptic curve cryptography](https://en.wikipedia.org/wiki/Elliptic_curve_cryptography). This is a group consisting of points of the form $(x,y,z)\in \Z_p^3$ that satisfy a certain equation, and multiplication can be defined according in a certain way. The main advantage of elliptic curve cryptography is that the best known algorithms run in time $2^{\approx n}$ as opposed to $2^{\approx n^{1/3}}$, which allows for much shorter keys. Unfortunately, elliptic curve cryptography is just as susceptible to quantum algorithms as the discrete logarithm problem over $\Z_p$.
 
 
-> # {.remark title="Encryption vs Key Exchange and El Gamal" #DHKErem}
+> # {.remark title="Encryption vs Key Exchange and ElGamal" #DHKErem}
 In most of the cryptography literature the protocol above is called the _Diffie-Hellman Key Exchange_ protocol, and when considered as a public key system it is sometimes known as _ElGamal encryption_.[^ElGamal]
 The reason for this mostly stems from the early confusion on what the right security definitions are.
 Diffie and Hellman thought of encryption as a _deterministic_ process and so they called their scheme a "key exchange protocol".
@@ -383,7 +383,7 @@ If you haven't seen group theory, it might be useful for you to do a quick revie
 Shoup's [excellent book](http://www.shoup.net/ntb/) contains everything we need to know (and much more than that).
 What you need to remember is the following:
 
-* A _finite commutative group_ $\mathbb{G}$ is a finite set together with a multiplication operation that satisfies $a\cdot b = b\cdot a$ and $(a\cdot b)\cdot c = (a\cdot b)\cdot c)$.
+* A _finite commutative group_ $\mathbb{G}$ is a finite set together with a multiplication operation that satisfies $a\cdot b = b\cdot a$ and $(a\cdot b)\cdot c = a\cdot (b\cdot c)$.
 
 * $\mathbb{G}$ has a special element known as $1$, where $g1=1g=g$ for every $g\in\mathbb{G}$ and for every $g\in \mathbb{G}$ there exists an element $g^{-1}\in \mathbb{G}$ such that $gg^{-1}=1$.
 
@@ -392,7 +392,7 @@ What you need to remember is the following:
 
 The following basic facts are all not too hard to prove and would be useful exercises:
 
-* For every $g\in \mathbb{G}$, the map $a \mapsto g^a$ is a $k$ to $1$ map from $\{0,\ldots,|\mathbb{G}|-1\}$ to $\mathbb{G}$ where $k=|\mathbb{G}|/order(g)$. See footnote for hint^[For every $f\in \mathbb{G}$, you can show a one to one and onto mapping between the set $\{ a : g^a = 1 \}$ and the set $\{b : g^b= f \}$ by choosing some element $b$ from the latter set and looking at the map $a \mapsto a+b \mod |\mathbb{G}|$.]
+* For every $g\in \mathbb{G}$, the map $a \mapsto g^a$ is a $k$ to $1$ map from $\{0,\ldots,|\mathbb{G}|-1\}$ to $\mathbb{G}$ where $k=|\mathbb{G}|/order(g)$. See footnote for hint.^[For every $f\in \mathbb{G}$, you can show a one to one and onto mapping between the set $\{ a : g^a = 1 \}$ and the set $\{b : g^b= f \}$ by choosing some element $b$ from the latter set and looking at the map $a \mapsto a+b \mod |\mathbb{G}|$.]
 
 * As a corollary, the order of $g$ is always a divisor of $|\mathbb{G}|$. This is a special case of a more general phenomenon: the set $\{ g^a \;|\; a\in\mathbb{Z} \}$ is a subset of the group $\mathbb{G}$ that is closed under multiplication, and such subsets are known as _subgroups_ of $\mathbb{G}$. It is not hard to show (using the same approach as above) that for every group $\mathbb{G}$ and subgroup $\mathbb{H}$, the size of $\mathbb{H}$ divides the size of $\mathbb{G}$. This is known as [Lagrange's Theorem](https://goo.gl/Q9VSqn) in group theory.
 
@@ -568,7 +568,7 @@ However, it is known how to obtain schemes that do not rely on this heuristic, a
 ## Putting everything together - security in practice.
 
 Let us discuss briefly how public key cryptography is used to secure web traffic through the SSL/TLS protocol that we all use when we use ```https://``` URLs.
-The security this achieve is quite amazing. No matter what wired or wireless network you are using, no matter what country you are in, as long as your device (e.g., phone/laptop/etc..) and the server you are talking to (e.g., Google, Amazon, Microsoft etc.) is functioning properly, you can communicate securely without any party in the middle able to either learn or modify the contents of your interaction.[^steg]
+The security this achieves is quite amazing. No matter what wired or wireless network you are using, no matter what country you are in, as long as your device (e.g., phone/laptop/etc..) and the server you are talking to (e.g., Google, Amazon, Microsoft etc.) is functioning properly, you can communicate securely without any party in the middle able to either learn or modify the contents of your interaction.[^steg]
 
 [^steg]: They are able to know that such an interaction took place and the amount of bits exchanged. Preventing these kind of attacks is more subtle and approaches for solutions are known as _steganography_ and _anonymous routing_.
 
@@ -579,7 +579,7 @@ The solution goes back again to the quote of Archimedes of "Give me a fulcrum, a
 
 >_"I Apple certify that the public key of Amazon.com is ```30 82 01 0a 02 82 01 01 00 94 9f 2e fd 07 63 33 53 b1 be e5 d4 21 9d 86 43 70 0e b5 7c 45 bb ab d1 ff 1f b1 48 7b a3 4f be c7 9d 0f 5c 0b f1 dc 13 15 b0 10 e3 e3 b6 21 0b 40 b0 a3 ca af cc bf 69 fb 99 b8 7b 22 32 bc 1b 17 72 5b e5 e5 77 2b bd 65 d0 03 00 10 e7 09 04 e5 f2 f5 36 e3 1b 0a 09 fd 4e 1b 5a 1e d7 da 3c 20 18 93 92 e3 a1 bd 0d 03 7c b6 4f 3a a4 e5 e5 ed 19 97 f1 dc ec 9e 9f 0a 5e 2c ae f1 3a e5 5a d4 ca f6 06 cf 24 37 34 d6 fa c4 4c 7e 0e 12 08 a5 c9 dc cd a0 84 89 35 1b ca c6 9e 3c 65 04 32 36 c7 21 07 f4 55 32 75 62 a6 b3 d6 ba e4 63 dc 01 3a 09 18 f5 c7 49 bc 36 37 52 60 23 c2 10 82 7a 60 ec 9d 21 a6 b4 da 44 d7 52 ac c4 2e 3d fe 89 93 d1 ba 7e dc 25 55 46 50 56 3e e0 f0 8e c3 0a aa 68 70 af ec 90 25 2b 56 f6 fb f7 49 15 60 50 c8 b4 c4 78 7a 6b 97 ec cd 27 2e 88 98 92 db 02 03 01 00 01```"_
 
-Such a message is known as a _certificate_, and it allows you to extend your trust in Apple to a trust in Amazon.  Now when your browser communicates with Amazon, it can request this message, and if it is not present not continue with the interaction or at least display some warning. Clearly a person in the middle can stop this message from travelling and hence not allow the interaction to continue, but they cannot _spoof_ the message and send a certificate for their own public key, unless they
+Such a message is known as a _certificate_, and it allows you to extend your trust in Apple to a trust in Amazon.  Now when your browser communicates with Amazon, it can request this message, and if it is not present terminate the interaction or at least display some warning. Clearly a person in the middle can stop this message from travelling and hence not allow the interaction to continue, but they cannot _spoof_ the message and send a certificate for their own public key, unless they
 know Apple's secret key. (In today's actual implementation, for various business and other reasons, the trusted keys that come pre-installed in browsers and devices do not belong to Apple or Microsoft but rather to particular companies such as _Verisign_ known as _certificate authorities_. The security of these certificate authorities' private key is crucial to the security of the whole protocol, and it has been [attacked](https://en.wikipedia.org/wiki/DigiNotar) [before](http://www.wired.com/2011/10/son-of-stuxnet-in-the-wild/).)
 
 Using certificates, we can assume that Bob the user has the public verification key $v$ of Alice the server.
@@ -590,13 +590,13 @@ Once Bob knows Alice's public key they are in business- he can use that to send 
 
 This is, at a very high level, the SSL/TLS protocol, but there are many details inside it including the exact security notions needed from the encryption, how the two parties negotiate _which_ cryptographic algorithm to use, and more. All these issues can and have been used for attacks on this protocol. For two recent discussions see [this blog post](http://blog.cryptographyengineering.com/2013/12/how-does-nsa-break-ssl.html) and [this website](https://weakdh.org/).
 
-![When you connect to a webpage protected by SSL/TLS, the Browswer displays information on the certificate's authenticity](../figure/certificate.jpg){#tmplabelfig width=80% }
+![When you connect to a webpage protected by SSL/TLS, the browser displays information on the certificate's authenticity](../figure/certificate.jpg){#tmplabelfig width=80% }
 
 ![The cipher and certificate used by '''Google.com'''. Note that Google has a 2048bit RSA signature key which it then uses to authenticate an elliptic curve based Diffie-Hellman key exchange protocol to create session keys for the block cipher AES with 128 bit key in Galois Counter Mode.](../figure/googletls.jpg){#tmplabelfig width=40% }
 
 ![Digital signatures and other forms of electronic signatures are legally binding in many jurisdictions. This is some material from the website of the electronic signing company DocuSign.](../figure/docusign.jpg){#tmplabelfig width=80% }
 
->__Example:__ Here is the list of certificate authorities that were trusted by default (as of spring 2016) by Mozilla products: Actalis, Amazon, AS Sertifitseerimiskeskuse (SK), Atos, Autoridad de Certificacion Firmaprofesional, Buypass, CA Disig a.s., Camerfirma, CerticÃ¡mara S.A., Certigna, Certinomis, certSIGN, China Financial Certification Authority (CFCA), China Internet Network Information Center (CNNIC), Chunghwa Telecom Corporation, Comodo, ComSign, Consorci AdministraciÃ³ Oberta de Catalunya (Consorci AOC,  CATCert), Cybertrust Japan / JCSI, D-TRUST, Deutscher Sparkassen Verlag GmbH (S-TRUST,  DSV-Gruppe), DigiCert, DocuSign (OpenTrust/Keynectis), e-tugra, EDICOM, Entrust, GlobalSign, GoDaddy, Government of France (ANSSI,  DCSSI), Government of Hong Kong (SAR),  Hongkong Post,  Certizen, Government of Japan,  Ministry of Internal Affairs and Communications, Government of Spain,  Autoritat de CertificaciÃ³ de la Comunitat Valenciana (ACCV), Government of Taiwan,  Government Root Certification Authority (GRCA), Government of The Netherlands,  PKIoverheid, Government of Turkey,  Kamu Sertifikasyon Merkezi (Kamu SM), HARICA, IdenTrust, Izenpe S.A., Microsec e-SzignÃ³ CA, NetLock Ltd., PROCERT, QuoVadis, RSA the Security Division of EMC, SECOM Trust Systems Co. Ltd., Start Commercial (StartCom) Ltd., Swisscom (Switzerland) Ltd, SwissSign AG, Symantec / GeoTrust, Symantec / Thawte, Symantec / VeriSign, T-Systems International GmbH (Deutsche Telekom), Taiwan-CA Inc. (TWCA), TeliaSonera, Trend Micro, Trustis, Trustwave, TurkTrust, Unizeto Certum, Visa, Web.com, Wells Fargo Bank N.A., WISeKey, WoSign CA Limited
+>__Example:__ Here is the list of certificate authorities that were trusted by default (as of spring 2016) by Mozilla products: Actalis, Amazon, AS Sertifitseerimiskeskuse (SK), Atos, Autoridad de Certificacion Firmaprofesional, Buypass, CA Disig a.s., Camerfirma, Certicámara S.A., Certigna, Certinomis, certSIGN, China Financial Certification Authority (CFCA), China Internet Network Information Center (CNNIC), Chunghwa Telecom Corporation, Comodo, ComSign, Consorci Administració Oberta de Catalunya (Consorci AOC,  CATCert), Cybertrust Japan / JCSI, D-TRUST, Deutscher Sparkassen Verlag GmbH (S-TRUST,  DSV-Gruppe), DigiCert, DocuSign (OpenTrust/Keynectis), e-tugra, EDICOM, Entrust, GlobalSign, GoDaddy, Government of France (ANSSI,  DCSSI), Government of Hong Kong (SAR),  Hongkong Post,  Certizen, Government of Japan,  Ministry of Internal Affairs and Communications, Government of Spain,  Autoritat de Certificación de la Comunitat Valenciana (ACCV), Government of Taiwan,  Government Root Certification Authority (GRCA), Government of The Netherlands,  PKIoverheid, Government of Turkey,  Kamu Sertifikasyon Merkezi (Kamu SM), HARICA, IdenTrust, Izenpe S.A., Microsec e-Szignó CA, NetLock Ltd., PROCERT, QuoVadis, RSA the Security Division of EMC, SECOM Trust Systems Co. Ltd., Start Commercial (StartCom) Ltd., Swisscom (Switzerland) Ltd, SwissSign AG, Symantec / GeoTrust, Symantec / Thawte, Symantec / VeriSign, T-Systems International GmbH (Deutsche Telekom), Taiwan-CA Inc. (TWCA), TeliaSonera, Trend Micro, Trustis, Trustwave, TurkTrust, Unizeto Certum, Visa, Web.com, Wells Fargo Bank N.A., WISeKey, WoSign CA Limited
 
 
 ## Appendix: An alternative proof of the density of primes
@@ -638,13 +638,14 @@ In this class, we restrict ourselves to finite commutative groups to avoid compl
 
 Here are five more important groups used in cryptography other than $\mathbb{Z}_{p}$. Recall that groups are given by a set and a binary operation.
 
-* For some prime $p$, $\mathbb{Z}_p^{\*}=\{1,\ldots , p-1\}$, with operation multiplication mod $p$ (Note: the $^{\*}$ is to distinguish this group from $\mathbb{Z}_p$ with an additive operation and from $GF(p)$.)
-* The quadratic residues of $\mathbb{Z}_p^{\*}$: $Q_p=\{a^2:a\in \mathbb{Z}_p^{\*}\}$ with operation multiplication mod $p$
-* $\mathbb{Z}_n^{\*}$, where $n=p\cdot q$ (product of two primes)
-* The quadratic residues of $\mathbb{Z}_n^{\*}$:: $Q_n=\{a^2:a\in \mathbb{Z}_n^{*}\}$, where $n=p\cdot q$
+* For some prime $p$, $\mathbb{Z}_p^{*}=\{1,\ldots , p-1\}$, with operation multiplication mod $p$ (Note: the $^{*}$ is to distinguish this group from $\mathbb{Z}_p$ with an additive operation and from $GF(p)$.)
+* The quadratic residues of $\mathbb{Z}_p^{*}$: $Q_p=\{a^2:a\in \mathbb{Z}_p^{*}\}$ with operation multiplication mod $p$
+* $\mathbb{Z}_n^{*}$, where $n=p\cdot q$ (product of two primes)
+* The quadratic residues of $\mathbb{Z}_n^{*}$:: $Q_n=\{a^2:a\in \mathbb{Z}_n^{*}\}$, where $n=p\cdot q$
 * Elliptic curve groups 
 
 For more familiarity with group definitions, you could verify that the first 4 groups satisfy the group axioms. For cryptography, two operations need be efficient for elements $a,b$ in group $\mathbb{G}$:
+
 * Exponentiation: $a,b\mapsto a^b$. This is done efficiently using repeated squaring, i.e. generate all the squares up to $2^k$ and then use the binary representation. 
 * Inverse: $a \mapsto a^{-1}$. This is done efficiently in $\mathbb{Z}_p^{\*}$ by Fermat's little theorem. $a^{-1}=a^{p-2}$ mod $p$.
 
@@ -708,7 +709,7 @@ Suppose that $ca = c$ for all $c \in \mathbb{G}$ and that $cb = c$ for all $c \i
 
 
 
-The next few problems are related to quadratic residues, but these problems are a bit more general (in particular, we are considering some group, and a subgroup which are all of the elements of the first group which are squares)
+The next few problems are related to quadratic residues, but these problems are a bit more general (in particular, we are considering some group, and a subgroup which are all of the elements of the first group which are squares).
 
 
 ::: {.solvedexercise #quadresidueex1}
@@ -717,6 +718,7 @@ Suppose that $\mathbb{G}$ is some (finite, commutative) group, and $\mathbb{H}$ 
 
 ::: {.solution data-ref="quadresidueex1"}
 To be a subgroup, we need to make sure that $\mathbb{H}$ is a group in its own right (in particular, that it contains the identity, that it contains inverses, and that it is closed under multiplication; associativity and commutativity follow because we are within a larger set $\mathbb{G}$ which satisfies associativity and commutativity).
+
 _Identity_ Well, $1^2 = 1$, so $1 \in \mathbb{H}$, so $\mathbb{H}$ has the identity element. 
 _Inverses_ If $h \in \mathbb{H}$, then $g^2 = h$ for some $g \in \mathbb{G}$, but $g$ has an inverse in $\mathbb{G}$, and we can look at $g^2(g^{-1})^2 = (gg^{-1})^2 = 1^2 = 1$ (where I used commutativity and associativity, as well as the definition of the inverse). It is clear that $(g^{-1})^2 \in \mathbb{H}$ because there exists an element in $\mathbb{G}$ (specifically, $g^{-1}$) whose square is $(g^{-1})^2$. Therefore $h$ has an inverse in $\mathbb{H}$, where if $h=g^2$, then $h^{-1} = (g^{-1})^2$.
 _Closure under operation_ If $h_1,h_2 \in \mathbb{H}$, then there exist $g_1,g_2 \in \mathbb{G}$ where $h_1 = (g_1)^2, h_2 = (g_2)^2$. So $h_1h_2 = (g_1)^2(g_2)^2 = (g_1g_2)^2$, so $h_1h_2 \in \mathbb{H}$. 
