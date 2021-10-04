@@ -255,7 +255,7 @@ If there is a polynomial time algorithm for the discrete logarithm problem, then
 > # {.proof data-ref="dhinseclem"}
 Using a discrete logarithm algorithm, we can compute the private key $a$ from the parameters $p,g,g^a$ present in the public key, and clearly once we know the private key we can decrypt any message of our choice.
 
-Unfortunately, no such result is known in the other direction. However in the random oracle model, we can prove that this protocol is secure in the random-oracle model, under the assumption that the task of computing $g^{ab}$ from $g^a$ and $g^b$ (which is now known as the _Diffie-Hellman problem_) is hard.
+Unfortunately, no such result is known in the other direction. However, we can prove that this protocol is secure in the random-oracle model, under the assumption that the task of computing $g^{ab}$ from $g^a$ and $g^b$ (which is now known as the _Diffie-Hellman problem_) is hard.
 
 
 
@@ -291,7 +291,7 @@ We make the following claim:
 
 __CLAIM:__ For a fixed $\mathbb{G}$ of size $p$, generator $g$ for $\mathbb{G}$, and given random oracle $H$, if there is a size $T$ distinguisher $A$ with $\epsilon$ advantage between the distribution $(g^a,g^b,H(g^{ab}))$ and the distribution $(g^a,g^b,U_\ell)$ (where $a,b$ are chosen uniformly and independently in $\Z_{p}$), then there is a size $poly(T)$ algorithm $A'$ to solve the Diffie-Hellman problem with respect to $\mathbb{G},g$ with success at least $\epsilon$. That is, for random $a,b \in \Z_p$, $A'(g,g^a,g^b)=g^{ab}$ with probability at least $\epsilon/(2T)$.
 
-__Proof of claim:__ The proof is simple. We claim that under the assumptions above, $a$ makes the query $g^{ab}$ to its oracle $H$ with probability at least $\epsilon/2$ since otherwise, by the "lazy evaluation" paradigm, we can assume that $H(g^{ab})$ is chosen independently at random after $A$'s attack is completed and hence (conditioned on the adversary not making that query), the value $H(g^{ab})$  is indistinguishable from a uniform output.
+__Proof of claim:__ The proof is simple. We claim that under the assumptions above, $A$ makes the query $g^{ab}$ to its oracle $H$ with probability at least $\epsilon/2$ since otherwise, by the "lazy evaluation" paradigm, we can assume that $H(g^{ab})$ is chosen independently at random after $A$'s attack is completed and hence (conditioned on the adversary not making that query), the value $H(g^{ab})$  is indistinguishable from a uniform output.
 Therefore, on input $g,g^a,g^b$, $A'$ can simulate $A$ and simply output one of the at most $T$ queries that $A$ makes to $H$ at random and will be successful with probability at least $\epsilon/(2T)$.
 
 
@@ -322,7 +322,7 @@ One can get security results for this protocol without a random oracle if we ass
 :::
 
 > # {.remark title="Elliptic curve cryptography" #curverem}
-As mentioned, the Diffie-Hellman systems can be run with many variants of Abelian groups. Of course, for some of those groups the discrete logarithm problem might be easy, and so they would be inappropriate to use for this system. One variant that has been proposed is [elliptic curve cryptography](https://en.wikipedia.org/wiki/Elliptic_curve_cryptography). This is a group consisting of points of the form $(x,y,z)\in \Z_p^3$ that satisfy a certain equation, and multiplication can be defined according in a certain way. The main advantage of elliptic curve cryptography is that the best known algorithms run in time $2^{\approx n}$ as opposed to $2^{\approx n^{1/3}}$, which allows for much shorter keys. Unfortunately, elliptic curve cryptography is just as susceptible to quantum algorithms as the discrete logarithm problem over $\Z_p$.
+As mentioned, the Diffie-Hellman systems can be run with many variants of Abelian groups. Of course, for some of those groups the discrete logarithm problem might be easy, and so they would be inappropriate to use for this system. One variant that has been proposed is [elliptic curve cryptography](https://en.wikipedia.org/wiki/Elliptic_curve_cryptography). This is a group consisting of points of the form $(x,y,z)\in \Z_p^3$ that satisfy a certain equation, where multiplication can be defined in a certain way. The main advantage of elliptic curve cryptography is that the best known algorithms run in time $2^{\approx n}$ as opposed to $2^{\approx n^{1/3}}$, which allows for much shorter keys. Unfortunately, elliptic curve cryptography is just as susceptible to quantum algorithms as the discrete logarithm problem over $\Z_p$.
 
 
 > # {.remark title="Encryption vs Key Exchange and El Gamal" #DHKErem}
@@ -358,7 +358,7 @@ __CLAIM 1:__ $LCM(1,\ldots,N) \leq N^k$.
 __CLAIM 2:__ If $N$ is odd, then $LCM(1,\ldots,N) \geq 2^{N-1}$.
 
 
-The two claims immediately imply the result, since they imply that $2^N \leq N^k$, and taking logs we get that $N-2 \leq k \log N$ or $k \geq (N-2)/\log N$.
+The two claims immediately imply the result, since they imply that $2^{N-1} \leq N^k$, and taking logs we get that $N-1 \leq k \log N$ or $k \geq (N-1)/\log N$.
 (We can assume that $N$ is odd without of loss of generality, since changing from $N$ to $N+1$ can change the number of primes by at most one.)
 Thus, all that is left is to prove the two claims.
 
@@ -368,7 +368,7 @@ __Proof of CLAIM 2:__  Consider the integral $I=\int_0^1 x^{(N-1)/2}(1-x)^{(N-1)
 This is clearly some positive number and so $I>0$.
 On one hand, for every $x$ between zero and one, $x(1-x) \leq 1/4$ and hence $I$ is at most $4^{-(N-1)/2}=2^{-N+1}$.
 On the other hand, the polynomial $x^{(N-1)/2}(1-x)^{(N-1)/2}$ is some polynomial of degree at most $N-1$ with integer coefficients, and so $I=\sum_{k=0}^{N-1} C_k \int_0^1 x^k dx$ for some integer coefficients $C_0,\ldots,C_{N-1}$.
-Since $\int_0^1 x^k = \tfrac{1}{k+1}$, we see that $I$ is a sum of fractions with integer numerators and with denominators that are at most $N$.
+Since $\int_0^1 x^k dx = \tfrac{1}{k+1}$, we see that $I$ is a sum of fractions with integer numerators and with denominators that are at most $N$.
 Since all the denominators are at most $N$ and $I>0$, it follows that $I \geq \tfrac{1}{LCM(1,\ldots,N)}$, and so
 $$2^{-N+1} \geq I \geq \tfrac{1}{LCM(1,\ldots,N)}$$
 which implies $LCM(1,\ldots,N) \leq 2^{N-1}$. QED (CLAIM 2 and hence lemma)
@@ -472,7 +472,7 @@ __DSA Signatures:__ The DSA signature algorithm works as follows: (See also Sect
 
 * _Signature:_ To sign a message $m$ with the key $a$, pick $b$ at random, and let $f=g^b$, and then let $\sigma = b^{-1}[H(m)+a\cdot F(f)]$, where all computation is done modulo $|\mathbb{G}|$. The signature is $(f,\sigma)$. 
 
-* _Verification:_ To verify a signature $(f,\sigma)$ on a message $m$, check that $s\neq 0$ and $f^\sigma=g^{H(m)}h^{F(f)}$.
+* _Verification:_ To verify a signature $(f,\sigma)$ on a message $m$, check that $\sigma\neq 0$ and $f^\sigma=g^{H(m)}h^{F(f)}$.
 
 [^hashDSA]: It is a bit cumbersome, but not so hard, to transform functions that map strings to strings to functions whose domain or range are group elements. As noted in the KL book, in the actual DSA protocol $F$ is _not_ a cryptographic hash function but rather some very simple function that is still assumed to be "good enough" for security.
 
@@ -480,7 +480,7 @@ __DSA Signatures:__ The DSA signature algorithm works as follows: (See also Sect
 You should pause here and verify that this is indeed a valid signature scheme, in the sense that for every $m$, $V_s(m,S_s(m))=1$.
 
 
-Very roughly speaking, the idea behind security is that on one hand $s$ does not reveal information about $b$ and $a$ because this is "masked" by the "random" value $H(m)$. On the other hand, if an adversary is able to come up with valid signatures, then at least if we treated $H$ and $F$ as oracles, if the signature passes verification then (by taking $\log$ to the base of $g$) the answers $x,y$ of these oracles will satisfy $bs = x + ay$, which means that sufficiently many such equations should be enough to recover the discrete log $a$.
+Very roughly speaking, the idea behind security is that on one hand $\sigma$ does not reveal information about $b$ and $a$ because this is "masked" by the "random" value $H(m)$. On the other hand, if an adversary is able to come up with valid signatures, then at least if we treated $H$ and $F$ as oracles, if the signature passes verification then (by taking $\log$ to the base of $g$) the answers $x,y$ of these oracles will satisfy $b\sigma = x + ay$, which means that sufficiently many such equations should be enough to recover the discrete log $a$.
 
 
 > # { .pause }
@@ -499,13 +499,13 @@ For starters, we consider the following experiment $CMA'$, where in the chosen m
 
 
 On input a message $m$, the fake box will choose $\sigma,r$ at random in $\{0,\ldots,p-1\}$ (where $p=|\mathbb{G}|$), and compute $$f=(g^{H(m)}h^{r})^{\sigma^{-1} \mod p} \label{randomfdsaeq}$$
-and output $h$.
+and output $(f,\sigma)$.
 We will then record the value $F(f)=r$ and answer $r$ on future queries to $F$.
 If we've already answered $F(f)$ before with a different value, then we halt the experiment and output an error.
 We claim that the adversary's chance of succeeding in $CMA'$ is computationally indistinguishable from its chance of succeeding in the original $CMA$ experiment.
 Indeed, since we choose the value $r=F(f)$ at random, as long as we don't repeat a value $f$ that was queried before, the function $F$ is completely random.
 But since the adversary makes at most $T$ queries, and each $f$ is chosen according to [randomfdsaeq](){.eqref}, which yields a random element the group $\mathbb{G}$ (which has size roughly $2^n$), the probability that $f$ is repeated is at most $T/|\mathbb{G}|$, which is negligible.
-Now we computed $\sigma$ in the fake box as a random value, but we can also compute $\sigma$ as equaling $b^{-1}(H(m)+a r) \mod p$, where $b=\log_g f \mod \mathbb{G}$ is uniform as well, and so the distribution of the signature $(f,\sigma)$ is identical to the distribution by a real box.
+Now we computed $\sigma$ in the fake box as a random value, but we can also compute $\sigma$ as equaling $b^{-1}(H(m)+a r) \mod p$, where $b=\log_g f \mod p$ is uniform as well, and so the distribution of the signature $(f,\sigma)$ is identical to the distribution by a real box.
 
 Note that we can simulate the result of the experiment $CMA'$ without access to the value $a$ such that $h=g^a$.
 We now transform an algorithm $A'$ that manages to forge a signature in the $CMA'$ experiment into an algorithm that given $\mathbb{G},g,g^a$ manages to recover $a$.
@@ -527,7 +527,7 @@ $$H(m)+aF(f^*) = b\sigma$$
 and
 $$H(m^*)+aF(f^*)=b\sigma^*$$
 or
-$$b= (H(m^*)-H(m))(\sigma-\sigma^*)^{-1} \mod p$$
+$$b= (H(m)-H(m^*))(\sigma-\sigma^*)^{-1} \mod p$$
 since all of the values $H(m^*),H(m),\sigma,\sigma^*$ are known, this means we can compute $b$, and hence also recover the unknown value $a$.
 
 
