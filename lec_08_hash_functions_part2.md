@@ -91,7 +91,7 @@ until we get a single block $y\in\{0,1\}^n$. (Assume here $t$ is a power of two 
 ![In the Merkle Tree construction we map a long string $x$ into a block $y\in\{0,1\}^n$ that is a "digest" of the long string $x$. As in a collision resistant hash we can imagine that this map is "one to one" in the sense that it won't be possible to find $x'\neq x$ with the same digest. Moreover, we can efficiently certify that a certain bit of $x$ is equal to some value without sending out all of $x$ but rather the $\log t$ blocks that are on the path between $i$ to the root together with their "siblings" used in the hash function, for a total of at most $2\log t$ blocks.](../figure/merkle-tree.jpg){#merkletreefig width=80% }
 
 
-Alice who sends $x$ to the cloud Bob will keep the short block $y$.
+Alice, who sends $x$ to the cloud Bob, will keep the short block $y$.
 Whenever Alice queries the value $i$ she will ask for a _certificate_ that $x_i$ is indeed the right value.
 This certificate will consists of the block that contains $i$, as well as all of the $2\log t$ blocks that were used in the hash from this block to the root.
 The security of this scheme follows from the following simple theorem:
@@ -116,7 +116,7 @@ In a _proof of retrievability_, first proposed by Juels and Kalisky in 2007, Ali
 
 First, note that Alice can guarantee that Bob stores at least 99 percent of her data, by periodically asking him to provide answers (with proofs!)
 of the value of $x$ at 100 or so random locations.
-The idea is that if bob dropped more than 1 percent of the bits, then he'd be very likely to be caught "red handed" and get a question from Alice about a location he did not retain.
+The idea is that if Bob dropped more than 1 percent of the bits, then he'd be very likely to be caught "red handed" and get a question from Alice about a location he did not retain.
 
 Now, if we used some redundancy to store $x$ such as the RAID format, where it is composed of some small number $c$ parts and we can recover any bit of the original data as long as at most one of the parts were lost, then we might hope that even if 1\% of $x$ _was_ in fact lost by Bob, we could still recover the whole string.
 This is not a fool-proof guarantee since it could possibly be that the data lost by Bob was not confined to a single part.
