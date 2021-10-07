@@ -35,7 +35,7 @@ In particular, the following issues arise when considering the task of securely 
 
 * **Infrastructure/setup assumptions:** What kind of setup can Alice and Bob rely upon? For example in the TLS protocol, typically Alice is a website and Bob is user; Using the infrastructure of certificate authorities, Bob has a trusted way to obtain Alice's _public signature key_, while Alice doesn't know anything about Bob. But there are many other variants as well. Alice and Bob could share a (low entropy) _password_. One of them might have some hardware token, or they might have a secure out of band channel (e.g., text messages) to transmit a short amount of information. There are even variants where the parties authenticate by something they _know_, with one recent example being the notion of _witness encryption_ (Garg, Gentry, Sahai, and Waters) where one can encrypt information in a "digital time capsule" to be opened by anyone who, for example, finds a proof of the Riemann hypothesis.
 
-* **Adversary access:** What kind of attacks do we need to protect against. The simplest setting is a _passive_ eavesdropping adversary (often called "Eve") but we sometimes consider an _active person-in-the-middle_ attacks (sometimes called "Mallory"). We sometimes consider notions of _graceful recovery_. For example, if the adversary manages to hack into one of the parties then it can clearly read their communications from that time onwards, but we would want their past communication to be protected (a notion known as _forward secrecy_). If we rely on trusted infrastructure such as certificate authorities, we could ask what happens if the adversary breaks into those. Sometimes we rely on the security of several entities or secrets, and we want to consider adversaries that control _some_ but not _all_ of them, a notion known as _threshold cryptography_.
+* **Adversary access:** What kind of attacks do we need to protect against. The simplest setting is a _passive_ eavesdropping adversary (often called "Eve") but we sometimes consider an _active person-in-the-middle_ attacks (sometimes called "Mallory"). We sometimes consider notions of _graceful recovery_. For example, if the adversary manages to hack into one of the parties then it can clearly read their communications from that time onwards, but we would want their past communication to be protected (a notion known as _forward secrecy_). If we rely on trusted infrastructure such as certificate authorities, we could ask what happens if the adversary breaks into those. Sometimes we rely on the security of several entities or secrets, and we want to consider adversaries that control _some_ but not _all_ of them, a notion known as _threshold cryptography_. While we typically assume that information is either fully secret or fully public, we sometimes want to model _side channel attacks_ where the adversary can learn _partial information_ about the secret, this is known as _leakage-resistant cryptography_.
 
 * **Interaction:** Do Alice and Bob get to interact and relay several messages back and forth or is it a "one shot" protocol? You may think that this is merely a question about efficiency but it turns out to be crucial for some applications. Sometimes Alice and Bob might not be two parties separated in space but the same party separated in time. That is, Alice wishes to send a message to her future self by storing an encrypted and authenticated version of it on some media. In this case, absent a time machine, back and forth interaction between the two parties is obviously impossible.
 
@@ -76,9 +76,13 @@ She might also be able to create weird (with some potential security implication
 For this reason, in actual applications we typically use _authenticated_ key exchange.
 The notion of authentication used depends on what we can assume on the setup assumptions.
 A standard assumption is that Alice has some public keys but Bob doesn't.
-(This is the case when Alice is a website and Bob is a user.)
-However, one needs to take care in how to use this assumption.
-Indeed, the standard protocol for securing the web: the [transport Layer Security (TLS) protocol](https://goo.gl/md9Bsa) (and its predecessor SSL) has gone through six revisions (including a name change from SSL to TLS) largely because of security concerns.
+The justification for this assumption is that Alice might be a server, which has the capabilities to generate a private/public key pair, disseminate the public key (e.g., using a certificate authority) and maintain the private key in a secure storage.
+In contrast, if Bob is an individual user, then it might not have access to a secure storage to maintain a private key (since personal devices can often are hacked). 
+Moreover, Alice might not care about Bob's identity. For example, if Alice is nytimes.com and Bob is a reader, then Bob wants to know that the news he reads really came from the _New York Times_, but Alice is equally happy to engage in communication with any reader. 
+In other cases, such as gmail.com, after an initial secure connection is setup, Bob can authenticate himself to Alice as a registered user (by sending his login information or sending a "cookie" stored from a past interaction).
+
+
+It is possible to obtain a secure channel under these assumptions, but one needs to be careful. Indeed, the standard protocol for securing the web: the [transport Layer Security (TLS) protocol](https://goo.gl/md9Bsa) (and its predecessor SSL) has gone through six revisions (including a name change from SSL to TLS) largely because of security concerns.
 We now illustrate one of those attacks.
 
 
@@ -94,7 +98,7 @@ However, as was [shown by Bleichenbacher in 1998](http://archiv.infsec.ethz.ch/e
 
 * The adversary then starts many connections with the server with ciphertexts related to $c$, and observes whether they succeed or fail (and in what way they fail, if they do). It turns out that based on this information, the adversary would be able to recover the key $k$.
 
-Specifically, the version of RSA (known as PKCS $\sharp$ V1.5) used in the SSL V3.0 protocol requires the value $x$ to have a particular format, with the top two bytes having a certain form.
+Specifically, the version of RSA (known as PKCS ＃V1.5) used in the SSL V3.0 protocol requires the value $x$ to have a particular format, with the top two bytes having a certain form.
 If in the course of the protocol, a server decrypts $y$ and gets a value $x$ not of this form then it would send an error message and halt the connection.
 While the designers of SSL V3.0 might not have thought of it that way, this amounts to saying that an SSL V3.0 server supplies to any party an oracle that on input $y$ outputs $1$ iff $y^{d} \pmod{m}$ has this form, where $d = e^{-1} \pmod|\Z^*_m|$ is the secret decryption key.
 It turned out that one can use such an oracle to invert the RSA function.
@@ -102,26 +106,28 @@ For a result of a similar flavor, see the (1/2 page) proof of Theorem 11.31 (pag
 
 [^hardcore]: The first attack of this flavor was given in the 1982 paper of Goldwasser, Micali, and Tong. Interestingly, this notion of "hardcore bits" has been used for both practical _attacks_ against cryptosystems as well as theoretical (and sometimes practical) _constructions_ of other cryptosystems.
 
-For this reason, new versions of the SSL used a different variant of RSA known as PKCS $\sharp$1 V2.0 which satisfies (under assumptions) _chosen ciphertext security (CCA)_ and in particular such oracles cannot be used to break the encryption. (Nonetheless,  there are still some implementation issues that allowed to perform some attacks, see the note in KL page 425 on Manfer's attack.)
+For this reason, new versions of the SSL used a different variant of RSA known as PKCS ＃1 V2.0 which satisfies (under assumptions) _chosen ciphertext security (CCA)_ and in particular such oracles cannot be used to break the encryption. Nonetheless,  there are still some implementation issues that allowed to perform some attacks, specifically [Manger](http://archiv.infsec.ethz.ch/education/fs08/secsem/Manger01.pdf) showed that depending on PKCS ＃1 V2.0 is implemented, it might be possible to still launch an attack. The main reason is that the specification states several conditions under which decryption box is supposed to return "error". The proof of CCA security crucially relies on the attacker not being able to distinguish which condition caused the error message. However, some implementations could still leak this information, for example by checking these conditions one by one, and so returning "error" quicker when the earlier conditions hold. See discussion in Katz-Lindell (3rd ed)  12.5.4.
 
 ## Chosen ciphertext attack security for public key cryptography
 
 The concept of chosen ciphertext attack security makes perfect sense for _public key_ encryption as well.
 It is defined in the same way as it was in the private key setting:
 
-> # {.definition title="CCA secure public key encryption" #CCSpubdef}
+::: {.definition title="CCA secure public key encryption" #CCSpubdef}
 A public key encryption scheme $(G,E,D)$ is _chosen ciphertext attack (CCA) secure_ if every
 efficient Mallory wins in the following game with probability at most $1/2+ negl(n)$:
->
+
 * The keys $(e,d)$ are generated via $G(1^n)$, and Mallory gets the public encryption key $e$ and $1^n$.
->
+
 * For $poly(n)$ rounds, Mallory gets access to the function $c \mapsto D_d(c)$. (She doesn't need access to $m \mapsto E_e(m)$ since she already knows $e$.)
->
+
 * Mallory chooses a pair of messages $\{ m_0,m_1 \}$, a secret $b$ is chosen at random in $\{0,1\}$, and Mallory gets $c^* = E_e(m_b)$. (Note that she of course does _not_ get the randomness used to generate this challenge encryption.)
->
+
 * Mallory now gets another $poly(n)$ rounds of access to the function $c \mapsto D_d(c)$ except that she is not allowed to query $c^*$.
->
+
 * Mallory outputs $b'$ and _wins_ if $b'=b$.
+:::
+
 
 In the private key setting, we achieved CCA security by combining a CPA-secure private key encryption scheme with a message authenticating code (MAC), where to CCA-encrypt a message $m$,
 we first used the CPA-secure scheme on $m$ to obtain a ciphertext $c$, and then added an authentication tag $\tau$ by signing $c$ with the MAC.
@@ -149,7 +155,7 @@ For more on this, please see [Victor Shoup's survey](http://www.shoup.net/papers
 
 We now show how to convert any CPA-secure public key encryption scheme to a CCA-secure scheme in the random oracle model (this construction is taken from Fujisaki and Okamoto, CRYPTO 99).
 In the homework, you will see a somewhat simpler direct construction of a CCA secure scheme from a _trapdoor permutation_, a variant of which
-is known as OAEP (which has better ciphertext expansion) has been standardized as PKCS $\sharp$1 V2.0 and is used in several protocols.
+is known as OAEP (which has better ciphertext expansion) has been standardized as PKCS ＃1 V2.0 and is used in several protocols.
 The advantage of a generic construction is that it can be instantiated not just with the RSA and Rabin schemes, but also directly with Diffie-Hellman and Lattice based schemes
 (though there are direct and more efficient variants for these as well).
 
@@ -174,26 +180,7 @@ where by $E'_e(m';r')$ we denote the result of encrypting the plaintext $m'$ usi
 The above CCA-ROM-ENC scheme is CCA secure.
 
 ::: {.proof data-ref="CCAPKCthm"}
-__Note:__ The proof here refers to the original scheme in the notes (which was not secure) - should be updated by the scribes to the correct proof as presented in lecture.
-
-
-Suppose towards a contradiction that there exists an adversary $M$ that wins the CCA game with probability at least $1/2+\epsilon$ where $\epsilon$ is non-negligible.
-Our aim is to show that the decryption box would be "useless" to $M$ and hence reduce CCA security to CPA security (which we'll then derive from the CPA security of the underlying scheme).  
-
-Consider the following "box" $\hat{D}$ that will answer decryption queries $c\|y\|z$ of the adversary as follows: \
-* If $z$ was returned before to the adversary as an answer to $H'(m\|r)$ for some $m,r$, and $c=E'_e(m\;H(m\|r))$ and $y=m\oplus r$ then return $m$. \
-* Otherwise return ```error```
-
-__Claim:__ The probability that $\hat{D}$ answers a query differently then $D$ is negligible.
-
-__Proof of claim:__ If $D$ gives a non ```error``` response to a query $c\|y\|z$ then it must be that $z=H'(m\|r)$ for some $m,r$ such that $y = r\oplus m$ and $c=E_e(r;H(m\|r))$, in which case $D$ will return $m$. The only way that $\hat{D}$ will answer this question differently is if $z=H'(m\|r)$ but the query $m\|r$ hasn't been asked before by the adversary.
-Here there are two options. If this query has never been asked before at all, then by the lazy evaluation principle in this case we can think of $H'(m\|r)$ as being independently chosen at this point, and the probability it happens to equal $z$ will be $2^{-n}$.
-If this query was asked by someone apart from the adversary then it could only have been asked by the encryption oracle while producing the challenge ciphertext $c^*\|y^*\|z^*$, but since the adversary is not allowed to ask this precise ciphertext, then it must be a ciphertext of the form $c\|y\|z^*$ where $(c,y) \neq (c^*,y^*)$ and such a ciphertext would get an ```error``` response from both oracles. __QED (claim)__
-
-Note that we can assume without loss of generality that if $m^*$ is the challenge message and $r^*$ is the randomness chosen in this challenge, the adversary never asks the query $m^*\|r^*$ to the its $H$ or $H'$ oracles, since we can modify it so that before making a query $m\|r$, it will first check if $E_e(m\;r)=c^*$ where $c^*\|y^*\|z^*$ is the challenge ciphertext, and if so use this to win the game.
-
-In other words, if we modified the experiment so the values $R^*=H(r^*\|m)$ and $z^*=H'(m^*\|r^*)$ chosen while producing the challenge are simply random strings chosen completely independently of everything else. Now note that our oracle $\hat{D}$ did _not_ need to use the decryption key $d$.
-So, if the adversary wins the CCA game, then it wins the _CPA game_ for the encryption scheme $E_e(m) = E'_e(r;R)\| r \oplus m \| R'$ where $R$ and $R'$ are simply independent random strings; we leave proving that this scheme is CPA secure as an exercise to the reader.
+TBC
 :::
 
 
@@ -216,10 +203,12 @@ If I click on this lock symbol in my Chrome browser, I see that the certificate 
 My communication with Amazon is an example of a setting of _one sided authentication_.
 It is important for me to know that I am truly talking to amazon.com, while Amazon is willing to talk to any client.
 (Though of course once we establish a secure channel, I could use it to login to my Amazon account.)
-Chapter 21 of Boneh Shoup contains an in depth discussion of authenticated key exchange protocols.
+Chapter 21 of Boneh Shoup contains an in depth discussion of authenticated key exchange protocols, see for example [BSAKEfig](){.ref}.
+Because the definition is so involved, we will not go over the full formal definitions in this book, but I recommend Boneh-Shoup for an in-depth treatment.
 
-> # { .pause }
-You should stop here and read Section 21.9 of Boneh Shoup with the formal definitions of authenticated key exchange, going back as needed to the previous section for the definitions of protocols AEK1 - AEK4.
+
+![The attack game for defining authenticated key exchange, taken from Boneh-Shoup (Sec 21.9). TTP refers to a _trusted third party_ such as a certificate authority that maintains the identity of all users. The adversary can register corrupted users (which the adversary controls), can decide on how many honest users will register and who will talk to whom, as well as play "man in the middle" in their interaction. The adversary wins if they can distinguish between this exchange and an idealized exchange in which all honest users keys are securely transferred.](../figure/AKEdef.png){#BSAKEfig}
+the definitions of protocols AEK1 - AEK4.
 
 
 ### The compiler approach for authenticated key exchange
