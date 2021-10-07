@@ -383,7 +383,7 @@ If you haven't seen group theory, it might be useful for you to do a quick revie
 Shoup's [excellent book](http://www.shoup.net/ntb/) contains everything we need to know (and much more than that).
 What you need to remember is the following:
 
-* A _finite commutative group_ $\mathbb{G}$ is a finite set together with a multiplication operation that satisfies $a\cdot b = b\cdot a$ and $(a\cdot b)\cdot c = (a\cdot b)\cdot c)$.
+* A _finite commutative group_ $\mathbb{G}$ is a finite set together with a multiplication operation that satisfies $a\cdot b = b\cdot a$ and $(a\cdot b)\cdot c = a\cdot (b\cdot c)$.
 
 * $\mathbb{G}$ has a special element known as $1$, where $g1=1g=g$ for every $g\in\mathbb{G}$ and for every $g\in \mathbb{G}$ there exists an element $g^{-1}\in \mathbb{G}$ such that $gg^{-1}=1$.
 
