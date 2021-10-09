@@ -163,14 +163,19 @@ The advantage of a generic construction is that it can be instantiated not just 
 ::: {.quote }
 __CCA-ROM-ENC Scheme:__
 
-* **Ingredients:** A public key encryption scheme $(G',E',D')$ and a two hash functions $H,H':\{0,1\}^*\rightarrow\{0,1\}^n$ (which we model as independent random oracles[^oracles])
+* **Ingredients:** A CPA-secure public key encryption scheme $(G',E',D')$ and three hash functions $H,H',H'':\{0,1\}^*\rightarrow\{0,1\}^n$ (which we model as independent random oracles[^oracles]). 
+
+* _Notes:_ We assume that $E'$ takes $n$ bit messages (since CPA security is preserved under concatenation, a one-bit scheme can be transformed into such a scheme). Since $E'$ is (necessarily) randomized, we denote by $E'(x;s)$ the encryption of the message $x$ using the randomness $s$. We assume that the number of bits of randomness $E'$ uses is $n$. (Otherwise we can modify the scheme to use $n$ bits using a pseudorandom generator, or modify the co-domain of $H$ to be the space of random choices for $E'$.)
 
 * **Key generation:** We generate keys $(e,d)=G'(1^n)$ for the underlying encryption scheme.
 
-* **Encryption:** To encrypt a message $m\in\{0,1\}^\ell$, we select randomness $r\leftarrow_R\{0,1\}^\ell$ for the underlying encryption algorithm $E'$ and output $$E_e(m)= E'_e(r;H(m\|r))\|(H'(r) \oplus m)\;,$$
-where by $E'_e(m';r')$ we denote the result of encrypting the plaintext $m'$ using the key $e$ and the randomness $r'$ (we assume the scheme takes $n$ bits of randomness as input; otherwise modify the output length of $H$ accordingly).
+* **Encryption:** To encrypt a message $m\in\{0,1\}^\ell$, we select $r \leftarrow_R \{0,1\}^n$, and output
 
-* **Decryption:** To decrypt a ciphertext $c\|y$ first let $r=D'_d(c)$, $m=H'(r) \oplus y$ and then check that $c=E'_e(m;H(m\|r))$. If the check fails we output ```error```; otherwise we output $m$.
+$$E_e(m) = E'_e(r ; H(m\|r)) \| H''(r) \oplus m \| H'(m \| r)$$
+
+recall that $E'_e(r ; s)$ denotes the encryption of the message $r$ using randomness $s$. 
+
+* **Decryption:** To decrypt a ciphertext $c\|y \| h$ first let $r=D'_d(c)$, then compute  $m=H''(r) \oplus y$. Finally check that $c= E'_e(m ; H(m\|r))$ and $h=H'(m\|r)$. If either check fails we output ```error```; otherwise we output $m$.
 :::
 
 
@@ -180,7 +185,39 @@ where by $E'_e(m';r')$ we denote the result of encrypting the plaintext $m'$ usi
 The above CCA-ROM-ENC scheme is CCA secure.
 
 ::: {.proof data-ref="CCAPKCthm"}
-TBC
+Let $A$ be a polynomial-time adversary that wins the "CCA Game" with respect to the scheme $(G,E,D)$ with probability $1/2 + \epsilon$. We will show (Claim 1) that there is an adversary $\tilde{A}$ that can win in this game with probability $1/2 + \epsilon - negl(n)$ _without using the decryption box_.
+We will then show (Claim 2) that this implies that $A'$ can win the _CPA game_ with respect to the scheme $(G',E',D')$ with probability $1/2 + \Omega(\epsilon)$.
+We start by establishing the first claim:
+
+__Claim 1:__ Under the above assumptions, there exists a polynomial-time adversary $\tilde{A}$ that wins the CCA game with respect to the scheme $(G,E,D)$ without making any queries to the decryption box.
+
+__Proof of Claim 1:__ The adversary $\tilde{A}$ will simulate $A$, keeping track of all of $A$'s queries to its decryption and random oracles. Whenever $A$ makes a query $c\|y\|h$ to the decryption oracle, then $\tilde{A}$ will respond to it using the following "fake" decryption box $\tilde{D}$: check whether $h$ was returned before from the random oracle $H'$ as a response to a query $m\|r$ by $A$. If this is the case, then $\tilde{A}$ will check if $c = E'_e(r;H(m\|r))$ and $y= H''(r) \oplus m$. If so, then it will return $m$, otherwise it will return ```error```. Note that $\tilde{D}(c\|y\|h)$ is computed without any knowledge of the secret key $d$.
+
+We claim that the probability that $\tilde{A}$ will return an answer that differs from the true decryption box is negligible.  Indeed, for each particular query $c\|y\|h$, first observe that if $\tilde{D}(c\|y\|h)$ is not ```error``` then  $\tilde{D}(c\|y\|h) = D_d(c\|y\|h)$. Indeed, in this case it holds that $c=E'_e(m;H(m\|r))$, $y=H'(r) \oplus m$ and $h=H'(m\|r)$. Hence this is a properly formatted encryption of $m$, on which the true decryption box will return $m$ as well.
+
+So the only way that $D$ and $\tilde{D}$ differ is if $D_d(c\|y\|h)=m$ but $\tilde{D}(c\|y\|h)$ returns ```error```. For this it must be the case that for $r=D'_d(c)$, $h=H'(m\|r)$ but $m\|r$ was _not_ queried before by $A$. There are two options: either $m\|r$ was not queried at all, but then by the "lazy evaluation" paradigm, the value $H'(m\|r)$ is chosen uniformly in $\{0,1\}^n$ independently of $h$, and the probability that it equals $h$ is $2^{-n}$. The other option is that $m\|r$ was queried by not by the adversary. The only other party that can make queries to the oracle in the CCA game is the challenger, and it only makes a single query to $H'$ when producing the challenge ciphertext $C^* = c^*\|y^*\|h^*$ with $h^* = H'(m^*\|r^*)$. Now the adversary is not allowed to make the query $C^*$ so in this case the query must have the form $c\|y\|h^*$ where $c\|y \neq c^*\|y^*$. But the only way that $D_d(c\|y\|h^*)$ returns a value other than ```error``` is if for $r=D'_d(c)$ and $m = y \oplus H''(r)$, $c=E_e(r;H(m\|r))$ and $h^* = H'(m\|r)$. Since the probability of a collision in $H'$ is negligible, this can only happen if $m\|r = m^*\|r^*$, but in this case it will hold that $c=c^*$ and $y=y^*$, contradicting the fact that the ciphertext must differ from $C^*$. __QED (Claim 1)__
+
+
+__Claim 2:__ Under the above assumptions, there exists a polynomial-time adversary $A'$ that wins the CPA game with respect to the scheme $(G',E',D')$ with probability at least  $1/2 + \epsilon/10$.
+
+__Proof of Claim 2:__  
+$A'$ runs  the full CCA experiment with the adversary $\tilde{A}$ obtained from Claim 1, simulating the random oracles $H,H',H''$ using "lazy evaluation". When the time comes and the adversary $\tilde{A}$ chooses two ciphertexts $m_0,m_1$, then $A'$ does the following:
+
+1. The adversary $A'$ will choose $r_0,r_1 \leftarrow_R \{0,1\}^n$, give them to its own challenger and get $c^*$ which is either an encryption of $r_{b^*}$ under $E'_e$ for $b^* \leftarrow_R \{0,1\}$. If the adversary $\tilde{A}$ made in the past a query of the form $r_b$ or $m_b\|r_{b'}$ for $b,b' \in \{0,1\}$  to one of the random oracles then we stop the experiment and declare failure. (Since $r_0,r_1$ are random in $\{0,1\}^n$ and $\tilde{A}$ made only polynomially many queries, the probability of this happening is negligible).
+
+2. The adversary $A'$ will now give $c^* \| y^* \| h^*$ with $y^*,h^* \leftarrow_R \{0,1\}^n$ to $\tilde{A}$ as the response to the challenge. (Note that this ciphertext does not involve neither $m_0$ nor $m_1$ in any way.)
+
+3.  Now if the adversary $\tilde{A}$ makes a query of the form $r_b$ or $m\|r_b$ for $b\in \{0,1\}$ to one of its oracles, then $A'$ will output $b$. Otherwise, it outputs a random output.
+
+Note that the adversary $A'$ ignores the _output_ of $\tilde{A}$. It only cares about the queries that $\tilde{A}$ makes. Let's say that an "$r_b$ query is one that has $r_b$ as a postfix". To finish the proof we make the following two claims:
+
+__Claim 2.1:__ The probability that $\tilde{A}$ makes an $r_{1-b^*}$ query is negligible. 
+__Proof:__ This is because the only value that $\tilde{A}$ receives that depends on one of $r_0,r_1$ is $c^*$ which is an encryption of $r_{b^*}$. Hence $\tilde{A}$ never sees any value that depends on $r_{1-b^*}$ and since it is uniform in $\{0,1\}^n$, the probability that $\tilde{A}$ makes a query with this postfix is negligible.
+
+__Claim 2.2:__  $\tilde{A}$ will make an $r_{b^*}$ query with probability at least $\epsilon/2$.
+__Proof:__ Let $c^* = E'_e(r_{b^*) ; s^*)$ where $s^*$ is the randomness used in producing it. By the lazy evaluation paradigm, since no $r_{b^*}$ query was made up to that point, the distribution would be identical if we defined  $H(m_b\|r_{b^*))=s^*$, defined $H''(r_{b^*)) = y^* \oplus m_b$ and define $h^* = H'(m_b\|r_{b^*))$. Hence the distribution of the ciphertext is identical to how it is distributed in the actual CCA game. Now, since $\tilde{A}$ wins the CCA game with probability $1/2 + \epsilon - negl(n)$, in this game it must query $H''$ at $r_{b^*}$ with probability at least $\epsilon/2$. Indeed, conditioned on not querying $H''$ at this value, the string $y^*$ is independent of the message $m_0$, and the adversary cannot win the game with probability more than $1/2$.
+
+Together Claims 2.1 and 2.2 imply that the adversary $\tilde{A}$ makes an $r_{b^*}$ query with probability at least $\epsilon/2$, and makes an $r_{1-b^*}$ query with negligible probability, hence our adversary $A'$ will output $b^*$ with probability at least $\epsilon/2$, and with all but a negligible part of the remaining probability will guess randomly, leading to an overall success in the CPA game of at least $1/2 + \epsilon/2$. __QED (Claim 2 and hence theorem)__ 
 :::
 
 
@@ -231,10 +268,10 @@ Of these protocols a particularly efficient variant is the MQV protocol of Law, 
 
 ## Password authenticated key exchange.
 
-To be completed (the most natural candidate: use MACS with a password-derived key to authenticate communication - completely fails)
 
-> # { .pause }
-Please skim Boneh Shoup Chapter 21.11
+__NOTE:__ The following three parts are not yet written - we will discuss them in class, but please at least skim the resources pointed out below
+
+PAKE is covered in Boneh-Shoup Chapter 21.11
 
 
 ## Client to client key exchange for secure text messaging - ZRTP, OTR, TextSecure
