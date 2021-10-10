@@ -77,7 +77,7 @@ For this reason, in actual applications we typically use _authenticated_ key exc
 The notion of authentication used depends on what we can assume on the setup assumptions.
 A standard assumption is that Alice has some public keys but Bob doesn't.
 The justification for this assumption is that Alice might be a server, which has the capabilities to generate a private/public key pair, disseminate the public key (e.g., using a certificate authority) and maintain the private key in a secure storage.
-In contrast, if Bob is an individual user, then it might not have access to a secure storage to maintain a private key (since personal devices can often are hacked). 
+In contrast, if Bob is an individual user, then it might not have access to a secure storage to maintain a private key (since personal devices can often be hacked). 
 Moreover, Alice might not care about Bob's identity. For example, if Alice is nytimes.com and Bob is a reader, then Bob wants to know that the news he reads really came from the _New York Times_, but Alice is equally happy to engage in communication with any reader. 
 In other cases, such as gmail.com, after an initial secure connection is setup, Bob can authenticate himself to Alice as a registered user (by sending his login information or sending a "cookie" stored from a past interaction).
 
