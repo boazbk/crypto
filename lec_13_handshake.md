@@ -179,7 +179,7 @@ recall that $E'_e(r ; s)$ denotes the encryption of the message $r$ using random
 :::
 
 
-[^oracles]: Recall that it's easy to obtain two independent random oracles $H,H'$ from a single oracle $H''$, for example by letting $H(x)=H''(0\|x)$ and $H'(x)=H''(1\|x)$.
+[^oracles]: Recall that it's easy to obtain two independent random oracles $H,H'$ from a single oracle $H''$, for example by letting $H(x)=H''(0\|x)$ and $H'(x)=H''(1\|x)$. Similarly we can extend this to three, four or any number of oracles.
 
 > # {.theorem title="CCA security from random oracles" #CCAPKCthm}
 The above CCA-ROM-ENC scheme is CCA secure.
@@ -212,10 +212,10 @@ $A'$ runs  the full CCA experiment with the adversary $\tilde{A}$ obtained from 
 Note that the adversary $A'$ ignores the _output_ of $\tilde{A}$. It only cares about the queries that $\tilde{A}$ makes. Let's say that an "$r_b$ query is one that has $r_b$ as a postfix". To finish the proof we make the following two claims:
 
 __Claim 2.1:__ The probability that $\tilde{A}$ makes an $r_{1-b^*}$ query is negligible. 
-__Proof:__ This is because the only value that $\tilde{A}$ receives that depends on one of $r_0,r_1$ is $c^*$ which is an encryption of $r_{b^*}$. Hence $\tilde{A}$ never sees any value that depends on $r_{1-b^*}$ and since it is uniform in $\{0,1\}^n$, the probability that $\tilde{A}$ makes a query with this postfix is negligible.
+__Proof:__ This is because the only value that $\tilde{A}$ receives that depends on one of $r_0,r_1$ is $c^*$ which is an encryption of $r_{b^*}$. Hence $\tilde{A}$ never sees any value that depends on $r_{1-b^*}$ and since it is uniform in $\{0,1\}^n$, the probability that $\tilde{A}$ makes a query with this postfix is negligible. __QED (Claim 2.1)__
 
 __Claim 2.2:__  $\tilde{A}$ will make an $r_{b^*}$ query with probability at least $\epsilon/2$.
-__Proof:__ Let $c^* = E'_e(r_{b^*} ; s^*)$ where $s^*$ is the randomness used in producing it. By the lazy evaluation paradigm, since no $r_{b^*}$ query was made up to that point, the distribution would be identical if we defined  $H(m_b\|r_{b^*})=s^*$, defined $H''(r_{b^*}) = y^* \oplus m_b$ and define $h^* = H'(m_b\|r_{b^*})$. Hence the distribution of the ciphertext is identical to how it is distributed in the actual CCA game. Now, since $\tilde{A}$ wins the CCA game with probability $1/2 + \epsilon - negl(n)$, in this game it must query $H''$ at $r_{b^*}$ with probability at least $\epsilon/2$. Indeed, conditioned on not querying $H''$ at this value, the string $y^*$ is independent of the message $m_0$, and the adversary cannot win the game with probability more than $1/2$.
+__Proof:__ Let $c^* = E'_e(r_{b^*} ; s^*)$ where $s^*$ is the randomness used in producing it. By the lazy evaluation paradigm, since no $r_{b^*}$ query was made up to that point, the distribution would be identical if we defined  $H(m_b\|r_{b^*})=s^*$, defined $H''(r_{b^*}) = y^* \oplus m_b$ and define $h^* = H'(m_b\|r_{b^*})$. Hence the distribution of the ciphertext is identical to how it is distributed in the actual CCA game. Now, since $\tilde{A}$ wins the CCA game with probability $1/2 + \epsilon - negl(n)$, in this game it must query $H''$ at $r_{b^*}$ with probability at least $\epsilon/2$. Indeed, conditioned on not querying $H''$ at this value, the string $y^*$ is independent of the message $m_0$, and the adversary cannot win the game with probability more than $1/2$. __QED (Claim 2.2)__
 
 Together Claims 2.1 and 2.2 imply that the adversary $\tilde{A}$ makes an $r_{b^*}$ query with probability at least $\epsilon/2$, and makes an $r_{1-b^*}$ query with negligible probability, hence our adversary $A'$ will output $b^*$ with probability at least $\epsilon/2$, and with all but a negligible part of the remaining probability will guess randomly, leading to an overall success in the CPA game of at least $1/2 + \epsilon/2$. __QED (Claim 2 and hence theorem)__ 
 :::
