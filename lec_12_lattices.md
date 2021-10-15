@@ -40,7 +40,7 @@ In the theory side, many cool new constructions are now based on lattice based c
 as well as indistinguishability obfuscation (though the latter's security's foundations are still far less solid).
 On the applied side, the steady advances in the technology of quantum computers have finally gotten practitioners worried about RSA, Diffie Hellman and Elliptic Curves.
 While current constructions for quantum computers are nowhere near being able to, say, factor larger numbers that can be done classically (or even than can be done by hand), given that it takes many years to develop new standards and get them deployed, many believe the effort to transition away from these factoring/dlog based schemes should start today (or perhaps should have started several years ago).
-The NSA has [suggested](https://www.nsa.gov/ia/programs/suiteb_cryptography/index.shtml) that it plans to initiate the process to "transition to quantum resistant algorithms in the not too distant future"; see also this [very interesting FAQ](https://cryptome.org/2016/01/CNSA-Suite-and-Quantum-Computing-FAQ.pdf) on this topic.
+Based on this, the National Institute of Standards and Technology has started a [process to identify "post quantum" public key encryption scheme](https://csrc.nist.gov/projects/post-quantum-cryptography). All the finalist for public-key encryption are based on lattices/codes.
 
 Cryptography has the peculiar/unfortunate feature that if a machine is built that can factor large integers in 20 years, it can still be used to break the communication we transmit _today_, provided this communication was recorded.
 So, if you have some data that you expect you'd want still kept secret in 20 years (as many government and commercial entities do), you might have reasons to worry.
@@ -55,7 +55,7 @@ I highly recommend [Chris Peikert's Survey](https://web.eecs.umich.edu/~cpeikert
 A _field_ $\mathbb{F}$ is a set that supports the operations $+,\cdot$ and contains the numbers $0$ and $1$ (more formally the additive identity and multiplicative identity) with the usual properties that the real numbers have. (That is associative, commutative, and distributive law, the fact that for every $x \in \mathbb{F}$ there is an element $-x$ such that $x + (-x) = 0$ and that if $x \neq 0$ there is an element $x^{-1}$ such that $x \cdot x^{-1} = 1$.) 
 Apart from the real numbers, the main field we will be interested in this section is the field $\Z_q$ of the numbers $\{0,1,\ldots,q-1\}$ with addition and multiplication done modulo $q$, where $q$ is a prime number.^[While this won't be of interest for us in this chapter, one can also define finite fields whose size is a _prime power_ of the form $q^k$ where $q$ is a prime and $k$ is an integer; this is sometimes useful and in particular fields of size $2^k$ are sometimes used in practice. In such fields we usually think of the elements as _vector_ $v \in (\Z_q)^k$ with addition done component-wise but multiplication is not defined component-wise (since otherwise a vector with a single coordinate zero would not have an inverse) but in a different way, via interpreting these vectors as coefficients of a degree $k-1$ polynomial.]
 
-You should be comfortable with the following notions:
+You should be comfortable with the following notions (these are covered in a number of sources, including the appendix of Katz-Lindell and [Shoup's online-available book](https://shoup.net/ntb/)):
 
 * A vector $v \in \mathbb{F}^n$ and a _matrix_ $M \in \mathbb{F}^{m \times n}$. An $m\times n$ matrix has $m$ rows and $n$ columns. We think of vectors as _column vectors_ and so we can think of a vector $v \in \mathbb{F}^n$ as an $n\times 1$ matrix.  We write the $i$-the coordinate of $v$ as $v_i$ and the $(i,j)$-th coordinate of $M$ as $M_{i,j}$ (i.e. the coordinate in the $i$-th row and the $j$-th column.) We often write a vector $v$ as $(v_1,\ldots,v_n)$ but we still mean that it's a column vector unless we say otherwise.
 
@@ -66,7 +66,7 @@ You should be comfortable with the following notions:
 
 
 
-* The inner product (also known as "dot product")  $\langle u,v \rangle$ between two vectors of the same dimension $n$ that is defined as $\sum u_i v_i$ (addition done in the field $\mathbb{F}$).^[There is a much more general notion of inner product typically defined, and in particular over fields such as the complex numbers we would define the inner product as $\sum \overline{u}_i v_i$ where for $a\in \mathbb{C}$, $\overline{a}$ denotes the _complex conjugate_ of $a$. However, we stick to the simple case above for this chapter.]
+* The inner product (also known as "dot product")  $\langle u,v \rangle$ between two vectors of the same dimension $n$ that is defined as $\sum u_i v_i$ (addition done in the field $\mathbb{F}$).^[Inner products can be defined more generally,  and in particular over fields such as the complex numbers we would define the inner product as $\sum \overline{u}_i v_i$ where for $a\in \mathbb{C}$, $\overline{a}$ denotes the _complex conjugate_ of $a$. However, we stick to this simple case for this chapter.]
 
 * The _matrix product_ $AB$ of an $m \times k$ and a $k\times n$ matrix, that results in an $m\times n$ matrix. If we think of the rows of $A$ as the vectors $A_1,\ldots,A_m \in \mathbb{F}^k$ and the columns of $B$ as $B_1,\ldots,B_n$, then the $(i,j)$-th coordinate of $AB$  is $\langle A_i , B_j \rangle$. Matrix product is associative and satisfies the distributive law but is _not commutative_: there are pairs of square matrices $A,B$ such that $AB \neq BA$.
 
@@ -101,7 +101,7 @@ where the task is to invert the map $a,b \mapsto a\cdot b$.
 Perhaps the simplest structure to consider is the task of solving linear equations.
 
 
-Pretend that we didn't know of Gaussian elimination,^[Despite the name, [Gaussian elimination](https://goo.gl/3HNb5U)  has been known to Chinese mathematicians since 150BC or so, and was popularized in the west through the 1670 notes of Isaac Newton.] and that if we picked a "generic" matrix $A$ then the map $x \mapsto Ax$ would be hard to invert.
+Pretend that we didn't know of Gaussian elimination,^[Despite the name, [Gaussian elimination](https://goo.gl/3HNb5U)  has been known to Chinese mathematicians since 150BC or so, and was popularized in the west through the 1670 notes of Isaac Newton, more than 100 years before Gauss was born.] and that if we picked a "generic" matrix $A$ then the map $x \mapsto Ax$ would be hard to invert.
 (Here and elsewhere, our default interpretation of a vector $x$ is as a _column_ vector, and hence if $x$ is $n$ dimensional and $A$ is $m\times n$ then $Ax$ is $m$ dimensional. We use $x^\top$ to denote the row vector obtained by _transposing_ $x$.)
 Could we use that to get a public key encryption scheme?
 
@@ -195,12 +195,19 @@ If we want to handle a noise of low enough magnitude (say $\delta(n) = 1/n^2$) t
 Therefore we can think of such an adversary $R$ as getting access to a "magic box" that they can use $m=poly(n)$ number of times to get "noisy equations on $x$" of the form $(a_i,y_i)$ with $a_i\in \Z_q^n$, $y_i \in \Z_q$ where $y_i = \langle a_i, x \rangle + e_i$).
 
 
+::: { .pause }
+The LWE conjecture posits that no _efficient_ algorithm can recover $x$ given $A$ and $Ax + e$. But you might wonder whether it's possible to do this is _inefficiently_. The answer is yes. Intuitively the reason is that if we have more equations than unknown (i.e., if $m>n$) then these equations contain enough information to determine the unknown variables even if they are noisy. It can be shown that if $m$ is sufficiently large ($m>10n$ will do) then with high probability over $A,x,e$, given $A$ and $y=x +e$, if we enumerate over all $\tilde{x} \in \Z_q^n$ and output the string minimizing $| A\tilde{x} - y|$ (where we define $|v| =\sum |v_i|$ for a vector $v$), then $\tilde{x}$ will equal $x$.
+
+It is a good exercise to work out the details, but a hint is this can be proven by showing that for every $\tilde{x}\neq x$, with high probability over $A$, $|A\tilde{x} - Ax| > \delta q m$. The latter fact holds because $v = A(x-\tilde{x})$ is a random vector in $\Z_q^m$, and the probability that $|v|<\delta q m$ is much smaller than $q^{-0.1 m} < q^{-n}$. 
+Hence we can take a union bound over all possible $\tilde{x} \in \Z_q^n$.
+::
+
 
 ## Search to decision
 
 It turns out that if the LWE is hard, then it is even hard to distinguish between random equations and nearly correct ones:
 
-![The search to decision reduction ([LWEsearchtodecthm](){.ref}) implies that under the LWE conjecture,  for every $m=poly(n)$, if we choose and fix a random $m\times n$ matrix $A$ over $\Z_q$, the distribution $Ax+e$ is indistinguishable from a random vector in $\Z_q^m$, where $x$ is a random vector in $\Z_q^n$ and $e$ is a random "short" vector in $\Z_q^m$. The two distributions are indistinguishable even to an adversary that knows $A$.](../figure/lwevecindist.png){#figid  .margin}
+![The search to decision reduction ([LWEsearchtodecthm](){.ref}) implies that under the LWE conjecture,  for every $m=poly(n)$, if we choose and fix a random $m\times n$ matrix $A$ over $\Z_q$, the distribution $Ax+e$ is indistinguishable from a random vector in $\Z_q^m$, where $x$ is a random vector in $\Z_q^n$ and $e$ is a random "short" vector in $\Z_q^m$. The two distributions are indistinguishable even to an adversary that knows $A$.](../figure/lwevecindist.png){#lwesearchtodecisionfig }
 
 
 ::: {.theorem title="Search to decision reduction for LWE" #LWEsearchtodecthm}
@@ -245,6 +252,7 @@ We can now show the secure variant of our original encryption scheme:
 
 ::: {.quote }
 __LWE-based encryption LWE-ENC:__
+
 * _Parameters:_ Let $\delta(n)=1/n^4$ and let $q=poly(n)$ be a prime such that LWE holds w.r.t. $q,\delta$. We let $m = n^2\log q$.
 
 * _Key generation:_ Pick $x\in\Z_q^n$. The private key is $x$ and the public key is $(A,y)$ with $y=Ax+e$ with $e$ a $\delta$-noise vector and $A$ a random $m\times n$ matrix.
@@ -261,7 +269,7 @@ __LWE-based encryption LWE-ENC:__
 The scheme LWEENC is also described in [lweencdescfig](){.ref} with slightly different notation. I highly recommend you stop and verify you understand why the two descriptions are equivalent.
 
 
-![In the encryption scheme LWEENC, the public key is a matrix $A'=(A|y)$, where $y=As+e$ and $s$ is the secret key. To encrypt a bit $b$ we choose a random $w \leftarrow_R \{0,1\}^m$, and output $w^\top A' + (0,\ldots,0,b\floor{\tfrac{q}{2}})$. We decrypt $c \in \Z_q^{n+1}$ to zero with key $s$ iff $|\langle c,(s,-1) \rangle| \leq q/10$ where the inner product is done modulo $q$. ](../figure/lweencdesc.png){#lweencdescfig  .margin}
+![In the encryption scheme LWEENC, the public key is a matrix $A'=(A|y)$, where $y=As+e$ and $s$ is the secret key. To encrypt a bit $b$ we choose a random $w \leftarrow_R \{0,1\}^m$, and output $w^\top A' + (0,\ldots,0,b\floor{\tfrac{q}{2}})$. We decrypt $c \in \Z_q^{n+1}$ to zero with key $s$ iff $|\langle c,(s,-1) \rangle| \leq q/10$ where the inner product is done modulo $q$. ](../figure/lweencdesc.png){#lweencdescfig  }
 
 
 
@@ -328,7 +336,7 @@ The claim completes the proof of the theorem, since letting $A'$ be the matrix $
 Hence this means that the statistical distance of $D'$ from $\overline{D}$ (where all elements are uniform) is $O(2^{-n})$.
 (Please make sure you understand this reasoning!)
 
-The proof of this claim relies on the [leftover hash lemma](https://goo.gl/KXpccP).
+__Proof of claim:__ The proof of this claim relies on the [leftover hash lemma](https://goo.gl/KXpccP).
 
 First, the basic idea of the proof: For every $m\times (n+1)$ matrix $A'$ over $\Z_q$, define $h_{A'}:\Z_q^m \rightarrow \Z_q^n$ to be the map $h_{A'}(w)=w^\top A'$.
 This collection can be shown to be a "good" hash function collection in some specific technical sense, which in particular implies that for every distribution $D$ with much more than $n\log q$ bits of min-entropy, with all but negligible probability over the choice of $A'$, $h_{A'}(D)$ is statistically indistinguishable from the uniform distribution.
@@ -349,23 +357,28 @@ The min entropy of $w\gets_R\{0,1\}^m$ is the same as the entropy (because it is
 
 Now, we'll show this implies that for probability $\ge 1-2^{-n}$ over the selection of $A'$, the statistical distance between $w^\top A'$ and $z$ is less than $2^{-10n}$. If not, the distance between $(w^\top A',A')$ and $(z,A')$ would be at least $2^{-n}\cdot 2^{-n}>2^{-10n}$.
 
-Now for the proof of [Leftoverhashlem](){.ref} (based on notes from [Daniel Wichs's class](http://www.ccs.neu.edu/home/wichs/class/crypto-fall15/) [@wichsnotes]).
+__Proof of [Leftoverhashlem](){.ref}:__^[This is based on notes from [Daniel Wichs's class](http://www.ccs.neu.edu/home/wichs/class/crypto-fall15/)]
 
 Let $Z$ be the random variable $(H(W),H)$, where the probability is over $H$ and $W$. Let $Z'$ be an independent copy of $Z$.
 
-Step 1: we'll show that $\Pr[Z=Z']\le\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}(1+4\epsilon^2)$.
+__Step 1:__ $\Pr[Z=Z']\le\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}(1+4\epsilon^2)$. Indeed,
 
-$$ \begin{aligned} \Pr[Z=Z']&=\Pr[(H(W),H)=(H'(W'),H')]\\&=\Pr[H=H']\cdot\Pr[H(W)=H(W')]\\&=\frac{1}{|\mathcal{H}|}\left(\Pr[W=W']+\Pr[H(W)=H(W')\wedge X\neq X']\right)\\&\le\frac{1}{|\mathcal{H}|}\left(\frac{1}{|\mathcal{V}|}\epsilon^2\cdot 4+\frac{1}{|\mathcal{V}|}\right)\\&=\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}(1+4\epsilon^2).\end{aligned} $$
 
-Step 2: we'll show this implies that the statistical difference between $(H(W),H)$ and $(V,H)$ is less than $\epsilon$. Denote the statistical difference by $\Delta((H(W),H),(V,H))$.
+$$\begin{aligned} \Pr[Z=Z']&=\Pr[(H(W),H)=(H'(W'),H')]\\&=\Pr[H=H']\cdot\Pr[H(W)=H(W')]\\&=\frac{1}{|\mathcal{H}|}\left(\Pr[W=W']+\Pr[H(W)=H(W')\wedge X\neq X']\right)\\&\le\frac{1}{|\mathcal{H}|}\left(\frac{1}{|\mathcal{V}|}\epsilon^2\cdot 4+\frac{1}{|\mathcal{V}|}\right)\\&=\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}(1+4\epsilon^2).\end{aligned}$$
 
-$$ \begin{aligned} \Delta((H(W),H),(V,H))&=\frac{1}{2}\sum_{h,w}\left|\Pr[Z=(h(w),w)]-\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}\right|.\end{aligned} $$ Define $x_{h,w}=\Pr[Z=(h(w),h)]-\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}$ and $s_{h,w}=\text{sign}(x_{h,w})$. Write $x$ for the vector of all the $x_{h,w}$ and $s$ for the vector of all the $s_{h,w}$. Then $$\begin{aligned}\Delta((H(W),H),(V,H))&=\frac{1}{2}\langle x,s\rangle\\&\le\frac{1}{2}\|x\|_2\cdot\|s\|_2&\text{Cauchy-Schwarz}\\
+__Step 2:__ The statistical difference between $(H(W),H)$ and $(V,H)$ is less than $\epsilon$. Denote the statistical difference by $\Delta((H(W),H),(V,H))$, then
+
+$$\begin{aligned} \Delta((H(W),H),(V,H))&=\frac{1}{2}\sum_{h,w}\left|\Pr[Z=(h(w),w)]-\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}\right|.\end{aligned} $$ Define $x_{h,w}=\Pr[Z=(h(w),h)]-\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}$ and $s_{h,w}=\text{sign}(x_{h,w})$. Write $x$ for the vector of all the $x_{h,w}$ and $s$ for the vector of all the $s_{h,w}$. Then $$\begin{aligned}\Delta((H(W),H),(V,H))&=\frac{1}{2}\langle x,s\rangle\\&\le\frac{1}{2}\|x\|_2\cdot\|s\|_2&\text{Cauchy-Schwarz}\\
 &=\frac{\sqrt{|\mathcal{H}|\cdot|\mathcal{V}|}}{2}\|x\|_2.\end{aligned}$$
 
 Let's expand $\|x\|_2$:
-$$\begin{aligned} \|x\|_2^2&=\sum_{h,w}\left(\Pr[Z=(h(w),h)]-\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}\right)^2\\&=\sum_{h,w}\left(\Pr[Z=(h(w),h)]^2-\frac{2\Pr[Z=(h(w),h)]}{|\mathcal{H}|\cdot|\mathcal{V}|}+\frac{1}{(|\mathcal{H}|\cdot|\mathcal{V}|)^2}\right)\\&\le\frac{1+4\epsilon^2}{|\mathcal{H}|\cdot|\mathcal{V}|}-\frac{2}{|\mathcal{H}|\cdot|\mathcal{V}|}+\frac{|\mathcal{H}|\cdot|\mathcal{V}|}{(|\mathcal{H}|\cdot|\mathcal{V}|)^2}\\&=\frac{4\epsilon^2}{|\mathcal{H}|\cdot|\mathcal{V}|}.\end{aligned}$$ When we plug this in to our expression for the statistical distance, we get
+
+$$\begin{aligned} \|x\|_2^2&=\sum_{h,w}\left(\Pr[Z=(h(w),h)]-\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}\right)^2\\&=\sum_{h,w}\left(\Pr[Z=(h(w),h)]^2-\frac{2\Pr[Z=(h(w),h)]}{|\mathcal{H}|\cdot|\mathcal{V}|}+\frac{1}{(|\mathcal{H}|\cdot|\mathcal{V}|)^2}\right)\\&\le\frac{1+4\epsilon^2}{|\mathcal{H}|\cdot|\mathcal{V}|}-\frac{2}{|\mathcal{H}|\cdot|\mathcal{V}|}+\frac{|\mathcal{H}|\cdot|\mathcal{V}|}{(|\mathcal{H}|\cdot|\mathcal{V}|)^2}\\&=\frac{4\epsilon^2}{|\mathcal{H}|\cdot|\mathcal{V}|}.\end{aligned}$$ 
+
+When we plug this in to our expression for the statistical distance, we get
 $$\begin{aligned}\Delta((H(W),H),(V,H))&\le\frac{\sqrt{|\mathcal{H}|\cdot|\mathcal{V}|}}{2}\|x\|_2\\&\le \epsilon.\end{aligned}$$
 
+This completes the proof of [Leftoverhashlem](){.ref} and hence the theorem.
 :::
 
 
@@ -382,7 +395,7 @@ It can be shown that we can assume without loss of generality that $B$ is full d
 Note that given a basis $B$ we can generate vectors in $L$, as well as test whether a vector $v$ is in $L$ by testing if $B^{-1}v$ is an integer vector.
 There can be many different bases for the same lattice, and some of them are easier to work with than others (see [latticebasesfig](){.ref}).
 
-![A _lattice_ is a discrete subspace $L \subseteq \R^n$ that is closed under _integer_ combinations. A _basis_ for the lattice is a minimal set $b_1,\ldots,b_m$ (typically $m=n$) such that every $u \in L$ is an integer combination of $b_1,\ldots,b_m$. The same lattice can have different bases. In this figure the lattice is a set of points in $\R^2$, and the black vectors $v_1,v_2$ and the ref vectors $u_1,u_2$ are two alternative bases for it. Generally we consider the basis $u_1,u_2$ "better" since the vectors are shorter and it is less "skewed".](../figure/Lattice-reduction.png){#latticebasesfig  .margin}
+![A _lattice_ is a discrete subspace $L \subseteq \R^n$ that is closed under _integer_ combinations. A _basis_ for the lattice is a minimal set $b_1,\ldots,b_m$ (typically $m=n$) such that every $u \in L$ is an integer combination of $b_1,\ldots,b_m$. The same lattice can have different bases. In this figure the lattice is a set of points in $\R^2$, and the black vectors $v_1,v_2$ and the ref vectors $u_1,u_2$ are two alternative bases for it. Generally we consider the basis $u_1,u_2$ "better" since the vectors are shorter and it is less "skewed".](../figure/Lattice-reduction.png){#latticebasesfig  }
 
 Some classical computational questions on lattices are:
 
