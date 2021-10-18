@@ -27,13 +27,13 @@ and CCA (chosen ciphertext attacks), for hash functions we talk about collision-
 
 ## Cryptography's obsession with adjectives.
 
-As we learn more and more cryptography we see more and more adjectives, every notion seems to have modifiers such as "non-malleable", "leakage-resilient", "identity based", "concurrently secure", "adaptive", "non-interactive", etc.. etc... .
+As we learn more and more cryptography we see more and more adjectives, every notion seems to have modifiers such as "non-malleable", "leakage-resilient", "identity based", "concurrently secure", "adaptive", "non-interactive", etc. etc.
 Indeed, this motivated a parody web page of an [automatic crypto paper title generator](https://cseweb.ucsd.edu/~mihir/crypto-topic-generator.html).
 Unlike algorithms, where typically there are straightforward _quantitative_ tradeoffs (e.g., faster is better), in cryptography there are many _qualitative_ ways protocols can vary based on the assumptions they operate under and the notions of security they provide.
 
 In particular, the following issues arise when considering the task of securely transmitting information between two parties Alice and Bob:
 
-* **Infrastructure/setup assumptions:** What kind of setup can Alice and Bob rely upon? For example in the TLS protocol, typically Alice is a website and Bob is user; Using the infrastructure of certificate authorities, Bob has a trusted way to obtain Alice's _public signature key_, while Alice doesn't know anything about Bob. But there are many other variants as well. Alice and Bob could share a (low entropy) _password_. One of them might have some hardware token, or they might have a secure out of band channel (e.g., text messages) to transmit a short amount of information. There are even variants where the parties authenticate by something they _know_, with one recent example being the notion of _witness encryption_ (Garg, Gentry, Sahai, and Waters) where one can encrypt information in a "digital time capsule" to be opened by anyone who, for example, finds a proof of the Riemann hypothesis.
+* **Infrastructure/setup assumptions:** What kind of setup can Alice and Bob rely upon? For example in the TLS protocol, typically Alice is a website and Bob is user; using the infrastructure of certificate authorities, Bob has a trusted way to obtain Alice's _public signature key_, while Alice doesn't know anything about Bob. But there are many other variants as well. Alice and Bob could share a (low entropy) _password_. One of them might have some hardware token, or they might have a secure out of band channel (e.g., text messages) to transmit a short amount of information. There are even variants where the parties authenticate by something they _know_, with one recent example being the notion of _witness encryption_ (Garg, Gentry, Sahai, and Waters) where one can encrypt information in a "digital time capsule" to be opened by anyone who, for example, finds a proof of the Riemann hypothesis.
 
 * **Adversary access:** What kind of attacks do we need to protect against. The simplest setting is a _passive_ eavesdropping adversary (often called "Eve") but we sometimes consider an _active person-in-the-middle_ attacks (sometimes called "Mallory"). We sometimes consider notions of _graceful recovery_. For example, if the adversary manages to hack into one of the parties then it can clearly read their communications from that time onwards, but we would want their past communication to be protected (a notion known as _forward secrecy_). If we rely on trusted infrastructure such as certificate authorities, we could ask what happens if the adversary breaks into those. Sometimes we rely on the security of several entities or secrets, and we want to consider adversaries that control _some_ but not _all_ of them, a notion known as _threshold cryptography_. While we typically assume that information is either fully secret or fully public, we sometimes want to model _side channel attacks_ where the adversary can learn _partial information_ about the secret, this is known as _leakage-resistant cryptography_.
 
@@ -64,7 +64,7 @@ Another variant is using an arbitrary public key encryption scheme such as RSA:
 
 3. They both set their key to $k$ (which Alice computes by decrypting Bob's ciphertext)
 
-Under plausible assumptions, it can be shown that these protocols secure against a _passive_ eavesdropping adversary Eve.
+Under plausible assumptions, it can be shown that these protocols are secure against a _passive_ eavesdropping adversary Eve.
 The notion of security here means that, similar to encryption, if after observing the transcript Eve receives with probability $1/2$ the value of $k$ and with probability $1/2$ a random string $k'\gets\{0,1\}^n$, then her probability of guessing which is the case would be at most $1/2+negl(n)$ (where $n$ can be thought of as $\log |\mathbb{G}|$ or some other parameter related to the length of bit representation of members in the group).
 
 ## Authenticated key exchange
@@ -98,15 +98,15 @@ However, as was [shown by Bleichenbacher in 1998](http://archiv.infsec.ethz.ch/e
 
 * The adversary then starts many connections with the server with ciphertexts related to $c$, and observes whether they succeed or fail (and in what way they fail, if they do). It turns out that based on this information, the adversary would be able to recover the key $k$.
 
-Specifically, the version of RSA (known as PKCS ＃V1.5) used in the SSL V3.0 protocol requires the value $x$ to have a particular format, with the top two bytes having a certain form.
+Specifically, the version of RSA (known as PKCS \＃1 V1.5) used in the SSL V3.0 protocol requires the value $x$ to have a particular format, with the top two bytes having a certain form.
 If in the course of the protocol, a server decrypts $y$ and gets a value $x$ not of this form then it would send an error message and halt the connection.
 While the designers of SSL V3.0 might not have thought of it that way, this amounts to saying that an SSL V3.0 server supplies to any party an oracle that on input $y$ outputs $1$ iff $y^{d} \pmod{m}$ has this form, where $d = e^{-1} \pmod{|\Z^*_m|}$ is the secret decryption key.
 It turned out that one can use such an oracle to invert the RSA function.
-For a result of a similar flavor, see the (1/2 page) proof of Theorem 11.31 (page 418) in KL, where they show that an oracle that given $y$ outputs the least significant bit of $y^d \pmod{m}$ allows to invert the RSA function.[^hardcore]
+For a result of a similar flavor, see the (1/2 page) proof of Theorem 11.31 (page 418) in KL, where they show that an oracle that given $y$ outputs the least significant bit of $y^d \pmod{m}$ allows one to invert the RSA function.[^hardcore]
 
 [^hardcore]: The first attack of this flavor was given in the 1982 paper of Goldwasser, Micali, and Tong. Interestingly, this notion of "hardcore bits" has been used for both practical _attacks_ against cryptosystems as well as theoretical (and sometimes practical) _constructions_ of other cryptosystems.
 
-For this reason, new versions of the SSL used a different variant of RSA known as PKCS ＃1 V2.0 which satisfies (under assumptions) _chosen ciphertext security (CCA)_ and in particular such oracles cannot be used to break the encryption. Nonetheless,  there are still some implementation issues that allowed to perform some attacks, specifically [Manger](http://archiv.infsec.ethz.ch/education/fs08/secsem/Manger01.pdf) showed that depending on PKCS ＃1 V2.0 is implemented, it might be possible to still launch an attack. The main reason is that the specification states several conditions under which decryption box is supposed to return "error". The proof of CCA security crucially relies on the attacker not being able to distinguish which condition caused the error message. However, some implementations could still leak this information, for example by checking these conditions one by one, and so returning "error" quicker when the earlier conditions hold. See discussion in Katz-Lindell (3rd ed)  12.5.4.
+For this reason, new versions of the SSL used a different variant of RSA known as PKCS \＃1 V2.0 which satisfies (under assumptions) _chosen ciphertext security (CCA)_ and in particular such oracles cannot be used to break the encryption. Nonetheless, there are still some implementation issues that allowed adversaries to perform some attacks, specifically [Manger](http://archiv.infsec.ethz.ch/education/fs08/secsem/Manger01.pdf) showed that depending on how PKCS \＃1 V2.0 is implemented, it might be possible to still launch an attack. The main reason is that the specification states several conditions under which decryption box is supposed to return "error". The proof of CCA security crucially relies on the attacker not being able to distinguish which condition caused the error message. However, some implementations could still leak this information, for example by checking these conditions one by one, and so returning "error" quicker when the earlier conditions hold. See discussion in Katz-Lindell (3rd ed)  12.5.4.
 
 ## Chosen ciphertext attack security for public key cryptography
 
@@ -155,7 +155,7 @@ For more on this, please see [Victor Shoup's survey](http://www.shoup.net/papers
 
 We now show how to convert any CPA-secure public key encryption scheme to a CCA-secure scheme in the random oracle model (this construction is taken from Fujisaki and Okamoto, CRYPTO 99).
 In the homework, you will see a somewhat simpler direct construction of a CCA secure scheme from a _trapdoor permutation_, a variant of which
-is known as OAEP (which has better ciphertext expansion) has been standardized as PKCS ＃1 V2.0 and is used in several protocols.
+is known as OAEP (which has better ciphertext expansion) has been standardized as PKCS \＃1 V2.0 and is used in several protocols.
 The advantage of a generic construction is that it can be instantiated not just with the RSA and Rabin schemes, but also directly with Diffie-Hellman and Lattice based schemes
 (though there are direct and more efficient variants for these as well).
 
@@ -175,7 +175,7 @@ $$E_e(m) = E'_e(r ; H(m\|r)) \| H''(r) \oplus m \| H'(m \| r)$$
 
 recall that $E'_e(r ; s)$ denotes the encryption of the message $r$ using randomness $s$. 
 
-* **Decryption:** To decrypt a ciphertext $c\|y \| h$ first let $r=D'_d(c)$, then compute  $m=H''(r) \oplus y$. Finally check that $c= E'_e(m ; H(m\|r))$ and $h=H'(m\|r)$. If either check fails we output ```error```; otherwise we output $m$.
+* **Decryption:** To decrypt a ciphertext $c\|y \| h$ first let $r=D'_d(c)$, then compute  $m=H''(r) \oplus y$. Finally check that $c= E'_e(r ; H(m\|r))$ and $h=H'(m\|r)$. If either check fails we output ```error```; otherwise we output $m$.
 :::
 
 
@@ -195,7 +195,7 @@ __Proof of Claim 1:__ The adversary $\tilde{A}$ will simulate $A$, keeping track
 
 We claim that the probability that $\tilde{A}$ will return an answer that differs from the true decryption box is negligible.  Indeed, for each particular query $c\|y\|h$, first observe that if $\tilde{D}(c\|y\|h)$ is not ```error``` then  $\tilde{D}(c\|y\|h) = D_d(c\|y\|h)$. Indeed, in this case it holds that $c=E'_e(m;H(m\|r))$, $y=H'(r) \oplus m$ and $h=H'(m\|r)$. Hence this is a properly formatted encryption of $m$, on which the true decryption box will return $m$ as well.
 
-So the only way that $D$ and $\tilde{D}$ differ is if $D_d(c\|y\|h)=m$ but $\tilde{D}(c\|y\|h)$ returns ```error```. For this it must be the case that for $r=D'_d(c)$, $h=H'(m\|r)$ but $m\|r$ was _not_ queried before by $A$. There are two options: either $m\|r$ was not queried at all, but then by the "lazy evaluation" paradigm, the value $H'(m\|r)$ is chosen uniformly in $\{0,1\}^n$ independently of $h$, and the probability that it equals $h$ is $2^{-n}$. The other option is that $m\|r$ was queried by not by the adversary. The only other party that can make queries to the oracle in the CCA game is the challenger, and it only makes a single query to $H'$ when producing the challenge ciphertext $C^* = c^*\|y^*\|h^*$ with $h^* = H'(m^*\|r^*)$. Now the adversary is not allowed to make the query $C^*$ so in this case the query must have the form $c\|y\|h^*$ where $c\|y \neq c^*\|y^*$. But the only way that $D_d(c\|y\|h^*)$ returns a value other than ```error``` is if for $r=D'_d(c)$ and $m = y \oplus H''(r)$, $c=E_e(r;H(m\|r))$ and $h^* = H'(m\|r)$. Since the probability of a collision in $H'$ is negligible, this can only happen if $m\|r = m^*\|r^*$, but in this case it will hold that $c=c^*$ and $y=y^*$, contradicting the fact that the ciphertext must differ from $C^*$. __QED (Claim 1)__
+So the only way that $D$ and $\tilde{D}$ differ is if $D_d(c\|y\|h)=m$ but $\tilde{D}(c\|y\|h)$ returns ```error```. For this it must be the case that for $r=D'_d(c)$, $h=H'(m\|r)$ but $m\|r$ was _not_ queried before by $A$. There are two options: either $m\|r$ was not queried at all, but then by the "lazy evaluation" paradigm, the value $H'(m\|r)$ is chosen uniformly in $\{0,1\}^n$ independently of $h$, and the probability that it equals $h$ is $2^{-n}$. The other option is that $m\|r$ was queried but not by the adversary. The only other party that can make queries to the oracle in the CCA game is the challenger, and it only makes a single query to $H'$ when producing the challenge ciphertext $C^* = c^*\|y^*\|h^*$ with $h^* = H'(m^*\|r^*)$. Now the adversary is not allowed to make the query $C^*$ so in this case the query must have the form $c\|y\|h^*$ where $c\|y \neq c^*\|y^*$. But the only way that $D_d(c\|y\|h^*)$ returns a value other than ```error``` is if for $r=D'_d(c)$ and $m = y \oplus H''(r)$, $c=E_e(r;H(m\|r))$ and $h^* = H'(m\|r)$. Since the probability of a collision in $H'$ is negligible, this can only happen if $m\|r = m^*\|r^*$, but in this case it will hold that $c=c^*$ and $y=y^*$, contradicting the fact that the ciphertext must differ from $C^*$. __QED (Claim 1)__
 
 
 __Claim 2:__ Under the above assumptions, there exists a polynomial-time adversary $A'$ that wins the CPA game with respect to the scheme $(G',E',D')$ with probability at least  $1/2 + \epsilon/10$.
@@ -254,7 +254,7 @@ There is a generic "compiler" approach to obtaining authenticated key exchange p
 
 * Start with a protocol such as the basic Diffie-Hellman protocol that is only secure with respect to a _passive eavesdropping_ adversary.
 
-* Then _compile_ it into a protocol that is secure with respect to an active adversary using authentication tools such as digital signatures, message authentication codes, etc.., depending on what kind of setup you can assume and what properties you want to achieve.
+* Then _compile_ it into a protocol that is secure with respect to an active adversary using authentication tools such as digital signatures, message authentication codes, etc., depending on what kind of setup you can assume and what properties you want to achieve.
 
 This approach has the advantage of being modular in both the construction and the analysis.
 However, direct constructions might be more efficient.
