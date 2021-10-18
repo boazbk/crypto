@@ -66,9 +66,9 @@ You should be comfortable with the following notions (these are covered in a num
 
 
 
-* The inner product (also known as "dot product")  $\langle u,v \rangle$ between two vectors of the same dimension $n$ that is defined as $\sum u_i v_i$ (addition done in the field $\mathbb{F}$).^[Inner products can be defined more generally,  and in particular over fields such as the complex numbers we would define the inner product as $\sum \overline{u}_i v_i$ where for $a\in \mathbb{C}$, $\overline{a}$ denotes the _complex conjugate_ of $a$. However, we stick to this simple case for this chapter.]
+* The inner product (also known as "dot product")  $\langle u,v \rangle$ between two vectors of the same dimension $n$ is defined as $\sum u_i v_i$ (addition done in the field $\mathbb{F}$).^[Inner products can be defined more generally,  and in particular over fields such as the complex numbers we would define the inner product as $\sum \overline{u}_i v_i$ where for $a\in \mathbb{C}$, $\overline{a}$ denotes the _complex conjugate_ of $a$. However, we stick to this simple case for this chapter.]
 
-* The _matrix product_ $AB$ of an $m \times k$ and a $k\times n$ matrix, that results in an $m\times n$ matrix. If we think of the rows of $A$ as the vectors $A_1,\ldots,A_m \in \mathbb{F}^k$ and the columns of $B$ as $B_1,\ldots,B_n$, then the $(i,j)$-th coordinate of $AB$  is $\langle A_i , B_j \rangle$. Matrix product is associative and satisfies the distributive law but is _not commutative_: there are pairs of square matrices $A,B$ such that $AB \neq BA$.
+* The _matrix product_ $AB$ of an $m \times k$ and a $k\times n$ matrix results in an $m\times n$ matrix. If we think of the rows of $A$ as the vectors $A_1,\ldots,A_m \in \mathbb{F}^k$ and the columns of $B$ as $B_1,\ldots,B_n \in \mathbb{F}^k$, then the $(i,j)$-th coordinate of $AB$  is $\langle A_i , B_j \rangle$. Matrix product is associative and satisfies the distributive law but is _not commutative_: there are pairs of square matrices $A,B$ such that $AB \neq BA$.
 
 * The _transpose_ of an $n\times m$ matrix $A$  is the $m\times n$ matrix $A^\top$ such that $(A^\top)_{i,j} = A_{j,i}$.
 
@@ -76,7 +76,7 @@ You should be comfortable with the following notions (these are covered in a num
 
 * The _rank_ of an $m\times n$ matrix $A$ is the minimum number $r$ such that we can write $A$ as $\sum_{i=1}^r u_i(v_i)^\top$  where $u_i \in \mathbb{F}^m$ and $v_i \in \mathbb{F}^n$. We can think of the $u_i$'s as the columns of an $m\times r$ matrix $U$ and the $v_i$'s as the rows of an $r\times n$ matrix $V$, and hence the rank of $A$ is the minimum $r$ such that $A=UV$ where $U$ is $m\times r$ and $V$ is $r\times n$. It can be shown that an $n\times n$ matrix is full rank if and only if it has an inverse.
 
-* Solving _linear equations_ can be thought of as the task of given an $m \times n$ matrix $A$ and $m$-dimensional vector $y$, finding the $n$-dimensional vector $x$ such that $Ax = y$. If the rank of $A$ is at least $n$ (which in particular means that $m \geq n$) then it means that by dropping $m-n$ rows of $A$ and coordinates of $y$ we can obtain the equation $A'x = y'$ where $A'$ is an $n\times n$ matrix that has an inverse. In this case a solution (if it exists) will be equal to $(A')^{-1}y$.  If for a set of equations we have $m>n$ and we can find two such matrices $A',A''$ such that $(A')^{-1}y \neq (A'')^{-1}y$ then we say it is _over determined_ and in such a case it has no solutions. If a set of equations has more variables $n$ than equations $m$ we say it's _under-determined_. In such a case it either has no solutions or the solutions form an affinte subspace of dimension at least $n-m$. 
+* Solving _linear equations_ can be thought of as the task of given an $m \times n$ matrix $A$ and $m$-dimensional vector $y$, finding the $n$-dimensional vector $x$ such that $Ax = y$. If the rank of $A$ is at least $n$ (which in particular means that $m \geq n$) then by dropping $m-n$ rows of $A$ and coordinates of $y$ we can obtain the equation $A'x = y'$ where $A'$ is an $n\times n$ matrix that has an inverse. In this case a solution (if it exists) will be equal to $(A')^{-1}y$.  If for a set of equations we have $m>n$ and we can find two such matrices $A',A''$ such that $(A')^{-1}y \neq (A'')^{-1}y$ then we say it is _over determined_ and in such a case it has no solutions. If a set of equations has more variables $n$ than equations $m$ we say it's _under-determined_. In such a case it either has no solutions or the solutions form an affine subspace of dimension at least $n-m$. 
 
 
 * The _gaussian elimination_ algorithm can be used to obtain, given a set of equations $Ax = y$ a solution to $x$ if such exists or a certification that no solution exists. It can be executed in time polynomial in the dimensions and the bit complexity of the numbers involved. This algorithm can also be used to obtain an inverse of a given matrix $A$, if such an inverse exists.
@@ -95,7 +95,7 @@ Throughout this chapter, and while working in lattice based cryptography in gene
 
 ## A world without Gaussian elimination
 
-The general approach people used to get a public key encryption is to obtain a hard computational problem with some mathematical _structure_.
+The general approach people use to get a public key encryption is to obtain a hard computational problem with some mathematical _structure_.
 We've seen this in the _discrete logarithm_ problem, where the task is to invert the map $a \mapsto g^a \pmod{p}$, and the integer factoring problem,
 where the task is to invert the map $a,b \mapsto a\cdot b$.
 Perhaps the simplest structure to consider is the task of solving linear equations.
@@ -121,7 +121,7 @@ Can you see why?
 
 If $a_1,\ldots,a_m$ are the rows of $A$, we can think of the public key as the set of equations $\langle a_1,x \rangle=y_1,\ldots, \langle a_m,x \rangle=y_m$ in the unknown variables $x$.
 The idea is that to encrypt the value $0$ we will generate a new _correct_ equation on $x$, while to encrypt the value $1$ we will generate an _incorrect_ equation.
-To decrypt a ciphertext $(a,\sigma)\in \Z_q^{n+1}$, we think of it as an equation of the form $\langle a,x \rangle=\sigma$ and output $1$ if and only if the equation is correct.
+To decrypt a ciphertext $(a,\sigma)\in \Z_q^{n+1}$, we think of it as an equation of the form $\langle a,x \rangle=\sigma$ and output $1$ if and only if the equation is incorrect.
 
 How does the encrypting algorithm, that does not know $x$, get a correct or incorrect equation on demand?
 One way would be to simply take two equations $\langle a_i,x \rangle=y_i$ and $\langle a_j,x \rangle=y_j$ and add them together to get the equation $\langle a_i+a_j,x \rangle=y_i+y_j$.
@@ -130,9 +130,9 @@ However, even if it's hard to solve for $x$ given the equations, an attacker (wh
 
 Our solution for this is simple- just add more equations! If the encryptor adds a random subset of equations then there are $2^m$ possibilities for that, and an attacker can't guess them all.
 That is, if the rows of $A$ are $a_1,\ldots,a_m$, then we can pick a vector $w \in \{0,1\}^m$ at random, and consider the equation $\langle a ,x \rangle = y$ where $a = \sum w_i a_i$ and $y = \sum w_i y_i$.
-In other words, we can think of this as the equation $w^\top A x = \langle w,y \rangle$ (note that $\langle w,y \rangle = w^\top y$ and so we can think of this as the equation that we obtain from $Ax = y$ by multiplying both sides on the right by the row vector $w^\top$).
+In other words, we can think of this as the equation $w^\top A x = \langle w,y \rangle$ (note that $\langle w,y \rangle = w^\top y$ and so we can think of this as the equation that we obtain from $Ax = y$ by multiplying both sides on the left by the row vector $w^\top$).
 
-Thus, at least intuitively, the following encryption scheme would be "secure" in the Gaussian-elimination free world of attackers that haven't taken freshman linear algebra:
+Thus, at least intuitively, the following encryption scheme would be "secure" in the Gaussian elimination-free world of attackers that haven't taken freshman linear algebra:
 
 
 ::: { .quote} 
@@ -143,7 +143,7 @@ __Scheme "LwoE-ENC":__  Public key encryption under the hardness of "learning li
 
 * _Encryption_: To encrypt a message $b\in\{0,1\}$, pick $w\in\{0,1\}^m$ and output $w^\top A,\langle w,y \rangle+\alpha b$ for some fixed nonzero $\alpha\in\Z_q$.
 
-* _Decryption:_ To decrypt a ciphertext $(a,\sigma)$, output $0$ iff $\langle a,x \rangle=\sigma$.
+* _Decryption:_ To decrypt a ciphertext $(a,\sigma)$, output $0$ iff $ax=\sigma$.
 
 :::
 
@@ -159,7 +159,7 @@ Please stop here and make sure that you see why this is a valid encryption (not 
 Like it or not (and cryptographers typically don't) Gaussian elimination _is_ possible in the real world and the scheme above is completely insecure.
 However, the Gaussian elimination algorithm is extremely _brittle_.  
 Errors tend to be amplified when you combine equations.
-This is usually thought of as a bad thing, and numerical analysis is much about dealing with issue.
+This is usually thought of as a bad thing, and numerical analysis is much about dealing with this issue.
 However, from the cryptographic point of view, these errors can be our saving grace and enable us to salvage the security of the ridiculous scheme above.
 
 
@@ -180,7 +180,7 @@ __Conjecture (Learning with Errors, Regev 2005):__ Let $q=q(n)$  and $\delta=\de
 The _Learning with Error (LWE) conjecture with respect to $q,\delta$_,denoted as $LWE_{q,\delta}$, is the following conjecture: for every polynomial $m(n)$ and polynomial-time adversary $R$, 
 
 $$\Pr[ R(A,Ax+e) = x ] < negl(n)$$
-where for $q=q(n)$ and $\delta = \delta(n)$, this probability is taken over $A$  a random $m\times n$ matrix in $\Z_q$, $x$ a random vector in $\Z_q^n,$ and $e$ a random "noise vector" in $\Z_q^m$ where $|e_i| < \delta q$ for every $i \in [m]$.[^noise]
+where for $q=q(n)$ and $\delta = \delta(n)$, this probability is taken over $A$  a random $m\times n$ matrix over $\Z_q$, $x$ a random vector in $\Z_q^n,$ and $e$ a random "noise vector" in $\Z_q^m$ where $|e_i| < \delta q$ for every $i \in [m]$.[^noise]
 
 
 The _LWE conjecture_ (without any parameters) is that there is some absolute constant $c$ such that for every polynomial $p(n)$ there, if $q(n) > p(n)^c$ then LWE holds with respect to $q(n)$  and $\delta(n)=1/p(n)$.[^superpoly]
@@ -192,7 +192,7 @@ The _LWE conjecture_ (without any parameters) is that there is some absolute con
 
 It is important to note the order of quantifiers in the learning with error conjecture.
 If we want to handle a noise of low enough magnitude (say $\delta(n) = 1/n^2$) then we need to choose the modulos $q$ to be large enough (for example it is believed that $q > n^4$ will be good enough for this case) and then the adversary can choose $m(n)$ to be as big a polynomial as they like, and of course run in time which is an arbitrary polynomial in $n$.
-Therefore we can think of such an adversary $R$ as getting access to a "magic box" that they can use $m=poly(n)$ number of times to get "noisy equations on $x$" of the form $(a_i,y_i)$ with $a_i\in \Z_q^n$, $y_i \in \Z_q$ where $y_i = \langle a_i, x \rangle + e_i$).
+Therefore we can think of such an adversary $R$ as getting access to a "magic box" that they can use $m=poly(n)$ number of times to get "noisy equations on $x$" of the form $(a_i,y_i)$ with $a_i\in \Z_q^n$, $y_i \in \Z_q$ where $y_i = \langle a_i, x \rangle + e_i$.
 
 
 ::: { .pause }
@@ -230,11 +230,11 @@ Clearly, we can repeat this for all the possible $q$ values of $a$ to learn the 
 Our algorithm $S$ gets as input the pair $(A,y)$ where $y=Ax+e$ and we need to decide whether $x_1 = a$.
 Now consider the instance $(A+(r\|0^m\|\cdots \|0^m),y+ar)$, where $r$ is a random vector in $\Z_q^m$ and the matrix $(r\|0^m\|\cdots \|0^m)$ is simply the matrix with first column equal to $r$ and all other columns equal to $0$.
 If $A$ is random then $A+(r\|0^m\|\cdots \|0^m)$ is random as well.
-Now note that $Ax + (r|0^m\cdots \|0^m)x = Ax + x_1 r$ and hence if $x_1 = a$ then we still have an input of the same form $(A',A'x+e)$.
+Now note that $Ax + (r\|0^m\cdots \|0^m)x = Ax + x_1 r$ and hence if $x_1 = a$ then we still have an input of the same form $(A',A'x+e)$.
 
 In contrast, we claim that if if $x_1 \neq a$ then the distribution $(A',y')$ where $A'=A+(r\|0^m\|\cdots \|0^m)$ and $y'= Ax + e + ar$ is identical to the uniform distribution over a random uniformly chosen matrix $A'$ and a random and independent uniformly chosen vector $y'$.
 Indeed, we can write this distribution as $(A',y')$ where $A'$ is chosen uniformly at random, and $y'= A'x + e + (a-x_1)r$ where $r$ is a random and independent vector. (Can you see why?)
-Since $a-x_1 \neq 0$, this amounts to adding a random and independent vector $r'$ to $y'$, which means that the distribution $(A',y')$ is uniform and independent.
+Since $a-x_1 \neq 0$, this amounts to adding a random and independent vector $r$ to $y'$, which means that the distribution $(A',y')$ is uniform and independent.
 
 Hence if we send the input $(A',y')$ to our the decision algorithm $D$, then we would get $1$ with probability $p+\epsilon$  if $x_1=a$ and an output of $1$ with probability $p$ otherwise.
 
@@ -259,7 +259,7 @@ __LWE-based encryption LWE-ENC:__
 
 * _Encrypt:_ To encrypt $b\in\{0,1\}$ given the key $(A,y)$, pick $w\in\{0,1\}^m$ and output $w^\top A, \langle w,y \rangle+b\floor{q/2}$ (all computations are done in $\Z_q$).
 
-* _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|\langle a,x \rangle-\sigma|<q/10$.
+* _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|ax - \sigma|<q/10$.
 :::
 
 
@@ -302,7 +302,7 @@ Thus [LWEENCthm](){.ref}  will follow from the following lemma:
 Let $q,m,\delta$ be set as in LWEENC.
 Then, assuming the LWE conjecture, the following distributions are computationally indistinguishable:
 
-*  $D$: The distribution over four-tuples of the form $(A,y,w^\top A,\langle w,y \rangle)$  where $A$ is uniform in $\Z_q^{m\times n}$, $x$ is uniform in $\Z_q^n$, $e \in Z_q$ is chosen with $e_i \in \{-\delta q,\ldots,+\delta q\}$, $y=Ax+e$, and $w$ is uniform in $\{0,1\}^m$.
+*  $D$: The distribution over four-tuples of the form $(A,y,w^\top A,\langle w,y \rangle)$  where $A$ is uniform in $\Z_q^{m\times n}$, $x$ is uniform in $\Z_q^n$, $e \in \Z_q^m$ is chosen with $e_i \in \{-\delta q,\ldots,+\delta q\}$, $y=Ax+e$, and $w$ is uniform in $\{0,1\}^m$.
 
 * $\overline{D}$: The distribution over four-tuples $(A,y',a,\sigma)$ where all entries are uniform: $A$ is uniform in $\Z_q^{m\times n}$, $y'$ is uniform in $\Z_q^m$, $a$ is uniform in $\Z_q^n$ and $\sigma$ is uniform in $\Z_q$.
 :::
@@ -326,19 +326,19 @@ But if there was some polynomial-time algorithm $T$ distinguishing $D$ from $D'$
 We will finish the proof by showing that the distribution $D'$ is _statistically indistinguishable_ (i.e., has negligible total variation distance) from $\overline{D}$.
 This follows from the following claim:
 
-**CLAIM**: Suppose that $m > 100 n \log q$. If $A'$ is a random $m\times n+1$ matrix in $\Z_q^m$, then with probability at least $1-2^{-n}$ over the choice of $A'$, the distribution $Z_{A'}$ over $\Z_q^{n+1}$ which is obtained by choosing $w$ at random in $\{0,1\}^m$ and outputting $w^\top A'$ has at most $2^{-n}$ statistical distance from the uniform distribution over $\Z_q^{n+1}$.
+**CLAIM**: Suppose that $m > 100 n \log q$. If $A'$ is a random $m\times n+1$ matrix over $\Z_q$, then with probability at least $1-2^{-n}$ over the choice of $A'$, the distribution $Z_{A'}$ over $\Z_q^{n+1}$ which is obtained by choosing $w$ at random in $\{0,1\}^m$ and outputting $w^\top A'$ has at most $2^{-n}$ statistical distance from the uniform distribution over $\Z_q^{n+1}$.
 
 Note that the randomness used for the distribution $Z_{A'}$ is only obtained by the choice of $w$, and *not* by the choice of $A'$ that is fixed.
 (This passes a basic "sanity check" since $w$ has $m$ random bits, while the uniform distribution over $\Z_q^n$ requires $n \log q \ll m$ random bits, and hence $Z_{A'}$ at least has a "fighting chance" in being statistically close to it.)
 Another way to state the same claim is that the pair $(A',w^\top A')$ is statistically indistinguishable from the uniform distribution $(A',z)$ where $z$ is a vector chosen independently at random from $\Z_q^{n+1}$.
 
-The claim completes the proof of the theorem, since letting $A'$ be the matrix $(A|y)$ and $z=(a,\sigma)$, we see that the distribution $D'$, as the form $(A',z)$ where $A'$ is a uniformly random $m\times (n+1)$ matrix and $z$ is sampled from $Z_{A'}$ (i.e., $z=w^\top A'$ where $w$ is uniformly chosen in $\{0,1\}^m$).
+The claim completes the proof of the lemma, since letting $A'$ be the matrix $(A|y)$ and $z=(a,\sigma)$, we see that the distribution $D'$, as the form $(A',z)$ where $A'$ is a uniformly random $m\times (n+1)$ matrix and $z$ is sampled from $Z_{A'}$ (i.e., $z=w^\top A'$ where $w$ is uniformly chosen in $\{0,1\}^m$).
 Hence this means that the statistical distance of $D'$ from $\overline{D}$ (where all elements are uniform) is $O(2^{-n})$.
 (Please make sure you understand this reasoning!)
 
 __Proof of claim:__ The proof of this claim relies on the [leftover hash lemma](https://goo.gl/KXpccP).
 
-First, the basic idea of the proof: For every $m\times (n+1)$ matrix $A'$ over $\Z_q$, define $h_{A'}:\Z_q^m \rightarrow \Z_q^n$ to be the map $h_{A'}(w)=w^\top A'$.
+First, the basic idea of the proof: For every $m\times (n+1)$ matrix $A'$ over $\Z_q$, define $h_{A'}:\Z_q^m \rightarrow \Z_q^{n+1}$ to be the map $h_{A'}(w)=w^\top A'$.
 This collection can be shown to be a "good" hash function collection in some specific technical sense, which in particular implies that for every distribution $D$ with much more than $n\log q$ bits of min-entropy, with all but negligible probability over the choice of $A'$, $h_{A'}(D)$ is statistically indistinguishable from the uniform distribution.
 Now when we choose $w$ at random in $\{0,1\}^m$, it is coming from a distribution with $m$ bits of entropy.
 If $m \gg (n+1)\log q$, then because the output of this function is so much smaller than $m$, we expect it to be completely uniform, and this is what's shown by the leftover hash lemma.
@@ -355,7 +355,7 @@ First, let's see why [Leftoverhashlem](){.ref} implies the claim. Consider the h
 
 The min entropy of $w\gets_R\{0,1\}^m$ is the same as the entropy (because it is uniform) which is $m$. The output of the hash family is in $\Z_q^{n+1}$, and $\log|\Z_q^{n+1}|=(n+1)\log q$. Since $m\ge(n+1)\log q+20n-2$ by assumption, [Leftoverhashlem](){.ref} implies that $(w^\top A',A')$ is $2^{-10n}$ close in terms of statistical distance to $(z,A')$ where $z$ is chosen uniformly in $\Z_q^{n+1}$. 
 
-Now, we'll show this implies that for probability $\ge 1-2^{-n}$ over the selection of $A'$, the statistical distance between $w^\top A'$ and $z$ is less than $2^{-10n}$. If not, the distance between $(w^\top A',A')$ and $(z,A')$ would be at least $2^{-n}\cdot 2^{-n}>2^{-10n}$.
+Now, we'll show this implies that for probability $\ge 1-2^{-n}$ over the selection of $A'$, the statistical distance between $w^\top A'$ and $z$ is less than $2^{-n}$. If not, the distance between $(w^\top A',A')$ and $(z,A')$ would be at least $2^{-n}\cdot 2^{-n}>2^{-10n}$.
 
 __Proof of [Leftoverhashlem](){.ref}:__^[This is based on notes from [Daniel Wichs's class](http://www.ccs.neu.edu/home/wichs/class/crypto-fall15/)]
 
@@ -364,7 +364,7 @@ Let $Z$ be the random variable $(H(W),H)$, where the probability is over $H$ and
 __Step 1:__ $\Pr[Z=Z']\le\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}(1+4\epsilon^2)$. Indeed,
 
 
-$$\begin{aligned} \Pr[Z=Z']&=\Pr[(H(W),H)=(H'(W'),H')]\\&=\Pr[H=H']\cdot\Pr[H(W)=H(W')]\\&=\frac{1}{|\mathcal{H}|}\left(\Pr[W=W']+\Pr[H(W)=H(W')\wedge X\neq X']\right)\\&\le\frac{1}{|\mathcal{H}|}\left(\frac{1}{|\mathcal{V}|}\epsilon^2\cdot 4+\frac{1}{|\mathcal{V}|}\right)\\&=\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}(1+4\epsilon^2).\end{aligned}$$
+$$\begin{aligned} \Pr[Z=Z']&=\Pr[(H(W),H)=(H'(W'),H')]\\&=\Pr[H=H']\cdot\Pr[H(W)=H(W')]\\&=\frac{1}{|\mathcal{H}|}\left(\Pr[W=W']+\Pr[H(W)=H(W')\wedge W\neq W']\right)\\&\le\frac{1}{|\mathcal{H}|}\left(\frac{1}{|\mathcal{V}|}\epsilon^2\cdot 4+\frac{1}{|\mathcal{V}|}\right)\\&=\frac{1}{|\mathcal{H}|\cdot|\mathcal{V}|}(1+4\epsilon^2).\end{aligned}$$
 
 __Step 2:__ The statistical difference between $(H(W),H)$ and $(V,H)$ is less than $\epsilon$. Denote the statistical difference by $\Delta((H(W),H),(V,H))$, then
 
