@@ -192,7 +192,7 @@ The _LWE conjecture_ (without any parameters) is that there is some absolute con
 
 It is important to note the order of quantifiers in the learning with error conjecture.
 If we want to handle a noise of low enough magnitude (say $\delta(n) = 1/n^2$) then we need to choose the modulos $q$ to be large enough (for example it is believed that $q > n^4$ will be good enough for this case) and then the adversary can choose $m(n)$ to be as big a polynomial as they like, and of course run in time which is an arbitrary polynomial in $n$.
-Therefore we can think of such an adversary $R$ as getting access to a "magic box" that they can use $m=poly(n)$ number of times to get "noisy equations on $x$" of the form $(a_i,y_i)$ with $a_i\in \Z_q^n$, $y_i \in \Z_q$ where $y_i = \langle a_i, x \rangle + e_i$).
+Therefore we can think of such an adversary $R$ as getting access to a "magic box" that they can use $m=poly(n)$ number of times to get "noisy equations on $x$" of the form $(a_i,y_i)$ with $a_i\in \Z_q^n$, $y_i \in \Z_q$ where $y_i = \langle a_i, x \rangle + e_i$.
 
 
 ::: { .pause }
@@ -200,7 +200,7 @@ The LWE conjecture posits that no _efficient_ algorithm can recover $x$ given $A
 
 It is a good exercise to work out the details, but a hint is this can be proven by showing that for every $\tilde{x}\neq x$, with high probability over $A$, $|A\tilde{x} - Ax| > \delta q m$. The latter fact holds because $v = A(x-\tilde{x})$ is a random vector in $\Z_q^m$, and the probability that $|v|<\delta q m$ is much smaller than $q^{-0.1 m} < q^{-n}$. 
 Hence we can take a union bound over all possible $\tilde{x} \in \Z_q^n$.
-::
+:::
 
 
 ## Search to decision
