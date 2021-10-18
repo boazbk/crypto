@@ -143,7 +143,7 @@ __Scheme "LwoE-ENC":__  Public key encryption under the hardness of "learning li
 
 * _Encryption_: To encrypt a message $b\in\{0,1\}$, pick $w\in\{0,1\}^m$ and output $w^\top A,\langle w,y \rangle+\alpha b$ for some fixed nonzero $\alpha\in\Z_q$.
 
-* _Decryption:_ To decrypt a ciphertext $(a,\sigma)$, output $0$ iff $ax=\sigma$.
+* _Decryption:_ To decrypt a ciphertext $(a,\sigma)$, output $0$ iff $\langle a,x \rangle=\sigma$.
 
 :::
 
@@ -259,7 +259,7 @@ __LWE-based encryption LWE-ENC:__
 
 * _Encrypt:_ To encrypt $b\in\{0,1\}$ given the key $(A,y)$, pick $w\in\{0,1\}^m$ and output $w^\top A, \langle w,y \rangle+b\floor{q/2}$ (all computations are done in $\Z_q$).
 
-* _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|ax - \sigma|<q/10$.
+* _Decrypt:_ To decrypt $(a,\sigma)$, output $0$ iff $|\langle a,x \rangle-\sigma|<q/10$.
 :::
 
 
