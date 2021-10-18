@@ -27,7 +27,7 @@ This notion later became known as _fully homomorphic encryption (FHE)_ which is 
 In particular in our scenario above (see [fhefig](){.ref}), such a scheme will allow Bob, given an encryption of $x$, to compute the encryption of $f(x)$ and send this ciphertext to Alice without ever getting the secret key and so without ever learning anything about $x$ (or $f(x)$ for that matter).
 
 
-![A fully homomorphic encryption can be used to store data on the cloud in encrypted form, but still have the cloud provider be able to evaluate functions on the data in encrypted form (without ever learning either the inputs or the outputs of the function they evaluate).](../figure/fhedescription.png){#fhefig  .margin}
+![A fully homomorphic encryption can be used to store data on the cloud in encrypted form, but still have the cloud provider be able to evaluate functions on the data in encrypted form (without ever learning either the inputs or the outputs of the function they evaluate).](../figure/fhedescription.png){#fhefig }
 
 Unlike the case of a trapdoor function, where it only took a year for Diffie and Hellman's challenge to be answered by RSA, in the case of fully homomorphic encryption for more than 30 years cryptographers had no constructions achieving this goal.
 In fact, some people suspected that there is something inherently incompatible between the security of an encryption scheme and the ability of a user to perform all these operations on ciphertexts.
@@ -37,11 +37,11 @@ Gentry's paper shook the world of cryptography, and instigated a flurry of resea
 In particular,  Brakerski and Vaikuntanathan managed to obtain a fully homomorphic encryption scheme based only on the _Learning with Error (LWE)_ assumption we have seen before.
 
 
-Although there is an [open source library](http://shaih.github.io/HElib/), as well as [other](https://www.dcsec.uni-hannover.de/fileadmin/ful/mitarbeiter/brenner/wahc14_RC.pdf)
-[implementations](https://eprint.iacr.org/2014/816), there is still much work to be done in order to turn FHE from theory to practice.
+Although there is a number of implementations for (partially and) fully homomorphic encryption (see [this list](https://github.com/jonaschn/awesome-he)), there is still much work to be done in order to realize the full practical potential of FHE.
 For a comparable level of security, the encryption and decryption operations of a fully homomorphic encryption scheme are several orders of magnitude slower than a conventional public key system, and (depending on its complexity) homomorphically evaluating a circuit can be significantly more taxing.
 However, this is a fast evolving field, and already since 2009 significant optimizations have been discovered that reduced the computational and storage overhead by many orders of magnitudes.
-As in public key encryption, one would imagine that for larger data one would use a "hybrid" approach of combining FHE with symmetric encryption, though one might need to come up with tailor-made symmetric encryption schemes that can be efficiently evaluated.^[In [2012](https://eprint.iacr.org/2012/099.pdf) the state of art on homomorphically evaluating AES was about six orders of magnitude slower than non-homomorphic AES computation. I don't know what's the current record.]
+As in public key encryption, one would imagine that for larger data one would use a "hybrid" approach of combining FHE with symmetric encryption, though one might need to come up with tailor-made symmetric encryption schemes that can be efficiently evaluated.^[In [2015](https://eprint.iacr.org/2012/099.pdf) the state of art on homomorphically evaluating AES was about 6 seconds of computation per block using about 4GB memory total for 180 blocks. See also [this paper](https://link.springer.com/article/10.1007/s10623-015-0095-1). In contrast, modern processors can evaluate [10s-100s millions](https://www.bearssl.org/speed.html) of AES blocks per second.]
+Homomorphically evaluations _approximate computation_, which can be useful for machine learning, can be [done more efficiently](https://eprint.iacr.org/2016/421).
 
 
 In this lecture and the next one we will focus on the fully homomorphic encryption schemes that are _easiest to describe_, rather than the ones that are most _efficient_ (though the efficient schemes share many similarities with the ones we will talk about).
@@ -50,14 +50,15 @@ As is generally the case for lattice based encryption, the current most efficien
 [^ideal]: As we mentioned before, as a general rule of thumb, the difference between the ideal schemes and the one that we describe is that in the ideal setting one deals with _structured_ matrices that have a compact representation as a single vector and also enable fast FFT-like matrix-vector multiplication. This saves a factor of about $n$ in the storage and computation requirements (where $n$ is the dimension of the subspace/lattice). However, there can be some subtle security implications for ideal lattices as well, see e.g., [here](https://eprint.iacr.org/2016/127), [here](https://eprint.iacr.org/2015/313), [here](https://eprint.iacr.org/2016/139), and [here](https://eprint.iacr.org/2015/676).
 
 
-> # {.remark title="Lesson from verifying computation" #verifyinglessonrem}
+::: {.remark title="Lesson from verifying computation" #verifyinglessonrem}
 To take the distance between theory and practice in perspective, it might be useful to consider the case of _verifying computation_.
 In the early 1990's researchers (motivated initially by zero knowledge proofs) came up with the notion of [probabilistically checkable proofs (PCP's)](http://madhu.seas.harvard.edu/papers/2009/pcpcacm.pdf) which could yield in principle extremely succinct ways to check correctness of computation.
->
+
 Probabilistically checkable proofs can be thought of as "souped up" versions of NP completeness reductions and like these reductions, have been mostly used for _negative_ results, especially since the initial proofs were extremely complicated and also included enormous hidden constants.
-However, with time people have slowly understood these better and made them more efficient (e.g., see [this survey](http://m.cacm.acm.org/magazines/2015/2/182636-verifying-computations-without-reexecuting-them/fulltext)) and it has now reached the point where these results, are [nearly practical](http://cacm.acm.org/magazines/2016/2/197429-pinocchio/abstract) (see also [this](https://eprint.iacr.org/2016/646)) and in fact these ideas underly at least one [startup](http://z.cash).
+However, with time people have slowly understood these better and made them more efficient (e.g., see [this survey](http://m.cacm.acm.org/magazines/2015/2/182636-verifying-computations-without-reexecuting-them/fulltext)) and it has now reached the point where these results, are [practical](http://cacm.acm.org/magazines/2016/2/197429-pinocchio/abstract) (see also [this](https://eprint.iacr.org/2016/646)) and in fact these ideas underlieat least  [two](http://z.cash) [startups](https://starkware.co/).
 Overall,  constructions for verifying computation have improved by at least 20 orders of magnitude over the last two decades. (We will talk about some of these constructions later in this course.)
 If progress on fully homomorphic encryption follows a similar trajectory, then we can expect the road to practical utility to be very long, but there is hope that it's not a "bridge to nowhere".
+:::
 
 
 > # {.remark title="Poor man's FHE via hardware" #hardwarefhe}
@@ -94,7 +95,7 @@ By artificially increasing the randomness for the key generation algorithm, this
 You should also understand the distinction between ciphertexts that are the output of the encryption algorithm on the plaintext $b$, and ciphertexts that decrypt to $b$, see [evalciphertextfig](){.ref}.
 
 
-![In a valid encryption scheme $E$, the set of ciphertexts $c$ such that $D_d(c)=b$ is a superset of the set of ciphertexts $c$ such that $c=E_e(b;r)$ for some $r \in \{0,1\}^{t}$ where $t$ is the number of random bits used by the encryption algorithm. Our definition of partially homomorphic encryption scheme requires that for every $f:\{0,1\}^\ell \rightarrow \{0,1\}$ in our family and $x\in \{0,1\}^\ell$, if $c_i \in E_e(x_i;\{0,1\}^t)$ for $i=1..\ell$ then $EVAL(f,c_1,\ldots,c_\ell)$ is in the superset $\{ c \;|\; D_d(c)=f(x) \}$ of $E_e(f(x);\{0,1\}^t)$. For example if we apply $EVAL$ to the $OR$ function and ciphertexts $c,c'$ that were obtained as encryptions of $1$ and $0$ respectively, then the output is a ciphertext $c''$ that would be decrypted to $OR(1,0)=1$, even if $c''$ is not in the smaller set of possible outputs of the encryption algorithm on $1$. This distinction between the smaller and larger set is the reason why we cannot automatically apply the $EVAL$ function to ciphertexts that are obtained from the outputs of previous $EVAL$ operations.](../figure/evalciphertexts.png){#evalciphertextfig  .margin}
+![In a valid encryption scheme $E$, the set of ciphertexts $c$ such that $D_d(c)=b$ is a superset of the set of ciphertexts $c$ such that $c=E_e(b;r)$ for some $r \in \{0,1\}^{t}$ where $t$ is the number of random bits used by the encryption algorithm. Our definition of partially homomorphic encryption scheme requires that for every $f:\{0,1\}^\ell \rightarrow \{0,1\}$ in our family and $x\in \{0,1\}^\ell$, if $c_i \in E_e(x_i;\{0,1\}^t)$ for $i=1..\ell$ then $EVAL(f,c_1,\ldots,c_\ell)$ is in the superset $\{ c \;|\; D_d(c)=f(x) \}$ of $E_e(f(x);\{0,1\}^t)$. For example if we apply $EVAL$ to the $OR$ function and ciphertexts $c,c'$ that were obtained as encryptions of $1$ and $0$ respectively, then the output is a ciphertext $c''$ that would be decrypted to $OR(1,0)=1$, even if $c''$ is not in the smaller set of possible outputs of the encryption algorithm on $1$. This distinction between the smaller and larger set is the reason why we cannot automatically apply the $EVAL$ function to ciphertexts that are obtained from the outputs of previous $EVAL$ operations.](../figure/evalciphertexts.png){#evalciphertextfig  }
 
 
 
