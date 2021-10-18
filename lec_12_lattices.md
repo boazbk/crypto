@@ -57,7 +57,7 @@ Apart from the real numbers, the main field we will be interested in this sectio
 
 You should be comfortable with the following notions (these are covered in a number of sources, including the appendix of Katz-Lindell and [Shoup's online-available book](https://shoup.net/ntb/)):
 
-* A vector $v \in \mathbb{F}^n$ and a _matrix_ $M \in \mathbb{F}^{m \times n}$. An $m\times n$ matrix has $m$ rows and $n$ columns. We think of vectors as _column vectors_ and so we can think of a vector $v \in \mathbb{F}^n$ as an $n\times 1$ matrix.  We write the $i$-the coordinate of $v$ as $v_i$ and the $(i,j)$-th coordinate of $M$ as $M_{i,j}$ (i.e. the coordinate in the $i$-th row and the $j$-th column.) We often write a vector $v$ as $(v_1,\ldots,v_n)$ but we still mean that it's a column vector unless we say otherwise.
+* A vector $v \in \mathbb{F}^n$ and a _matrix_ $M \in \mathbb{F}^{m \times n}$. An $m\times n$ matrix has $m$ rows and $n$ columns. We think of vectors as _column vectors_ and so we can think of a vector $v \in \mathbb{F}^n$ as an $n\times 1$ matrix.  We write the $i$-th coordinate of $v$ as $v_i$ and the $(i,j)$-th coordinate of $M$ as $M_{i,j}$ (i.e. the coordinate in the $i$-th row and the $j$-th column.) We often write a vector $v$ as $(v_1,\ldots,v_n)$ but we still mean that it's a column vector unless we say otherwise.
 
 * If $\alpha \in \mathbb{F}$ is a _scalar_ (i.e., a number) and $v \in \mathbb{F}^n$ is a vector then $\alpha v$ is the vector $(\alpha v_1 ,\ldots, \alpha v_n)$. If $u,v$ are $n$ dimensional vectors then $u+v$ is the vector $(u_1+v_1,\ldots,u_n+v_n)$.
 
