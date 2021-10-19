@@ -283,7 +283,7 @@ We will show a "partially homomorphic encryption" (based on a later work of Gent
 ## Bootstrapping: Fully Homomorphic "escape velocity"
 
 
-![The "Bootstrapping Theorem" shows that once a partially homomorphic encryption scheme is homomorphic with respect to a rich enough family of functions, and specifically a family that contains its own decryption algorithm, then it can be converted to a fully homomorphic encryption scheme that can be used to evaluate _any_ function.](../figure/fheescape.png){#bootstrapfig  .margin}
+![The "Bootstrapping Theorem" shows that once a partially homomorphic encryption scheme is homomorphic with respect to a rich enough family of functions, and specifically a family that contains its own decryption algorithm, then it can be converted to a fully homomorphic encryption scheme that can be used to evaluate _any_ function.](../figure/fheescape.png){#bootstrapfig  }
 
 The bootstrapping theorem is quite surprising.
 A priori you might expect that given that a homomorphic encryption for linear functions was not trivial to do, a homomorphic encryption for quadratics would be harder, cubics even harder and so on and so forth.
@@ -304,16 +304,24 @@ Suppose that $(G,E,D)$ is a CPA circular[^circular] secure partially homomorphic
 
 ### Radioactive legos analogy
 
-![To build a castle from radioactive Lego bricks, which can be kept safe in a special ziploc bag for 10 seconds, we can: 1) Place the bricks in a bag, and place the bag inside an outer bag. 2) Manipulate the inner bag through the outer bag to remove the bricks from it in 9 seconds, and spend 1 second putting one brick in place 3) Now the outer bag has 9 seconds of life left, and we can put it inside a new bag and repeat the process.](../figure/fheziplocbag.png){#ziplocbagfig  .margin}
 
 
 Here is one analogy for bootstrapping, inspired by Gentry's [survey](https://crypto.stanford.edu/craig/easy-fhe.pdf).
 Suppose that you need to construct some complicated object from a highly toxic material (see [ziplocbagfig](){.ref}).
+For example you want to build a castle out of radio-active legos.
+
 You are given a supply of sealed bags that are flexible enough so you can manipulate the object from outside the bag.
 However, each bag can only hold for $10$ seconds of such manipulations before it leaks.
-The idea is that if you can open one bag inside another within $9$ seconds then you can perform the manipulations for arbitrary length.
-That is, if the object is in the $i^{th}$ bag then you put this bag inside the $i+1^{st}$ bag, spend $9$ seconds on opening the $i^{th}$ bag inside the $i+1^{st}$ bag and then spend another second of whatever manipulations you wanted to perform.
-We then continue this process by putting the $i+1^{st}$ bag inside the $i+2^{nd}$ bag and so on and so forth.
+The idea is that if you can open one bag inside another within $9$ seconds then you can use the extra second to perform one step. By repeating this, you perform the manipulations for arbitrary length.
+
+Specifically, suppose that you have completed $i$ steps out of the total of $T$, and now have the partially constructed castle inside a sealed bag $B_i$.
+You now put the bag $B_i$ _inside_ a fresh bag $B_{i+1}$. You now spend $9$ seconds on opening the bag $B_i$ inside the bag $B_{i+1}$, and an extra second on performing the $i+1$ step in the construction.
+At this point we have completed $i+1$ steps and have the object in the bag $B_{i+1}$, we can now continue by putting in the bag $B_{i+2}$ and so on and so forth.
+
+
+=
+![To build a castle from radioactive Lego bricks, which can be kept safe in a special ziploc bag for 10 seconds, we can: 1) Place the bricks in a bag, and place the bag inside an outer bag. 2) Manipulate the inner bag through the outer bag to remove the bricks from it in 9 seconds, and spend 1 second putting one brick in place. Now, just before the outer bag "leaks" we put it inside a fresh new bag and repeat the process.](../figure/fheziplocbag.png){#ziplocbagfig  }
+
 
 
 ### Proving the bootstrapping theorem
