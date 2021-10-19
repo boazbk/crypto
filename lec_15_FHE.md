@@ -130,7 +130,7 @@ The probability of detection can be amplified to $1-negl(n)$ using appropriate r
 It turns out that Regev's LWE-based encryption LWEENC we saw before is homomorphic with respect to the class of linear (mod 2) functions.
 Let us recall the LWE assumption and the encryption scheme based on it.
 
-::: {.definition title="LWE (simplified decision variant)" #LWEdef}
+::: {.definition title="DLWE (simplified  variant)" #LWEdef}
 Let $q=q(n)$ be some function mapping the natural numbers to primes. The _$q(n)$-decision learning with error ($q(n)$-dLWE) conjecture_ is the following:
 for every $m=poly(n)$ there is a distribution $LWE_q$ over pairs $(A,s)$ such that:
 
@@ -179,20 +179,24 @@ For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c
 
 > # { .pause }
 This claim is not hard to prove, but working it out for yourself can be a good way to get more familiarity with LWE-ENC' and the kind of manipulations we'll be making time and again in the constructions of many lattice based cryptographic primitives.
-Try to show that $c = c_1 + \cdots +c_\ell$ (where addition is done as vectors in $\Z_q$) will be the encryption $b_1 \oplus \cdots \oplus b_\ell$.
+Recall that a ciphertext $c$ of LWE-ENC' is a vector in $\Z_q^n$. Try to show that $c = c_1 + \cdots +c_\ell$ (where addition is done as vectors in $\Z_q$) will be the encryption of $b_1 \oplus \cdots \oplus b_\ell$.
 Note that if $q$ is _super polynomial_  in $n$ then $\ell$ can be an arbitrarily large polynomial in $n$.
 
 
-> # {.proof data-ref="parityhomlem"}
+::: {.proof data-ref="parityhomlem"}
 The proof is quite simple. $EVAL$ will simply add the ciphertexts as vectors in $\Z_q$.
 If $c = \sum c_i$ then
 $$\langle c,s \rangle = \sum b_i \floor{\tfrac{q}{2}}  +  \xi \mod q$$
 where $\xi \in \Z_q$ is a "noise term" such that $|\xi| \leq \ell m \sqrt{q} \ll q$.
+
+
 Since $|\floor{\tfrac{q}{2}}-  \tfrac{q}{2}|<1$, adding at most $\ell$ terms of this difference adds at most $\ell$, and so we can also write
 $$\langle c,s \rangle = \floor{ \sum b_i \tfrac{q}{2} }  +  \xi' \mod q$$
 for $|\xi'| \leq \ell m \sqrt{q} + \ell \ll q$.
+
 If $\sum b_i$ is even then $\sum b_i \tfrac{q}{2}$ is an integer multiple of $q$ and hence in this case $|\langle c,s \rangle| \ll q$.
 If $\sum b_i$ is odd $\floor{\sum b_i \tfrac{q}{2}} = \floor{q/2} \mod q$ and so in this case $|\langle c,s \rangle| = q/2 \pm o(q) > q/10$.
+:::
 
 Several other encryption schemes are also homomorphic with respect to linear functions. Even before Gentry's construction there were constructions of encryption schemes that are homomorphic with respect to somewhat larger classes (e.g., quadratic functions by Boneh, Goh and Nissim) but not significantly so.
 
@@ -205,27 +209,28 @@ On input $1^n$ key generation algorithm outputs a vector $s\in\Z_q^m$ with $s_1 
 
 * If $c$ is output by $G_s(1^n)$ then $|\langle c,s \rangle| \leq n\sqrt{q}$.
 
-Thus $s$ can be thought of a "trapdoor" for the generator that allows to distinguish between a random vector $c\in \Z_q^n$ (that with high probability would satisfy $|\langle c,s \rangle|\geq q/10$)
+The generator $G_s$ picks $w \leftarrow_R \{0,1\}^m$ to $w^\top A$. Its output will look pseudorandom but will satisfy the condition $|\langle G_s(1^n),s \rangle| \leq n\sqrt{q}$ with probability $1$ over the choice of $w$.
+Thus $s$ can be thought of a "trapdoor" for the generator that allows to distinguish between a random vector $c\in \Z_q^n$ (that with high probability would satisfy $|\langle c,s \rangle| \gg n\sqrt{q}$, assuming $q \gg n^2$)
 and an output of the generator.
 We use $G_s$ to encrypt a bit $b$ by letting $c \leftarrow_R G_s(1^n)$ and outputting $c + (b,0,\ldots,0)^\top$.
-In the particular instantiation above we obtain $G_s$ by sampling the matrix $A$ from the LWE assumption and having $G_s$ output $w^\top A$ for a random $w\in\{0,1\}^n$, but we can ignore this particular implementation detail in the forgoing.
+While our particular implementation mapped $G_s(w)= w^\topA$, we can ignore these implementation details in the forgoing.
 
-![In a _trapdoor generator_, we have two ways to generate randomized algorithms. That is, we have some algorithms $GEN$ and $GEN'$ such that $GEN$ outputs a pair $(G_s,s)$ and $GEN'$ outputs $G'$ with $G_s,G'$ being themselves algorithms (e.g., randomized circuits). The conditions we require are that __(1)__ the descriptions of the circuits $G_s$ and $G'$ (considering them as distributions over strings) are computationally indistinguishable and __(2)__ the distribution $G'(1^n)$ is _statistically indistinguishable_ from the uniform distribution , __(3)__ there is an efficient algorithm that given the secret "trapdoor" $s$ can distinguish the output of $G_s$ from the uniform distribution. In particular __(1)__,__(2)__, and __(3)__ together imply that it is _not_ feasible to exract $s$ from the description of $G_s$.](../figure/trapdoorprg.png){#TDPgenfig  .margin}
+![In a _trapdoor generator_, we have two ways to generate randomized algorithms. That is, we have some algorithms $GEN$ and $GEN'$ such that $GEN$ outputs a pair $(G_s,s)$ and $GEN'$ outputs $G'$ with $G_s,G'$ being themselves algorithms (e.g., randomized circuits). The conditions we require are that __(1)__ the descriptions of the circuits $G_s$ and $G'$ (considering them as distributions over strings) are computationally indistinguishable and __(2)__ the distribution $G'(1^n)$ is _statistically indistinguishable_ from the uniform distribution , __(3)__ there is an efficient algorithm that given the secret "trapdoor" $s$ can distinguish the output of $G_s$ from the uniform distribution. In particular __(1)__,__(2)__, and __(3)__ together imply that it is _not_ feasible to exract $s$ from the description of $G_s$.](../figure/trapdoorprg.png){#TDPgenfig }
 
 
-Note that this trapdoor generator satisfies the following stronger property: we can generate an alternative generator $G'$ such that the description of $G'$ is indistinguishable from the description of $G_s$ but such that $G'$ actually does produce (up to exponentially small statistical error)  the uniform distribution over $\Z_q^n$.
+Our LWE-based trapdoor generator satisfies the following stronger property: we can generate an alternative generator $G'$ such that the description of $G'$ is indistinguishable from the description of $G_s$ but such that $G'$ actually does produce (up to exponentially small statistical error)  the uniform distribution over $\Z_q^n$. We can do so by sampling $A$ completely at random instead of from the $LWE_q$ distribution.
 We can define trapdoor generators formally as follows
 
 ::: {.definition title="Trapdoor generators" #tdpgendef}
 A _trapdoor generator_ is a pair of randomized algorithms $GEN,GEN'$ that satisfy the following:
 
-* On input $1^n$, $GEN$ outputs a pair $(G_s,s)$ where $G_s$ is a string describing a _randomized_ circuit that itself takes $1^n$ as input and outputs a string of length $t$ where $t=t(n)$ is some polynomial. 
+* On input $1^n$, $GEN$ outputs a pair $(G_s,s)$ where $G_s$ is a string describing a _randomized_ circuit. The circuit $G_s$ takes $1^n$ as input and outputs a (randomly chosen) string of length $t$ where $t=t(n)$ is some polynomial. 
 
-* On input $1^n$, $GEN'$ outputs $G'$ where $G'$ is a string describing a randomized circuit that itself takes $1^n$ as input. 
+* On input $1^n$, $GEN'$ outputs $G'$ where $G'$ is a string describing a randomized circuit with the same inputs and outputs.
 
-* The distributions $GEN(1^n)_1$ (i.e., the first output of $GEN(1^n)$ and $GEN'(1^n)$ are computationally indistinguishable 
+* The distributions $GEN(1^n)_1$ (i.e., the first output of $GEN(1^n)$ and $GEN'(1^n)$ are computationally indistinguishable. (These are both distributions over _circuits_.)
 
-* With probability $1-negl(n)$ over the choice of $G'$ output by $GEN'$, the distribution $G'(1^n)$ is _statistically indistinguishable_ (i.e., within $negl(n)$ total variation distance) from $U_t$. 
+* With probability $1-negl(n)$ over the choice of $G'$ output by $GEN'$, the distribution $G'(1^n)$ is _statistically indistinguishable_ (i.e., within $negl(n)$ total variation distance) from $U_t$ (i.e., the uniform distribution over $\{0,1\}^t$). 
 
 * There is an efficient algorithm $T$ such that for every pair $(G_s,s)$ output by $GEN$, $\Pr[ T(s,G_s(1^n))=1] \geq 1- negl(n)$ (where this probability is over the internal randomness used by $G_s$ on the input $1^n$) but $\Pr[ T(s,U_t)=1] \leq 1/3$.^[The choice of $1/3$ is arbitrary, and can be amplified as needed.]
 :::
@@ -245,7 +250,7 @@ In the above we use the notion of a "trapdoor" in the pseudorandom generator as 
 You'd think that this generator is long dead but it turns out to be the "gift that keeps on giving".
 In December of 2015, Juniper systems [announced](http://www.wired.com/2015/12/juniper-networks-hidden-backdoors-show-the-risk-of-government-backdoors/) that they have discovered a malicious code in their system, dating back to at least 2012 (possibly [2008](https://goo.gl/X6pAXV)), that would allow an attacker to surreptitiously decrypt all VPN traffic through their firewalls.
 The issue is that Juniper has been using the Dual EC DRBG and someone has managed to replace the constant they were using with another one, one that they presumably knew the trapdoor for (see [here](https://rpw.sh/blog/2015/12/21/the-backdoored-backdoor/)  and [here](http://blog.cryptographyengineering.com/2015/12/on-juniper-backdoor.html) for more; of course unless you know to check for this, it's very hard by looking at the code to see that one arbitrary looking constant has been replaced by another).
-Apparently, even though this is very surprising to many people in law enforcement and government, inserting back doors into cryptographic primitives might end up making them less secure.
+Apparently, even though this is very surprising to many people in law enforcement and government, inserting back doors into cryptographic primitives might end up making them less secure. Some more details have emereged in this case in 2021, see [this story](https://finance.yahoo.com/news/juniper-breach-mystery-starts-clear-130016591.html) and  [this Tweet thread](https://twitter.com/matthew_d_green/status/1433451378391883782?s=20) 
 :::
 
 
@@ -315,19 +320,21 @@ We then continue this process by putting the $i+1^{st}$ bag inside the $i+2^{nd}
 
 We now turn to the formal proof of [bootstrapthm](){.ref}
 
-> # {.proof data-ref="bootstrapthm"}
+::: {.proof data-ref="bootstrapthm"}
 The idea behind the proof is simple but ingenious.
 Recall that the NAND gate $b,b' \mapsto \neg(b \wedge b')$ is a universal gate that allows us to compute any function $f:\{0,1\}^n\rightarrow\{0,1\}$ that can be efficiently computed.
 Thus, to obtain a fully homomorphic encryption it suffices to obtain a function $NANDEVAL$ such that
 $D_d(NANDEVAL(c,c'))=D_d(c) \;NAND\; D_d(c')$.
 (Note that this is stronger than the typical notion of homomorphic evaluation since we require that $NANDEVAL$ outputs an encryption of $b \;NAND\; b'$ when given _any_ pair of ciphertexts that decrypt to $b$ and $b'$ respectively, regardless whether these ciphertexts were produced by the encryption algorithm or by some other method, including the $NANDEVAL$ procedure itself.)
->
+
+
 Thus to prove the theorem, we need to modify $(G,E,D)$ into an encryption scheme supporting the $NANDEVAL$ operation.
 Our new scheme will use the same encryption algorithms $E$ and $D$ but the following modification $G'$ of the key generation algorithm: after running $(d,e)=G(1^n)$, we will append to the public key an encryption $c^* = E_e(d)$ of the secret key.
 We have now defined the key generation, encryption and decryption.
 CPA security follows from the security of the original scheme, where by circular security we refer exactly to the condition that the scheme is secure even if the adversary gets a single encryption of the public key.[^leveled]
 This latter condition is not known to be implied by standard CPA security but as far as we know is satisfied by all natural public key encryptions, including the LWE-based ones we will plug into this theorem later on.
->
+
+
 So, now all that is left is to define the $NANDEVAL$ operation. On input two ciphertexts $c$ and $c'$, we will construct the function $f_{c,c'}:\{0,1\}^n\rightarrow\{0,1\}$ (where $n$ is the length of the secret key) such that $f_{c,c'}(d)=D_d(c) \;NAND\; D_d(c')$.
 It would be useful to pause at this point and make sure you understand what are the inputs to $f_{c,c'}$, what are "hardwired constants" and what is its output.
 The ciphertexts $c$ and $c'$ are simply treated as fixed strings and are _not_ part of the input to $f_{c,c'}$.
@@ -338,6 +345,7 @@ Since $c^* = E_e(d)$, we get that
 $$D_d(NANDEVAL(c,c'))= D_d(EVAL(f_{c,c'},c^*))=f_{c,c'}(d) =D_d(c) \;NAND\; D_d(c') \;.$$
 Thus indeed we map _any_ pair of ciphertexts $c,c'$ that decrypt to $b,b'$ into a ciphertext $c''$ that decrypts to $b \;NAND\; b'$.
 This is all that we needed to prove.
+:::
 
 
 [^leveled]: Without this assumption we can still obtained a form of FHE known as a _leveled_ FHE where the size of the public key grows with the [depth](https://en.wikipedia.org/wiki/Circuit_complexity) of the circuit to be evaluated. We can do this by having $\ell$ public keys where $\ell$ is the depth we want to evaluate, and encrypt the private key of the $i^{th}$ key with the $i+1^{st}$ public key.  However, since circular security seems quite likely to hold, we ignore this extra complication in the rest of the discussion.
