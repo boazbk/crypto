@@ -111,7 +111,7 @@ Curiously the protocol involves "doubly encrypting" the input, and homomorphical
 
 * __Assumptions:__ We assume that all functions $f$ that the client will be interested in can be described by a string of length $n$.
 
-* __Preprocessing:__ The client generates a pair of keys $(e,d)$. In the initial stage the client computes the encrypted database $\overline{c}=E_e(x)$ and sends $\overline{c},e,e'$ to the server. It also computes $c^* = E_e(f^*)$ for some function $f^*$ as well as $C^{**}=EVAL_{e}(eval,c^*\|\overline{c})$  for some function $f^*$ and keeps $c^*,c^{**}$ for herself, where $eval(f,x)=f(x)$ is the circuit evaluation function.
+* __Preprocessing:__ The client generates a pair of keys $(e,d)$. In the initial stage the client computes the encrypted database $\overline{c}=E_e(x)$ and sends $\overline{c},e,e'$ to the server. It also computes $c^* = E_e(f^*)$ for some function $f^*$ as well as $c^{**}=EVAL_{e}(eval,c^*\|\overline{c})$  for some function $f^*$ and keeps $c^*,c^{**}$ for herself, where $eval(f,x)=f(x)$ is the circuit evaluation function.
 
 
 * __Client query:__ To ask for an evaluation of $f$, the client generates a new random FHE keypair $(e',d')$, chooses $b \leftarrow_R \{0,1\}$ and lets $c_b = E_{e'}(E_e(f))$ and $c_{1-b}=E_{e'}(c^*)$. It sends the triple $e',c_0,c_1$ to the server.
