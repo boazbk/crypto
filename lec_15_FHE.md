@@ -213,7 +213,7 @@ The generator $G_s$ picks $w \leftarrow_R \{0,1\}^m$ to $w^\top A$. Its output w
 Thus $s$ can be thought of a "trapdoor" for the generator that allows to distinguish between a random vector $c\in \Z_q^n$ (that with high probability would satisfy $|\langle c,s \rangle| \gg n\sqrt{q}$, assuming $q \gg n^2$)
 and an output of the generator.
 We use $G_s$ to encrypt a bit $b$ by letting $c \leftarrow_R G_s(1^n)$ and outputting $c + (b,0,\ldots,0)^\top$.
-While our particular implementation mapped $G_s(w)= w^\topA$, we can ignore these implementation details in the forgoing.
+While our particular implementation mapped $G_s(w)= w^\top A$, we can ignore these implementation details in the forgoing.
 
 ![In a _trapdoor generator_, we have two ways to generate randomized algorithms. That is, we have some algorithms $GEN$ and $GEN'$ such that $GEN$ outputs a pair $(G_s,s)$ and $GEN'$ outputs $G'$ with $G_s,G'$ being themselves algorithms (e.g., randomized circuits). The conditions we require are that __(1)__ the descriptions of the circuits $G_s$ and $G'$ (considering them as distributions over strings) are computationally indistinguishable and __(2)__ the distribution $G'(1^n)$ is _statistically indistinguishable_ from the uniform distribution , __(3)__ there is an efficient algorithm that given the secret "trapdoor" $s$ can distinguish the output of $G_s$ from the uniform distribution. In particular __(1)__,__(2)__, and __(3)__ together imply that it is _not_ feasible to exract $s$ from the description of $G_s$.](../figure/trapdoorprg.png){#TDPgenfig }
 
