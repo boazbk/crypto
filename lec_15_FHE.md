@@ -319,7 +319,6 @@ You now put the bag $B_i$ _inside_ a fresh bag $B_{i+1}$. You now spend $9$ seco
 At this point we have completed $i+1$ steps and have the object in the bag $B_{i+1}$, we can now continue by putting in the bag $B_{i+2}$ and so on and so forth.
 
 
-=
 ![To build a castle from radioactive Lego bricks, which can be kept safe in a special ziploc bag for 10 seconds, we can: 1) Place the bricks in a bag, and place the bag inside an outer bag. 2) Manipulate the inner bag through the outer bag to remove the bricks from it in 9 seconds, and spend 1 second putting one brick in place. Now, just before the outer bag "leaks" we put it inside a fresh new bag and repeat the process.](../figure/fheziplocbag.png){#ziplocbagfig  }
 
 
