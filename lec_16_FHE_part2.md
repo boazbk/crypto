@@ -42,7 +42,7 @@ as long as $n^3\cdot \max\{\eta,\eta'\}<q/4$. That is, as long as noise is not t
 
 The noisy homomorphic encryption actually states that if $C$ and $C'$ encrypt $b$ and $b'$ up to error $\eta$ and $\eta'$, respectively, then $ENAND(c,c')$ encrypts $NAND(b,b')$ up to some error which can be controlled by $\eta,\eta'$. The coefficient $n^3$ is not essential here; we just need the order $poly(n)$. This property allows us to perform the $ENAND$ operator repeatly as long as we can guarantee the accumulated error is smaller than $q/4$, which means that the decryption can be done correctly. The next theorem tells us with what depth, a circuit that can be computed homomorphically.
 
-![In a noisy homomorphic encryption, every ciphertext $c$ has a "noise" parameter $\eta(c)$ associated with it. When we encrypt $0$ or $1$, we get a ciphertext with noise at most $\sqrt{q}$, while we are guaranteed to successfully decrypt. Applying the $ENAND$ operation to two ciphertexts $c$ and $c'$ yields a ciphertext with noise level at most $n^3$ times the maximum noise of $c$ and $c'$. Hence we can compose $ENAND$ operations to apply any NAND circuit of depth at most $d$ to fresh encryptions, and succeed in obtaining a ciphertext decrypting to the circuit output as long as $n^{3d}\sqrt{q} \ll q/4$.](../figure/fhe-noisy.png){#noisefhefig}
+![In a noisy homomorphic encryption, every ciphertext $c$ has a "noise" parameter $\eta(c)$ associated with it. When we encrypt $0$ or $1$, we get a ciphertext with noise at most $\sqrt{q}$, while we are guaranteed to successfully decrypt. Applying the $ENAND$ operation to two ciphertexts $c$ and $c'$ yields a ciphertext with noise level at most $n^3$ times the maximum noise of $c$ and $c'$. Hence we can compose $ENAND$ operations to apply any NAND circuit of depth at most $\ell$ to fresh encryptions, and succeed in obtaining a ciphertext decrypting to the circuit output as long as $n^{3\ell}\sqrt{q} \ll q/4$.](../figure/fhe-noisy.png){#noisefhefig}
 
 > # {.theorem #Depththm}
 If there exists a noisy homomorphic encryption scheme with $q=2^{\sqrt{n}}$, then the it can be extended to a homomorphic encryption scheme for any circuit with depth smaller than $polylog(n)$.
@@ -50,7 +50,8 @@ If there exists a noisy homomorphic encryption scheme with $q=2^{\sqrt{n}}$, the
 > # {.proof data-ref="Depththm"}
 For any function $f:\{0,1\}^m\rightarrow \{0,1\}$ which can be described by a circuit with depth $\ell$, we can compute $EVAL(f,E_e(x_1),\cdots,E_e(x_m))$ with error up to $\sqrt(q)(n^3)^\ell$. (The initial error for $E_e(x_i)$ is smaller than $\sqrt{n}$ and the error will be accumulated with rate up to $n^3$.) Thus, to guarantee that $EVAL(f,E_e(x_1),\cdots,E_e(x_m))$ can be decrypted to $f(x_1,\cdots,x_m)$ correctly, we only need $\sqrt(q)(n^3)^\ell\ll q$, i.e., $n^{3\ell}\ll \sqrt{q}=2^{\sqrt{n}/2}$. This is equalvent to $3\ell\log(n)\ell \sqrt{n}/2$, which can be guaranteed when $\ell =n^{o(1)}$ or $\ell=polylog(n)$.
 
-With [Depththm](){.ref}, the rest is to verify that the function $d \mapsto D_d(c)\; NAND\; D_d(c')$ can be computed by a circuit with depth being $polylog(n)$. And then we can obtain a fully homomorphic encryption scheme. We will head into some details show how to construct things we want in the rest of this chapter. The most technical and interesting part would be how to upperbound the noise/error.
+We will assume the LWE conjecture with $q(n) \approx 2^{\sqrt{n}}$ in the remainder of this chapter. 
+With [Depththm](){.ref} in hand, our goal is to construct a noisy FHE such that the decryption map (specifically the map $d \mapsto D_d(c)$ for any fixed ciphertext $c$) can be computed by a circuit with depth at most $polylog(n)$. ([bootstrapthm](){.ref} refers to the map  $d \mapsto \wedge{D_d(c) \wedge D_d(c')}$, but this latter map is obtained by applying one more NAND gate to two parallel executions of $d \mapsto D_d(c)$, and hence if the map $d \mapsto D_d(c)$ has depth at most $polylog(n)$ then so does the map $d \mapsto \wedge{D_d(c) \wedge D_d(c')}$.)    Once we do this then we can obtain a fully homomorphic encryption scheme. We will head into some details show how to construct things we want in the rest of this chapter. The most technical and interesting part would be how to upper bound the noise/error.
 
 
 ## Prelude: from vectors to matrices
@@ -115,7 +116,7 @@ The main idea is that we can expect the following problem to be hard for a rando
 This yields a natural candidate for an encryption scheme where we encrypt $b$ by a matrix $C$ satisfying $Cs = bs + e$ where $e$ is a "short" vector.[^short]
 
 
-[^short]: We deliberately leave some flexibility in the definition of "short". While initially "short" might mean that $|e_i|<\sqrt{q}$ for every $i$, decryption will succeed as long as long as $|e_i|$ is, say, at most $q/100$.
+[^short]: We deliberately leave some flexibility in the definition of "short". While initially "short" might mean that $|e_i|<\sqrt{q}$ for every $i$, decryption will succeed as long as $|e_i|$ is, say, at most $q/100n$.
 
 We can now try to check what adding and multiplying two matrices does to the noise.
 If $Cs = bs+e$ and $C's=b's+e'$ then
@@ -129,18 +130,18 @@ I recommend you pause here and check for yourself whether it will be the case th
 
 
 We would have loved to say that we can define as above $C\oplus C' = C+C' (\mod\; q)$ and $C\otimes C' = CC' (\mod \; q)$.
-For this we would need that $(C+C')s$ equals $(b+b')s$ plus a "short" vector and $CC's$ equals $bb's$ plus a "short" vector.
+For this we would need that the vector $(C+C')s$ equals $(b+b')s$ plus a "short" vector and the vector $CC's$ equals $bb's$ plus a "short" vector.
 The former statement indeed holds.
 Looking at [eqhommult](){.eqref} we see that $(C+C')s$ equals $(b+b')s$ up to the "noise" vector $e+e'$, and if $e,e'$ are "short" then $e+e'$ is not too long either.
-That is, if $|e_i|<\delta q$ and $|e'_i|<\delta q$ for every $i$ then $|e_i+e'_i|<2\delta q$.
+That is, if $|e_i|<\eta$ and $|e'_i|<\eta'$ for every $i$ then $|e_i+e'_i|<\eta + \eta'$.
 So we can at least handle a significant number of additions before the noise gets out of hand.
 
 
 However, if we consider [eqhommult](){.eqref}, we see that $CC'$ will be equal to $bb's$ plus the "noise vector" $b'e + Ce'$.
-The first component $b'e$ of this noise vector is "short" (after all $b\in \{0,1\}$ and $e$ is "short").
+The first component $b'e$ of this noise vector is "short" (after all $b'\in \{0,1\}$ and $e$ is "short").
 However,   the second component $Ce'$ could be a very large vector.
-Indeed, since $C$ looks like a random matrix in $\Z_q$, no matter how small the entries of $e'$, many of the entries of $Ce'$ are quite likely to be of magnitude at least, say, $q/2$
-and so multiplying $e'$ by $C$ takes us "beyond the edge of chaos".
+Indeed, since $C$ looks like a random matrix in $\Z_q$, no matter how small the entries of $e'$, many of the entries of $Ce'$ will be large. 
+Hence multiplying $e'$ by $C$ takes us "beyond the edge of chaos" and makes the noise too large for decryption to be successful.
 
 ## Noise management via encoding
 
@@ -148,7 +149,6 @@ The problem we had above is that the entries of $C$ are elements in $\Z_q$ that 
 At this point one could say
 
 >_"If only there was some way to encode numbers between $0$ and $q-1$ using only $0$'s and $1$'s"_
-
 
 
 
@@ -175,13 +175,37 @@ It's a good exercise to verify that for every vector $s\in \Z_q^n$ and matrix $C
 ![We can encode an $n\times n$ matrix $C$ over $\Z_q$ by an $n\times (n \log q)$ matrix $\hat{C}$ using the binary basis. We have the equation $C=\hat{C}Q^\top$ where $Q$ is the same matrix we use to decode a vector.](../figure/encodematrix.png){#encodematrixfig  .margin}
 
 
-In our final scheme the ciphertext encrypting $b$ will be an $(n\log q)\times (n\log q)$ matrix $C$ with small coefficients such that $Cv =bv + e$ for a "short" $e \in \Z_q^{n\log q}$ and $v=Q^\top s$ for $s\in\Z_q^n$.
-Now given ciphertexts $C,C'$ that encrypt $b,b'$ respectively, we will define $C \oplus C' = C + C' \pmod{q}$ and $C \otimes C' = \widehat{(CQ^\top)}C'$.
+__Our final encryption scheme:__ We describe below the key generation, encryption and decryption algorithms of our final homomorphic encryption scheme (FHEENC).
+It will satisfy the following properties:
+
+1. Ciphertexts are $(n \log q)\times (n\log q)$ matrices $C$ with all coefficients in $\{0,1\}$.
+
+2. The secret key is a vector $s \in \Z_q^n$. We let $v \in Z_q^{n \log q}$ be the vector $V = Q^\top s$. 
+
+3. An encryption of $b\in \{0,1\}$ is a matrix $C$ satisfying the following "ciphertext equation" 
+$$Cv =bv + e \label{eqciphertexteqfhe}$$ 
+for a "short" $e$. 
 
 
-Since we have $Cv = bv + e$ and $C'v = b'v + e'$ we get that
+Given the conditions 1,2, and 3, we can now define the addition and multiplication operations for two ciphertexts $C,C'$ as follows:
+
+* $C \oplus C' = C + C' \pmod{q}$ 
+
+* $C \otimes C' = \widehat{(CQ^\top)}C'$
+
+::: { .pause }
+Please try to verify that if $C,C'$ are encryptions of $b,b'$ then $C \oplus C'$ and $C \otimes C'$ will be encryptions of $b+b'$ and $bb'$ respectively.
+:::
+
+
+__Correctness of operations.__ Suppose that  $Cv = bv + e$ and $C'v = b'v + e'$.
+Then
 $$(C\oplus C')v = (C+C')v = (b+b')v + (e+e') \label{eqfheaddfinal}$$
-and
+
+which means that $C \oplus C'$ satisfies the ciphertext equation [eqciphertexteqfhe](){.eqref} with respect to the plaintext $b+b'$, with the short vector $e+e'$.
+
+Let's now analyze the more challenging case of $C \otimes C'$. 
+
 $$(C\otimes C')v = \widehat{(CQ^\top)}C'v = \widehat{(CQ^\top)}(b'v+e') \;. \label{fhemultfinaleqfirst}$$
 
 But since $v=Q^\top s$ and $\hat{A}Q^\top = A$ for every matrix $A$, the righthand side of [fhemultfinaleqfirst](){.eqref} equals
@@ -190,12 +214,15 @@ $$\widehat{(CQ^\top)}(b'Q^\top s+e')=b'C Q^\top s+\widehat{(CQ^\top)}e' = b'Cv +
 
 but since $\widehat{B}$ is a matrix with small coefficients for every $B$ and $e'$ is short, the righthand side of [fhemultfinaleqsec](){.eqref} equals $b'Cv$ up to a short vector, and since $Cv=bv+e$ and $b'e$ is short, we get that $(C\otimes C')v$ equals $b'bv$ plus a short vector as desired.
 
+We can now define 
 
-If we keep track of the parameters in the above analysis, we can see that
+$$
+ENAND(C,C') = I - C \otimes C' \;.
+$$
 
-$$C \overline{\wedge} C' = (I - C \otimes C')$$
-
-then if $C$ encrypts $b$ and $C'$ encrypts $b'$ with noise vectors $e,e'$ satisfying $\max |e_i| \leq \mu$ and $\max |e'_i| \leq \mu'$ then $C \overline{\wedge} C'$ encrypts $b \; NAND\; b'$ up to a vector of maximum magnitude at most $O(\mu + n\log q \mu')$, which is definitely smaller than $n^3\cdot \max\{\eta,\eta,\}$ for $q=2^{\sqrt{n}}$.
+__Keeping track of parameters.__ For $C$ that encrypts a plaintext $b$, let $\eta(C) = \max_{i\in [n]} |Cv -bv|$.
+Now if we can see that if $C$ encrypts $b$ with noise $\eta(C)$ and $C'$ encrypts $b'$ with noise $\eta(C')$, then $ENAND(C,C')$ will encrypt
+$1-bb' = NAND(b,b')$ with noise of magnitude at most $O(\mu + n\log q \mu')$, which is  smaller than $n^3\cdot \max\{\eta(C),\eta(C'),\}$ for $q\approx 2^{\sqrt{n}}$.
 
 
 ## Putting it all together
@@ -206,21 +233,18 @@ Namely,  the $q(n)$-dLWE assumption for $q(n)=2^{\sqrt{n}}$.
 It is not hard to show that we can relax our assumption to $q(n)$-LWE $q(n)=2^{polylog(n)}$  and Brakerski and Vaikuntanathan showed how to relax the assumption to standard (i.e. $q(n)=poly(n)$) LWE though we will not present this here.
 
 
->__FHEENC:__
->
+::: { .quote}
+__FHEENC:__
+
 * **Key generation:**  As in the scheme of last lecture the secret key is $s\in\Z_s^n$ and the public key is a generator $G_s$ such that samples from $G_s(1^n)$ are indistinguishable from independent random samples from $\Z_q^n$ but if $c$ is output by $G_s$ then $|\langle c,s \rangle|<\sqrt{q}$, where the inner product (as all other computations) is done modulo $q$ and for every $x\in\Z_q=\{0,\ldots,q-1\}$ we define $|x|=\min \{ x, q-x \}$.
 As before, we can assume that $s_1 = \floor{q/2}$ which implies that $(Q^\top s)_1$ is also $\floor{q/2}$ since (as can be verified by direct inspection) the first row of $Q^\top$ is $(1,0,\ldots,0)$. 
->
+
 * **Encryption:** To encrypt $b\in\{0,1\}$, let $d_1,\ldots,d_{n\log q} \leftarrow_R G_s(1^n)$ output $C=\widehat{(bQ^\top +D)}$ where $D$ is the matrix whose rows are $d_1,\ldots,d_{n\log q}$ generated from $G_s$. (See [fheencfig](){.ref})
->
+
 * **Decryption:** To decrypt the ciphertext $C$, we output $0$ if $|(CQ^\top s)_1|<0.1q$ and output $1$ if $0.6q>|(CQ^\top s)_1|>0.4q$, see [fhedecfig](){.ref}. (It doesn't matter what we output on other cases.)
->
+
 * **NAND evaluation:** Given ciphertexts $C,C'$, we define $C \overline{\wedge} C'$ (sometimes also denoted as $NANDEVAL(C,C')$) to equal $I- \widehat{(CQ^\top)}C'$, where $I$ is the $(n\log q)\times (n\log q)$ identity matrix.
-
- \
-
-
- \
+:::
 
 
 
@@ -234,9 +258,9 @@ Please take your time to read the definition of the scheme, and go over
 
 
 
-![In our fully homomorphic encryption, the public key is a trapdoor generator $G_s$. To encrypt a bit $b$, we output $C=\widehat{(bQ^\top +D)}$ where $D$ is a $(n\log q) \times n$ matrix whose rows are generated using $G_s$.](../figure/fheenc.png){#fheencfig  .margin}
+![In our fully homomorphic encryption, the public key is a trapdoor generator $G_s$. To encrypt a bit $b$, we output $C=\widehat{(bQ^\top +D)}$ where $D$ is a $(n\log q) \times n$ matrix whose rows are generated using $G_s$.](../figure/fheenc.png){#fheencfig }
 
-![We decrypt a ciphertext $C=\widehat{(bQ^\top +D)}$ by looking at the first coordinate of $CQ^\top s$ (or equivalently, $CQ^\top Q\hat{s}$). If $b=0$ then this equals to the first coordinate of $Ds$, which is at most $\sqrt{q}$ in magintude. If $b=1$ then we get an extra factor of $Q^\top s$ which we set to be in the interval $(0.499q,0.51q)$. We can think of either $s$ or $\hat{s}$ as our secret key.](../figure/fhedec.png){#fhedecfig  .margin}
+![We decrypt a ciphertext $C=\widehat{(bQ^\top +D)}$ by looking at the first coordinate of $CQ^\top s$ (or equivalently, $CQ^\top Q\hat{s}$). If $b=0$ then this equals to the first coordinate of $Ds$, which is at most $\sqrt{q}$ in magintude. If $b=1$ then we get an extra factor of $Q^\top s$ which we set to be in the interval $(0.499q,0.51q)$. We can think of either $s$ or $\hat{s}$ as our secret key.](../figure/fhedec.png){#fhedecfig }
 
 
 
@@ -315,19 +339,25 @@ Adding the identity for the NAND operation adds at most $\mu(C)+\mu(C')$ to the 
 
 ### Shallow decryption circuit
 
-Recall that to plug in our homomorphic encryption scheme into the bootstrapping theorem, we needed to show that for every ciphertexts $C,C'$ (generated by the encryption algorithm) the function $f:\{0,1\}^{n \log q} \rightarrow \{0,1\}$ defined as
-$$f(d) = D_d(C) \;NAND\; D_d(C')$$
-can be homomorphically evaluated where $d$ is the secret key and $D_d(C)$ denotes the decryption algorithm applied to $C$.
-
-In our case we can think of the secret key as the binary string $\hat{s}$ which describes our vector $s$ as a bit string of length $n\log q$.
-Given a ciphertext $C$, the decryption algorithm takes the dot product modulo $q$ of $s$ with the first row of $CQ^\top$ (or, equivalently, the dot product of $\hat{s}$ with the first row of $CQ^\top Q$) and outputs $0$ (respectively $1$) if the resulting number is small (respectively large).
+Recall that to plug in our homomorphic encryption scheme into the bootstrapping theorem, we needed to show that for every ciphertext $C$ (generated by the encryption algorithm) the function $f_C:\{0,1\}^{n \log q} \rightarrow \{0,1\}$ can be computed by a circuit of sufficiently shallow, where $f_C$ is defined as
+$$f_C(d) = D_d(C)$$
+ where $d$ is the secret key and $D_d(C)$ denotes the decryption algorithm applied to $C$.
 
 
-By repeatedly applying the noisy homomorphism lemma ([noisehomolem](){.ref}), we can show that can homorphically evaluate every circuit of NAND gates whose _depth_ $\ell$  satisfies $(2n\log q)^\ell \ll q$.
-If $q = 2^{\sqrt{n}}$ then (assuming $n$ is sufficiently large) then as long as $\ell < n^{0.49}$ this will be satisfied.
+In our case a circuit of $polylog(n) \ll n^5$ will be "sufficiently shallow".
+Specifically, by repeatedly applying the noisy homomorphism lemma ([noisehomolem](){.ref}), we can show that can homorphically evaluate every circuit of NAND gates whose _depth_ $\ell$  satisfies the condition $(2n\log q)^\ell \ll q$.
+If $q = 2^{\sqrt{n}}$ then (assuming $n$ is sufficiently large)  as long as $\ell < n^{0.49}$ this will be satisfied.
 
-In particular to show that $f(\cdot)$ can be homomorphically evaluated it will suffice to show that for every fixed vector $c\in \Z_q^{n\log q}$ there is a $polylog(n) \ll n^{0.49}$ depth circuit $F$ that on input a string $\hat{s}\in\{0,1\}^{n \log q}$ will output $0$ if $|\langle c,\hat{s \rangle}|  < q/10$ and output $1$ if $|\langle c,\hat{s \rangle}|  > q/5$.
-(We don't care what $F$ does otherwise. The above suffices since given a ciphertext $C$ we can use $F$ with the vector $c$ being the top row of $CQ^\top Q$, and hence $\langle c,\hat{s} \rangle$ would correspond to the first entry of $CQ^\top s$. Note that if $F$ has depth $\ell$ then the function $f()$ above has depth at most $\ell+1$.)
+
+We will encode the secret key of the encryption scheme as the binary string $\hat{s}$ which describes our vector $s \in Z_q^n$ as a bit string of length $n\log q$.
+Given a ciphertext $C$, the decryption algorithm takes the dot product modulo $q$ of $s$ with the first row of $CQ^\top$.
+This can be equivalently described as taking the dot product of $\hat{s}$ with the first row of $CQ^\top Q$.
+Decryption outputs $0$ (respectively $1$) if the resulting number is small (respectively large).
+
+
+In particular to show that $f_C(\cdot)$ can be homomorphically evaluated it will suffice to show that for every fixed vector $c\in \Z_q^{n\log q}$ there is a $polylog(n) \ll n^{0.49}$ depth circuit $F$ that on input a string $\hat{s}\in\{0,1\}^{n \log q}$ will output $0$ if $|\langle c,\hat{s \rangle}|  < q/10$ and output $1$ if $|\langle c,\hat{s \rangle}|  > q/5$.
+(We don't care what $F$ does otherwise.) The above suffices since given a ciphertext $C$ we can use $F$ with the vector $c$ being the top row of $CQ^\top Q$, and hence $\langle c,\hat{s} \rangle$ would correspond to the first entry of $CQ^\top s$. 
+
 
 > # { .pause }
 Please make sure you understand the above argument.
@@ -335,6 +365,8 @@ Please make sure you understand the above argument.
 If $c=(c_1,\ldots,c_{n\log q})$ is a vector then to compute its inner product with a $0/1$ vector $\hat{s}$ we simply need to sum up the numbers $c_i$  where $\hat{s}_i=1$.
 Summing up $m$ numbers can be done via the obvious recursion in depth that is $\log m$ times the depth for a single addition of two numbers.
 However, the naive way to add two numbers in $\Z_q$ (each represented by $\log q$ bits) will have depth $O(\log q)$ which is too much for us.
+The issue is that while $m = n\log q$ is polynomial in $n$,  $q$ itself has _exponential_ magnitude. In particular $\log q \approx \sqrt{n}$, and we cannot afford to use a circuit of that depth.
+
 
 > # { .pause }
 Please stop here and see if you understand why the natural circuit to compute the addition of two numbers modulo $q$ (represented as $\log q$-length binary strings) will require depth $O(\log q)$.
@@ -342,28 +374,36 @@ As a hint, one needs to keep track of the "carry".
 
 
 
-Fortunately, because we only care about accuracy up to $q/10$, if we add $m$ numbers, we can drop all but the first $100\log m$ most significant digits of our numbers, since including them can change the sum of the $m$ numbers by at most $m(q/m^{100}) \ll q$.
+Fortunately, because we only care about accuracy up to $q/10$, we can make the calculation "shallower".
+Specifically, if we add $m$ numbers in $\Z_q$ (each represented by $\log q$ bits), we can drop all but the first $100\log m$ most significant digits of our numbers.
+The reason is that dropping this can change each number by at most $(q/m^{100})$, and so if we ignore these digits, then it would change the sum of the $m$ numbers by at most $m(q/m^{100}) \ll q$.
 Hence we can easily do this work in $poly(\log m)$  depth, which is $poly(\log n)$ since $m=poly(n)$.
 
 Let us now show this more formally:
 
 
-> # {.lemma #decdepthlem}
-For every $c\in\Z_q^m$ there exists some function $f:\{0,1\}^m\rightarrow\{0,1\}$ such that: \
-1. For every $\hat{s}\in \{0,1\}^n$ such that $|\langle \hat{s} \rangle,c|<0.1q$, $f(\hat{s})=0$ \
-2. For every $\hat{s}\in \{0,1\}^n$ such that $0.4q<|\langle \hat{s} \rangle,c|<0.6q$, $f(\hat{s})=1$ \
-3. There is a circuit computing $f$ of depth at most $100(\log m)^3$.
+::: {.lemma #decdepthlem}
+For every $c\in\Z_q^m$ there exists some function $f:\{0,1\}^m\rightarrow\{0,1\}$ such that: 
 
-> # {.proof data-ref="decdepthlem"}
-For every number $x\in\Z_q$, write $\tilde{x}$ to be the number that is obtained by writing $x$ in the binary basis and setting all digits except the $10\log m$ most significant ones to zero.  
-Note that $\tilde{x} \leq x \leq \tilde{x} + q/m^{10}$.
+1. For every $\hat{s}\in \{0,1\}^n$ such that $|\langle \hat{s} \rangle,c|<0.1q$, $f(\hat{s})=0$ 
+
+2. For every $\hat{s}\in \{0,1\}^n$ such that $0.4q<|\langle \hat{s} \rangle,c|<0.6q$, $f(\hat{s})=1$ 
+
+3. There is a circuit computing $f$ of depth at most $100(\log m)^3$.
+:::
+
+::: {.proof data-ref="decdepthlem"}
+For every number $x\in\Z_q$, write $\tilde{x}$ to be the number that is obtained by writing $x$ in the binary basis and setting all digits except the $10\log m$ most significant ones to zero.
+Note that $\tilde{x} \leq x \leq \tilde{x} + q/m^{10}$. The idea is that we will do the calculation by changing every number $c_i$ and the modulos $q$, into the correponding  numbers $\tilde{c}_i$ and $\tilde{q}$.
+
 We define $f(\hat{s})$ to equal $1$ if $|\sum \hat{s}_i \tilde{c}_i (\mod \tilde{q})| \geq 0.3\tilde{q}$ and to equal $0$ otherwise (where as usual the absolute value of $x$ modulo $\tilde{q}$ is the minimum of $x$ and $\tilde{q}-x$.)
-Note that all numbers involved have zeroes in all but the $10\log m$ most significant digits and so these less significant digits can be ignored.
+All  numbers involved have zeroes in all but the $10\log m$ most significant digits and so these less significant digits can be ignored.
 Hence we can add any pair of such numbers modulo $\tilde{q}$ in depth $O(\log m)^2$ using the standard elementary school algorithm to add two $\ell$-digit numbers in $O(\ell^2)$ steps.
+
 Now we can add the $m$ numbers by adding pairs, and then adding up the results, and this way in a binary tree of depth $\log m$ to get a total depth of $O(\log m)^3$.
 So, all that is left to prove is that this function $f$ satisfies the conditions (1) and (2).
->
-Note that $|\sum \hat{s}_i \tilde{c}_i - \sum \hat{s}_i c_i | < mq/m^{10} = q/m^9$ so now we want to show that the effect of taking modulo $\tilde{q}$ is not much different from taking modulo $q$.
+
+If we look at the _non modular_ sum then $|\sum \hat{s}_i \tilde{c}_i - \sum \hat{s}_i c_i | < mq/m^{10} = q/m^9$ so now we want to show that the effect of taking modulo $\tilde{q}$ is not much different from taking modulo $q$.
 Indeed, note that this sum (before a modular reduction) is an integer between $0$ and $qm$. If $x$ is such an integer and we
 divide $x$ by $q$ to write $x = kq+ r$ for $r<q$, then since $x<qm$, $k<m$, and so we can write $x = k\tilde{q} + k(q-\tilde{q})+r$ so the difference between $k \mod q$ and $k \mod{\tilde{q}}$ will be (in our standard modular metric)  at most $mq/m^{10}=q/m^9$. Overall we get that if $\sum \hat{s}_i c_i \mod{q}$ is in the interval $[0.4q, 0.6q]$ then $\sum \hat{s}_i \tilde{c}_i ( \mod{\tilde{q}})$ will be in the interval $[0.4q-100q/m^9, 0.6q+100q/m^9]$ which is contained in $[0.3\tilde{q},0.7\tilde{q}]$.
 
@@ -396,22 +436,26 @@ This scheme offers an efficient homomorphic encryption setting for many practica
 
 When we define homomorphic encryption in [partialhomdef](){.ref}, we only consider a class of single-output functions $\mathcal{F}$. Now we want to extend the difinition to multiple-output function and consider how bandwidth-efficient the fully homomorphic encryption can be. More specifically, if we want to guarantee that the result of decryption is (or contains) $f(x_1,\ldots,x_\ell)$, what will be the minimal possible length of the ciphertext? Let us first define the compressible fully homomorphic encryption scheme.
 
-::: {.definition title="Compressible Fully Homomorphic Encryption" #compFHE}  A _compressible fully homomorphic public key encryption scheme_  is a CPA secure public key encryption scheme $(G,E,D)$ such that there exist polynomial-time algorithms $EVAL, COMP:{0,1}^* \rightarrow {0,1}^*$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$, $x_1,\ldots,x_\ell \in \{0,1\}$, and $f:\{0,1\}^\ell\rightarrow \{0,1\}^*$ which can be described by a circuit, it holds that:
+::: {.definition title="Compressible Fully Homomorphic Encryption" #compFHE}  
+A _compressible fully homomorphic public key encryption scheme_  is a CPA secure public key encryption scheme $(G,E,D)$ such that there exist polynomial-time algorithms $EVAL, COMP:{0,1}^* \rightarrow {0,1}^*$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$, $x_1,\ldots,x_\ell \in \{0,1\}$, and $f:\{0,1\}^\ell\rightarrow \{0,1\}^*$ which can be described by a circuit, it holds that:
 
 -   $c=EVAL_e(f,E_e(x_1),\ldots,E_e(x_\ell))$.
 
 -   $c^*=COMP(c)$.
     
--   $f(x_1,\ldots,x_\ell)$ is a prefix of $D_d(c^*) $. :::
+-   $f(x_1,\ldots,x_\ell)$ is a prefix of $D_d(c^*) $. 
+:::
 
 This definition is similar to the standard fully homomorphic encryption except an additional compression step. The bandwidth efficiency of a compressible fully homomorphic encryption is often described by the rate which is defined as follows:
     
- ::: {.definition title="Rate of Compressible Fully Homomorphic Encryption" #ratecompFHE}  A compressible fully homomorphic public key encryption scheme has _rate_ $\alpha=\alpha(n)$ if for every $(e,d)=G(1^n)$, $\ell=poly(n)$, $x_1,\ldots,x_\ell \in \{0,1\}$, and $f:\{0,1\}^\ell\rightarrow \{0,1\}^*$ with sufficiently long output, it holds that
-$$\alpha |c^*|\leq |f(x_1,\ldots,x_\ell)|.$$ :::
+::: {.definition title="Rate of Compressible Fully Homomorphic Encryption" #ratecompFHE}  
+A compressible fully homomorphic public key encryption scheme has _rate_ $\alpha=\alpha(n)$ if for every $(e,d)=G(1^n)$, $\ell=poly(n)$, $x_1,\ldots,x_\ell \in \{0,1\}$, and $f:\{0,1\}^\ell\rightarrow \{0,1\}^*$ with sufficiently long output, it holds that
+$$\alpha |c^*|\leq |f(x_1,\ldots,x_\ell)|.$$ 
+:::
 
-The following theorem answers the earlier question, which states that the nearly optimal rate, say a rate arbitrarily close to 1, can be achieved.
+The following theorem by [Gentry and Halevi 2019](https://eprint.iacr.org/2019/733.pdf) answers the earlier question, which states that the nearly optimal rate, say a rate arbitrarily close to 1, can be achieved.
 
-> # {.theorem title="Nearly Optimal Rate, [Gentry and Halevi 2019](https://eprint.iacr.org/2019/733.pdf)" #optrate}
+> # {.theorem title="Nearly Optimal Rate" #optrate}
 For any $\epsilon>0$, there exists a compressive fully homomorphic encryption scheme with rate being $1-\epsilon$ under the LWE assumption.
  
 ### Using fully homomorphic encryption to achieve private information retrieval.
