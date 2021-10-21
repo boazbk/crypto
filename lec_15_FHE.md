@@ -15,7 +15,7 @@ For example, suppose that _Alice_ has some data $x \in \{0,1\}^n$ (in modern app
 
 Encryption does not seem to immediately solve the problem.
 Alice could store at Bob an _encrypted_ version of the data and keep the secret key for herself.
-But then she would be at a loss if she wanted to do with the data anything more than retrieving particular blocks of it.
+But then she would be at a loss if she wanted to do anything more with the data other than retrieving particular blocks of it.
 If she wanted to outsource computation to Bob as well, and compute $f(x)$ for some function $f$, then she would need to share the secret key with Bob, thus defeating the purpose of encrypting the data in the first place.
 
 For example, after the computing systems of Office of Personell Management (OPM) were [discovered to be hacked](https://www.lawfareblog.com/why-opm-hack-far-worse-you-imagine) in June of 2015, revealing sensitive information, including fingerprints and all data gathered during security clearance checks of up to 18 million people, DHS assistant secretary for cybersecurity and communications Andy Ozment [said](http://www.federaltimes.com/story/government/omr/opm-cyber-report/2015/06/19/opm-breach-encryption/28985237/) that encryption wouldn't have helped preventing it since "if an adversary has the credentials of a user on the network, then they can access data even if it's encrypted, just as the users on the network have to access data".
@@ -95,7 +95,7 @@ By artificially increasing the randomness for the key generation algorithm, this
 You should also understand the distinction between ciphertexts that are the output of the encryption algorithm on the plaintext $b$, and ciphertexts that decrypt to $b$, see [evalciphertextfig](){.ref}.
 
 
-![In a valid encryption scheme $E$, the set of ciphertexts $c$ such that $D_d(c)=b$ is a superset of the set of ciphertexts $c$ such that $c=E_e(b;r)$ for some $r \in \{0,1\}^{t}$ where $t$ is the number of random bits used by the encryption algorithm. Our definition of partially homomorphic encryption scheme requires that for every $f:\{0,1\}^\ell \rightarrow \{0,1\}$ in our family and $x\in \{0,1\}^\ell$, if $c_i \in E_e(x_i;\{0,1\}^t)$ for $i=1..\ell$ then $EVAL(f,c_1,\ldots,c_\ell)$ is in the superset $\{ c \;|\; D_d(c)=f(x) \}$ of $E_e(f(x);\{0,1\}^t)$. For example if we apply $EVAL$ to the $OR$ function and ciphertexts $c,c'$ that were obtained as encryptions of $1$ and $0$ respectively, then the output is a ciphertext $c''$ that would be decrypted to $OR(1,0)=1$, even if $c''$ is not in the smaller set of possible outputs of the encryption algorithm on $1$. This distinction between the smaller and larger set is the reason why we cannot automatically apply the $EVAL$ function to ciphertexts that are obtained from the outputs of previous $EVAL$ operations.](../figure/evalciphertexts.png){#evalciphertextfig  }
+![In a valid encryption scheme $E$, the set of ciphertexts $c$ such that $D_d(c)=b$ is a superset of the set of ciphertexts $c$ such that $c=E_e(b;r)$ for some $r \in \{0,1\}^{t}$ where $t$ is the number of random bits used by the encryption algorithm. Our definition of partially homomorphic encryption scheme requires that for every $f:\{0,1\}^\ell \rightarrow \{0,1\}$ in our family and $x\in \{0,1\}^\ell$, if $c_i \in E_e(x_i;\{0,1\}^t)$ for $i=1...\ell$ then $EVAL(f,c_1,\ldots,c_\ell)$ is in the superset $\{ c \;|\; D_d(c)=f(x) \}$ of $E_e(f(x);\{0,1\}^t)$. For example if we apply $EVAL$ to the $OR$ function and ciphertexts $c,c'$ that were obtained as encryptions of $1$ and $0$ respectively, then the output is a ciphertext $c''$ that would be decrypted to $OR(1,0)=1$, even if $c''$ is not in the smaller set of possible outputs of the encryption algorithm on $1$. This distinction between the smaller and larger set is the reason why we cannot automatically apply the $EVAL$ function to ciphertexts that are obtained from the outputs of previous $EVAL$ operations.](../figure/evalciphertexts.png){#evalciphertextfig  }
 
 
 
@@ -164,7 +164,7 @@ __LWE-ENC' encryption:__
 
 * To _encrypt_ $b\in\{0,1\}$, choose $w\in\{0,1\}^m$ and output $w^\top A + (b,0,\ldots,0)$. 
 
-* To _decrypt_ $c\in\Z_q^n$, output $0$ iff $|\langle c,s \rangle| \leq q/10$, where for $x\in\Z_q$ we defined $|x| = \min \{ x , q-x \}$. (Recall that the first coordinate of $s$ is $\floor{q/2}$.
+* To _decrypt_ $c\in\Z_q^n$, output $0$ iff $|\langle c,s \rangle| \leq q/10$, where for $x\in\Z_q$ we defined $|x| = \min \{ x , q-x \}$. (Recall that the first coordinate of $s$ is $\floor{q/2}$.)
 :::
 
 
@@ -175,7 +175,7 @@ It turns out that this scheme is homomorphic with respect to the class of _linea
 
 
 > # {.lemma #parityhomlem}
-For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c_1,\ldots,c_\ell$, the encryption via LWEENC of bits $b_1,\ldots,b_\ell \in \{0,1\}$, outputs a ciphertext $c$ whose decryption is $b_1 \oplus \cdots \oplus b_\ell$.
+For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c_1,\ldots,c_\ell$ which are LWEENC-encryptions of the bits $b_1,\ldots,b_\ell \in \{0,1\}$, outputs a ciphertext $c$ whose decryption is $b_1 \oplus \cdots \oplus b_\ell$.
 
 > # { .pause }
 This claim is not hard to prove, but working it out for yourself can be a good way to get more familiarity with LWE-ENC' and the kind of manipulations we'll be making time and again in the constructions of many lattice based cryptographic primitives.
@@ -205,13 +205,13 @@ Several other encryption schemes are also homomorphic with respect to linear fun
 It is instructive to consider the following abstraction (which we'll use in the next lecture) of the above encryption scheme as a _trapdoor generator_ (see [TDPgenfig](){.ref}).
 On input $1^n$ the key generation algorithm outputs a vector $s\in\Z_q^m$ with $s_1 = \floor{\tfrac{q}{2}}$ and a probabilistic algorithm $G_s$ such that the following holds:
 
-* Any polynomial number of samples from the distribution $G_s(1^n)$ is computationally indistinguishable from independent samples from the uniform distribution over $\Z_q^n$
+* Any polynomial number of samples from the distribution $G_s(1^n)$ is computationally indistinguishable from independent samples from the uniform distribution over $\Z_q^n$.
 
 * If $c$ is output by $G_s(1^n)$ then $|\langle c,s \rangle| \leq n\sqrt{q}$.
 
-The generator $G_s$ picks $w \leftarrow_R \{0,1\}^m$ and outputs $w^\top A$. Its output will look pseudorandom but will satisfy the condition $|\langle G_s(1^n),s \rangle| \leq n\sqrt{q}$ with probability $1$ over the choice of $w$.
-Thus $s$ can be thought of a "trapdoor" for the generator that allows to distinguish between a random vector $c\in \Z_q^n$ (that with high probability would satisfy $|\langle c,s \rangle| \gg n\sqrt{q}$, assuming $q \gg n^2$)
-and an output of the generator.
+The generator $G_s$ picks $w \leftarrow_R \{0,1\}^m$ to $w^\top A$. Its output will look pseudorandom but will satisfy the condition $|\langle G_s(1^n),s \rangle| \leq n\sqrt{q}$ with probability $1$ over the choice of $w$.
+Thus $s$ can be thought of a "trapdoor" for the generator that allows us to distinguish between a random vector $c\in \Z_q^n$ (that with high probability would satisfy $|\langle c,s \rangle| \gg n\sqrt{q}$, assuming $q \gg n^2$) and an output of the generator.
+
 We use $G_s$ to encrypt a bit $b$ by letting $c \leftarrow_R G_s(1^n)$ and outputting $c + (b,0,\ldots,0)^\top$.
 While our particular implementation mapped $G_s(w)= w^\top A$, we can ignore these implementation details in the forgoing.
 
