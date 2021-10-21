@@ -20,22 +20,29 @@ Assuming the LWE conjecture, there exists a partially homomorphic public key enc
 That is, for every two ciphertexts $c$ and $c'$, the function $d \mapsto D_d(c)\; NAND\; D_d(c')$  can be homomorphically evaluated by $EVAL$.
 
 
-Before the detailed description and analysis, let us first outline our strategy. Something of essential importance is the following.
+Before the detailed description and analysis, let us first outline our strategy. The following notion of "noisy homomorphic encryption" will be of essential importance (see also [noisefhefig](){.ref}).
+
+
 
 :::  {.definition title="Noisy Homomorphic Encryption" #NoisyHEdef}
-Suppose that $(G,E,D)$ is a CPA secure public key scheme and that $\eta$ is a measure which maps any ciphertext $c$ to its "noise" $\eta(c)\in [0, \infty).$ Denote
-$$\mathcal{C}_b^\theta=\{c:D_b(c)=b,\eta(c)\leq\theta \}.$$ $(G,E,D,NAND)$ is called a _noisy homomorphic encryption scheme_ if the followings holds for some $q=q(n)$:
+Suppose that $(G,E,D)$ is a CPA secure public key scheme and that $\eta$ is a measure (depending on the key) which maps any ciphertext $c$ to a number $\eta(c)\in [0, \infty)$ which we call its "noise". 
+For some fixed keypair $(e,d)$ of the scheme, denote
+$$\mathcal{C}_b^\theta=\{c:D_d(c)=b,\eta(c)\leq\theta \}.$$ 
 
-* $E_e(b)\in \mathcal{C}_b^{\sqrt{q}}$ for any plaintext $b$.
+$(G,E,D,NAND)$ is called a _noisy homomorphic encryption scheme_ if the followings holds for some $q=q(n)$:
 
-* If $c\in\mathcal{C}_b^\eta$ with $\eta\leq q/4$, then $D_e(c)=b$.
+* $E_e(b)\in \mathcal{C}_b^{\sqrt{q}}$ for any plaintext $b$. That is, "fresh encryptions" have noise at most $\sqrt{q}$.
+
+* If $c\in\mathcal{C}_b^\eta$ with $\eta\leq q/4$, then $D_d(c)=b$. That is, as long as the noise is at most $q/4$ (which is $\gg \sqrt{q}$), decryption will still succeed.
 
 * For any $c\in\mathcal{C}_b^\eta$ and $c'\in\mathcal{C}_{b'}^{\eta'}$, it holds that
 $$ENAND(c,c')\in\mathcal{C}_{b\overline{\wedge}b'}^{n^3\cdot \max\{\eta,\eta'\}}$$
-as long as $n^3\cdot \max\{\eta,\eta'\}<q/4$.
+as long as $n^3\cdot \max\{\eta,\eta'\}<q/4$. That is, as long as noise is not too large, applying $ENAND$ to $c$ and $c'$ will yield an encryption of $NAND(D_d(c),D_d(c'))$ with noise level that is not "too much higher" than the maximum noise of $c$ and $c'$.
 ::: 
 
 The noisy homomorphic encryption actually states that if $C$ and $C'$ encrypt $b$ and $b'$ up to error $\eta$ and $\eta'$, respectively, then $ENAND(c,c')$ encrypts $NAND(b,b')$ up to some error which can be controlled by $\eta,\eta'$. The coefficient $n^3$ is not essential here; we just need the order $poly(n)$. This property allows us to perform the $ENAND$ operator repeatly as long as we can guarantee the accumulated error is smaller than $q/4$, which means that the decryption can be done correctly. The next theorem tells us with what depth, a circuit that can be computed homomorphically.
+
+![In a noisy homomorphic encryption, every ciphertext $c$ has a "noise" parameter $\eta(c)$ associated with it. When we encrypt $0$ or $1$, we get a ciphertext with noise at most $\sqrt{q}$, while we are guaranteed to successfully decrypt. Applying the $ENAND$ operation to two ciphertexts $c$ and $c'$ yields a ciphertext with noise level at most $n^3$ times the maximum noise of $c$ and $c'$. Hence we can compose $ENAND$ operations to apply any NAND circuit of depth at most $d$ to fresh encryptions, and succeed in obtaining a ciphertext decrypting to the circuit output as long as $n^{3d}\sqrt{q} \ll q/4$.](../figure/fhe-noisy.png){#noisefhefig}
 
 > # {.theorem #Depththm}
 If there exists a noisy homomorphic encryption scheme with $q=2^{\sqrt{n}}$, then the it can be extended to a homomorphic encryption scheme for any circuit with depth smaller than $polylog(n)$.
