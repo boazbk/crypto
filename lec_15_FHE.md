@@ -41,7 +41,7 @@ Although there is a number of implementations for (partially and) fully homomorp
 For a comparable level of security, the encryption and decryption operations of a fully homomorphic encryption scheme are several orders of magnitude slower than a conventional public key system, and (depending on its complexity) homomorphically evaluating a circuit can be significantly more taxing.
 However, this is a fast evolving field, and already since 2009 significant optimizations have been discovered that reduced the computational and storage overhead by many orders of magnitudes.
 As in public key encryption, one would imagine that for larger data one would use a "hybrid" approach of combining FHE with symmetric encryption, though one might need to come up with tailor-made symmetric encryption schemes that can be efficiently evaluated.^[In [2015](https://eprint.iacr.org/2012/099.pdf) the state of art on homomorphically evaluating AES was about 6 seconds of computation per block using about 4GB memory total for 180 blocks. See also [this paper](https://link.springer.com/article/10.1007/s10623-015-0095-1). In contrast, modern processors can evaluate [10s-100s millions](https://www.bearssl.org/speed.html) of AES blocks per second.]
-Homomorphically evaluations _approximate computation_, which can be useful for machine learning, can be [done more efficiently](https://eprint.iacr.org/2016/421).
+Homomorphically evaluations of _approximate computation_, which can be useful for machine learning, can be [done more efficiently](https://eprint.iacr.org/2016/421).
 
 
 In this lecture and the next one we will focus on the fully homomorphic encryption schemes that are _easiest to describe_, rather than the ones that are most _efficient_ (though the efficient schemes share many similarities with the ones we will talk about).
@@ -111,12 +111,12 @@ Curiously the protocol involves "doubly encrypting" the input, and homomorphical
 
 * __Assumptions:__ We assume that all functions $f$ that the client will be interested in can be described by a string of length $n$.
 
-* __Preprocessing:__ The client generates a pair of keys $(e,d)$. In the initial stage the client computes the encrypted database $\overline{c}=E_e(x)$ and sends $\overline{c},e,e'$ to the server. It also computes $c^* = E_e(f^*)$ for some function $f^*$ as well as $c^{**}=EVAL_{e}(eval,c^*\|\overline{c})$  for some function $f^*$ and keeps $c^*,c^{**}$ for herself, where $eval(f,x)=f(x)$ is the circuit evaluation function.
+* __Preprocessing:__ The client generates a pair of keys $(e,d)$. In the initial stage the client computes the encrypted database $\overline{c}=E_e(x)$ and sends $\overline{c},e$ to the server. It also computes $c^* = E_e(f^*)$ for some function $f^*$ as well as $c^{**}=EVAL_{e}(eval,c^*\|\overline{c})$  for that $f^*$ and keeps $c^*,c^{**}$ for herself, where $eval(f,x)=f(x)$ is the circuit evaluation function.
 
 
 * __Client query:__ To ask for an evaluation of $f$, the client generates a new random FHE keypair $(e',d')$, chooses $b \leftarrow_R \{0,1\}$ and lets $c_b = E_{e'}(E_e(f))$ and $c_{1-b}=E_{e'}(c^*)$. It sends the triple $e',c_0,c_1$ to the server.
 
-* __Server response:__ Given the queries $c_0,c_1$, the server defines the function $g:\{0,1\}^* \rightarrow \{0,1\}^*$ where $g(c)=EVAL_e(eval,c\|\overline{c})$ (for the fixed $\overline{c}$ received) and computes $c'_0,c'_1$ where $c'_b = EVAL_{e'}(g_b,c_b)$. (Please pause here and make sure you understand what this step is doing! Note that we use here crucially the fact that $EVAL$ itself is a polynomial time computation.)
+* __Server response:__ Given the queries $c_0,c_1$, the server defines the function $g:\{0,1\}^* \rightarrow \{0,1\}^*$ where $g(c)=EVAL_e(eval,c\|\overline{c})$ (for the fixed $\overline{c}$ received) and computes $c'_0,c'_1$ where $c'_b = EVAL_{e'}(g,c_b)$. (Please pause here and make sure you understand what this step is doing! Note that we use here crucially the fact that $EVAL$ itself is a polynomial time computation.)
 
 * __Client check:__ Client checks whether $D_{d'}(c'_{1-b})=c^{**}$ and if so accepts $D_d(D_{d'}(c'_b))$ as the answer.
 
@@ -134,7 +134,7 @@ Let us recall the LWE assumption and the encryption scheme based on it.
 Let $q=q(n)$ be some function mapping the natural numbers to primes. The _$q(n)$-decision learning with error ($q(n)$-dLWE) conjecture_ is the following:
 for every $m=poly(n)$ there is a distribution $LWE_q$ over pairs $(A,s)$ such that:
 
-* $A$ is an $m\times n$ matrix over $\Z_q$ and $s\in\Z_q^n$ satisfies $s_1=\floor{\tfrac{q}{2}}$ and $|As|_i \leq \sqrt{q}$ for every $i\in \{1,\ldots, m\}$.
+* $A$ is an $m\times n$ matrix over $\Z_q$ and $s\in\Z_q^n$ satisfies $s_1=\floor{\tfrac{q}{2}}$ and $|(As)_i| \leq \sqrt{q}$ for every $i\in \{1,\ldots, m\}$.
 
 * The distribution $A$ where $(A,s)$ is sampled from $LWE_q$ is computationally indistinguishable from the uniform distribution of $m\times n$ matrices over $\Z_q$.
 :::
@@ -151,7 +151,7 @@ __Equivalence between LWE and DLWE:__
 The reason the two conjectures are equivalent are the following.
 Before we phrased the conjecture as recovering $s$ from a pair $(A',y)$ where $y=A's'+e$ and $|e_i|\leq \delta q$ for every $i$.
 We then showed a _search to decision_ reduction ([LWEsearchtodecthm](){.ref}) demonstrating that this is equivalent to the task of distinguishing between this case and the case that $y$ is a random vector.
-If we now let $\alpha = \floor{\tfrac{q}{2}}$ and $\beta = \alpha^{-1} (\mod\;q)$, and consider the matrix $A=(-\beta y|A')$ and the column vector $s=\binom{\alpha}{s'}$  we see that $As = e$.
+If we now let $\alpha = \floor{\tfrac{q}{2}}$ and $\beta = \alpha^{-1} \pmod q$, and consider the matrix $A=(-\beta y|A')$ and the column vector $s=\binom{\alpha}{s'}$  we see that $As = e$.
 Note that if $y$ is a random vector in $\Z_q^m$ then so is $-\beta y$ and so the current form of the conjecture follows from the previous one.
 (To reduce the number of free parameters, we fixed $\delta$ to equal $1/\sqrt{q}$; in this form the conjecture becomes stronger as $q$ grows.)
 
@@ -175,7 +175,7 @@ It turns out that this scheme is homomorphic with respect to the class of _linea
 
 
 > # {.lemma #parityhomlem}
-For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c_1,\ldots,c_\ell$ encrypting via LWEENC bits $b_1,\ldots,b_\ell \in \{0,1\}$, outputs a ciphertext $c$ whose decryption is $b_1 \oplus \cdots \oplus b_\ell$.
+For every $\ell \ll q^{1/4}$, there is an algorithm $EVAL_\ell$ that on input $c_1,\ldots,c_\ell$ which are LWEENC-encryptions of the bits $b_1,\ldots,b_\ell \in \{0,1\}$, outputs a ciphertext $c$ whose decryption is $b_1 \oplus \cdots \oplus b_\ell$.
 
 > # { .pause }
 This claim is not hard to prove, but working it out for yourself can be a good way to get more familiarity with LWE-ENC' and the kind of manipulations we'll be making time and again in the constructions of many lattice based cryptographic primitives.
@@ -203,15 +203,15 @@ Several other encryption schemes are also homomorphic with respect to linear fun
 ### Abstraction: A trapdoor pseudorandom generator.
 
 It is instructive to consider the following abstraction (which we'll use in the next lecture) of the above encryption scheme as a _trapdoor generator_ (see [TDPgenfig](){.ref}).
-On input $1^n$ key generation algorithm outputs a vector $s\in\Z_q^m$ with $s_1 = \floor{\tfrac{q}{2}}$ and a probabilistic algorithm $G_s$ such that the following holds:
+On input $1^n$ the key generation algorithm outputs a vector $s\in\Z_q^m$ with $s_1 = \floor{\tfrac{q}{2}}$ and a probabilistic algorithm $G_s$ such that the following holds:
 
 * Any polynomial number of samples from the distribution $G_s(1^n)$ is computationally indistinguishable from independent samples from the uniform distribution over $\Z_q^n$.
 
 * If $c$ is output by $G_s(1^n)$ then $|\langle c,s \rangle| \leq n\sqrt{q}$.
 
 The generator $G_s$ picks $w \leftarrow_R \{0,1\}^m$ to $w^\top A$. Its output will look pseudorandom but will satisfy the condition $|\langle G_s(1^n),s \rangle| \leq n\sqrt{q}$ with probability $1$ over the choice of $w$.
-Thus $s$ can be thought of a "trapdoor" for the generator that allows us to distinguish between a random vector $c\in \Z_q^n$ (that with high probability would satisfy $|\langle c,s \rangle| \gg n\sqrt{q}$, assuming $q \gg n^2$)
-and an output of the generator.
+Thus $s$ can be thought of a "trapdoor" for the generator that allows us to distinguish between a random vector $c\in \Z_q^n$ (that with high probability would satisfy $|\langle c,s \rangle| \gg n\sqrt{q}$, assuming $q \gg n^2$) and an output of the generator.
+
 We use $G_s$ to encrypt a bit $b$ by letting $c \leftarrow_R G_s(1^n)$ and outputting $c + (b,0,\ldots,0)^\top$.
 While our particular implementation mapped $G_s(w)= w^\top A$, we can ignore these implementation details in the forgoing.
 
@@ -228,7 +228,7 @@ A _trapdoor generator_ is a pair of randomized algorithms $GEN,GEN'$ that satisf
 
 * On input $1^n$, $GEN'$ outputs $G'$ where $G'$ is a string describing a randomized circuit with the same inputs and outputs.
 
-* The distributions $GEN(1^n)_1$ (i.e., the first output of $GEN(1^n)$ and $GEN'(1^n)$) are computationally indistinguishable. (These are both distributions over _circuits_.)
+* The distributions $GEN(1^n)_1$ (i.e., the first output of $GEN(1^n)$) and $GEN'(1^n)_1$ are computationally indistinguishable. (These are both distributions over _circuits_.)
 
 * With probability $1-negl(n)$ over the choice of $G'$ output by $GEN'$, the distribution $G'(1^n)$ is _statistically indistinguishable_ (i.e., within $negl(n)$ total variation distance) from $U_t$ (i.e., the uniform distribution over $\{0,1\}^t$). 
 
@@ -250,7 +250,7 @@ In the above we use the notion of a "trapdoor" in the pseudorandom generator as 
 You'd think that this generator is long dead but it turns out to be the "gift that keeps on giving".
 In December of 2015, Juniper systems [announced](http://www.wired.com/2015/12/juniper-networks-hidden-backdoors-show-the-risk-of-government-backdoors/) that they have discovered a malicious code in their system, dating back to at least 2012 (possibly [2008](https://goo.gl/X6pAXV)), that would allow an attacker to surreptitiously decrypt all VPN traffic through their firewalls.
 The issue is that Juniper has been using the Dual EC DRBG and someone has managed to replace the constant they were using with another one, one that they presumably knew the trapdoor for (see [here](https://rpw.sh/blog/2015/12/21/the-backdoored-backdoor/)  and [here](http://blog.cryptographyengineering.com/2015/12/on-juniper-backdoor.html) for more; of course unless you know to check for this, it's very hard by looking at the code to see that one arbitrary looking constant has been replaced by another).
-Apparently, even though this is very surprising to many people in law enforcement and government, inserting back doors into cryptographic primitives might end up making them less secure. Some more details have emereged in this case in 2021, see [this story](https://finance.yahoo.com/news/juniper-breach-mystery-starts-clear-130016591.html) and  [this Tweet thread](https://twitter.com/matthew_d_green/status/1433451378391883782?s=20) 
+Apparently, even though this is very surprising to many people in law enforcement and government, inserting back doors into cryptographic primitives might end up making them less secure. Some more details have emereged in this case in 2021, see [this story](https://finance.yahoo.com/news/juniper-breach-mystery-starts-clear-130016591.html) and  [this Tweet thread](https://twitter.com/matthew_d_green/status/1433451378391883782?s=20).
 :::
 
 
@@ -355,7 +355,7 @@ This is all that we needed to prove.
 :::
 
 
-[^leveled]: Without this assumption we can still obtained a form of FHE known as a _leveled_ FHE where the size of the public key grows with the [depth](https://en.wikipedia.org/wiki/Circuit_complexity) of the circuit to be evaluated. We can do this by having $\ell$ public keys where $\ell$ is the depth we want to evaluate, and encrypt the private key of the $i^{th}$ key with the $i+1^{st}$ public key.  However, since circular security seems quite likely to hold, we ignore this extra complication in the rest of the discussion.
+[^leveled]: Without this assumption we can still obtain a form of FHE known as a _leveled_ FHE where the size of the public key grows with the [depth](https://en.wikipedia.org/wiki/Circuit_complexity) of the circuit to be evaluated. We can do this by having $\ell$ public keys where $\ell$ is the depth we want to evaluate, and encrypt the private key of the $i^{th}$ key with the $i+1^{st}$ public key.  However, since circular security seems quite likely to hold, we ignore this extra complication in the rest of the discussion.
 
 
 > # { .pause }
