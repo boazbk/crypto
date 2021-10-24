@@ -29,7 +29,7 @@ Suppose that $(G,E,D)$ is a CPA secure public key scheme and that $\eta$ is a me
 For some fixed keypair $(e,d)$ of the scheme, denote
 $$\mathcal{C}_b^\theta=\{c:D_d(c)=b,\eta(c)\leq\theta \}.$$ 
 
-$(G,E,D,NAND)$ is called a _noisy homomorphic encryption scheme_ if the followings holds for some $q=q(n)$:
+$(G,E,D,NAND)$ is called a _noisy homomorphic encryption scheme_ if the following holds for some $q=q(n)$:
 
 * $E_e(b)\in \mathcal{C}_b^{\sqrt{q}}$ for any plaintext $b$. That is, "fresh encryptions" have noise at most $\sqrt{q}$.
 
@@ -45,10 +45,10 @@ The noisy homomorphic encryption actually states that if $C$ and $C'$ encrypt $b
 ![In a noisy homomorphic encryption, every ciphertext $c$ has a "noise" parameter $\eta(c)$ associated with it. When we encrypt $0$ or $1$, we get a ciphertext with noise at most $\sqrt{q}$, while we are guaranteed to successfully decrypt. Applying the $ENAND$ operation to two ciphertexts $c$ and $c'$ yields a ciphertext with noise level at most $n^3$ times the maximum noise of $c$ and $c'$. Hence we can compose $ENAND$ operations to apply any NAND circuit of depth at most $\ell$ to fresh encryptions, and succeed in obtaining a ciphertext decrypting to the circuit output as long as $n^{3\ell}\sqrt{q} \ll q/4$.](../figure/fhe-noisy.png){#noisefhefig}
 
 > # {.theorem #Depththm}
-If there exists a noisy homomorphic encryption scheme with $q=2^{\sqrt{n}}$, then the it can be extended to a homomorphic encryption scheme for any circuit with depth smaller than $polylog(n)$.
+If there exists a noisy homomorphic encryption scheme with $q=2^{\sqrt{n}}$, then it can be extended to a homomorphic encryption scheme for any circuit with depth smaller than $polylog(n)$.
 
 > # {.proof data-ref="Depththm"}
-For any function $f:\{0,1\}^m\rightarrow \{0,1\}$ which can be described by a circuit with depth $\ell$, we can compute $EVAL(f,E_e(x_1),\cdots,E_e(x_m))$ with error up to $\sqrt(q)(n^3)^\ell$. (The initial error for $E_e(x_i)$ is smaller than $\sqrt{n}$ and the error will be accumulated with rate up to $n^3$.) Thus, to guarantee that $EVAL(f,E_e(x_1),\cdots,E_e(x_m))$ can be decrypted to $f(x_1,\cdots,x_m)$ correctly, we only need $\sqrt(q)(n^3)^\ell\ll q$, i.e., $n^{3\ell}\ll \sqrt{q}=2^{\sqrt{n}/2}$. This is equalvent to $3\ell\log(n)\ell \sqrt{n}/2$, which can be guaranteed when $\ell =n^{o(1)}$ or $\ell=polylog(n)$.
+For any function $f:\{0,1\}^m\rightarrow \{0,1\}$ which can be described by a circuit with depth $\ell$, we can compute $EVAL(f,E_e(x_1),\cdots,E_e(x_m))$ with error up to $\sqrt(q)(n^3)^\ell$. (The initial error for $E_e(x_i)$ is smaller than $\sqrt{n}$ and the error will be accumulated with rate up to $n^3$.) Thus, to guarantee that $EVAL(f,E_e(x_1),\cdots,E_e(x_m))$ can be decrypted to $f(x_1,\cdots,x_m)$ correctly, we only need $\sqrt(q)(n^3)^\ell\ll q$, i.e., $n^{3\ell}\ll \sqrt{q}=2^{\sqrt{n}/2}$. This is equivalent to $3\ell\log(n)\ell \sqrt{n}/2$, which can be guaranteed when $\ell =n^{o(1)}$ or $\ell=polylog(n)$.
 
 We will assume the LWE conjecture with $q(n) \approx 2^{\sqrt{n}}$ in the remainder of this chapter. 
 With [Depththm](){.ref} in hand, our goal is to construct a noisy FHE such that the decryption map (specifically the map $d \mapsto D_d(c)$ for any fixed ciphertext $c$) can be computed by a circuit with depth at most $polylog(n)$. ([bootstrapthm](){.ref} refers to the map  $d \mapsto \wedge{D_d(c) \wedge D_d(c')}$, but this latter map is obtained by applying one more NAND gate to two parallel executions of $d \mapsto D_d(c)$, and hence if the map $d \mapsto D_d(c)$ has depth at most $polylog(n)$ then so does the map $d \mapsto \wedge{D_d(c) \wedge D_d(c')}$.)    Once we do this then we can obtain a fully homomorphic encryption scheme. We will head into some details show how to construct things we want in the rest of this chapter. The most technical and interesting part would be how to upper bound the noise/error.
@@ -180,7 +180,7 @@ It will satisfy the following properties:
 
 1. Ciphertexts are $(n \log q)\times (n\log q)$ matrices $C$ with all coefficients in $\{0,1\}$.
 
-2. The secret key is a vector $s \in \Z_q^n$. We let $v \in Z_q^{n \log q}$ be the vector $V = Q^\top s$. 
+2. The secret key is a vector $s \in \Z_q^n$. We let $v \in \Z_q^{n \log q}$ be the vector $V = Q^\top s$. 
 
 3. An encryption of $b\in \{0,1\}$ is a matrix $C$ satisfying the following "ciphertext equation" 
 $$Cv =bv + e \label{eqciphertexteqfhe}$$ 
@@ -222,7 +222,7 @@ $$
 
 __Keeping track of parameters.__ For $C$ that encrypts a plaintext $b$, let $\eta(C) = \max_{i\in [n]} |Cv -bv|$.
 Now if we can see that if $C$ encrypts $b$ with noise $\eta(C)$ and $C'$ encrypts $b'$ with noise $\eta(C')$, then $ENAND(C,C')$ will encrypt
-$1-bb' = NAND(b,b')$ with noise of magnitude at most $O(\mu + n\log q \mu')$, which is  smaller than $n^3\cdot \max\{\eta(C),\eta(C'),\}$ for $q\approx 2^{\sqrt{n}}$.
+$1-bb' = NAND(b,b')$ with noise of magnitude at most $O(\mu + n\log q \mu')$, which is smaller than $n^3\cdot \max\{\eta(C),\eta(C')\}$ for $q\approx 2^{\sqrt{n}}$.
 
 
 ## Putting it all together
