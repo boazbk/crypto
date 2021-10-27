@@ -28,6 +28,13 @@ Zero knowledge proofs were invented by Goldwasser, Micali and Rackoff in 1982 an
 How would you achieve such a thing, or even define it? And why on earth would it be useful?
 This is the topic of this lecture.
 
+
+::: { .pause }
+This chapter will rely on the notion of __NP completeness__, as well as the view of NP as proof systems. For a review of this notion, please see [this chapter of my introduction to TCS text](https://introtcs.org/public/lec_13_Cook_Levin.html). 
+:::
+
+
+
 ## Applications for zero knowledge proofs.
 
 Before we talk about how to achieve zero knowledge, let us discuss some of its potential applications:
@@ -122,6 +129,11 @@ Alice and Bob will repeat the following experiment $n$ times: Alice turns her ba
 >
 If Alice is successful in all of the $n$ repetitions then Bob will have $1-2^{-n}$ confidence that the pieces are truly different.
 
+A similar "proof" inspired the influential notion of _hypothesis testing_ in statistics. Dr. [Muriel Bristol](https://www.sciencehistory.org/distillations/ronald-fisher-a-bad-cup-of-tea-and-the-birth-of-modern-statistics) said that she prefers the taste of tea when the milk is put first into the cup and tea later, rather than vice versa.
+The statistician Ronald Fisher did not believe her. William Roach (like Bristol, a chemist, and her future husband)  proposed a probabilistic test, whereby eight cups would be poured for Bristol, each randomly chosen to either be "milk first" or "tea first". Bristol correctly identified all 8 cups.
+Pondering about this experiment, and the level of confidence that it enabled to reject the "null hypothesis" that Bristol simply guessed randomly led to Fisher's development of hypothesis testing and the now ubiquitous "$p$ values".
+
+
 
 
 We now consider a more "mathematical" example along similar lines.
@@ -153,30 +165,22 @@ Hence if Alice is always successful than after $n$ repetitions Bob would have $1
 Please stop and make sure you see the similarities between this protocol and the one for demonstrating that the two pieces of plastic do not have identical colors.
 
 
-<!-- Recall that two graphs $G_0$ and $G_1$ are isomorphic if one can permute the vertices of $G_0$ to make it into $G_1$.
-There have been some recent great advances by Babai for this problem, but there is still not a truly efficient algorithm to test whether a pair of graphs has this property.
-Suppose though Alice is an "isomorphomat" - she does have the computational ability to find such isomorphisms, if they exist, and wants to convince Bob that a pair of $n$-vertex graphs $G_0$ and $G_1$ are not _isomorphic_.
-She can tell him "trust me, I know how to find isomorphisms and couldn't find one for this pair", but he may view this as less than fully convincing.
-However, he could be convinced by the following protocol: he will repeat the following experiements: pick $b$ at random in $\{0,1\}$  and pick $\sigma$ to be a random permutation of $\{1,\ldots,n \}$. He then lets $H$ be the graph obtained by permuting the vertices of $G_b$ according to $\sigma$ and sends $H$ to Alice.
-Now Alice using her isomorphism powers finds out whether $H$ is isomorphic to $G_0$ or $G_1$ and sends the index $b'\in\{0,1\}$ of the isomorphic graph to Bob.
-If the graphs were _not_  isomorphic, then $b'$ would equal $b$ with probability $1$, since $H$ can only be isomorphic to one of the graphs.
-On ther other hand, if the graphs were isomorphic then $H$ is distributed identically no matter what $b$ was, and so no matter what she does Alice has probability at most $1/2$ of finding $b'$ that equals $b$.
-Thus if Alice always succeeds then after $n$ repetitions Bob can have $1-2^{-n}$ confidence that the graphs are _not_ isomorphic.
--->
 
 Let us now make the formal definition:
 
 
-> # {.definition title="Proof systems" #proofsystemdef}
+::: {.definition title="Proof systems" #proofsystemdef}
 Let $f:\{0,1\}^* \rightarrow \{0,1\}$ be some function.
 A _probabilistic proof for $f$_ (i.e., a proof for statements of the form "$f(x)=1$") is a pair of interactive algorithms $(P,V)$ such that $V$ runs in polynomial time and they satisfy:
->
+
 * __Completeness:__ If $f(x)=1$ then on input $x$, if $P$ and $V$ are given input $x$ and interact, then at the end of the interaction $V$ will output ```Accept``` with probability at least $0.9$.
->
+
 * __Soundness:__ If If $f(x)=0$ then for any arbitrary (efficient or non efficient) algorithm $P^*$, if $P^*$ and $V$ are given input $x$  and interact then at the end $V$ will output ```Accept``` with probability at most $0.1$
+:::
+
 
 > # {.remark title="Functions vs languages" #funclangrem}
-In many texts proof systems are defined with respect to _languages_ as opposed to _functions_. That is, instead of talking about a function $f:\{0,1\}^* \rightarrow \{0,1\}$ we talk about a _lanugage_ $L \subseteq \{0,1\}^*$.
+In many texts proof systems are defined with respect to _languages_ as opposed to _functions_. That is, instead of talking about a function $f:\{0,1\}^* \rightarrow \{0,1\}$ we talk about a _language_ $L \subseteq \{0,1\}^*$.
 These two viewpoints are completely equivalent via the mapping $f \longleftrightarrow L$ where $L = \{ x \;| f(x) = 1 \}$.
 
 
@@ -226,79 +230,85 @@ To define zero knowledge mathematically we follow the following intuition:
 
 >_A proof system is zero knowledge if the verifier did not learn anything after the interaction that he could not have learned on his own._
 
-Here is how we formally define this:
+Despite the name "zero knowledge", we do not claim that the verifier does not know anything about the private input $x$. For example, $m=p\cdot q$ for two primes $p,q$, then each $s \in \Z^*_m$ has at most four square roots, and if the verifier could compute square roots then they can narrow $x$ down to these four possibilities. However, the point is that this is knowledge that the verifier already even before the interaction with the prover, and so participating in the proof resulted in _zero additional knowledge_. 
+
+Here is how we formally define zero knowledge:
 
 
-> # {.definition title="Zero knowledge proofs" #zkpdef}
+::: {.definition title="Zero knowledge proofs" #zkpdef}
 A proof system $(P,V)$ for $f$ is _zero knowledge_ if for every efficient verifier strategy $V^*$
 there exists an efficient probabilistic algorithm $S^*$ (known as the _simulator_) such that for every $x$ s.t. $f(x)=1$,
 the following random variables are computationally indistinguishable:
->
+
 * The output of $V^*$ after interacting with $P$ on input $x$.
->
+
 * The output of $S^*$ on input $x$.
+:::
 
 That is, we can show the verifier does not gain anything from the interaction, because no matter what algorithm $V^*$ he uses, whatever he learned as a result of interacting with the prover, he could have just as equally learned by simply running the standalone algorithm $S^*$ on the same input.
 
 
-> # {.remark title="The simulation paradigm" #simulationrem}
+::: {.remark title="The simulation paradigm" #simulationrem}
 The natural way to define security is to say that a system is secure if some "laundry list" of bad outcomes X,Y,Z can't happen.
 The definition of zero knowledge is different. Rather than giving a list of the events that are _not allowed_ to occur, it gives a maximalist _simulation_ condition.
->
+
 At its heart the definition of zero knowledge says the following: clearly, we cannot prevent the verifier from running an efficient algorithm $S^*$ on the public input, but we want to ensure that this is the most he can learn from the interaction.
+
 This _simulation paradigm_ has become the standard way to define security of a great many cryptographic applications.
 That is, we bound what an adversary Eve can learn by postulating some hypothetical adversary Lilith that is under much harsher conditions (e.g., does not get to interact with the prover) and ensuring that Eve cannot learn anything that Lilith couldn't have learned either.
 This has an advantage of being the most conservative definition possible, and also phrasing security in _positive_ terms- there exists a simulation - as opposed to the typical _negative_ terms - events X,Y,Z can't happen. Since it's often easier for us to think of positive terms, paradoxically sometimes this stronger security condition is easier to prove. Zero knowledge is in some sense the simplest setting of the simulation paradigm and we'll see it time and again in dealing with more advanced notions.
+:::
 
 
-The definition of zero knowledge is confusing since intuitively one thing that if the verifier gained confidence that the statement is true than surely he must have learned _something_.
+The definition of zero knowledge is confusing since intuitively if the verifier gained confidence that the statement is true than surely he must have learned _something_.
 This is another one of those cases where cryptography is counterintuitive.
-To understand it better, it is worthwhile to see the formal proof that the protocol above for quadratic residousity is zero knowledge:
+To understand it better, it is worthwhile to see the formal proof that the protocol above for quadratic residuosity is zero knowledge:
 
 
 > # {.theorem title="Zero knowledge for quadratic residuosity" #zkqrthm}
 Protocol ZK-QR above is a zero knowledge protocol.
 
-> # {.proof data-ref="zkqrthm"}
+::: {.proof data-ref="zkqrthm"}
 Let $V^*$ be an arbitrary efficient strategy for Bob.
 Since Bob only sends a single bit, we can think of this strategy as composed of two functions:
->
+
 * $V_1(x,m,x')$ outputs the bit $b$ that Bob chooses on input $x,m$ and after Alice's first message is $x'$.
->
+
 * $V_2(x,m,x',s'')$ is whatever Bob outputs after seeing Alice's response $s''$ to the bit $b$.
->
+
 Both $V_1$ and $V_2$ are efficiently computable. We now need to come up with an efficient simulator $S^*$ that is a standalone algorithm that on input $x,m$ will output a distribution indistinguishable from the output $V^*$.
+
 The simulator $S^*$ will work as follows:
->
+
 1. Pick $b'\leftarrow_R\{0,1\}$.
->
+
 2. Pick $s''$ at random in $\Z^*_m$. If $b=0$ then let $x'={s''}^2 \pmod{m}$. Otherwise output $x'=x{s''}^2 \pmod{m}$.
->
+
 3. Let $b=V_1(x,m,x')$. If $b \neq b'$ then go back to step 1.
->
+
 4. Output $V_2(x,m,x',s'')$.
->
+
 The correctness of the simulator follows from the following claims (all of which assume that $x$ is actually a quadratic residue, since otherwise
 we don't need to make any guarantees and in any case Alice's behaviour is not well defined):
->
+
 __Claim 1:__ The distribution of $x'$ computed by $S^*$ is identical to the distribution of $x'$ chosen by Alice.
->
+
 __Claim 2:__ With probability at least $1/2$, $b'=b$.
->
+
 __Claim 3:__ Conditioned on $b=b'$ and the value $x'$ computed in step 2, the value $s''$ computed by $S^*$ is identical to the value that Alice sends when her first message is $X'$ and Bob's response is $b$.
->
+
 Together these three claims imply that in expectation $S^*$ only invokes $V_1$ and $V_2$ a constant number of times (since every time it goes back to step 1 with probability at most $1/2$).
 They also imply that the output of $S^*$ is in fact identical to the output of $V^*$ in a true interaction with Alice.
 Thus, we only need to prove the claims, which is actually quite easy:
->
-__Proof of Claim 1:__ In both cases, $x'$ is a random quadratic residue. QED
->
-__Proof of Claim 2:__ This is a corollary of Claim 1; since the distribution of $x'$ is identical to the distribution chosen by Alice, in particular $x'$ gives out no information about the choice of $b'$. QED
->
-__Proof of Claim 3:__ This follows from a direct calculation. The value $s''$ sent by Alice is a square root of $x'$ if $b=0$ and of $x'x^{-1}$ if $x=1$. But this is identical to what happens for $S^*$ if $b=b'$. QED
->
-Together these complete the proof of the theorem.
 
+__Proof of Claim 1:__ In both cases, $x'$ is a random quadratic residue. __QED (Claim 1)__
+
+__Proof of Claim 2:__ This is a corollary of Claim 1; since the distribution of $x'$ is identical to the distribution chosen by Alice, in particular $x'$ gives out no information about the choice of $b'$. __QED (Claim 2)__
+
+__Proof of Claim 3:__ This follows from a direct calculation. The value $s''$ sent by Alice is a square root of $x'$ if $b=0$ and of $x'x^{-1}$ if $x=1$. But this is identical to what happens for $S^*$ if $b=b'$. __QED (Claim 3)__
+
+Together these complete the proof of the theorem.
+:::
 
 [zkqrthm](){.ref} is interesting but not yet good enough to guarantee security in practice.
 After all, the protocol that we really need to show is zero knowledge is the one where we repeat this procedure $n$ times.
@@ -313,88 +323,120 @@ There are known ways to achieve zero knowledge with negligible soundness error a
 
 We now show a proof for another language.
 Suppose that Alice and Bob know an $n$-vertex graph $G$ and Alice knows a _Hamiltonian cycle_ $C$ in this graph (i.e.. a length $n$ simple cycle- one that traverses all vertices exactly once).
-Here is how Alice can prove that such a cycle exists without revealing any information about it:
+Here is how Alice can prove that such a cycle exists without revealing any information about it.
+
 
 __Protocol ZK-Ham:__
 
-0. **Common input:** graph $H$ (in the form of an $n\times n$ adjacency matrix); **Alice's private input:** a Hamiltonian cycle $C=(C_1,\ldots,C_n)$ which are distinct vertices such that $(C_\ell,C_{\ell+1})$ is an edge in $H$ for all $\ell\in\{1,\ldots,n-1\}$ and $(C_n,C_1)$ is an edge as well.
+0. **Common input:** graph $H$ (in the form of an $n\times n$ adjacency matrix). **Alice's private input:** a Hamiltonian cycle $C=(C_1,\ldots,C_n)$ which are distinct vertices such that $(C_\ell,C_{\ell+1})$ is an edge in $H$ for all $\ell\in\{1,\ldots,n-1\}$ and $(C_n,C_1)$ is an edge as well. Below we assume that $G:\{0,1\}^n \rightarrow\{0,1\}^{3n}$ is a pseudorandom generator.
 
 1. Bob chooses a random string $z\in \{0,1\}^{3n}$
 
-2. Alice chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). For every $i,j$, Alice chooses a random string $x_{i,j} \in \{0,1\}^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}z$, where $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$ is a pseudorandom generator. She sends $\{ y_{i,j} \}_{i,j \in [n]}$ to Bob.
+2. Alice chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). For every $i,j$, Alice chooses a random string $x_{i,j} \in \{0,1\}^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}$. She sends $\{ y_{i,j} \}_{i,j \in [n]}$ to Bob.
 
 3. Bob chooses a bit $b\in\{0,1\}$.
 
 4. If $b=0$ then Alice sends out $\pi$ and the strings $\{ x_{i,j} \}$ for all $i,j$; If $b=1$ then Alice sends out the $n$ strings $x_{\pi(C_1),\pi(C_2)}$,$\ldots$,$x_{\pi(C_n),\pi(C_1)}$ together with their indices.
 
-5. If $b=0$ then Bob computes $M$ to be the $\pi$-permuted adjacency matrix of $H$ and verifies that all the $y_{i,j}$'s were computed from the $x_{i,j}$'s appropriately. If $b=1$ then verify that the indices of the strings $\{ x_{i,j } \}$ sent by Alice form a cycle and that indeed $y_{i,j}=G(x_{i,j})\oplus z$ for every string $x_{i,j}$ that was sent by Alice.
+5. If $b=0$ then Bob computes $M$ to be the $\pi$-permuted adjacency matrix of $H$ and verifies that all the $y_{i,j}$'s were computed from the $x_{i,j}$'s appropriately. If so then Bob accepts the proof, and otherwise it rejects it. If $b=1$ then Bob verifies that the indices of the strings $\{ x_{i,j } \}$ sent by Alice form a cycle and that indeed $y_{i,j}=G(x_{i,j})\oplus z$ for every string $x_{i,j}$ that was sent by Alice. If so then Bob accepts the proof and otherwise he rejects it.
 
 > # {.theorem title="Zero Knowledge proof for Hamiltonian Cycle" #zkhamthm}
 Protocol ZK-Ham is a zero knowledge proof system for the language of Hamiltonian graphs.[^zkcredit]
 
-> # {.proof data-ref="zkhamthm"}
+::: {.proof data-ref="zkhamthm"}
 We need to prove **completeness**, **soundness**, and **zero knowledge**.
->
+
 **Completeness** can be easily verified, and so we leave this to the reader.
->
+
 For **soundness**, we recall that (as we've seen before) with extremely high probability the sets $S_0=\{ G(x) : x\in\{0,1\}^n \}$ and $S_1 = \{ G(x)\oplus z : x\in\{0,1\}^n \}$ will be disjoint (this probability is over the choice of $z$ that is done by the verifier).
 Now, assuming this is the case, given the messages $\{ y_{i,j} \}$ sent by the prover in the first step, define an $n\times n$ matrix $M'$ with entries in $\{0,1,?\}$ as follows: $M'_{i,j}=0$ if $y_{i,j}\in S_0$ , $M'_{i,j}=1$ if $y_{i,j}\in S_1$ and $M'_{i,j}=?$ otherwise.
->
+
 We split into two cases.
 The first case is that there exists some permutation $\pi$ such that **(i)** $M'$ is a $\pi$-permuted version of the input graph $G$ and **(ii)** $M'$ contains a Hamiltonian cycle. Clearly in this case $G$ contains a Hamiltonian cycle as well, and hence we don't need to consider it when analyzing soundness. In the other case we claim that with probability at least $1/2$ the verifier will reject the proof.
 Indeed, if **(i)** is violated then the proof will be rejected if Bob chooses $b=0$ and if **(ii)** is violated then the proof will be rejected if Bob chooses $b=1$.
->
+
 We now turn to showing **zero knowledge**. For this we need to build a _simulator_ $S^*$ for an arbitrary efficient strategy $V^*$ of Bob.
 Recall that $S^*$ gets as input the graph $H$ (but not the _Hamiltonian_ cycle $C$) and needs to produce an output that is indistinguishable from the output of $V^*$.
 It will do so as follows:
->
+
 0. Pick $b'\in\{0,1\}$.
->
+
 1. Let $z\in \{0,1\}^{3n}$ be the first message computed by $V^*$ on input $H$.
->
+
 2. If $b'=0$ then $S^*$ computes the second message as Alice does: chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). In contrast, if $b'=1$ then $S^*$ lets $M$ be the all $1'$ matrix. For every $i,j$, $S^*$ chooses a random string $x_{i,j} \in \{0,1\}^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}z$, where $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$ is a pseudorandom generator.
->
+
 3. Let $b$ be the output of $V^*$ when given the input $H$ and the first message $\{ y_{i,j} \}$ computed as above. If $b\neq b'$ then go back to step 0.
->
+
 4. We compute the fourth message of the protocol similarly to how Alice does it: if $b=0$ then it consists of $\pi$ and the strings $\{ x_{i,j} \}$ for all $i,j$; If $b=1$ then we pick a random length-$n$ cycle $C'$  and the message consists of the $n$ strings $x_{C'_1,C'_2}$,$\ldots$,$x_{C'_n,C'_1}$ together with their indices.
->
+
 5. Output whatever $V^*$ outputs when given the prior message.
->
+
 We prove the output of the simulator is indistinguishable from the output of $V^*$ in an actual interaction by the following claims:
->
+
 **Claim 1:** The message $\{ y_{i,j} \}$ computed by $S^*$ is computationally indistinguishable from the first message computed by Alice.
->
+
 **Claim 2:** The probability that $b=b'$ is at least $1/3$.
->
+
 **Claim 3:** The fourth message computed by $S^*$ is computationally indistinguishable from the fourth message computed by Alice.
->
-We will simply sketch here the proofs (again see Goldreich's book for full proofs):
->
+
+We will simply sketch here the proofs (see Goldreich's book for example for full proofs):
+
 For Claim 1, note that if $b'=0$ then the message is _identical_ to the way Alice computes it.
 If $b'=1$ then the difference is that $S^*$ computes some strings $y_{i,j}$ of the form $G(x_{i,j})+z$ where Alice would compute the corresponding strings as $G(x_{i,j})$ this is indistinguishable because $G$ is a pseudorandom generator (and the distribution $U_{3n}\oplus z$ is the same as $U_{3n}$).
->
-Claim 2 is a corollary of Claim 1. If $V^*$ managed to pick a message $b$ such that $\Pr[ b=b' ] < 1/2 - negl(n)$ then in particular it could distinguish between the first message of Alice (that is computed independently of $b'$ and hence contains no information about it) from the first message of $V^*$.
->
-For Claim 3, note that again if $b=0$ then the message is computed in a way identical to what Alice does. If $b=1$ then this message is also computed in a way identical to Alice, since it does not matter if instead of picking $C'$ at random, we picked a random permutation $\pi$ and let $C'$ be the image of the Hamiltonian cycle under this permutation.
->
-This completes the proof of the theorem.
 
+Claim 2 is a corollary of Claim 1. If $V^*$ managed to pick a message $b$ such that $\Pr[ b=b' ] < 1/2 - negl(n)$ then in particular it could distinguish between the first message of Alice (that is computed independently of $b'$ and hence contains no information about it) from the first message of $V^*$.
+
+For Claim 3, note that again if $b=0$ then the message is computed in a way identical to what Alice does. If $b=1$ then this message is also computed in a way identical to Alice, since it does not matter if instead of picking $C'$ at random, we picked a random permutation $\pi$ and let $C'$ be the image of the Hamiltonian cycle under this permutation.
+
+This completes the proof of the theorem.
+:::
 
 
 [^zkcredit]: Goldreich, Micali and Wigderson were the first to come up with a zero knowledge proof for an NP complete problem, though the Hamiltoncity protocol here is from a later work by Blum. We use Naor's commitment scheme.
 
 ### Why is this interesting?
 
-The reason that a protocol for Hamiltonicity is more interesting than a protocol for quadratic residuosity is that Hamiltonicity is an NP-complete question.
+The reason that a protocol for Hamiltonicity is more interesting than a protocol for quadratic residuosity is that Hamiltonicity is an _NP-complete_ problem.
+Specifically recall the following:
+
+* A function $F:\{0,1\}^* \rightarrow \{0,1\}$ is in NP if there exists a polynomial-time algorithm $V_F$ and some integer $c$ such that for every $x\in \{0,1\}^*$, $F(x)=1$ iff there exists $y \in \{0,1\}^{|x|^c}$ such that $V_F(x,y)=1$. Many functions of interest in all areas of math, science, engineering, and more  are in the class NP. 
+
+* Let $HAM:\{0,1\}^* \rightarrow \{0,1\}$ be the function that maps a graph $G$ to $1$ if and only if $G$ contains a Hamiltonian cycle. Then $HAM \in NP$. Indeed, this is demonstrated by the function $V_{HAM}$ such that $V_{HAM}(G,C)=1$ iff $C$ is a Hamiltonian cycle in the graph $G$.
+
+* The function $HAM$ is NP-complete. Specifically for every $F,V_F$ as above, there is are efficiently computable functions $r, r_{Encode}, r_{Decode}$ that satisfy the following:
+  a. (Completeness of reduction.) For every $x,y$ such that $V_F(x,y)=1$, $V_{HAM}( r(x), r_{Encode}(x,y))=1$.  In particular this means that for every $x$ such that $F(x)=1$, $HAM(r(x))=1$. (Can you see why?)
+  b. (Soundness of reduction.) For every $x \in \{0,1\}^*$, if there exists $C$ such that $V_{HAM}(r(x),C)=1$ then $V_F(x,r_{Decode}(x,C))=1$. In particular this means that for every $x$ such that $HAM(r(x))=1$, $F(x)=1$. (Can you see why?)
+
+
+Using the reduction above, we can transform the zero-knowledge proof for Hamiltonicity into a zero knowledge proof for every $F\in NP$. 
+Specifically, to prove that $F(x)=1$, the verifier and prover will use the following system (see also [zkhamnpcfig](){.ref}).
+
+1. __Public input:__ $x$. __Prover's private input:__ $y$ such that $V_F(x,y)=1$.
+
+2. Verifier and prover will compute $G=r(x)$. Prover will compute $C=r_{Encode}(x,y)$.
+
+3. Verifier and prove run the Hamiltonicity zero knowledge protocol, with public input $G$ and prover's private input $C$. The verifier's output is the output in this protocol.
+
+
+
+![Using a zero knowledge protocol for Hamiltonicity we can obtain a zero knowledge protocol for any language $L$ in NP. For example, if the public input is a SAT formula $\varphi$ and the Prover's secret input is a satisfying assignment $x$ for $\varphi$ then the verifier can run the reduction on $\varphi$ to obtain a graph $H$ and the prover can run the same reduction to obtain from $x$ a Hamiltonian cycle $C$ in $H$. They can then run the ZK-Ham protocol to prove that indeed $H$ is Hamiltonian (and hence the original formula was satisfiable) without revealing any information the verifier could not have obtain on his own.](../figure/zk-ham.jpg){#zkhamnpcfig width=80% }
+
+
+::: { .pause }
+Please make sure that you understand why this will give a zero knowledge proof for $F$, and in particular satisfy the completeness, soundness, and zero-knowledge properties.
+
+Note that while the NP completeness of Hamiltonicity (and the Cook-Levin Theorem in general) is usually perceived as a _negative result_ (showing evidence for the non-existence of an algorithm), in this context we use it to obtain a _positive result_ (zero knowledge proof systems for many interesting functions).
+:::
+
+
+
 This means that for every other NP language $L$, we can use the reduction from $L$ to Hamiltonicity combined with protocol ZK-Ham to give a zero knowledge proof system for $L$. In particular this means that we can have zero knowledge proofs for the following languages:
 
 * The language of numbers $m$ such that there exists a prime $p$ dividing $m$ whose remainder modulo $10$ is $7$.
 
 * The language of tuples $X,e,c_1,\ldots,c_n$ such that $c_i$ is an encryption of a number $x_i$ with $\sum x_i = X$. (This is essentially what we needed in the voting example above).
 
-* For every efficient function $F$, the language of pairs $x,y$ such that there exists some input $r$ satisfying $y=F(x\|r)$. (This is what we often need in the "protocol compiling" applications to show that a particular output was produced by the correct program $F$ on public input $x$ and private input $r$.)
-
-![Using a zero knowledge protocol for Hamiltonicity we can obtain a zero knowledge protocol for any language $L$ in NP. For example, if the public input is a SAT formula $\varphi$ and the Prover's secret input is a satisfying assignment $x$ for $\varphi$ then the verifier can run the reduction on $\varphi$ to obtain a graph $H$ and the prover can run the same reduction to obtain from $x$ a Hamiltonian cycle $C$ in $H$. They can then run the ZK-Ham protocol to prove that indeed $H$ is Hamiltonian (and hence the original formula was satisfiable) without revealing any information the verifier could not have obtain on his own.](../figure/zk-ham.jpg){#tmplabelfig width=80% }
+* For every efficient function $G$, the language of pairs $x,y$ such that there exists some input $r$ satisfying $y=G(x\|r)$. (This is what we often need in the "protocol compiling" applications to show that a particular output was produced by the correct program $G$ on public input $x$ and private input $r$.)
 
 ## Parallel repetition and turning zero knowledge proofs to signatures.
 
@@ -408,6 +450,16 @@ Schnorr designed signatures based on this non interactive version.
 
 ### "Bonus features" of zero knowledge
 
-* Proof of knowledge
+The following properties of zero knowledge systems are used in the literature. We might cover some in class, but mention them here. These are covered in Chapter 20 of Boneh-Shoup.
 
-* Deniability / non-transferability
+* _Proof of knowledge_ - it can be shown that the proof above of Hamiltonicity yields more than soundness. We can "extract" from a prover startegy that succeeds in convincing the verifier that $G$ is Hamiltonian with probability larger than 1/2 an actual Hamiltonian cycle. This means that the prover didn't just convince the verifier that there _exists_ a Hamiltonian cycle in the graph $G$  but also that the prover "knows" it. This notion is known as a "proof of knowledge". 
+
+* _Arguments_ - if a proof system only satisfies the soundness condition with respect to polynomial-time provers, then it is called an _argument system_. 
+
+* _Succinct_ proofs - proofs that $F(x)=1$ where total communication is a fixed polynomial in $n$ _independently_ of the time to verify $F$. 
+
+Combining succinct zero-knowledge proofs with the Fiat-Shamir heuristic for non-interactivity leads to the notion of _zero-knowledge succinct arguments_ or ZK-SNARG.
+If these also satisfy a "proof of knowledge" property then they are called [ZK-SNARKs](https://eprint.iacr.org/2014/580). These have recently been of great interest for crypto-currencies.
+See [lectures 16-18 in Stanford CS 251](https://cs251.stanford.edu/syllabus.html), as well as this [blog post](https://z.cash/technology/zksnarks/).
+
+
