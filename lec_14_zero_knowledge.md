@@ -10,7 +10,7 @@ chapternum: "13"
 
 The notion of _proof_ is central to so many fields.
 In mathematics, we want to prove that a certain assertion is correct.
-In other sciences, we often want to accumulate a preponderance of evidence (or statistical significance) to reject certain hypothesis.
+In other sciences, we often want to accumulate a preponderance of evidence (or statistical significance) to reject certain hypotheses.
 In criminal law the prosecution famously needs to prove its case "beyond a reasonable doubt".
 Cryptography turns out to give some new twists on this ancient notion.
 
@@ -42,7 +42,7 @@ Before we talk about how to achieve zero knowledge, let us discuss some of its p
 
 ### Nuclear disarmament
 
-The United States and Russia have reached a dangerous and expensive equilibrium by which each has about [7000 nuclear warheads](https://www.armscontrol.org/factsheets/Nuclearweaponswhohaswhat), much more than is needed to decimate each others' population (and the population of much of the rest of the world).[^population]
+The United States and Russia have reached a dangerous and expensive equilibrium where each has about [7000 nuclear warheads](https://www.armscontrol.org/factsheets/Nuclearweaponswhohaswhat), much more than is needed to decimate each others' population (and the population of much of the rest of the world).[^population]
 Having so many weapons increases the chance of "leakage" of weapons, or of an accidental launch (which can result in an all out war) through fault in communications or rogue commanders.
 This also threatens the delicate balance of the [Non-Proliferation Treaty](https://en.wikipedia.org/wiki/Treaty_on_the_Non-Proliferation_of_Nuclear_Weapons) which at its core is a bargain where non-weapons states agree not to pursue nuclear weapons and the five nuclear weapon states agree to make progress on nuclear disarmament.
 These huge quantities of nuclear weapons are not only dangerous, as they increase the chance of a leak or of an individual failure or rogue commander causing a world catastrophe, but also extremely expensive to maintain.
@@ -54,7 +54,7 @@ On the other side, Russian President Putin has said already in 2000 that he sees
 There are many reasons why progress on nuclear disarmament has been so slow, and most of them have nothing to do with zero knowledge or any other piece of technology.
 But there are some technical hurdles as well.
 One of those hurdles is that for the U.S. and Russia to go beyond restricting the number of _deployed_ weapons to significantly reducing the _stockpiles_, they need to find a way for one country to verifiably prove that it has dismantled warheads.
-As mentioned in my [work with Glaser and Goldston](http://www.nature.com/nature/journal/v510/n7506/full/nature13457.html) (see also [this page](http://nuclearfutures.princeton.edu/warhead-verification/)), a key stumbling block is that the design of a nuclear warhard is of course highly classified and about the last thing in the world that the U.S. would like to share with Russia and vice versa.
+As mentioned in my [work with Glaser and Goldston](http://www.nature.com/nature/journal/v510/n7506/full/nature13457.html) (see also [this page](http://nuclearfutures.princeton.edu/warhead-verification/)), a key stumbling block is that the design of a nuclear warhead is of course highly classified and about the last thing in the world that the U.S. would like to share with Russia and vice versa.
 So, how can the U.S. convince the Russian that it has destroyed a warhead, when it cannot let Russian experts anywhere near it?
 
 [^population]: To be fair, "only" about 170 million Americans live in the [50 largest metropolitan areas](https://www.currentresults.com/Weather-Extremes/US/largest-cities-list.php) and so arguably many people will survive at least the initial impact of a nuclear war, though it had been estimated that even a "small" nuclear war involving detonation of 100 not too large warheads could have [devastating global consequences](http://onlinelibrary.wiley.com/doi/10.1002/2013EF000205/full).
@@ -100,7 +100,7 @@ For example:
 
 * In [_Zermelo-Fraenkel + Axiom of Choice (ZFC)_](https://en.wikipedia.org/wiki/Zermelo%E2%80%93Fraenkel_set_theory) a _statement_ is some purported fact about sets (e.g., the Riemann Hypothesis[^encoding]), and a _proof_ is a step by step derivation of it from the axioms.
 
-* We can many define other "theories". For example, a theory where the statements are pairs $(x,m)$ such that $x$ is a quadratic residue modulo $m$  and a proof for $x$ is the number $s$ such that $x=s^2 \pmod{m}$, or a theory where the theorems are _Hamiltonian_ graphs $G$ (graphs on $n$ vertices that contain an $n$-long cycle) and the proofs are the description of the cycle.
+* We can define many other "theories". For example, a theory where the statements are pairs $(x,m)$ such that $x$ is a quadratic residue modulo $m$  and a proof for $x$ is the number $s$ such that $x=s^2 \pmod{m}$, or a theory where the theorems are _Hamiltonian_ graphs $G$ (graphs on $n$ vertices that contain an $n$-long cycle) and the proofs are the description of the cycle.
 
 
 [^encoding]: Integers can be coded as sets in various ways. For example, one can encode $0$ as $\emptyset$ and if $N$ is the set encoding $n$, we can encode $n+1$ using the  $n+1$-element set $\{ N \} \cup N$.   
@@ -115,9 +115,9 @@ While this is not necessarily always the case, in our setting, we can always thi
 To achieve the notion of zero knowledge proofs, Goldwasser and Micali had to consider a generalization of proofs from static sequences of symbols to _interactive probabilistic protocols_ between a prover and a verifier.
 Let's start with an informal example.
 The vast majority of humans have three types of cone cells in their eyes.
-This is the reason why [we perceive the sky as blue](http://www.patarnott.com/atms749/pdf/blueSkyHumanResponse.pdf) (see also [this](https://www.forbes.com/sites/briankoberlein/2017/01/11/earths-skies-are-violet-we-just-see-them-as-blue/#33aaaf0f735f)), despite its color being quite a different spectrum than the blue of the rainbow, is that the projection of the sky's color to our cones is closest to the projection of blue.
+The reason why [we perceive the sky as blue](http://www.patarnott.com/atms749/pdf/blueSkyHumanResponse.pdf) (see also [this](https://www.forbes.com/sites/briankoberlein/2017/01/11/earths-skies-are-violet-we-just-see-them-as-blue/#33aaaf0f735f)), despite its color being quite a different spectrum than the blue of the rainbow, is that the projection of the sky's color to our cones is closest to the projection of blue.
 It has been suggested that a tiny fraction of the human population might have four functioning cones (in fact, only women, as it would require two X chromosomes and a certain mutation).
-How would a person _prove_ to another that she is a in fact such a [tetrachromat](https://en.wikipedia.org/wiki/Tetrachromacy) ?
+How would a person _prove_ to another that she is a in fact such a [tetrachromat](https://en.wikipedia.org/wiki/Tetrachromacy)?
 
 
 
@@ -154,7 +154,7 @@ However, here is an interactive proof system to prove statements of the form "$N
 
 3. Bob _accepts_ the proof if $b=b'$.
 
-To see that Bob will indeed accept the proof, note that if $x$ is a non-residue then $xs^2$ will have to be a non-residue as well (since if it had a root $s'$ then $s's^{-1}$ would be a root of $x$). Hence it will always be the case that $b'=b$.
+To see that Bob will indeed accept the proof, note that if $x$ is a non-residue then $xs^2$ will have to be a non-residue as well (since if it had a root $s'$ then $s's$ would be a root of $xs^2$). Hence it will always be the case that $b'=b$.
 
 
 Moreover, if $x$ _was_ a quadratic residue of the form $x=s'^2 \pmod{m}$ for some $s'$, then $xs^2=(s's)^2$ is simply a random quadratic residue, which means that in this case Bob's message is distributed the same regardless of whether $b=0$ or $b=1$, and no matter what she does, Alice has probability at most $1/2$ of guessing $b$.
@@ -204,7 +204,7 @@ Before we attempt a definition, let us consider an example.
 Going back to the notion of quadratic residuosity, suppose that $x$ and $m$ are public and Alice knows $s$ such that $x=s^2 \pmod{m}$.
 She wants to convince Bob that this is the case.
 However she prefers not to reveal $s$.
-Can she convince Bob that such an $s$ exist without revealing any information about it? Here is a way to do so:
+Can she convince Bob that such an $s$ exists without revealing any information about it? Here is a way to do so:
 
 
 __Protocol ZK-QR:__ Public input for Alice and Bob: $x,m$; Alice's private input is $s$ such that $x=s^2 \pmod{m}$.
@@ -230,7 +230,7 @@ To define zero knowledge mathematically we follow the following intuition:
 
 >_A proof system is zero knowledge if the verifier did not learn anything after the interaction that he could not have learned on his own._
 
-Despite the name "zero knowledge", we do not claim that the verifier does not know anything about the private input $x$. For example, $m=p\cdot q$ for two primes $p,q$, then each $s \in \Z^*_m$ has at most four square roots, and if the verifier could compute square roots then they can narrow $x$ down to these four possibilities. However, the point is that this is knowledge that the verifier already even before the interaction with the prover, and so participating in the proof resulted in _zero additional knowledge_. 
+Despite the name "zero knowledge", we do not claim that the verifier does not know anything about the private input $x$. For example, if 1$m=p\cdot q$ for two primes $p,q$, then each $s \in \Z^*_m$ has at most four square roots, and if the verifier could compute square roots then they can narrow $x$ down to these four possibilities. However, the point is that this is knowledge that the verifier already even before the interaction with the prover, and so participating in the proof resulted in _zero additional knowledge_. 
 
 Here is how we formally define zero knowledge:
 
@@ -295,7 +295,7 @@ __Claim 1:__ The distribution of $x'$ computed by $S^*$ is identical to the dist
 
 __Claim 2:__ With probability at least $1/2$, $b'=b$.
 
-__Claim 3:__ Conditioned on $b=b'$ and the value $x'$ computed in step 2, the value $s''$ computed by $S^*$ is identical to the value that Alice sends when her first message is $X'$ and Bob's response is $b$.
+__Claim 3:__ Conditioned on $b=b'$ and the value $x'$ computed in step 2, the value $s''$ computed by $S^*$ is identical to the value that Alice sends when her first message is $x'$ and Bob's response is $b$.
 
 Together these three claims imply that in expectation $S^*$ only invokes $V_1$ and $V_2$ a constant number of times (since every time it goes back to step 1 with probability at most $1/2$).
 They also imply that the output of $S^*$ is in fact identical to the output of $V^*$ in a true interaction with Alice.
@@ -322,7 +322,7 @@ There are known ways to achieve zero knowledge with negligible soundness error a
 ## Zero knowledge proof for Hamiltonicity.
 
 We now show a proof for another language.
-Suppose that Alice and Bob know an $n$-vertex graph $G$ and Alice knows a _Hamiltonian cycle_ $C$ in this graph (i.e.. a length $n$ simple cycle- one that traverses all vertices exactly once).
+Suppose that Alice and Bob know an $n$-vertex graph $G$ and Alice knows a _Hamiltonian cycle_ $C$ in this graph (i.e. a length $n$ simple cycle - one that traverses all vertices exactly once).
 Here is how Alice can prove that such a cycle exists without revealing any information about it.
 
 
@@ -332,7 +332,7 @@ __Protocol ZK-Ham:__
 
 1. Bob chooses a random string $z\in \{0,1\}^{3n}$
 
-2. Alice chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). For every $i,j$, Alice chooses a random string $x_{i,j} \in \{0,1\}^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}$. She sends $\{ y_{i,j} \}_{i,j \in [n]}$ to Bob.
+2. Alice chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). For every $i,j$, Alice chooses a random string $x_{i,j} \in \{0,1\}^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}z$. She sends $\{ y_{i,j} \}_{i,j \in [n]}$ to Bob.
 
 3. Bob chooses a bit $b\in\{0,1\}$.
 
@@ -352,7 +352,7 @@ For **soundness**, we recall that (as we've seen before) with extremely high pro
 Now, assuming this is the case, given the messages $\{ y_{i,j} \}$ sent by the prover in the first step, define an $n\times n$ matrix $M'$ with entries in $\{0,1,?\}$ as follows: $M'_{i,j}=0$ if $y_{i,j}\in S_0$ , $M'_{i,j}=1$ if $y_{i,j}\in S_1$ and $M'_{i,j}=?$ otherwise.
 
 We split into two cases.
-The first case is that there exists some permutation $\pi$ such that **(i)** $M'$ is a $\pi$-permuted version of the input graph $G$ and **(ii)** $M'$ contains a Hamiltonian cycle. Clearly in this case $G$ contains a Hamiltonian cycle as well, and hence we don't need to consider it when analyzing soundness. In the other case we claim that with probability at least $1/2$ the verifier will reject the proof.
+The first case is that there exists some permutation $\pi$ such that **(i)** $M'$ is a $\pi$-permuted version of the input graph $H$ and **(ii)** $M'$ contains a Hamiltonian cycle. Clearly in this case $H$ contains a Hamiltonian cycle as well, and hence we don't need to consider it when analyzing soundness. In the other case we claim that with probability at least $1/2$ the verifier will reject the proof.
 Indeed, if **(i)** is violated then the proof will be rejected if Bob chooses $b=0$ and if **(ii)** is violated then the proof will be rejected if Bob chooses $b=1$.
 
 We now turn to showing **zero knowledge**. For this we need to build a _simulator_ $S^*$ for an arbitrary efficient strategy $V^*$ of Bob.
@@ -363,7 +363,7 @@ It will do so as follows:
 
 1. Let $z\in \{0,1\}^{3n}$ be the first message computed by $V^*$ on input $H$.
 
-2. If $b'=0$ then $S^*$ computes the second message as Alice does: chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). In contrast, if $b'=1$ then $S^*$ lets $M$ be the all $1'$ matrix. For every $i,j$, $S^*$ chooses a random string $x_{i,j} \in \{0,1\}^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}z$, where $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$ is a pseudorandom generator.
+2. If $b'=0$ then $S^*$ computes the second message as Alice does: chooses a random permutation $\pi$ on $\{1,\ldots, n\}$ and let $M$ be the $\pi$-permuted adjacency matrix of $H$  (i.e., $M_{\pi(i),\pi(j)}=1$ iff $(i,j)$ is an edge in $H$). In contrast, if $b'=1$ then $S^*$ lets $M$ be the all $1$s matrix. For every $i,j$, $S^*$ chooses a random string $x_{i,j} \in \{0,1\}^n$ and let $y_{i,j}=G(x_{i,j})\oplus M_{i,j}z$, where $G:\{0,1\}^n\rightarrow\{0,1\}^{3n}$ is a pseudorandom generator.
 
 3. Let $b$ be the output of $V^*$ when given the input $H$ and the first message $\{ y_{i,j} \}$ computed as above. If $b\neq b'$ then go back to step 0.
 
