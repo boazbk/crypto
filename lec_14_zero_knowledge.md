@@ -117,7 +117,6 @@ Let's start with an informal example.
 The vast majority of humans have three types of cone cells in their eyes.
 The reason why [we perceive the sky as blue](http://www.patarnott.com/atms749/pdf/blueSkyHumanResponse.pdf) (see also [this](https://www.forbes.com/sites/briankoberlein/2017/01/11/earths-skies-are-violet-we-just-see-them-as-blue/#33aaaf0f735f)), despite its color being quite a different spectrum than the blue of the rainbow, is that the projection of the sky's color to our cones is closest to the projection of blue.
 It has been suggested that a tiny fraction of the human population might have four functioning cones (in fact, only women, as it would require two X chromosomes and a certain mutation).
-
 How would a person _prove_ to another that she is a in fact such a [tetrachromat](https://en.wikipedia.org/wiki/Tetrachromacy)?
 
 
