@@ -11,11 +11,6 @@ chapternum: "16"
 
 
 
-
-
-
-
-
 Wikipedia [defines](https://en.wikipedia.org/wiki/Cryptography) cryptography as "the practice and study of techniques for secure communication in the presence of third parties called adversaries".
 However, I think a better definition would be:
 
@@ -72,37 +67,36 @@ A _$k$-party protocol_ is a set of efficiently computable $k$ prescribed interac
 We assume the existence of an authenticated and private point to point channel between every pair of parties (this can be implemented using signatures and encryptions).[^broadcast]
 A _$k$ party functionality_  is a probabilistic process $F$ mapping $k$ inputs in $\{0,1\}^n$ into $k$ outputs in $\{0,1\}^n$.[^lengths]
 
-[^numberk]: Note that here $k$ is not a string which the secret key but the number of parties in the protocol.
+[^numberk]: Unlike much of this text, in the context of multiparty secure computation we use $k$ to denote the number of parties in the protocol, as opposed to a the secret key of some encryption scheme.
 
-[^broadcast]: Protocols for $k>2$ parties require also a _broadcast channel_ but these can be [implemented](http://epubs.siam.org/doi/abs/10.1137/0212045?journalCode=smjcat) using the combination of authenticated channels and digital signatures.
+[^broadcast]: Protocols for $k>2$ parties require also a _broadcast channel_ but this  can be [implemented](http://epubs.siam.org/doi/abs/10.1137/0212045?journalCode=smjcat) using the combination of authenticated channels and digital signatures.
 
 [^lengths]: Fixing the input and output sizes to $n$ is done for notational simplicity and is without loss of generality. More generally, the inputs and outputs could have sizes up to polynomial in $n$ and some inputs or output can also be empty. Also, note that one can define a more general notion of stateful functionalities, though it is not hard to reduce the task of building a protocol for stateful functionalities to building protocols for stateless ones.
 
 
 ### First attempt: a slightly "too ideal" definition
 
-Here is one attempt of a definition that is clean but a bit too strong, which nevertheless captures much of the spirit of secure multiparty computation:
+Here is one attempt of a definition that is clean but a bit too strong. Nevertheless it captures much of the spirit of secure multiparty computation:
 
-> # {.definition title="MPC without aborts" #mpcnoaborts}
+::: {.definition title="MPC without aborts" #mpcnoaborts}
 Let $F$ be a $k$-party functionality.  A _secure protocol for $F$_ is a protocol for $k$ parties satisfying that for every $T\subseteq [k]$ and every efficient adversary $A$,  there exists an efficient "ideal adversary" (i.e., efficient interactive algorithm)  $S$ such that for every set of inputs $\{ x_i \}_{i\in [k]\setminus T}$ the following two distributions are computationally indistinguishable:
->
+
 * The tuple $(y_1,\ldots,y_k)$ of outputs of all the parties (both controlled and not controlled by the adversary) in an execution of the protocol where $A$ controls the parties in $T$ and the inputs of the parties not in $T$ are given by $\{ x_i \}_{i\in [k]\setminus T}$.
->
+
 * The tuple $(y_1,\ldots,y_k)$ that is computed using the following process:
->
-   a. We let $\{ x_i \}_{i \in T}$ be chosen by $S$, and compute $(y'_1,\ldots,y'_k)=F(x_1,\ldots,x_k)$.
->
-   b. For every $i\in [k]$, if $i\not\in T$ (i.e., party $i$ is "honest") then $y_i=y'_i$ and otherwise, we let $S$ choose $y_i$.
 
-  \
+  a. We let $\{ x_i \}_{i \in T}$ be chosen by $S$, and compute $(y'_1,\ldots,y'_k)=F(x_1,\ldots,x_k)$.
 
+  b. For every $i\in [k]$, if $i\not\in T$ (i.e., party $i$ is "honest") then $y_i=y'_i$ and otherwise, we let $S$ choose $y_i$.
+:::
+ 
 That is, the protocol is secure if whatever an adversary can gain by taking complete control over the set of parties in $T$, could have been gain by simply using this control to choose particular inputs $\{ x_i \}_{i\in T}$, run the protocol honestly, and observe the outputs of the functionality.  
 Note that in particular if $T=\emptyset$ (and hence there is no adversary) then if the parties' inputs are $(x_1,\ldots,x_k)$ then their outputs will equal $F(x_1,\ldots,x_k)$.
 
 
 ### Allowing for aborts
 
-The definition above is a little too strong, in the following sense.
+[mpcnoaborts](){.ref} above is a little too strong, in the following sense.
 Consider the case that $k=2$ where there are two parties Alice (Party $1$) and Bob (Party $2$) that wish to compute some output $F(x_1,x_2)$.
 If Bob is controlled by the adversary then he clearly can simply abort the protocol and prevent Alice from computing $y_1$.
 Thus, in this case in the actual execution of the protocol the output $y_1$ will be some error message (which we denote by $\bot$).
@@ -110,25 +104,25 @@ But we did not allow this possiblity for the idealized adversary $S$: if $1\not\
 This means that we would be able to distinguish between the output in the real and ideal setting.[^honest-maj]
 This motivates the following, slightly more messy definition, that allows for the ability of the adversary to abort the execution at any point in time:
 
-[^honest-maj]: As a side note, we can avoid this issue if we have an honest majority of players - i.e. if $|T|<k/2$, but this of course makes no sense in the two party setting.)
+[^honest-maj]: As a side note, we can avoid this issue if we have an _honest majority_ of players - i.e. if $|T|<k/2$, but this condition does not make sense in  the two party setting, where you can only have an honest majority if there is no cheating party.
 
 
 
 
 
-> # {.definition title="MPC with aborts" #MPCdef}
+::: {.definition title="MPC with aborts" #MPCdef}
 Let $F$ be a $k$-party functionality.  A _secure protocol for $F$_ is a protocol for $k$ parties satisfying that for every $T\subseteq [k]$ and every efficient adversary $A$,  there exists an efficient "ideal adversary" (i.e., efficient interactive algorithm)  $S$ such that for every set of inputs $\{ x_i \}_{i\in [k]\setminus T}$ the following two distributions are computationally indistinguishable:
->
-* The tuple $(y_1,\ldots,y_k)$ of outputs of all the parties (both controlled and not controlled by the adversary) in an execution of the protocol where $A$ controls the parties in $T$ and the inputs of the parties not in $T$ are given by $\{ x_i \}_{i\in [k]\setminus T}$ we denote by $y_i = \top$ if the $i^{th}$ party aborted the protocol.
->
-* The tuple $(y_1,\ldots,y_k)$ that is computed using the following process:
->
-   a. We let $\{ x_i \}_{i \in T}$ be chosen by $S$, and compute $(y'_1,\ldots,y'_k)=F(x_1,\ldots,x_k)$.
->
-   b. For $i=1,\ldots,k$ do the following: ask $S$ if it wishes to abort at this stage, and if it doesn't then the $i^{th}$ party learns $y'_i$. If the adversary did abort then we exit the loop at this stage and the parties $i+1,\ldots,k$ (regardless if they are honest or malicious) do not learn the corresponding outputs.
->
-   c. Let $k'$ be the last non-abort stage we reached above. For every $i\not\in T$, if $i \leq k'$ then $y_i =y'_i$ and if $i>k'$ then $y'_i=\bot$. We let the adversary $S$  choose $\{ y_i \}_{i\in T}$.
 
+* The tuple $(y_1,\ldots,y_k)$ of outputs of all the parties (both controlled and not controlled by the adversary) in an execution of the protocol where $A$ controls the parties in $T$ and the inputs of the parties not in $T$ are given by $\{ x_i \}_{i\in [k]\setminus T}$ we denote by $y_i = \top$ if the $i^{th}$ party aborted the protocol.
+
+* The tuple $(y_1,\ldots,y_k)$ that is computed using the following process:
+
+  a. We let $\{ x_i \}_{i \in T}$ be chosen by $S$, and compute $(y'_1,\ldots,y'_k)=F(x_1,\ldots,x_k)$.
+
+  b. For $i=1,\ldots,k$ do the following: ask $S$ if it wishes to abort at this stage, and if it doesn't then the $i^{th}$ party learns $y'_i$. If the adversary did abort then we exit the loop at this stage and the parties $i+1,\ldots,k$ (regardless if they are honest or malicious) do not learn the corresponding outputs.
+
+  c. Let $k'$ be the last non-abort stage we reached above. For every $i\not\in T$, if $i \leq k'$ then $y_i =y'_i$ and if $i>k'$ then $y'_i=\bot$. We let the adversary $S$  choose $\{ y_i \}_{i\in T}$.
+:::
 
 
 ![We define security of a protocol implementing a functionality $F$ by stipulating that for every adversary $A$ that control a subset of the parties, $A$'s view in an actual execution of the protocol would be indistinguishable from its view in an ideal setting where all the parties send their inputs to an idealized and perfectly trusted party, who then computes the outputs and sends it to each party.](../figure/./real-ideal.jpg){#tmplabelfig}
@@ -159,7 +153,7 @@ Under reasonable assumptions[^assumptions] for every polynomial-time computable 
 [^assumptions]: Originally this was shown under the assumption of trapdoor permutations (which can be derived from the Factoring or RSA conjectures) but it is known today under a variety of other assumptions, including in particular the LWE conjecture.
 
 [MPCthm](){.ref} was originally proven by Yao in 1982 for the special case of two party functionalities, and then proved for the general case by Goldreich, Micali,  and Wigderson in 1987.
-As discussed below, many variants of this theorem has been shown, and this line of research is still ongoing.
+As discussed below, many variants of this theorem have been shown, and this line of research is still ongoing.
 
 
 ### Some comments:
