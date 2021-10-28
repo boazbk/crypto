@@ -18,7 +18,7 @@ Typically a proof that some assertion X is true, also reveals some information a
 When Hercule Poirot proves that Norman Gale killed Madame Giselle he does so by showing _how_ Gale committed the murder by dressing up as a flight attendant and stabbing Madame Gisselle with a poisoned dart.
 Could Hercule convince us beyond a reasonable doubt that Gale did the crime without giving any information on _how_ the crime was committed?
 Can the Russians prove to the U.S. that a sealed box contains an authentic nuclear warhead without revealing anything about its design?
-Can I prove to you that the number $m=385,608,108,395,369,363,400,501,273,594,475,104,405,448,848,047,062,278,473,983$ has a prime factor whose last digit is $7$ without giving you any information about $m$'s prime factors?
+Can I prove to you that the number $m=385,608,108,395,369,363,400,501,273,594,475,104,405,448,848,047,$$062,278,473,983$ has a prime factor whose last digit is $7$ without giving you any information about $m$'s prime factors?
 We won't answer the first question, but will show some insights on the latter two.^[In case you are curious, the factors of $m$ are $1,172,192,558,529,627,184,841,954,822,099$ and $328,963,108,995,562,790,517,498,071,717$.]
 
 _Zero knowledge proofs_ are proofs that fully convince that a statement is true without yielding _any additional knowledge_.
