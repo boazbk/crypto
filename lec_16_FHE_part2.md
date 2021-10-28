@@ -25,11 +25,14 @@ Before the detailed description and analysis, let us first outline our strategy.
 
 
 :::  {.definition title="Noisy Homomorphic Encryption" #NoisyHEdef}
-Suppose that $(G,E,D)$ is a CPA secure public key scheme and that $\eta$ is a measure (depending on the key) which maps any ciphertext $c$ to a number $\eta(c)\in [0, \infty)$ which we call its "noise". 
-For some fixed keypair $(e,d)$ of the scheme, denote
+A _noisy homomorphic encryption scheme_ is a four-tuple $(G,E,D,ENAND)$ of algorithms such that $(G,E,D)$ is a CPA secure public key scheme and 
+such that for every keypair $(e,d)$, there exists a function $\eta=\eta_{e,d}$ which maps any ciphertext $c$ to a number $\eta(c)\in [0, \infty)$
+(which we call the "noise level" of $c$) satisfying the following.
+
+For every keypair $(e,d)$, if we denote 
 $$\mathcal{C}_b^\theta=\{c:D_d(c)=b,\eta(c)\leq\theta \}.$$ 
 
-$(G,E,D,ENAND)$ is called a _noisy homomorphic encryption scheme_ if the followings holds for some $q=q(n)$:
+then
 
 * $E_e(b)\in \mathcal{C}_b^{\sqrt{q}}$ for any plaintext $b$. That is, "fresh encryptions" have noise at most $\sqrt{q}$.
 
@@ -180,7 +183,7 @@ It will satisfy the following properties:
 
 1. Ciphertexts are $(n \log q)\times (n\log q)$ matrices $C$ with all coefficients in $\{0,1\}$.
 
-2. The secret key is a vector $s \in \Z_q^n$. We let $v \in Z_q^{n \log q}$ be the vector $V = Q^\top s$. 
+2. The secret key is a vector $s \in \Z_q^n$. We let $v \in \Z_q^{n \log q}$ be the vector $V = Q^\top s$. 
 
 3. An encryption of $b\in \{0,1\}$ is a matrix $C$ satisfying the following "ciphertext equation" 
 $$Cv =bv + e \label{eqciphertexteqfhe}$$ 
@@ -222,7 +225,7 @@ $$
 
 __Keeping track of parameters.__ For $C$ that encrypts a plaintext $b$, let $\eta(C) = \max_{i\in [n]} |Cv -bv|$.
 Now if we can see that if $C$ encrypts $b$ with noise $\eta(C)$ and $C'$ encrypts $b'$ with noise $\eta(C')$, then $ENAND(C,C')$ will encrypt
-$1-bb' = NAND(b,b')$ with noise of magnitude at most $O(\eta + n\log q \eta')$, which is  smaller than $n^3\cdot \max\{\eta(C),\eta(C'),\}$ for $q\approx 2^{\sqrt{n}}$.
+$1-bb' = NAND(b,b')$ with noise of magnitude at most $O(\mu + n\log q \mu')$, which is smaller than $n^3\cdot \max\{\eta(C),\eta(C')\}$ for $q\approx 2^{\sqrt{n}}$.
 
 
 ## Putting it all together

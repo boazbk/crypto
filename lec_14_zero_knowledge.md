@@ -18,7 +18,7 @@ Typically a proof that some assertion X is true, also reveals some information a
 When Hercule Poirot proves that Norman Gale killed Madame Giselle he does so by showing _how_ Gale committed the murder by dressing up as a flight attendant and stabbing Madame Gisselle with a poisoned dart.
 Could Hercule convince us beyond a reasonable doubt that Gale did the crime without giving any information on _how_ the crime was committed?
 Can the Russians prove to the U.S. that a sealed box contains an authentic nuclear warhead without revealing anything about its design?
-Can I prove to you that the number $m=385,608,108,395,369,363,400,501,273,594,475,104,405,448,848,047,062,278,473,983$ has a prime factor whose last digit is $7$ without giving you any information about $m$'s prime factors?
+Can I prove to you that the number $m=385,608,108,395,369,363,400,501,273,594,475,104,405,448,848,047,$$062,278,473,983$ has a prime factor whose last digit is $7$ without giving you any information about $m$'s prime factors?
 We won't answer the first question, but will show some insights on the latter two.^[In case you are curious, the factors of $m$ are $1,172,192,558,529,627,184,841,954,822,099$ and $328,963,108,995,562,790,517,498,071,717$.]
 
 _Zero knowledge proofs_ are proofs that fully convince that a statement is true without yielding _any additional knowledge_.
@@ -47,7 +47,7 @@ Having so many weapons increases the chance of "leakage" of weapons, or of an ac
 This also threatens the delicate balance of the [Non-Proliferation Treaty](https://en.wikipedia.org/wiki/Treaty_on_the_Non-Proliferation_of_Nuclear_Weapons) which at its core is a bargain where non-weapons states agree not to pursue nuclear weapons and the five nuclear weapon states agree to make progress on nuclear disarmament.
 These huge quantities of nuclear weapons are not only dangerous, as they increase the chance of a leak or of an individual failure or rogue commander causing a world catastrophe, but also extremely expensive to maintain.
 
-For all of these reasons, in 2009, U.S. President Obama called to set as a long term goal a "world without nuclear weapons" and in 2012 talked about concretely talking to Russia about reducing "not only our strategic nuclear warheads, but also tactical weapons and warheads in reserve".
+For all of these reasons, in 2009, U.S. President Obama called to set as a long term goal a "world without nuclear weapons" and in 2012 spoke concretely about talking to Russia about reducing "not only our strategic nuclear warheads, but also tactical weapons and warheads in reserve".
 On the other side, Russian President Putin has said already in 2000 that he sees "no obstacles that could hamper future deep cuts of strategic offensive armaments".
 (Though as of 2018, political winds on both sides have shifted away from disarmament and more toward armament.)
 
@@ -117,6 +117,7 @@ Let's start with an informal example.
 The vast majority of humans have three types of cone cells in their eyes.
 The reason why [we perceive the sky as blue](http://www.patarnott.com/atms749/pdf/blueSkyHumanResponse.pdf) (see also [this](https://www.forbes.com/sites/briankoberlein/2017/01/11/earths-skies-are-violet-we-just-see-them-as-blue/#33aaaf0f735f)), despite its color being quite a different spectrum than the blue of the rainbow, is that the projection of the sky's color to our cones is closest to the projection of blue.
 It has been suggested that a tiny fraction of the human population might have four functioning cones (in fact, only women, as it would require two X chromosomes and a certain mutation).
+
 How would a person _prove_ to another that she is a in fact such a [tetrachromat](https://en.wikipedia.org/wiki/Tetrachromacy)?
 
 
@@ -175,7 +176,7 @@ A _probabilistic proof for $f$_ (i.e., a proof for statements of the form "$f(x)
 
 * __Completeness:__ If $f(x)=1$ then on input $x$, if $P$ and $V$ are given input $x$ and interact, then at the end of the interaction $V$ will output ```Accept``` with probability at least $0.9$.
 
-* __Soundness:__ If If $f(x)=0$ then for any arbitrary (efficient or non efficient) algorithm $P^*$, if $P^*$ and $V$ are given input $x$  and interact then at the end $V$ will output ```Accept``` with probability at most $0.1$
+* __Soundness:__ If If $f(x)=0$ then for any arbitrary (efficient or non efficient) algorithm $P^*$, if $P^*$ and $V$ are given input $x$  and interact then at the end $V$ will output ```Accept``` with probability at most $0.1$.
 :::
 
 
@@ -186,7 +187,7 @@ These two viewpoints are completely equivalent via the mapping $f \longleftright
 
 Note that we don't necessarily require the prover to be efficient (and indeed, in some cases it might not be).
 On the other hand, our soundness condition holds even if the prover uses a non efficient strategy.[^arguments]
-We say that a proof system has an _efficient prover_ if there is an NP-type proof system $\Pi$ for $L$ (that is some efficient algorithm $\Pi$ such that there exists $\pi$ with $\Pi(x,\pi)=1$ iff $x\in L$ and such that $\Pi(x,\pi)=1$ implies that $|\pi|\leq poly(|x|)$), such that the strategy for $P$ can be implemented efficiently given any static proof $\pi$ for $x$ in this system.
+We say that a proof system has an _efficient prover_ if there is an NP-type proof system $\Pi$ for $L$ (that is some efficient algorithm $\Pi$ such that there exists $\pi$ with $\Pi(x,\pi)=1$ iff $x\in L$ and such that $\Pi(x,\pi)=1$ implies that $|\pi|\leq poly(|x|)$, such that the strategy for $P$ can be implemented efficiently given any static proof $\pi$ for $x$ in this system.
 
 
 [^arguments]: People have considered the notion of zero knowledge systems where soundness holds only with respect to efficient provers; these are known as _argument systems_.
@@ -218,7 +219,7 @@ __Protocol ZK-QR:__ Public input for Alice and Bob: $x,m$; Alice's private input
 4. Bob checks that the value $s''$ revealed by Alice is indeed a root of $x'x^{-b}$, if so then it "accepts" the proof.
 
 If $x$ was _not_ a quadratic residue then no matter how $x'$ was chosen, either $x'$ or $x'x^{-1}$ is _not_ a residue and hence Bob will reject the proof with probability at least $1/2$.
-By repeating this $n$ times, we can reduce the probability of Bob accepting a the proof of a non residue to $2^{-n}$.
+By repeating this $n$ times, we can reduce the probability of Bob accepting the proof of a non residue to $2^{-n}$.
 
 
 On the other hand, we claim that we didn't really reveal anything about $s$.
@@ -322,7 +323,8 @@ There are known ways to achieve zero knowledge with negligible soundness error a
 ## Zero knowledge proof for Hamiltonicity.
 
 We now show a proof for another language.
-Suppose that Alice and Bob know an $n$-vertex graph $G$ and Alice knows a _Hamiltonian cycle_ $C$ in this graph (i.e. a length $n$ simple cycle - one that traverses all vertices exactly once).
+
+Suppose that Alice and Bob know an $n$-vertex graph $G$ and Alice knows a _Hamiltonian cycle_ $C$ in this graph  (i.e. a length $n$ simple cycle - one that traverses all vertices exactly once).
 Here is how Alice can prove that such a cycle exists without revealing any information about it.
 
 
@@ -336,7 +338,7 @@ __Protocol ZK-Ham:__
 
 3. Bob chooses a bit $b\in\{0,1\}$.
 
-4. If $b=0$ then Alice sends out $\pi$ and the strings $\{ x_{i,j} \}$ for all $i,j$; If $b=1$ then Alice sends out the $n$ strings $x_{\pi(C_1),\pi(C_2)}$,$\ldots$,$x_{\pi(C_n),\pi(C_1)}$ together with their indices.
+4. If $b=0$ then Alice sends out $\pi$ and the strings $\{ x_{i,j} \}$ for all $i,j$; if $b=1$ then Alice sends out the $n$ strings $x_{\pi(C_1),\pi(C_2)},\ldots,x_{\pi(C_n),\pi(C_1)}$ together with their indices.
 
 5. If $b=0$ then Bob computes $M$ to be the $\pi$-permuted adjacency matrix of $H$ and verifies that all the $y_{i,j}$'s were computed from the $x_{i,j}$'s appropriately. If so then Bob accepts the proof, and otherwise it rejects it. If $b=1$ then Bob verifies that the indices of the strings $\{ x_{i,j } \}$ sent by Alice form a cycle and that indeed $y_{i,j}=G(x_{i,j})\oplus z$ for every string $x_{i,j}$ that was sent by Alice. If so then Bob accepts the proof and otherwise he rejects it.
 
@@ -367,7 +369,7 @@ It will do so as follows:
 
 3. Let $b$ be the output of $V^*$ when given the input $H$ and the first message $\{ y_{i,j} \}$ computed as above. If $b\neq b'$ then go back to step 0.
 
-4. We compute the fourth message of the protocol similarly to how Alice does it: if $b=0$ then it consists of $\pi$ and the strings $\{ x_{i,j} \}$ for all $i,j$; If $b=1$ then we pick a random length-$n$ cycle $C'$  and the message consists of the $n$ strings $x_{C'_1,C'_2}$,$\ldots$,$x_{C'_n,C'_1}$ together with their indices.
+4. We compute the fourth message of the protocol similarly to how Alice does it: if $b=0$ then it consists of $\pi$ and the strings $\{ x_{i,j} \}$ for all $i,j$; if $b=1$ then we pick a random length-$n$ cycle $C'$  and the message consists of the $n$ strings $x_{C'_1,C'_2},\ldots,x_{C'_n,C'_1}$ together with their indices.
 
 5. Output whatever $V^*$ outputs when given the prior message.
 
