@@ -163,7 +163,7 @@ There is in fact not a single theorem but rather many variants of this fundament
 
 
 * __Fairness, guaranteed output delivery:__ The definition above does not attempt to protect against "denial of service" attacks, in the sense that the adversary is allowed, even in the ideal case, to prevent the honest parties from receiving their outputs.  
-As mentioned above, without honest majority this is essential for simlar reasons to the issue we discussed in [our lecture on bitcoin](http://www.boazbarak.org/cs127/chap07_hash_functions.pdf)  why achieving consensus is hard if there isn't a honest majority.
+As mentioned above, without honest majority this is essential for similar reasons to the issue we discussed in [our lecture on bitcoin](http://www.boazbarak.org/cs127/chap07_hash_functions.pdf)  why achieving consensus is hard if there isn't a honest majority.
 When there is an honest majority, we can achieve the property of _guaranteed output delivery_, which offers protection against such "denial of service" attacks.
 Even when there is no guaranteed output delivery, we might want the property of _fairness_, whereas we guarantee that if the honest parties don't get the output then neither does the adversary.
 There has been extensive study of fairness and there are protocols achieving variants on it under various computational and setup assumptions.
