@@ -90,7 +90,7 @@ Let $F$ be a $k$-party functionality.  A _secure protocol for $F$_ is a protocol
   b. For every $i\in [k]$, if $i\not\in T$ (i.e., party $i$ is "honest") then $y_i=y'_i$ and otherwise, we let $S$ choose $y_i$.
 :::
  
-That is, the protocol is secure if whatever an adversary can gain by taking complete control over the set of parties in $T$, could have been gain by simply using this control to choose particular inputs $\{ x_i \}_{i\in T}$, run the protocol honestly, and observe the outputs of the functionality.  
+That is, the protocol is secure if whatever an adversary can gain by taking complete control over the set of parties in $T$, could have been gained by simply using this control to choose particular inputs $\{ x_i \}_{i\in T}$, run the protocol honestly, and observe the outputs of the functionality.  
 Note that in particular if $T=\emptyset$ (and hence there is no adversary) then if the parties' inputs are $(x_1,\ldots,x_k)$ then their outputs will equal $F(x_1,\ldots,x_k)$.
 
 
@@ -125,7 +125,7 @@ Let $F$ be a $k$-party functionality.  A _secure protocol for $F$_ is a protocol
 :::
 
 
-![We define security of a protocol implementing a functionality $F$ by stipulating that for every adversary $A$ that control a subset of the parties, $A$'s view in an actual execution of the protocol would be indistinguishable from its view in an ideal setting where all the parties send their inputs to an idealized and perfectly trusted party, who then computes the outputs and sends it to each party.](../figure/./real-ideal.jpg){#tmplabelfig}
+![We define security of a protocol implementing a functionality $F$ by stipulating that for every adversary $A$ that controls a subset of the parties, $A$'s view in an actual execution of the protocol would be indistinguishable from its view in an ideal setting where all the parties send their inputs to an idealized and perfectly trusted party, who then computes the outputs and sends it to each party.](../figure/./real-ideal.jpg){#tmplabelfig}
 
 Here are some good exercises to make sure you follow the definition:
 
@@ -172,7 +172,7 @@ There has been extensive study of fairness and there are protocols achieving var
 
 * __Setup assumptions:__ The definition does not assume a trusted third party, but people have studied different setup assumptions including a public key infrastructure, common reference string, and more.
 
-* __Adversarial power:__ It turns out that under certain condition, it can be possible to obtain secure multiparty computation with respect to adversaries that have unbounded computational power (so called "information theoretic security"). People have also studies different variants of adversaries including "honest but curious" or "passive adversaries", as well as "covert" adversaries that only deviate from the protocol if they won't be caught. Other settings studied limit the adversary's ability to control parties (e.g., honest majority, smaller fraction of parties or particular patterns of control, adaptive vs static corruption).  
+* __Adversarial power:__ It turns out that under certain conditions, it can be possible to obtain secure multiparty computation with respect to adversaries that have unbounded computational power (so called "information theoretic security"). People have also studies different variants of adversaries including "honest but curious" or "passive adversaries", as well as "covert" adversaries that only deviate from the protocol if they won't be caught. Other settings studied limit the adversary's ability to control parties (e.g., honest majority, smaller fraction of parties or particular patterns of control, adaptive vs static corruption).  
 
 * __Concurrent compositions:__  The definition displayed above are for _standalone execution_ which is known not to automatically imply security with respect to _concurrent composition_, where many copies of the same protocol (or different protocols) could be executed simultaneously. This opens up all sorts of new attacks.[^grandmasters]  See [Yehuda Lindell's thesis](http://u.cs.biu.ac.il/~lindell/thesis.html) (or [this updated version](http://u.cs.biu.ac.il/~lindell/LNCSmonograph.html)) for more. A very general notion known as "UC security" (which stands for "Universally Composable" or maybe "Ultimate Chuck") has been proposed to achieve security in these settings, though at a price of additional setup assumptions, see [here](http://www.cs.tau.ac.il/~canetti/materials/ICALP08.pdf) and [here](http://eprint.iacr.org/2007/475).
 
