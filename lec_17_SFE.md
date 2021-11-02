@@ -100,7 +100,7 @@ Note that in particular if $T=\emptyset$ (and hence there is no adversary) then 
 Consider the case that $k=2$ where there are two parties Alice (Party $1$) and Bob (Party $2$) that wish to compute some output $F(x_1,x_2)$.
 If Bob is controlled by the adversary then he clearly can simply abort the protocol and prevent Alice from computing $y_1$.
 Thus, in this case in the actual execution of the protocol the output $y_1$ will be some error message (which we denote by $\bot$).
-But we did not allow this possiblity for the idealized adversary $S$: if $1\not\in S$ then it must be the case that the output $y_1$ is equal to $y'_1$ for some $(y'_1,y'_2)=F(x_1,x_2)$.  
+But we did not allow this possiblity for the idealized adversary $S$: if $1\not\in T$ then it must be the case that the output $y_1$ is equal to $y'_1$ for some $(y'_1,y'_2)=F(x_1,x_2)$.  
 This means that we would be able to distinguish between the output in the real and ideal setting.[^honest-maj]
 This motivates the following, slightly more messy definition, that allows for the ability of the adversary to abort the execution at any point in time:
 
