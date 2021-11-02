@@ -22,14 +22,15 @@ Assuming the LWE conjecture, for every two party functionality $F$ there is a pr
 Before proving the theorem it might be worthwhile to recall what is actually the definition of secure multiparty computation, when specialized for the $k=2$ and honest but curious case.
 The definition significantly simplifies here since we don't have to deal with the possibility of aborts.
 
-> # {.definition title="Two party honest-but-curious secure computation" #twopartympcdef}
+::: {.definition title="Two party honest-but-curious secure computation" #twopartympcdef}
 Let $F$ be (possibly probabilistic) map of $\{0,1\}^n\times \{0,1\}^n$ to $\{0,1\}^n\times\{0,1\}^n$.    A _secure protocol for $F$_ is a two party protocol such for every party $t\in \{1,2\}$, there exists an efficient "ideal adversary" (i.e., efficient interactive algorithm)  $S$ such that for every pair of inputs $(x_1,x_2)$ the following two distributions are computationally indistinguishable:
->
+
 * The tuple $(y_1,y_2,v)$ obtained by running the protocol on inputs $x_1,x_2$, and letting $y_1,y_2$ be the outputs of the two parties and $v$ be the _view_ (all internal randomness, inputs, and messages received) of party $t$.
->
+
 * The tuple $(y_1,y_2,v)$ that is computed by letting $(y_1,y_2)=F(x_1,x_2)$ and $v=S(x_t,y_t)$.
->
+
 That is, $S$, which only gets the input $x_t$ and output $y_t$, can simulate all the information that an honest-but-curious adversary controlling party $t$ will view.
+:::
 
 
 ## Constructing 2 party honest but curious computation from fully homomorphic encryption
@@ -41,7 +42,7 @@ Here is a suggested protocol for Alice and Bob to run on inputs $x,y$ respective
 ![An honest but curious protocol for two party computation using a fully homomorphic encryption scheme with circuit privacy. ](../figure/twopcprotfig.png){#twopcprotfig  .margin}
 
 
-:::
+::: { .quote }
 __Protocol 2PC:__ (See [twopcprotfig](){.ref})
 
 * __Assumptions:__ $(G,E,D,EVAL)$ is a fully homomorphic encryption scheme.
@@ -53,7 +54,6 @@ __Protocol 2PC:__ (See [twopcprotfig](){.ref})
 * __Bob->Alice:__ Bob computes define $f$ to be the function $f(x)=F(x,y)$ and sends $c'=EVAL(f,c)$ to Alice.
 
 * __Alice's output:__ Alice computes $z=D_d(c')$.
-
 :::
 
 
@@ -112,7 +112,7 @@ Thus we need to get a stronger property, known as _circuit privacy_.
 This is a property that's useful in other contexts where we use FHE.
 Let us now define it:
 
-> # {.definition title="Perfect circuit privacy" #perfectcircprivatedef}
+::: {.definition title="Perfect circuit privacy" #perfectcircprivatedef}
 Let $\mathcal{E}=(G,E,D,EVAL)$ be an FHE. We say that $\mathcal{E}$ satisfies _perfect circuit privacy_ if for every $(e,d)$ output by $G(1^n)$ and every function $f:\{0,1\}^\ell\rightarrow\{0,1\}$ of $poly(n)$ description size,
 and every ciphertexts $c_1,\ldots,c_\ell$ and $x_1,\ldots,x_\ell \in \{0,1\}$ such that $c_i$ is output by $E_e(x_i)$, the distribution of $EVAL_e(f,c_1,\ldots,c_\ell)$ is identical to the distribution of $E_e(f(x))$.
 That is, for every $z\in\{0,1\}^*$, the probability that $EVAL_e(f,c_1,\ldots,c_\ell)=z$ is the same as the probability that $E_e(f(x))=z$. We stress that these probabilities are taken only over the coins of the algorithms $EVAL$ and $E$.
@@ -133,15 +133,15 @@ In fact, the expression on the lefthand side of [eqcircprivacy](){.eqref} is equ
 However, for our applications bounding it by a negligible function is enough.
 Hence, we can use the relaxed notion of "imperfect" circuit privacy, defined as follows:
 
-> # {.definition title="Statistical circuit privacy" #circprivatedef}
+::: {.definition title="Statistical circuit privacy" #circprivatedef}
 Let $\mathcal{E}=(G,E,D,EVAL)$ be an FHE. We say that $\mathcal{E}$ satisfies _statistical circuit privacy_ if for every $(e,d)$ output by $G(1^n)$ and every function $f:\{0,1\}^\ell\rightarrow\{0,1\}$ of $poly(n)$ description size,
 and every ciphertexts $c_1,\ldots,c_\ell$ and $x_1,\ldots,x_\ell \in \{0,1\}$ such that $c_i$ is output by $E_e(x_i)$, the distribution of $EVAL_e(f,c_1,\ldots,c_\ell)$ is equal up to $negl(n)$ total variation distance to the distribution of $E_e(f(x))$.
->
+
 That is,
 $$\sum_{z\in\{0,1\}^*} \left| \Pr[ EVAL_e(f,c_1,\ldots,c_\ell)=z] - \Pr[ E_e(f(x))=z ] \right| < negl(n)$$
->
-where once again, these probabilities are taken only over the coins of the algorithms $EVAL$ and $E$.
 
+where once again, these probabilities are taken only over the coins of the algorithms $EVAL$ and $E$.
+:::
 
 If you find [circprivatedef](){.ref} hard to parse, the most important points you need to remember about it are the following:
 
@@ -257,13 +257,13 @@ We now sketch how to go beyond two parties.
 It turns out that the compiler of honest-but-curious to malicious security works just as well in the many party setting, and so the crux of the matter is to obtain an _honest but curious_ secure protocol for $k>2$ parties.
 
 We start with the case of three parties - Alice, Bob, and Charlie.
-First, let us introduce some convenient notation (which is used in other settings as well).^[I believe this notation originates with Burrows–Abadi–Needham (BAN) logic though would be happy if scribe writers verify this.] 
+First, let us introduce some convenient notation (which is used in other settings as well).^[I believe this notation originates with Burrows–Abadi–Needham (BAN) logic though would be happy to get corrections/references.] 
 We will assume that each party initially generates private/public key pairs with respect to some fully homomorphic encryption (satisfying statistical circuit privacy) and sends them to the other parties.
 We will use $\{ x \}_A$ to denote the encryption of $x\in \{0,1\}^\ell$ using Alice's public key (similarly $\{ x \}_B$ and $\{ x \}_C$ will denote the encryptions of $x$ with respect to Bob's and Charlie's public key. We can also compose these and so denote by $\{ \{ x \}_A \}_B$ the encryption under Bob's key of the encryption under Alice's key of $x$.
 
 With the notation above, Protocol 2PC can be described as follows:
 
-:::
+::: { .quote }
 __Protocol 2PC:__ (Using BAN notation)
 
 * __Inputs:__ Alice's input is $x\in\{0,1\}^n$ and Bob's input is $y\in\{0,1\}^n$. The goal is for Alice to learn only $F(x,y)$ and Bob to learn nothing.
@@ -278,7 +278,7 @@ __Protocol 2PC:__ (Using BAN notation)
 We can now describe the protocol for three parties. We will focus on the case where the goal is for Alice to learn $F(x,y,z)$ (where $x,y,z$ are the private inputs of Alice, Bob, and Charlie, respectively) and for Bob and Charlie to learn nothing. As usual we can reduce the general case to this by running the protocol multiple times with parties switching the roles of Alice, Bob, and Charlie.
 
 
-:::
+::: { .quote} 
 __Protocol 3PC:__ (Using BAN notation)
 
 * __Inputs:__ Alice's input is $x\in\{0,1\}^n$, Bob's input is $y\in\{0,1\}^n$, and Charlie's input is $z\in \{0,1\}^m$. The goal is for Alice to learn only $F(x,y,z)$ and for Bob and Charlie to learn nothing.
@@ -301,7 +301,7 @@ If the underlying encryption is a fully homomorphic statistically circuit privat
 
 
 ::: {.proof data-ref="threepartympc"}
-To be completed.
+Left to the reader :)
 :::
 
 
