@@ -12,17 +12,17 @@ chapternum: "20"
 
 Let us stop and think of the notions we have seen in cryptography. We have seen that under reasonable computational assumptions (such as LWE) we can achieve the following:
 
-* CPA secure _private key encryption_ and _Message Authentication codes_ (which can be combined to get CCA security or authenticated encryption)- this means that two parties that share a key can have virtual secure channel between them. An adversary cannot get _any additional information_ beyond whatever is her prior knowledge given an encryption of a message sent from Alice to Bob. Even if Moreover, she cannot modify this message by even a single bit. It's lucky we only discovered these results from the 1970's onwards--- if the Germans have used such an encryption instead of ENIGMA in World War II there's no telling how many more lives would have been lost.
+* CPA secure _private key encryption_ and _Message Authentication codes_ (which can be combined to get CCA security or authenticated encryption)- this means that two parties that share a key can have virtual secure channel between them. An adversary cannot get _any additional information_ beyond whatever is her prior knowledge given an encryption of a message sent from Alice to Bob. Moreover, she cannot modify this message by even a single bit. It's lucky we only discovered these results from the 1970's onwards--- if the Germans had used such an encryption instead of ENIGMA in World War II there's no telling how many more lives would have been lost.
 
-* _Public key encryption_ and _digital signatures_ that enable Alice and Bob to set up such a virtually secure channel without _sharing a prior key_. This enables our "information economy" and protects virtually every financial transaction over the web. Moreover, it is the crucial mechanism for supplying "over the air" software updates which smart devices whether its phones, cars, thermostats or anything else. Some had predicted that this invention will change the nature of our form of government to [crypto anarchy](http://www.activism.net/cypherpunk/crypto-anarchy.html) and while this may be hyperbole, governments everywhere are [worried](https://www.fbi.gov/about-us/otd/going-dark-issue) about this invention.   
+* _Public key encryption_ and _digital signatures_ that enable Alice and Bob to set up such a virtually secure channel without _sharing a prior key_. This enables our "information economy" and protects virtually every financial transaction over the web. Moreover, it is the crucial mechanism for supplying "over the air" software updates to smart devices, whether they be phones, cars, thermostats or anything else. Some had predicted that this invention would change the nature of our form of government to [crypto anarchy](http://www.activism.net/cypherpunk/crypto-anarchy.html) and while this may be hyperbole, governments everywhere are [worried](https://www.fbi.gov/about-us/otd/going-dark-issue) about this invention.   
 
-* _Hash functions_ and _pseudorandom function_ enable us to create authentication tokens for deriving one-time passwords out of shared keys, or deriving long keys from short passwords. They are also useful as a tool in _password based key exchange_, which enables two parties to communicate securely (with fairly good but not overwhelming probability)  when they share a 6 digit PIN, even if the adversary can easily afford much much more than $10^6$ computational cycles.  
+* _Hash functions_ and _pseudorandom functions_ enable us to create authentication tokens for deriving one-time passwords out of shared keys, or deriving long keys from short passwords. They are also useful as a tool in a _password based key exchange_, which enables two parties to communicate securely (with fairly good but not overwhelming probability)  when they share a 6 digit PIN, even if the adversary can easily afford much much more than $10^6$ computational cycles.  
 
 * _Fully homomorphic encryption_ allows computing over encrypted data. Bob could prepare Alice's taxes without knowing what her income is, and more generally store all her data and perform computations on it, without knowing what the data is.
 
 * _Zero knowledge proofs_ can be used to prove a statement is true without revealing _why_ its true. In particular since you can use zero knowledge proofs to prove that you posses X bitcoins without giving any information about their identity, they have been used to obtain [fully anonymous electronic currency](http://zerocash-project.org/).
 
-* _Multiparty secure computation_ are a fully general tool that enable Alice and Bob (and Charlie, David, Elana, Fran,.. ) to perform any computation on their private inputs, whether it is to compute the result of a vote, a second-price auction, privacy-preserving data mining, perform a cryptographic operation in a distributed manner (without any party ever learning the secret key) or simply play poker online without needing to trust any central server.
+* _Multiparty secure computation_ are a fully general tool that enable Alice and Bob (and Charlie, David, Elana, Fran, etc.) to perform any computation on their private inputs, whether it is to compute the result of a vote, a second-price auction, privacy-preserving data mining, perform a cryptographic operation in a distributed manner (without any party ever learning the secret key) or simply play poker online without needing to trust any central server.
 
 (BTW all of the above points are notions that you should be familiar and be able to explain what are their security guarantees if you ever need to use them, for example, in the unlikely event that you ever find yourself needing to take a cryptography final exam...)
 
@@ -36,11 +36,11 @@ Here are some scenarios that are still not covered by the above tools:
 
 Suppose that you have uncovered a conspiracy that involves very powerful people, and you are afraid that something bad might happen to you.
 You would like an "insurance policy" in the form of writing down everything you know and making sure it is published in the case of your untimely death, but are afraid these powerful people could find and attack any trusted agent.
-Ideally you would to publish an encrypted form of your manuscript far and wide, and make sure the decryption key is automatically revealed if anything happens to you, but how could you do that?
-A _UA-secure encryption_ (which stands for secure against an [Underwood](https://goo.gl/8ms4wP)) attack) gives an ability to create an encryption $c$ of a message $m$ that is CPA secure but such that there is an algorithm $D$ such that on input $c$ and any string $w$ which is a (digitally signed) New York Times obituary for Janine Skorsky will output $m$.
+Ideally you would want to publish an encrypted form of your manuscript far and wide, and make sure the decryption key is automatically revealed if anything happens to you, but how could you do that?
+A _UA-secure encryption_ (which stands for secure against an [Underwood](https://goo.gl/8ms4wP) attack) gives an ability to create an encryption $c$ of a message $m$ that is CPA secure but such that there is an algorithm $D$ such that on input $c$ and any string $w$ which is a (digitally signed) New York Times obituary for Janine Skorsky will output $m$.
 
 
-The technical term for this notion is _witness encryption_  by which we mean that for every circuit $F$ we have an algorithm $E$ that on input $F$ and a message $m$ creates a ciphertext $c$ that in a CPA secure, and there is an algorithm $D$ that on input $c$ and some string $w$,  outputs $m$ if $F(w)=1$.
+The technical term for this notion is _witness encryption_, by which we mean that for every circuit $F$ we have an algorithm $E$ that on input $F$ and a message $m$ creates a ciphertext $c$ that is CPA secure, and there is an algorithm $D$ that on input $c$ and some string $w$,  outputs $m$ if $F(w)=1$.
 In other words, instead of the key being a unique string, the key is _any_ string $w$ that satisfies a certain condition.
 Witness encryption can be used for other applications.
 For example, you could encrypt a message to future members of humanity, that can be decrypted only using a valid proof of the Riemann Hypothesis.
@@ -50,8 +50,8 @@ For example, you could encrypt a message to future members of humanity, that can
 Here is another scenario that is seemingly not covered by our current tools.
 Suppose that Alice uses a public key system $(G,E,D)$ to encrypt a message $m$ by computing $c=E_e(m,r)$ and sending $c$  to Bob that will compute $m=D_d(c)$.
 The ciphertext is intercepted by Bob's archenemy Freddie Baskerville Ignatius (or FBI for short) who has the means to force Alice to reveal the message and as proof reveal the randomness used in encryption as well.
-Could Alice find, for any choice of $m'$, some string $r'$ that is pseudorandom and still $c$ equals $E_e(m',r')$?
-An encryption scheme with this property is called _deniable _, since we Alice can deny she sent $m$ and claim she sent $m'$ instead.[^pumpkin]
+Could Alice find, for any choice of $m'$, some string $r'$ that is pseudorandom and for which $c$ equals $E_e(m',r')$?
+An encryption scheme with this property is called _deniable_, since we Alice can deny she sent $m$ and claim she sent $m'$ instead.[^pumpkin]
 
 [^pumpkin]: One could also think of a deniable witness encryption, and so if Janine in the scenario above is forced to open the ciphertexts she sent by reveal the randomness used to create them, she can credibly claim that she didn't encrypt her knowledge of the conspiracy, but merely wanted to make sure that her family secret recipe for pumpkin pie is not lost when she passes away.
 
@@ -131,14 +131,14 @@ for every efficient adversary $A$ mapping $\{0,1\}^*$ to $\{0,1\}$, there exists
 ## Applications of obfuscation
 
 The writings of Diffie and Hellman, James Ellis, and others that thought of public key encryption, shows that one of the first approaches they considered was to use obfuscation to transform a private-key encryption scheme into a public key one.
-That is, given a private key encryption scheme $(E,D)$ we can transform it to a public key encryption scheme $(G,E',D)$ by having the key generation algorithm select a private key $k\leftarrow_R\{0,1\}^n$ that will serve as the decryption key, and let the encryption key $e$ be the circuit $\mathcal{O}(C)$ where $\mathcal{O}$ is an obfuscator and $C$ is a circuit mapping $c$ to $D_k(d)$.
+That is, given a private key encryption scheme $(E,D)$ we can transform it to a public key encryption scheme $(G,E',D)$ by having the key generation algorithm select a private key $k\leftarrow_R\{0,1\}^n$ that will serve as the decryption key, and let the encryption key $e$ be the circuit $\mathcal{O}(C)$ where $\mathcal{O}$ is an obfuscator and $C$ is a circuit mapping $c$ to $E_k(c)$.
 The new encryption algorithm $E'$ takes $e$ and $c$ and simply outputs $e(c)$.
 
 These days we know other approaches for obtaining public key encryption, but the obfuscation-based approach has significant additional flexibility.
 To turn this into a fully homomorphic encryption, we simply publish the obfuscation of $c,c' \mapsto D_k(c) ~NAND~ D_k(c')$.
 To turn this into a functional encryption, for every function $f$ we can define $d_f$ as the obfuscation of $c \mapsto f(D_k(c))$.
 
-We can also use obfuscation to get a witness encryption, to encrypt a message $m$ to be opened using any $w$ such that $F(w)=1$, we can obfuscate the function that maps $w$ to $m$ if $F(w)=1$ and outputs ```error``` otherwise.
+We can also use obfuscation to get a witness encryption: to encrypt a message $m$ to be opened using any $w$ such that $F(w)=1$, we can obfuscate the function that maps $w$ to $m$ if $F(w)=1$ and outputs ```error``` otherwise.
 To solve the patch problem, for a given regular expression we can obfuscate the function that maps $x$ to $R(x)$.
 
 ## Impossibility of obfuscation
@@ -177,14 +177,14 @@ There does not exist a strong VBB obfuscator.
 Suppose towards a contradiction that there exists a strong VBB obfuscator $\mathcal{O}$. Let $F_{\alpha,\beta}$ be defined as above, and let $A$ be the adversary that on input a
 circuit $C'$ simply outputs $C'$. We claim that for every $S$ there exists some $\alpha,\beta$ and an efficient algorithm $D_{\alpha,\beta}$
 >
-$\left| \Pr[ D_{\alpha,\beta}(A(\mathcal{O}(F_{\alpha,\beta}))=1] -\Pr[ D_{\alpha,\beta}(S^{F_{\alpha,\beta}}(1^{10n}))=1 ] \right| > 0.9 \;\; (*)$
+$\left| \Pr[ D_{\alpha,\beta}(A(\mathcal{O}(F_{\alpha,\beta})))=1] -\Pr[ D_{\alpha,\beta}(S^{F_{\alpha,\beta}}(1^{10n}))=1 ] \right| > 0.9 \;\; (*)$
 >
 these probabilities are over the coins of $\mathcal{O}$ and the simulator $S$. Note that we identify the function $F_{\alpha,\beta}$ with the obvious circuit of size at most $10n$ that computes it.
 >
 Clearly $(*)$ implies that that these two distributions are not indistinguishable, and so proving $(*)$ will finish the proof.
 The algorithm $D_{\alpha,\beta}$ on input a circuit $C'$ will simply output $1$ iff $C'(\alpha)=\beta$.
 By the definition of a compiler and the algorithm $A$,  for every $\alpha,\beta$,
-$\Pr[ D_{\alpha,\beta}(A(\mathcal{O}(F_{\alpha,\beta}))=1]=1$.
+$\Pr[ D_{\alpha,\beta}(A(\mathcal{O}(F_{\alpha,\beta})))=1]=1$.
 >
 On the other hand, for $D_{\alpha,\beta}$ to output $1$ on $C' = S^{F_{\alpha,\beta}}(1^{10n})$, it must be the case that $C'(\alpha)=\beta$.
 We claim that there exists some $\alpha,\beta$ such that this will happen with negligible probability.
@@ -209,25 +209,25 @@ If fully homomorphic encryption exists then there is no VBB secure obfuscating c
 
 > # {.proof data-ref="obfimpweakthm"}
 Let $(G,E,D,EVAL)$ be a fully homomorphic encryption scheme.
-For strings $d,e,c,\alpha,\beta,\gamma$, we will define the function $F_{e,c,\alpha,\beta,\gamma}$ as follows: for inputs of the form $00x$, it will output $\beta$ if and only if $x=\alpha$, and otherwise output $0^n$.
+For strings $d,e,c,\alpha,\beta,\gamma$, we will define the function $F_{d,e,c,\alpha,\beta,\gamma}$ as follows: for inputs of the form $00x$, it will output $\beta$ if and only if $x=\alpha$, and otherwise output $0^n$.
 For inputs of the form $01c'$, it will output $\gamma$ iff $D_d(c')=\beta$ and otherwise output $0^n$.
 And for the input $1^n$, it will output $c$.
 For all other inputs it will output $0^n$.
 >
 We will use this function family where $d,e$ are the keys of the FHE, and $c=E_e(\alpha)$.
-We now define our adversary $A$. On input some circuit $C'$, $A$ will compute $c=C'(1^n)$ and let $C''$ be the circuit that on input $x$ outputs $C'(00x)$.
-It will then let $c'' = EVAL_e(C'',c)$.
-Note that if $c$ is an encryption of $\alpha$ and $C'$ computes $F=F_{d,e,c,\alpha,\beta,\gamma}$ then $c''$ will be an encryption of $F(00\alpha)=\beta$.
-The adversary $A$ will then compute $\gamma' = C'(01c')$ and output $\gamma_1$.
+We now define our adversary $A$. On input some circuit $C'$, $A$ will compute $c'=C'(1^n)$ and let $C''$ be the circuit that on input $x$ outputs $C'(00x)$.
+It will then let $c'' = EVAL_e(C'',c')$.
+Note that if $c'$ is an encryption of $\alpha$ and $C'$ computes $F=F_{d,e,c,\alpha,\beta,\gamma}$ then $c''$ will be an encryption of $F(00\alpha)=\beta$.
+The adversary $A$ will then compute $\gamma' = C'(01c'')$ and output $\gamma_1'$.
 >
 We claim that for every simulator $S$, there exist some tuple $(d,e,c,\alpha,\beta,\gamma)$ and a distinguisher $D$ such that
 >
-$$\left| \Pr[ D(A(\mathcal{O}(F_{d,e,c,\alpha,\beta,\gamma})))=1] - \Pr[ S^{F_{d,e,c,\alpha,\beta,\gamma}}(1^{|F_{d,e,c,\alpha,\beta,\gamma}|}) ] \right| \geq 0.1$$
+$$\left| \Pr[D(A(\mathcal{O}(F_{d,e,c,\alpha,\beta,\gamma})))=1] - \Pr[D(S^{F_{d,e,c,\alpha,\beta,\gamma}}(1^{|F_{d,e,c,\alpha,\beta,\gamma}|})\)=1] \right| \geq 0.1$$
 >
 Indeed, the distinguisher $D$ will depend on $\gamma$ and on input a bit $b$ will simply output $1$ iff $b=\gamma_1$.
 Clearly, if $(d,e)$ are keys of the FHE and $c=E_e(\alpha)$ then no matter what circuit $C'$ the obfuscator $\mathcal{O}$ outputs on input $F_{d,e,c,\alpha,\beta,\gamma}$,
 the adversary $A$ will output $\gamma_1$ on $C'$ and hence $D$ will output $1$ with probability one on $A$'s output.
-
+>
 In contrast if we let $S$ be a simulator and generate $(d,e)=G(1^n)$, pick $\alpha,\beta,\gamma$ independently at random in $\{0,1\}^n$ and let $c=E_e(\alpha)$,
 we claim that the probability that $S$ will output $\gamma_1$ will be equal to $1/2 \pm negl(n)$.
 Indeed, suppose otherwise, and define the event $E_i$ to be that the $i^{th}$ query is the first query (apart from the query $1^n$ whose answer is $c$) on which $S$ receives an answer other than $0^n$.
