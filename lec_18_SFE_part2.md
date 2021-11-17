@@ -51,7 +51,7 @@ __Protocol 2PC:__ (See [twopcprotfig](){.ref})
 
 * __Alice->Bob:__ Alice generates $(e,d)\leftarrow_R G(1^n)$ and sends $e$ and $c=E_e(x)$.
 
-* __Bob->Alice:__ Bob computes define $f$ to be the function $f(x)=F(x,y)$ and sends $c'=EVAL(f,c)$ to Alice.
+* __Bob->Alice:__ Bob defines $f$ to be the function $f(x)=F(x,y)$ and sends $c'=EVAL(f,c)$ to Alice.
 
 * __Alice's output:__ Alice computes $z=D_d(c')$.
 :::
@@ -77,26 +77,6 @@ __Claim A:__ For every $x,y$, there exists a standalone algorithm $S$ such that 
 > # { .pause }
 At this point, you might want to try to see if you can prove Claim A on your own.
 If you're having difficulties proving it, try to think whether it's even true.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
-
-.
 
 \newpage
 
@@ -166,8 +146,8 @@ That is, if we manage to add some additional random noise $e'$ that has magnitud
 
 
 > # {.lemma #noiseandsignallem}
-Let $a\in \Z_q$ and $T\in\mathbb{N}$ be such that $aT<q/2$. If we let $X$ be the distribution obtained by taking $x (\mod q)$ for an integer $x$ chosen at random in $[-T,+T]$ and
-let $X'$ be the distribution obtained by taking $a+x (\mod q)$ for $x$ chosen in the same way, then
+Let $a\in \Z_q$ and $T\in\mathbb{N}$ be such that $aT<q/2$. If we let $X$ be the distribution obtained by taking $x \pmod q$ for an integer $x$ chosen at random in $[-T,+T]$ and
+let $X'$ be the distribution obtained by taking $a+x \pmod q$ for $x$ chosen in the same way, then
 $$\sum_{y \in \Z_q} \left| \Pr[X=y] - \Pr[X'=y] \right| <|a|/T$$
 
 ![If $a \ll T$ then the uniform distribution over the interval $[-T,+T]$ is statistically close to the uniform distribution over the interval $[-T+a,+T+a]$, since the statistical distance is proportional to the event (which happens with probability $a/T$) that a random sample from one distribution falls inside the symmetric difference of the two intervals.](../figure/statdistintervals.png){#statdistintervalsfig  .margin}
@@ -289,9 +269,9 @@ __Protocol 3PC:__ (Using BAN notation)
 
 * __Charlie-->Bob:__ Charlie sends $\{ \{ F(x,y,z) \}_A \}_B$ to Bob. Charlie can do this by running $EVAL_B$ on the ciphertext and on the (efficiently computable) map $c,y \mapsto EVAL_A(f_y,c)$ where $f_y$ is the circuit $x \mapsto F(x,y,z)$. (Please read this line several times!)
 
-* __Bob-->Alice:__  Bob sends $\{ f(x,y,z) \}_A$ to Alice by decrypting the ciphertext sent from Charlie. 
+* __Bob-->Alice:__  Bob sends $\{ F(x,y,z) \}_A$ to Alice by decrypting the ciphertext sent from Charlie. 
 
-* __Alice's output:__ Alice computes $f(x,y,z)$ by decrypting the ciphertext sent from Bob.
+* __Alice's output:__ Alice computes $F(x,y,z)$ by decrypting the ciphertext sent from Bob.
 :::
 
 > ### {.theorem title="Three party honest-but-curious secure computation" #threepartympc}
