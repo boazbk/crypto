@@ -207,23 +207,23 @@ If fully homomorphic encryption exists then there is no VBB secure obfuscating c
 (To get the original theorem from this, note that if VBB obfuscation exists then we can transform any private key encryption into a fully homomorphic public key encryption.)
 
 
-> # {.proof data-ref="obfimpweakthm"}
+::: {.proof data-ref="obfimpweakthm"}
 Let $(G,E,D,EVAL)$ be a fully homomorphic encryption scheme.
 For strings $d,e,c,\alpha,\beta,\gamma$, we will define the function $F_{d,e,c,\alpha,\beta,\gamma}$ as follows: for inputs of the form $00x$, it will output $\beta$ if and only if $x=\alpha$, and otherwise output $0^n$.
 For inputs of the form $01c'$, it will output $\gamma$ iff $D_d(c')=\beta$ and otherwise output $0^n$.
 And for the input $1^n$, it will output $c$.
 For all other inputs it will output $0^n$.
->
+
 We will use this function family where $d,e$ are the keys of the FHE, and $c=E_e(\alpha)$.
 We now define our adversary $A$. On input some circuit $C'$, $A$ will compute $c'=C'(1^n)$ and let $C''$ be the circuit that on input $x$ outputs $C'(00x)$.
 It will then let $c'' = EVAL_e(C'',c')$.
 Note that if $c'$ is an encryption of $\alpha$ and $C'$ computes $F=F_{d,e,c,\alpha,\beta,\gamma}$ then $c''$ will be an encryption of $F(00\alpha)=\beta$.
 The adversary $A$ will then compute $\gamma' = C'(01c'')$ and output $\gamma_1'$.
->
+
 We claim that for every simulator $S$, there exist some tuple $(d,e,c,\alpha,\beta,\gamma)$ and a distinguisher $D$ such that
->
-$$\left| \Pr[D(A(\mathcal{O}(F_{d,e,c,\alpha,\beta,\gamma})))=1] - \Pr[D(S^{F_{d,e,c,\alpha,\beta,\gamma}}(1^{|F_{d,e,c,\alpha,\beta,\gamma}|})\)=1] \right| \geq 0.1$$
->
+
+$$\left| \Pr[D(A(\mathcal{O}(F_{d,e,c,\alpha,\beta,\gamma})))=1] - \Pr[D(S^{F_{d,e,c,\alpha,\beta,\gamma}}(1^{|F_{d,e,c,\alpha,\beta,\gamma}|}))=1] \right| \geq 0.1$$
+
 Indeed, the distinguisher $D$ will depend on $\gamma$ and on input a bit $b$ will simply output $1$ iff $b=\gamma_1$.
 Clearly, if $(d,e)$ are keys of the FHE and $c=E_e(\alpha)$ then no matter what circuit $C'$ the obfuscator $\mathcal{O}$ outputs on input $F_{d,e,c,\alpha,\beta,\gamma}$,
 the adversary $A$ will output $\gamma_1$ on $C'$ and hence $D$ will output $1$ with probability one on $A$'s output.
@@ -232,17 +232,18 @@ In contrast if we let $S$ be a simulator and generate $(d,e)=G(1^n)$, pick $\alp
 we claim that the probability that $S$ will output $\gamma_1$ will be equal to $1/2 \pm negl(n)$.
 Indeed, suppose otherwise, and define the event $E_i$ to be that the $i^{th}$ query is the first query (apart from the query $1^n$ whose answer is $c$) on which $S$ receives an answer other than $0^n$.
 Now there are two cases:
->
+
 __Case 1:__ The query is equal to $00\alpha$.
->
+
 __Case 2:__ The query is equal to $01c'$ for some $c'$ such that $D_d(c')=\beta$.
->
+
 Case 2 only happens with negligible probability because if $S$ only received the value $e$ (which is independent of $\beta$) and did not receive any other non $0^n$ response up to the $i^{th}$ point then it did not learn any information about $\beta$.
 Therefore the value $\beta$ is independent of the $i^{th}$ query and the probability that it decrypts to $\beta$ is at most $2^{-n}$.
->
+
 Case 1 only happens with negligible probability because otherwise $S$ is an algorithm that on input an encryption of $\alpha$ (and a bunch of answers of the form $0^n$, which are of course not helpful) manages to output $\alpha$ with non-negligible probability, hence violating the CPA security of the encryption scheme.
->
+
 Now if neither case happens, then $S$ does not receive any information about $\gamma$, and hence the probability that its output is $\gamma_1$ is at most $1/2$.
+:::
 
 
 > # { .pause }
