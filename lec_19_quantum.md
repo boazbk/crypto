@@ -13,50 +13,126 @@ chapternum: "18"
 
 >_"The only difference between a probabilistic classical world and the equations of the quantum world is that somehow or other it appears as if the probabilities would have to go negative "_, Richard Feynman, 1982
 
-For much of the history of mankind, people believed that the ultimate "theory of everything" would be of the "billiard ball" type.
-That is, at the end of the day, everything is composed of some elementary particles and adjacent particles interact with one another according to some well specified laws.
-The types of particles and laws might differ, but not the general shape of the theory.
-Note that this in particular means that a system of $N$ particles can be simulated by a computer with $poly(N)$ memory and time.
+There were two schools of natural philosophy in ancient Greece.
+_Aristotle_ believed that objects have an _essence_ that explains their behavior, and a theory of the natural world has to refer to the _reasons_ (or "final cause" to use Aristotle's language) as to why they exhibit certain phenomena.
+_Democritus_ believed in a purely mechanistic explanation of the world.
+In his view, the universe was ultimately composed of elementary particles (or _Atoms_) and  our observed phenomena arise from the interactions between these particles according to some local rules.
+Modern science (arguably starting with Newton) has embraced Democritus' point of view, of a mechanistic or "clockwork" universe of particles and forces acting upon them.
 
-Alas, in the beginning of the 20th century, several experimental results were calling into question the "billiard ball" theory of the world.
-One such experiment is the famous "double slit" experiment.
-Suppose we shoot an electron at a wall that has a single slit at position $i$ and put somewhere behind this slit a detector.
-If we let $p_i$ be the probability that the electron goes through the slit and let $q_i$ be the probability that conditioned on this event, the electron hits this detector, then the fraction of times the electron hits our detector should be (and indeed is) $\alpha = p_iq_i$.
-Similarly, if we close this slit and open a second slit at position $j$ then the new fraction of times the electron hits our detector will be $\beta=p_jq_j$.
-Now if we open both slits then it seems that the fraction should be $\alpha+\beta$ and in particular, "obviously" the probability that the electron hits our detector should only _increase_ if we open a second slit.
-However, this is not what actually happens when we run this experiment.
-It can be that the detector is hit a _smaller_ number of times when two slits are open than when only a single one hits.
-It's almost as if the electron checks whether two slits are open, and if they are, it changes the path it takes.
-If we try to "catch the electron in the act" and place a detector right next to each slit so we can count which electron went through which slit then something even more bizarre happened.
-The mere fact that we _measured_ the electron path changes the actual path it takes, and now this "destructive interference" pattern is gone and the detector will be hit $\alpha+\beta$ fraction of the time.
 
-![The setup of the double slit experiment](../figure/double-slit-setup.PNG){#tmplabelfig  .margin }
+While the classification of particles and forces evolved with  time, to a large extent the "big picture" has not changed from  Newton till Einstein.
+In particular it was held as an axiom that if we knew fully the current _state_ of the universe (i.e., the particles and their properties such as location and velocity) then we could predict its future state at any point in time.
+In computational language, in all these theories the state of a system with $n$ particles could be stored in an array of $O(n)$ numbers, and predicting the evolution of the system  can be done by running some efficient (e.g., $poly(n)$ time) deterministic computation on this array.
 
-![In the double slit experiment, opening two slits can actually cause some positions to receive _fewer_ electrons than before.](../figure/double_slit2.jpg){#tmplabelfig  .margin }
+## The double slit experiment
 
-Quantum mechanics is a mathematical theory that allows us to calculate and predict the results of this and many other examples.
-If you think of quantum as an explanation as to what "really" goes on in the world, it can be rather confusing.
-However, if you simply "shut up and calculate" then it works amazingly well at predicting the results of a great many experiments.
 
-In the double slit experiment, quantum mechanics still allows to compute numbers $\alpha$ and $\beta$ that denote "probabilities"
-that the first and second electrons hit the detector. The only difference that in quantum mechanics these probabilities might be _negative_ numbers.
-However, probabilities can only be negative when no one is looking at them.
-When we actually measure what happened to the detector, we make the probabilities positive by _squaring_ them.
-So, if only the first slit is open, the detector will be hit $\alpha^2$ fraction of the time. If only the second slit is open, the detector will be hit $\beta^2$ fraction of the time. And if both slits are open, the detector will be hit $(\alpha+\beta)^2$ fraction of the time.
-Note that it can well be that $(\alpha+\beta)^2 < \alpha^2 + \beta^2$ and so this calculation explains why the number of times a detector is hit when two slits are open
-might be _smaller_ than the number of times it is hit when either slit is open.
-If you haven't seen it before, it may seem like complete nonsense and at this point I'll have to politely point you back to the part where I said we should not question
-quantum mechanics but simply "shut up and calculate".[^quantum]
+Alas, in the beginning of the 20th century, several experimental results were calling into question this "clockwork" or "billiard ball" theory of the world.
+One such experiment is the famous [double slit experiment](https://en.wikipedia.org/wiki/Double-slit_experiment).
+Here is one way to describe it.
+Suppose that we buy one of those baseball pitching machines, and aim it at a soft plastic wall, but put a _metal barrier with a single slit_ between the machine and the plastic wall (see [doublebaseballfig](){.ref}).
+If we shoot baseballs at the plastic wall, then some of the baseballs would bounce off the metal barrier, while some would make it through the slit and dent the wall.
+If we now carve out an additional slit in the metal barrier then more balls would get through, and so the plastic wall would be _even more dented_.
 
-[^quantum]: If you _have_ seen quantum mechanics before, I should warn that I am making here many simplifications. In particular in quantum mechanics the "probabilities" can actually be _complex_ numbers, though one gets most of the qualitative understanding by considering them as potentially negative real numbers. I will also be focusing throughout this presentation on so called "pure" quantum states, and ignore the fact that generally the states of a quantum subsystem are _mixed_ states that are a convex combination of pure states and can be described by a so called _density matrix_. This issue does not arise as much in quantum algorithms precisely because the goal is for a quantum computer is to be an isolated system that can evolve to continue to be in a pure state; in real world quantum computers however there will be interference from the outside world that causes the state to become mixed and increase its so called "von Neumann entropy"- fighting this interference and the second law of thermodynamics is much of what the challenge of building quantum computers is all about . More generally, this lecture is not meant to be a complete or accurate description of quantum mechanics, quantum information theory, or quantum computing, but rather just give a sense of the main points that are different about it from classical computing and how they relate to cryptography.
 
-Some of the counterintuitive properties that arise from these negative probabilities include:
+![In the "double baseball experiment" we shoot baseballs from a gun at a soft wall through a hard barrier that has one or two slits open in it. There is only "constructive interference" in the sense that the dent in each position in the wall when both slits are open is the sum of the dents when each slit is open on its own.](../figure/double_baseball2.png){#doublebaseballfig .margin width=300px height=300px}
+
+
+So far this is pure common sense, and it is indeed (to my knowledge) an accurate description of what happens when we shoot baseballs at a plastic wall.
+However, this is not the same when we shoot _photons_.
+Amazingly, if we shoot with a "photon gun" (i.e., a laser) at a wall equipped with photon detectors through some barrier, then (as shown in [doubleslitfig](){.ref}) in some positions of the wall we will see  _fewer_ hits when the two slits are open than one only ones of them is!.^[A nice illustrated description of the double slit experiment appears in   [this video](https://www.youtube.com/watch?v=DfPeprQ7oGc).]
+In particular there are positions in the wall that are hit when the first slit is open, hit when the  second gun is open, but are _not hit at all when both slits are open!_.
+
+
+
+![The setup of the double slit experiment in the case of photon or electron guns. We see also _destructive_ interference in the sense that there are some positions on the wall that get _fewer_ hits when both slits are open than they get when only one of the slits is open. Image credit: Wikipedia.](../figure/double-slit-setup.PNG){#doubleslitfig .margin width=300px height=300px}
+
+
+It seems as if each photon coming out of the gun is aware of the global setup of the experiment, and behaves differently if two slits are open than if only one is.
+If we try to "catch the photon in the act" and place  a detector right next to each slit so we can see exactly the path each photon takes  then something even more bizarre happens.
+The mere fact that we _measure_ the  path changes the photon's behavior, and now this "destructive interference" pattern is gone and the number of times a position is hit when two slits are open is the sum of the number of times it is hit when each slit is open.
+
+
+> # { .pause }
+You should read the paragraphs above more than once and make sure you appreciate how truly mind boggling these results are.
+
+
+## Quantum amplitudes
+
+
+The double slit and other experiments ultimately forced scientists to accept a very counterintuitive picture of the world.
+It is not merely about nature being randomized, but rather it is about the probabilities in some sense "going negative" and cancelling each other!
+
+To see what we mean by this, let us go back to the baseball experiment.
+Suppose that the probability a ball passes through the left slit is $p_L$ and the probability that it passes through the right slit is $p_R$.  Then, if we shoot $N$ balls out of each gun, we expect the wall  will be hit $(p_L+p_R)N$ times.
+In contrast, in the quantum world of photons instead of baseballs, it can sometimes be the case that in both the first and second case the wall is hit with positive probabilities $p_L$ and $p_R$ respectively but somehow when both slits are open the wall (or a particular position in it) is not hit at all.
+It's almost as if the probabilities can "cancel each other out".
+
+To understand the way we model this in quantum mechanics, it is helpful to think of a "lazy evaluation" approach to probability.
+We can think of a probabilistic experiment such as shooting a baseball through two slits  in two different ways:
+
+* When a ball is shot, "nature" tosses a coin and decides if it will go through the left slit (which happens with  probability $p_L$), right slit (which happens with  probability $p_R$),  or bounce back. If it passes through one of the slits then it will hit the wall.
+Later we can look at the wall and find out whether or not this event happened, but the fact that the event happened or not is determined independently of whether or not we look at the wall.
+
+* The other viewpoint is that when a ball is shot, "nature" computes the probabilities $p_L$ and $p_R$ as before, but does _not_ yet "toss the coin" and determines what happened.
+Only when  we actually look at the wall, nature tosses a coin and with probability $p_L+p_R$ ensures we see a dent. That is, nature uses "lazy evaluation", and only determines the result of a probabilistic experiment when we decide to _measure_ it.
+
+While the first scenario seems much more natural, the end result in both is the same (the wall is hit with probability $p_L+p_R$) and so the question of  whether we should model nature as following the first scenario or second one  seems like asking about the proverbial tree that falls in the forest with no one hearing about it.
+
+However, when we want to describe the double slit experiment with photons rather than baseballs, it is the second scenario that lends itself better to a quantum generalization.
+Quantum mechanics associates a number $\alpha$ known as an _amplitude_ with each probabilistic experiment.
+This number $\alpha$ can be _negative_, and in fact even _complex_.
+We never observe the amplitudes directly, since whenever we _measure_ an event with amplitude $\alpha$, nature tosses a coin and determines that the event happens with probability $|\alpha|^2$.
+However, the sign (or in the complex case, phase) of the amplitudes can affect whether two different events have _constructive_ or _destructive_ interference.
+
+
+Specifically, consider an event that can either occur or not (e.g. "detector number 17 was hit by a photon").
+In classical probability, we model this by a probability distribution over the two outcomes: a pair of non-negative numbers $p$ and $q$ such that $p+q=1$, where $p$ corresponds to  the probability that the event occurs and $q$ corresponds to the probability that the event does not occur.
+In quantum mechanics, we model this also by  pair of numbers, which we call _amplitudes_. This is  a pair of (potentially negative or even complex) numbers $\alpha$ and $\beta$ such that $|\alpha|^2 + |\beta|^2 =1$.
+The probability that the event occurs is $|\alpha|^2$ and the probability that it does not occur is $|\beta|^2$.
+In isolation, these negative or complex numbers don't matter much, since we anyway square them to obtain probabilities.
+But the interaction of positive and negative amplitudes can result in surprising _cancellations_ where somehow combining two scenarios where an event happens with positive probability results in a scenario where it  never does.
+
+::: { .pause }
+If you don't find the above description confusing and unintuitive, you probably didn't get it.
+Please make sure to re-read the above paragraphs until you are thoroughly confused.
+:::
+
+
+
+
+
+
+Quantum mechanics is a mathematical theory that allows us to calculate and predict the results of the double-slit and many other experiments.
+If you think of quantum mechanics as an explanation as to what "really" goes on in the world, it can be rather confusing.
+However, if you simply "shut up and calculate" then it works amazingly well at predicting  experimental results.
+In particular, in the double slit experiment, for any position in the wall, we can compute  numbers $\alpha$ and $\beta$ such that photons from the first and second slit  hit that position with probabilities $|\alpha|^2$ and $|\beta|^2$ respectively.
+When we open both slits, the probability that the position will be hit is proportional to $|\alpha+\beta|^2$, and so in particular, if $\alpha=-\beta$ then it will be the case that, despite being hit when _either_ slit one or slit two are open, the position is _not hit at all_ when they both are.
+If you are confused by quantum mechanics,  you are not alone: for decades people have been trying to come up with [explanations](https://en.wikipedia.org/wiki/Interpretations_of_quantum_mechanics) for "the underlying reality" behind quantum mechanics, including [Bohmian Mechanics](https://en.wikipedia.org/wiki/De_Broglie%E2%80%93Bohm_theory),  [Many Worlds](https://en.wikipedia.org/wiki/Many-worlds_interpretation) and others.
+However, none of these interpretations have gained universal acceptance and all of those (by design) yield the same experimental predictions.
+Thus at this point many scientists prefer to just ignore the question of what is the "true reality" and go back to simply "shutting up and calculating".
+
+
+Some of the counterintuitive properties that arise from amplitudes or "negative probabilities" include:
 
 * **Interference** - As we see here, probabilities can "cancel each other out".
 * **Measurement** -   The idea that probabilities are negative as long as "no one is looking" and "collapse" to positive probabilities when they are _measured_ is deeply disturbing. Indeed, people have shown that it can yield to various strange outcomes such as "spooky actions at a distance", where we can measure an object at one place and instantaneously (faster than the speed of light) cause a difference in the results of a measurements in a place far removed. Unfortunately (or fortunately?) these strange outcomes have been confirmed experimentally.
 * **Entanglement** - The notion that two parts of the system could be connected in this weird way where measuring one will affect the other is known as _quantum entanglement_.   
 
 Again, as counter-intuitive as these concepts are, they have been experimentally confirmed, so we just have to live with them.
+
+
+
+::: {.remark title="Complex vs real, other simplifications" #complexrem}
+If (like the author) you are a bit intimidated by complex numbers, don't worry: you can think of all amplitudes as _real_ (though potentially _negative_) numbers without loss of understanding.
+All the "magic" of quantum computing already arises in this case, and so we will often restrict attention to real amplitudes in this chapter.
+
+We will also only discuss so-called _pure_ quantum states, and not the more general notion of _mixed_ states.
+Pure states turn out to be sufficient for understanding the algorithmic aspects of quantum computing.
+
+More generally, this chapter is not meant to be a complete  description of quantum mechanics, quantum information theory, or quantum computing, but rather illustrate the main points where these differ  from classical computing.
+:::
+
 
 ### Quantum computing and computation - an executive summary.
 
@@ -79,17 +155,19 @@ For a while these hypothetical quantum computers seemed useful for one of two th
 First, to provide a general-purpose mechanism to simulate a variety of the real quantum systems that people care about.
 Second, as a challenge to the theory of computation's approach to model efficient computation by Turing machines, though a challenge that has little bearing to practice, given that this theoretical "extra power" of quantum computer seemed to offer little advantage in the problems people actually want to solve such as combinatorial optimization, machine learning,  data structures, etc..
 
-To a significant extent, this is still true today. We have no real evidence that quantum computers, if built, will offer truly significant[^Grover] advantage in 99 percent of the applications of computing.[^overhead]
+To a significant extent, this is still true today.   We have no real evidence that quantum computers, when built, will offer truly significant[^Grover] advantage in 99 percent of the applications of computing.[^overhead]
 However, there is one cryptography-sized exception:
 In 1994 Peter Shor showed that quantum computers can solve the integer factoring and discrete logarithm in polynomial time.
 This result has captured the imagination of a great many people, and completely energized research into quantum computing.  
 This is both because the hardness of these particular problems provides the foundations for securing such a huge part of our communications (and these days, our economy), as well as it was a powerful demonstration that quantum computers could turn out to be useful for problems that a-priori seemed to have nothing to do with quantum physics.
-As we'll discuss later, at the moment there are several intensive efforts to construct large scale quantum computers.
-It seems safe to say that, as far as we know, in the next five years or so there will not be a quantum computer large enough to factor, say, a $1024$ bit number, but it is quite possible that some quantum computer will be built that is strong enough to achieve some task that is too inefficient to achieve with a non-quantum or "classical" computer (or at least requires more resources classically than it would for this computer).
+
+
+At the moment there are several intensive efforts to construct large scale quantum computers. It seems safe to say that, in the next five years or so there will not be a quantum computer large enough to factor, say, a $1024$ bit number.
+However, some quantum computers have been built that achieved tasks that are either not known to be achieved classically, or at least seem to require more resources classically than they do for these quantum computers.
 When and if such a computer is built that can break reasonable parameters of Diffie Hellman, RSA and elliptic curve cryptography is anybody's guess.
 It could also be a "self destroying prophecy" whereby the existence of a small-scale quantum computer would cause everyone to shift away to lattice-based crypto which in turn will diminish the motivation to invest the huge resources needed to build a large scale quantum computer.[^legacy]
 
-[^legacy]: Of course, given that [we're still hearing](http://blog.cryptographyengineering.com/2016/03/attack-of-week-drown.html) of attacks exploiting "export grade" cryptography that was supposed to disappear with 1990's, I imagine that we'll still have products running 1024 bit RSA when everyone has a quantum laptop.
+[^legacy]: Of course, given that  "export grade" cryptography that was supposed to disappear with 1990's [took a long time to die](http://blog.cryptographyengineering.com/2016/03/attack-of-week-drown.html), I imagine that we'll still have products running 1024 bit RSA when everyone has a quantum laptop.
 
 [^overhead]: This "99 percent" is a figure of speech, but not completely so. It seems that for many web servers, the TLS protocol (which based on the current non-lattice based systems would be completely broken by quantum computing) is responsible [for about 1 percent of the CPU usage](https://goo.gl/Gekjrc).  
 
@@ -184,14 +262,22 @@ The [threshold theorem](https://courses.cs.washington.edu/courses/cse599d/06wi/l
 
 There have been several proposals to build quantum computers:
 
-* [Superconducting quantum computers](https://en.wikipedia.org/wiki/Superconducting_quantum_computing) use super-conducting electric circuits to do quantum computation. [Recent works](http://arxiv.org/abs/1411.7403) have shown one can keep these superconducting qubits fairly robust to the point one can do some error correction on them (see also [here](http://arxiv.org/abs/1508.05882v2)).
+* [Superconducting quantum computers](https://arxiv.org/abs/1905.13641) use super-conducting electric circuits to do quantum computation.  These are currently the devices with largest number of fully controllable qubits.
 
-* [Trapped ion quantum computers](https://en.wikipedia.org/wiki/Trapped_ion_quantum_computer) Use the states of an ion to simulate a qubit. People have made some [recent advances](http://iontrap.umd.edu/wp-content/uploads/2016/02/1602.02840v1.pdf) on these computers too. While it's not clear that's the right measuring yard, the [current best implementation](http://arxiv.org/abs/1507.08852) of Shor's algorithm (for factoring 15) is done using an ion-trap computer.
+* At Harvard, Lukin's group is using [cold atoms](https://lukin.physics.harvard.edu/arrays-cold-atoms)  to implement quantum computers.
+
+* [Trapped ion quantum computers](https://en.wikipedia.org/wiki/Trapped_ion_quantum_computer) Use the states of an ion to simulate a qubit. People have made some [recent advances](http://iontrap.umd.edu/wp-content/uploads/2016/02/1602.02840v1.pdf) on these computers too. For example, an ion-trap computer was used to [implement Shor's algorithm to factor 15](http://arxiv.org/abs/1507.08852). (It turns out that $15=3\times 5$ :) )
 
 * [Topological quantum computers](https://en.wikipedia.org/wiki/Topological_quantum_computer) use a different technology, which is more stable by design but arguably harder to manipulate to create quantum computers.
 
 These approaches are not mutually exclusive and it could be that ultimately quantum computers are built by combining all of them together.
-I am not at all an expert on this matter, but it seems that progress has been slow but steady and it is quite possible that we'll see a 20-50 qubit computer sometime in the next 5-10 years.
+At the moment, we have devices with about $100$ qubits, and about $1\%$ error per gate.
+Such restricted machines are sometimes called "Noisy Intermediate-Scale Quantum Computers" or  "NISQ".
+See [this article by John Preskil](https://arxiv.org/abs/1801.00862) for some of the progress and applications of such more restricted devices.
+If the number of qubits is increased and the error is decreased by one or two orders of magnitude, we could start seeing more applications.
+
+
+![Superconducting quantum computer prototype at Google. Image credit: Google / MIT Technology Review.](../figure/googlequantum.jpg){#googlequantumfig .margin width=300px height=300px}
 
 
 ### Bra-ket notation
@@ -213,90 +299,137 @@ A quantum gate is an operation on at most three bits, and so it can be completel
 Quantum states are always unit vectors and so we sometimes omit the normalization for convenience; for example we will identify the state $|0\rangle+|1\rangle$ with its normalized version $\tfrac{1}{\sqrt{2}}|0\rangle + \tfrac{1}{\sqrt{2}}|1\rangle$.
 
 
-### Bell's Inequality
+## Bell's Inequality
 
 There is something weird about quantum mechanics.
 In 1935 [Einstein, Podolsky and Rosen (EPR)](http://plato.stanford.edu/entries/qt-epr/) tried to pinpoint this issue by highlighting a previously unrealized corollary of this theory.
-It was already realized that the fact that quantum measurement collapses the state to a definite aspect yields the _uncertainty principle_, whereby if you measure a quantum system in one orthogonal basis, you will not know how it would have measured in an incohrent basis to it (such as position vs. momentum).
-What EPR showed was that quantum mechanics results in so called "spooky action at a distance" where if you have a system of two particles then measuring one of them would instantenously effect the state of the other.
-Since this "state" is just a mathematical description,  as far as I know the EPR paper was considered to be a thought experiment showing troubling aspects of quantum mechanics, without bearing on experiment.
-This changed when in 1965 John Bell showed an actual experiment to test the predictions of EPR and hence pit intuitive common sense against the predictions of quantum mechanics.
-Quantum mechanics won.
-Nonetheless, since the results of these experiments are so obviously wrong to anyone that has ever sat in an armchair,  that there are still a number of [Bell denialists](http://www.scottaaronson.com/blog/?p=2464) arguing that quantum mechanics is wrong in some way.
+They showed that the idea that nature does not determine the results of an experiment until it is measured results in so called  "spooky action at a distance".
+Namely, making a measurement of one object may  instantaneously  effect the state (i.e., the vector of amplitudes) of another object in the other end of the universe.
+
+
+Since the vector of amplitudes  is just a mathematical abstraction,  the EPR paper was considered to be merely a thought experiment for philosophers to be concerned about, without bearing on experiments.
+This changed when in 1965 John Bell showed an actual experiment to test the predictions of EPR and hence pit intuitive common sense against the quantum mechanics.
+Quantum mechanics won: it turns out that it _is_ in fact possible to use measurements to create correlations between the states of objects far removed from one another that cannot be explained by any prior theory.
+Nonetheless, since the results of these experiments are so obviously wrong to anyone that has ever sat in an armchair,  that there are still a number of [Bell denialists](http://www.scottaaronson.com/blog/?p=2464) arguing that this can't be true and quantum mechanics is wrong.
 
 So, what is this Bell's Inequality?
 Suppose that Alice and Bob try to convince you they have telepathic ability, and they aim to prove it via the following experiment.
-Alice and Bob will be in separate closed rooms.[^paranoid]
+Alice and Bob will be in separate closed rooms.^[If you are extremely paranoid about Alice and Bob communicating with one another, you can coordinate with your assistant to perform the experiment exactly at the same time, and make sure that the rooms are sufficiently far apart (e.g., are on two different continents, or maybe even one is on the moon and another is on earth) so that Alice and Bob couldn't communicate to each other in time the results of their respective coins even if they do so at the speed of light.]
 You will interrogate Alice and your associate will interrogate Bob.
 You choose a random bit $x\in\{0,1\}$ and your associate chooses a random $y\in\{0,1\}$.
 We let $a$ be Alice's response and $b$ be Bob's response.
 We say that Alice and Bob win this experiment if $a \oplus b = x \wedge y$.
+In other words, Alice and Bob need to output two bits that _disagree_ if $x=y=1$ and _agree_ otherwise.^[This form of Bell's game was shown by [Clauser, Horne, Shimony, and Holt](https://goo.gl/wvJGZU).]
 
-[^paranoid]: If you are extremely paranoid about Alice and Bob communicating with one another, you can coordinate with your assistant to perform the experiment exactly at the same time, and make sure that the rooms are so that Alice and Bob couldn't communicate to each other in time the results of the coin even if they do so at the speed of light.
+
+
 
 
 Now if Alice and Bob are not telepathic, then they need to agree in advance on some strategy.
-The most general form of such a strategy is that Alice and Bob agree on some distribution over a pair of functions $d,g:\{0,1\}\rightarrow\{0,1\}$, such that Alice will set $a=f(x)$ and
-Bob will set $b=g(x)$.
-Therefore, the following claim, which is basically Bell's Inequality,[^CHSH] implies that Alice and Bob cannot succeed in this game with probability higher than $3/4$:
+It's not hard for Alice and Bob to succeed with probability $3/4$: just always output the same bit.
+Moreover, by doing some case analysis, we can show that no matter what strategy they use, Alice and Bob cannot succeed with higher probability than that:^[[bellthm](){.ref} below assumes that Alice and Bob use _deterministic_ strategies $f$ and $g$ respectively. More generally, Alice and Bob could use a _randomized_ strategy, or equivalently, each could choose $f$ and $g$ from some  _distributions_ $\mathcal{F}$ and $\mathcal{G}$ respectively.  However the _averaging principle_ ([averagingprinciplerem](){.ref}) implies that if all possible deterministic strategies succeed with probability at most $3/4$, then the same is true for all randomized strategies.]
 
-__Claim:__ For every two functions $f,g:\{0,1\}\rightarrow\{0,1\}$ there exist some $x,y\in\{0,1\}$ such that $f(x) \oplus g(y) \neq x \wedge y$.
+> # {.theorem title="Bell's Inequality" #bellthm}
+For every two functions $f,g:\{0,1\}\rightarrow\{0,1\}$, $\Pr_{x,y \in \{0,1\}}[  f(x) \oplus g(y) = x \wedge y] \leq 3/4$.
 
-__Proof:__  Suppose toward a contradiction that $f,g$ satisfy
-$f(x) \oplus g(y) = x \wedge y \;(*)$
-or
-$f(x) = (x \wedge y) \oplus g(y)\;(*)$ \;.
-So if $y=0$ it must be that $f(x)=0$ for all $x$, but on the other hand, if $y=1$ then for $(*)$ to hold then it must be that $f(x) = x \oplus g(1)$ but that means that $f$ cannot be constant. QED
+::: {.proof data-ref="bellthm"}
+Since the probability is taken over all four choices of $x,y \in \{0,1\}$, the only way the theorem can  be violated if if there exist  two functions $f,g$ that satisfy
 
-[^CHSH]: This form of Bell's game was shown by CHSH
+$$f(x) \oplus g(y) = x \wedge y$$
 
-An amazing [experimentally verified](http://arxiv.org/abs/1508.05949) fact is that quantum mechanics allows for telepathy:[^telepathy]
+for all the four choices of  $x,y \in \{0,1\}^2$.
+Let's plug in all these four choices and see what we get (below we use the equalities $z \oplus 0 = z$, $z \wedge 0=0$ and $z \wedge 1 = z$):
+
+$$
+\begin{aligned}
+f(0) &\oplus g(0) &= 0\;\;\;\; &(\text{plugging in } x=0,y=0) \\
+f(0) &\oplus g(1) &= 0\;\;\;\; &(\text{plugging in } x=0,y=1) \\
+f(1) &\oplus g(0) &= 0\;\;\;\; &(\text{plugging in } x=1,y=0) \\
+f(1) &\oplus g(1) &= 1\;\;\;\; &(\text{plugging in } x=1,y=1)
+\end{aligned}
+$$
+
+If we XOR together the first and second equalities we get $g(0) \oplus g(1) = 0$ while if we XOR together the third and fourth equalities we get $g(0) \oplus g(1) = 1$, thus obtaining a contradiction.
+:::
+
+
+
+
+
+An amazing [experimentally verified](http://arxiv.org/abs/1508.05949) fact is that quantum mechanics allows for "telepathy".[^telepathy]
+Specifically, it has been shown that using the weirdness of quantum mechanics, there is in fact a strategy for Alice and Bob to succeed in this game with probability larger than $3/4$  (in fact, they can succeed with probability about $0.85$, see [bellstrategy](){.ref}).
+
 
 [^telepathy]: More accurately, one either has to give up on a "billiard ball type" theory of the universe or believe in telepathy (believe it or not, some scientists went for the [latter option](https://en.wikipedia.org/wiki/Superdeterminism)).
 
-__Claim:__ There is a strategy for Alice and Bob to succeed in this game with probability at least $0.8$.
+## Analysis of Bell's Inequality 
 
-__Proof:__ The main idea is for Alice and Bob to first prepare a 2-qubit quantum system in the state (up to normalization)
-$|00\rangle+|11\rangle$ (this is known as an _EPR pair_).
-Alice takes the first qubit in this system to her room, and Bob takes the qubit to his room.
-Now, when Alice receives $x$ if $x=0$ she does nothing and if $x=1$ she applies the unitary map $R_{\pi/8}$ to her qubit where $R_\theta = \begin{pmatrix} cos \theta & \sin -\theta \\ \sin \theta & \cos \theta \end{pmatrix}$.
-When Bob receives $y$, if $y=0$ he does nothing and if $y=1$ he applies the unitary map $R_{-\pi/8}$ to his qubit.
+Now that we have the notation in place, we can show a strategy for Alice and Bob to display "quantum telepathy" in Bell's Game.
+Recall that in the classical case, Alice and Bob can succeed in the "Bell Game" with probability at most $3/4 = 0.75$.
+We now show that quantum mechanics allows them to succeed with probability at least $0.8$.^[The strategy we show is not the best one. Alice and Bob can in fact  succeed with probability $\cos^2(\pi/8) \sim 0.854$.]
+
+
+> # {.lemma #bellstrategy}
+There is a 2-qubit quantum state $\psi\in \mathbb{C}^4$ so that if Alice has access to the first qubit of $\psi$, can manipulate and measure it and output $a\in \{0,1\}$ and Bob has access to the second qubit of $\psi$ and can manipulate and measure it and output $b\in \{0,1\}$ then
+$\Pr[ a \oplus b = x \wedge y ] \geq 0.8$.
+
+::: {.proof data-ref="bellstrategy"}
+Alice and Bob will start by preparing a  2-qubit quantum system in the state
+
+$$\psi = \tfrac{1}{\sqrt{2}}|00\rangle + \tfrac{1}{\sqrt{2}}|11\rangle$$
+
+(this state is known as an [EPR pair](https://en.wikipedia.org/wiki/EPR_paradox)).
+Alice takes the first qubit of the  system to her room, and Bob takes the qubit to his room.
+Now, when Alice receives $x$ if $x=0$ she does nothing and if $x=1$ she applies the unitary map $R_{-\pi/8}$ to her qubit where $R_\theta = \begin{pmatrix} cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{pmatrix}$ is the unitary operation corresponding to rotation in the plane with angle $\theta$.
+When Bob receives $y$, if $y=0$ he does nothing and if $y=1$ he applies the unitary map $R_{\pi/8}$ to his  qubit.
 Then each one of them measures their qubit and sends this as their response.
+
+
 Recall that to win the game Bob and Alice want their outputs to be more likely to differ if $x=y=1$ and to be more likely to agree otherwise.
+We will split the analysis in one case for each of the four possible values of $x$ and $y$.
 
-If $x=y=0$ then the state does not change and Alice and Bob always output either both $0$ or both $1$, and hence in both case $a\oplus b = x \wedge y$.
-If $x=0$ and $y=1$ then after Alice measures her bit, if she gets $0$ then Bob's state is equal to $-\cos (\pi/8)|0\rangle-\sin(\pi/8)|1\rangle$ which will equal $0$ with probability $\cos^2 (\pi/8)$.
-The case that Alice gets $1$, or that $x=1$ and $y=0$, is symmetric, and so in all the cases where $x\neq y$ (and hence $x \wedge y=0$) the probability that $a=b$ will be $\cos^2(\pi/8) \geq 0.85$.
-For the case that $x=1$ and $y=1$, direct calculation via trigonomertic identities yields that all four options for $(a,b)$ are equally likely and hence in this case $a=b$ with probability $0.5$.
-The overall probability of winning the game is at least $\tfrac{1}{4}\cdot 1 + \tfrac{1}{2}\cdot 0.85 + \tfrac{1}{4} \cdot 0.5 =0.8$. QED
+__Case 1: $x=0$ and $y=0$.__ If $x=y=0$ then the state does not change.
+* Because the state $\psi$ is proportional to    $|00\rangle + |11\rangle$, the measurements of Bob and Alice will always agree (if Alice measures $0$ then the state collapses to $|00 \rangle$ and so Bob measures $0$ as well, and similarly for $1$).
+Hence in the case $x=y=1$, Alice and Bob always  win.
 
->__Quantum vs probabilistic strategies:__ It is instructive to understand what is it about quantum mechanics that enabled this gain in Bell's Inequality. For this, consider the following analogous probabilistic strategy for Alice and Bob. They agree that each one of them output $0$ if he or she get $0$ as input and outputs $1$ with probability $p$ if they get $1$ as input. In this case one can see that their success probability would be $\tfrac{1}{4}\cdot 1 + \tfrac{1}{2}(1-p)+\tfrac{1}{4}[2p(1-p)]=0.75 -0.5p^2 \leq 0.75$. The quantum strategy we described above can be thought of as a variant of the probabilistic strategy for $p$ is $\sin^2 (\pi/8)=0.15$. But in the case $x=y=1$, instead of disagreeing only with probability $2p(1-p)=1/4$, because we can use these negative probabilities in the quantum world and rotate the state in opposite directions, the probability of disagreement ends up being $\sin^2 (\pi/4)=0.5$.
+__Case 2: $x=0$ and $y=1$.__ If $x=0$ and $y=1$ then after Alice measures her bit, if she gets $0$ then the system collapses to the state $|00 \rangle$, in which case after Bob performs his rotation, his qubit is in the state  $\cos (\pi/8)|0\rangle+\sin(\pi/8)|1\rangle$.
+Thus, when Bob measures his qubit, he will get $0$ (and hence agree with Alice) with probability  $\cos^2 (\pi/8)  \geq 0.85$.
+Similarly, if Alice gets $1$ then the system collapses to $|11 \rangle$, in which case after rotation Bob's qubit will be in the state $-\sin (\pi/8)|0\rangle+\cos(\pi/8)|1\rangle$ and so once again he will agree with Alice with probability $\cos^2(\pi/8)$.
+
+The analysis for __Case 3__, where $x=1$ and $y=0$, is completely analogous to Case 2. Hence Alice and Bob will agree with probability $\cos^2(\pi/8)$ in this case as well.^[We are using the (not too hard) observation that the result of this  experiment is the same regardless of the order in which Alice and Bob apply their rotations and measurements.]
 
 
+__Case 4: $x=1$ and $y=1$.__ For the case that $x=1$ and $y=1$, after both Alice and Bob perform their rotations, the state will be proportional to
+
+$$R_{-\pi/8}|0\rangle R_{\pi/8}|0 \rangle + R_{-\pi/8}|1\rangle R_{\pi/8}|1 \rangle \;. \label{quantumbellcasefoureq}$$
 
 
+Intuitively, since we rotate one state by 45 degrees and the other state by -45 degrees, they will become orthogonal to each other, and the measurements will behave like independent coin tosses that agree with probability 1/2.
+However, for the sake of completeness, we now show the full calculation.
 
-<!--
+Opening up the coefficients and using $\cos(-x)=\cos(x)$ and $\sin(-x)=-\sin(x)$, we can see that [quantumbellcasefoureq](){.eqref} is proportional to
 
-Now for every $x,y$, the state of the two qubits before measurement is the $4$ dimensional vector:
-$v_{x,y} = \tfrac{1}{\sqrt{2}}\left[ R_{x\pi/8}|0\rangle \otimes R_{-y\pi/8}|1\rangle \;+\; R_{x\pi/8}|0\rangle \otimes R_{-y\pi/8}|1\rangle \right] \;(**)$
+$$
+\begin{aligned}
+\cos^2(\pi/8)|00 \rangle &+ \cos(\pi/8)\sin(\pi/8)|01 \rangle \\
+- \sin(\pi/8)\cos(\pi/8)|10\rangle  &+ \sin^2(\pi/8)|11 \rangle \\
+-  \sin^2(\pi/8)|00 \rangle &+ \sin(\pi/8)\cos(\pi/8)|01 \rangle \\
+-  \cos(\pi/8)\sin(\pi/8)|10\rangle  &+ \cos^2(\pi/8)|11 \rangle \;.
+\end{aligned}
+$$
 
-If $v \in \mathbb{R}^4$ is the state of the two qubits,[^real] then the probability that we get a particular output $(a,b)$ is simply the dot product squared of $v$ with $|ab\rangle$.
-Since $|1\rangle=R_{\pi/2}|0\rangle$, and $\langle R_\alpha u,R_\beta u \rangle^2 = \cos^2 (\beta-\alpha)$, we get that for every choice of the coins $x,y$ and $a,b$
-the probability that we get $a,b$ as output conditioned on $x,y$ is:
+Using the trigonometric identities $2\sin(\alpha)\cos(\alpha)= \sin(2\alpha)$ and $\cos^(\alpha) - \sin^2(\alpha) = \cos(2\alpha)$, we see that the probability of getting any one of $|00\rangle,|10\rangle,|01\rangle,|11\rangle$ is proportional to $\cos(\pi/4)=\sin(\pi/4)=\tfrac{1}{\sqrt{2}}$.
+Hence all four options for $(a,b)$ are equally likely, which mean that in this case $a=b$ with probability $0.5$.
 
-$\tfrac{1}{2}\left[ \cos^2(a\pi/2-x\pi/8)\cos^2(b\pi/2+y\pi/8) + \sin^2(a\pi/2-x\pi/8)\sin^2(b\pi/2+y\pi/8) right]$
 
-One can calculate that if $x=y=0$ then this equals $1$ if $a=b$ and $0$ if $a \neq b$, which implies they win the game with probability $1$.
-If $x=y=1$ then this equals
-which by calculation yields success probability of at least 0.8 QED
+Taking all the four cases together,  the overall probability of winning the game is at least $\tfrac{1}{4}\cdot 1 + \tfrac{1}{2}\cdot 0.85 + \tfrac{1}{4} \cdot 0.5 =0.8$.
+:::
 
-[^real]: In general the state of two qubits is a _complex_ $2^2=4$ dimensional vector but in this case since the initial state was real and our transformations are real, the state will always be a real vector with no imaginary components.
--->
 
-<!--
-[Bell's overview paper](http://philosophyfaculty.ucsd.edu/faculty/wuthrich/GSSPP09/Files/BellJohnS1981Speakable_BertlmannsSocks.pdf)
--->
+> # {.remark title="Quantum vs probabilistic strategies" #quantumprob}
+It is instructive to understand what is it about quantum mechanics that enabled this gain in Bell's Inequality. For this, consider the following analogous probabilistic strategy for Alice and Bob. They agree that each one of them output $0$ if he or she get $0$ as input and outputs $1$ with probability $p$ if they get $1$ as input. In this case one can see that their success probability would be $\tfrac{1}{4}\cdot 1 + \tfrac{1}{2}(1-p)+\tfrac{1}{4}[2p(1-p)]=0.75 -0.5p^2 \leq 0.75$. The quantum strategy we described above can be thought of as a variant of the probabilistic strategy for parameter $p$ set to  $\sin^2 (\pi/8)=0.15$. But in the case $x=y=1$, instead of disagreeing only with probability $2p(1-p)=1/4$, because we can use these negative probabilities in the quantum world and rotate the state in opposite directions, and hence  the probability of disagreement ends up being $\sin^2 (\pi/4)=0.5$.
+
+
 
 
 ## Grover's Algorithm
