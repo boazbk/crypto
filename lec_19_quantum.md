@@ -90,7 +90,7 @@ Specifically, consider an event that can either occur or not (e.g. "detector num
 In classical probability, we model this by a probability distribution over the two outcomes: a pair of non-negative numbers $p$ and $q$ such that $p+q=1$, where $p$ corresponds to  the probability that the event occurs and $q$ corresponds to the probability that the event does not occur.
 In quantum mechanics, we model this also by  pair of numbers, which we call _amplitudes_. This is  a pair of (potentially negative or even complex) numbers $\alpha$ and $\beta$ such that $|\alpha|^2 + |\beta|^2 =1$.
 The probability that the event occurs is $|\alpha|^2$ and the probability that it does not occur is $|\beta|^2$.
-In isolation, these negative or complex numbers don't matter much, since we anyway square them to obtain probabilities.
+In isolation, these negative or complex numbers don't matter much, since we square them anyway to obtain probabilities.
 But the interaction of positive and negative amplitudes can result in surprising _cancellations_ where somehow combining two scenarios where an event happens with positive probability results in a scenario where it  never does.
 
 ::: { .pause }
