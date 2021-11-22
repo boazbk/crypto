@@ -285,7 +285,7 @@ If the number of qubits is increased and the error is decreased by one or two or
 Quantum computing is very confusing and counterintuitive for many reasons.
 But there is also a "cultural" reason why people sometimes find quantum arguments hard to follow.
 Quantum folks follow their own special [notation](https://en.wikipedia.org/wiki/Bra%E2%80%93ket_notation) for vectors.
-Many non quantum people find it ugly and confusing, while quantum folks secretly wish they people used it all the time, not just for non-quantum linear algebra, but also for restaurant bills and elemntary school math classes.
+Many non quantum people find it ugly and confusing, while quantum folks secretly wish they people used it all the time, not just for non-quantum linear algebra, but also for restaurant bills and elementary school math classes.
 
 The notation is actually not so confusing. If $x\in\{0,1\}^n$ then $|x\rangle$ denotes the $x^{th}$ standard basis vector in $2^n$ dimension.
 That is $|x\rangle$  $2^n$-dimensional column vector that has $1$ in the $x^{th}$ coordinate and zero everywhere else.
@@ -418,7 +418,7 @@ $$
 \end{aligned}
 $$
 
-Using the trigonometric identities $2\sin(\alpha)\cos(\alpha)= \sin(2\alpha)$ and $\cos^(\alpha) - \sin^2(\alpha) = \cos(2\alpha)$, we see that the probability of getting any one of $|00\rangle,|10\rangle,|01\rangle,|11\rangle$ is proportional to $\cos(\pi/4)=\sin(\pi/4)=\tfrac{1}{\sqrt{2}}$.
+Using the trigonometric identities $2\sin(\alpha)\cos(\alpha)= \sin(2\alpha)$ and $\cos^2(\alpha) - \sin^2(\alpha) = \cos(2\alpha)$, we see that the probability of getting any one of $|00\rangle,|10\rangle,|01\rangle,|11\rangle$ is proportional to $\cos(\pi/4)=\sin(\pi/4)=\tfrac{1}{\sqrt{2}}$.
 Hence all four options for $(a,b)$ are equally likely, which mean that in this case $a=b$ with probability $0.5$.
 
 
