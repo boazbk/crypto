@@ -99,7 +99,7 @@ You should also understand the distinction between ciphertexts that are the outp
 
 
 
-A _fully homomomorphic encryption_ is simply a partially homomorphic encryption scheme for the family $\mathcal{F}$ of _all_ functions, where the description of a function is as a circuit (say composed of [NAND](https://en.wikipedia.org/wiki/NAND_gate) gates, which are known to be a universal basis).
+A _fully homomorphic encryption_ is simply a partially homomorphic encryption scheme for the family $\mathcal{F}$ of _all_ functions, where the description of a function is as a circuit (say composed of [NAND](https://en.wikipedia.org/wiki/NAND_gate) gates, which are known to be a universal basis).
 
 ### Another application: fully homomorphic encryption for verifying computation
 
