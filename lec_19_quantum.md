@@ -9,9 +9,9 @@ chapternum: "18"
 # Quantum computing and cryptography I
 
 
->_"I think I can safely say that nobody understands quantum mechanics."_ , Richard Feynman, 1965
+>_"I think I can safely say that nobody understands quantum mechanics." Richard Feynman, 1965
 
->_"The only difference between a probabilistic classical world and the equations of the quantum world is that somehow or other it appears as if the probabilities would have to go negative "_, Richard Feynman, 1982
+>_"The only difference between a probabilistic classical world and the equations of the quantum world is that somehow or other it appears as if the probabilities would have to go negative," Richard Feynman, 1982
 
 There were two schools of natural philosophy in ancient Greece.
 _Aristotle_ believed that objects have an _essence_ that explains their behavior, and a theory of the natural world has to refer to the _reasons_ (or "final cause" to use Aristotle's language) as to why they exhibit certain phenomena.
@@ -40,8 +40,8 @@ If we now carve out an additional slit in the metal barrier then more balls woul
 
 So far this is pure common sense, and it is indeed (to my knowledge) an accurate description of what happens when we shoot baseballs at a plastic wall.
 However, this is not the same when we shoot _photons_.
-Amazingly, if we shoot with a "photon gun" (i.e., a laser) at a wall equipped with photon detectors through some barrier, then (as shown in [doubleslitfig](){.ref}) in some positions of the wall we will see  _fewer_ hits when the two slits are open than one only ones of them is!.^[A nice illustrated description of the double slit experiment appears in   [this video](https://www.youtube.com/watch?v=DfPeprQ7oGc).]
-In particular there are positions in the wall that are hit when the first slit is open, hit when the  second gun is open, but are _not hit at all when both slits are open!_.
+Amazingly, if we shoot with a "photon gun" (i.e., a laser) at a wall equipped with photon detectors through some barrier, then (as shown in [doubleslitfig](){.ref}) in some positions of the wall we will see  _fewer_ hits when the two slits are open than when only ones of them is!^[A nice illustrated description of the double slit experiment appears in   [this video](https://www.youtube.com/watch?v=DfPeprQ7oGc).]
+In particular there are positions in the wall that are hit when the first slit is open, hit when the  second gun is open, but are _not hit at all when both slits are open!
 
 
 
@@ -90,7 +90,7 @@ Specifically, consider an event that can either occur or not (e.g. "detector num
 In classical probability, we model this by a probability distribution over the two outcomes: a pair of non-negative numbers $p$ and $q$ such that $p+q=1$, where $p$ corresponds to  the probability that the event occurs and $q$ corresponds to the probability that the event does not occur.
 In quantum mechanics, we model this also by  pair of numbers, which we call _amplitudes_. This is  a pair of (potentially negative or even complex) numbers $\alpha$ and $\beta$ such that $|\alpha|^2 + |\beta|^2 =1$.
 The probability that the event occurs is $|\alpha|^2$ and the probability that it does not occur is $|\beta|^2$.
-In isolation, these negative or complex numbers don't matter much, since we anyway square them to obtain probabilities.
+In isolation, these negative or complex numbers don't matter much, since we square them anyway to obtain probabilities.
 But the interaction of positive and negative amplitudes can result in surprising _cancellations_ where somehow combining two scenarios where an event happens with positive probability results in a scenario where it  never does.
 
 ::: { .pause }
@@ -153,13 +153,13 @@ Such a system is now known as a _quantum computer_.
 
 For a while these hypothetical quantum computers seemed useful for one of two things.
 First, to provide a general-purpose mechanism to simulate a variety of the real quantum systems that people care about.
-Second, as a challenge to the theory of computation's approach to model efficient computation by Turing machines, though a challenge that has little bearing to practice, given that this theoretical "extra power" of quantum computer seemed to offer little advantage in the problems people actually want to solve such as combinatorial optimization, machine learning,  data structures, etc..
+Second, as a challenge to the theory of computation's approach to model efficient computation by Turing machines, though a challenge that has little bearing to practice, given that this theoretical "extra power" of quantum computer seemed to offer little advantage in the problems people actually want to solve such as combinatorial optimization, machine learning,  data structures, etc.
 
 To a significant extent, this is still true today.   We have no real evidence that quantum computers, when built, will offer truly significant[^Grover] advantage in 99 percent of the applications of computing.[^overhead]
 However, there is one cryptography-sized exception:
-In 1994 Peter Shor showed that quantum computers can solve the integer factoring and discrete logarithm in polynomial time.
+In 1994 Peter Shor showed that quantum computers can solve the integer factoring and discrete logarithm problems in polynomial time.
 This result has captured the imagination of a great many people, and completely energized research into quantum computing.  
-This is both because the hardness of these particular problems provides the foundations for securing such a huge part of our communications (and these days, our economy), as well as it was a powerful demonstration that quantum computers could turn out to be useful for problems that a-priori seemed to have nothing to do with quantum physics.
+This is both because the hardness of these particular problems provides the foundations for securing such a huge part of our communications (and these days, our economy), as well as a powerful demonstration that quantum computers could turn out to be useful for problems that a-priori seemed to have nothing to do with quantum physics.
 
 
 At the moment there are several intensive efforts to construct large scale quantum computers. It seems safe to say that, in the next five years or so there will not be a quantum computer large enough to factor, say, a $1024$ bit number.
@@ -187,7 +187,7 @@ relatively short resource that contains essentially everything we discuss here.
 See also this [blog post of Aaronson](http://www.scottaaronson.com/blog/?p=208) for a high level explanation of Shor's algorithm which ends with links to several more detailed expositions.
 See also [this lecture](http://www.scottaaronson.com/democritus/lec14.html) of Aaronson for a great discussion of the feasibility of quantum computing (Aaronson's [course lecture notes](http://www.scottaaronson.com/democritus/default.html) and the [book](http://www.amazon.com/Quantum-Computing-since-Democritus-Aaronson/dp/0521199565) that they spawned are fantastic reads as well).
 
-__States:__ We will consider a simple quantum system that includes $n$ objects (e.g., electrons/photons/transistors/etc..) each of which can be in either an "on" or "off" state - i.e., each of them can encode a single _bit_ of information, but to emphasize the "quantumness" we will call it a _qubit_.
+__States:__ We will consider a simple quantum system that includes $n$ objects (e.g., electrons/photons/transistors/etc.) each of which can be in either an "on" or "off" state - i.e., each of them can encode a single _bit_ of information, but to emphasize the "quantumness" we will call it a _qubit_.
 A _probability distribution_ over such a system can be described as a $2^n$ dimensional vector $v$ with non-negative entries summing up to $1$, where for every $x\in\{0,1\}^n$, $v_x$ denotes the probability that the system is in state $x$.
 As we mentioned, quantum mechanics allows negative (in fact even complex) probabilities and so a _quantum state_ of the system can be described as a $2^n$ dimensional vector $v$ such that $\|v\|^2 = \sum_x |v_x|^2 = 1$.
 
@@ -210,10 +210,10 @@ That is,  $M$ is obtained by "lifting" some $8\times 8$ matrix $M'$ that operate
 Formally, given an $8\times 8$ matrix $M'$ (indexed by strings in $\{0,1\}^3$) and three distinct indices $i<j<k \in \{1,\ldots,n\}$ we define the _$n$-lift of $M'$ with indices $i,j,k$_ to be the $2^n\times 2^n$ matrix $M$ such that for every strings $x$ and $y$ that agree with each other on all coordinates except possibly $i,j,k$, $M_{x,y}=M'_{x_ix_jx_k,y_iy_jy_k}$ and otherwise $M_{x,y}=0$.
 Note that if $M'$ is of the form $M'_f$ for some function $f:\{0,1\}^3\rightarrow\{0,1\}^3$ then $M=M_g$ where $g:\{0,1\}^n\rightarrow\{0,1\}^n$ is defined as $g(x)=f(x_ix_jx_k)$.
 We define $M$ as an _elementary stochastic matrix_ or a _probabilistic gate_ if $M$ is equal to an $n$ lift of some stochastic $8\times 8$ matrix $M'$.
-The quantum case is similar: a _quantum gate_ is a $2^n\times 2^n$ matrix that is an $N$ lift of some unitary $8\times 8$ matrix $M'$.
+The quantum case is similar: a _quantum gate_ is a $2^n\times 2^n$ matrix that is an $n$ lift of some unitary $8\times 8$ matrix $M'$.
 It is an exercise to prove that lifting preserves stochasticity and unitarity. That is,  every probabilistic gate is a stochastic matrix and every quantum gate is a unitary matrix.
 
-__Complexity:__ For every stochastic matrix $M$ we can define its _randomized complexity_, denoted as $R(M)$ to be the minimum number $T$ such that $M$ is can be (approximately) obtained by combining $T$ elementary probabilistic gates. To be concrete, we can define $R(M)$ to be the minimum $T$ such that there exists $T$ elementary matrices $M_1,\ldots,M_T$
+__Complexity:__ For every stochastic matrix $M$ we can define its _randomized complexity_, denoted as $R(M)$ to be the minimum number $T$ such that $M$ can be (approximately) obtained by combining $T$ elementary probabilistic gates. To be concrete, we can define $R(M)$ to be the minimum $T$ such that there exists $T$ elementary matrices $M_1,\ldots,M_T$
 such that for every $x$, $\sum_y |M_{y,x}-(M_T\cdots M_1)_{y,x}|<0.1$.
 (It can be shown that $R(M)$ is finite and in fact at most $10^n$ for every $M$; we can do so by writing $M$ as a convex combination of function and writing every function as a composition of functions that map a single string $x$ to $y$, keeping all other inputs intact.)
 We will say that a probabilistic process $M$ mapping distributions on $\{0,1\}^n$ to distributions on $\{0,1\}^n$ is _efficiently classically computable_ if $R(M) \leq poly(n)$.
@@ -222,7 +222,7 @@ We say that $M$ is _efficiently quantumly computable_ if $Q(M)\leq poly(n)$.
 
 
 __Computing functions:__ We have defined what it means for an operator to be probabilistically or quantumly efficiently computable, but we typically are interested in computing some function $f:\{0,1\}^m\rightarrow\{0,1\}^\ell$.
-The idea is that we say that $f$ is efficiently computable if the corresponding operator is efficiently computable, except that we also allow to use extra memory and so to embed $f$ in some $n=poly(m)$.
+The idea is that we say that $f$ is efficiently computable if the corresponding operator is efficiently computable, except that we also allow it to use extra memory and so embed $f$ in some $n=poly(m)$.
 We define $f$ to be _efficiently classically computable_ if there is some $n=poly(m)$ such that the operator $M_g$ is efficiently classically computable where $g:\{0,1\}^n\rightarrow\{0,1\}^n$ is defined such that $g(x_1,\ldots,x_n)=f(x_1,\ldots,x_m)$.
 In the quantum case we have a slight twist since the operator $M_g$ is not necessarily a unitary matrix.[^reversible]
 Therefore we say that $f$ is _efficiently quantumly computable_  if there is $n=poly(m)$ such that the operator $M_q$ is efficiently quantumly computable where $g:\{0,1\}^n\rightarrow\{0,1\}^n$ is defined as
@@ -255,7 +255,7 @@ Indeed, we cannot _prove_ that they are (since in particular we can't prove that
 ### Physically realizing quantum computation
 
 To realize quantum computation one needs to create a system with $n$ independent binary states (i.e., "qubits"), and be able to manipulate small subsets of two or three of these qubits to change their state.
-While by the way we defined operations above it might seem that one needs to be able to perform arbitrary unitary operations on these two or three qubits, it turns out that there several choices for _universal sets_ -  a small constant number of gates that generate all others.
+While the way we defined operations above might seem that one needs to be able to perform arbitrary unitary operations on these two or three qubits, it turns out that there several choices for _universal sets_ -  a small constant number of gates that generate all others.
 The biggest challenge is how to keep the system from being measured and _collapsing_ to a single classical combination of states.
 This is sometimes known as the _coherence time_ of the system.
 The [threshold theorem](https://courses.cs.washington.edu/courses/cse599d/06wi/lecturenotes19.pdf) says that there is some absolute constant level of errors $\tau$ so that if errors are created at every gate at rate smaller than $\tau$ then we can recover from those and perform arbitrary long computations. (Of course there are different ways to model the errors and so there are actually several threshold _theorems_ corresponding to various noise models).
@@ -266,14 +266,14 @@ There have been several proposals to build quantum computers:
 
 * At Harvard, Lukin's group is using [cold atoms](https://lukin.physics.harvard.edu/arrays-cold-atoms)  to implement quantum computers.
 
-* [Trapped ion quantum computers](https://en.wikipedia.org/wiki/Trapped_ion_quantum_computer) Use the states of an ion to simulate a qubit. People have made some [recent advances](http://iontrap.umd.edu/wp-content/uploads/2016/02/1602.02840v1.pdf) on these computers too. For example, an ion-trap computer was used to [implement Shor's algorithm to factor 15](http://arxiv.org/abs/1507.08852). (It turns out that $15=3\times 5$ :) )
+* [Trapped ion quantum computers](https://en.wikipedia.org/wiki/Trapped_ion_quantum_computer) use the states of an ion to simulate a qubit. People have made some [recent advances](http://iontrap.umd.edu/wp-content/uploads/2016/02/1602.02840v1.pdf) on these computers too. For example, an ion-trap computer was used to [implement Shor's algorithm to factor 15](http://arxiv.org/abs/1507.08852). (It turns out that $15=3\times 5$ :) )
 
 * [Topological quantum computers](https://en.wikipedia.org/wiki/Topological_quantum_computer) use a different technology, which is more stable by design but arguably harder to manipulate to create quantum computers.
 
 These approaches are not mutually exclusive and it could be that ultimately quantum computers are built by combining all of them together.
 At the moment, we have devices with about $100$ qubits, and about $1\%$ error per gate.
 Such restricted machines are sometimes called "Noisy Intermediate-Scale Quantum Computers" or  "NISQ".
-See [this article by John Preskil](https://arxiv.org/abs/1801.00862) for some of the progress and applications of such more restricted devices.
+See [this article by John Preskill](https://arxiv.org/abs/1801.00862) for some of the progress and applications of such more restricted devices.
 If the number of qubits is increased and the error is decreased by one or two orders of magnitude, we could start seeing more applications.
 
 
@@ -285,10 +285,10 @@ If the number of qubits is increased and the error is decreased by one or two or
 Quantum computing is very confusing and counterintuitive for many reasons.
 But there is also a "cultural" reason why people sometimes find quantum arguments hard to follow.
 Quantum folks follow their own special [notation](https://en.wikipedia.org/wiki/Bra%E2%80%93ket_notation) for vectors.
-Many non quantum people find it ugly and confusing, while quantum folks secretly wish they people used it all the time, not just for non-quantum linear algebra, but also for restaurant bills and elemntary school math classes.
+Many non quantum people find it ugly and confusing, while quantum folks secretly wish that people used it all the time, not just for non-quantum linear algebra, but also for restaurant bills and elementary school math classes.
 
-The notation is actually not so confusing. If $x\in\{0,1\}^n$ then $|x\rangle$ denotes the $x^{th}$ standard basis vector in $2^n$ dimension.
-That is $|x\rangle$  $2^n$-dimensional column vector that has $1$ in the $x^{th}$ coordinate and zero everywhere else.
+The notation is actually not so confusing. If $x\in\{0,1\}^n$ then $|x\rangle$ denotes the $x^{th}$ standard basis vector in $2^n$ dimensions.
+That is $|x\rangle$ is the $2^n$-dimensional column vector that has $1$ in the $x^{th}$ coordinate and zero everywhere else.
 So, we can describe the column vector that has $\alpha_x$ in the $x^{th}$ entry as $\sum_{x\in\{0,1\}^n} \alpha_x |x\rangle$.
 One more piece of notation that is useful is that if $x\in\{0,1\}^n$ and $y\in\{0,1\}^m$ then we identify $|x\rangle|y\rangle$ with $|xy\rangle$ (that is, the $2^{n+m}$ dimensional vector that has $1$ in the coordinate corresponding to the concatenation of $x$ and $y$, and zero everywhere else).
 This is more or less all you need to know about this notation to follow this lecture.[^bra]
@@ -304,13 +304,13 @@ Quantum states are always unit vectors and so we sometimes omit the normalizatio
 There is something weird about quantum mechanics.
 In 1935 [Einstein, Podolsky and Rosen (EPR)](http://plato.stanford.edu/entries/qt-epr/) tried to pinpoint this issue by highlighting a previously unrealized corollary of this theory.
 They showed that the idea that nature does not determine the results of an experiment until it is measured results in so called  "spooky action at a distance".
-Namely, making a measurement of one object may  instantaneously  effect the state (i.e., the vector of amplitudes) of another object in the other end of the universe.
+Namely, making a measurement of one object may  instantaneously affect the state (i.e., the vector of amplitudes) of another object in the other end of the universe.
 
 
 Since the vector of amplitudes  is just a mathematical abstraction,  the EPR paper was considered to be merely a thought experiment for philosophers to be concerned about, without bearing on experiments.
 This changed when in 1965 John Bell showed an actual experiment to test the predictions of EPR and hence pit intuitive common sense against the quantum mechanics.
 Quantum mechanics won: it turns out that it _is_ in fact possible to use measurements to create correlations between the states of objects far removed from one another that cannot be explained by any prior theory.
-Nonetheless, since the results of these experiments are so obviously wrong to anyone that has ever sat in an armchair,  that there are still a number of [Bell denialists](http://www.scottaaronson.com/blog/?p=2464) arguing that this can't be true and quantum mechanics is wrong.
+Nonetheless, since the results of these experiments are so obviously wrong to anyone that has ever sat in an armchair, there are still a number of [Bell denialists](http://www.scottaaronson.com/blog/?p=2464) arguing that this can't be true and quantum mechanics is wrong.
 
 So, what is this Bell's Inequality?
 Suppose that Alice and Bob try to convince you they have telepathic ability, and they aim to prove it via the following experiment.
@@ -379,8 +379,8 @@ Alice and Bob will start by preparing a  2-qubit quantum system in the state
 $$\psi = \tfrac{1}{\sqrt{2}}|00\rangle + \tfrac{1}{\sqrt{2}}|11\rangle$$
 
 (this state is known as an [EPR pair](https://en.wikipedia.org/wiki/EPR_paradox)).
-Alice takes the first qubit of the  system to her room, and Bob takes the qubit to his room.
-Now, when Alice receives $x$ if $x=0$ she does nothing and if $x=1$ she applies the unitary map $R_{-\pi/8}$ to her qubit where $R_\theta = \begin{pmatrix} cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{pmatrix}$ is the unitary operation corresponding to rotation in the plane with angle $\theta$.
+Alice takes the first qubit of the system to her room, and Bob takes the second qubit to his room.
+Now, when Alice receives $x$ if $x=0$ she does nothing and if $x=1$ she applies the unitary map $R_{-\pi/8}$ to her qubit where $R_\theta = \begin{pmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{pmatrix}$ is the unitary operation corresponding to rotation in the plane with angle $\theta$.
 When Bob receives $y$, if $y=0$ he does nothing and if $y=1$ he applies the unitary map $R_{\pi/8}$ to his  qubit.
 Then each one of them measures their qubit and sends this as their response.
 
@@ -435,7 +435,7 @@ It is instructive to understand what is it about quantum mechanics that enabled 
 ## Grover's Algorithm
 
 Shor's Algorithm, which we'll see in the next lecture, is an amazing achievement, but it only applies to very particular problems.
-It does not seem to be relevant to breaking AES, lattice based cryptography, or problems not related to quantum computing at all such as scheduling,  constraint satisfaction, traveling salesperson etc.. etc..
+It does not seem to be relevant to breaking AES, lattice based cryptography, or problems not related to quantum computing at all such as scheduling,  constraint satisfaction, traveling salesperson etc.
 Indeed, for the most general form of these search problems, classically we don't how to do anything much better than brute force search, which takes $2^n$ time over an $n$-bit domain. Lev Grover showed that quantum computers can obtain a quadratic improvement over this brute force search, solving SAT in $2^{n/2}$ time.
 The effect of Grover's algorithm on cryptography is fairly mild: one essentially needs to double the key lengths of symmetric primitives.
 But beyond cryptography, if large scale quantum computers end up being built, Grover search and its variants might end up being some of the most useful computational problems they will tackle.
@@ -450,7 +450,7 @@ The general idea can be illustrated in the case that there exists a single $x^*$
 As in Simon's algorithm, we can efficiently initialize an $n$-qubit system to the uniform state $u = 2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle$ which has $2^{-n/2}$ dot product with $|x^*\rangle$. Of course if we measure $u$, we only have probability $(2^{-n/2})^2 = 2^{-n}$ of obtaining the value $x^*$.
 Our goal would be to use $O(2^{n/2})$ calls to the oracle to transform the system to a state $v$ with dot product at least some constant $\epsilon>0$ with the state $|x^*\rangle$.
 
-It is an exercise to show that using $Had$ gets we can efficiently compute the unitary operator $U$ such that $Uu = u$ and $Uv = -v$ for every $v$ orthogonal to $u$.
+It is an exercise to show that using $Had$ gates we can efficiently compute the unitary operator $U$ such that $Uu = u$ and $Uv = -v$ for every $v$ orthogonal to $u$.
 Also, using the circuit for $f$, we can efficiently compute the unitary operator $U^*$ such that $U^*|x\rangle=|x\rangle$ for all $x\neq x^*$ and $U^*|x^*\rangle=-|x^*\rangle$.
 It turns out that $O(2^{n/2})$ applications of $UU^*$ to $u$ yield a vector $v$ with $\Omega(1)$ inner product with $|x^*\rangle$.
 To see why, consider what these operators do in the two dimensional linear subspace spanned by $u$ and $|x^*\rangle$. (Note that the initial state $u$ is in this subspace and all our operators preserve this property.)
