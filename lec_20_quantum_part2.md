@@ -19,7 +19,7 @@ In 1994 Peter Shor showed that one would be wrong:
 The map that takes an integer $m$ into its prime factorization is efficiently quantumly computable. Specifically, it can be computed using $O(\log^3 m)$ quantum gates.
 
 
-This is an exponential improvement over the best known classical algorithms, which as we mentioned before,  take roughly $2^{\tilde{O(\log^{1/3}m)}}$ time.
+This is an exponential improvement over the best known classical algorithms, which as we mentioned before,  take roughly $2^{\tilde{O}(\log^{1/3}m)}$ time.
 
 We will now sketch the ideas behind Shor's algorithm. In fact, Shor proved the following more general theorem:
 
@@ -46,7 +46,7 @@ Note that if $\mathbb{G}$ is some Abelian group, then if we define $\mathbb{H}=\
 So, finding the order of an item reduces to the question of finding the period of a function.
 
 
-How do we generally find the period of a function? Let us consider the simplest case, where $f$ is a function from $\R$ to $\R$ that is $h^*$ periodic for some number $h^*$, in the sense that $f$ repeats itself on the intervals $[0,h^*]$, $[h^*,2h^*]$, $[2h^*,3h^*]$, etc..
+How do we generally find the period of a function? Let us consider the simplest case, where $f$ is a function from $\R$ to $\R$ that is $h^*$ periodic for some number $h^*$, in the sense that $f$ repeats itself on the intervals $[0,h^*]$, $[h^*,2h^*]$, $[2h^*,3h^*]$, etc.
 How do we find this number $h^*$?
 The key idea would be to transform $f$ from the _time_ to the _frequency_ domain.
 That is, we use the _Fourier transform_ to represent $f$ as a sum of wave functions. In this representation wavelengths that divide the period $h^*$ would get significant mass, while wavelengths that don't would likely "cancel out".
@@ -71,17 +71,17 @@ Note that given $O(n)$ such samples, we can recover $h^*$ with high probability 
 > # {.proof data-ref="simonsthm"}
 Let $HAD$ be the $2\times 2$ unitary matrix corresponding to the one qubit operation $|0\rangle \mapsto \tfrac{1}{\sqrt{2}}(|0\rangle+|1\rangle)$ and
 $|1\rangle \mapsto \tfrac{1}{\sqrt{2}}(|0\rangle-|1\rangle)$  or $|a\rangle\mapsto \tfrac{1}{\sqrt{2}}(|0\rangle+(-1)^a|1\rangle)$.
-Given the state $|0^{n+m\rangle}$ we can apply this map to each one of the first $n$ qubits to get the state
+Given the state $|0^{n+m}\rangle$ we can apply this map to each one of the first $n$ qubits to get the state
 $2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle|0^m\rangle$
 and then we can apply the gates of $f$ to map this to the state
 $2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle|f(x)\rangle$
 now suppose that we apply this operation again to the first $n$ qubits then we get the state
 $2^{-n}\sum_{x\in\{0,1\}^n}\prod_{i=1}^n(|0\rangle+(-1)^{x_i}|1\rangle)|f(x)\rangle$
-which if we open up each one of these product and look at all $2^n$ choices $y\in\{0,1\}^n$ (with $y_i=0$ corresponding to picking $|0\rangle$ and $y_i=1$ corresponding to picking $|1\rangle$ in the $i^{th}$ product) we get
+which if we open up each one of these products and look at all $2^n$ choices $y\in\{0,1\}^n$ (with $y_i=0$ corresponding to picking $|0\rangle$ and $y_i=1$ corresponding to picking $|1\rangle$ in the $i^{th}$ product) we get
 $2^{-n}\sum_{x\in\{0,1\}^n}\sum_{y\in\{0,1\}^n}(-1)^{\langle x,y \rangle}|y\rangle|f(x)\rangle$.
 Now under our assumptions for every particular $z$ in the image of $f$, there exist exactly two preimages $x$ and $x\oplus h^*$ such that $f(x)=f(x+h^*)=z$.
 So, if $\langle y,h^* \rangle=0 \pmod{2}$, we get that $(-1)^{\langle x,y \rangle}+(-1)^{\langle x,y+h^* \rangle}=2$ and otherwise we get $(-1)^{\langle x,y \rangle}+(-1)^{\langle x,y+h^* \rangle}=0$.
-Therefore, if measure the state we will get a pair $(y,z)$ such that $\langle y,h^* \rangle=0 \pmod{2}$. QED
+Therefore, if we measure the state we will get a pair $(y,z)$ such that $\langle y,h^* \rangle=0 \pmod{2}$. QED
 
 Simon's algorithm seems to really use the special bit-wise structure of the group $\{0,1\}^n$, so one could wonder if it has any relevance for the group $\Z^*_m$ for some exponentially large $m$.
 It turns out that the same insights that underlie the well known Fast Fourier Transform (FFT) algorithm can be used to essentially follow the same strategy for this group as well.
@@ -96,7 +96,7 @@ We now describe how to achieve Shor's algorithm for order finding. We will not d
 That is, we prove the following theorem:
 
 > # {.theorem title="Shor's Algorithm, restated" #shortwothm}
-For every $\ell$ and $a\in\Z^*_\ell$, there is a quantum $poly(log \ell)$ algorithm to find the order of $a$ in $\Z^*_\ell$.
+For every $\ell$ and $a\in\Z^*_\ell$, there is a quantum $poly(\log \ell)$ algorithm to find the order of $a$ in $\Z^*_\ell$.
 
 
 
@@ -123,7 +123,7 @@ in $\{0,\ldots,m-1\}$ with addition modulo $m$). We give a definition that is sp
 For every vector $f\in\mathbb{C}^m$, the *Fourier transform of $f$* is the
 vector $\hat{f}$ where the $x^{th}$ coordinate of $\hat{f}$ is defined as[^8]
 
-$\hat{f}(x) = \tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m} f(x)\omega^{xy}$
+$$\hat{f}(x) = \tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m} f(x)\omega^{xy}$$
 
 where $\omega = e^{2\pi i/m}$.
 
@@ -201,7 +201,7 @@ quantum register from $f \in \mathbb{C}^m$ to its Fourier transform $\hat{f}$.
 
 
 > # {.theorem title="Quantum Fourier Transform (Bernstein-Vazirani)" #quantumftthm}
-For every $m$ and $m =2^m$ there is a quantum algorithm that uses
+For every $m$ and $x =2^m$ there is a quantum algorithm that uses
 $O(m^2)$ elementary quantum operations and transforms a quantum register
 in state $f = \sum_{x\in\Z_m} f(x)|x\rangle$ into the state
 $\hat{f}= \sum_{x\in\Z_m} \hat{f}(x) |x\rangle$, where
@@ -219,7 +219,7 @@ here.)
 
 We now describe the algorithm and the state, neglecting normalizing factors.
 
-1. _initial state:_                $f= \sum_{x\in\Z_m} f(x)|x\rangle$
+1. _Initial state:_                $f= \sum_{x\in\Z_m} f(x)|x\rangle$
 
 2.  Recursively run $FT_{m/2}$ on $m-1$ most significant qubits (state: $(FT_{m/2}f_{even})|0\rangle + (FT_{m/2}f_{odd})|1\rangle$)
 
@@ -237,7 +237,7 @@ operation on the $i^{th}$ qubit of the register:
 
 $|0\rangle \mapsto |0\rangle$ and $|1\rangle \mapsto \omega^{2^i}|1\rangle$.
 
-The final state is equal to $\hat{f}$ by the FFT equations (we leave this as an exercise)
+The final state is equal to $\hat{f}$ by the FFT equations (we leave this as an exercise).
 
 ## Shor’s Order-Finding Algorithm.
 
@@ -260,9 +260,9 @@ there is a prescribed upper bound on $q$ (see below)
 
 We now describe the algorithm and the state, this time *including* normalizing factors.
 
-1. Apply Fourier transform to the first $m$ bits. (state:  $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m}|x\rangle)|0^n\rangle$)
+1. Apply Fourier transform to the first $m$ bits. (state:  $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m}|x\rangle|0^n\rangle$)
 
-2. Compute the transformation $|x\rangle|y\rangle \mapsto |x\rangle|y \oplus (A^x \pmod{N\rangle)}$. (state: $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m} |x\rangle|A^x \pmod{N\rangle}$)
+2. Compute the transformation $|x\rangle|y\rangle \mapsto |x\rangle|y \oplus (A^x \pmod{N}\rangle)$. (state: $\tfrac{1}{\sqrt{m}}\sum_{x\in\Z_m} |x\rangle|A^x \pmod{N}\rangle$)
 
 3.  Measure the second register to get a value $y_0$.  (state: $\tfrac{1}{\sqrt{K}}\sum_{\ell=0}^{K-1}|x_0 + \ell r\rangle|y_0\rangle$ where $x_0$ is the smallest number such that $A^{x_0} = y_0 \pmod{N}$ and $K= \floor{(m-1-x_0)/r}$.)
 
@@ -337,10 +337,10 @@ the coefficient of $|x\rangle$ is at least $\Omega(\tfrac{1}{\sqrt{r}})$.
 **Proof of Lemma 1** We prove the lemma for the
 case that $r$ is coprime to $m$, leaving the general case to the reader. In this case, the map
 $x \mapsto rx \pmod{m}$ is a permutation of $\Z^*_m$. There are at least
-$\Omega(r/\log r)$ numbers in $[1..r/10]$ that are coprime to $r$ (take
+$\Omega(r/\log r)$ numbers in $[1 \dots r/10]$ that are coprime to $r$ (take
 primes in this range that are not one of $r$’s at most $\log r$ prime
 factors) and hence $\Omega(r/\log r)$ numbers $x$ such that
-$rx \pmod{m} = xr - \floor{xr/m}m$ is in $[1..r/10]$ and coprime to $r$. But this means that
+$rx \pmod{m} = xr - \floor{xr/m}m$ is in $[1 \dots r/10]$ and coprime to $r$. But this means that
 $\floor{rx/m}$ can not have a nontrivial shared factor with $r$, as
 otherwise this factor would be shared with $rx \pmod{m}$ as well.
 
@@ -351,13 +351,12 @@ $$\tfrac{1}{\sqrt{K}\sqrt{m}}\left| \sum_{\ell=0}^{K-1} \omega^{\ell r x} \right
 $K = \floor{(m-x_0-1)/r}$. Note that $\tfrac{m}{2r} < K < \tfrac{m}{r}$
 since $x_0 < N \ll m$.
 
-Setting $\beta=\omega^{rx}$ (note that since $m \not| rx$, $\beta
+Setting $\beta=\omega^{rx}$ (note that since $m \nmid rx$, $\beta
 \neq 1$) and using the formula for the sum of a geometric series, this
 is at least
 $\tfrac{\sqrt{r}}{2M}\left| \tfrac{1 - \beta^{\ceil{m/r}}}{1-\beta} \right| = \tfrac{\sqrt{r}}{2M}\tfrac{\sin(\theta\ceil{m/r}/2)}{\sin(\theta/2)} \;,$
 where $\theta=\tfrac{rx \pmod{m}}{m}$ is the angle such that
-$\beta = e^{i\theta}$ (see Figure \[quantum:fig:theta\] for a proof by
-picture of the last equality). Under our assumptions
+$\beta = e^{i\theta}$. Under our assumptions
 $\ceil{m/r}\theta<1/10$ and hence (using the fact that
 $\sin \alpha \sim \alpha$ for small angles $\alpha$), the coefficient of
 $x$ is at least
@@ -506,7 +505,7 @@ computed in $polylog(q_n)$ time.
 
 ### Quantum cryptography
 
-There is another way in which quantum mechanics interacts with cryptography. These "spooky actions at a distance" have been suggested by Weisner and Bennet-Brassard as a way in which parties can create a secret shared key over an insecure channel. On one hand, this concept does not require as much control as general-purpose quantum computing, and so it has in fact been [demonstrated physically](https://en.wikipedia.org/wiki/Quantum_key_distribution#Quantum_Key_Distribution_Networks). On the other hand, unlike transmitting standard digital information, this "insecure channel" cannot be an arbitrary media such as wifi etc.. but rather one needs fiber optics, lasers, etc.. Unlike quantum computers, where we only need one of those to break RSA, to actually use key exchange at scale we need to setup these type of networks, and so it is unclear if this approach will ever dominate the solution of Alice sending to Bob a Brink's truck with the shared secret key. People have proposed some other ways to use the interesting properties of quantum mechanics for cryptographic purposes including [quantum money](https://en.wikipedia.org/wiki/Quantum_money) and [quantum software protection](http://www.scottaaronson.com/papers/noclone-ccc.pdf).
+There is another way in which quantum mechanics interacts with cryptography. These "spooky actions at a distance" have been suggested by Weisner and Bennet-Brassard as a way in which parties can create a secret shared key over an insecure channel. On one hand, this concept does not require as much control as general-purpose quantum computing, and so it has in fact been [demonstrated physically](https://en.wikipedia.org/wiki/Quantum_key_distribution#Quantum_Key_Distribution_Networks). On the other hand, unlike transmitting standard digital information, this "insecure channel" cannot be an arbitrary media such as wifi etc. but rather one needs fiber optics, lasers, etc. Unlike quantum computers, where we only need one of those to break RSA, to actually use key exchange at scale we need to setup these type of networks, and so it is unclear if this approach will ever dominate the solution of Alice sending to Bob a Brink's truck with the shared secret key. People have proposed some other ways to use the interesting properties of quantum mechanics for cryptographic purposes including [quantum money](https://en.wikipedia.org/wiki/Quantum_money) and [quantum software protection](http://www.scottaaronson.com/papers/noclone-ccc.pdf).
 
 
 
