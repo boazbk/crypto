@@ -74,14 +74,14 @@ $|1\rangle \mapsto \tfrac{1}{\sqrt{2}}(|0\rangle-|1\rangle)$  or $|a\rangle\maps
 Given the state $|0^{n+m\rangle}$ we can apply this map to each one of the first $n$ qubits to get the state
 $2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle|0^m\rangle$
 and then we can apply the gates of $f$ to map this to the state
-$2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle|f(x)\rangle$
-now suppose that we apply this operation again to the first $n$ qubits then we get the state
-$2^{-n}\sum_{x\in\{0,1\}^n}\prod_{i=1}^n(|0\rangle+(-1)^{x_i}|1\rangle)|f(x)\rangle$
-which if we open up each one of these product and look at all $2^n$ choices $y\in\{0,1\}^n$ (with $y_i=0$ corresponding to picking $|0\rangle$ and $y_i=1$ corresponding to picking $|1\rangle$ in the $i^{th}$ product) we get
+$2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle|f(x)\rangle$.
+Now suppose that we apply this operation again to the first $n$ qubits. We get the state
+$2^{-n}\sum_{x\in\{0,1\}^n}\prod_{i=1}^n(|0\rangle+(-1)^{x_i}|1\rangle)|f(x)\rangle$,
+which if we open up each one of these products and look at all $2^n$ choices $y\in\{0,1\}^n$ (with $y_i=0$ corresponding to picking $|0\rangle$ and $y_i=1$ corresponding to picking $|1\rangle$ in the $i^{th}$ product), we get
 $2^{-n}\sum_{x\in\{0,1\}^n}\sum_{y\in\{0,1\}^n}(-1)^{\langle x,y \rangle}|y\rangle|f(x)\rangle$.
 Now under our assumptions for every particular $z$ in the image of $f$, there exist exactly two preimages $x$ and $x\oplus h^*$ such that $f(x)=f(x+h^*)=z$.
-So, if $\langle y,h^* \rangle=0 \pmod{2}$, we get that $(-1)^{\langle x,y \rangle}+(-1)^{\langle x,y+h^* \rangle}=2$ and otherwise we get $(-1)^{\langle x,y \rangle}+(-1)^{\langle x,y+h^* \rangle}=0$.
-Therefore, if measure the state we will get a pair $(y,z)$ such that $\langle y,h^* \rangle=0 \pmod{2}$. QED
+So, if $\langle y,h^* \rangle=0 \pmod{2}$, we get that $(-1)^{\langle x,y \rangle}+(-1)^{\langle x\oplus h^*,y \rangle}=2$ and otherwise we get $(-1)^{\langle x,y \rangle}+(-1)^{\langle x\oplus h^*,y \rangle}=0$.
+Therefore, if we measure the state, we will get a pair $(y,z)$ such that $\langle y,h^* \rangle=0 \pmod{2}$. QED
 
 Simon's algorithm seems to really use the special bit-wise structure of the group $\{0,1\}^n$, so one could wonder if it has any relevance for the group $\Z^*_m$ for some exponentially large $m$.
 It turns out that the same insights that underlie the well known Fast Fourier Transform (FFT) algorithm can be used to essentially follow the same strategy for this group as well.
@@ -129,13 +129,13 @@ where $\omega = e^{2\pi i/m}$.
 
 The Fourier transform is simply a representation of $f$ in the *Fourier basis* $\{  \chi_x \}_{x \in \Z_m}$, where $\chi_x$ is the
 vector/function whose $y^{th}$ coordinate is
-$\tfrac{1}{\sqrt{m}\omega^{xy}}$. Now the inner product of any two vectors
+$\tfrac{1}{\sqrt{m}}\omega^{xy}$. Now the inner product of any two vectors
 $\chi_x,\chi_z$ in this basis is equal to
 $$\langle \chi_x,\chi_z \rangle = \tfrac{1}{m}\sum_{y\in\Z_m} \omega^{xy} \overline{\omega^{zy}} = \tfrac{1}{m}\sum_{y\in\Z_m} \omega^{(x-z)y}  \;.$$
 But if $x=z$ then $\omega^{(x-z)}=1$ and hence this sum is equal to $1$. On
 the other hand, if $x \neq z$, then this sum is equal to
-$\tfrac{1}{m} \tfrac{1 -\omega^{(x-y)m}}{1-\omega^{x-y}}=
-\tfrac{1}{m}\tfrac{1-1}{1-\omega^{x-y}}=0$ using the formula for the sum of
+$\tfrac{1}{m} \tfrac{1 -\omega^{(x-z)m}}{1-\omega^{x-z}}=
+\tfrac{1}{m}\tfrac{1-1}{1-\omega^{x-z}}=0$ using the formula for the sum of
 a geometric series. In other words, this is an *orthonormal* basis which
 means that the Fourier transform map $f \mapsto \hat{f}$ is a *unitary*
 operation.
