@@ -19,7 +19,7 @@ In 1994 Peter Shor showed that one would be wrong:
 The map that takes an integer $m$ into its prime factorization is efficiently quantumly computable. Specifically, it can be computed using $O(\log^3 m)$ quantum gates.
 
 
-This is an exponential improvement over the best known classical algorithms, which as we mentioned before,  take roughly $2^{\tilde{O(\log^{1/3}m)}}$ time.
+This is an exponential improvement over the best known classical algorithms, which as we mentioned before,  take roughly $\sim 2^{O(\log^{1/3}m)}$ time.
 
 We will now sketch the ideas behind Shor's algorithm. In fact, Shor proved the following more general theorem:
 
@@ -57,7 +57,7 @@ Similarly, the main idea behind Shor's algorithm is to use a tool known as the _
 Hence when we measure this state,  we get a group element $h$ with probability proportional to the square of the corresponding Fourier coefficient.
 One can show that if $f$ is $h^*$-periodic then we can recover $h^*$ from this distribution.
 
-Shor carried out this approach for the group $\mathbb{H}=\Z^*_q$ for some $q$, but we will start be seeing this for the group $\mathbb{H} = \{0,1\}^n$ with the XOR operation.
+Shor carried out this approach for the group $\mathbb{H}=\Z^*_q$ for some $q$, but we will start by seeing this for the group $\mathbb{H} = \{0,1\}^n$ with the XOR operation.
 This case is known as _Simon's algorithm_ (given by Dan Simon in 1994) and actually preceded (and inspired) Shor's algorithm:
 
 
@@ -71,17 +71,17 @@ Note that given $O(n)$ such samples, we can recover $h^*$ with high probability 
 > # {.proof data-ref="simonsthm"}
 Let $HAD$ be the $2\times 2$ unitary matrix corresponding to the one qubit operation $|0\rangle \mapsto \tfrac{1}{\sqrt{2}}(|0\rangle+|1\rangle)$ and
 $|1\rangle \mapsto \tfrac{1}{\sqrt{2}}(|0\rangle-|1\rangle)$  or $|a\rangle\mapsto \tfrac{1}{\sqrt{2}}(|0\rangle+(-1)^a|1\rangle)$.
-Given the state $|0^{n+m\rangle}$ we can apply this map to each one of the first $n$ qubits to get the state
-$2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle|0^m\rangle$
+Given the state $|0^{n+m}\rangle$. we can apply this map to each one of the first $n$ qubits to get the state
+$2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle|0^m\rangle$,
 and then we can apply the gates of $f$ to map this to the state
-$2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle|f(x)\rangle$
-now suppose that we apply this operation again to the first $n$ qubits then we get the state
+$2^{-n/2}\sum_{x\in\{0,1\}^n}|x\rangle|f(x)\rangle$.
+Now suppose that we apply this operation again to the first $n$ qubits then we get the state
 $2^{-n}\sum_{x\in\{0,1\}^n}\prod_{i=1}^n(|0\rangle+(-1)^{x_i}|1\rangle)|f(x)\rangle$
 which if we open up each one of these product and look at all $2^n$ choices $y\in\{0,1\}^n$ (with $y_i=0$ corresponding to picking $|0\rangle$ and $y_i=1$ corresponding to picking $|1\rangle$ in the $i^{th}$ product) we get
 $2^{-n}\sum_{x\in\{0,1\}^n}\sum_{y\in\{0,1\}^n}(-1)^{\langle x,y \rangle}|y\rangle|f(x)\rangle$.
-Now under our assumptions for every particular $z$ in the image of $f$, there exist exactly two preimages $x$ and $x\oplus h^*$ such that $f(x)=f(x+h^*)=z$.
-So, if $\langle y,h^* \rangle=0 \pmod{2}$, we get that $(-1)^{\langle x,y \rangle}+(-1)^{\langle x,y+h^* \rangle}=2$ and otherwise we get $(-1)^{\langle x,y \rangle}+(-1)^{\langle x,y+h^* \rangle}=0$.
-Therefore, if measure the state we will get a pair $(y,z)$ such that $\langle y,h^* \rangle=0 \pmod{2}$. QED
+By the problem assumptions, for every particular $z$ in the image of $f$, there exist exactly two preimages, $x$ and $x\oplus h^*$, such that $f(x)=f(x\oplus h^*)=z$.
+So, if $\langle y,h^* \rangle=0 \pmod{2}$, then $(-1)^{\langle x,y \rangle}+(-1)^{\langle x+h^*,y\rangle}=2\cdot(-1)^{\langle x, y\rangle}$ and otherwise $(-1)^{\langle x,y \rangle}+(-1)^{\langle x+h^*,y\rangle}=0$.
+Therefore, if measure the state we will get a pair $(y,z)$ such that $\langle y,h^* \rangle=0 \pmod{2}$.
 
 Simon's algorithm seems to really use the special bit-wise structure of the group $\{0,1\}^n$, so one could wonder if it has any relevance for the group $\Z^*_m$ for some exponentially large $m$.
 It turns out that the same insights that underlie the well known Fast Fourier Transform (FFT) algorithm can be used to essentially follow the same strategy for this group as well.
@@ -100,7 +100,7 @@ For every $\ell$ and $a\in\Z^*_\ell$, there is a quantum $poly(log \ell)$ algori
 
 
 
-The idea is similar to Simon's algorithm.  We consider the map $x \mapsto a^x (\mod \ell)$ which is a periodic map over $\Z_m$ where $m=|\Z^*_\ell|$ with period being the order of $a$.  
+The idea is similar to Simon's algorithm.  We consider the map $x \mapsto a^x \pmod{\ell}$ which is a periodic map over $\Z_m$ where $m=|\Z^*_\ell|$ with period being the order of $a$.  
 To find the period of this map we will now need to perform a _Quantum Fourier Transform (QFT)_ over the group $\Z_m$ instead of $\{0,1\}^n$.
 This is a quantum algorithm that takes a register from some arbitrary
 state $f \in \mathbb{C}^{m}$ into a state whose vector is the Fourier transform
@@ -129,13 +129,13 @@ where $\omega = e^{2\pi i/m}$.
 
 The Fourier transform is simply a representation of $f$ in the *Fourier basis* $\{  \chi_x \}_{x \in \Z_m}$, where $\chi_x$ is the
 vector/function whose $y^{th}$ coordinate is
-$\tfrac{1}{\sqrt{m}\omega^{xy}}$. Now the inner product of any two vectors
+$\tfrac{1}{\sqrt{m}}\omega^{xy}$. Now the inner product of any two vectors
 $\chi_x,\chi_z$ in this basis is equal to
 $$\langle \chi_x,\chi_z \rangle = \tfrac{1}{m}\sum_{y\in\Z_m} \omega^{xy} \overline{\omega^{zy}} = \tfrac{1}{m}\sum_{y\in\Z_m} \omega^{(x-z)y}  \;.$$
 But if $x=z$ then $\omega^{(x-z)}=1$ and hence this sum is equal to $1$. On
 the other hand, if $x \neq z$, then this sum is equal to
-$\tfrac{1}{m} \tfrac{1 -\omega^{(x-y)m}}{1-\omega^{x-y}}=
-\tfrac{1}{m}\tfrac{1-1}{1-\omega^{x-y}}=0$ using the formula for the sum of
+$\tfrac{1}{m} \tfrac{1 -\omega^{(x-z)m}}{1-\omega^{x-z}}=
+\tfrac{1}{m}\tfrac{1-1}{1-\omega^{x-z}}=0$ using the formula for the sum of
 a geometric series. In other words, this is an *orthonormal* basis which
 means that the Fourier transform map $f \mapsto \hat{f}$ is a *unitary*
 operation.
@@ -146,7 +146,7 @@ it’s easy to see that every function $\chi$ in the Fourier basis is a
 *homomorphism* from $\Z_m$ to $\mathbb{C}$ in the sense that
 $\chi(y+z)= \chi(y)\chi(z)$ for every $y,z \in
 \Z_m$. Also, every function $\chi$ is *periodic* in the sense that there
-exists $r\in \Z_m$ such that $\chi(y+r)=\chi(z)$ for every $y\in \Z_m$
+exists $r\in \Z_m$ such that $\chi(y+r)=\chi(y)$ for every $y\in \Z_m$
 (indeed if $\chi(y) =
 \omega^{xy}$ then we can take $r$ to be $\ell/x$ where $\ell$ is the least
 common multiple of $x$ and $m$). Thus, intuitively, if a function
@@ -169,9 +169,9 @@ the same idea is used in the *quantum* Fourier transform algorithm.
 
 Note that
 
-$\hat{f}(x) = \tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m} f(y)\omega^{xy} =$
+$\hat{f}(x) = \tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m} f(x)\omega^{xy} =$
 
-$\tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m,y \;even} f(y)\omega^{-2x(y/2)} + \omega^x\tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m,y \;odd} f(y)\omega^{2x(y-1)/2} \;.$
+$\tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m,y \;even} f(x)\omega^{2x(y/2)} + \omega^x\tfrac{1}{\sqrt{m}}\sum_{y\in\Z_m,y \;odd} f(x)\omega^{2x(y-1)/2} \;.$
 
 Now since $\omega^2$ is an $m/2$th root of unity and $\omega^{m/2}=-1$, letting
 $W$ be the $m/2 \times m/2$ diagonal matrix with diagonal entries
@@ -188,8 +188,8 @@ $1$) and by $\vec{v}_{low}$ (resp. $\vec{v}_{high}$) the restriction of
 $\vec{v}$ to coordinates with most significant bit $0$ (resp. $1$).
 
 The equations above are the crux
-of the divide-and-conquer idea of the FFT algorithm, since they allow to
-replace a size-$m$ problem with two size-$m/2$ subproblems, leading to a
+of the divide-and-conquer idea of the FFT algorithm, since they allow
+replacing a size-$m$ problem with two size-$m/2$ subproblems, leading to a
 recursive time bound of the form $T(m) = 2T(m/2) + O(m)$ which solves to
 $T(m)=O(m\log m)$.
 
@@ -506,7 +506,7 @@ computed in $polylog(q_n)$ time.
 
 ### Quantum cryptography
 
-There is another way in which quantum mechanics interacts with cryptography. These "spooky actions at a distance" have been suggested by Weisner and Bennet-Brassard as a way in which parties can create a secret shared key over an insecure channel. On one hand, this concept does not require as much control as general-purpose quantum computing, and so it has in fact been [demonstrated physically](https://en.wikipedia.org/wiki/Quantum_key_distribution#Quantum_Key_Distribution_Networks). On the other hand, unlike transmitting standard digital information, this "insecure channel" cannot be an arbitrary media such as wifi etc.. but rather one needs fiber optics, lasers, etc.. Unlike quantum computers, where we only need one of those to break RSA, to actually use key exchange at scale we need to setup these type of networks, and so it is unclear if this approach will ever dominate the solution of Alice sending to Bob a Brink's truck with the shared secret key. People have proposed some other ways to use the interesting properties of quantum mechanics for cryptographic purposes including [quantum money](https://en.wikipedia.org/wiki/Quantum_money) and [quantum software protection](http://www.scottaaronson.com/papers/noclone-ccc.pdf).
+There is another way in which quantum mechanics interacts with cryptography. These "spooky actions at a distance" have been suggested by Weisner and Bennet-Brassard as a way in which parties can create a secret shared key over an insecure channel. On one hand, this concept does not require as much control as general-purpose quantum computing, and so it has in fact been [demonstrated physically](https://en.wikipedia.org/wiki/Quantum_key_distribution#Quantum_Key_Distribution_Networks). On the other hand, unlike transmitting standard digital information, this "insecure channel" cannot be an arbitrary media such as wifi, but rather one needs fiber optics, lasers, etc. Unlike quantum computers, where we only need one of those to break RSA, to actually use key exchange at scale we need to setup these type of networks, and so it is unclear if this approach will ever dominate the solution of Alice sending to Bob a Brink's truck with the shared secret key. People have proposed some other ways to use the interesting properties of quantum mechanics for cryptographic purposes including [quantum money](https://en.wikipedia.org/wiki/Quantum_money) and [quantum software protection](http://www.scottaaronson.com/papers/noclone-ccc.pdf).
 
 
 
