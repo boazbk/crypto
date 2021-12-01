@@ -40,8 +40,8 @@ If we now carve out an additional slit in the metal barrier then more balls woul
 
 So far this is pure common sense, and it is indeed (to my knowledge) an accurate description of what happens when we shoot baseballs at a plastic wall.
 However, this is not the same when we shoot _photons_.
-Amazingly, if we shoot with a "photon gun" (i.e., a laser) at a wall equipped with photon detectors through some barrier, then (as shown in [doubleslitfig](){.ref}) in some positions of the wall we will see  _fewer_ hits when the two slits are open than one only ones of them is!.^[A nice illustrated description of the double slit experiment appears in   [this video](https://www.youtube.com/watch?v=DfPeprQ7oGc).]
-In particular there are positions in the wall that are hit when the first slit is open, hit when the  second gun is open, but are _not hit at all when both slits are open!_.
+Amazingly, if we shoot with a "photon gun" (i.e., a laser) at a wall equipped with photon detectors through some barrier, then (as shown in [doubleslitfig](){.ref}) in some positions of the wall we will see  _fewer_ hits when the two slits are open than one only ones of them is!^[A nice illustrated description of the double slit experiment appears in   [this video](https://www.youtube.com/watch?v=DfPeprQ7oGc).]
+In particular there are positions in the wall that are hit when the first slit is open, hit when the second slit is open, but are _not hit at all when both slits are open!_
 
 
 
@@ -90,7 +90,7 @@ Specifically, consider an event that can either occur or not (e.g. "detector num
 In classical probability, we model this by a probability distribution over the two outcomes: a pair of non-negative numbers $p$ and $q$ such that $p+q=1$, where $p$ corresponds to  the probability that the event occurs and $q$ corresponds to the probability that the event does not occur.
 In quantum mechanics, we model this also by  pair of numbers, which we call _amplitudes_. This is  a pair of (potentially negative or even complex) numbers $\alpha$ and $\beta$ such that $|\alpha|^2 + |\beta|^2 =1$.
 The probability that the event occurs is $|\alpha|^2$ and the probability that it does not occur is $|\beta|^2$.
-In isolation, these negative or complex numbers don't matter much, since we anyway square them to obtain probabilities.
+In isolation, these negative or complex numbers don't matter much, since we square them anyway to obtain probabilities.
 But the interaction of positive and negative amplitudes can result in surprising _cancellations_ where somehow combining two scenarios where an event happens with positive probability results in a scenario where it  never does.
 
 ::: { .pause }
@@ -116,7 +116,7 @@ Thus at this point many scientists prefer to just ignore the question of what is
 Some of the counterintuitive properties that arise from amplitudes or "negative probabilities" include:
 
 * **Interference** - As we see here, probabilities can "cancel each other out".
-* **Measurement** -   The idea that probabilities are negative as long as "no one is looking" and "collapse" to positive probabilities when they are _measured_ is deeply disturbing. Indeed, people have shown that it can yield to various strange outcomes such as "spooky actions at a distance", where we can measure an object at one place and instantaneously (faster than the speed of light) cause a difference in the results of a measurements in a place far removed. Unfortunately (or fortunately?) these strange outcomes have been confirmed experimentally.
+* **Measurement** -   The idea that probabilities are negative as long as "no one is looking" and "collapse" to positive probabilities when they are _measured_ is deeply disturbing. Indeed, people have shown that it can yield to various strange outcomes such as "spooky actions at a distance," where we can measure an object at one place and instantaneously (faster than the speed of light) cause a difference in the results of a measurements in a place far removed. Unfortunately (or fortunately?) these strange outcomes have been confirmed experimentally.
 * **Entanglement** - The notion that two parts of the system could be connected in this weird way where measuring one will affect the other is known as _quantum entanglement_.   
 
 Again, as counter-intuitive as these concepts are, they have been experimentally confirmed, so we just have to live with them.
@@ -142,9 +142,9 @@ This is a huge headache for scientists that actually need to do these calculatio
 
 In the 1981, physicist Richard Feynman proposed to "turn this lemon to lemonade" by making the following almost tautological observation:
 
->_If a physical system cannot be simulated by a computer in $T$ steps, the system can be considered as performing a computation that would take more than $T$ steps_
+>_If a physical system cannot be simulated by a computer in $T$ steps, the system can be considered as performing a computation that would take more than $T$ steps._
 
-So, he asked whether one could design a quantum system such that its outcome $y$ based on the initial condition $x$ would be some function $y=f(x)$ such that **(a)** we don't know how to efficiently compute in any other way, and **(b)** is actually useful for something.[^Feynman]
+So, he asked whether one could design a quantum system such that its outcome $y$ based on the initial condition $x$ would be some function $y=f(x)$ that **(a)** we don't know how to efficiently compute in any other way, and **(b)** is actually useful for something.[^Feynman]
 In 1985, David Deutsch formally suggested the notion of a quantum Turing machine, and the model has been since refined in works of Detusch and Josza and Bernstein and Vazirani.
 Such a system is now known as a _quantum computer_.
 
@@ -153,7 +153,7 @@ Such a system is now known as a _quantum computer_.
 
 For a while these hypothetical quantum computers seemed useful for one of two things.
 First, to provide a general-purpose mechanism to simulate a variety of the real quantum systems that people care about.
-Second, as a challenge to the theory of computation's approach to model efficient computation by Turing machines, though a challenge that has little bearing to practice, given that this theoretical "extra power" of quantum computer seemed to offer little advantage in the problems people actually want to solve such as combinatorial optimization, machine learning,  data structures, etc..
+Second, as a challenge to the theory of computation's approach to model efficient computation by Turing machines, though a challenge that has little bearing to practice, given that this theoretical "extra power" of quantum computer seemed to offer little advantage in the problems people actually want to solve such as combinatorial optimization, machine learning,  data structures, etc.
 
 To a significant extent, this is still true today.   We have no real evidence that quantum computers, when built, will offer truly significant[^Grover] advantage in 99 percent of the applications of computing.[^overhead]
 However, there is one cryptography-sized exception:
@@ -167,7 +167,7 @@ However, some quantum computers have been built that achieved tasks that are eit
 When and if such a computer is built that can break reasonable parameters of Diffie Hellman, RSA and elliptic curve cryptography is anybody's guess.
 It could also be a "self destroying prophecy" whereby the existence of a small-scale quantum computer would cause everyone to shift away to lattice-based crypto which in turn will diminish the motivation to invest the huge resources needed to build a large scale quantum computer.[^legacy]
 
-[^legacy]: Of course, given that  "export grade" cryptography that was supposed to disappear with 1990's [took a long time to die](http://blog.cryptographyengineering.com/2016/03/attack-of-week-drown.html), I imagine that we'll still have products running 1024 bit RSA when everyone has a quantum laptop.
+[^legacy]: Of course, given that  "export grade" cryptography that was supposed to disappear with the 1990's [took a long time to die](http://blog.cryptographyengineering.com/2016/03/attack-of-week-drown.html), I imagine that we'll still have products running 1024 bit RSA when everyone has a quantum laptop.
 
 [^overhead]: This "99 percent" is a figure of speech, but not completely so. It seems that for many web servers, the TLS protocol (which based on the current non-lattice based systems would be completely broken by quantum computing) is responsible [for about 1 percent of the CPU usage](https://goo.gl/Gekjrc).  
 
@@ -196,7 +196,7 @@ Thus we can describe the _state_ of the system by the $2^n$-dimensional vector $
 If we _measure_ the system and see what the coins came out, we will get the value $x$ with probability $v_x$.
 Naturally, if we measure the system twice we will get the same result.
 Thus, after we see that the coin is $x$, the new state of the system _collapses_ to a vector $v$ such that $v_y = 1$ if $y=x$ and $v_y=0$ if $y\neq x$.
-In a quantum state, we do the same thing: if we _measure_ a vector $v$ corresponds to turning it with probability $|v_x|^2$ into a vector that has $1$ on coordinate $x$ and zero on all the other coordinates.
+In a quantum state, we do the same thing: _measuring_ a vector $v$ corresponds to turning it with probability $|v_x|^2$ into a vector that has $1$ on coordinate $x$ and zero on all the other coordinates.
 
 
 __Operations:__ In the classical probabilistic setting, if we have a system in state $v$ and we apply some function $f:\{0,1\}^n\rightarrow\{0,1\}^n$ then this transforms $v$ to the state $w$ such that $w_y = \sum_{x:f(x)=y} v_x$.  
@@ -210,10 +210,10 @@ That is,  $M$ is obtained by "lifting" some $8\times 8$ matrix $M'$ that operate
 Formally, given an $8\times 8$ matrix $M'$ (indexed by strings in $\{0,1\}^3$) and three distinct indices $i<j<k \in \{1,\ldots,n\}$ we define the _$n$-lift of $M'$ with indices $i,j,k$_ to be the $2^n\times 2^n$ matrix $M$ such that for every strings $x$ and $y$ that agree with each other on all coordinates except possibly $i,j,k$, $M_{x,y}=M'_{x_ix_jx_k,y_iy_jy_k}$ and otherwise $M_{x,y}=0$.
 Note that if $M'$ is of the form $M'_f$ for some function $f:\{0,1\}^3\rightarrow\{0,1\}^3$ then $M=M_g$ where $g:\{0,1\}^n\rightarrow\{0,1\}^n$ is defined as $g(x)=f(x_ix_jx_k)$.
 We define $M$ as an _elementary stochastic matrix_ or a _probabilistic gate_ if $M$ is equal to an $n$ lift of some stochastic $8\times 8$ matrix $M'$.
-The quantum case is similar: a _quantum gate_ is a $2^n\times 2^n$ matrix that is an $N$ lift of some unitary $8\times 8$ matrix $M'$.
+The quantum case is similar: a _quantum gate_ is a $2^n\times 2^n$ matrix that is an $n$ lift of some unitary $8\times 8$ matrix $M'$.
 It is an exercise to prove that lifting preserves stochasticity and unitarity. That is,  every probabilistic gate is a stochastic matrix and every quantum gate is a unitary matrix.
 
-__Complexity:__ For every stochastic matrix $M$ we can define its _randomized complexity_, denoted as $R(M)$ to be the minimum number $T$ such that $M$ is can be (approximately) obtained by combining $T$ elementary probabilistic gates. To be concrete, we can define $R(M)$ to be the minimum $T$ such that there exists $T$ elementary matrices $M_1,\ldots,M_T$
+__Complexity:__ For every stochastic matrix $M$ we can define its _randomized complexity_, denoted as $R(M)$ to be the minimum number $T$ such that $M$ can be (approximately) obtained by combining $T$ elementary probabilistic gates. To be concrete, we can define $R(M)$ to be the minimum $T$ such that there exists $T$ elementary matrices $M_1,\ldots,M_T$
 such that for every $x$, $\sum_y |M_{y,x}-(M_T\cdots M_1)_{y,x}|<0.1$.
 (It can be shown that $R(M)$ is finite and in fact at most $10^n$ for every $M$; we can do so by writing $M$ as a convex combination of function and writing every function as a composition of functions that map a single string $x$ to $y$, keeping all other inputs intact.)
 We will say that a probabilistic process $M$ mapping distributions on $\{0,1\}^n$ to distributions on $\{0,1\}^n$ is _efficiently classically computable_ if $R(M) \leq poly(n)$.
@@ -232,8 +232,8 @@ $g(x_1,\ldots,x_n) = x_1\cdots x_m \|( f(x_1\cdots x_m)0^{n-m-\ell}\; \oplus \; 
 
 **Quantum and classical computation:** The way we defined what it means for a function to be efficiently quantumly computable, it might not be clear that if $f:\{0,1\}^m\rightarrow\{0,1\}^\ell$ is a function that we can compute by a polynomial size Boolean circuit (e.g., combining polynomially many AND, OR and NOT gates) then it is also quantumly efficiently computable.
 The idea is that for every gate $g:\{0,1\}^2\rightarrow\{0,1\}$ we can define an $8\times 8$ unitary matrix $M_h$ where $h:\{0,1\}^3\rightarrow\{0,1\}^3$ has the form $h(a,b,c)=a,b,c\oplus g(a,b)$.
-So, if $f$ has a circuit of $s$ gates, then we can dedicate an extra bit for every one of these gates and then run the corresponding $s$ unitary operations one by one, at the end of which we will get an operator that computes the mapping $x_1,\ldots,x_{m+\ell+s} = x_1\cdots x_m \| x_{m+1}\cdots x_{m+s} \oplus f(x_1,\ldots,x_m)\|g(x_1\ldots x_m)$ where
-the the $\ell+i^{th}$ bit of $g(x_1,\ldots,x_n)$ is the result of applying the $i^{th}$ gate in the calculation of $f(x_1,\ldots,x_m)$.
+So, if $f$ has a circuit of $s$ gates, then we can dedicate an extra bit for every one of these gates and then run the corresponding $s$ unitary operations one by one, at the end of which we will get an operator that computes the mapping $x_1,\ldots,x_{m+\ell+s} = x_1\cdots x_m \| x_{m+1}\cdots x_{m+\ell+s} \oplus (f(x_1,\ldots,x_m)\|g(x_1\ldots x_{m+\ell+s}))$ where
+the the $i^{th}$ bit of $g(x_1,\ldots,x_{m+\ell+s})$ is the result of applying the $i^{th}$ gate in the calculation of $f(x_1,\ldots,x_m)$.
 So this is "almost" what we wanted except that we have this "extra junk" that we need to get rid of. The idea is that we now simply run the same computation again which will basically we mean we XOR another copy of $g(x_1,\ldots,x_m)$ to the last $s$ bits, but since $g(x)\oplus g(x) = 0^s$ we get that we compute the map $x \mapsto x_1\cdots x_m \| (f(x_1,\ldots,x_m)0^s \;\oplus\; x_{m+1}\cdots x_{m+\ell+s})$ as desired.
 
 
@@ -285,10 +285,10 @@ If the number of qubits is increased and the error is decreased by one or two or
 Quantum computing is very confusing and counterintuitive for many reasons.
 But there is also a "cultural" reason why people sometimes find quantum arguments hard to follow.
 Quantum folks follow their own special [notation](https://en.wikipedia.org/wiki/Bra%E2%80%93ket_notation) for vectors.
-Many non quantum people find it ugly and confusing, while quantum folks secretly wish they people used it all the time, not just for non-quantum linear algebra, but also for restaurant bills and elemntary school math classes.
+Many non quantum people find it ugly and confusing, while quantum folks secretly wish that people used it all the time, not just for non-quantum linear algebra, but also for restaurant bills and elementary school math classes.
 
-The notation is actually not so confusing. If $x\in\{0,1\}^n$ then $|x\rangle$ denotes the $x^{th}$ standard basis vector in $2^n$ dimension.
-That is $|x\rangle$  $2^n$-dimensional column vector that has $1$ in the $x^{th}$ coordinate and zero everywhere else.
+The notation is actually not so confusing. If $x\in\{0,1\}^n$ then $|x\rangle$ denotes the $x^{th}$ standard basis vector in $2^n$ dimensions.
+That is, $|x\rangle$ is the $2^n$-dimensional column vector that has $1$ in the $x^{th}$ coordinate and zero everywhere else.
 So, we can describe the column vector that has $\alpha_x$ in the $x^{th}$ entry as $\sum_{x\in\{0,1\}^n} \alpha_x |x\rangle$.
 One more piece of notation that is useful is that if $x\in\{0,1\}^n$ and $y\in\{0,1\}^m$ then we identify $|x\rangle|y\rangle$ with $|xy\rangle$ (that is, the $2^{n+m}$ dimensional vector that has $1$ in the coordinate corresponding to the concatenation of $x$ and $y$, and zero everywhere else).
 This is more or less all you need to know about this notation to follow this lecture.[^bra]
@@ -379,8 +379,8 @@ Alice and Bob will start by preparing a  2-qubit quantum system in the state
 $$\psi = \tfrac{1}{\sqrt{2}}|00\rangle + \tfrac{1}{\sqrt{2}}|11\rangle$$
 
 (this state is known as an [EPR pair](https://en.wikipedia.org/wiki/EPR_paradox)).
-Alice takes the first qubit of the  system to her room, and Bob takes the qubit to his room.
-Now, when Alice receives $x$ if $x=0$ she does nothing and if $x=1$ she applies the unitary map $R_{-\pi/8}$ to her qubit where $R_\theta = \begin{pmatrix} cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{pmatrix}$ is the unitary operation corresponding to rotation in the plane with angle $\theta$.
+Alice takes the first qubit of the system to her room, and Bob takes the second qubit to his room.
+Now, when Alice receives $x$ if $x=0$ she does nothing and if $x=1$ she applies the unitary map $R_{-\pi/8}$ to her qubit where $R_\theta = \begin{pmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{pmatrix}$ is the unitary operation corresponding to rotation in the plane with angle $\theta$.
 When Bob receives $y$, if $y=0$ he does nothing and if $y=1$ he applies the unitary map $R_{\pi/8}$ to his  qubit.
 Then each one of them measures their qubit and sends this as their response.
 
@@ -389,8 +389,8 @@ Recall that to win the game Bob and Alice want their outputs to be more likely t
 We will split the analysis in one case for each of the four possible values of $x$ and $y$.
 
 __Case 1: $x=0$ and $y=0$.__ If $x=y=0$ then the state does not change.
-* Because the state $\psi$ is proportional to    $|00\rangle + |11\rangle$, the measurements of Bob and Alice will always agree (if Alice measures $0$ then the state collapses to $|00 \rangle$ and so Bob measures $0$ as well, and similarly for $1$).
-Hence in the case $x=y=1$, Alice and Bob always  win.
+Because the state $\psi$ is proportional to    $|00\rangle + |11\rangle$, the measurements of Bob and Alice will always agree (if Alice measures $0$ then the state collapses to $|00 \rangle$ and so Bob measures $0$ as well, and similarly for $1$).
+Hence in the case $x=y=0$, Alice and Bob always win.
 
 __Case 2: $x=0$ and $y=1$.__ If $x=0$ and $y=1$ then after Alice measures her bit, if she gets $0$ then the system collapses to the state $|00 \rangle$, in which case after Bob performs his rotation, his qubit is in the state  $\cos (\pi/8)|0\rangle+\sin(\pi/8)|1\rangle$.
 Thus, when Bob measures his qubit, he will get $0$ (and hence agree with Alice) with probability  $\cos^2 (\pi/8)  \geq 0.85$.
@@ -412,7 +412,7 @@ Opening up the coefficients and using $\cos(-x)=\cos(x)$ and $\sin(-x)=-\sin(x)$
 $$
 \begin{aligned}
 \cos^2(\pi/8)|00 \rangle &+ \cos(\pi/8)\sin(\pi/8)|01 \rangle \\
-- \sin(\pi/8)\cos(\pi/8)|10\rangle  &+ \sin^2(\pi/8)|11 \rangle \\
+- \sin(\pi/8)\cos(\pi/8)|10\rangle  &- \sin^2(\pi/8)|11 \rangle \\
 -  \sin^2(\pi/8)|00 \rangle &+ \sin(\pi/8)\cos(\pi/8)|01 \rangle \\
 -  \cos(\pi/8)\sin(\pi/8)|10\rangle  &+ \cos^2(\pi/8)|11 \rangle \;.
 \end{aligned}
@@ -427,7 +427,7 @@ Taking all the four cases together,  the overall probability of winning the game
 
 
 > # {.remark title="Quantum vs probabilistic strategies" #quantumprob}
-It is instructive to understand what is it about quantum mechanics that enabled this gain in Bell's Inequality. For this, consider the following analogous probabilistic strategy for Alice and Bob. They agree that each one of them output $0$ if he or she get $0$ as input and outputs $1$ with probability $p$ if they get $1$ as input. In this case one can see that their success probability would be $\tfrac{1}{4}\cdot 1 + \tfrac{1}{2}(1-p)+\tfrac{1}{4}[2p(1-p)]=0.75 -0.5p^2 \leq 0.75$. The quantum strategy we described above can be thought of as a variant of the probabilistic strategy for parameter $p$ set to  $\sin^2 (\pi/8)=0.15$. But in the case $x=y=1$, instead of disagreeing only with probability $2p(1-p)=1/4$, because we can use these negative probabilities in the quantum world and rotate the state in opposite directions, and hence  the probability of disagreement ends up being $\sin^2 (\pi/4)=0.5$.
+It is instructive to understand what is it about quantum mechanics that enabled this gain in Bell's Inequality. For this, consider the following analogous probabilistic strategy for Alice and Bob. They agree that each one of them output $0$ if he or she get $0$ as input and outputs $1$ with probability $p$ if they get $1$ as input. In this case one can see that their success probability would be $\tfrac{1}{4}\cdot 1 + \tfrac{1}{2}(1-p)+\tfrac{1}{4}[2p(1-p)]=0.75 -0.5p^2 \leq 0.75$. The quantum strategy we described above can be thought of as a variant of the probabilistic strategy for parameter $p$ set to  $\sin^2 (\pi/8)=0.15$. But in the case $x=y=1$, instead of disagreeing only with probability $2p(1-p)=1/4$, because we can use these negative probabilities in the quantum world and rotate the state in opposite directions, the probability of disagreement ends up being $\sin^2 (\pi/4)=0.5$.
 
 
 
@@ -435,7 +435,7 @@ It is instructive to understand what is it about quantum mechanics that enabled 
 ## Grover's Algorithm
 
 Shor's Algorithm, which we'll see in the next lecture, is an amazing achievement, but it only applies to very particular problems.
-It does not seem to be relevant to breaking AES, lattice based cryptography, or problems not related to quantum computing at all such as scheduling,  constraint satisfaction, traveling salesperson etc.. etc..
+It does not seem to be relevant to breaking AES, lattice based cryptography, or problems not related to quantum computing at all such as scheduling,  constraint satisfaction, traveling salesperson etc.
 Indeed, for the most general form of these search problems, classically we don't how to do anything much better than brute force search, which takes $2^n$ time over an $n$-bit domain. Lev Grover showed that quantum computers can obtain a quadratic improvement over this brute force search, solving SAT in $2^{n/2}$ time.
 The effect of Grover's algorithm on cryptography is fairly mild: one essentially needs to double the key lengths of symmetric primitives.
 But beyond cryptography, if large scale quantum computers end up being built, Grover search and its variants might end up being some of the most useful computational problems they will tackle.
