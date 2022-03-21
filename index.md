@@ -12,7 +12,7 @@ __Boaz Barak__
 
 _Work in progress_
 
-These are lecture notes for lecture notes for an introductory but fast-paced undergraduate/beginning graduate course on cryptography.
+These are lecture notes for an introductory but fast-paced undergraduate/beginning graduate course on cryptography.
 I am using these notes for [Harvard CS 127](https://cs127.boazbarak.org).
 
 
