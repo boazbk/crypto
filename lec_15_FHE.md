@@ -80,7 +80,7 @@ We focus on encryption for single bits.  This is without loss of generality for 
 Let $\mathcal{F} = \cup \mathcal{F}_\ell$ be a class of functions where every $f\in\mathcal{F}_\ell$ maps $\{0,1\}^\ell$ to $\{0,1\}$.  
 An _$\mathcal{F}$-homomorphic public key encryption scheme_ is a CPA secure public key encryption scheme $(G,E,D)$ such that there exists a polynomial-time algorithm $EVAL:\{0,1\}^* \rightarrow \{0,1\}^*$ such that for every $(e,d)=G(1^n)$, $\ell=poly(n)$,  $x_1,\ldots,x_\ell \in \{0,1\}$, and $f\in \mathcal{F}_\ell$ of description size $|f|$ at most $poly(\ell)$ it holds that:
 
-* $c=EVAL_e(f,E_e(x_1),\ldots,E_e(x_\ell))$ has length at most $n$. 
+* $c=EVAL_e(f,E_e(x_1),\ldots,E_e(x_\ell))$ has length at most $p(n)$ for $p=poly(\cdot)$ that does not grow with $\ell$ or $|f|$. 
 
 * $D_d(c)=f(x_1,\ldots,x_\ell)$.
 :::
